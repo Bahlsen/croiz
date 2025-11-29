@@ -13,7 +13,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // The grid is 13x13; cell at row=2,col=0 is index = 2*13 + 0 = 26
-    final cellIndex = 2 * 13 + 0;
+    const cellIndex = 2 * 13 + 0;
     final cells = find.byType(GestureDetector);
     expect(cells.evaluate().length, greaterThan(cellIndex));
 

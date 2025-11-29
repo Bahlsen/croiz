@@ -8,7 +8,6 @@ void main() {
       child: CroizApp(),
     ),
   );
-}
 
 class CroizApp extends StatelessWidget {
   const CroizApp({Key? key}) : super(key: key);
@@ -16,39 +15,27 @@ class CroizApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
         title: 'Croiz',
-        theme: ThemeData(
+        // Light theme (kept for completeness) and a stronger global dark theme.
+        theme: ThemeData.from(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
         ),
+        darkTheme: ThemeData.dark().copyWith(
+          scaffoldBackgroundColor: Colors.black,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue, brightness: Brightness.dark),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.black,
+            elevation: 0,
+            centerTitle: true,
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
+          ),
+          textTheme: ThemeData.dark().textTheme.apply(bodyColor: Colors.white, displayColor: Colors.white),
+        ),
+        themeMode: ThemeMode.dark,
         routerConfig: appRouter,
         debugShowCheckedModeBanner: false,
       );
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Croiz'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome to Croiz',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Start Game'),
-            ),
-          ],
-        ),
-      ),
-    );
-}

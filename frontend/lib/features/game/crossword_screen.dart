@@ -15,7 +15,7 @@ class CrosswordScreen extends ConsumerWidget {
           elevation: 0,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12),
           child: Container(
             color: Colors.black,
             child: const CrosswordGrid(),

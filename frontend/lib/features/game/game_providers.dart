@@ -6,8 +6,14 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
   GameBoardNotifier(super.state);
 
   factory GameBoardNotifier.createEmpty(int size) {
-    final grid = List.generate(size, (_) => List<String?>.filled(size, null));
-    final blackCells = List.generate(size, (_) => List<bool>.filled(size, false));
+    final grid = <List<String?>>[];
+    for (var i = 0; i < size; i++) {
+      grid.add(List<String?>.filled(size, null));
+    }
+    final blackCells = <List<bool>>[];
+    for (var i = 0; i < size; i++) {
+      blackCells.add(List<bool>.filled(size, false));
+    }
     final board = GameBoard(
       id: 'local',
       title: 'Local Game',
@@ -23,12 +29,12 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
 
   void setLetter(int row, int col, String? letter) {
     final newGrid = List<List<String?>>.from(
-      state.grid.map((r) => List<String?>.from(r)),
+      state.grid.map(List<String?>.from),
     );
     newGrid[row][col] = letter == null || letter.isEmpty ? null : letter.substring(0, 1).toUpperCase();
     // copy blackCells as-is
     final newBlack = List<List<bool>>.from(
-      state.blackCells.map((r) => List<bool>.from(r)),
+      state.blackCells.map(List<bool>.from),
     );
     state = GameBoard(
       id: state.id,
@@ -44,10 +50,10 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
 
   void toggleBlackCell(int row, int col) {
     final newGrid = List<List<String?>>.from(
-      state.grid.map((r) => List<String?>.from(r)),
+      state.grid.map(List<String?>.from),
     );
     final newBlack = List<List<bool>>.from(
-      state.blackCells.map((r) => List<bool>.from(r)),
+      state.blackCells.map(List<bool>.from),
     );
     newBlack[row][col] = !newBlack[row][col];
     // if a cell becomes black, clear its letter
@@ -67,9 +73,7 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
   }
 }
 
-final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((ref) {
-  return createSampleBoard();
-});
+final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>(_createSampleBoardRef);
 
 
   
@@ -78,8 +82,14 @@ GameBoardNotifier createSampleBoard() =>
 
 GameBoardNotifier _createSampleBoardImpl() {
   const size = 13;
-  final grid = List.generate(size, (_) => List<String?>.filled(size, null));
-  final blackCells = List.generate(size, (_) => List<bool>.filled(size, false));
+  final grid = <List<String?>>[];
+  for (var i = 0; i < size; i++) {
+    grid.add(List<String?>.filled(size, null));
+  }
+  final blackCells = <List<bool>>[];
+  for (var i = 0; i < size; i++) {
+    blackCells.add(List<bool>.filled(size, false));
+  }
 
   // Example arbitrary pattern of black cells (prototype)
   final blackCoords = <List<int>>[
@@ -146,7 +156,13 @@ class SelectedCell {
 enum WordDirection { horizontal, vertical }
 
 /// Holds the currently selected cell (or null if none).
-final selectedCellProvider = StateProvider<SelectedCell?>((ref) => null);
+final selectedCellProvider = StateProvider<SelectedCell?>(_initialSelectedCell);
 
 /// Holds the current word direction (horizontal or vertical).
-final wordDirectionProvider = StateProvider<WordDirection>((ref) => WordDirection.horizontal);
+final wordDirectionProvider = StateProvider<WordDirection>(_initialWordDirection);
+
+// Provider tear-offs: small wrappers matching the provider callback signature so
+// the analyzer suggests using a tear-off instead of an inline closure.
+GameBoardNotifier _createSampleBoardRef(ref) => createSampleBoard();
+SelectedCell? _initialSelectedCell(ref) => null;
+WordDirection _initialWordDirection(ref) => WordDirection.horizontal;

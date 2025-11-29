@@ -20,7 +20,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Request focus so keyboard events are received when the grid is visible.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _focusNode.requestFocus();
+      if (mounted) {
+        _focusNode.requestFocus();
+      }
     });
   }
 
@@ -32,7 +34,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   }
 
   void _handleKey(KeyEvent event, int size) {
-    if (event is! KeyDownEvent) return;
+    if (event is! KeyDownEvent) {
+      return;
+    }
 
     final sel = ref.read(selectedCellProvider);
     var row = sel?.row ?? 0;
@@ -71,11 +75,13 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // Character input: if single-character label (e.g., 'a', 'A', 'é' etc.)
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
-      if (RegExp(r"[A-ZÀ-ÖØ-Ý]", unicode: true).hasMatch(char)) {
+      if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
         // move right after typing
         col = (col + 1) % size;
-        if (col == 0) row = (row + 1).clamp(0, size - 1);
+        if (col == 0) {
+          row = (row + 1).clamp(0, size - 1);
+        }
         ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
       }
     }
@@ -90,11 +96,13 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final black = board.blackCells;
 
     // compute clue numbers for display
-    final Map<String, int> numbers = {};
+    final numbers = <String, int>{};
     var count = 1;
     for (var r = 0; r < size; r++) {
-      for (var c = 0; c < size; c++) {
-        if (black[r][c]) continue;
+        for (var c = 0; c < size; c++) {
+        if (black[r][c]) {
+          continue;
+        }
         final isStartAcross = (c == 0) || black[r][c - 1];
         final isStartDown = (r == 0) || black[r - 1][c];
         if (isStartAcross || isStartDown) {
@@ -118,7 +126,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: size,
-          childAspectRatio: 1.0,
+          childAspectRatio: 1,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
@@ -130,16 +138,16 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final isSelected = selected != null && selected.row == row && selected.col == col;
           final isBlack = black[row][col];
 
+
           // Check if this cell is part of the selected word (horizontal or vertical)
-          bool isPartOfSelectedWord = false;
-          if (isSelected) {
+          var isPartOfSelectedWord = false;
+          if (selected != null) {
             if (wordDirection == WordDirection.horizontal) {
               isPartOfSelectedWord = (row == selected.row);
             } else {
               isPartOfSelectedWord = (col == selected.col);
             }
           }
-
           if (isBlack) {
             return Container(
               color: Colors.black,
@@ -150,17 +158,20 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
           return GestureDetector(
             onTap: () {
-              if (isSelected) {
+              final wasSelected = isSelected;
+              // Always set the selection (might be same or new cell)
+              ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+              _focusNode.requestFocus();
+              
+              if (wasSelected) {
                 // Second tap on same cell: toggle direction
                 final newDir = wordDirection == WordDirection.horizontal 
                     ? WordDirection.vertical 
                     : WordDirection.horizontal;
                 ref.read(wordDirectionProvider.notifier).state = newDir;
               } else {
-                // First tap on new cell: select it and reset direction to horizontal
-                ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+                // First tap on this cell: reset direction to horizontal
                 ref.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
-                _focusNode.requestFocus();
               }
             },
             child: AnimatedContainer(
@@ -186,7 +197,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                       top: 2,
                       child: Text(
                         '$cellNumber',
-                        style: TextStyle(fontSize: 9, color: Colors.white70),
+                        style: const TextStyle(fontSize: 9, color: Colors.white70),
                       ),
                     ),
                   Center(
@@ -194,6 +205,16 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                         ? SizedBox(
                             width: 36,
                             child: TextField(
+                              // When the TextField itself is tapped while already selected,
+                              // toggle the word direction. This ensures a second tap
+                              // toggles to vertical even though the TextField absorbs taps.
+                              onTap: () {
+                                final current = ref.read(wordDirectionProvider);
+                                final newDir = current == WordDirection.horizontal
+                                    ? WordDirection.vertical
+                                    : WordDirection.horizontal;
+                                ref.read(wordDirectionProvider.notifier).state = newDir;
+                              },
                               controller: _editingController,
                               textAlign: TextAlign.center,
                               textCapitalization: TextCapitalization.characters,
@@ -211,10 +232,14 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                                 var newCol = col;
                                 if (wordDirection == WordDirection.horizontal) {
                                   newCol = (col + 1) % size;
-                                  if (newCol == 0) newRow = (row + 1).clamp(0, size - 1);
+                                  if (newCol == 0) {
+                                    newRow = (row + 1).clamp(0, size - 1);
+                                  }
                                 } else {
                                   newRow = (row + 1) % size;
-                                  if (newRow == 0) newCol = (col + 1).clamp(0, size - 1);
+                                  if (newRow == 0) {
+                                    newCol = (col + 1).clamp(0, size - 1);
+                                  }
                                 }
                                 ref.read(selectedCellProvider.notifier).state = SelectedCell(newRow, newCol);
                               },
