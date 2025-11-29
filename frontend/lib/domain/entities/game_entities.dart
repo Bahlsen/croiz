@@ -22,11 +22,31 @@ class GameBoard extends GameEntity {
     required super.createdAt,
     required this.grid,
     required this.clues,
+    required this.blackCells,
     required this.difficulty,
   });
   final List<List<String?>> grid;
   final Map<String, String> clues;
+  /// true = black/blocked cell
+  final List<List<bool>> blackCells;
   final int difficulty;
+
+  GameBoard copyWith({
+    List<List<String?>>? grid,
+    Map<String, String>? clues,
+    List<List<bool>>? blackCells,
+    int? difficulty,
+  }) =>
+      GameBoard(
+        id: id,
+        title: title,
+        gridSize: gridSize,
+        createdAt: createdAt,
+        grid: grid ?? List.generate(this.grid.length, (r) => List<String?>.from(this.grid[r])),
+        clues: clues ?? Map<String, String>.from(this.clues),
+        blackCells: blackCells ?? List.generate(this.blackCells.length, (r) => List<bool>.from(this.blackCells[r])),
+        difficulty: difficulty ?? this.difficulty,
+      );
 }
 
 class GameScore {
