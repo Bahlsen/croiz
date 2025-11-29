@@ -86,6 +86,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final board = ref.watch(gameBoardProvider);
     final size = board.gridSize;
     final selected = ref.watch(selectedCellProvider);
+    final wordDirection = ref.watch(wordDirectionProvider);
     final black = board.blackCells;
 
     // compute clue numbers for display
@@ -129,6 +130,16 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final isSelected = selected != null && selected.row == row && selected.col == col;
           final isBlack = black[row][col];
 
+          // Check if this cell is part of the selected word (horizontal or vertical)
+          bool isPartOfSelectedWord = false;
+          if (isSelected) {
+            if (wordDirection == WordDirection.horizontal) {
+              isPartOfSelectedWord = (row == selected.row);
+            } else {
+              isPartOfSelectedWord = (col == selected.col);
+            }
+          }
+
           if (isBlack) {
             return Container(
               color: Colors.black,
@@ -139,19 +150,32 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
           return GestureDetector(
             onTap: () {
-              ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
-              _focusNode.requestFocus();
+              if (isSelected) {
+                // Second tap on same cell: toggle direction
+                final newDir = wordDirection == WordDirection.horizontal 
+                    ? WordDirection.vertical 
+                    : WordDirection.horizontal;
+                ref.read(wordDirectionProvider.notifier).state = newDir;
+              } else {
+                // First tap on new cell: select it and reset direction to horizontal
+                ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+                ref.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+                _focusNode.requestFocus();
+              }
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                boxShadow: isSelected
-                    ? [BoxShadow(color: Colors.blue.withOpacity(0.25), blurRadius: 8, offset: const Offset(0, 2))]
-                    : [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 2, offset: const Offset(0, 1))],
-                border: Border.all(color: isSelected ? Colors.blueAccent : Colors.grey.shade700, width: isSelected ? 2 : 1),
-                color: isSelected ? Colors.blue.withOpacity(0.45) : Colors.grey[800],
+                boxShadow: isPartOfSelectedWord
+                    ? [BoxShadow(color: Colors.blue.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
+                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2, offset: const Offset(0, 1))],
+                border: Border.all(
+                  color: isPartOfSelectedWord ? Colors.blueAccent : Colors.grey.shade700,
+                  width: isPartOfSelectedWord ? 2 : 1,
+                ),
+                color: isPartOfSelectedWord ? Colors.blue.withValues(alpha: 0.45) : Colors.grey[800],
               ),
               child: Stack(
                 children: [
@@ -182,10 +206,16 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                                 ref.read(gameBoardProvider.notifier).setLetter(row, col, value);
                               },
                               onSubmitted: (value) {
-                                // move selection to the right on submit
+                                // move selection in the current direction
                                 var newRow = row;
-                                var newCol = (col + 1) % size;
-                                if (newCol == 0) newRow = (row + 1).clamp(0, size - 1);
+                                var newCol = col;
+                                if (wordDirection == WordDirection.horizontal) {
+                                  newCol = (col + 1) % size;
+                                  if (newCol == 0) newRow = (row + 1).clamp(0, size - 1);
+                                } else {
+                                  newRow = (row + 1) % size;
+                                  if (newRow == 0) newCol = (col + 1).clamp(0, size - 1);
+                                }
                                 ref.read(selectedCellProvider.notifier).state = SelectedCell(newRow, newCol);
                               },
                             ),

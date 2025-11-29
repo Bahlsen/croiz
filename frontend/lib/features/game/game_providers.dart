@@ -142,8 +142,11 @@ class SelectedCell {
   final int col;
 }
 
+/// Represents word direction: true = horizontal, false = vertical.
+enum WordDirection { horizontal, vertical }
+
 /// Holds the currently selected cell (or null if none).
 final selectedCellProvider = StateProvider<SelectedCell?>((ref) => null);
 
-/// Toggle edit mode to allow changing black cells.
-final editModeProvider = StateProvider<bool>((ref) => false);
+/// Holds the current word direction (horizontal or vertical).
+final wordDirectionProvider = StateProvider<WordDirection>((ref) => WordDirection.horizontal);
