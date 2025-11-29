@@ -8,6 +8,7 @@ void main() {
       child: CroizApp(),
     ),
   );
+}
 
 class CroizApp extends StatelessWidget {
   const CroizApp({Key? key}) : super(key: key);
@@ -15,7 +16,6 @@ class CroizApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp.router(
         title: 'Croiz',
-        // Light theme (kept for completeness) and a stronger global dark theme.
         theme: ThemeData.from(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
@@ -37,5 +37,3 @@ class CroizApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
       );
 }
-
-
