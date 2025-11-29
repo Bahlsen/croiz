@@ -1,0 +1,45 @@
+# Flutter
+frontend/.dart_tool/
+frontend/build/
+frontend/.flutter-plugins
+frontend/.flutter-plugins-dependencies
+frontend/.packages
+frontend/pubspec.lock
+frontend/coverage/
+frontend/.fvm/
+
+# Spring Boot
+backend/target/
+backend/.gradle/
+backend/build/
+backend/.idea/
+backend/*.iml
+backend/.classpath
+backend/.project
+backend/bin/
+backend/out/
+
+# Common
+.DS_Store
+.env
+.env.local
+*.log
+node_modules/
+.vscode/settings.json
+.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+*.iws
+*.ipr
+*.iml
+.vscode/
+*.code-workspace
+
+# OS
+Thumbs.db
+.AppleDouble
+.LSOverride
