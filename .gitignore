@@ -7,6 +7,8 @@ frontend/.packages
 frontend/pubspec.lock
 frontend/coverage/
 frontend/.fvm/
+frontend/.firebase/
+frontend/web/flutter_service_worker.js
 
 # Spring Boot
 backend/target/
@@ -18,11 +20,14 @@ backend/.classpath
 backend/.project
 backend/bin/
 backend/out/
+backend/gradle/
+backend/.DS_Store
 
 # Common
 .DS_Store
 .env
 .env.local
+.env.*.local
 *.log
 node_modules/
 .vscode/settings.json
@@ -38,8 +43,19 @@ node_modules/
 *.iml
 .vscode/
 *.code-workspace
+*.sublime-project
+*.sublime-workspace
 
 # OS
 Thumbs.db
 .AppleDouble
 .LSOverride
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+
+# Local development
+*.local
+secret/
+credentials/
