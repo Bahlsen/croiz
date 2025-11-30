@@ -46,7 +46,11 @@ jobs:
           flutter pub get
 
       - name: Run tests with coverage
-        run: flutter test --coverage
+        working-directory: frontend
+        shell: bash
+        run: |
+          set -e
+          flutter test --coverage
 
       - name: Analyze
         if: success()
