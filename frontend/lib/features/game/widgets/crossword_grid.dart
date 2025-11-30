@@ -189,37 +189,26 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       });
     }
 
-    // compute clue numbers for display
-    // Number across (horizontal) starts first (row-major), then down (vertical) starts.
+    // Compute clue numbers for display directly from puzzle entries (use entry coordinates).
     final numbers = <String, int>{};
-    var count = 1;
-
-    // First pass: assign numbers to across starts only
-    for (var r = 0; r < size; r++) {
-      for (var c = 0; c < size; c++) {
-        if (black.isDisabled(r, c)) {
+    final entries = board.entries;
+    if (entries != null && entries.isNotEmpty) {
+      for (final e in entries) {
+        final r = e.y;
+        final c = e.x;
+        if (r < 0 || r >= size || c < 0 || c >= size) {
           continue;
         }
-        final isStartAcross = (c == 0) || black.isDisabled(r, c - 1);
-        if (isStartAcross) {
-          numbers['$r,$c'] = count++;
-        }
-      }
-    }
-
-    // Second pass: assign numbers to down starts that haven't been numbered yet
-    for (var r = 0; r < size; r++) {
-      for (var c = 0; c < size; c++) {
-        if (black.isDisabled(r, c)) {
-          continue;
-        }
-        final isStartDown = (r == 0) || black.isDisabled(r - 1, c);
         final key = '$r,$c';
-        if (isStartDown && !numbers.containsKey(key)) {
-          numbers[key] = count++;
+        final current = numbers[key];
+        if (current == null || e.number < current) {
+          numbers[key] = e.number;
         }
       }
+    } else {
+      throw FlutterError('Puzzle entries are required to compute numbering.');
     }
+    // No further validation: numbering is placed strictly at entry coordinates.
 
     // Keep the editing controller in sync with the selected cell's value.
     if (selected != null) {
