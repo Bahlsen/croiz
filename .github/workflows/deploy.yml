@@ -34,6 +34,16 @@ jobs:
         with:
           flutter-version: '3.38.x'
 
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            frontend/.dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('frontend/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
       - name: Get Flutter dependencies
         run: flutter pub get
 

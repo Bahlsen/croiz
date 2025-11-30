@@ -19,27 +19,34 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            frontend/.dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('frontend/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
       - name: Get dependencies
         run: |
           flutter pub get
 
-      - name: Run tests
-        if: success()
-        run: flutter test
-
       - name: Run tests with coverage
-        if: success()
-        run:  flutter test --coverage
+        run:  flutter test flutter test --coverage
 
       - name: Analyze
         if: success()
         run: flutter analyze
 
       - name: Compute coverage and enforce threshold
+        if: success()
         run: |
           dart tools/compute_coverage.dart --threshold=70
 
       - name: Upload coverage artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-lcov
