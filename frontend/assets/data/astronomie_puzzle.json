@@ -1,0 +1,244 @@
+{
+  "id": "astronomie-v1",
+  "rows": 7,
+  "cols": 7,
+  "cells": [
+    {"x": 0, "y": 0, "is_black": false, "solution": "S"},
+    {"x": 1, "y": 0, "is_black": false, "solution": "O"},
+    {"x": 2, "y": 0, "is_black": false, "solution": "L"},
+    {"x": 3, "y": 0, "is_black": false, "solution": "E"},
+    {"x": 4, "y": 0, "is_black": false, "solution": "I"},
+    {"x": 5, "y": 0, "is_black": false, "solution": "L"},
+    {"x": 6, "y": 0, "is_black": true},
+    
+    {"x": 0, "y": 1, "is_black": false, "solution": "A"},
+    {"x": 1, "y": 1, "is_black": true},
+    {"x": 2, "y": 1, "is_black": false, "solution": "U"},
+    {"x": 3, "y": 1, "is_black": false, "solution": "N"},
+    {"x": 4, "y": 1, "is_black": false, "solution": "E"},
+    {"x": 5, "y": 1, "is_black": true},
+    {"x": 6, "y": 1, "is_black": false, "solution": "C"},
+    
+    {"x": 0, "y": 2, "is_black": false, "solution": "T"},
+    {"x": 1, "y": 2, "is_black": false, "solution": "E"},
+    {"x": 2, "y": 2, "is_black": false, "solution": "R"},
+    {"x": 3, "y": 2, "is_black": false, "solution": "R"},
+    {"x": 4, "y": 2, "is_black": false, "solution": "E"},
+    {"x": 5, "y": 2, "is_black": true},
+    {"x": 6, "y": 2, "is_black": false, "solution": "I"},
+    
+    {"x": 0, "y": 3, "is_black": false, "solution": "E"},
+    {"x": 1, "y": 3, "is_black": true},
+    {"x": 2, "y": 3, "is_black": false, "solution": "B"},
+    {"x": 3, "y": 3, "is_black": true},
+    {"x": 4, "y": 3, "is_black": false, "solution": "T"},
+    {"x": 5, "y": 3, "is_black": false, "solution": "O"},
+    {"x": 6, "y": 3, "is_black": false, "solution": "E"},
+    
+    {"x": 0, "y": 4, "is_black": false, "solution": "L"},
+    {"x": 1, "y": 4, "is_black": false, "solution": "U"},
+    {"x": 2, "y": 4, "is_black": false, "solution": "I"},
+    {"x": 3, "y": 4, "is_black": false, "solution": "T"},
+    {"x": 4, "y": 4, "is_black": true},
+    {"x": 5, "y": 4, "is_black": false, "solution": "R"},
+    {"x": 6, "y": 4, "is_black": true},
+    
+    {"x": 0, "y": 5, "is_black": false, "solution": "L"},
+    {"x": 1, "y": 5, "is_black": true},
+    {"x": 2, "y": 5, "is_black": false, "solution": "T"},
+    {"x": 3, "y": 5, "is_black": false, "solution": "E"},
+    {"x": 4, "y": 5, "is_black": true},
+    {"x": 5, "y": 5, "is_black": false, "solution": "B"},
+    {"x": 6, "y": 5, "is_black": true},
+    
+    {"x": 0, "y": 6, "is_black": false, "solution": "I"},
+    {"x": 1, "y": 6, "is_black": false, "solution": "O"},
+    {"x": 2, "y": 6, "is_black": false, "solution": "E"},
+    {"x": 3, "y": 6, "is_black": true},
+    {"x": 4, "y": 6, "is_black": false, "solution": "M"},
+    {"x": 5, "y": 6, "is_black": false, "solution": "A"},
+    {"x": 6, "y": 6, "is_black": false, "solution": "R"}
+  ],
+  "entries": [
+    {
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 6,
+      "answer": "SOLEIL",
+      "clue": "Étoile au centre de notre système planétaire"
+    },
+    {
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 7,
+      "answer": "SATELLI",
+      "clue": "Corps céleste en orbite (incomplet)"
+    },
+    {
+      "number": 2,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 7,
+      "answer": "LURBITE",
+      "clue": "Parcours d'une planète"
+    },
+    {
+      "number": 3,
+      "direction": "across",
+      "x": 2,
+      "y": 1,
+      "length": 3,
+      "answer": "UNE",
+      "clue": "Article féminin"
+    },
+    {
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 1,
+      "length": 3,
+      "answer": "NRT",
+      "clue": "Initiales spatiales"
+    },
+    {
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 3,
+      "answer": "IET",
+      "clue": "Partie d'étoile"
+    },
+    {
+      "number": 6,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "LORB",
+      "clue": "Début d'orbite"
+    },
+    {
+      "number": 7,
+      "direction": "down",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "CIER",
+      "clue": "Fin de glacier"
+    },
+    {
+      "number": 8,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 5,
+      "answer": "TERRE",
+      "clue": "Troisième planète du système solaire"
+    },
+    {
+      "number": 9,
+      "direction": "across",
+      "x": 0,
+      "y": 3,
+      "length": 1,
+      "answer": "E",
+      "clue": "Initiale d'Étoile"
+    },
+    {
+      "number": 10,
+      "direction": "across",
+      "x": 2,
+      "y": 3,
+      "length": 1,
+      "answer": "B",
+      "clue": "Initiale de Big Bang"
+    },
+    {
+      "number": 11,
+      "direction": "across",
+      "x": 4,
+      "y": 3,
+      "length": 3,
+      "answer": "TOE",
+      "clue": "Début d'étoile"
+    },
+    {
+      "number": 12,
+      "direction": "across",
+      "x": 0,
+      "y": 4,
+      "length": 4,
+      "answer": "LUIT",
+      "clue": "Brille dans le ciel nocturne"
+    },
+    {
+      "number": 13,
+      "direction": "down",
+      "x": 2,
+      "y": 4,
+      "length": 3,
+      "answer": "ITE",
+      "clue": "Fin de météorite"
+    },
+    {
+      "number": 14,
+      "direction": "across",
+      "x": 5,
+      "y": 4,
+      "length": 1,
+      "answer": "R",
+      "clue": "Initiale de Rayon"
+    },
+    {
+      "number": 15,
+      "direction": "across",
+      "x": 0,
+      "y": 5,
+      "length": 1,
+      "answer": "L",
+      "clue": "Initiale de Lune"
+    },
+    {
+      "number": 16,
+      "direction": "across",
+      "x": 2,
+      "y": 5,
+      "length": 2,
+      "answer": "TE",
+      "clue": "Fin de comète"
+    },
+    {
+      "number": 17,
+      "direction": "across",
+      "x": 5,
+      "y": 5,
+      "length": 1,
+      "answer": "B",
+      "clue": "Initiale de Big Bang"
+    },
+    {
+      "number": 18,
+      "direction": "across",
+      "x": 0,
+      "y": 6,
+      "length": 3,
+      "answer": "IOE",
+      "clue": "Voyelles cosmiques"
+    },
+    {
+      "number": 19,
+      "direction": "across",
+      "x": 4,
+      "y": 6,
+      "length": 3,
+      "answer": "MAR",
+      "clue": "Début de Mars"
+    }
+  ]
+}

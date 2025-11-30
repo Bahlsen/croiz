@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/data/models/puzzle.dart';
+import 'package:croiz/core/puzzle_converter.dart';
 
 class GameBoardNotifier extends StateNotifier<GameBoard> {
   GameBoardNotifier(super.state);
@@ -49,6 +53,7 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
       clues: state.clues,
       blackCells: newBlack,
       difficulty: state.difficulty,
+      entries: state.entries,
     );
   }
 
@@ -73,81 +78,44 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
       clues: state.clues,
       blackCells: newBlack,
       difficulty: state.difficulty,
+      entries: state.entries,
     );
   }
 }
 
-final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>(_createSampleBoardRef);
+/// Provider to load the puzzle asynchronously from JSON.
+final puzzleLoaderProvider = FutureProvider<GameBoard>(
+  (ref) async => loadPuzzleFromAsset('assets/data/astronomie_puzzle.json'),
+);
 
-
-  
-GameBoardNotifier createSampleBoard() =>
-  _createSampleBoardImpl();
-
-GameBoardNotifier _createSampleBoardImpl() {
-  const size = 13;
-  final grid = <List<String?>>[];
-  for (var i = 0; i < size; i++) {
-    grid.add(List<String?>.filled(size, null));
-  }
-  final blackCells = <List<bool>>[];
-  for (var i = 0; i < size; i++) {
-    blackCells.add(List<bool>.filled(size, false));
-  }
-
-  // Example arbitrary pattern of black cells (prototype)
-  final blackCoords = <List<int>>[
-    // some pattern to create non-rectangular crossword
-    [0, 0], [0, 1], [0, 11], [0, 12],
-    [1, 0], [1, 12],
-    [2, 4], [2, 8],
-    [3, 2], [3, 10],
-    [4, 0], [4, 6], [4, 12],
-    [5, 3], [5, 9],
-    [6, 0], [6, 12],
-    [7, 3], [7, 9],
-    [8, 0], [8, 6], [8, 12],
-    [9, 2], [9, 10],
-    [10,4], [10,8],
-    [11,0], [11,12],
-    [12,0], [12,1], [12,11], [12,12],
-  ];
-  blackCells.setBlackCells(blackCoords);
-
-  // Place some sample words (horizontal/vertical)
-  // Ensure word cells are not black before placing words
-  void place(String w, int r, int c, {bool horizontal = true}) {
-    for (var i = 0; i < w.length; i++) {
-      final rr = horizontal ? r : r + i;
-      final cc = horizontal ? c + i : c;
-      if (rr >= 0 && rr < size && cc >= 0 && cc < size) {
-        blackCells[rr][cc] = false;
-      }
-    }
-    grid.setWordSafe(r, c, w, horizontal: horizontal);
-  }
-
-  place('SOL', 2, 0);
-  place('APOGEE', 2, 5);
-  place('LEAD', 3, 3);
-  place('ENTERPRISE', 5, 0);
-  place('OPEN', 6, 2);
-  place('STEREO', 8, 2);
-  place('ALPHA', 0, 4, horizontal: false);
-  place('BRAVO', 0, 7, horizontal: false);
-
-  final board = GameBoard(
-    id: 'sample',
-    title: 'Sample Crossword',
-    gridSize: size,
-    createdAt: DateTime.now(),
-    grid: grid,
-    clues: {},
-    blackCells: blackCells,
-    difficulty: 1,
+/// Main game board provider (uses the loaded puzzle or fallback to empty).
+final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((ref) {
+  final puzzleAsync = ref.watch(puzzleLoaderProvider);
+  return puzzleAsync.when(
+    data: GameBoardNotifier.new,
+    loading: () => GameBoardNotifier.createEmpty(5),
+    error: (_, __) => GameBoardNotifier.createEmpty(5),
   );
+});
+
+
+/// Load a puzzle from a JSON asset file and convert to GameBoard.
+Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
+  final jsonString = await rootBundle.loadString(assetPath);
+  final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+  final puzzle = Puzzle.fromJson(jsonData);
+  return PuzzleConverter.puzzleToGameBoard(puzzle);
+}
+
+/// Create sample board by loading from assets/data/sample_5x5.json
+Future<GameBoardNotifier> createSampleBoard() async {
+  final board = await loadPuzzleFromAsset('assets/data/sample_5x5.json');
   return GameBoardNotifier(board);
 }
+
+/// Fallback: create empty board if loading fails
+GameBoardNotifier createEmptyBoard(int size) =>
+    GameBoardNotifier.createEmpty(size);
 
 /// Represents a selected cell in the grid.
 class SelectedCell {
@@ -165,8 +133,6 @@ final selectedCellProvider = StateProvider<SelectedCell?>(_initialSelectedCell);
 /// Holds the current word direction (horizontal or vertical).
 final wordDirectionProvider = StateProvider<WordDirection>(_initialWordDirection);
 
-// Provider tear-offs: small wrappers matching the provider callback signature so
-// the analyzer suggests using a tear-off instead of an inline closure.
-GameBoardNotifier _createSampleBoardRef(ref) => createSampleBoard();
+// Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;

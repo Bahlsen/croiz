@@ -40,8 +40,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     }
 
     final sel = ref.read(selectedCellProvider);
-    var row = sel?.row ?? 0;
-    var col = sel?.col ?? 0;
+    final row = sel?.row ?? 0;
+    final col = sel?.col ?? 0;
     final blackCellsForKey = ref.read(gameBoardProvider).blackCells;
     // If the currently selected cell is disabled (black), ignore keyboard input.
     if (sel != null && blackCellsForKey.isDisabled(sel.row, sel.col)) {
@@ -89,7 +89,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // Character input: if single-character label (e.g., 'a', 'A', 'é' etc.)
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
-        if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
+      if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
         // move to the next cell after typing; _findNextSelectable derives step from mode
         final next = _findNextSelectable(row, col, size, ref.read(gameBoardProvider).blackCells);
@@ -120,7 +120,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // when the linear advance hits out-of-bounds (or a run of disabled cells
     // followed by out-of-bounds), it will continue to the next row/column.
     final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
-    if (next == null) return null;
+    if (next == null) {
+      return null;
+    }
     return SelectedCell(next[0], next[1]);
   }
 
