@@ -66,7 +66,7 @@ jobs:
       #     exit 1
 
       - name: Run Flutter integration tests
-        run: flutter test integration_test/ --target=integration_test/app_test.dart
+        run: flutter test integration_test/app_test.dart
         # If your tests need an API URL, set it to a mock or remote test server.
         # env:
         #   API_BASE_URL: http://localhost:8080/api/v1
