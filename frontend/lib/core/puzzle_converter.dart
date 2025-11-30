@@ -6,13 +6,19 @@ class PuzzleConverter {
   /// Convert Puzzle to GameBoard.
   /// - Builds the grid and blackCells matrices from puzzle.cells.
   /// - Extracts clues from puzzle.entries.
-  static GameBoard puzzleToGameBoard(Puzzle puzzle, {bool preFillSolutions = false}) {
+  static GameBoard puzzleToGameBoard(
+    Puzzle puzzle, {
+    bool preFillSolutions = false,
+  }) {
     final rows = puzzle.rows;
     final cols = puzzle.cols;
 
     // Initialize empty grid and blackCells
     final grid = List.generate(rows, (_) => List<String?>.filled(cols, null));
-    final blackCells = List.generate(rows, (_) => List<bool>.filled(cols, false));
+    final blackCells = List.generate(
+      rows,
+      (_) => List<bool>.filled(cols, false),
+    );
 
     // Fill grid and blackCells from puzzle.cells
     for (final cell in puzzle.cells) {
@@ -32,14 +38,16 @@ class PuzzleConverter {
     for (final entry in puzzle.entries) {
       final key = '${entry.number}-${entry.direction}';
       clues[key] = entry.clue ?? '';
-      entries.add(PuzzleEntryData(
-        number: entry.number,
-        direction: entry.direction,
-        x: entry.x,
-        y: entry.y,
-        length: entry.length,
-        clue: entry.clue,
-      ));
+      entries.add(
+        PuzzleEntryData(
+          number: entry.number,
+          direction: entry.direction,
+          x: entry.x,
+          y: entry.y,
+          length: entry.length,
+          clue: entry.clue,
+        ),
+      );
     }
 
     final metadata = puzzle.metadata ?? {};
@@ -48,7 +56,8 @@ class PuzzleConverter {
     return GameBoard(
       id: puzzle.id,
       title: title,
-      gridSize: rows, // Assuming square grid; if non-square, adjust logic //TODO handle non-square grids 
+      gridSize:
+          rows, // Assuming square grid; if non-square, adjust logic //TODO handle non-square grids
       createdAt: DateTime.now(),
       grid: grid,
       clues: clues,

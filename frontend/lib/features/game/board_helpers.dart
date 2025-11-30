@@ -54,7 +54,13 @@ extension BoolGridHelpers on List<List<bool>> {
   ///     revenir au point de départ.
   ///
   /// Retourne `null` si aucune case trouvée après un tour complet.
-  List<int>? nextSelectableFrom(int row, int col, int dr, int dc, {bool wrap = false}) {
+  List<int>? nextSelectableFrom(
+    int row,
+    int col,
+    int dr,
+    int dc, {
+    bool wrap = false,
+  }) {
     if (dr == 0 && dc == 0) {
       return null;
     }
@@ -151,11 +157,13 @@ extension WordSelectionHelpers on List<List<bool>> {
     var start = horizontal ? col : row;
     var end = horizontal ? col : row;
     // Expand left/up
-    while (start > 0 && !this[horizontal ? row : start - 1][horizontal ? start - 1 : col]) {
+    while (start > 0 &&
+        !this[horizontal ? row : start - 1][horizontal ? start - 1 : col]) {
       start--;
     }
     // Expand right/down
-    while (end < size - 1 && !this[horizontal ? row : end + 1][horizontal ? end + 1 : col]) {
+    while (end < size - 1 &&
+        !this[horizontal ? row : end + 1][horizontal ? end + 1 : col]) {
       end++;
     }
     return [start, end];

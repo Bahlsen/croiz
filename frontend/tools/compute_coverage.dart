@@ -11,7 +11,9 @@ void main(List<String> args) {
 
   final f = File('coverage/lcov.info');
   if (!f.existsSync()) {
-    stderr.writeln('coverage/lcov.info not found. Run `flutter test --coverage` first.');
+    stderr.writeln(
+      'coverage/lcov.info not found. Run `flutter test --coverage` first.',
+    );
     exit(2);
   }
 
@@ -50,7 +52,9 @@ void main(List<String> args) {
     }
     if (total > 0) {
       final pct = covered / total * 100.0;
-      stdout.writeln('${fname.replaceAll(r'\\', '/').split('/').takeLast(3).join('/')} : $covered/$total = ${pct.toStringAsFixed(2)}%');
+      stdout.writeln(
+        '${fname.replaceAll(r'\\', '/').split('/').takeLast(3).join('/')} : $covered/$total = ${pct.toStringAsFixed(2)}%',
+      );
     }
     totalAll += total;
     coveredAll += covered;
@@ -66,13 +70,14 @@ void main(List<String> args) {
   stdout.writeln('\nOverall coverage: $result');
 
   if (pctAll < threshold) {
-    stderr.writeln('Coverage $result is below threshold ${threshold.toStringAsFixed(2)}%');
+    stderr.writeln(
+      'Coverage $result is below threshold ${threshold.toStringAsFixed(2)}%',
+    );
     exit(4);
   }
   stdout.writeln('Coverage meets threshold ${threshold.toStringAsFixed(2)}%');
   exit(0);
 }
-
 
 extension<T> on Iterable<T> {
   Iterable<T> takeLast(int n) sync* {
@@ -83,5 +88,3 @@ extension<T> on Iterable<T> {
     }
   }
 }
-
-

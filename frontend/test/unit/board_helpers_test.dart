@@ -21,7 +21,11 @@ void main() {
 
     test('setBlackCells marks given coords safely', () {
       final blacks = List.generate(4, (_) => List<bool>.filled(4, false));
-      blacks.setBlackCells([[0, 0], [2, 3], [10, 10]]); // last out-of-bounds ignored
+      blacks.setBlackCells([
+        [0, 0],
+        [2, 3],
+        [10, 10],
+      ]); // last out-of-bounds ignored
       expect([blacks[0][0], blacks[2][3]], [isTrue, isTrue]);
       // other cells remain false
       expect(blacks[1][1], isFalse);

@@ -6,7 +6,8 @@ import 'virtual_keyboard.dart';
 /// and prevents the system keyboard from appearing.
 class InGameTextInput extends StatefulWidget {
   const InGameTextInput({
-    required this.controller, super.key,
+    required this.controller,
+    super.key,
     this.hintText,
     this.maxLength,
     this.onSubmitted,
@@ -48,44 +49,46 @@ class _InGameTextInputState extends State<InGameTextInput> {
 
   @override
   Widget build(BuildContext context) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _buildField(context),
-        AnimatedCrossFade(
-          firstChild: const SizedBox.shrink(),
-          secondChild: VirtualKeyboard(
-            onKey: _handleKey,
-            onBackspace: _handleBackspace,
-            enabledLetters: widget.enabledLetters,
-            layout: widget.keyboardLayout,
-          ),
-          crossFadeState: _keyboardVisible
-              ? CrossFadeState.showSecond
-              : CrossFadeState.showFirst,
-          duration: const Duration(milliseconds: 180),
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      _buildField(context),
+      AnimatedCrossFade(
+        firstChild: const SizedBox.shrink(),
+        secondChild: VirtualKeyboard(
+          onKey: _handleKey,
+          onBackspace: _handleBackspace,
+          enabledLetters: widget.enabledLetters,
+          layout: widget.keyboardLayout,
         ),
-      ],
-    );
+        crossFadeState: _keyboardVisible
+            ? CrossFadeState.showSecond
+            : CrossFadeState.showFirst,
+        duration: const Duration(milliseconds: 180),
+      ),
+    ],
+  );
 
   Widget _buildField(BuildContext context) => TextField(
-      controller: widget.controller,
-      readOnly: true, // Prevent system keyboard
-      showCursor: true,
-      focusNode: _focusNode,
-      autofocus: widget.autofocus,
-      textCapitalization: TextCapitalization.characters,
-      maxLength: widget.maxLength,
-      decoration: InputDecoration(
-        hintText: widget.hintText,
-        counterText: '',
-        suffixIcon: IconButton(
-          tooltip: _keyboardVisible ? 'Masquer le clavier' : 'Afficher le clavier',
-          onPressed: () => setState(() => _keyboardVisible = !_keyboardVisible),
-          icon: Icon(_keyboardVisible ? Icons.keyboard_hide : Icons.keyboard),
-        ),
+    controller: widget.controller,
+    readOnly: true, // Prevent system keyboard
+    showCursor: true,
+    focusNode: _focusNode,
+    autofocus: widget.autofocus,
+    textCapitalization: TextCapitalization.characters,
+    maxLength: widget.maxLength,
+    decoration: InputDecoration(
+      hintText: widget.hintText,
+      counterText: '',
+      suffixIcon: IconButton(
+        tooltip: _keyboardVisible
+            ? 'Masquer le clavier'
+            : 'Afficher le clavier',
+        onPressed: () => setState(() => _keyboardVisible = !_keyboardVisible),
+        icon: Icon(_keyboardVisible ? Icons.keyboard_hide : Icons.keyboard),
       ),
-      onTap: () => setState(() => _keyboardVisible = true),
-    );
+    ),
+    onTap: () => setState(() => _keyboardVisible = true),
+  );
 
   void _handleKey(String letter) {
     if (!_isAZ(letter)) {

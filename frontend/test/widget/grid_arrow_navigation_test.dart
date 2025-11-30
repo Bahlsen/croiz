@@ -7,7 +7,9 @@ import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/crossword_grid.dart';
 
 void main() {
-  testWidgets('arrow right moves selection to next non-black cell', (tester) async {
+  testWidgets('arrow right moves selection to next non-black cell', (
+    tester,
+  ) async {
     await tester.pumpWidget(const ProviderScope(child: CroizApp()));
     await tester.tap(find.text('Start Game'));
     await tester.pumpAndSettle();

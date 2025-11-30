@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 void main() {
-  testWidgets('backspace long press accelerates repeat count over time', (tester) async {
-    int count = 0;
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: VirtualKeyboard(
-          onBackspace: () => count++,
-        ),
+  testWidgets('backspace long press accelerates repeat count over time', (
+    tester,
+  ) async {
+    var count = 0;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(body: VirtualKeyboard(onBackspace: () => count++)),
       ),
-    ));
+    );
     final backspace = find.byIcon(Icons.backspace_outlined);
     expect(backspace, findsOneWidget);
 

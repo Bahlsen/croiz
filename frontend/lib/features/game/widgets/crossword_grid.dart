@@ -52,28 +52,56 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Arrow keys: move to the next non-black cell in the given direction.
     if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      final next = _findNextSelectableInDirection(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(
+        row,
+        col,
+        0,
+        1,
+        size,
+        ref.read(gameBoardProvider).blackCells,
+      );
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      final next = _findNextSelectableInDirection(row, col, 0, -1, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(
+        row,
+        col,
+        0,
+        -1,
+        size,
+        ref.read(gameBoardProvider).blackCells,
+      );
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      final next = _findNextSelectableInDirection(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(
+        row,
+        col,
+        1,
+        0,
+        size,
+        ref.read(gameBoardProvider).blackCells,
+      );
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      final next = _findNextSelectableInDirection(row, col, -1, 0, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(
+        row,
+        col,
+        -1,
+        0,
+        size,
+        ref.read(gameBoardProvider).blackCells,
+      );
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
@@ -81,7 +109,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     }
 
     // Backspace / Delete clears the current cell
-    if (event.logicalKey == LogicalKeyboardKey.backspace || event.logicalKey == LogicalKeyboardKey.delete) {
+    if (event.logicalKey == LogicalKeyboardKey.backspace ||
+        event.logicalKey == LogicalKeyboardKey.delete) {
       ref.read(gameBoardProvider.notifier).setLetter(row, col, '');
       return;
     }
@@ -92,7 +121,12 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
         // move to the next cell after typing; _findNextSelectable derives step from mode
-        final next = _findNextSelectable(row, col, size, ref.read(gameBoardProvider).blackCells);
+        final next = _findNextSelectable(
+          row,
+          col,
+          size,
+          ref.read(gameBoardProvider).blackCells,
+        );
         if (next != null) {
           ref.read(selectedCellProvider.notifier).state = next;
         }
@@ -106,7 +140,12 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   // - horizontal => move right (col+1)
   // Arrow keys bypass this by calling `_findNextSelectableInDirection`.
   // Returns null if none in bounds.
-  SelectedCell? _findNextSelectable(int row, int col, int size, List<List<bool>> black) {
+  SelectedCell? _findNextSelectable(
+    int row,
+    int col,
+    int size,
+    List<List<bool>> black,
+  ) {
     final currentDir = ref.read(wordDirectionProvider);
     final dr = (currentDir == WordDirection.vertical) ? 1 : 0;
     final dc = (currentDir == WordDirection.vertical) ? 0 : 1;
@@ -114,7 +153,14 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   }
 
   // Find the next selectable in an explicit direction (dr,dc). Used for arrow keys.
-  SelectedCell? _findNextSelectableInDirection(int row, int col, int dr, int dc, int size, List<List<bool>> black) {
+  SelectedCell? _findNextSelectableInDirection(
+    int row,
+    int col,
+    int dr,
+    int dc,
+    int size,
+    List<List<bool>> black,
+  ) {
     // Use the helper in `board_helpers.dart` which supports wrapping across
     // rows/columns and handles non-rectangular grids. We enable wrap so that
     // when the linear advance hits out-of-bounds (or a run of disabled cells
@@ -125,7 +171,6 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     }
     return SelectedCell(next[0], next[1]);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +226,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       final current = board.grid[selected.row][selected.col] ?? '';
       if (_editingController.text != current) {
         _editingController.text = current;
-        _editingController.selection = TextSelection.fromPosition(TextPosition(offset: _editingController.text.length));
+        _editingController.selection = TextSelection.fromPosition(
+          TextPosition(offset: _editingController.text.length),
+        );
       }
     }
 
@@ -200,25 +247,29 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final row = index ~/ size;
           final col = index % size;
           final letter = board.grid[row][col];
-          final isSelected = selected != null && selected.row == row && selected.col == col;
+          final isSelected =
+              selected != null && selected.row == row && selected.col == col;
           final isDisabled = black.isDisabled(row, col);
-
 
           // Check if this cell is part of the selected word (horizontal or vertical)
           var isPartOfSelectedWord = false;
           if (selected != null) {
             final horizontal = wordDirection == WordDirection.horizontal;
-            final bounds = black.wordBounds(selected.row, selected.col, horizontal: horizontal);
+            final bounds = black.wordBounds(
+              selected.row,
+              selected.col,
+              horizontal: horizontal,
+            );
             if (horizontal) {
-              isPartOfSelectedWord = row == selected.row && col >= bounds[0] && col <= bounds[1];
+              isPartOfSelectedWord =
+                  row == selected.row && col >= bounds[0] && col <= bounds[1];
             } else {
-              isPartOfSelectedWord = col == selected.col && row >= bounds[0] && row <= bounds[1];
+              isPartOfSelectedWord =
+                  col == selected.col && row >= bounds[0] && row <= bounds[1];
             }
           }
           if (isDisabled) {
-            return Container(
-              color: Colors.black,
-            );
+            return Container(color: Colors.black);
           }
 
           final cellNumber = numbers['$row,$col'];
@@ -227,18 +278,22 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
             onTap: () {
               final wasSelected = isSelected;
               // Always set the selection (might be same or new cell)
-              ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+              ref.read(selectedCellProvider.notifier).state = SelectedCell(
+                row,
+                col,
+              );
               _focusNode.requestFocus();
-              
+
               if (wasSelected) {
                 // Second tap on same cell: toggle direction
-                final newDir = wordDirection == WordDirection.horizontal 
-                    ? WordDirection.vertical 
+                final newDir = wordDirection == WordDirection.horizontal
+                    ? WordDirection.vertical
                     : WordDirection.horizontal;
                 ref.read(wordDirectionProvider.notifier).state = newDir;
               } else {
                 // First tap on this cell: reset direction to horizontal
-                ref.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+                ref.read(wordDirectionProvider.notifier).state =
+                    WordDirection.horizontal;
               }
             },
             child: AnimatedContainer(
@@ -248,17 +303,39 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                 borderRadius: BorderRadius.circular(6),
                 // Selected cell gets a purple glow; selected-word keeps blue.
                 boxShadow: isSelected
-                  ? [BoxShadow(color: Colors.purple.withValues(alpha: 0.28), blurRadius: 10, offset: const Offset(0, 2))]
-                  : (isPartOfSelectedWord
-                    ? [BoxShadow(color: Colors.blue.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2, offset: const Offset(0, 1))]),
+                    ? [
+                        BoxShadow(
+                          color: Colors.purple.withValues(alpha: 0.28),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ]
+                    : (isPartOfSelectedWord
+                          ? [
+                              BoxShadow(
+                                color: Colors.blue.withValues(alpha: 0.25),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.5),
+                                blurRadius: 2,
+                                offset: const Offset(0, 1),
+                              ),
+                            ]),
                 border: Border.all(
                   color: isSelected
                       ? Colors.purpleAccent
-                      : (isPartOfSelectedWord ? Colors.blueAccent : Colors.grey.shade700),
+                      : (isPartOfSelectedWord
+                            ? Colors.blueAccent
+                            : Colors.grey.shade700),
                   width: isSelected ? 2.5 : (isPartOfSelectedWord ? 2 : 1),
                 ),
-                color: isPartOfSelectedWord ? Colors.blue.withValues(alpha: 0.45) : Colors.grey[800],
+                color: isPartOfSelectedWord
+                    ? Colors.blue.withValues(alpha: 0.45)
+                    : Colors.grey[800],
               ),
               child: Stack(
                 children: [
@@ -269,7 +346,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                       top: 2,
                       child: Text(
                         '$cellNumber',
-                        style: const TextStyle(fontSize: 9, color: Colors.white70),
+                        style: const TextStyle(
+                          fontSize: 9,
+                          color: Colors.white70,
+                        ),
                       ),
                     ),
                   Consumer(
@@ -286,7 +366,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                             style: TextStyle(
                               fontSize: isSelected ? 20 : 16,
                               fontWeight: FontWeight.bold,
-                              color: flashing ? Colors.amberAccent : Colors.white,
+                              color: flashing
+                                  ? Colors.amberAccent
+                                  : Colors.white,
                             ),
                           ),
                         ),

@@ -39,7 +39,9 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
     final newGrid = List<List<String?>>.from(
       state.grid.map(List<String?>.from),
     );
-    newGrid[row][col] = letter == null || letter.isEmpty ? null : letter.substring(0, 1).toUpperCase();
+    newGrid[row][col] = letter == null || letter.isEmpty
+        ? null
+        : letter.substring(0, 1).toUpperCase();
     // copy blackCells as-is
     final newBlack = List<List<bool>>.from(
       state.blackCells.map(List<bool>.from),
@@ -89,7 +91,9 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>(
 );
 
 /// Main game board provider (uses the loaded puzzle or fallback to empty).
-final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((ref) {
+final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((
+  ref,
+) {
   final puzzleAsync = ref.watch(puzzleLoaderProvider);
   return puzzleAsync.when(
     data: GameBoardNotifier.new,
@@ -97,7 +101,6 @@ final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((r
     error: (_, __) => GameBoardNotifier.createEmpty(5),
   );
 });
-
 
 /// Load a puzzle from a JSON asset file and convert to GameBoard.
 Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
@@ -131,7 +134,9 @@ enum WordDirection { horizontal, vertical }
 final selectedCellProvider = StateProvider<SelectedCell?>(_initialSelectedCell);
 
 /// Holds the current word direction (horizontal or vertical).
-final wordDirectionProvider = StateProvider<WordDirection>(_initialWordDirection);
+final wordDirectionProvider = StateProvider<WordDirection>(
+  _initialWordDirection,
+);
 
 /// Cell flashing after deletion (stores "row,col" or null)
 final flashCellProvider = StateProvider<String?>((_) => null);

@@ -7,11 +7,18 @@ class PuzzleGenerator {
   static List<List<PuzzleCell>> buildGrid(Puzzle puzzle) {
     final grid = List.generate(
       puzzle.rows,
-      (y) => List.generate(puzzle.cols, (x) => PuzzleCell(x: x, y: y), growable: false),
+      (y) => List.generate(
+        puzzle.cols,
+        (x) => PuzzleCell(x: x, y: y),
+        growable: false,
+      ),
       growable: false,
     );
     for (final cell in puzzle.cells) {
-      if (cell.y < 0 || cell.y >= puzzle.rows || cell.x < 0 || cell.x >= puzzle.cols) {
+      if (cell.y < 0 ||
+          cell.y >= puzzle.rows ||
+          cell.x < 0 ||
+          cell.x >= puzzle.cols) {
         continue;
       }
       grid[cell.y][cell.x] = cell;
@@ -36,8 +43,12 @@ class PuzzleGenerator {
           continue;
         }
 
-        final isStartAcross = (x == 0 || grid[y][x - 1].isBlack) && (x + 1 < cols && !grid[y][x + 1].isBlack);
-        final isStartDown = (y == 0 || grid[y - 1][x].isBlack) && (y + 1 < rows && !grid[y + 1][x].isBlack);
+        final isStartAcross =
+            (x == 0 || grid[y][x - 1].isBlack) &&
+            (x + 1 < cols && !grid[y][x + 1].isBlack);
+        final isStartDown =
+            (y == 0 || grid[y - 1][x].isBlack) &&
+            (y + 1 < rows && !grid[y + 1][x].isBlack);
 
         if (isStartAcross || isStartDown) {
           final assignedNumber = nextNumber;
@@ -51,7 +62,15 @@ class PuzzleGenerator {
               len++;
               xx++;
             }
-            out.add(PuzzleEntry(number: assignedNumber, direction: 'across', x: x, y: y, length: len));
+            out.add(
+              PuzzleEntry(
+                number: assignedNumber,
+                direction: 'across',
+                x: x,
+                y: y,
+                length: len,
+              ),
+            );
           }
 
           if (isStartDown) {
@@ -61,7 +80,15 @@ class PuzzleGenerator {
               len++;
               yy++;
             }
-            out.add(PuzzleEntry(number: assignedNumber, direction: 'down', x: x, y: y, length: len));
+            out.add(
+              PuzzleEntry(
+                number: assignedNumber,
+                direction: 'down',
+                x: x,
+                y: y,
+                length: len,
+              ),
+            );
           }
         }
       }

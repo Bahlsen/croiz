@@ -92,7 +92,10 @@ void main() {
         entries: [],
       );
 
-      final gameBoard = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: true);
+      final gameBoard = PuzzleConverter.puzzleToGameBoard(
+        puzzle,
+        preFillSolutions: true,
+      );
 
       // Verify solutions are pre-filled
       expect(gameBoard.grid[0][0], 'X');

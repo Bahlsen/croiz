@@ -1,6 +1,5 @@
 /// Game domain entities
 abstract class GameEntity {
-
   GameEntity({
     required this.id,
     required this.title,
@@ -32,7 +31,6 @@ class PuzzleEntryData {
 }
 
 class GameBoard extends GameEntity {
-
   GameBoard({
     required super.id,
     required super.title,
@@ -46,9 +44,11 @@ class GameBoard extends GameEntity {
   });
   final List<List<String?>> grid;
   final Map<String, String> clues;
+
   /// true = black/blocked cell
   final List<List<bool>> blackCells;
   final int difficulty;
+
   /// Optional: pre-computed entries (from Puzzle model) with number/position/clue.
   /// If present, UI can use these directly instead of recalculating numbering.
   final List<PuzzleEntryData>? entries;
@@ -59,22 +59,30 @@ class GameBoard extends GameEntity {
     List<List<bool>>? blackCells,
     int? difficulty,
     List<PuzzleEntryData>? entries,
-  }) =>
-      GameBoard(
-        id: id,
-        title: title,
-        gridSize: gridSize,
-        createdAt: createdAt,
-        grid: grid ?? List.generate(this.grid.length, (r) => List<String?>.from(this.grid[r])),
-        clues: clues ?? Map<String, String>.from(this.clues),
-        blackCells: blackCells ?? List.generate(this.blackCells.length, (r) => List<bool>.from(this.blackCells[r])),
-        difficulty: difficulty ?? this.difficulty,
-        entries: entries ?? this.entries,
-      );
+  }) => GameBoard(
+    id: id,
+    title: title,
+    gridSize: gridSize,
+    createdAt: createdAt,
+    grid:
+        grid ??
+        List.generate(
+          this.grid.length,
+          (r) => List<String?>.from(this.grid[r]),
+        ),
+    clues: clues ?? Map<String, String>.from(this.clues),
+    blackCells:
+        blackCells ??
+        List.generate(
+          this.blackCells.length,
+          (r) => List<bool>.from(this.blackCells[r]),
+        ),
+    difficulty: difficulty ?? this.difficulty,
+    entries: entries ?? this.entries,
+  );
 }
 
 class GameScore {
-
   GameScore({
     required this.gameId,
     required this.userId,
@@ -90,7 +98,6 @@ class GameScore {
 }
 
 class Player {
-
   Player({
     required this.id,
     required this.username,

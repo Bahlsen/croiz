@@ -3,7 +3,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Secure Storage Provider
-final secureStorageProvider = Provider<FlutterSecureStorage>((ref) => const FlutterSecureStorage());
+final secureStorageProvider = Provider<FlutterSecureStorage>(
+  (ref) => const FlutterSecureStorage(),
+);
 
 // Dio HTTP Client Provider
 final dioProvider = Provider<Dio>((ref) {
@@ -43,10 +45,11 @@ final dioProvider = Provider<Dio>((ref) {
 });
 
 // Authentication Provider
-final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<AuthState>>(AuthNotifier.new);
+final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<AuthState>>(
+  AuthNotifier.new,
+);
 
 class AuthNotifier extends StateNotifier<AsyncValue<AuthState>> {
-
   AuthNotifier(this.ref) : super(AsyncValue.data(AuthState.initial()));
   final Ref ref;
 
@@ -65,7 +68,6 @@ class AuthNotifier extends StateNotifier<AsyncValue<AuthState>> {
 }
 
 class AuthState {
-
   const AuthState({
     required this.isAuthenticated,
     this.userId,
