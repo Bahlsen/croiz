@@ -25,22 +25,23 @@ subprojects {
 
 // Align Java & Kotlin toolchains to Java 17 for Android compatibility
 subprojects {
-    // Kotlin
+    // Kotlin (limit JVM 17 to app module to avoid plugin mismatch)
     pluginManager.withPlugin("org.jetbrains.kotlin.android") {
-        tasks.withType<KotlinJvmCompile>().configureEach {
-            compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
+        if (project.path == ":app") {
+            tasks.withType<KotlinJvmCompile>().configureEach {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_17)
+                }
             }
-        }
-        extensions.findByType(KotlinProjectExtension::class.java)?.apply {
-            jvmToolchain(17)
         }
     }
 
-    // Java
-    tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
+    // Java (also only for app module)
+    if (project.path == ":app") {
+        tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {
+            sourceCompatibility = JavaVersion.VERSION_17.toString()
+            targetCompatibility = JavaVersion.VERSION_17.toString()
+        }
     }
 }
 
