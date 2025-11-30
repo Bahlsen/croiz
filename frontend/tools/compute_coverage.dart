@@ -15,7 +15,7 @@ void main(List<String> args) {
 
   final lines = f.readAsLinesSync();
 
-  final Map<String, List<String>> files = {};
+  final files = <String, List<String>>{};
   String? current;
   for (final line in lines) {
     if (line.startsWith('SF:')) {
@@ -26,14 +26,14 @@ void main(List<String> args) {
     }
   }
 
-  int totalAll = 0;
-  int coveredAll = 0;
+  var totalAll = 0;
+  var coveredAll = 0;
 
-  print('Per-file coverage:');
+  stdout.writeln('Per-file coverage:');
   for (final entry in files.entries) {
     final fname = entry.key;
-    int total = 0;
-    int covered = 0;
+    var total = 0;
+    var covered = 0;
     for (final line in entry.value) {
       if (line.startsWith('DA:')) {
         final parts = line.substring(3).split(',');
@@ -46,27 +46,26 @@ void main(List<String> args) {
     }
     if (total > 0) {
       final pct = covered / total * 100.0;
-      print('${fname.replaceAll('\\\\', '/').split('/').takeLast(3).join('/')} : ${covered}/${total} = ${pct.toStringAsFixed(2)}%');
+      stdout.writeln('${fname.replaceAll(r'\\', '/').split('/').takeLast(3).join('/')} : $covered/$total = ${pct.toStringAsFixed(2)}%');
     }
     totalAll += total;
     coveredAll += covered;
   }
 
   if (totalAll == 0) {
-    print('No DA lines found in lcov.info; coverage unknown.');
+    stdout.writeln('No DA lines found in lcov.info; coverage unknown.');
     exit(3);
   }
 
   final pctAll = coveredAll / totalAll * 100.0;
-  final result = '${coveredAll}/${totalAll} = ${pctAll.toStringAsFixed(2)}%';
-  print('\nOverall coverage: $result');
+  final result = '$coveredAll/$totalAll = ${pctAll.toStringAsFixed(2)}%';
+  stdout.writeln('\nOverall coverage: $result');
 
   if (pctAll < threshold) {
     stderr.writeln('Coverage $result is below threshold ${threshold.toStringAsFixed(2)}%');
     exit(4);
   }
-
-  print('Coverage meets threshold ${threshold.toStringAsFixed(2)}%');
+  stdout.writeln('Coverage meets threshold ${threshold.toStringAsFixed(2)}%');
   exit(0);
 }
 

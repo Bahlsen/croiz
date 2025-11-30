@@ -31,8 +31,8 @@ extension WordSelectionHelpers on List<List<bool>> {
   /// Returns (start, end) inclusive indices.
   List<int> wordBounds(int row, int col, {required bool horizontal}) {
     final size = length;
-    int start = horizontal ? col : row;
-    int end = horizontal ? col : row;
+    var start = horizontal ? col : row;
+    var end = horizontal ? col : row;
     // Expand left/up
     while (start > 0 && !this[horizontal ? row : start - 1][horizontal ? start - 1 : col]) {
       start--;
