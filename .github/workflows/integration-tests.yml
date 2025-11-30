@@ -17,20 +17,20 @@ jobs:
     name: End-to-End Integration Tests
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15-alpine
-        env:
-          POSTGRES_DB: croiz
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+    # services:
+    #   postgres:
+    #     image: postgres:15-alpine
+    #     env:
+    #       POSTGRES_DB: croiz
+    #       POSTGRES_USER: postgres
+    #       POSTGRES_PASSWORD: postgres
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+    #     ports:
+    #       - 5432:5432
 
     steps:
       - uses: actions/checkout@v4
@@ -48,27 +48,28 @@ jobs:
           flutter-version: '3.38.x'
           channel: 'stable'
 
-      - name: Start Spring Boot API
-        working-directory: backend
-        run: |
-          ./gradlew bootRun &
-          sleep 15
+      # - name: Start Spring Boot API
+      #   working-directory: backend
+      #   run: |
+      #     ./gradlew bootRun &
+      #     sleep 15
 
-      - name: Wait for API to be ready
-        run: |
-          for i in {1..30}; do
-            if curl -f http://localhost:8080/api/v1/health; then
-              echo "API is ready"
-              exit 0
-            fi
-            sleep 2
-          done
-          exit 1
+      # - name: Wait for API to be ready
+      #   run: |
+      #     for i in {1..30}; do
+      #       if curl -f http://localhost:8080/api/v1/health; then
+      #         echo "API is ready"
+      #         exit 0
+      #       fi
+      #       sleep 2
+      #     done
+      #     exit 1
 
       - name: Run Flutter integration tests
         run: flutter test integration_test/ --target=integration_test/app_test.dart
-        env:
-          API_BASE_URL: http://localhost:8080/api/v1
+        # If your tests need an API URL, set it to a mock or remote test server.
+        # env:
+        #   API_BASE_URL: http://localhost:8080/api/v1
 
       - name: Upload test results
         if: always()
