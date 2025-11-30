@@ -1,3 +1,5 @@
+// ignore_for_file: eol_at_end_of_file
+
 import 'dart:io';
 
 void main(List<String> args) {
@@ -40,7 +42,9 @@ void main(List<String> args) {
         if (parts.length >= 2) {
           total++;
           final hits = int.tryParse(parts[1]) ?? 0;
-          if (hits > 0) covered++;
+          if (hits > 0) {
+            covered++;
+          }
         }
       }
     }
@@ -69,6 +73,7 @@ void main(List<String> args) {
   exit(0);
 }
 
+
 extension<T> on Iterable<T> {
   Iterable<T> takeLast(int n) sync* {
     final list = toList();
@@ -78,4 +83,5 @@ extension<T> on Iterable<T> {
     }
   }
 }
+
 
