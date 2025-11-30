@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/board_helpers.dart';
 
 class CrosswordGrid extends ConsumerStatefulWidget {
   const CrosswordGrid({Key? key}) : super(key: key);
@@ -96,17 +97,33 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final black = board.blackCells;
 
     // compute clue numbers for display
+    // Number across (horizontal) starts first (row-major), then down (vertical) starts.
     final numbers = <String, int>{};
     var count = 1;
+
+    // First pass: assign numbers to across starts only
     for (var r = 0; r < size; r++) {
-        for (var c = 0; c < size; c++) {
+      for (var c = 0; c < size; c++) {
         if (black[r][c]) {
           continue;
         }
         final isStartAcross = (c == 0) || black[r][c - 1];
-        final isStartDown = (r == 0) || black[r - 1][c];
-        if (isStartAcross || isStartDown) {
+        if (isStartAcross) {
           numbers['$r,$c'] = count++;
+        }
+      }
+    }
+
+    // Second pass: assign numbers to down starts that haven't been numbered yet
+    for (var r = 0; r < size; r++) {
+      for (var c = 0; c < size; c++) {
+        if (black[r][c]) {
+          continue;
+        }
+        final isStartDown = (r == 0) || black[r - 1][c];
+        final key = '$r,$c';
+        if (isStartDown && !numbers.containsKey(key)) {
+          numbers[key] = count++;
         }
       }
     }
@@ -142,10 +159,12 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           // Check if this cell is part of the selected word (horizontal or vertical)
           var isPartOfSelectedWord = false;
           if (selected != null) {
-            if (wordDirection == WordDirection.horizontal) {
-              isPartOfSelectedWord = (row == selected.row);
+            final horizontal = wordDirection == WordDirection.horizontal;
+            final bounds = black.wordBounds(selected.row, selected.col, horizontal: horizontal);
+            if (horizontal) {
+              isPartOfSelectedWord = row == selected.row && col >= bounds[0] && col <= bounds[1];
             } else {
-              isPartOfSelectedWord = (col == selected.col);
+              isPartOfSelectedWord = col == selected.col && row >= bounds[0] && row <= bounds[1];
             }
           }
           if (isBlack) {
@@ -179,12 +198,17 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                boxShadow: isPartOfSelectedWord
+                // Selected cell gets a purple glow; selected-word keeps blue.
+                boxShadow: isSelected
+                  ? [BoxShadow(color: Colors.purple.withValues(alpha: 0.28), blurRadius: 10, offset: const Offset(0, 2))]
+                  : (isPartOfSelectedWord
                     ? [BoxShadow(color: Colors.blue.withValues(alpha: 0.25), blurRadius: 8, offset: const Offset(0, 2))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2, offset: const Offset(0, 1))],
+                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2, offset: const Offset(0, 1))]),
                 border: Border.all(
-                  color: isPartOfSelectedWord ? Colors.blueAccent : Colors.grey.shade700,
-                  width: isPartOfSelectedWord ? 2 : 1,
+                  color: isSelected
+                      ? Colors.purpleAccent
+                      : (isPartOfSelectedWord ? Colors.blueAccent : Colors.grey.shade700),
+                  width: isSelected ? 2.5 : (isPartOfSelectedWord ? 2 : 1),
                 ),
                 color: isPartOfSelectedWord ? Colors.blue.withValues(alpha: 0.45) : Colors.grey[800],
               ),

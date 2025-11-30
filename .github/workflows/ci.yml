@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Flutter --version
+        run: flutter --version
+
+      - name: Get dependencies
+        run: |
+          flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Compute coverage and enforce threshold
+        run: |
+          dart frontend/tools/compute_coverage.dart --threshold=70
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: frontend/coverage/lcov.info
