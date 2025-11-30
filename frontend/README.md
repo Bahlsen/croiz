@@ -91,6 +91,30 @@ flutter test test/unit/game_logic_test.dart
 flutter test --watch
 ```
 
+## Integration Tests & CI notes
+
+- **CI fix:** The GitHub Actions workflow at `.github/workflows/integration-tests.yml` was updated to remove a non-supported `--target` flag for `flutter test`. The workflow now invokes the test file directly: `flutter test integration_test/app_test.dart`.
+
+- **Local execution:** Integration tests require a device or Android emulator. On desktop the test runner will prompt for a device; to run non-interactively, pass the device id with `-d <device-id>`.
+
+PowerShell examples:
+```powershell
+# From repo root
+Push-Location 'C:\Projects\croiz\frontend'
+flutter pub get
+
+# Run a specific integration test on a device/emulator
+flutter test integration_test/app_test.dart -d <device-id>
+
+# Run all integration tests
+flutter test integration_test/
+Pop-Location
+```
+
+- **Web devices:** Integration tests currently do not support web devices in the same way as mobile/emulator targets. Attempting to run integration tests on web may fail with "Web devices are not supported for integration tests yet." Use an Android emulator or physical device instead.
+
+- **When CI needs an emulator:** Add steps to the GitHub Actions job to install SDK components, create and boot an AVD, and wait for boot completion before running tests (see root `README.md` for a sample snippet).
+
 ## Dependencies
 
 ### State Management

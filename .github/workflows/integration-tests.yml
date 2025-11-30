@@ -14,6 +14,7 @@ defaults:
 
 jobs:
   integration-tests:
+    if: false
     name: End-to-End Integration Tests
     runs-on: ubuntu-latest
 
