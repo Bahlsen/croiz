@@ -23,6 +23,13 @@ extension BoolGridHelpers on List<List<bool>> {
       }
     }
   }
+
+  /// Returns true when the given cell is disabled: either out of bounds or a black cell.
+  bool isDisabled(int row, int col) {
+    if (row < 0 || row >= length) return true;
+    if (col < 0 || col >= this[row].length) return true;
+    return this[row][col];
+  }
 }
 
 extension WordSelectionHelpers on List<List<bool>> {

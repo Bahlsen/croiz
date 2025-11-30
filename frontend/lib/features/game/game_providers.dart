@@ -28,6 +28,10 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
   }
 
   void setLetter(int row, int col, String? letter) {
+    // Do nothing if this cell is a black cell — no interaction allowed.
+    if (state.blackCells.isDisabled(row, col)) {
+      return;
+    }
     final newGrid = List<List<String?>>.from(
       state.grid.map(List<String?>.from),
     );

@@ -42,28 +42,41 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final sel = ref.read(selectedCellProvider);
     var row = sel?.row ?? 0;
     var col = sel?.col ?? 0;
+    final blackCellsForKey = ref.read(gameBoardProvider).blackCells;
+    // If the currently selected cell is disabled (black), ignore keyboard input.
+    if (sel != null && blackCellsForKey.isDisabled(sel.row, sel.col)) {
+      return;
+    }
 
     final keyLabel = event.logicalKey.keyLabel;
 
-    // Arrow keys
+    // Arrow keys: move to the next non-black cell in the given direction.
     if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      col = (col + 1).clamp(0, size - 1);
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+      final next = _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
+      if (next != null) {
+        ref.read(selectedCellProvider.notifier).state = next;
+      }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      col = (col - 1).clamp(0, size - 1);
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+      final next = _findNextSelectable(row, col, 0, -1, size, ref.read(gameBoardProvider).blackCells);
+      if (next != null) {
+        ref.read(selectedCellProvider.notifier).state = next;
+      }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      row = (row + 1).clamp(0, size - 1);
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+      final next = _findNextSelectable(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
+      if (next != null) {
+        ref.read(selectedCellProvider.notifier).state = next;
+      }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      row = (row - 1).clamp(0, size - 1);
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
+      final next = _findNextSelectable(row, col, -1, 0, size, ref.read(gameBoardProvider).blackCells);
+      if (next != null) {
+        ref.read(selectedCellProvider.notifier).state = next;
+      }
       return;
     }
 
@@ -78,15 +91,30 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       final char = keyLabel.toUpperCase();
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
-        // move right after typing
-        col = (col + 1) % size;
-        if (col == 0) {
-          row = (row + 1).clamp(0, size - 1);
+        // move right after typing, skipping black cells
+        final next = _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
+        if (next != null) {
+          ref.read(selectedCellProvider.notifier).state = next;
         }
-        ref.read(selectedCellProvider.notifier).state = SelectedCell(row, col);
       }
     }
   }
+
+  // Find the next selectable (non-black) cell from (row,col) stepping by (dr,dc).
+  // Returns null if none found within bounds.
+  SelectedCell? _findNextSelectable(int row, int col, int dr, int dc, int size, List<List<bool>> black) {
+    var r = row;
+    var c = col;
+    while (true) {
+      r += dr;
+      c += dc;
+      if (r < 0 || r >= size || c < 0 || c >= size) return null;
+      if (!black.isDisabled(r, c)) {
+        return SelectedCell(r, c);
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +124,15 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final wordDirection = ref.watch(wordDirectionProvider);
     final black = board.blackCells;
 
+    // If selection somehow points to a disabled cell (from older state), clear it.
+    if (selected != null && black.isDisabled(selected.row, selected.col)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ref.read(selectedCellProvider.notifier).state = null;
+        }
+      });
+    }
+
     // compute clue numbers for display
     // Number across (horizontal) starts first (row-major), then down (vertical) starts.
     final numbers = <String, int>{};
@@ -104,10 +141,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // First pass: assign numbers to across starts only
     for (var r = 0; r < size; r++) {
       for (var c = 0; c < size; c++) {
-        if (black[r][c]) {
+        if (black.isDisabled(r, c)) {
           continue;
         }
-        final isStartAcross = (c == 0) || black[r][c - 1];
+        final isStartAcross = (c == 0) || black.isDisabled(r, c - 1);
         if (isStartAcross) {
           numbers['$r,$c'] = count++;
         }
@@ -117,10 +154,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // Second pass: assign numbers to down starts that haven't been numbered yet
     for (var r = 0; r < size; r++) {
       for (var c = 0; c < size; c++) {
-        if (black[r][c]) {
+        if (black.isDisabled(r, c)) {
           continue;
         }
-        final isStartDown = (r == 0) || black[r - 1][c];
+        final isStartDown = (r == 0) || black.isDisabled(r - 1, c);
         final key = '$r,$c';
         if (isStartDown && !numbers.containsKey(key)) {
           numbers[key] = count++;
@@ -153,7 +190,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final col = index % size;
           final letter = board.grid[row][col];
           final isSelected = selected != null && selected.row == row && selected.col == col;
-          final isBlack = black[row][col];
+          final isDisabled = black.isDisabled(row, col);
 
 
           // Check if this cell is part of the selected word (horizontal or vertical)
@@ -167,7 +204,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
               isPartOfSelectedWord = col == selected.col && row >= bounds[0] && row <= bounds[1];
             }
           }
-          if (isBlack) {
+          if (isDisabled) {
             return Container(
               color: Colors.black,
             );
@@ -251,21 +288,13 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                                 ref.read(gameBoardProvider.notifier).setLetter(row, col, value);
                               },
                               onSubmitted: (value) {
-                                // move selection in the current direction
-                                var newRow = row;
-                                var newCol = col;
-                                if (wordDirection == WordDirection.horizontal) {
-                                  newCol = (col + 1) % size;
-                                  if (newCol == 0) {
-                                    newRow = (row + 1).clamp(0, size - 1);
-                                  }
-                                } else {
-                                  newRow = (row + 1) % size;
-                                  if (newRow == 0) {
-                                    newCol = (col + 1).clamp(0, size - 1);
-                                  }
+                                // move selection in the current direction, skipping black cells
+                                final next = (wordDirection == WordDirection.horizontal)
+                                    ? _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells)
+                                    : _findNextSelectable(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
+                                if (next != null) {
+                                  ref.read(selectedCellProvider.notifier).state = next;
                                 }
-                                ref.read(selectedCellProvider.notifier).state = SelectedCell(newRow, newCol);
                               },
                             ),
                           )
