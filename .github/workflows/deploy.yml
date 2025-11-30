@@ -5,6 +5,10 @@ on:
     types: [created]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
   deploy:
     name: Deploy to Production
@@ -30,12 +34,28 @@ jobs:
         with:
           flutter-version: '3.38.x'
 
+      - name: Get Flutter dependencies
+        run: flutter pub get
+
+      - name: Run integration tests
+        run: |
+          if [ -d integration_test ]; then
+            echo "Running integration tests..."
+            flutter test integration_test
+          else
+            echo "No integration_test directory found; skipping integration tests."
+          fi
+
+      # If you have device-driven integration tests (flutter drive), uncomment and configure the following
+      # - name: Run device integration tests (requires emulator/device setup)
+      #   working-directory: frontend
+      #   run: |
+      #     flutter drive --driver=test_driver/integration_test.dart --target=integration_test/app_test.dart
+
       - name: Build Flutter app for Android
-        working-directory: frontend
         run: flutter build apk --release
 
       - name: Build Flutter app for iOS
-        working-directory: frontend
         run: flutter build ios --release
         continue-on-error: true
 
