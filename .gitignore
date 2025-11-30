@@ -10,6 +10,11 @@ frontend/.fvm/
 frontend/.firebase/
 frontend/web/flutter_service_worker.js
 
+# Firebase
+**/google-services.json
+**/GoogleService-Info.plist
+docs/firebase-credentials.md
+
 # Spring Boot
 backend/target/
 backend/.gradle/
