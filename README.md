@@ -152,10 +152,15 @@ To distribute the app to testers via Firebase:
 1. Go to the Actions tab in GitHub
 2. Select "Firebase App Distribution" workflow
 3. Click "Run workflow"
-4. Select the branch (main or develop)
+4. Select the platform:
+   - **android**: Build and distribute Android APK
+   - **ios**: Build and distribute iOS IPA
+   - **both**: Build and distribute both platforms
 5. Click "Run workflow" to start the build and distribution
 
-The APK will be automatically uploaded to Firebase App Distribution and made available to the "testers" group.
+The builds will be automatically uploaded to Firebase App Distribution and made available to the "testers" group.
+
+**Note:** iOS distribution requires an Apple Developer account (paid) and signing setup. See [iOS Firebase Setup](docs/ios-firebase-setup.md) and the [iOS Checklist](docs/ios-setup-checklist.md).
 
 ## Documentation
 
@@ -168,6 +173,7 @@ The APK will be automatically uploaded to Firebase App Distribution and made ava
 - [Puzzle Creation Guide](docs/puzzle-creation-guide.md) - How to create puzzles
 - [Firebase Setup](docs/firebase-setup.md) - Firebase configuration
 - [Firebase Credentials](docs/firebase-credentials.md) - Credentials management
+- [iOS Firebase Setup](docs/ios-firebase-setup.md) - iOS App Distribution configuration
 
 ## Project Resources
 

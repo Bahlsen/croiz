@@ -1,5 +1,21 @@
 # Configuration iOS pour Firebase App Distribution
 
+Ce guide documente précisément tout ce qu'il reste à faire pour distribuer l'app iOS via Firebase App Distribution. Aujourd'hui, l'iOS côté code et pipeline est préparé, mais la distribution réelle nécessite l'inscription au Apple Developer Program (99$/an) et la configuration de la signature.
+
+## État actuel (projet Croiz)
+- iOS Flutter scaffoldé, `Bundle ID` défini: `ca.charlemagne.croiz`
+- `AppDelegate.swift` initialise Firebase (`FirebaseApp.configure()`)
+- `Podfile` configuré (FirebaseAnalytics, FirebaseAppDistribution)
+- `GoogleService-Info.plist` local présent et non committé (exemple committé)
+- Workflow GitHub Actions prêt (création du plist via secret, build IPA, upload Firebase)
+- Secrets iOS NON encore ajoutés (à faire lors de l'inscription Apple)
+
+## Coût et alternatives
+- Pour distribuer à des testeurs sur iOS (Ad Hoc / Firebase / TestFlight), Apple exige le programme développeur payant (99$/an).
+- Alternatives temporaires sans frais:
+  - Exécuter sur simulateur (Mac requis), non partageable.
+  - Free provisioning sur un seul iPhone via Xcode (expire tous les 7 jours, pas de CI, pas de distribution OTA).
+
 ## Prérequis
 
 1. **Compte Apple Developer** avec accès à l'équipe
@@ -20,7 +36,7 @@
 
 **✅ Cette étape est déjà complétée pour ce projet.**
 
-**Firebase App ID iOS**
+Remarque: l'ID Firebase iOS n'est pas un secret (identifiant public). Ne commitez jamais le vrai `GoogleService-Info.plist`.
 ### 2. Installer les dépendances Firebase (sur macOS avec Xcode)
 
 Le projet utilise CocoaPods pour gérer les dépendances Firebase. Le `Podfile` est déjà configuré.
@@ -36,6 +52,8 @@ pod install
 - `FirebaseAppDistribution` : Distribution aux testeurs
 
 **Note :** Sur Windows, cette étape sera automatiquement effectuée par le GitHub Actions runner macOS lors du build.
+
+> Facultatif: Vous pouvez migrer vers Swift Package Manager pour Firebase si vous préférez éviter CocoaPods, mais le pipeline actuel utilise CocoaPods et fonctionne bien en CI.
 
 ### 3. Initialiser Firebase dans l'application
 
@@ -99,6 +117,7 @@ Créer les secrets suivants :
 | Nom du secret | Description | Comment l'obtenir |
 |---------------|-------------|-------------------|
 | `FIREBASE_APP_ID_IOS` | ID de l'app iOS dans Firebase | Firebase Console > Project Settings > Your apps > iOS app |
+| `IOS_GOOGLESERVICE_INFO_PLIST_BASE64` | Contenu base64 du fichier GoogleService-Info.plist | Encoder votre fichier `GoogleService-Info.plist` |
 | `IOS_P12_BASE64` | Certificat de signature encodé | Contenu de `certificate_base64.txt` |
 | `IOS_P12_PASSWORD` | Mot de passe du certificat .p12 | Celui défini lors de l'export du certificat |
 | `IOS_PROVISIONING_PROFILE_BASE64` | Profil de provisionnement encodé | Contenu de `profile_base64.txt` |
@@ -106,6 +125,23 @@ Créer les secrets suivants :
 **Secrets existants à vérifier :**
 - `FIREBASE_APP_ID` : ID de l'app Android
 - `FIREBASE_SERVICE_ACCOUNT` : Credentials du service account Firebase
+
+Encodage du fichier GoogleService-Info.plist en base64:
+
+macOS / Linux:
+```bash
+base64 -i frontend/ios/Runner/GoogleService-Info.plist -o ios_google_plist_base64.txt
+```
+
+Windows PowerShell:
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("frontend/ios/Runner/GoogleService-Info.plist")) | Set-Content -Path ios_google_plist_base64.txt
+```
+
+Copiez le contenu du fichier `ios_google_plist_base64.txt` dans le secret `IOS_GOOGLESERVICE_INFO_PLIST_BASE64`.
+
+### 7.1. Variables d'entrée du workflow (optionnel)
+- `team_id` (input du workflow): si renseigné lors du "Run workflow", le pipeline injecte automatiquement `DEVELOPMENT_TEAM` dans le projet Xcode.
 
 ### 8. Obtenir Team ID et Bundle ID
 
@@ -151,6 +187,7 @@ Vous pouvez le vérifier dans Xcode :
    - `android` : Build APK Android uniquement
    - `ios` : Build IPA iOS uniquement
    - `both` : Build les deux plateformes
+5. (Optionnel) Renseigner `team_id` si vous souhaitez injection automatique du Team ID
 
 ### Tester localement
 
@@ -176,6 +213,7 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 ### Erreur "Provisioning profile not found"
 - Vérifier que le nom du profil dans ExportOptions.plist correspond exactement
 - S'assurer que le profil est bien encodé en base64 sans retours à la ligne
+ - Vérifier que les devices de test (UDID) sont bien inclus dans le profil Ad Hoc
 
 ### Erreur Firebase "App not found"
 - Vérifier que `FIREBASE_APP_ID_IOS` correspond à l'ID iOS dans Firebase Console
@@ -186,3 +224,4 @@ flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 - [Firebase App Distribution iOS](https://firebase.google.com/docs/app-distribution/ios/distribute-console)
 - [Apple Code Signing](https://developer.apple.com/support/code-signing/)
 - [Flutter iOS Deployment](https://docs.flutter.dev/deployment/ios)
+ - [Apple Developer Program](https://developer.apple.com/programs/)

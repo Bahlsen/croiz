@@ -10,8 +10,13 @@
 - [x] **GoogleService-Info.plist placé dans `frontend/ios/Runner/`**
 - [x] **Firebase App ID iOS** : `1:439585026140:ios:4c726108f5f68a36997699`
 - [x] **Podfile configuré avec dépendances Firebase**
+ - [x] **Workflow CI iOS prêt à reconstituer GoogleService-Info.plist depuis un secret**
 
-## 📋 À faire AVANT de commiter et pousser
+## 📋 À faire (lorsque vous déciderez de déployer iOS)
+
+Résumé des prérequis payants et matériels:
+- Apple Developer Program: 99 USD/an (requis pour la distribution OTA)
+- Mac requis pour créer le certificat et le profil de provisionnement
 
 ### 1. ~~Créer l'application iOS dans Firebase Console~~ ✅ FAIT
 
@@ -43,7 +48,7 @@
 7. Capabilities: Sélectionner celles nécessaires (Push Notifications, etc.)
 8. Register
 
-### 4. Créer un Certificat de Distribution
+### 4. Créer un Certificat de Distribution (Apple Distribution)
 
 **Sur macOS uniquement :**
 
@@ -73,7 +78,11 @@
 
 **Convertir en base64 :**
 ```bash
+# macOS / Linux
 base64 -i certificate.p12 -o certificate_base64.txt
+
+# Windows PowerShell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\\path\\to\\certificate.p12")) | Set-Content -Path certificate_base64.txt
 ```
 
 ### 5. Créer un Profil de Provisionnement Ad Hoc
@@ -90,7 +99,11 @@ base64 -i certificate.p12 -o certificate_base64.txt
 
 **Convertir en base64 :**
 ```bash
+# macOS / Linux
 base64 -i profile.mobileprovision -o profile_base64.txt
+
+# Windows PowerShell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("C:\\path\\to\\AdHoc.mobileprovision")) | Set-Content -Path profile_base64.txt
 ```
 
 ### 6. Mettre à jour ExportOptions.plist
@@ -117,6 +130,7 @@ Créer ces 4 nouveaux secrets :
 | Secret Name | Value | Source |
 |------------|-------|--------|
 | `FIREBASE_APP_ID_IOS` | `1:xxxxx:ios:xxxxx` | Firebase Console (étape 1) |
+| `IOS_GOOGLESERVICE_INFO_PLIST_BASE64` | Base64 du `GoogleService-Info.plist` | Encoder le fichier téléchargé depuis Firebase |
 | `IOS_P12_BASE64` | Contenu de `certificate_base64.txt` | Étape 4 |
 | `IOS_P12_PASSWORD` | Le mot de passe du .p12 | Étape 4 |
 | `IOS_PROVISIONING_PROFILE_BASE64` | Contenu de `profile_base64.txt` | Étape 5 |
@@ -124,6 +138,18 @@ Créer ces 4 nouveaux secrets :
 **Vérifier les secrets existants :**
 - `FIREBASE_APP_ID` (Android)
 - `FIREBASE_SERVICE_ACCOUNT`
+
+Encodage de GoogleService-Info.plist en base64
+
+macOS / Linux:
+```bash
+base64 -i frontend/ios/Runner/GoogleService-Info.plist -o ios_google_plist_base64.txt
+```
+
+Windows PowerShell:
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("frontend/ios/Runner/GoogleService-Info.plist")) | Set-Content -Path ios_google_plist_base64.txt
+```
 
 ## ⚠️ Notes importantes
 
@@ -148,7 +174,7 @@ Si vous voulez juste tester localement sans Firebase Distribution :
 1. Commiter et pousser les changements
 2. Aller dans GitHub Actions
 3. Lancer "Firebase App Distribution"
-4. Choisir "ios" ou "both"
+4. Choisir "ios" ou "both" (optionnel: renseigner `team_id`)
 5. Le build se lancera et distribuera l'app sur Firebase
 
 ## 📚 Ressources
