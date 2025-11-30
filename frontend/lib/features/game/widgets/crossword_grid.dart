@@ -115,16 +115,13 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
   // Find the next selectable in an explicit direction (dr,dc). Used for arrow keys.
   SelectedCell? _findNextSelectableInDirection(int row, int col, int dr, int dc, int size, List<List<bool>> black) {
-    var r = row;
-    var c = col;
-    while (true) {
-      r += dr;
-      c += dc;
-      if (r < 0 || r >= size || c < 0 || c >= size) return null;
-      if (!black.isDisabled(r, c)) {
-        return SelectedCell(r, c);
-      }
-    }
+    // Use the helper in `board_helpers.dart` which supports wrapping across
+    // rows/columns and handles non-rectangular grids. We enable wrap so that
+    // when the linear advance hits out-of-bounds (or a run of disabled cells
+    // followed by out-of-bounds), it will continue to the next row/column.
+    final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
+    if (next == null) return null;
+    return SelectedCell(next[0], next[1]);
   }
 
 
