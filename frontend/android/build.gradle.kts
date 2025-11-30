@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+
 allprojects {
     repositories {
         google()
@@ -22,12 +26,11 @@ subprojects {
 // Ensure consistent Kotlin compiler settings across all Android subprojects (incl. plugins)
 subprojects {
     pluginManager.withPlugin("org.jetbrains.kotlin.android") {
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-            kotlinOptions {
-                // Kotlin 1.4 is no longer supported; align with Kotlin 2.x toolchain
-                jvmTarget = "17"
-                languageVersion = "2.0"
-                apiVersion = "2.0"
+        tasks.withType<KotlinCompilationTask<*>>().configureEach {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
+                languageVersion.set(KotlinVersion.KOTLIN_2_0)
+                apiVersion.set(KotlinVersion.KOTLIN_2_0)
             }
         }
     }
