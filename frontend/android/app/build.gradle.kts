@@ -12,12 +12,12 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Match Kotlin jvmTarget (17) configured in root build script
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // Kotlin compiler options are configured via compilerOptions DSL in
-    // project-level script for all subprojects (see android/build.gradle.kts).
+    // Kotlin compiler/toolchain configured in project-level script (android/build.gradle.kts).
 
     defaultConfig {
         applicationId = "ca.charlemagne.croiz"

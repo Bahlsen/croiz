@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
 allprojects {
     repositories {
@@ -23,25 +23,24 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
-// Ensure consistent Kotlin compiler settings across all Android subprojects (incl. plugins)
+// Align Java & Kotlin toolchains to Java 17 for Android compatibility
 subprojects {
+    // Kotlin
     pluginManager.withPlugin("org.jetbrains.kotlin.android") {
-        // Configure Kotlin compiler options using the new DSL
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {
-                // Some environments may lack the jvmTarget option in compilerOptions; rely on Java toolchain below
-                languageVersion.set(KotlinVersion.KOTLIN_2_0)
-                apiVersion.set(KotlinVersion.KOTLIN_2_0)
+                jvmTarget.set(JvmTarget.JVM_17)
             }
+        }
+        extensions.findByType(KotlinProjectExtension::class.java)?.apply {
+            jvmToolchain(17)
         }
     }
 
-    // Ensure Java compilation uses 17 across all modules to avoid source/target 8 warnings
+    // Java
     tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {
         sourceCompatibility = JavaVersion.VERSION_17.toString()
         targetCompatibility = JavaVersion.VERSION_17.toString()
-        // Do not use --release for Android: AGP needs bootclasspath for Android APIs
-        // options.release.set(17)
     }
 }
 
