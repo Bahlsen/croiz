@@ -247,12 +247,12 @@ class _LetterKey extends StatelessWidget {
         child: FilledButton(
           onPressed: onPressed,
           style: FilledButton.styleFrom(
-            backgroundColor:
-                keyColor ?? scheme.surfaceContainerHighest.withOpacity(0.32),
+            backgroundColor: keyColor ??
+              scheme.surfaceContainerHighest.withValues(alpha: 0.32),
             foregroundColor: scheme.onSurface,
             disabledBackgroundColor:
-                disabledKeyColor ?? scheme.onSurface.withOpacity(0.08),
-            disabledForegroundColor: scheme.onSurface.withOpacity(0.38),
+              disabledKeyColor ?? scheme.onSurface.withValues(alpha: 0.08),
+            disabledForegroundColor: scheme.onSurface.withValues(alpha: 0.38),
             padding: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(radius),
@@ -353,11 +353,11 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
         child: FilledButton(
           onPressed: _trigger,
           style: FilledButton.styleFrom(
-            backgroundColor:
-                widget.keyColor ??
-                Theme.of(
-                  context,
-                ).colorScheme.surfaceContainerHighest.withOpacity(0.38),
+            backgroundColor: widget.keyColor ??
+                Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest
+                    .withValues(alpha: 0.38),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(widget.radius),
             ),
