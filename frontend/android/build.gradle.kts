@@ -29,7 +29,7 @@ subprojects {
         // Configure Kotlin compiler options using the new DSL
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_17)
+                // Some environments may lack the jvmTarget option in compilerOptions; rely on Java toolchain below
                 languageVersion.set(KotlinVersion.KOTLIN_2_0)
                 apiVersion.set(KotlinVersion.KOTLIN_2_0)
             }
