@@ -1,4 +1,4 @@
-package ca.charlemagne.croiz
+package com.example.croiz
 
 import io.flutter.embedding.android.FlutterActivity
 

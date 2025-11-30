@@ -40,7 +40,8 @@ subprojects {
     tasks.withType<org.gradle.api.tasks.compile.JavaCompile>().configureEach {
         sourceCompatibility = JavaVersion.VERSION_17.toString()
         targetCompatibility = JavaVersion.VERSION_17.toString()
-        options.release.set(17)
+        // Do not use --release for Android: AGP needs bootclasspath for Android APIs
+        // options.release.set(17)
     }
 }
 
