@@ -1,5 +1,7 @@
 # Croiz - French Crossword Game
 
+[![CI](https://github.com/Bahlsen/croiz/actions/workflows/ci.yml/badge.svg)](https://github.com/Bahlsen/croiz/actions/workflows/ci.yml)
+
 A modern mobile crossword game built with Flutter and Spring Boot, featuring real-time gameplay, user authentication, and comprehensive scoring systems.
 
 ## Project Structure
