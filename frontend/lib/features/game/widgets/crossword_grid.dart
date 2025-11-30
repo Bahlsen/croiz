@@ -52,28 +52,28 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Arrow keys: move to the next non-black cell in the given direction.
     if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      final next = _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      final next = _findNextSelectable(row, col, 0, -1, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(row, col, 0, -1, size, ref.read(gameBoardProvider).blackCells);
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      final next = _findNextSelectable(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
       return;
     }
     if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      final next = _findNextSelectable(row, col, -1, 0, size, ref.read(gameBoardProvider).blackCells);
+      final next = _findNextSelectableInDirection(row, col, -1, 0, size, ref.read(gameBoardProvider).blackCells);
       if (next != null) {
         ref.read(selectedCellProvider.notifier).state = next;
       }
@@ -89,10 +89,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // Character input: if single-character label (e.g., 'a', 'A', 'é' etc.)
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
-      if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
+        if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
-        // move right after typing, skipping black cells
-        final next = _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells);
+        // move to the next cell after typing; _findNextSelectable derives step from mode
+        final next = _findNextSelectable(row, col, size, ref.read(gameBoardProvider).blackCells);
         if (next != null) {
           ref.read(selectedCellProvider.notifier).state = next;
         }
@@ -100,9 +100,21 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     }
   }
 
-  // Find the next selectable (non-black) cell from (row,col) stepping by (dr,dc).
-  // Returns null if none found within bounds.
-  SelectedCell? _findNextSelectable(int row, int col, int dr, int dc, int size, List<List<bool>> black) {
+  // Return the next non-black selectable cell after (row,col).
+  // Step is derived from the current `wordDirectionProvider`:
+  // - vertical   => move down (row+1)
+  // - horizontal => move right (col+1)
+  // Arrow keys bypass this by calling `_findNextSelectableInDirection`.
+  // Returns null if none in bounds.
+  SelectedCell? _findNextSelectable(int row, int col, int size, List<List<bool>> black) {
+    final currentDir = ref.read(wordDirectionProvider);
+    final dr = (currentDir == WordDirection.vertical) ? 1 : 0;
+    final dc = (currentDir == WordDirection.vertical) ? 0 : 1;
+    return _findNextSelectableInDirection(row, col, dr, dc, size, black);
+  }
+
+  // Find the next selectable in an explicit direction (dr,dc). Used for arrow keys.
+  SelectedCell? _findNextSelectableInDirection(int row, int col, int dr, int dc, int size, List<List<bool>> black) {
     var r = row;
     var c = col;
     while (true) {
@@ -289,9 +301,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                               },
                               onSubmitted: (value) {
                                 // move selection in the current direction, skipping black cells
-                                final next = (wordDirection == WordDirection.horizontal)
-                                    ? _findNextSelectable(row, col, 0, 1, size, ref.read(gameBoardProvider).blackCells)
-                                    : _findNextSelectable(row, col, 1, 0, size, ref.read(gameBoardProvider).blackCells);
+                                final next = _findNextSelectable(row, col, size, ref.read(gameBoardProvider).blackCells);
                                 if (next != null) {
                                   ref.read(selectedCellProvider.notifier).state = next;
                                 }
