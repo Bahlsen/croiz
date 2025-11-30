@@ -53,6 +53,19 @@ jobs:
       - name: Get Flutter dependencies
         run: flutter pub get
 
+      - name: Analyze (non-blocking)
+        run: |
+          flutter analyze | tee flutter_analyze.log
+        continue-on-error: true
+
+      - name: Upload analyzer report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-analyze-android-${{ github.sha }}
+          path: frontend/flutter_analyze.log
+          retention-days: 7
+
       - name: Run tests
         run: flutter test
 
@@ -106,6 +119,19 @@ jobs:
 
       - name: Get Flutter dependencies
         run: flutter pub get
+
+      - name: Analyze (non-blocking)
+        run: |
+          flutter analyze | tee flutter_analyze.log
+        continue-on-error: true
+
+      - name: Upload analyzer report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: flutter-analyze-ios-${{ github.sha }}
+          path: frontend/flutter_analyze.log
+          retention-days: 7
 
       - name: Install CocoaPods dependencies
         run: |
