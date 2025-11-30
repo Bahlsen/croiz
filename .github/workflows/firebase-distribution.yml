@@ -1,10 +1,6 @@
 name: Firebase App Distribution
 
 on:
-  push:
-    branches:
-      - main
-      - develop
   workflow_dispatch:
 
 defaults:
@@ -53,7 +49,6 @@ jobs:
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.sha }}
             Author: ${{ github.actor }}
-            Message: ${{ github.event.head_commit.message }}
 
       - name: Upload APK to GitHub Artifacts
         uses: actions/upload-artifact@v4

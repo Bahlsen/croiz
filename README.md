@@ -11,6 +11,7 @@ croiz/
 ├── frontend/          # Flutter mobile application (Riverpod state management)
 ├── backend/           # Spring Boot REST API
 ├── shared/            # Shared models and constants
+├── tools/             # Python puzzle generation scripts
 ├── .github/workflows/ # CI/CD pipelines
 └── docs/              # Project documentation
 ```
@@ -18,109 +19,162 @@ croiz/
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Flutter 3.38+
-- **State Management**: Riverpod
-- **HTTP Client**: Dio
+- **Framework**: Flutter 3.19+ (Dart 3.10+)
+- **State Management**: Riverpod 2.4
+- **Routing**: GoRouter 12.0
+- **HTTP Client**: Dio 5.3
 - **Local Storage**: Sqflite + flutter_secure_storage
-- **Testing**: flutter_test, mockito, golden_toolkit
+- **UI**: Google Fonts, Flutter SVG
+- **Testing**: flutter_test, mockito, mocktail, golden_toolkit
 
 ### Backend
-- **Framework**: Spring Boot 4.0+
-- **Database**: PostgreSQL
+- **Framework**: Spring Boot 4.0.1
+- **Language**: Java 21 LTS
+- **Database**: PostgreSQL + Flyway migrations
 - **Security**: Spring Security + JWT
-- **Build Tool**: Gradle/Maven
-- **Testing**: JUnit 5, MockMvc, H2 (in-memory)
+- **Build Tool**: Gradle
+- **Code Quality**: Spotless, JaCoCo
+- **Testing**: JUnit 5, Mockito, Spring Security Test, H2 (in-memory)
 
-
-## Recent Changes (2025-11-29)
-
-- **CI Workflow (fixed):** Updated `.github/workflows/integration-tests.yml` to remove an invalid `--target` flag previously passed to `flutter test`. The workflow now runs the test file directly: `flutter test integration_test/app_test.dart`. This prevents the `Could not find an option named "--target"` error seen in CI runs.
-- **Integration Tests (TI):** Added local instructions to run integration tests. Integration tests require a connected device or an Android emulator; running `flutter test` may prompt to select a device if multiple are available. Prefer specifying a device non-interactively with `-d <device-id>`.
-
-- **Temporary CI change (2025-11-30):** Integration tests (TI) are temporarily disabled in CI to avoid failing runs while we prepare emulator setup for the runners. The job in `.github/workflows/integration-tests.yml` has been disabled by adding `if: false`. To re-enable TI in CI, remove the `if: false` line and add steps to install SDK components and boot an AVD as documented above.
-
-Local commands (PowerShell examples):
-```powershell
-# From repository root, run in frontend
-Push-Location 'C:\Projects\croiz\frontend'
-flutter pub get
-
-# Run a single integration test on an Android device/emulator (non-interactive)
-flutter test integration_test/app_test.dart -d <device-id>
-
-# Or run all integration tests
-flutter test integration_test/
-Pop-Location
-```
-
-Prerequisites for local TI:
-- Android SDK / Android Studio (for `emulator`, `sdkmanager`, `avdmanager`).
-- Or a physical Android device with USB debugging enabled.
-
-Quick emulator setup (Windows PowerShell example):
-```powershell
-# Set your Android SDK root if not already set
-$env:ANDROID_SDK_ROOT = 'C:\Users\<YourUser>\AppData\Local\Android\Sdk'
-
-# Install required SDK components (requires sdkmanager in PATH)
 ## Quick Start
 
-# Create an AVD named 'test_avd'
-
-
-# Launch the emulator (may take a minute to boot)
 ### Prerequisites
-- Flutter 3.38+ with Dart 3.10+
-```
-
-CI recommendation:
-- If you want GitHub Actions to run TI non-interactively, add steps in `.github/workflows/integration-tests.yml` to install Android SDK components, create and boot an AVD, and wait for the emulator to become ready before running `flutter test`.
-- Example (Ubuntu runner) — skeleton snippet to integrate into the workflow:
-```yaml
-- name: Install Android SDK
-	run: |
-		sudo apt-get update
-		sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients
-		yes | sdkmanager --install "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"
-
-- name: Create and start AVD
-	run: |
-		echo no | avdmanager create avd -n test_avd -k "system-images;android-33;google_apis;x86_64" --force
-		$ANDROID_SDK_ROOT/emulator/emulator -avd test_avd -no-window -no-audio &
-		adb wait-for-device
-		adb shell 'while [[ $(getprop sys.boot_completed) != "1" ]]; do sleep 1; done'
-```
+- Flutter 3.19+ with Dart 3.10+
 - Java 21 LTS
 - PostgreSQL 14+
 - Git
+- Android SDK (for mobile development)
 
 ### Frontend Setup
-```bash
+
+```powershell
+# Navigate to frontend directory
 cd frontend
+
+# Install dependencies
 flutter pub get
+
+# Run on connected device or emulator
 flutter run
+
+# Run tests
+flutter test
+
+# Run tests with coverage
+flutter test --coverage
 ```
 
 ### Backend Setup
-```bash
+
+```powershell
+# Navigate to backend directory
 cd backend
-./gradlew bootRun
-# or
-mvn spring-boot:run
+
+# Run the application
+.\gradlew bootRun
+
+# Run tests
+.\gradlew test
+
+# Run with code coverage
+.\gradlew jacocoTestReport
+
+# Check code formatting
+.\gradlew spotlessCheck
+
+# Apply code formatting
+.\gradlew spotlessApply
 ```
+
+### Puzzle Generation
+
+```powershell
+# Navigate to tools directory
+cd tools
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Generate a puzzle
+python generate_puzzle.py
+```
+
+## Testing
+
+### Unit Tests
+```powershell
+# Frontend
+cd frontend
+flutter test
+
+# Backend
+cd backend
+.\gradlew test
+```
+
+### Integration Tests
+```powershell
+# Frontend (requires connected device/emulator)
+cd frontend
+flutter test integration_test/
+
+# Run on specific device
+flutter test integration_test/ -d <device-id>
+```
+
+### Coverage Reports
+```powershell
+# Frontend
+cd frontend
+flutter test --coverage
+dart run tools/compute_coverage.dart
+
+# Backend
+cd backend
+.\gradlew jacocoTestReport
+# Report available at: backend/build/jacocoHtml/index.html
+```
+
+## CI/CD
+
+The project uses GitHub Actions for continuous integration and deployment:
+
+- **ci.yml**: Main CI pipeline (lint, test, build)
+- **api-tests.yml**: Backend API tests
+- **integration-tests.yml**: Frontend integration tests
+- **firebase-distribution.yml**: Manual Firebase App Distribution (triggered via GitHub Actions UI)
+- **deploy.yml**: Deployment pipeline
+
+### Firebase Distribution
+
+To distribute the app to testers via Firebase:
+
+1. Go to the Actions tab in GitHub
+2. Select "Firebase App Distribution" workflow
+3. Click "Run workflow"
+4. Select the branch (main or develop)
+5. Click "Run workflow" to start the build and distribution
+
+The APK will be automatically uploaded to Firebase App Distribution and made available to the "testers" group.
 
 ## Documentation
 
-- [Architecture](docs/architecture.md)
-- [API Documentation](docs/api.md)
-- [Setup Guide](docs/setup.md)
-- [Testing Strategy](docs/testing.md)
-- [Database Schema](docs/database.md)
+- [Architecture](docs/architecture.md) - System design and architecture overview
+- [API Documentation](docs/api.md) - REST API endpoints and specifications
+- [Setup Guide](docs/setup.md) - Detailed setup instructions
+- [Testing Strategy](docs/testing.md) - Testing approach and guidelines
+- [Puzzle System](docs/puzzle-system.md) - Crossword puzzle mechanics
+- [Puzzle Schema](docs/puzzle-schema.md) - Puzzle data structure
+- [Puzzle Creation Guide](docs/puzzle-creation-guide.md) - How to create puzzles
+- [Firebase Setup](docs/firebase-setup.md) - Firebase configuration
+- [Firebase Credentials](docs/firebase-credentials.md) - Credentials management
+
+## Project Resources
+
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Quick Reference](QUICK_REFERENCE.md)
+- [Initialization Guide](INITIALIZATION.md)
 
 ## License
 
 Private repository - All rights reserved
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md)
