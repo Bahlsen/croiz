@@ -6,16 +6,19 @@ void main() {
     test('setWordSafe writes within bounds horizontally', () {
       final grid = List.generate(5, (_) => List<String?>.filled(5, null));
       grid.setWordSafe(1, 1, 'AbC', horizontal: true);
-      expect(grid[1][1], 'A');
-      expect(grid[1][2], 'B');
-      expect(grid[1][3], 'C');
+      final row1 = grid[1];
+      expect(row1[1], 'A');
+      expect(row1[2], 'B');
+      expect(row1[3], 'C');
     });
 
     test('setWordSafe writes within bounds vertically', () {
       final grid = List.generate(5, (_) => List<String?>.filled(5, null));
       grid.setWordSafe(0, 0, 'xy', horizontal: false);
-      expect(grid[0][0], 'X');
-      expect(grid[1][0], 'Y');
+      final col0Row0 = grid[0];
+      final col0Row1 = grid[1];
+      expect(col0Row0[0], 'X');
+      expect(col0Row1[0], 'Y');
     });
 
     test('setBlackCells marks given coords safely', () {
@@ -37,11 +40,12 @@ void main() {
       ];
 
       // horizontal from (1,1) should give bounds 1..2
-      final horiz = grid.wordBounds(1, 1, horizontal: true);
+      final g = grid;
+      final horiz = g.wordBounds(1, 1, horizontal: true);
       expect(horiz, [1, 2]);
 
       // vertical from (1,1) should give bounds 1..2
-      final vert = grid.wordBounds(1, 1, horizontal: false);
+      final vert = g.wordBounds(1, 1, horizontal: false);
       expect(vert, [1, 2]);
     });
   });
