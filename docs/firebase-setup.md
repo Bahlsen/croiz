@@ -55,6 +55,34 @@ Allez dans **Settings > Secrets and variables > Actions** de votre repo et ajout
 4. Ouvrez le fichier et copiez **tout le contenu JSON**
 5. Collez-le dans le secret GitHub
 
+#### ANDROID_GOOGLE_SERVICES_JSON_BASE64
+
+Ce secret fournit `google-services.json` au workflow CI sans le committer.
+
+- Générez la chaîne base64 depuis votre machine de dev.
+    - Windows PowerShell:
+
+        ```powershell
+        $content = Get-Content -Raw -Path "frontend/android/app/google-services.json"
+        [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($content))
+        ```
+
+    - macOS/Linux:
+
+        ```bash
+        base64 -i frontend/android/app/google-services.json | tr -d '\n'
+        ```
+
+- Créez le secret `ANDROID_GOOGLE_SERVICES_JSON_BASE64` et collez la valeur.
+
+Le workflow Android décodera ce secret et écrira le fichier à
+`frontend/android/app/google-services.json` pendant le build, puis le supprimera.
+
+#### IOS_GOOGLESERVICE_INFO_PLIST_BASE64
+
+Même principe pour iOS: encodez `frontend/ios/Runner/GoogleService-Info.plist` en base64
+et créez/validez le secret `IOS_GOOGLESERVICE_INFO_PLIST_BASE64`.
+
 ## 📱 Utilisation
 
 ### Distribution Automatique

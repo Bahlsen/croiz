@@ -23,6 +23,46 @@ try {
   # Go to project frontend root
   Set-Location ..
 
+  # Ensure Android SDK env for this process
+  $sdkCandidates = @('C:\Android', 'C:\Android\sdk', "$env:LOCALAPPDATA\Android\Sdk")
+  $sdkRoot = $null
+  foreach ($c in $sdkCandidates) { if (Test-Path $c) { $sdkRoot = $c; break } }
+  if (-not $env:ANDROID_HOME -and $sdkRoot) {
+    if (Test-Path 'C:\Android') { $env:ANDROID_HOME = 'C:\Android' } else { $env:ANDROID_HOME = $sdkRoot }
+  }
+  if (-not $env:ANDROID_SDK_ROOT -and $sdkRoot) { $env:ANDROID_SDK_ROOT = $sdkRoot }
+  # Make sure PATH has platform-tools for this process
+  $pt1 = (Join-Path $env:ANDROID_HOME 'platform-tools')
+  $pt2 = (Join-Path $env:ANDROID_SDK_ROOT 'platform-tools')
+  $ctb = (Join-Path (Join-Path $env:ANDROID_HOME 'cmdline-tools') 'cmdline-tools\bin')
+  foreach ($p in @($pt1,$pt2,$ctb)) { if ($p -and (Test-Path $p) -and ($env:PATH -notlike "*${p}*")) { $env:PATH += ";$p" } }
+
+  # Ensure Java (JDK) for Gradle/Flutter in this process
+  $javaOk = $false
+  $javaCmd = Get-Command java -ErrorAction SilentlyContinue
+  if ($javaCmd) { $javaOk = $true }
+  if (-not $javaOk) {
+    $jdkPath = $null
+    $jdkCandidates = @()
+    if ($env:JAVA_HOME) { $jdkCandidates += $env:JAVA_HOME }
+    if (Test-Path 'C:\Java') { $jdkCandidates += (Get-ChildItem 'C:\Java' -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'jdk-*' } | Select-Object -ExpandProperty FullName) }
+    if (Test-Path 'C:\Program Files\Microsoft') { $jdkCandidates += (Get-ChildItem 'C:\Program Files\Microsoft' -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'jdk-*' } | Select-Object -ExpandProperty FullName) }
+    if (Test-Path 'C:\Program Files\Eclipse Adoptium') { $jdkCandidates += (Get-ChildItem 'C:\Program Files\Eclipse Adoptium' -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'jdk-*' } | Select-Object -ExpandProperty FullName) }
+    if (Test-Path 'C:\Program Files\Java') { $jdkCandidates += (Get-ChildItem 'C:\Program Files\Java' -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'jdk*' } | Select-Object -ExpandProperty FullName) }
+    foreach ($cand in $jdkCandidates) {
+      if ($cand -and (Test-Path (Join-Path $cand 'bin\java.exe'))) { $jdkPath = $cand; break }
+    }
+    if ($jdkPath) {
+      $env:JAVA_HOME = $jdkPath
+      $javaBin = (Join-Path $jdkPath 'bin')
+      if ($env:PATH -notlike "*${javaBin}*") { $env:PATH += ";$javaBin" }
+      $javaOk = $true
+      Write-Host "Using JAVA_HOME=$env:JAVA_HOME" -ForegroundColor DarkCyan
+    } else {
+      Write-Warning 'No JDK found automatically. If build fails, set JAVA_HOME to your JDK path.'
+    }
+  }
+
   $buildMode = if ($Debug) { 'debug' } else { 'release' }
   $apkName = if ($Debug) { 'app-debug.apk' } else { 'app-release.apk' }
 
@@ -61,8 +101,8 @@ try {
     & $adb pair $PairHost $PairCode
   }
 
-  # Wireless connect (optional)
-  if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
+  # Wireless pairing (optional)
+  if ($Pair) {
   if ($Connect) {
     Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
     & $adb connect $Connect | Out-Host
@@ -70,15 +110,19 @@ try {
 
   Write-Host "Checking connected devices..." -ForegroundColor Cyan
   $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
-  if (-not $devices -or $devices.Count -eq 0) {
-    $hint = if ($Connect) { "Ensure phone is on same Wi‑Fi and Wireless debugging is ON." } else { "Enable USB debugging and authorize the PC (Options pour les développeurs)." }
-    throw "No device found. $hint"
-  }
+  Write-Host "Checking connected devices..." -ForegroundColor Cyan
+  $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
 
-  foreach ($d in $devices) {
-    Write-Host "Installing to device $d ..." -ForegroundColor Cyan
-    & $adb -s $d install -r $apkPath
-    if ($LASTEXITCODE -ne 0) { throw "Install failed on $d" }
+  # Wireless connect (optional, only if none connected yet)
+  if (-not $devices -or $devices.Count -eq 0) {
+    if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
+    if ($Connect) {
+      Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
+      $null = & $adb connect $Connect 2>$null
+      # Recheck devices after attempting connection
+      $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
+    }
+  }
     if (-not $NoLaunch) {
       Write-Host "Launching $Package on $d ..." -ForegroundColor Cyan
       & $adb -s $d shell monkey -p $Package -c android.intent.category.LAUNCHER 1 | Out-Null
