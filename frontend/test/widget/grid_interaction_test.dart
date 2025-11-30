@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/main.dart';
 
 void main() {
-  testWidgets('tap a known cell (2,0), enter a letter, and see it updated', (WidgetTester tester) async {
+  testWidgets('tap selectable cell then tap virtual keyboard letter updates grid', (WidgetTester tester) async {
     await tester.pumpWidget(const ProviderScope(child: CroizApp()));
 
     // Navigate to crossword screen
@@ -22,13 +22,15 @@ void main() {
     await tester.tap(cells.first);
     await tester.pumpAndSettle();
 
-    // Enter a letter in the focused TextField
-    final tfFinder = find.byType(TextField).first;
-    expect(tfFinder, findsOneWidget);
-    await tester.enterText(tfFinder, 'Z');
+    // Count existing 'Z' occurrences inside the grid (should be 0 initially for empty cell set).
+    final gridFinder = find.byType(GridView);
+    final zInGridBefore = find.descendant(of: gridFinder, matching: find.text('Z')).evaluate().length;
+
+    // Tap letter 'Z' on virtual keyboard.
+    await tester.tap(find.text('Z').first);
     await tester.pumpAndSettle();
 
-    // Verify the letter appears in the UI
-    expect(find.text('Z'), findsWidgets);
+    final zInGridAfter = find.descendant(of: gridFinder, matching: find.text('Z')).evaluate().length;
+    expect(zInGridAfter, greaterThan(zInGridBefore));
   });
 }

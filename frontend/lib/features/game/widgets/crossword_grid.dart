@@ -272,45 +272,26 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                         style: const TextStyle(fontSize: 9, color: Colors.white70),
                       ),
                     ),
-                  Center(
-                    child: isSelected
-                        ? SizedBox(
-                            width: 36,
-                            child: TextField(
-                              // When the TextField itself is tapped while already selected,
-                              // toggle the word direction. This ensures a second tap
-                              // toggles to vertical even though the TextField absorbs taps.
-                              onTap: () {
-                                final current = ref.read(wordDirectionProvider);
-                                final newDir = current == WordDirection.horizontal
-                                    ? WordDirection.vertical
-                                    : WordDirection.horizontal;
-                                ref.read(wordDirectionProvider.notifier).state = newDir;
-                              },
-                              controller: _editingController,
-                              textAlign: TextAlign.center,
-                              textCapitalization: TextCapitalization.characters,
-                              maxLength: 1,
-                              autofocus: true,
-                              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                              cursorColor: Colors.white,
-                              decoration: const InputDecoration(counterText: '', border: InputBorder.none, isDense: true),
-                              onChanged: (value) {
-                                ref.read(gameBoardProvider.notifier).setLetter(row, col, value);
-                              },
-                              onSubmitted: (value) {
-                                // move selection in the current direction, skipping black cells
-                                final next = _findNextSelectable(row, col, size, ref.read(gameBoardProvider).blackCells);
-                                if (next != null) {
-                                  ref.read(selectedCellProvider.notifier).state = next;
-                                }
-                              },
-                            ),
-                          )
-                        : Text(
+                  Consumer(
+                    builder: (context, ref, _) {
+                      final flash = ref.watch(flashCellProvider);
+                      final flashing = flash == '$row,$col';
+                      return Center(
+                        child: AnimatedScale(
+                          scale: flashing ? 1.25 : 1.0,
+                          duration: const Duration(milliseconds: 140),
+                          curve: Curves.easeOut,
+                          child: Text(
                             letter ?? '',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: isSelected ? 20 : 16,
+                              fontWeight: FontWeight.bold,
+                              color: flashing ? Colors.amberAccent : Colors.white,
+                            ),
                           ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

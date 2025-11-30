@@ -133,6 +133,9 @@ final selectedCellProvider = StateProvider<SelectedCell?>(_initialSelectedCell);
 /// Holds the current word direction (horizontal or vertical).
 final wordDirectionProvider = StateProvider<WordDirection>(_initialWordDirection);
 
+/// Cell flashing after deletion (stores "row,col" or null)
+final flashCellProvider = StateProvider<String?>((_) => null);
+
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
