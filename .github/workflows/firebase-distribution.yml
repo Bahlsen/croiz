@@ -29,6 +29,13 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Configure Gradle memory for CI
+        run: |
+          echo "org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m -XX:+HeapDumpOnOutOfMemoryError" >> android/gradle.properties
+          echo "org.gradle.daemon=true" >> android/gradle.properties
+          echo "org.gradle.parallel=false" >> android/gradle.properties
+          echo "kotlin.daemon.jvmargs=-Xmx1536m" >> android/gradle.properties
+
       - name: Get Flutter dependencies
         run: flutter pub get
 
