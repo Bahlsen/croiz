@@ -10,6 +10,18 @@ These rules define how GitHub Copilot (the assistant) must operate in this repos
   - Refactor only after tests are green.
   - New features or fixes MUST include appropriate tests.
 
+- Respect SOLID and KISS at all times.
+  - Extract helpers/services with single responsibility; keep widgets thin.
+  - Favor simple, readable solutions over clever ones.
+
+- Control bodies on new lines (style enforcement).
+  - Always use explicit blocks for `if/else/for/while`.
+  - Example: `if (cond) { return; }` not `if (cond) return;`.
+
+- Pre-change workflow checks.
+  - Frontend: write unit/widget tests under `frontend/test/`, run `flutter test`, and adhere to `analysis_options.yaml` (includes `always_put_control_body_on_new_line`).
+  - Backend: write JUnit tests under `backend/src/test/`, run `./gradlew test`, and ensure format/lint are clean.
+
 - Minimal, focused changes.
   - Edit only what is necessary for the current task.
   - Keep style consistent with the existing codebase.
