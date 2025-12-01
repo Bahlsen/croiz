@@ -131,20 +131,17 @@ void _navigateToAdjacentEntry(
   int delta,
 ) {
   if (entries.isEmpty) return;
-  // Sort by clue numbering then by direction to keep stable order.
-  final sorted = List<PuzzleEntryData>.from(entries)
-    ..sort((a, b) {
-      final byNum = a.number.compareTo(b.number);
-      if (byNum != 0) return byNum;
-      return a.direction.compareTo(b.direction);
-    });
-  final idx = sorted.indexWhere((e) =>
+  // Restrict navigation to the current direction (across or down).
+  final currentDir = current.direction;
+  final inSameDir = entries.where((e) => e.direction == currentDir).toList()
+    ..sort((a, b) => a.number.compareTo(b.number));
+    final idxInDir = inSameDir.indexWhere((e) =>
       e.x == current.x && e.y == current.y && e.direction == current.direction);
-  if (idx == -1) return;
-  var nextIdx = idx + delta;
-  if (nextIdx < 0) nextIdx = sorted.length - 1;
-  if (nextIdx >= sorted.length) nextIdx = 0;
-  final next = sorted[nextIdx];
+    if (idxInDir == -1) return;
+    var nextIdx = idxInDir + delta;
+  if (nextIdx < 0) nextIdx = inSameDir.length - 1;
+  if (nextIdx >= inSameDir.length) nextIdx = 0;
+  final next = inSameDir[nextIdx];
 
   // Update selection and direction to the start of the target word.
   final newDir = next.direction == 'across'
