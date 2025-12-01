@@ -8,7 +8,9 @@ PuzzleEntryData computeAdjacentEntry(
   PuzzleEntryData current,
   int delta,
 ) {
-  if (entries.isEmpty) return current;
+  if (entries.isEmpty) {
+    return current;
+  }
   // Direction-first ordering: navigate within current direction by number,
   // wrap into the other direction only when overflowing.
   final across = entries.where((e) => e.direction == 'across').toList()
@@ -22,7 +24,9 @@ PuzzleEntryData computeAdjacentEntry(
 
   final idxInDir = currentList.indexWhere((e) =>
       e.x == current.x && e.y == current.y && e.direction == current.direction);
-  if (idxInDir == -1) return current;
+  if (idxInDir == -1) {
+    return current;
+  }
 
   final nextIdx = idxInDir + delta;
   if (nextIdx < 0) {

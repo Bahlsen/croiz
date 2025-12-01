@@ -41,8 +41,8 @@ void main() {
 
       // Act
       await tester.pumpWidget(
-        ProviderScope(
-          parent: container,
+        UncontrolledProviderScope(
+          container: container,
           child: const MaterialApp(
             home: Scaffold(
               body: CrosswordClueBanner(),
@@ -83,8 +83,8 @@ void main() {
       container.read(selectedCellProvider.notifier).state = null;
 
       await tester.pumpWidget(
-        ProviderScope(
-          parent: container,
+        UncontrolledProviderScope(
+          container: container,
           child: const MaterialApp(
             home: Scaffold(body: CrosswordClueBanner()),
           ),
@@ -143,8 +143,8 @@ void main() {
       container.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
 
       await tester.pumpWidget(
-        ProviderScope(
-          parent: container,
+        UncontrolledProviderScope(
+          container: container,
           child: const MaterialApp(
             home: Scaffold(body: CrosswordClueBanner()),
           ),

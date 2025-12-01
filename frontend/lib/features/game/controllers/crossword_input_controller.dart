@@ -2,25 +2,99 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 
-typedef Reader = T Function<T>(ProviderListenable<T> provider);
-
-/// Handles keyboard input for the crossword grid, decoupled from UI.
 class CrosswordInputController {
-  CrosswordInputController._(this._read);
 
-  factory CrosswordInputController.fromRef(WidgetRef ref) =>
-      CrosswordInputController._(ref.read);
-  factory CrosswordInputController.fromContainer(ProviderContainer container) =>
+    CrosswordInputController(WidgetRef ref) : _read = ref.read;
+    CrosswordInputController._(this._read);
+    factory CrosswordInputController.fromRef(WidgetRef ref) => CrosswordInputController(ref);
+    factory CrosswordInputController.fromContainer(ProviderContainer container) =>
       CrosswordInputController._(container.read);
+  final T Function<T>(ProviderListenable<T> provider) _read;
+  bool _didAutoSelectFirstAcross = false;
 
-  final Reader _read;
+  void setLetterAndAdvance(String letter) {
+    final board = _read(gameBoardProvider);
+    final selected = _read(selectedCellProvider);
+    if (selected == null) {
+      final first = _firstSelectable(board.blackCells);
+      if (first == null) {
+        return;
+      }
+      _read(selectedCellProvider.notifier).state = SelectedCell(first[0], first[1]);
+      _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
+      _moveToNext(board, startRow: first[0], startCol: first[1]);
+      return;
+    }
+    _read(gameBoardProvider.notifier).setLetter(selected.row, selected.col, letter);
+    _moveToNext(board, startRow: selected.row, startCol: selected.col);
+  }
 
-  void handleKey(KeyEvent event, int size) {
+  void clearCurrent() {
+    final sel = _read(selectedCellProvider);
+    if (sel == null) {
+      return;
+    }
+    final board = _read(gameBoardProvider);
+    final current = board.grid[sel.row][sel.col];
+    if (current == null || current.isEmpty) {
+      final dir = _read(wordDirectionProvider);
+      final dr = dir == WordDirection.vertical ? -1 : 0;
+      final dc = dir == WordDirection.vertical ? 0 : -1;
+
+      var fromR = sel.row;
+      var fromC = sel.col;
+      final maxSteps = board.gridSize * board.gridSize;
+      for (var i = 0; i < maxSteps; i++) {
+        final prev = board.blackCells.nextSelectableFrom(fromR, fromC, dr, dc, wrap: true);
+        if (prev == null) {
+          break;
+        }
+        fromR = prev[0];
+        fromC = prev[1];
+        final letter = board.grid[fromR][fromC];
+        if (letter != null && letter.isNotEmpty) {
+          final prevSel = SelectedCell(fromR, fromC);
+          _read(selectedCellProvider.notifier).state = prevSel;
+          _read(gameBoardProvider.notifier).setLetter(prevSel.row, prevSel.col, '');
+          break;
+        }
+      }
+    } else {
+      _read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
+    }
+  }
+
+  void tryAutoSelectFirstAcross(GameBoard board) {
+    if (_didAutoSelectFirstAcross) {
+      return;
+    }
+    final alreadySelected = _read(selectedCellProvider);
+    if (alreadySelected != null) {
+      return;
+    }
+    final entries = board.entries;
+    if (entries == null || entries.isEmpty) {
+      return;
+    }
+    final firstAcross = entries
+        .where((e) => e.direction == 'across')
+        .toList()
+      ..sort((a, b) => a.number.compareTo(b.number));
+    if (firstAcross.isEmpty) {
+      return;
+    }
+    final e = firstAcross.first;
+    _read(selectedCellProvider.notifier).state = SelectedCell(e.y, e.x);
+    _read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+    _didAutoSelectFirstAcross = true;
+  }
+
+  void handleKey(KeyEvent event, [int? _]) {
     if (event is! KeyDownEvent) {
       return;
     }
-
     final sel = _read(selectedCellProvider);
     final row = sel?.row ?? 0;
     final col = sel?.col ?? 0;
@@ -29,41 +103,40 @@ class CrosswordInputController {
       return;
     }
 
-    final keyLabel = event.logicalKey.keyLabel;
+    final logical = event.logicalKey;
+    if (logical == LogicalKeyboardKey.arrowRight) {
+      _moveToDirection(row, col, 0, 1);
+      return;
+    }
+    if (logical == LogicalKeyboardKey.arrowLeft) {
+      _moveToDirection(row, col, 0, -1);
+      return;
+    }
+    if (logical == LogicalKeyboardKey.arrowDown) {
+      _moveToDirection(row, col, 1, 0);
+      return;
+    }
+    if (logical == LogicalKeyboardKey.arrowUp) {
+      _moveToDirection(row, col, -1, 0);
+      return;
+    }
 
-    if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      _move(row, col, 0, 1);
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      _move(row, col, 0, -1);
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      _move(row, col, 1, 0);
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      _move(row, col, -1, 0);
-      return;
-    }
-
-    if (event.logicalKey == LogicalKeyboardKey.backspace ||
-        event.logicalKey == LogicalKeyboardKey.delete) {
+    if (logical == LogicalKeyboardKey.backspace || logical == LogicalKeyboardKey.delete) {
       _read(gameBoardProvider.notifier).setLetter(row, col, '');
       return;
     }
 
+    final keyLabel = logical.keyLabel;
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         _read(gameBoardProvider.notifier).setLetter(row, col, char);
-        _advance(row, col);
+        _moveToNext(_read(gameBoardProvider), startRow: row, startCol: col);
       }
     }
   }
 
-  void _move(int row, int col, int dr, int dc) {
+  void _moveToDirection(int row, int col, int dr, int dc) {
     final black = _read(gameBoardProvider).blackCells;
     final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
     if (next != null) {
@@ -71,14 +144,30 @@ class CrosswordInputController {
     }
   }
 
-  void _advance(int row, int col) {
-    final black = _read(gameBoardProvider).blackCells;
+  void _moveToNext(
+    GameBoard board, {
+    required int startRow,
+    required int startCol,
+  }) {
     final dir = _read(wordDirectionProvider);
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
-    final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
+    final next = board.blackCells.nextSelectableFrom(startRow, startCol, dr, dc, wrap: true);
     if (next != null) {
       _read(selectedCellProvider.notifier).state = SelectedCell(next[0], next[1]);
     }
   }
+
+  List<int>? _firstSelectable(List<List<bool>> black) {
+    for (var r = 0; r < black.length; r++) {
+      for (var c = 0; c < black[r].length; c++) {
+        if (!black.isDisabled(r, c)) {
+          return [r, c];
+        }
+      }
+    }
+    return null;
+  }
 }
+
+// no-op helper removed: using container.read directly

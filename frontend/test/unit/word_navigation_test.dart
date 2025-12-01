@@ -41,7 +41,7 @@ void main() {
     });
 
     test('current not found returns current', () {
-      final ghost = const PuzzleEntryData(number: 99, direction: 'across', x: 9, y: 9, length: 1, clue: 'X');
+      const ghost = PuzzleEntryData(number: 99, direction: 'across', x: 9, y: 9, length: 1, clue: 'X');
       final next = computeAdjacentEntry(entries, ghost, 1);
       expect(next, ghost);
     });

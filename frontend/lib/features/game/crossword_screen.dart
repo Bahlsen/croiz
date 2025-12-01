@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/crossword_grid.dart';
-import 'package:croiz/features/game/widgets/crossword_clues_banner.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/board_helpers.dart';
-import 'package:croiz/widgets/virtual_keyboard.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/widgets/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 
 class CrosswordScreen extends ConsumerStatefulWidget {
   const CrosswordScreen({Key? key}) : super(key: key);
@@ -15,146 +13,40 @@ class CrosswordScreen extends ConsumerStatefulWidget {
 }
 
 class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
-  bool _isAzerty = true; // Default AZERTY as requested
-  final TextEditingController _textController = TextEditingController();
+  late final CrosswordInputController _controller;
 
   @override
   void initState() {
     super.initState();
-    // Initialize selection to first across entry after first frame.
+    _controller = CrosswordInputController(ref);
+    // Try once after the first frame in case data already exists
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final selected = ref.read(selectedCellProvider);
-      if (selected != null) return;
-      final board = ref.read(gameBoardProvider);
-      final entries = board.entries;
-      if (entries == null || entries.isEmpty) return;
-      final firstAcross = entries
-          .where((e) => e.direction == 'across')
-          .toList()
-        ..sort((a, b) => a.number.compareTo(b.number));
-      if (firstAcross.isEmpty) return;
-      final e = firstAcross.first;
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(e.y, e.x);
-      ref.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+      _controller.tryAutoSelectFirstAcross(ref.read(gameBoardProvider));
     });
   }
 
-  void _setLetterAndAdvance(String letter) {
-    final board = ref.read(gameBoardProvider);
-    final selected = ref.read(selectedCellProvider);
-    if (selected == null) {
-      // If nothing selected, select first available cell and type there
-      final first = _firstSelectable(board.blackCells);
-      if (first == null) {
-        return;
-      }
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(
-        first[0],
-        first[1],
-      );
-      ref
-          .read(gameBoardProvider.notifier)
-          .setLetter(first[0], first[1], letter);
-      _moveToNext(board, startRow: first[0], startCol: first[1]);
-      return;
-    }
-    ref
-        .read(gameBoardProvider.notifier)
-        .setLetter(selected.row, selected.col, letter);
-    _moveToNext(board, startRow: selected.row, startCol: selected.col);
-  }
+  // Input and navigation logic moved to CrosswordInputController
 
-  void _clearCurrent() {
-    final sel = ref.read(selectedCellProvider);
-    if (sel == null) {
-      return;
-    }
-    final board = ref.read(gameBoardProvider);
-    final current = board.grid[sel.row][sel.col];
-    if (current == null || current.isEmpty) {
-      // Move backwards skipping empty cells until a letter is found, then clear it.
-      final dir = ref.read(wordDirectionProvider);
-      final dr = dir == WordDirection.vertical ? -1 : 0;
-      final dc = dir == WordDirection.vertical ? 0 : -1;
-
-      var fromR = sel.row;
-      var fromC = sel.col;
-      final maxSteps = board.gridSize * board.gridSize;
-      for (var i = 0; i < maxSteps; i++) {
-        final prev = board.blackCells.nextSelectableFrom(
-          fromR,
-          fromC,
-          dr,
-          dc,
-          wrap: true,
-        );
-        if (prev == null) {
-          break;
-        }
-        fromR = prev[0];
-        fromC = prev[1];
-        final letter = board.grid[fromR][fromC];
-        if (letter != null && letter.isNotEmpty) {
-          final prevSel = SelectedCell(fromR, fromC);
-          ref.read(selectedCellProvider.notifier).state = prevSel;
-          ref
-              .read(gameBoardProvider.notifier)
-              .setLetter(prevSel.row, prevSel.col, '');
-          break;
-        }
-      }
-    } else {
-      // Clear current cell but keep selection
-      ref.read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
-    }
-  }
+  
 
   // Enter no longer toggles direction; kept for potential future use.
 
-  void _moveToNext(
-    GameBoard board, {
-    required int startRow,
-    required int startCol,
-  }) {
-    final dir = ref.read(wordDirectionProvider);
-    final dr = dir == WordDirection.vertical ? 1 : 0;
-    final dc = dir == WordDirection.vertical ? 0 : 1;
-    final next = board.blackCells.nextSelectableFrom(
-      startRow,
-      startCol,
-      dr,
-      dc,
-      wrap: true,
-    );
-    if (next != null) {
-      ref.read(selectedCellProvider.notifier).state = SelectedCell(
-        next[0],
-        next[1],
-      );
-    }
-  }
+  
 
-  List<int>? _firstSelectable(List<List<bool>> black) {
-    for (var r = 0; r < black.length; r++) {
-      for (var c = 0; c < (black[r].length); c++) {
-        if (!black.isDisabled(r, c)) {
-          return [r, c];
-        }
-      }
-    }
-    return null;
-  }
+  
 
 
   @override
   void dispose() {
-    _textController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final board = ref.watch(gameBoardProvider);
+    // One-time microtask to catch late-loaded entries (compatible with tests)
+    Future.microtask(() {
+      _controller.tryAutoSelectFirstAcross(ref.read(gameBoardProvider));
+    });
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -173,39 +65,9 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
               ),
             ),
           ),
-          _buildKeyboardBar(context, board),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildKeyboardBar(BuildContext context, GameBoard board) {
-    final layout = _isAzerty
-        ? VirtualKeyboard.azertyLayout
-        : VirtualKeyboard.qwertyLayout;
-    return SafeArea(
-      top: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Clue banner for the currently selected word
-          const CrosswordClueBanner(),
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              tooltip: 'Basculer AZERTY/QWERTY',
-              icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
-              onPressed: () => setState(() => _isAzerty = !_isAzerty),
-            ),
-          ),
-          VirtualKeyboard(
-            layout: layout,
-            onKey: _setLetterAndAdvance,
-            onBackspace: _clearCurrent,
-            // onEnter: null, // Enter no-op per request
-            enableFeedback: true,
-            keyHeight: 44,
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+          CrosswordKeyboardBar(
+            onKey: _controller.setLetterAndAdvance,
+            onBackspace: _controller.clearCurrent,
           ),
         ],
       ),

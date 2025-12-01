@@ -73,7 +73,7 @@ class CrosswordClueBanner extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: Colors.grey[900],
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey[700]!, width: 1.0),
+                    border: Border.all(color: Colors.grey[700]!, width: 1),
                   ),
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
@@ -113,8 +113,7 @@ class _NavArrow extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
@@ -124,7 +123,6 @@ class _NavArrow extends StatelessWidget {
         child: Icon(icon, color: Colors.white70, size: 28),
       ),
     );
-  }
 }
 
 void _navigateToAdjacentEntry(
@@ -133,7 +131,9 @@ void _navigateToAdjacentEntry(
   PuzzleEntryData current,
   int delta,
 ) {
-  if (entries.isEmpty) return;
+  if (entries.isEmpty) {
+    return;
+  }
   final next = computeAdjacentEntry(entries, current, delta);
 
   // Update selection and direction to the start of the target word.

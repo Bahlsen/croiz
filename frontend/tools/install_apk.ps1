@@ -98,18 +98,9 @@ try {
       throw 'When using -Pair, provide -PairHost <ip:port> and -PairCode <code> from Wireless debugging.'
     }
     Write-Host "Pairing with $PairHost ..." -ForegroundColor Cyan
-    & $adb pair $PairHost $PairCode
+    & $adb pair $PairHost $PairCode | Out-Host
   }
 
-  # Wireless pairing (optional)
-  if ($Pair) {
-  if ($Connect) {
-    Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
-    & $adb connect $Connect | Out-Host
-  }
-
-  Write-Host "Checking connected devices..." -ForegroundColor Cyan
-  $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
   Write-Host "Checking connected devices..." -ForegroundColor Cyan
   $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
 
@@ -123,6 +114,15 @@ try {
       $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
     }
   }
+
+  if (-not $devices -or $devices.Count -eq 0) {
+    throw 'No device connected. Use -Connect or -Pair first, or connect via USB.'
+  }
+
+  # Install to all connected devices
+  foreach ($d in $devices) {
+    Write-Host "Installing APK to $d ..." -ForegroundColor Cyan
+    & $adb -s $d install -r $apkPath | Out-Host
     if (-not $NoLaunch) {
       Write-Host "Launching $Package on $d ..." -ForegroundColor Cyan
       & $adb -s $d shell monkey -p $Package -c android.intent.category.LAUNCHER 1 | Out-Null
