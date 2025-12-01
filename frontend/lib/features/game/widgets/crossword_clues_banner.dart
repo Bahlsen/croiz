@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/word_navigation.dart';
 
 /// Compact banner showing the clue for the currently selected word.
 class CrosswordClueBanner extends ConsumerWidget {
@@ -44,7 +45,7 @@ class CrosswordClueBanner extends ConsumerWidget {
       ),
     );
 
-    if (entry.number == -1 || entry.clue == null || entry.clue!.isEmpty) {
+    if (entry.number == -1) {
       return const SizedBox.shrink();
     }
 
@@ -77,7 +78,9 @@ class CrosswordClueBanner extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                   child: Text(
-                    '${entry.number}  ${entry.clue!}',
+                    entry.clue == null || entry.clue!.isEmpty
+                        ? '${entry.number}'
+                        : '${entry.number}  ${entry.clue!}',
                     textAlign: TextAlign.center,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
@@ -131,17 +134,7 @@ void _navigateToAdjacentEntry(
   int delta,
 ) {
   if (entries.isEmpty) return;
-  // Restrict navigation to the current direction (across or down).
-  final currentDir = current.direction;
-  final inSameDir = entries.where((e) => e.direction == currentDir).toList()
-    ..sort((a, b) => a.number.compareTo(b.number));
-    final idxInDir = inSameDir.indexWhere((e) =>
-      e.x == current.x && e.y == current.y && e.direction == current.direction);
-    if (idxInDir == -1) return;
-    var nextIdx = idxInDir + delta;
-  if (nextIdx < 0) nextIdx = inSameDir.length - 1;
-  if (nextIdx >= inSameDir.length) nextIdx = 0;
-  final next = inSameDir[nextIdx];
+  final next = computeAdjacentEntry(entries, current, delta);
 
   // Update selection and direction to the start of the target word.
   final newDir = next.direction == 'across'

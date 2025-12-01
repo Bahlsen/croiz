@@ -18,6 +18,27 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
   bool _isAzerty = true; // Default AZERTY as requested
   final TextEditingController _textController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    // Initialize selection to first across entry after first frame.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final selected = ref.read(selectedCellProvider);
+      if (selected != null) return;
+      final board = ref.read(gameBoardProvider);
+      final entries = board.entries;
+      if (entries == null || entries.isEmpty) return;
+      final firstAcross = entries
+          .where((e) => e.direction == 'across')
+          .toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
+      if (firstAcross.isEmpty) return;
+      final e = firstAcross.first;
+      ref.read(selectedCellProvider.notifier).state = SelectedCell(e.y, e.x);
+      ref.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+    });
+  }
+
   void _setLetterAndAdvance(String letter) {
     final board = ref.read(gameBoardProvider);
     final selected = ref.read(selectedCellProvider);

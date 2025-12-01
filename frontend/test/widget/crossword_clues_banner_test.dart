@@ -151,32 +151,32 @@ void main() {
         ),
       );
 
-      // Tap right arrow → should go to entry #2 (down) at (y=0,x=2)
+      // Tap right arrow → should go to next across (entry #3) at (y=2,x=0)
       await tester.tap(find.byIcon(Icons.chevron_right));
       await tester.pump();
       final sel1 = container.read(selectedCellProvider);
       final dir1 = container.read(wordDirectionProvider);
-      expect(sel1?.row, 0);
-      expect(sel1?.col, 2);
-      expect(dir1, WordDirection.vertical);
+      expect(sel1?.row, 2);
+      expect(sel1?.col, 0);
+      expect(dir1, WordDirection.horizontal);
 
-      // Tap right arrow again → should go to entry #3 (across) at (y=2,x=0)
+      // Tap right arrow again → should wrap to first down (entry #2) at (y=0,x=2)
       await tester.tap(find.byIcon(Icons.chevron_right));
       await tester.pump();
       final sel2 = container.read(selectedCellProvider);
       final dir2 = container.read(wordDirectionProvider);
-      expect(sel2?.row, 2);
-      expect(sel2?.col, 0);
-      expect(dir2, WordDirection.horizontal);
+      expect(sel2?.row, 0);
+      expect(sel2?.col, 2);
+      expect(dir2, WordDirection.vertical);
 
-      // Tap left arrow → back to entry #2
+      // Tap left arrow → back to entry #3 (across)
       await tester.tap(find.byIcon(Icons.chevron_left));
       await tester.pump();
       final sel3 = container.read(selectedCellProvider);
       final dir3 = container.read(wordDirectionProvider);
-      expect(sel3?.row, 0);
-      expect(sel3?.col, 2);
-      expect(dir3, WordDirection.vertical);
+      expect(sel3?.row, 2);
+      expect(sel3?.col, 0);
+      expect(dir3, WordDirection.horizontal);
     });
   });
 }
