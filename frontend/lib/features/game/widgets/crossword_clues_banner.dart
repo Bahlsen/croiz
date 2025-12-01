@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/board_helpers.dart';
+
+/// Compact banner showing the clue for the currently selected word.
+class CrosswordClueBanner extends ConsumerWidget {
+  const CrosswordClueBanner({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final board = ref.watch(gameBoardProvider);
+    final selected = ref.watch(selectedCellProvider);
+    final dir = ref.watch(wordDirectionProvider);
+
+    if (selected == null) {
+      return const SizedBox.shrink();
+    }
+    final horizontal = dir == WordDirection.horizontal;
+    final bounds = board.blackCells.wordBounds(
+      selected.row,
+      selected.col,
+      horizontal: horizontal,
+    );
+    final startX = horizontal ? bounds[0] : selected.col;
+    final startY = horizontal ? selected.row : bounds[0];
+
+    final entries = board.entries;
+    if (entries == null || entries.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    final dirStr = horizontal ? 'across' : 'down';
+    final entry = entries.firstWhere(
+      (e) => e.x == startX && e.y == startY && e.direction == dirStr,
+      orElse: () => const PuzzleEntryData(
+        number: -1,
+        direction: 'across',
+        x: -1,
+        y: -1,
+        length: 0,
+        clue: null,
+      ),
+    );
+
+    if (entry.number == -1 || entry.clue == null || entry.clue!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Styling: no accent colors or glow; subtle border darker than the card.
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[900],
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.grey[700]!, width: 1.0),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+            child: Text(
+              '${entry.number}  ${entry.clue!}',
+              textAlign: TextAlign.center,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/crossword_grid.dart';
+import 'package:croiz/features/game/widgets/crossword_clues_banner.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
@@ -166,6 +167,8 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // Clue banner for the currently selected word
+          const CrosswordClueBanner(),
           Align(
             alignment: Alignment.centerRight,
             child: IconButton(
@@ -188,3 +191,5 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     );
   }
 }
+
+// Clue banner moved to dedicated widget file.
