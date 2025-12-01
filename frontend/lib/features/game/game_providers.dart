@@ -138,8 +138,8 @@ final wordDirectionProvider = StateProvider<WordDirection>(
   _initialWordDirection,
 );
 
-/// Cell flashing after deletion (stores "row,col" or null)
-final flashCellProvider = StateProvider<String?>((_) => null);
+// Removed flash animation feature; keep placeholder if needed later.
+// final flashCellProvider = StateProvider<String?>((_) => null);
 
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;

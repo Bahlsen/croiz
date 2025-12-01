@@ -59,3 +59,19 @@ Closes #123
 - Use `flutter analyze` for frontend
 - Use `spotless` or `checkstyle` for backend
 - Keep test coverage above 80%
+
+## Design Principles
+
+- KISS (Keep It Simple, Stupid): Aim for simple, readable solutions. Prefer small functions, explicit control flow, and minimal abstraction layers.
+- SOLID:
+	- Single Responsibility: One module, one reason to change.
+	- Open/Closed: Extend via composition rather than modifying stable code.
+	- Liskov Substitution: Preserve behavior contracts in derived implementations.
+	- Interface Segregation: Keep interfaces narrow and targeted.
+	- Dependency Inversion: Depend on abstractions and inject concrete details.
+
+## Refactoring
+
+- Break large files into cohesive modules. Keep imports stable via barrel files when possible.
+- Extract side-effectful code from pure logic for easier testing.
+- Document refactoring intent and scope in the PR description.

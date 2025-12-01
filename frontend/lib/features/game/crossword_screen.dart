@@ -78,14 +78,12 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
           ref
               .read(gameBoardProvider.notifier)
               .setLetter(prevSel.row, prevSel.col, '');
-          _flashCell(fromR, fromC);
           break;
         }
       }
     } else {
       // Clear current cell but keep selection
       ref.read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
-      _flashCell(sel.row, sel.col);
     }
   }
 
@@ -125,14 +123,6 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     return null;
   }
 
-  void _flashCell(int r, int c) {
-    ref.read(flashCellProvider.notifier).state = '$r,$c';
-    Future.delayed(const Duration(milliseconds: 180), () {
-      if (mounted && ref.read(flashCellProvider) == '$r,$c') {
-        ref.read(flashCellProvider.notifier).state = null;
-      }
-    });
-  }
 
   @override
   void dispose() {

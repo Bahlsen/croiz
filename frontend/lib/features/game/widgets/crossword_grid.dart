@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'package:croiz/features/game/utils/clue_numbering.dart';
 
 class CrosswordGrid extends ConsumerStatefulWidget {
   const CrosswordGrid({Key? key}) : super(key: key);
@@ -35,103 +36,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   }
 
   void _handleKey(KeyEvent event, int size) {
-    if (event is! KeyDownEvent) {
-      return;
-    }
-
-    final sel = ref.read(selectedCellProvider);
-    final row = sel?.row ?? 0;
-    final col = sel?.col ?? 0;
-    final blackCellsForKey = ref.read(gameBoardProvider).blackCells;
-    // If the currently selected cell is disabled (black), ignore keyboard input.
-    if (sel != null && blackCellsForKey.isDisabled(sel.row, sel.col)) {
-      return;
-    }
-
-    final keyLabel = event.logicalKey.keyLabel;
-
-    // Arrow keys: move to the next non-black cell in the given direction.
-    if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      final next = _findNextSelectableInDirection(
-        row,
-        col,
-        0,
-        1,
-        size,
-        ref.read(gameBoardProvider).blackCells,
-      );
-      if (next != null) {
-        ref.read(selectedCellProvider.notifier).state = next;
-      }
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      final next = _findNextSelectableInDirection(
-        row,
-        col,
-        0,
-        -1,
-        size,
-        ref.read(gameBoardProvider).blackCells,
-      );
-      if (next != null) {
-        ref.read(selectedCellProvider.notifier).state = next;
-      }
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      final next = _findNextSelectableInDirection(
-        row,
-        col,
-        1,
-        0,
-        size,
-        ref.read(gameBoardProvider).blackCells,
-      );
-      if (next != null) {
-        ref.read(selectedCellProvider.notifier).state = next;
-      }
-      return;
-    }
-    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      final next = _findNextSelectableInDirection(
-        row,
-        col,
-        -1,
-        0,
-        size,
-        ref.read(gameBoardProvider).blackCells,
-      );
-      if (next != null) {
-        ref.read(selectedCellProvider.notifier).state = next;
-      }
-      return;
-    }
-
-    // Backspace / Delete clears the current cell
-    if (event.logicalKey == LogicalKeyboardKey.backspace ||
-        event.logicalKey == LogicalKeyboardKey.delete) {
-      ref.read(gameBoardProvider.notifier).setLetter(row, col, '');
-      return;
-    }
-
-    // Character input: if single-character label (e.g., 'a', 'A', 'é' etc.)
-    if (keyLabel.length == 1) {
-      final char = keyLabel.toUpperCase();
-      if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
-        ref.read(gameBoardProvider.notifier).setLetter(row, col, char);
-        // move to the next cell after typing; _findNextSelectable derives step from mode
-        final next = _findNextSelectable(
-          row,
-          col,
-          size,
-          ref.read(gameBoardProvider).blackCells,
-        );
-        if (next != null) {
-          ref.read(selectedCellProvider.notifier).state = next;
-        }
-      }
-    }
+    CrosswordInputController.fromRef(ref).handleKey(event, size);
   }
 
   // Return the next non-black selectable cell after (row,col).
@@ -140,37 +45,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   // - horizontal => move right (col+1)
   // Arrow keys bypass this by calling `_findNextSelectableInDirection`.
   // Returns null if none in bounds.
-  SelectedCell? _findNextSelectable(
-    int row,
-    int col,
-    int size,
-    List<List<bool>> black,
-  ) {
-    final currentDir = ref.read(wordDirectionProvider);
-    final dr = (currentDir == WordDirection.vertical) ? 1 : 0;
-    final dc = (currentDir == WordDirection.vertical) ? 0 : 1;
-    return _findNextSelectableInDirection(row, col, dr, dc, size, black);
-  }
+  // Removed: handled by CrosswordInputController
 
   // Find the next selectable in an explicit direction (dr,dc). Used for arrow keys.
-  SelectedCell? _findNextSelectableInDirection(
-    int row,
-    int col,
-    int dr,
-    int dc,
-    int size,
-    List<List<bool>> black,
-  ) {
-    // Use the helper in `board_helpers.dart` which supports wrapping across
-    // rows/columns and handles non-rectangular grids. We enable wrap so that
-    // when the linear advance hits out-of-bounds (or a run of disabled cells
-    // followed by out-of-bounds), it will continue to the next row/column.
-    final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
-    if (next == null) {
-      return null;
-    }
-    return SelectedCell(next[0], next[1]);
-  }
+  // Removed: handled by CrosswordInputController
 
   @override
   Widget build(BuildContext context) {
@@ -189,25 +67,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       });
     }
 
-    // Compute clue numbers for display directly from puzzle entries (use entry coordinates).
-    final numbers = <String, int>{};
-    final entries = board.entries;
-    if (entries != null && entries.isNotEmpty) {
-      for (final e in entries) {
-        final r = e.y;
-        final c = e.x;
-        if (r < 0 || r >= size || c < 0 || c >= size) {
-          continue;
-        }
-        final key = '$r,$c';
-        final current = numbers[key];
-        if (current == null || e.number < current) {
-          numbers[key] = e.number;
-        }
-      }
-    } else {
-      throw FlutterError('Puzzle entries are required to compute numbering.');
-    }
+    // Compute clue numbers using utility for SRP.
+    final numbers = ClueNumbering.numbersFromBoard(board);
+    // If entries are missing (e.g. during loading or in tests), skip numbering gracefully.
+    // numbers.isEmpty simply means no clue numbers to overlay.
     // No further validation: numbering is placed strictly at entry coordinates.
 
     // Keep the editing controller in sync with the selected cell's value.
@@ -323,8 +186,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                   width: isSelected ? 2.5 : (isPartOfSelectedWord ? 2 : 1),
                 ),
                 color: isPartOfSelectedWord
-                    ? Colors.blue.withValues(alpha: 0.45)
-                    : Colors.grey[800],
+                  ? Colors.blue.withValues(alpha: 0.45)
+                  : Colors.grey[800],
               ),
               child: Stack(
                 children: [
@@ -341,28 +204,15 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                         ),
                       ),
                     ),
-                  Consumer(
-                    builder: (context, ref, _) {
-                      final flash = ref.watch(flashCellProvider);
-                      final flashing = flash == '$row,$col';
-                      return Center(
-                        child: AnimatedScale(
-                          scale: flashing ? 1.25 : 1.0,
-                          duration: const Duration(milliseconds: 140),
-                          curve: Curves.easeOut,
-                          child: Text(
-                            letter ?? '',
-                            style: TextStyle(
-                              fontSize: isSelected ? 20 : 16,
-                              fontWeight: FontWeight.bold,
-                              color: flashing
-                                  ? Colors.amberAccent
-                                  : Colors.white,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+                  Center(
+                    child: Text(
+                      letter ?? '',
+                      style: TextStyle(
+                        fontSize: isSelected ? 20 : 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -2,12 +2,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/main.dart';
+import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
   testWidgets('tap selectable cell then tap virtual keyboard letter updates grid', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const ProviderScope(child: CroizApp()));
+    final empty = GameBoardNotifier.createEmpty(5).state;
+    final boardWithEntries = empty.copyWith(entries: const [
+      PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
+      PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 1, length: 4),
+    ]);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
+        ],
+        child: const CroizApp(),
+      ),
+    );
 
     // Navigate to crossword screen
     expect(find.text('Start Game'), findsOneWidget);

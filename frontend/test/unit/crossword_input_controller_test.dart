@@ -1,0 +1,36 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'package:croiz/features/game/game_providers.dart';
+
+void main() {
+  test('typing a letter sets it and advances selection', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    // Initialize board and selection
+    final board = container.read(gameBoardProvider);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+
+    final controller = CrosswordInputController.fromContainer(container);
+
+    // Build a KeyDownEvent for letter 'a'
+    const event = KeyDownEvent(
+      logicalKey: LogicalKeyboardKey.keyA,
+      physicalKey: PhysicalKeyboardKey.keyA,
+      timeStamp: Duration(milliseconds: 1),
+    );
+
+    controller.handleKey(event, board.gridSize);
+
+    final updated = container.read(gameBoardProvider);
+    expect(updated.grid[0][0], 'A');
+
+    final sel = container.read(selectedCellProvider);
+    expect(sel != null, true);
+    // After typing horizontally, selection should move to col 1
+    expect(sel!.row, 0);
+    expect(sel.col, 1);
+  });
+}

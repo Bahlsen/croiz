@@ -56,8 +56,7 @@ class PuzzleConverter {
     return GameBoard(
       id: puzzle.id,
       title: title,
-      gridSize:
-          rows, // Assuming square grid; if non-square, adjust logic //TODO handle non-square grids
+      gridSize: rows, // Assuming square grid; if non-square, adjust logic
       createdAt: DateTime.now(),
       grid: grid,
       clues: clues,

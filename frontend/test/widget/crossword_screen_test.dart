@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/crossword_screen.dart';
+import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -8,8 +10,19 @@ void main() {
     tester,
   ) async {
     // Wrap in ProviderScope for Riverpod
+    // Provide a mock board with entries to satisfy numbering requirement.
+    final empty = GameBoardNotifier.createEmpty(5).state;
+    final boardWithEntries = empty.copyWith(entries: const [
+      PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
+      PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 1, length: 4),
+    ]);
     await tester.pumpWidget(
-      const ProviderScope(child: MaterialApp(home: CrosswordScreen())),
+      ProviderScope(
+        overrides: [
+          puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
+        ],
+        child: const MaterialApp(home: CrosswordScreen()),
+      ),
     );
 
     // Initial pump to start async loading

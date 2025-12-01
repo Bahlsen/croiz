@@ -43,3 +43,22 @@ These rules define how GitHub Copilot (the assistant) must operate in this repos
 - Prefer MCP tools and repo tasks over shell commands when applicable.
 - Avoid adding licenses/headers unless explicitly requested.
 - Avoid excessive verbosity; focus on actionable guidance.
+
+## Engineering Principles
+
+To keep the codebase healthy and maintainable, Copilot must adhere to the following principles:
+
+- KISS (Keep It Simple, Stupid): Prefer straightforward solutions with minimal moving parts; avoid cleverness that reduces clarity. Choose simple data structures, small functions, and explicit flows over abstract or meta-programming unless clearly justified.
+- SOLID:
+  - Single Responsibility: Each module/class/file should have one reason to change. Avoid mixing UI, state, and pure logic.
+  - Open/Closed: Extend behavior via composition or small new types; avoid modifying stable abstractions when adding features.
+  - Liskov Substitution: Respect contracts; derived types must be usable wherever their base types are expected.
+  - Interface Segregation: Prefer small, focused interfaces/APIs; don’t force dependents to implement unused methods.
+  - Dependency Inversion: Depend on abstractions (interfaces) and inject collaborators; avoid hard dependencies on concrete implementations.
+
+## Refactoring Guidelines
+
+- Split monolithic files into focused modules and provide barrel exports to maintain backward compatibility.
+- Extract impure logic (I/O, framework calls) from pure functions to enable testing.
+- Keep public APIs stable; when necessary, add new adapters rather than breaking imports.
+- Document rationale for structural changes in PR descriptions.
