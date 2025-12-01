@@ -70,6 +70,22 @@ Closes #123
 	- Interface Segregation: Keep interfaces narrow and targeted.
 	- Dependency Inversion: Depend on abstractions and inject concrete details.
 
+## Mandatory Engineering Rules
+
+- Always use TDD: write failing tests first, implement minimal code to pass, then refactor while keeping tests green.
+- Respect SOLID and KISS in all changes: extract helpers/services, keep widgets thin, avoid cross-layer shortcuts.
+- Control bodies on new lines: use explicit blocks for `if/else/for/while` (no single-line bodies).
+  - Example: `if (cond) { return; }` not `if (cond) return;`.
+- Pre-commit checks:
+  - Frontend: `flutter test` and lint via `analysis_options.yaml` (includes `always_put_control_body_on_new_line`).
+  - Backend: `./gradlew test` and format/lint tools if configured.
+
+### TDD Workflow Checklist
+- Write a failing unit/widget test under `frontend/test/` or a JUnit test under `backend/src/test/`.
+- Implement the minimal code to pass tests.
+- Run tests locally and ensure green.
+- Refactor for clarity; keep responsibilities small.
+
 ## Refactoring
 
 - Break large files into cohesive modules. Keep imports stable via barrel files when possible.

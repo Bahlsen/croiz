@@ -137,11 +137,61 @@ class CrosswordInputController {
   }
 
   void _moveToDirection(int row, int col, int dr, int dc) {
-    final black = _read(gameBoardProvider).blackCells;
-    final next = black.nextSelectableFrom(row, col, dr, dc, wrap: true);
-    if (next != null) {
-      _read(selectedCellProvider.notifier).state = SelectedCell(next[0], next[1]);
+    final board = _read(gameBoardProvider);
+    final black = board.blackCells;
+    final entries = board.entries;
+    
+    // Try to find next cell that belongs to a valid word
+    final maxAttempts = board.gridSize * board.gridSize;
+    var currentRow = row;
+    var currentCol = col;
+    
+    for (var i = 0; i < maxAttempts; i++) {
+      final next = black.nextSelectableFrom(currentRow, currentCol, dr, dc, wrap: true);
+      if (next == null) {
+        break;
+      }
+      
+      final nextRow = next[0];
+      final nextCol = next[1];
+      
+      // Check if this cell belongs to at least one word entry
+      if (_cellBelongsToWord(nextRow, nextCol, entries)) {
+        _read(selectedCellProvider.notifier).state = SelectedCell(nextRow, nextCol);
+        return;
+      }
+      
+      // Continue searching from this cell
+      currentRow = nextRow;
+      currentCol = nextCol;
+      
+      // Avoid infinite loop by breaking if we've returned to start
+      if (nextRow == row && nextCol == col) {
+        break;
+      }
     }
+  }
+  
+  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) {
+    if (entries == null || entries.isEmpty) {
+      return true; // If no entries defined, allow all non-black cells
+    }
+    
+    for (final entry in entries) {
+      final isAcross = entry.direction == 'across';
+      if (isAcross) {
+        // Check if cell is in this horizontal word
+        if (row == entry.y && col >= entry.x && col < entry.x + entry.length) {
+          return true;
+        }
+      } else {
+        // Check if cell is in this vertical word
+        if (col == entry.x && row >= entry.y && row < entry.y + entry.length) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   void _moveToNext(

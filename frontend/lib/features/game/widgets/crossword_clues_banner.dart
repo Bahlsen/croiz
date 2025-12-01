@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/helpers/word_navigation.dart';
 
 /// Compact banner showing the clue for the currently selected word.
@@ -18,39 +18,16 @@ class CrosswordClueBanner extends ConsumerWidget {
     if (selected == null) {
       return const SizedBox.shrink();
     }
-    final horizontal = dir == WordDirection.horizontal;
-    final bounds = board.blackCells.wordBounds(
-      selected.row,
-      selected.col,
-      horizontal: horizontal,
-    );
-    final startX = horizontal ? bounds[0] : selected.col;
-    final startY = horizontal ? selected.row : bounds[0];
 
-    final entries = board.entries;
-    if (entries == null || entries.isEmpty) {
+    final entryCtx = computeCurrentEntry(board, selected, dir);
+    if (entryCtx == null) {
       return const SizedBox.shrink();
     }
 
-    final dirStr = horizontal ? 'across' : 'down';
-    final entry = entries.firstWhere(
-      (e) => e.x == startX && e.y == startY && e.direction == dirStr,
-      orElse: () => const PuzzleEntryData(
-        number: -1,
-        direction: 'across',
-        x: -1,
-        y: -1,
-        length: 0,
-        clue: null,
-      ),
-    );
+    final horizontal = entryCtx.horizontal;
+    final entry = entryCtx.entry;
+    final entries = entryCtx.entries;
 
-    if (entry.number == -1) {
-      return const SizedBox.shrink();
-    }
-
-    // Styling: no accent colors or glow; subtle border darker than the card.
-    // Add left/right arrows outside the banner to navigate to previous/next word.
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
       child: Center(
@@ -59,45 +36,20 @@ class CrosswordClueBanner extends ConsumerWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Left arrow (previous word)
-              _NavArrow(
+              _buildNavArrow(
                 icon: Icons.chevron_left,
-                onTap: () {
-                  _navigateToAdjacentEntry(ref, entries, entry, -1);
-                },
+                onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
               ),
-              // The clue banner
               Expanded(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[900],
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey[700]!, width: 1),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-                  child: Text(
-                    entry.clue == null || entry.clue!.isEmpty
-                        ? '${entry.number}'
-                        : '${entry.number}  ${entry.clue!}',
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                child: _buildClueContainer(
+                  ref: ref,
+                  horizontal: horizontal,
+                  entry: entry,
                 ),
               ),
-              // Right arrow (next word)
-              _NavArrow(
+              _buildNavArrow(
                 icon: Icons.chevron_right,
-                onTap: () {
-                  _navigateToAdjacentEntry(ref, entries, entry, 1);
-                },
+                onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
               ),
             ],
           ),
@@ -124,6 +76,44 @@ class _NavArrow extends StatelessWidget {
       ),
     );
 }
+
+Widget _buildNavArrow({required IconData icon, required VoidCallback onTap}) => _NavArrow(icon: icon, onTap: onTap);
+
+// Entry resolution logic moved to helpers/entry_lookup.dart
+
+Widget _buildClueContainer({
+  required WidgetRef ref,
+  required bool horizontal,
+  required PuzzleEntryData entry,
+}) => GestureDetector(
+    onTap: () {
+      final newDir = horizontal ? WordDirection.vertical : WordDirection.horizontal;
+      ref.read(wordDirectionProvider.notifier).state = newDir;
+    },
+    behavior: HitTestBehavior.opaque,
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[900],
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Colors.grey[700]!, width: 1),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+      child: Text(
+        entry.clue == null || entry.clue!.isEmpty
+            ? '${entry.number}'
+            : '${entry.number}  ${entry.clue!}',
+        textAlign: TextAlign.center,
+        maxLines: 3,
+        overflow: TextOverflow.ellipsis,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  );
 
 void _navigateToAdjacentEntry(
   WidgetRef ref,

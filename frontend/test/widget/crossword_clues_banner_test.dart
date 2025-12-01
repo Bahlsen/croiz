@@ -7,6 +7,66 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CrosswordClueBanner', () {
+    testWidgets('tapping banner toggles direction and updates clue', (tester) async {
+      // Board with both across and down at same start
+      final board = GameBoard(
+        id: 'toggle',
+        title: 'Toggle Board',
+        gridSize: 3,
+        createdAt: DateTime(2025, 1, 1),
+        grid: List.generate(3, (_) => List.generate(3, (_) => null)),
+        clues: const {
+          '1-across': 'Across clue',
+          '1-down': 'Down clue',
+        },
+        blackCells: List.generate(3, (_) => List.generate(3, (_) => false)),
+        difficulty: 1,
+        entries: const [
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+            clue: 'Across clue',
+          ),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'down',
+            x: 0,
+            y: 0,
+            length: 3,
+            clue: 'Down clue',
+          ),
+        ],
+      );
+      final container = ProviderContainer(
+        overrides: [
+          gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
+        ],
+      );
+      addTearDown(container.dispose);
+      container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+      container.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            home: Scaffold(body: CrosswordClueBanner()),
+          ),
+        ),
+      );
+
+      expect(find.textContaining('Across clue'), findsOneWidget);
+
+      // Tap on banner
+      await tester.tap(find.byType(CrosswordClueBanner));
+      await tester.pump();
+
+      expect(container.read(wordDirectionProvider), WordDirection.vertical);
+      expect(find.textContaining('Down clue'), findsOneWidget);
+    });
     testWidgets('shows only entry number and clue, centered', (tester) async {
       // Arrange minimal board state with one entry and selection
       // Seed a simple 3x3 board with all selectable cells
