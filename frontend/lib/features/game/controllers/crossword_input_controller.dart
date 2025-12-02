@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/providers.dart';
 
 class CrosswordInputController {
 
@@ -17,6 +18,7 @@ class CrosswordInputController {
   void setLetterAndAdvance(String letter) {
     final board = _read(gameBoardProvider);
     final selected = _read(selectedCellProvider);
+    
     if (selected == null) {
       final first = _firstSelectable(board.blackCells);
       if (first == null) {
@@ -24,10 +26,20 @@ class CrosswordInputController {
       }
       _read(selectedCellProvider.notifier).state = SelectedCell(first[0], first[1]);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
+      _checkForCompletedWords();
       _moveToNext(board, startRow: first[0], startCol: first[1]);
       return;
     }
+    
+    // Check if the cell is locked
+    final lockedCells = _read(lockedCellsProvider);
+    final cellKey = '${selected.row},${selected.col}';
+    if (lockedCells.contains(cellKey)) {
+      return; // Cell is locked, cannot modify
+    }
+    
     _read(gameBoardProvider.notifier).setLetter(selected.row, selected.col, letter);
+    _checkForCompletedWords();
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
   }
 
@@ -36,6 +48,16 @@ class CrosswordInputController {
     if (sel == null) {
       return;
     }
+    
+    // Check if the cell is locked
+    final lockedCells = _read(lockedCellsProvider);
+    final cellKey = '${sel.row},${sel.col}';
+    if (lockedCells.contains(cellKey)) {
+      return; // Cell is locked, cannot modify
+    }
+    
+    // delete sound is handled by the virtual keyboard UI
+    
     final board = _read(gameBoardProvider);
     final current = board.grid[sel.row][sel.col];
     if (current == null || current.isEmpty) {
@@ -217,6 +239,61 @@ class CrosswordInputController {
       }
     }
     return null;
+  }
+
+  void _checkForCompletedWords() {
+    final board = _read(gameBoardProvider);
+    final entries = board.entries;
+    
+    if (entries == null || entries.isEmpty) {
+      return;
+    }
+    
+    final wordCheckService = _read(wordCheckServiceProvider);
+    final foundWords = _read(foundWordsProvider);
+    final newFoundWords = Set<String>.from(foundWords);
+    final lockedCells = _read(lockedCellsProvider);
+    final newLockedCells = Set<String>.from(lockedCells);
+    
+    for (final entry in entries) {
+      final wordKey = wordCheckService.getWordKey(entry);
+      
+      // Skip if already found
+      if (foundWords.contains(wordKey)) {
+        continue;
+      }
+      
+      // Check if word is complete
+      if (wordCheckService.isWordComplete(board, entry)) {
+        newFoundWords.add(wordKey);
+        
+        // success sound is handled elsewhere (or by the virtual keyboard/Audio service)
+        
+        // Trigger flash animation on cells
+        final cellKeys = wordCheckService.getCellKeys(entry);
+        _read(flashingCellsProvider.notifier).state = cellKeys.toSet();
+        
+        // Lock cells of the found word
+        newLockedCells.addAll(cellKeys);
+        
+        // Clear flash after animation (will be handled by UI)
+        Future.delayed(const Duration(milliseconds: 500), () {
+          try {
+            _read(flashingCellsProvider.notifier).state = {};
+          } on Object catch (_) {
+            // Provider might be disposed if user navigated away
+          }
+        });
+      }
+    }
+    
+    if (newFoundWords.length > foundWords.length) {
+      _read(foundWordsProvider.notifier).state = newFoundWords;
+    }
+    
+    if (newLockedCells.length > lockedCells.length) {
+      _read(lockedCellsProvider.notifier).state = newLockedCells;
+    }
   }
 }
 

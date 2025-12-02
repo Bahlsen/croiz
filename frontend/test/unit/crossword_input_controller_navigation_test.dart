@@ -3,10 +3,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/services/providers.dart';
+import 'package:croiz/services/game_audio_service.dart';
+
+// Mock pour le service audio
+class MockGameAudioService implements GameAudioService {
+  @override
+  Future<void> playType() async {}
+
+  @override
+  Future<void> playDelete() async {}
+
+  @override
+  Future<void> playSuccess() async {}
+}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('arrow right skips black cells and wraps to next row', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
     addTearDown(container.dispose);
 
     final boardNotifier = container.read(gameBoardProvider.notifier);
@@ -32,7 +52,11 @@ void main() {
   });
 
   test('arrow down skips a black cell directly below', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier)
     // Put a black cell at (1,0)
@@ -55,7 +79,11 @@ void main() {
   });
 
   test('arrow down from bottom row wraps vertically to next column', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier);
     // Ensure (0,1) is free and several cells in column 0 are black except bottom
@@ -84,7 +112,11 @@ void main() {
   });
 
   test('backspace clears letter without moving selection', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier);
     container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/services/providers.dart';
 
 /// A simple in-app virtual keyboard with uppercase A–Z letters,
 /// Backspace, and Enter. Designed for puzzle/game input.
-class VirtualKeyboard extends StatelessWidget {
+class VirtualKeyboard extends ConsumerWidget {
   const VirtualKeyboard({
     super.key,
     this.onKey,
@@ -71,7 +74,7 @@ class VirtualKeyboard extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final rows = List<List<String>>.from(
       (layout ?? _defaultAzertyLayout).map(List<String>.from),
     );
@@ -94,6 +97,16 @@ class VirtualKeyboard extends StatelessWidget {
               keySpacing: keySpacing,
               onKey: (k) => onKey?.call(k.toUpperCase()),
               onBackspace: onBackspace,
+              onPlayClick: () {
+                try {
+                  ref.read(gameAudioServiceProvider).playType();
+                } catch (_) {}
+              },
+              onPlayDelete: () {
+                try {
+                  ref.read(gameAudioServiceProvider).playDelete();
+                } catch (_) {}
+              },
               enabledLetters: enabledLetters,
               enableFeedback: enableFeedback,
               keyRadius: keyRadius,
@@ -117,6 +130,8 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
     required this.keySpacing,
     required this.onKey,
     required this.onBackspace,
+    required this.onPlayClick,
+    required this.onPlayDelete,
     required this.enabledLetters,
     required this.enableFeedback,
     required this.keyRadius,
@@ -129,6 +144,8 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
   final double keySpacing;
   final ValueChanged<String> onKey;
   final VoidCallback? onBackspace;
+  final VoidCallback? onPlayClick;
+  final VoidCallback? onPlayDelete;
   final Set<String>? enabledLetters;
   final bool enableFeedback;
   final double keyRadius;
@@ -184,6 +201,7 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
         height: height,
         width: unitWidth * 2,
         onBackspace: onBackspace,
+        onPlayDelete: onPlayDelete,
         enableFeedback: enableFeedback,
         radius: keyRadius,
         keyColor: keyColor,
@@ -192,7 +210,7 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
 
     final label = k.toUpperCase();
     final enabled = enabledSet == null || enabledSet.contains(label);
-    return _LetterKey(
+      return _LetterKey(
       label: label,
       height: height,
       width: unitWidth,
@@ -201,7 +219,11 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
           ? () {
               if (enableFeedback) {
                 HapticFeedback.selectionClick();
-                SystemSound.play(SystemSoundType.click);
+                try {
+                  onPlayClick?.call();
+                } catch (e, st) {
+                  developer.log('GameAudioService.playType failed', error: e, stackTrace: st);
+                }
               }
               onKey(label);
             }
@@ -278,6 +300,7 @@ class _BackspaceKey extends StatefulWidget {
     required this.height,
     required this.width,
     required this.onBackspace,
+    required this.onPlayDelete,
     required this.enableFeedback,
     required this.radius,
     required this.keyColor,
@@ -286,6 +309,7 @@ class _BackspaceKey extends StatefulWidget {
   final double height;
   final double width;
   final VoidCallback? onBackspace;
+  final VoidCallback? onPlayDelete;
   final bool enableFeedback;
   final double radius;
   final Color? keyColor;
@@ -301,6 +325,11 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
   void _trigger() {
     if (widget.enableFeedback) {
       HapticFeedback.selectionClick();
+      try {
+        widget.onPlayDelete?.call();
+      } catch (e, st) {
+        developer.log('GameAudioService.playDelete failed', error: e, stackTrace: st);
+      }
     }
     widget.onBackspace?.call();
   }

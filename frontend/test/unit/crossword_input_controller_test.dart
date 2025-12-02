@@ -3,10 +3,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/services/providers.dart';
+import 'package:croiz/services/game_audio_service.dart';
+
+// Mock pour le service audio
+class MockGameAudioService implements GameAudioService {
+  @override
+  Future<void> playType() async {}
+
+  @override
+  Future<void> playDelete() async {}
+
+  @override
+  Future<void> playSuccess() async {}
+}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('typing a letter sets it and advances selection', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Initialize board and selection

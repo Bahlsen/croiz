@@ -103,6 +103,15 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
               selected != null && selected.row == row && selected.col == col;
           final isDisabled = black.isDisabled(row, col);
 
+          // Check if this cell is flashing (word just completed)
+          final flashingCells = ref.watch(flashingCellsProvider);
+          final cellKey = '$row,$col';
+          final isFlashing = flashingCells.contains(cellKey);
+
+          // Check if this cell is locked (part of a found word)
+          final lockedCells = ref.watch(lockedCellsProvider);
+          final isLocked = lockedCells.contains(cellKey);
+
           // Check if this cell is part of the selected word (horizontal or vertical)
           var isPartOfSelectedWord = false;
           if (selected != null) {
@@ -153,41 +162,63 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                // Selected cell gets a purple glow; selected-word keeps blue.
-                boxShadow: isSelected
+                // Flashing cell gets a gold/green glow for success
+                boxShadow: isFlashing
                     ? [
                         BoxShadow(
-                          color: Colors.purple.withValues(alpha: 0.28),
-                          blurRadius: 10,
-                          offset: const Offset(0, 2),
+                          color: Colors.greenAccent.withValues(alpha: 0.8),
+                          blurRadius: 15,
+                          offset: Offset.zero,
                         ),
                       ]
-                    : (isPartOfSelectedWord
-                          ? [
-                              BoxShadow(
-                                color: Colors.blue.withValues(alpha: 0.25),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ]
-                          : [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.5),
-                                blurRadius: 2,
-                                offset: const Offset(0, 1),
-                              ),
-                            ]),
+                    : (isSelected
+                        ? [
+                            BoxShadow(
+                              color: Colors.purple.withValues(alpha: 0.28),
+                              blurRadius: 10,
+                              offset: const Offset(0, 2),
+                            ),
+                          ]
+                        : (isPartOfSelectedWord
+                              ? [
+                                  BoxShadow(
+                                    color: Colors.blue.withValues(alpha: 0.25),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ]
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.5),
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ])),
                 border: Border.all(
-                  color: isSelected
-                      ? Colors.purpleAccent
-                      : (isPartOfSelectedWord
-                            ? Colors.blueAccent
-                            : Colors.grey.shade700),
-                  width: isSelected ? 2.5 : (isPartOfSelectedWord ? 2 : 1),
+                  color: isFlashing
+                      ? Colors.greenAccent
+                      : (isLocked
+                            ? Colors.green.shade700
+                            : (isSelected
+                                ? Colors.purpleAccent
+                                : (isPartOfSelectedWord
+                                      ? Colors.blueAccent
+                                      : Colors.grey.shade700))),
+                  width: isFlashing
+                      ? 3
+                      : (isLocked
+                            ? 2
+                            : (isSelected
+                                ? 2.5
+                                : (isPartOfSelectedWord ? 2 : 1))),
                 ),
-                color: isPartOfSelectedWord
-                  ? Colors.blue.withValues(alpha: 0.45)
-                  : Colors.grey[800],
+                color: isFlashing
+                    ? Colors.greenAccent.withValues(alpha: 0.5)
+                    : (isLocked
+                          ? Colors.green.withValues(alpha: 0.3)
+                          : (isPartOfSelectedWord
+                              ? Colors.blue.withValues(alpha: 0.45)
+                              : Colors.grey[800])),
               ),
               child: Stack(
                 children: [

@@ -46,6 +46,7 @@ class PuzzleConverter {
           y: entry.y,
           length: entry.length,
           clue: entry.clue,
+          answer: entry.answer,
         ),
       );
     }

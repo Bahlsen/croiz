@@ -21,6 +21,7 @@ class PuzzleEntryData {
     required this.y,
     required this.length,
     this.clue,
+    this.answer,
   });
   final int number;
   final String direction; // 'across' or 'down'
@@ -28,6 +29,7 @@ class PuzzleEntryData {
   final int y;
   final int length;
   final String? clue;
+  final String? answer;
 }
 
 class GameBoard extends GameEntity {

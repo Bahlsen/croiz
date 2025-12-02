@@ -138,9 +138,18 @@ final wordDirectionProvider = StateProvider<WordDirection>(
   _initialWordDirection,
 );
 
-// Removed flash animation feature; keep placeholder if needed later.
-// final flashCellProvider = StateProvider<String?>((_) => null);
+// Holds the set of found word keys (format: "row,col,direction")
+final foundWordsProvider = StateProvider<Set<String>>(_initialFoundWords);
+
+// Holds cells that should flash (format: "row,col")
+final flashingCellsProvider = StateProvider<Set<String>>(_initialFlashingCells);
+
+// Holds cells that are locked (format: "row,col")
+final lockedCellsProvider = StateProvider<Set<String>>(_initialLockedCells);
 
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
+Set<String> _initialFoundWords(ref) => {};
+Set<String> _initialFlashingCells(ref) => {};
+Set<String> _initialLockedCells(ref) => {};
