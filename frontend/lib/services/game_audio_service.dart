@@ -2,13 +2,13 @@ import 'package:flame_audio/flame_audio.dart';
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
 class GameAudioService {
-  AudioPool? _typePool;
-  AudioPool? _deletePool;
-  bool _initialized = false;
 
   GameAudioService() {
     _init();
   }
+  AudioPool? _typePool;
+  AudioPool? _deletePool;
+  bool _initialized = false;
 
   Future<void> _init() async {
     try {

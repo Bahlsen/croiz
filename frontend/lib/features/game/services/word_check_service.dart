@@ -38,9 +38,7 @@ class WordCheckService {
   }
 
   /// Génère une clé unique pour un mot (utilisée pour le tracking).
-  String getWordKey(PuzzleEntryData entry) {
-    return '${entry.y},${entry.x},${entry.direction}';
-  }
+  String getWordKey(PuzzleEntryData entry) => '${entry.y},${entry.x},${entry.direction}';
 
   /// Génère les clés de cellules pour un mot (format: "row,col").
   List<String> getCellKeys(PuzzleEntryData entry) {
