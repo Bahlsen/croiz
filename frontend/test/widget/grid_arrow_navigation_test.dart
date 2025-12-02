@@ -32,6 +32,8 @@ void main() {
       ProviderScope(
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
+          // Enable physical keyboard handling for this widget test
+          physicalKeyboardEnabledProvider.overrideWithValue(true),
         ],
         child: const CroizApp(),
       ),

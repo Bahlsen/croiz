@@ -189,6 +189,9 @@ class LockedCellsNotifier extends Notifier<Set<String>> {
 final lockedCellsProvider =
     NotifierProvider<LockedCellsNotifier, Set<String>>(LockedCellsNotifier.new);
 
+// Disable physical keyboard handling in-app by default. Tests can override this provider.
+final physicalKeyboardEnabledProvider = Provider<bool>((ref) => false);
+
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;

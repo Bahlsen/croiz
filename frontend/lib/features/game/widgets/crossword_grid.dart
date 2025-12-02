@@ -19,11 +19,16 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   @override
   void initState() {
     super.initState();
-
-    // Request focus so keyboard events are received when the grid is visible.
+    // Request focus so keyboard events are received when the grid is visible
+    // only if physical keyboard handling is enabled via provider.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
+      if (!mounted) return;
+      final enabled = ref.read(physicalKeyboardEnabledProvider);
+      if (enabled) {
         _focusNode.requestFocus();
+      } else {
+        // Ensure we don't hold focus (avoid physical keyboard input)
+        _focusNode.unfocus();
       }
     });
   }
@@ -84,9 +89,11 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       }
     }
 
+    final keyboardEnabled = ref.watch(physicalKeyboardEnabledProvider);
+
     return KeyboardListener(
       focusNode: _focusNode,
-      onKeyEvent: (event) => _handleKey(event, size),
+      onKeyEvent: keyboardEnabled ? (event) => _handleKey(event, size) : null,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: size,
