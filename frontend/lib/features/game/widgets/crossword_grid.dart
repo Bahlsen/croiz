@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/board_helpers.dart';
-import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/utils/clue_numbering.dart';
 
 class CrosswordGrid extends ConsumerStatefulWidget {
@@ -19,18 +18,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
   @override
   void initState() {
     super.initState();
-    // Request focus so keyboard events are received when the grid is visible
-    // only if physical keyboard handling is enabled via provider.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final enabled = ref.read(physicalKeyboardEnabledProvider);
-      if (enabled) {
-        _focusNode.requestFocus();
-      } else {
-        // Ensure we don't hold focus (avoid physical keyboard input)
-        _focusNode.unfocus();
-      }
-    });
+    // Do not request focus: physical keyboard must never be active in-app.
   }
 
   @override
@@ -40,9 +28,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     super.dispose();
   }
 
-  void _handleKey(KeyEvent event, int size) {
-    CrosswordInputController.fromRef(ref).handleKey(event, size);
-  }
+  // Physical keyboard is disabled in-app; controller.handleKey is callable
+  // by tests or other non-UI code when needed.
 
   // Return the next non-black selectable cell after (row,col).
   // Step is derived from the current `wordDirectionProvider`:
@@ -89,11 +76,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       }
     }
 
-    final keyboardEnabled = ref.watch(physicalKeyboardEnabledProvider);
-
     return KeyboardListener(
       focusNode: _focusNode,
-      onKeyEvent: keyboardEnabled ? (event) => _handleKey(event, size) : null,
+      // Never attach onKeyEvent: ignore physical keyboard entirely.
+      onKeyEvent: null,
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: size,
@@ -143,11 +129,11 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final cellNumber = numbers['$row,$col'];
 
           return GestureDetector(
-            onTap: () {
+              onTap: () {
               final wasSelected = isSelected;
               // Always set the selection (might be same or new cell)
               ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
-              _focusNode.requestFocus();
+              // Do not request focus — never enable physical keyboard input.
 
               if (wasSelected) {
                 // Second tap on same cell: toggle direction

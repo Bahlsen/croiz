@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/main.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/crossword_grid.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -32,8 +33,6 @@ void main() {
       ProviderScope(
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
-          // Enable physical keyboard handling for this widget test
-          physicalKeyboardEnabledProvider.overrideWithValue(true),
         ],
         child: const CroizApp(),
       ),
@@ -50,9 +49,14 @@ void main() {
     final initial = container.read(selectedCellProvider);
     expect(initial, isNotNull);
 
-    // Send arrow right key
-    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
-    await tester.pump();
+    // Trigger navigation via controller directly (physical keyboard disabled in-app)
+    final controller = CrosswordInputController.fromContainer(container);
+    const event = KeyDownEvent(
+      logicalKey: LogicalKeyboardKey.arrowRight,
+      physicalKey: PhysicalKeyboardKey.arrowRight,
+      timeStamp: Duration(milliseconds: 1),
+    );
+    controller.handleKey(event, boardWithEntries.gridSize);
     final after = container.read(selectedCellProvider);
 
     // Ensure either column advanced or wrapped to different row/col
