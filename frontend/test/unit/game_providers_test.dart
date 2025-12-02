@@ -1,12 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
 
   test('createSampleBoard produces expected sample 5x5 layout', () async {
-    final notifier = await createSampleBoard();
-    final board = notifier.state;
+    final board = await createSampleBoard();
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
+    container.read(gameBoardProvider.notifier);
 
     expect(board.gridSize, equals(5));
     // Grid should be empty by default (not pre-filled)

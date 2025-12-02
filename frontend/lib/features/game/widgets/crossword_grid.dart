@@ -60,9 +60,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // If selection somehow points to a disabled cell (from older state), clear it.
     if (selected != null && black.isDisabled(selected.row, selected.col)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          ref.read(selectedCellProvider.notifier).state = null;
+          ref.read(selectedCellProvider.notifier).value = null;
         }
       });
     }
@@ -139,10 +139,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
             onTap: () {
               final wasSelected = isSelected;
               // Always set the selection (might be same or new cell)
-              ref.read(selectedCellProvider.notifier).state = SelectedCell(
-                row,
-                col,
-              );
+              ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
               _focusNode.requestFocus();
 
               if (wasSelected) {
@@ -150,11 +147,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                 final newDir = wordDirection == WordDirection.horizontal
                     ? WordDirection.vertical
                     : WordDirection.horizontal;
-                ref.read(wordDirectionProvider.notifier).state = newDir;
+                ref.read(wordDirectionProvider.notifier).value = newDir;
               } else {
                 // First tap on this cell: reset direction to horizontal
-                ref.read(wordDirectionProvider.notifier).state =
-                    WordDirection.horizontal;
+                ref.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
               }
             },
             child: AnimatedContainer(

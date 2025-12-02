@@ -11,11 +11,23 @@ void main() {
   testWidgets('arrow right moves selection to next non-black cell', (
     tester,
   ) async {
-    final empty = GameBoardNotifier.createEmpty(5).state;
-    final boardWithEntries = empty.copyWith(entries: const [
-      PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
-      PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 1, length: 4),
-    ]);
+    const size = 5;
+    final grid = List.generate(size, (_) => List<String?>.filled(size, null));
+    final black = List.generate(size, (_) => List<bool>.filled(size, false));
+    final boardWithEntries = GameBoard(
+      id: 'test-empty',
+      title: 'Test',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: grid,
+      clues: const {},
+      blackCells: black,
+      difficulty: 1,
+      entries: const [
+        PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
+        PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 1, length: 4),
+      ],
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

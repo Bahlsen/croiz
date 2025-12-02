@@ -31,7 +31,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
           ],
           child: const MaterialApp(home: Scaffold(body: CrosswordGrid())),
         ),
@@ -63,7 +63,7 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
+            puzzleLoaderProvider.overrideWith((ref) async => board),
           ],
           child: const MaterialApp(home: Scaffold(body: CrosswordGrid())),
         ),

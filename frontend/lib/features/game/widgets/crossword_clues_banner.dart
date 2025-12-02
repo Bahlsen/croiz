@@ -88,7 +88,7 @@ Widget _buildClueContainer({
 }) => GestureDetector(
     onTap: () {
       final newDir = horizontal ? WordDirection.vertical : WordDirection.horizontal;
-      ref.read(wordDirectionProvider.notifier).state = newDir;
+      ref.read(wordDirectionProvider.notifier).value = newDir;
     },
     behavior: HitTestBehavior.opaque,
     child: Container(
@@ -130,6 +130,6 @@ void _navigateToAdjacentEntry(
   final newDir = next.direction == 'across'
       ? WordDirection.horizontal
       : WordDirection.vertical;
-  ref.read(wordDirectionProvider.notifier).state = newDir;
-  ref.read(selectedCellProvider.notifier).state = SelectedCell(next.y, next.x);
+  ref.read(wordDirectionProvider.notifier).value = newDir;
+  ref.read(selectedCellProvider.notifier).value = SelectedCell(next.y, next.x);
 }

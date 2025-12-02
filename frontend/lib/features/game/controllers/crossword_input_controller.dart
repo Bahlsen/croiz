@@ -7,16 +7,17 @@ import 'package:croiz/services/providers.dart';
 
 class CrosswordInputController {
 
-    CrosswordInputController(WidgetRef ref) : _read = ref.read;
-    CrosswordInputController._(this._read);
-    factory CrosswordInputController.fromRef(WidgetRef ref) => CrosswordInputController(ref);
-    factory CrosswordInputController.fromContainer(ProviderContainer container) =>
-      CrosswordInputController._(container.read);
-  final T Function<T>(ProviderListenable<T> provider) _read;
+    CrosswordInputController(WidgetRef ref)
+        : _read = (<T>(provider) => ref.read(provider as dynamic) as T);
+      CrosswordInputController._(this._read);
+      factory CrosswordInputController.fromRef(WidgetRef ref) => CrosswordInputController(ref);
+      factory CrosswordInputController.fromContainer(ProviderContainer container) =>
+        CrosswordInputController._(<T>(provider) => container.read(provider as dynamic) as T);
+    final T Function<T>(Object provider) _read;
   bool _didAutoSelectFirstAcross = false;
 
   void setLetterAndAdvance(String letter) {
-    final board = _read(gameBoardProvider);
+    final board = _read<GameBoard>(gameBoardProvider);
     final selected = _read(selectedCellProvider);
     
     if (selected == null) {
@@ -24,7 +25,7 @@ class CrosswordInputController {
       if (first == null) {
         return;
       }
-      _read(selectedCellProvider.notifier).state = SelectedCell(first[0], first[1]);
+      _read(selectedCellProvider.notifier).value = SelectedCell(first[0], first[1]);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       _checkForCompletedWords();
       _moveToNext(board, startRow: first[0], startCol: first[1]);
@@ -58,7 +59,7 @@ class CrosswordInputController {
     
     // delete sound is handled by the virtual keyboard UI
     
-    final board = _read(gameBoardProvider);
+    final board = _read<GameBoard>(gameBoardProvider);
     final current = board.grid[sel.row][sel.col];
     if (current == null || current.isEmpty) {
       final dir = _read(wordDirectionProvider);
@@ -78,7 +79,7 @@ class CrosswordInputController {
         final letter = board.grid[fromR][fromC];
         if (letter != null && letter.isNotEmpty) {
           final prevSel = SelectedCell(fromR, fromC);
-          _read(selectedCellProvider.notifier).state = prevSel;
+          _read(selectedCellProvider.notifier).value = prevSel;
           _read(gameBoardProvider.notifier).setLetter(prevSel.row, prevSel.col, '');
           break;
         }
@@ -108,8 +109,8 @@ class CrosswordInputController {
       return;
     }
     final e = firstAcross.first;
-    _read(selectedCellProvider.notifier).state = SelectedCell(e.y, e.x);
-    _read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+    _read(selectedCellProvider.notifier).value = SelectedCell(e.y, e.x);
+    _read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
     _didAutoSelectFirstAcross = true;
   }
 
@@ -120,7 +121,7 @@ class CrosswordInputController {
     final sel = _read(selectedCellProvider);
     final row = sel?.row ?? 0;
     final col = sel?.col ?? 0;
-    final black = _read(gameBoardProvider).blackCells;
+    final black = _read<GameBoard>(gameBoardProvider).blackCells;
     if (sel != null && black.isDisabled(sel.row, sel.col)) {
       return;
     }
@@ -153,13 +154,13 @@ class CrosswordInputController {
       final char = keyLabel.toUpperCase();
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         _read(gameBoardProvider.notifier).setLetter(row, col, char);
-        _moveToNext(_read(gameBoardProvider), startRow: row, startCol: col);
+        _moveToNext(_read<GameBoard>(gameBoardProvider), startRow: row, startCol: col);
       }
     }
   }
 
   void _moveToDirection(int row, int col, int dr, int dc) {
-    final board = _read(gameBoardProvider);
+    final board = _read<GameBoard>(gameBoardProvider);
     final black = board.blackCells;
     final entries = board.entries;
     
@@ -242,7 +243,7 @@ class CrosswordInputController {
   }
 
   void _checkForCompletedWords() {
-    final board = _read(gameBoardProvider);
+    final board = _read<GameBoard>(gameBoardProvider);
     final entries = board.entries;
     
     if (entries == null || entries.isEmpty) {
@@ -270,11 +271,11 @@ class CrosswordInputController {
         // Play success sound
         try {
           _read(gameAudioServiceProvider).playSuccess();
-        } catch (_) {}
+        } on Object catch (_) {}
         
         // Trigger flash animation on cells
         final cellKeys = wordCheckService.getCellKeys(entry);
-        _read(flashingCellsProvider.notifier).state = cellKeys.toSet();
+          _read(flashingCellsProvider.notifier).value = cellKeys.toSet();
         
         // Lock cells of the found word
         newLockedCells.addAll(cellKeys);
@@ -282,7 +283,7 @@ class CrosswordInputController {
         // Clear flash after animation (will be handled by UI)
         Future.delayed(const Duration(milliseconds: 500), () {
           try {
-            _read(flashingCellsProvider.notifier).state = {};
+            _read(flashingCellsProvider.notifier).value = {};
           } on Object catch (_) {
             // Provider might be disposed if user navigated away
           }
@@ -291,11 +292,11 @@ class CrosswordInputController {
     }
     
     if (newFoundWords.length > foundWords.length) {
-      _read(foundWordsProvider.notifier).state = newFoundWords;
+      _read(foundWordsProvider.notifier).value = newFoundWords;
     }
     
     if (newLockedCells.length > lockedCells.length) {
-      _read(lockedCellsProvider.notifier).state = newLockedCells;
+      _read(lockedCellsProvider.notifier).value = newLockedCells;
     }
   }
 }

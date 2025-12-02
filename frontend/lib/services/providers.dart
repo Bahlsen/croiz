@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/game_audio_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
@@ -57,13 +58,13 @@ final dioProvider = Provider<Dio>((ref) {
 });
 
 // Authentication Provider
-final authProvider = StateNotifierProvider<AuthNotifier, AsyncValue<AuthState>>(
+final authProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
   AuthNotifier.new,
 );
 
-class AuthNotifier extends StateNotifier<AsyncValue<AuthState>> {
-  AuthNotifier(this.ref) : super(AsyncValue.data(AuthState.initial()));
-  final Ref ref;
+class AuthNotifier extends AsyncNotifier<AuthState> {
+  @override
+  FutureOr<AuthState> build() => AuthState.initial();
 
   Future<void> login(String username, String password) async {
     state = const AsyncValue.loading();

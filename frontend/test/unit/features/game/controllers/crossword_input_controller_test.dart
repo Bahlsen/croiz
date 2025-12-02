@@ -40,9 +40,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          gameBoardProvider.overrideWith(
-            (ref) => GameBoardNotifier(
-              GameBoard(
+              puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
                 id: 'test',
                 title: 'Test Board',
                 gridSize: 3,
@@ -59,11 +57,9 @@ void main() {
                   [false, false, false],
                 ],
                 difficulty: 1,
-              ),
-            ),
-          ),
-        ],
-      );
+                    ))),
+              ],
+                  );
     });
 
     tearDown(() {
@@ -99,9 +95,7 @@ void main() {
       final testContainer = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          gameBoardProvider.overrideWith(
-            (ref) => GameBoardNotifier(
-              GameBoard(
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
                 id: 'test',
                 title: 'Test Board',
                 gridSize: 3,
@@ -128,9 +122,7 @@ void main() {
                     answer: 'CAT',
                   ),
                 ],
-              ),
-            ),
-          ),
+              ))),
         ],
       );
 
@@ -160,9 +152,7 @@ void main() {
       final testContainer = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          gameBoardProvider.overrideWith(
-            (ref) => GameBoardNotifier(
-              GameBoard(
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
                 id: 'test',
                 title: 'Test Board',
                 gridSize: 3,
@@ -179,12 +169,12 @@ void main() {
                   [false, false, false],
                 ],
                 difficulty: 1,
-              ),
-            ),
-          ),
-          lockedCellsProvider.overrideWith((ref) => {'0,0', '0,1', '0,2'}),
+              ))),
+          // locked cells will be set on the container after creation
         ],
       );
+      // set locked cells for this test container
+      testContainer.read(lockedCellsProvider.notifier).value = {'0,0', '0,1', '0,2'};
 
       final controller = CrosswordInputController.fromContainer(testContainer);
       testContainer.read(selectedCellProvider.notifier).state =
@@ -205,9 +195,7 @@ void main() {
       final testContainer = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          gameBoardProvider.overrideWith(
-            (ref) => GameBoardNotifier(
-              GameBoard(
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
                 id: 'test',
                 title: 'Test Board',
                 gridSize: 3,
@@ -224,12 +212,11 @@ void main() {
                   [false, false, false],
                 ],
                 difficulty: 1,
-              ),
-            ),
-          ),
-          lockedCellsProvider.overrideWith((ref) => {'0,0'}),
+              ))),
         ],
       );
+      // set locked cells for this test container
+      testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
 
       final controller = CrosswordInputController.fromContainer(testContainer);
       testContainer.read(selectedCellProvider.notifier).state =

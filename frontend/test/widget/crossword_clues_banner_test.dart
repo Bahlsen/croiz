@@ -41,13 +41,13 @@ void main() {
         ],
       );
       final container = ProviderContainer(
-        overrides: [
-          gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
-        ],
+          overrides: [
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
+      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -91,13 +91,13 @@ void main() {
         ],
       );
       final container = ProviderContainer(
-        overrides: [
-          gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
-        ],
+          overrides: [
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
+      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
 
       // Act
       await tester.pumpWidget(
@@ -135,12 +135,12 @@ void main() {
         entries: const [],
       );
       final container = ProviderContainer(
-        overrides: [
-          gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
-        ],
+          overrides: [
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).state = null;
+      container.read(selectedCellProvider.notifier).value = null;
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -194,13 +194,13 @@ void main() {
         ],
       );
       final container = ProviderContainer(
-        overrides: [
-          gameBoardProvider.overrideWith((ref) => GameBoardNotifier(board)),
-        ],
+          overrides: [
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
+      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
 
       await tester.pumpWidget(
         UncontrolledProviderScope(

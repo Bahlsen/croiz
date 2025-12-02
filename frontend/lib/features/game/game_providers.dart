@@ -6,10 +6,23 @@ import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
 
-class GameBoardNotifier extends StateNotifier<GameBoard> {
-  GameBoardNotifier(super.state);
+class GameBoardNotifier extends Notifier<GameBoard> {
+  @override
+  GameBoard build() {
+    final defaultBoard = _createEmptyBoard(5);
 
-  factory GameBoardNotifier.createEmpty(int size) {
+    // Listen for puzzle loader updates and update state when puzzle data arrives
+    ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, (prev, next) {
+      if (next is AsyncData<GameBoard>) {
+        state = next.value;
+      }
+    });
+
+    final puzzleAsync = ref.watch(puzzleLoaderProvider);
+    return puzzleAsync.maybeWhen(data: (d) => d, orElse: () => defaultBoard);
+  }
+
+  static GameBoard _createEmptyBoard(int size) {
     final grid = <List<String?>>[];
     for (var i = 0; i < size; i++) {
       grid.add(List<String?>.filled(size, null));
@@ -18,7 +31,7 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
     for (var i = 0; i < size; i++) {
       blackCells.add(List<bool>.filled(size, false));
     }
-    final board = GameBoard(
+    return GameBoard(
       id: 'local',
       title: 'Local Game',
       gridSize: size,
@@ -28,7 +41,6 @@ class GameBoardNotifier extends StateNotifier<GameBoard> {
       blackCells: blackCells,
       difficulty: 1,
     );
-    return GameBoardNotifier(board);
   }
 
   void setLetter(int row, int col, String? letter) {
@@ -91,16 +103,9 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>(
 );
 
 /// Main game board provider (uses the loaded puzzle or fallback to empty).
-final gameBoardProvider = StateNotifierProvider<GameBoardNotifier, GameBoard>((
-  ref,
-) {
-  final puzzleAsync = ref.watch(puzzleLoaderProvider);
-  return puzzleAsync.when(
-    data: GameBoardNotifier.new,
-    loading: () => GameBoardNotifier.createEmpty(5),
-    error: (_, __) => GameBoardNotifier.createEmpty(5),
-  );
-});
+final gameBoardProvider = NotifierProvider<GameBoardNotifier, GameBoard>(
+  GameBoardNotifier.new,
+);
 
 /// Load a puzzle from a JSON asset file and convert to GameBoard.
 Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
@@ -111,14 +116,13 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
 }
 
 /// Create sample board by loading from assets/data/sample_5x5.json
-Future<GameBoardNotifier> createSampleBoard() async {
+Future<GameBoard> createSampleBoard() async {
   final board = await loadPuzzleFromAsset('assets/data/sample_5x5.json');
-  return GameBoardNotifier(board);
+  return board;
 }
 
 /// Fallback: create empty board if loading fails
-GameBoardNotifier createEmptyBoard(int size) =>
-    GameBoardNotifier.createEmpty(size);
+GameBoard createEmptyBoard(int size) => GameBoardNotifier._createEmptyBoard(size);
 
 /// Represents a selected cell in the grid.
 class SelectedCell {
@@ -131,21 +135,59 @@ class SelectedCell {
 enum WordDirection { horizontal, vertical }
 
 /// Holds the currently selected cell (or null if none).
-final selectedCellProvider = StateProvider<SelectedCell?>(_initialSelectedCell);
+class SelectedCellNotifier extends Notifier<SelectedCell?> {
+  @override
+  SelectedCell? build() => _initialSelectedCell(ref);
+  SelectedCell? get value => state;
+  set value(SelectedCell? v) => state = v;
+}
+
+final selectedCellProvider =
+    NotifierProvider<SelectedCellNotifier, SelectedCell?>(SelectedCellNotifier.new);
 
 /// Holds the current word direction (horizontal or vertical).
-final wordDirectionProvider = StateProvider<WordDirection>(
-  _initialWordDirection,
-);
+class WordDirectionNotifier extends Notifier<WordDirection> {
+  @override
+  WordDirection build() => _initialWordDirection(ref);
+  WordDirection get value => state;
+  set value(WordDirection v) => state = v;
+}
+
+final wordDirectionProvider =
+    NotifierProvider<WordDirectionNotifier, WordDirection>(WordDirectionNotifier.new);
 
 // Holds the set of found word keys (format: "row,col,direction")
-final foundWordsProvider = StateProvider<Set<String>>(_initialFoundWords);
+class FoundWordsNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => _initialFoundWords(ref);
+  Set<String> get value => state;
+  set value(Set<String> v) => state = v;
+}
+
+final foundWordsProvider =
+    NotifierProvider<FoundWordsNotifier, Set<String>>(FoundWordsNotifier.new);
 
 // Holds cells that should flash (format: "row,col")
-final flashingCellsProvider = StateProvider<Set<String>>(_initialFlashingCells);
+class FlashingCellsNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => _initialFlashingCells(ref);
+  Set<String> get value => state;
+  set value(Set<String> v) => state = v;
+}
+
+final flashingCellsProvider =
+    NotifierProvider<FlashingCellsNotifier, Set<String>>(FlashingCellsNotifier.new);
 
 // Holds cells that are locked (format: "row,col")
-final lockedCellsProvider = StateProvider<Set<String>>(_initialLockedCells);
+class LockedCellsNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => _initialLockedCells(ref);
+  Set<String> get value => state;
+  set value(Set<String> v) => state = v;
+}
+
+final lockedCellsProvider =
+    NotifierProvider<LockedCellsNotifier, Set<String>>(LockedCellsNotifier.new);
 
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
