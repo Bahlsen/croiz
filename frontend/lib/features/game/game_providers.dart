@@ -108,12 +108,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     state = result.board;
 
     if (result.clearedCells.isNotEmpty) {
-      // Flash cleared cells in the UI (red) via flashingCellsProvider
-      ref.read(flashingCellsProvider.notifier).value = result.clearedCells.toSet();
+      // Flash cleared cells in the UI (red) via flashingClearedCellsProvider
+      ref.read(flashingClearedCellsProvider.notifier).value = result.clearedCells.toSet();
       // Clear flash after a short duration
       Future.delayed(const Duration(milliseconds: 700), () {
         try {
-          ref.read(flashingCellsProvider.notifier).value = <String>{};
+          ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
         } on Object catch (_) {}
       });
     }
@@ -201,6 +201,17 @@ class FlashingCellsNotifier extends Notifier<Set<String>> {
 final flashingCellsProvider =
     NotifierProvider<FlashingCellsNotifier, Set<String>>(FlashingCellsNotifier.new);
 
+// Holds cells that should flash red because they were cleared by the cleaner.
+class FlashingClearedCellsNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() => _initialFlashingClearedCells(ref);
+  Set<String> get value => state;
+  set value(Set<String> v) => state = v;
+}
+
+final flashingClearedCellsProvider =
+    NotifierProvider<FlashingClearedCellsNotifier, Set<String>>(FlashingClearedCellsNotifier.new);
+
 // Holds cells that are locked (format: "row,col")
 class LockedCellsNotifier extends Notifier<Set<String>> {
   @override
@@ -217,3 +228,4 @@ WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
 Set<String> _initialFoundWords(ref) => {};
 Set<String> _initialFlashingCells(ref) => {};
 Set<String> _initialLockedCells(ref) => {};
+Set<String> _initialFlashingClearedCells(ref) => {};

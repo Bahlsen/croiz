@@ -98,8 +98,11 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
           // Check if this cell is flashing (word just completed)
           final flashingCells = ref.watch(flashingCellsProvider);
+          // Check if this cell is flashing because it was cleared (red flash)
+          final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
           final cellKey = '$row,$col';
           final isFlashing = flashingCells.contains(cellKey);
+          final isClearedFlashing = clearedFlashingCells.contains(cellKey);
 
           // Check if this cell is locked (part of a found word)
           final lockedCells = ref.watch(lockedCellsProvider);
@@ -151,16 +154,24 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
               curve: Curves.easeInOut,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
-                // Flashing cell gets a gold/green glow for success
-                boxShadow: isFlashing
+                // Flashing cell gets a gold/green glow for success; cleared cells flash red
+                boxShadow: isClearedFlashing
                     ? [
                         BoxShadow(
-                          color: Colors.greenAccent.withValues(alpha: 0.8),
+                          color: Colors.redAccent.withValues(alpha: 0.85),
                           blurRadius: 15,
                           offset: Offset.zero,
                         ),
                       ]
-                    : (isSelected
+                    : (isFlashing
+                        ? [
+                            BoxShadow(
+                              color: Colors.greenAccent.withValues(alpha: 0.8),
+                              blurRadius: 15,
+                              offset: Offset.zero,
+                            ),
+                          ]
+                        : (isSelected
                         ? [
                             BoxShadow(
                               color: Colors.purple.withValues(alpha: 0.28),
@@ -184,30 +195,36 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
                                   ),
                                 ])),
                 border: Border.all(
-                  color: isFlashing
+                  color: isClearedFlashing
+                    ? Colors.redAccent
+                    : (isFlashing
                       ? Colors.greenAccent
                       : (isLocked
-                            ? Colors.green.shade700
-                            : (isSelected
-                                ? Colors.purpleAccent
-                                : (isPartOfSelectedWord
-                                      ? Colors.blueAccent
-                                      : Colors.grey.shade700))),
-                  width: isFlashing
+                        ? Colors.green.shade700
+                        : (isSelected
+                          ? Colors.purpleAccent
+                          : (isPartOfSelectedWord
+                            ? Colors.blueAccent
+                            : Colors.grey.shade700)))),
+                  width: isClearedFlashing
+                    ? 3
+                    : (isFlashing
                       ? 3
                       : (isLocked
-                            ? 2
-                            : (isSelected
-                                ? 2.5
-                                : (isPartOfSelectedWord ? 2 : 1))),
+                        ? 2
+                        : (isSelected
+                          ? 2.5
+                          : (isPartOfSelectedWord ? 2 : 1)))),
                 ),
-                color: isFlashing
+                color: isClearedFlashing
+                  ? Colors.redAccent.withValues(alpha: 0.5)
+                  : (isFlashing
                     ? Colors.greenAccent.withValues(alpha: 0.5)
                     : (isLocked
-                          ? Colors.green.withValues(alpha: 0.3)
-                          : (isPartOfSelectedWord
-                              ? Colors.blue.withValues(alpha: 0.45)
-                              : Colors.grey[800])),
+                      ? Colors.green.withValues(alpha: 0.3)
+                      : (isPartOfSelectedWord
+                        ? Colors.blue.withValues(alpha: 0.45)
+                        : Colors.grey[800]))),
               ),
               child: Stack(
                 children: [

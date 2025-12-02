@@ -65,7 +65,7 @@ void main() {
     expect(provEntries, isNotNull);
     expect(provEntries!.length, 1);
 
-    final flashing = container.read(flashingCellsProvider);
+    final flashing = container.read(flashingClearedCellsProvider);
     expect(flashing.contains('0,1'), isTrue);
 
     // The game board should have cleared the incorrect letter at 0,1
@@ -74,7 +74,7 @@ void main() {
 
     // Advance time to allow the flash to be cleared (700ms in implementation)
     await tester.pump(const Duration(milliseconds: 800));
-    final flashingAfter = container.read(flashingCellsProvider);
+    final flashingAfter = container.read(flashingClearedCellsProvider);
     expect(flashingAfter, isEmpty);
   });
 }

@@ -77,6 +77,12 @@ These guidelines help AI coding agents work productively in this repository. Foc
 - **KISS**: Favor straightforward solutions over clever ones. Keep widgets/providers small, single-purpose; avoid deep inheritance and unnecessary abstractions.
 - **SOLID**: 
   - Single Responsibility: each `Service`, `Repository`, and `Controller` owns one concern.
+  - Single Responsibility Principle (SRP): a module or class should have one,
+    and only one, reason to change — i.e., a single responsibility. Practically,
+    keep business logic (services) separate from UI (widgets) and from state
+    orchestration (providers/notifiers). When behavior grows, prefer extracting
+    a small service with focused unit tests rather than adding complexity to
+    an existing class.
   - Open/Closed: extend behavior via new implementations (e.g., new datasource) rather than modifying existing ones.
   - Liskov: keep interchangeable implementations consistent (e.g., repository interfaces used by services).
   - Interface Segregation: define narrow interfaces for domain/repository contracts.
