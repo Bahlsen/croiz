@@ -145,7 +145,10 @@ class CrosswordInputController {
     }
 
     if (logical == LogicalKeyboardKey.backspace || logical == LogicalKeyboardKey.delete) {
-      _read(gameBoardProvider.notifier).setLetter(row, col, '');
+      // Use the same deletion logic as the on-screen backspace so that
+      // locked cells (found words) are respected and we correctly move
+      // to the previous filled cell when current is empty.
+      clearCurrent();
       return;
     }
 

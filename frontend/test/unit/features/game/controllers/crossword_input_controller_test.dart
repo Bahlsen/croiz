@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
@@ -147,6 +148,58 @@ void main() {
       testContainer.dispose();
     });
 
+    test('physical backspace/delete does not clear locked cells', () {
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
+                id: 'test',
+                title: 'Test Board',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['C', null, null],
+                  [null, null, null],
+                  [null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+              ))),
+        ],
+      );
+      // lock the cell
+      testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      testContainer.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+
+      // Send Backspace
+      const backspaceEvent = KeyDownEvent(
+        logicalKey: LogicalKeyboardKey.backspace,
+        physicalKey: PhysicalKeyboardKey.backspace,
+        timeStamp: Duration(milliseconds: 10),
+      );
+      controller.handleKey(backspaceEvent);
+
+      // Value should remain because cell is locked
+      expect(testContainer.read(gameBoardProvider).grid[0][0], 'C');
+
+      // Send Delete
+      const deleteEvent = KeyDownEvent(
+        logicalKey: LogicalKeyboardKey.delete,
+        physicalKey: PhysicalKeyboardKey.delete,
+        timeStamp: Duration(milliseconds: 11),
+      );
+      controller.handleKey(deleteEvent);
+      expect(testContainer.read(gameBoardProvider).grid[0][0], 'C');
+
+      testContainer.dispose();
+    });
     test('locked cells cannot be modified', () {
       // Setup a container with a locked cell
       final testContainer = ProviderContainer(
