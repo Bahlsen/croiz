@@ -267,7 +267,10 @@ class CrosswordInputController {
       if (wordCheckService.isWordComplete(board, entry)) {
         newFoundWords.add(wordKey);
         
-        // success sound is handled elsewhere (or by the virtual keyboard/Audio service)
+        // Play success sound
+        try {
+          _read(gameAudioServiceProvider).playSuccess();
+        } catch (_) {}
         
         // Trigger flash animation on cells
         final cellKeys = wordCheckService.getCellKeys(entry);

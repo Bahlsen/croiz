@@ -100,12 +100,12 @@ class VirtualKeyboard extends ConsumerWidget {
               onPlayClick: () {
                 try {
                   ref.read(gameAudioServiceProvider).playType();
-                } catch (_) {}
+                } on Object catch (_) {}
               },
               onPlayDelete: () {
                 try {
                   ref.read(gameAudioServiceProvider).playDelete();
-                } catch (_) {}
+                } on Object catch (_) {}
               },
               enabledLetters: enabledLetters,
               enableFeedback: enableFeedback,
@@ -221,7 +221,7 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
                 HapticFeedback.selectionClick();
                 try {
                   onPlayClick?.call();
-                } catch (e, st) {
+                } on Object catch (e, st) {
                   developer.log('GameAudioService.playType failed', error: e, stackTrace: st);
                 }
               }
@@ -327,7 +327,7 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
       HapticFeedback.selectionClick();
       try {
         widget.onPlayDelete?.call();
-      } catch (e, st) {
+      } on Object catch (e, st) {
         developer.log('GameAudioService.playDelete failed', error: e, stackTrace: st);
       }
     }

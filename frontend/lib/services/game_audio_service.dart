@@ -1,18 +1,64 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flame_audio/flame_audio.dart';
 
-/// Service simple pour jouer des sons du jeu.
+/// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
 class GameAudioService {
-  final AudioPlayer _player = AudioPlayer();
+  AudioPool? _typePool;
+  AudioPool? _deletePool;
+  bool _initialized = false;
 
-  Future<void> playType() async {
-    await _player.play(AssetSource('audio/type.mp3'), volume: 1);
+  GameAudioService() {
+    _init();
   }
 
-  Future<void> playDelete() async {
-    await _player.play(AssetSource('audio/delete.mp3'), volume: 1);
+  Future<void> _init() async {
+    try {
+      // Preload into cache (files placed in assets/audio/)
+      await FlameAudio.audioCache.loadAll([
+        'typing.wav',
+        'delete.wav',
+        'success.wav',
+      ]);
+
+      // Create small pools for quick, possibly overlapping SFX.
+      _typePool = await FlameAudio.createPool('typing.wav', maxPlayers: 6);
+      _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 4);
+
+      _initialized = true;
+    } on Object catch (_) {
+      // Initialization failures should not crash the app; log elsewhere if needed.
+      _initialized = false;
+    }
   }
 
-  Future<void> playSuccess() async {
-    await _player.play(AssetSource('audio/success.mp3'), volume: 1);
+  void playType() {
+    try {
+      if (!_initialized) {
+        return;
+      }
+      if (_typePool != null) {
+        _typePool!.start();
+      }
+    } on Object catch (_) {}
   }
+
+  void playDelete() {
+    try {
+      if (!_initialized) {
+        return;
+      }
+      if (_deletePool != null) {
+        _deletePool!.start();
+      }
+    } on Object catch (_) {}
+  }
+
+  void playSuccess() {
+    try {
+      if (!_initialized) {
+        return;
+      }
+      FlameAudio.play('success.wav');
+    } on Object catch (_) {}
+  }
+  
 }
