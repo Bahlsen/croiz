@@ -5,6 +5,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
+import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 
 class GameBoardNotifier extends Notifier<GameBoard> {
   @override
@@ -94,6 +95,28 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       difficulty: state.difficulty,
       entries: state.entries,
     );
+  }
+
+  /// Clear any letters in the grid that do not match the puzzle answers.
+  ///
+  /// For each entry with a known answer, build an expected grid from the
+  /// answers and remove any letter in the current grid that does not match
+  /// the expected character for that cell.
+  void clearIncorrectLetters() {
+    final cleaner = ref.read(incorrectLetterCleanerProvider);
+    final result = cleaner.cleanWithResult(state);
+    state = result.board;
+
+    if (result.clearedCells.isNotEmpty) {
+      // Flash cleared cells in the UI (red) via flashingCellsProvider
+      ref.read(flashingCellsProvider.notifier).value = result.clearedCells.toSet();
+      // Clear flash after a short duration
+      Future.delayed(const Duration(milliseconds: 700), () {
+        try {
+          ref.read(flashingCellsProvider.notifier).value = <String>{};
+        } on Object catch (_) {}
+      });
+    }
   }
 }
 

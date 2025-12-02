@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'virtual_keyboard.dart';
+import 'package:croiz/features/game/game_providers.dart';
 
 /// In-game text input that uses the in-app [VirtualKeyboard]
 /// and prevents the system keyboard from appearing.
-class InGameTextInput extends StatefulWidget {
+class InGameTextInput extends ConsumerStatefulWidget {
   const InGameTextInput({
     required this.controller,
     super.key,
@@ -27,18 +29,20 @@ class InGameTextInput extends StatefulWidget {
   final bool keyboardInitiallyVisible;
 
   @override
-  State<InGameTextInput> createState() => _InGameTextInputState();
+  ConsumerState<InGameTextInput> createState() => _InGameTextInputState();
 }
 
-class _InGameTextInputState extends State<InGameTextInput> {
+class _InGameTextInputState extends ConsumerState<InGameTextInput> {
   late final FocusNode _focusNode;
   late bool _keyboardVisible;
+  late List<List<String>>? _currentLayout;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode(canRequestFocus: false);
     _keyboardVisible = widget.keyboardInitiallyVisible;
+    _currentLayout = widget.keyboardLayout ?? VirtualKeyboard.azertyLayout;
   }
 
   @override
@@ -52,13 +56,30 @@ class _InGameTextInputState extends State<InGameTextInput> {
     mainAxisSize: MainAxisSize.min,
     children: [
       _buildField(context),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FilledButton.icon(
+              onPressed: () {
+                try {
+                  ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+                } on Object catch (_) {}
+              },
+              icon: const Icon(Icons.delete_sweep_outlined),
+              label: const Text('Clear'),
+            ),
+          ],
+        ),
+      ),
       AnimatedCrossFade(
         firstChild: const SizedBox.shrink(),
         secondChild: VirtualKeyboard(
           onKey: _handleKey,
           onBackspace: _handleBackspace,
           enabledLetters: widget.enabledLetters,
-          layout: widget.keyboardLayout,
+          layout: _currentLayout,
         ),
         crossFadeState: _keyboardVisible
             ? CrossFadeState.showSecond
@@ -79,12 +100,35 @@ class _InGameTextInputState extends State<InGameTextInput> {
     decoration: InputDecoration(
       hintText: widget.hintText,
       counterText: '',
-      suffixIcon: IconButton(
-        tooltip: _keyboardVisible
-            ? 'Masquer le clavier'
-            : 'Afficher le clavier',
-        onPressed: () => setState(() => _keyboardVisible = !_keyboardVisible),
-        icon: Icon(_keyboardVisible ? Icons.keyboard_hide : Icons.keyboard),
+      suffixIcon: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            tooltip: 'Clear incorrect letters',
+            onPressed: () {
+              try {
+                ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+              } on Object catch (_) {}
+            },
+            icon: const Icon(Icons.delete_sweep_outlined),
+          ),
+          IconButton(
+            tooltip: 'Switch keyboard layout',
+            onPressed: () {
+              setState(() {
+                // Toggle between AZERTY and QWERTY layouts
+                if (_currentLayout == VirtualKeyboard.azertyLayout) {
+                  _currentLayout = VirtualKeyboard.qwertyLayout;
+                } else {
+                  _currentLayout = VirtualKeyboard.azertyLayout;
+                }
+                // Ensure keyboard visible when switching layout
+                _keyboardVisible = true;
+              });
+            },
+            icon: Icon(_keyboardVisible ? Icons.keyboard : Icons.keyboard),
+          ),
+        ],
       ),
     ),
     onTap: () => setState(() => _keyboardVisible = true),

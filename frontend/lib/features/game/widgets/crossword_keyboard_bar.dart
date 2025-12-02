@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/crossword_clues_banner.dart';
 
 class CrosswordKeyboardBar extends ConsumerStatefulWidget {
@@ -34,10 +35,25 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
           const CrosswordClueBanner(),
           Align(
             alignment: Alignment.centerRight,
-            child: IconButton(
-              tooltip: 'Basculer AZERTY/QWERTY',
-              icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
-              onPressed: () => setState(() => _isAzerty = !_isAzerty),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  key: const Key('clear_button'),
+                  tooltip: 'Clear incorrect letters',
+                  icon: const Icon(Icons.delete_sweep_outlined, color: Colors.white70),
+                  onPressed: () {
+                    try {
+                      ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+                    } on Object catch (_) {}
+                  },
+                ),
+                IconButton(
+                  tooltip: 'Basculer AZERTY/QWERTY',
+                  icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
+                  onPressed: () => setState(() => _isAzerty = !_isAzerty),
+                ),
+              ],
             ),
           ),
           VirtualKeyboard(
