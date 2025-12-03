@@ -33,59 +33,92 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
     // normal runtime behavior intact.
     return SafeArea(
       top: false,
-      child: SizedBox(
-        height: 240,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            // Fixed-height clue banner. Give it priority (fixed) so it
-            // remains a consistent size and does not shrink undesirably.
-            SizedBox(height: 80, child: const CrosswordClueBanner()),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Desired dimensions (increased so clue banner can show two lines)
+          const desiredBanner = 120.0;
+          const desiredControls = 44.0;
+          const desiredKeyboard = 160.0;
+          const desiredTotal = desiredBanner + desiredControls + desiredKeyboard;
 
-            // Controls row: fixed small height to separate banner and keyboard.
-            SizedBox(
-              height: 40,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      key: const Key('clear_button'),
-                      tooltip: 'Clear incorrect letters',
-                      icon: const Icon(Icons.delete_sweep_outlined, color: Colors.white70),
-                      onPressed: () {
-                        try {
-                          ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-                        } on Object catch (e, st) {
-                          debugPrint('clearIncorrectLetters failed: $e\n$st');
-                        }
-                      },
-                    ),
-                    IconButton(
-                      tooltip: 'Basculer AZERTY/QWERTY',
-                      icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
-                      onPressed: () => setState(() => _isAzerty = !_isAzerty),
-                    ),
-                  ],
+          // Minimum dimensions to keep UI usable on very small screens
+          const minBanner = 64.0;
+          const minControls = 32.0;
+          const minKeyboard = 100.0;
+
+          final maxH = constraints.maxHeight.isFinite ? constraints.maxHeight : desiredTotal;
+
+          double bannerH = desiredBanner;
+          double controlsH = desiredControls;
+          double keyboardH = desiredKeyboard;
+
+          if (maxH < desiredTotal) {
+            // Scale down proportionally but respect minimums. We reduce banner
+            // and keyboard but keep controls at least minControls.
+            final scale = maxH / desiredTotal;
+            bannerH = (desiredBanner * scale).clamp(minBanner, desiredBanner);
+            keyboardH = (desiredKeyboard * scale).clamp(minKeyboard, desiredKeyboard);
+            // Controls take remaining space but not less than minControls.
+            controlsH = (maxH - bannerH - keyboardH).clamp(minControls, desiredControls);
+
+            // If remaining is still too small, shrink keyboard further.
+            if (controlsH < minControls) {
+              final deficit = minControls - controlsH;
+              final shrinkable = keyboardH - minKeyboard;
+              final shrink = shrinkable >= deficit ? deficit : shrinkable;
+              keyboardH = keyboardH - shrink;
+              controlsH = (maxH - bannerH - keyboardH).clamp(minControls, desiredControls);
+            }
+          }
+
+          return Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              SizedBox(height: bannerH, child: const CrosswordClueBanner()),
+
+              SizedBox(
+                height: controlsH,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        key: const Key('clear_button'),
+                        tooltip: 'Clear incorrect letters',
+                        icon: const Icon(Icons.delete_sweep_outlined, color: Colors.white70),
+                        onPressed: () {
+                          try {
+                            ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+                          } on Object catch (e, st) {
+                            debugPrint('clearIncorrectLetters failed: $e\n$st');
+                          }
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'Basculer AZERTY/QWERTY',
+                        icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
+                        onPressed: () => setState(() => _isAzerty = !_isAzerty),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            // Fixed-height keyboard with priority.
-            SizedBox(
-              height: 120,
-              child: VirtualKeyboard(
-                layout: layout,
-                onKey: widget.onKey,
-                onBackspace: widget.onBackspace,
-                enableFeedback: true,
-                keyHeight: 38,
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              SizedBox(
+                height: keyboardH,
+                child: VirtualKeyboard(
+                  layout: layout,
+                  onKey: widget.onKey,
+                  onBackspace: widget.onBackspace,
+                  enableFeedback: true,
+                  keyHeight: 44,
+                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }
