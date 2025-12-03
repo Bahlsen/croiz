@@ -35,46 +35,50 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
       top: false,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          // Desired dimensions (increased so clue banner can show two lines)
+          // Desired and minimum sizes
           const desiredBanner = 120.0;
           const desiredControls = 44.0;
           const desiredKeyboard = 160.0;
-          const desiredTotal = desiredBanner + desiredControls + desiredKeyboard;
 
-          // Minimum dimensions to keep UI usable on very small screens
           const minBanner = 64.0;
-          const minControls = 32.0;
-          const minKeyboard = 100.0;
+          const minControls = 24.0;
+          const minKeyboard = 80.0;
 
-          final maxH = constraints.maxHeight.isFinite ? constraints.maxHeight : desiredTotal;
+          final available = constraints.maxHeight.isFinite ? constraints.maxHeight : (desiredBanner + desiredControls + desiredKeyboard);
 
           double bannerH = desiredBanner;
           double controlsH = desiredControls;
           double keyboardH = desiredKeyboard;
 
-          if (maxH < desiredTotal) {
-            // Scale down proportionally but respect minimums. We reduce banner
-            // and keyboard but keep controls at least minControls.
-            final scale = maxH / desiredTotal;
-            bannerH = (desiredBanner * scale).clamp(minBanner, desiredBanner);
-            keyboardH = (desiredKeyboard * scale).clamp(minKeyboard, desiredKeyboard);
-            // Controls take remaining space but not less than minControls.
-            controlsH = (maxH - bannerH - keyboardH).clamp(minControls, desiredControls);
+          if (available < (desiredBanner + desiredControls + desiredKeyboard)) {
+            // Simpler, more robust approach: first try to scale banner and keyboard
+            // proportionally, while respecting minimums. After that, assign the
+            // remaining space to controls. As a final safety net, ensure the
+            // three heights sum exactly to `available` so no overflow can occur.
+            final contentDesired = desiredBanner + desiredKeyboard;
+            final contentAvailable = (available - desiredControls).clamp(minBanner + minKeyboard, double.infinity);
+            final scale = contentAvailable / contentDesired;
 
-            // If remaining is still too small, shrink keyboard further.
-            if (controlsH < minControls) {
-              final deficit = minControls - controlsH;
-              final shrinkable = keyboardH - minKeyboard;
-              final shrink = shrinkable >= deficit ? deficit : shrinkable;
-              keyboardH = keyboardH - shrink;
-              controlsH = (maxH - bannerH - keyboardH).clamp(minControls, desiredControls);
+            bannerH = (desiredBanner * scale).clamp(minBanner, desiredBanner);
+            keyboardH = (desiredKeyboard * scale).clamp(minKeyboard, double.infinity);
+
+            controlsH = (available - bannerH - keyboardH).clamp(minControls, double.infinity);
+
+            // Safety adjustment: if rounding/clamping left a gap or overflow,
+            // put the remainder into the keyboard so the sum equals available.
+            final sum = bannerH + controlsH + keyboardH;
+            if ((sum - available).abs() > 0.1) {
+              keyboardH = (available - bannerH - controlsH).clamp(0.0, double.infinity);
             }
           }
 
           return Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(height: bannerH, child: const CrosswordClueBanner()),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minBanner, maxHeight: bannerH),
+                child: SizedBox(height: bannerH, child: const CrosswordClueBanner()),
+              ),
 
               SizedBox(
                 height: controlsH,
@@ -105,15 +109,18 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
                 ),
               ),
 
-              SizedBox(
-                height: keyboardH,
-                child: VirtualKeyboard(
-                  layout: layout,
-                  onKey: widget.onKey,
-                  onBackspace: widget.onBackspace,
-                  enableFeedback: true,
-                  keyHeight: 44,
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 0, maxHeight: keyboardH),
+                child: SizedBox(
+                  height: keyboardH,
+                  child: VirtualKeyboard(
+                    layout: layout,
+                    onKey: widget.onKey,
+                    onBackspace: widget.onBackspace,
+                    enableFeedback: true,
+                    keyHeight: 44,
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                  ),
                 ),
               ),
             ],
