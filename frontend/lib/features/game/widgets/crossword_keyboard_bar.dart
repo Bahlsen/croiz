@@ -50,26 +50,56 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
           double controlsH = desiredControls;
           double keyboardH = desiredKeyboard;
 
-          if (available < (desiredBanner + desiredControls + desiredKeyboard)) {
-            // Simpler, more robust approach: first try to scale banner and keyboard
-            // proportionally, while respecting minimums. After that, assign the
-            // remaining space to controls. As a final safety net, ensure the
-            // three heights sum exactly to `available` so no overflow can occur.
+          // If there's less space than desired, allocate deterministically:
+          // 1. Reserve the minimum for controls.
+          // 2. Split the remaining space between banner and keyboard according
+          //    to their desired proportions, but don't go below their minima.
+          // 3. If rounding/clamping creates a mismatch, reduce keyboard first,
+          //    then banner, to make the sum == available. If there's extra
+          //    space, give it to the keyboard.
+          final totalDesired = desiredBanner + desiredControls + desiredKeyboard;
+          if (available < totalDesired) {
+            controlsH = minControls;
+
+            final remainingForContent = (available - controlsH).clamp(minBanner + minKeyboard, double.infinity);
             final contentDesired = desiredBanner + desiredKeyboard;
-            final contentAvailable = (available - desiredControls).clamp(minBanner + minKeyboard, double.infinity);
-            final scale = contentAvailable / contentDesired;
+            final bannerShare = desiredBanner / contentDesired;
+            final keyboardShare = desiredKeyboard / contentDesired;
 
-            bannerH = (desiredBanner * scale).clamp(minBanner, desiredBanner);
-            keyboardH = (desiredKeyboard * scale).clamp(minKeyboard, double.infinity);
+            bannerH = (remainingForContent * bannerShare).clamp(minBanner, desiredBanner);
+            keyboardH = (remainingForContent * keyboardShare).clamp(minKeyboard, desiredKeyboard);
 
-            controlsH = (available - bannerH - keyboardH).clamp(minControls, double.infinity);
+            // Now fix any mismatch so that bannerH + controlsH + keyboardH == available
+            double sum = bannerH + controlsH + keyboardH;
+            if (sum > available) {
+              double overflow = sum - available;
+              // Reduce keyboard first, down to minKeyboard
+              final reduceKb = (keyboardH - minKeyboard).clamp(0.0, overflow);
+              keyboardH -= reduceKb;
+              overflow -= reduceKb;
 
-            // Safety adjustment: if rounding/clamping left a gap or overflow,
-            // put the remainder into the keyboard so the sum equals available.
-            final sum = bannerH + controlsH + keyboardH;
-            if ((sum - available).abs() > 0.1) {
-              keyboardH = (available - bannerH - controlsH).clamp(0.0, double.infinity);
+              if (overflow > 0) {
+                final reduceBanner = (bannerH - minBanner).clamp(0.0, overflow);
+                bannerH -= reduceBanner;
+                overflow -= reduceBanner;
+              }
+
+              if (overflow > 0) {
+                // As a last resort, shrink controls (can go to 0 if truly tiny)
+                controlsH = (controlsH - overflow).clamp(0.0, controlsH);
+              }
+            } else if (sum < available) {
+              // Give extra space to keyboard (preferred) so keys remain usable
+              final deficit = available - sum;
+              keyboardH += deficit;
             }
+          }
+
+          // Final safety: ensure the three values sum to `available` (within a
+          // tiny epsilon) by adjusting keyboard. This avoids layout overflow.
+          final finalSum = bannerH + controlsH + keyboardH;
+          if ((finalSum - available).abs() > 0.1) {
+            keyboardH = (available - bannerH - controlsH).clamp(0.0, double.infinity);
           }
 
           return Column(
