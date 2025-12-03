@@ -4,6 +4,8 @@ import 'package:flame_audio/flame_audio.dart';
 class GameAudioService {
 
   GameAudioService() {
+    // fire-and-forget initialization
+    // ignore: unawaited_futures
     _init();
   }
   AudioPool? _typePool;
@@ -17,6 +19,7 @@ class GameAudioService {
         'typing.wav',
         'delete.wav',
         'success.wav',
+        'victory.wav',
       ]);
 
       // Create small pools for quick, possibly overlapping SFX.
@@ -30,35 +33,48 @@ class GameAudioService {
     }
   }
 
-  void playType() {
+  Future<void> playType() async {
     try {
       if (!_initialized) {
         return;
       }
       if (_typePool != null) {
-        _typePool!.start();
+        await _typePool!.start();
       }
     } on Object catch (_) {}
+    return;
   }
 
-  void playDelete() {
+  Future<void> playDelete() async {
     try {
       if (!_initialized) {
         return;
       }
       if (_deletePool != null) {
-        _deletePool!.start();
+        await _deletePool!.start();
       }
     } on Object catch (_) {}
+    return;
   }
 
-  void playSuccess() {
+  Future<void> playSuccess() async {
     try {
       if (!_initialized) {
         return;
       }
-      FlameAudio.play('success.wav');
+      await FlameAudio.play('success.wav');
     } on Object catch (_) {}
+    return;
+  }
+  
+  Future<void> playVictory() async {
+    try {
+      if (!_initialized) {
+        return;
+      }
+      await FlameAudio.play('victory.wav');
+    } on Object catch (_) {}
+    return;
   }
   
 }

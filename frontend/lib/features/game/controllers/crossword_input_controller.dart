@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/game_timer_provider.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
@@ -301,6 +302,19 @@ class CrosswordInputController {
     if (newLockedCells.length > lockedCells.length) {
       _read(lockedCellsProvider.notifier).value = newLockedCells;
     }
+
+    // If all words found -> finalize timer and play victory sound
+    try {
+      final totalEntries = entries.length;
+      if (totalEntries > 0 && newFoundWords.length == totalEntries) {
+        try {
+          _read(gameTimerProvider(board.id)).finalizeSync();
+        } on Object catch (_) {}
+        try {
+          _read(gameAudioServiceProvider).playVictory();
+        } on Object catch (_) {}
+      }
+    } on Object catch (_) {}
   }
 }
 

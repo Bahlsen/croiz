@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/crossword_grid.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/end_game_overlay.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'package:croiz/features/game/game_timer_provider.dart';
 
 class CrosswordScreen extends ConsumerStatefulWidget {
   const CrosswordScreen({Key? key}) : super(key: key);
@@ -22,6 +24,11 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     // Try once after the first frame in case data already exists
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.tryAutoSelectFirstAcross(ref.read(gameBoardProvider));
+      // Ensure timer is started (will restore if already started)
+      try {
+        final board = ref.read(gameBoardProvider);
+        ref.read(gameTimerProvider(board.id)).start();
+      } on Object catch (_) {}
     });
   }
 
@@ -54,21 +61,26 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         backgroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Container(
-                color: Colors.black,
-                child: const CrosswordGrid(),
+          Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Container(
+                    color: Colors.black,
+                    child: const CrosswordGrid(),
+                  ),
+                ),
               ),
-            ),
+              CrosswordKeyboardBar(
+                onKey: _controller.setLetterAndAdvance,
+                onBackspace: _controller.clearCurrent,
+              ),
+            ],
           ),
-          CrosswordKeyboardBar(
-            onKey: _controller.setLetterAndAdvance,
-            onBackspace: _controller.clearCurrent,
-          ),
+          const EndGameOverlay(),
         ],
       ),
     );

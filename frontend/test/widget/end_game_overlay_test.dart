@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/game/widgets/end_game_overlay.dart';
+import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class TestSecureStorage extends FlutterSecureStorage {
+  final Map<String, String> _map = {};
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AndroidOptions? aOptions,
+    IOSOptions? iOptions,
+    LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
+  }) async {
+    if (value != null) {
+      _map[key] = value;
+    }
+  }
+
+  @override
+  Future<String?> read({
+    required String key,
+    AndroidOptions? aOptions,
+    IOSOptions? iOptions,
+    LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
+  }) async => _map[key];
+
+  @override
+  Future<void> delete({
+    required String key,
+    AndroidOptions? aOptions,
+    IOSOptions? iOptions,
+    LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
+  }) async => _map.remove(key);
+}
+
+void main() {
+  testWidgets('EndGameOverlay shows when all words found', (tester) async {
+    final board = GameBoard(
+      id: 'test',
+      title: 'T',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: [
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+      ],
+      difficulty: 1,
+      entries: [
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 3,
+        ),
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    await tester.pumpWidget(UncontrolledProviderScope(
+      container: container,
+      child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
+    ));
+
+    // not yet showing because foundWords is empty
+    expect(find.text('Bravo !'), findsNothing);
+
+    // mark words as found
+    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    await tester.pumpAndSettle();
+
+    // overlay should appear
+    expect(find.text('Bravo !'), findsOneWidget);
+    expect(find.text('Terminer'), findsOneWidget);
+  });
+}
