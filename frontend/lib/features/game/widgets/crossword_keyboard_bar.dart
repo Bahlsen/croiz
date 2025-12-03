@@ -34,16 +34,18 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
     return SafeArea(
       top: false,
       child: SizedBox(
-        // Keep this reasonably small for tests; the inner scroll view will
-        // allow the banner+controls+keyboard to be scrolled instead of
-        // overflowing the available space.
         height: 240,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const CrosswordClueBanner(),
-              Align(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            // Fixed-height clue banner. Give it priority (fixed) so it
+            // remains a consistent size and does not shrink undesirably.
+            SizedBox(height: 80, child: const CrosswordClueBanner()),
+
+            // Controls row: fixed small height to separate banner and keyboard.
+            SizedBox(
+              height: 40,
+              child: Align(
                 alignment: Alignment.centerRight,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -68,23 +70,21 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
                   ],
                 ),
               ),
-              // Constrain the visual keyboard to a fixed height so it cannot
-              // force the bar to grow. The outer SingleChildScrollView will
-              // allow scrolling when the combined banner+controls+keyboard
-              // would otherwise exceed `height: 240`.
-              SizedBox(
-                height: 120,
-                child: VirtualKeyboard(
-                  layout: layout,
-                  onKey: widget.onKey,
-                  onBackspace: widget.onBackspace,
-                  enableFeedback: true,
-                  keyHeight: 38,
-                  padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-                ),
+            ),
+
+            // Fixed-height keyboard with priority.
+            SizedBox(
+              height: 120,
+              child: VirtualKeyboard(
+                layout: layout,
+                onKey: widget.onKey,
+                onBackspace: widget.onBackspace,
+                enableFeedback: true,
+                keyHeight: 38,
+                padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
