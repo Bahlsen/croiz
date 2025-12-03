@@ -107,7 +107,13 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
             children: [
               ConstrainedBox(
                 constraints: BoxConstraints(minHeight: minBanner, maxHeight: bannerH),
-                child: SizedBox(height: bannerH, child: const CrosswordClueBanner()),
+                child: SizedBox(
+                  height: bannerH,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                    child: const CrosswordClueBanner(),
+                  ),
+                ),
               ),
 
               SizedBox(
@@ -129,6 +135,7 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
                           }
                         },
                       ),
+                      const SizedBox(width: 12),
                       IconButton(
                         tooltip: 'Basculer AZERTY/QWERTY',
                         icon: const Icon(Icons.keyboard_alt, color: Colors.white70),
@@ -148,8 +155,8 @@ class _CrosswordKeyboardBarState extends ConsumerState<CrosswordKeyboardBar> {
                     onKey: widget.onKey,
                     onBackspace: widget.onBackspace,
                     enableFeedback: true,
-                    keyHeight: 44,
-                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                    keyHeight: 48,
+                    padding: const EdgeInsets.fromLTRB(12, 6, 12, 12),
                   ),
                 ),
               ),
