@@ -152,6 +152,53 @@ void main() {
       testContainer.dispose();
     });
 
+    test('typing a letter that completes two crossing words marks both found', () {
+      // Build a board where two words cross at (0,1) and the final letter
+      // to type is at that cell. Both words should be marked found after typing.
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(GameBoard(
+                id: 'test',
+                title: 'Cross Test',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['A', null, null],
+                  [null, 'B', null],
+                  [null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+                entries: [
+                  // Across word at y=0 from x=0 length 2: A?
+                  const PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 2, answer: 'AC'),
+                  // Down word at x=1 from y=0 length 2: ?B
+                  const PuzzleEntryData(number: 2, direction: 'down', x: 1, y: 0, length: 2, answer: 'CB'),
+                ],
+              ))),
+        ],
+      );
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      // select the shared final cell (0,1)
+      testContainer.read(selectedCellProvider.notifier).state = const SelectedCell(0, 1);
+
+      // Type 'C' which should complete both words
+      controller.setLetterAndAdvance('C');
+
+      final found = testContainer.read(foundWordsProvider);
+      expect(found.contains('0,0,across'), isTrue);
+      expect(found.contains('0,1,down'), isTrue);
+
+      testContainer.dispose();
+    });
+
     test('physical backspace/delete does not clear locked cells', () {
       final testContainer = ProviderContainer(
         overrides: [

@@ -8,32 +8,70 @@ class WordCheckService {
     GameBoard board,
     PuzzleEntryData entry,
   ) {
-    // Si pas de réponse définie, on ne peut pas vérifier
-    if (entry.answer == null || entry.answer!.isEmpty) {
-      return false;
-    }
-    
     final isHorizontal = entry.direction == 'across';
-    final answer = entry.answer!.toUpperCase();
-    
+
+    // Prefer authoritative cell solutions when available.
+    final solutions = board.solutionGrid;
+    if (solutions != null) {
+      for (var i = 0; i < entry.length; i++) {
+        final row = isHorizontal ? entry.y : entry.y + i;
+        final col = isHorizontal ? entry.x + i : entry.x;
+        if (row >= board.gridSize || col >= board.gridSize) {
+          return false;
+        }
+        final sol = solutions[row][col];
+        final cellValue = board.grid[row][col];
+        if (sol == null) {
+          // No authoritative solution for this cell: fall back to requiring
+          // that the cell is filled (can't verify correctness without solution).
+          if (cellValue == null || cellValue.isEmpty) {
+            return false;
+          }
+        } else {
+          // Compare filled value to solution
+          if (cellValue == null || cellValue.isEmpty) {
+            return false;
+          }
+          if (cellValue.toUpperCase() != sol.toUpperCase()) {
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    // No solutionGrid available: fall back to entry.answer if present.
+    if (entry.answer != null && entry.answer!.isNotEmpty) {
+      final answer = entry.answer!.toUpperCase();
+      for (var i = 0; i < entry.length; i++) {
+        final row = isHorizontal ? entry.y : entry.y + i;
+        final col = isHorizontal ? entry.x + i : entry.x;
+        if (row >= board.gridSize || col >= board.gridSize) {
+          return false;
+        }
+        final cellValue = board.grid[row][col];
+        if (cellValue == null || cellValue.isEmpty) {
+          return false;
+        }
+        if (cellValue.toUpperCase() != answer[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // No solutionGrid and no declared answer: consider the word complete when
+    // all constituent cells are non-empty (best-effort behavior).
     for (var i = 0; i < entry.length; i++) {
       final row = isHorizontal ? entry.y : entry.y + i;
       final col = isHorizontal ? entry.x + i : entry.x;
-      
       if (row >= board.gridSize || col >= board.gridSize) {
         return false;
       }
-      
       final cellValue = board.grid[row][col];
       if (cellValue == null || cellValue.isEmpty) {
         return false;
       }
-      
-      if (cellValue.toUpperCase() != answer[i]) {
-        return false;
-      }
     }
-    
     return true;
   }
 

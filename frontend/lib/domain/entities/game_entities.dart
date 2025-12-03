@@ -43,6 +43,7 @@ class GameBoard extends GameEntity {
     required this.blackCells,
     required this.difficulty,
     this.entries,
+    this.solutionGrid,
   });
   final List<List<String?>> grid;
   final Map<String, String> clues;
@@ -54,6 +55,10 @@ class GameBoard extends GameEntity {
   /// Optional: pre-computed entries (from Puzzle model) with number/position/clue.
   /// If present, UI can use these directly instead of recalculating numbering.
   final List<PuzzleEntryData>? entries;
+  /// Optional solution grid (from puzzle cells). When available, this is the
+  /// authoritative answer for each cell and should be preferred over
+  /// `PuzzleEntryData.answer` when validating completed words.
+  final List<List<String?>>? solutionGrid;
 
   GameBoard copyWith({
     List<List<String?>>? grid,
@@ -61,6 +66,7 @@ class GameBoard extends GameEntity {
     List<List<bool>>? blackCells,
     int? difficulty,
     List<PuzzleEntryData>? entries,
+    List<List<String?>>? solutionGrid,
   }) => GameBoard(
     id: id,
     title: title,
@@ -81,6 +87,7 @@ class GameBoard extends GameEntity {
         ),
     difficulty: difficulty ?? this.difficulty,
     entries: entries ?? this.entries,
+    solutionGrid: solutionGrid ?? this.solutionGrid,
   );
 }
 

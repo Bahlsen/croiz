@@ -1,26 +1,61 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
+import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 
 class GameBoardNotifier extends Notifier<GameBoard> {
+  GameBoardNotifier() {
+    // Listen for puzzle loader updates and update state when puzzle data arrives
+    ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, _onPuzzleLoaderChanged);
+  }
+
   @override
   GameBoard build() {
     final defaultBoard = _createEmptyBoard(5);
 
-    // Listen for puzzle loader updates and update state when puzzle data arrives
-    ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, (prev, next) {
-      if (next is AsyncData<GameBoard>) {
-        state = next.value;
-      }
-    });
-
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
     return puzzleAsync.maybeWhen(data: (d) => d, orElse: () => defaultBoard);
+  }
+
+  void _onPuzzleLoaderChanged(AsyncValue<GameBoard>? prev, AsyncValue<GameBoard> next) {
+    if (next is AsyncData<GameBoard>) {
+      state = next.value;
+
+      // After loading a new puzzle, automatically detect any words that are
+      // already complete (e.g., when puzzles are prefilling solutions) and
+      // update the found/locked providers so the UI (end-game overlay,
+      // locked cells) reflects the correct state immediately.
+      final entries = state.entries;
+      if (entries != null && entries.isNotEmpty) {
+        try {
+          final wordCheck = ref.read(wordCheckServiceProvider);
+          final newFound = <String>{};
+          final newLocked = <String>{};
+          for (final entry in entries) {
+            if (wordCheck.isWordComplete(state, entry)) {
+              final key = wordCheck.getWordKey(entry);
+              newFound.add(key);
+              newLocked.addAll(wordCheck.getCellKeys(entry));
+            }
+          }
+          if (newFound.isNotEmpty) {
+            ref.read(foundWordsProvider.notifier).value = newFound;
+          }
+          if (newLocked.isNotEmpty) {
+            ref.read(lockedCellsProvider.notifier).value = newLocked;
+          }
+        } on Object catch (e, stack) {
+          // Log and ignore errors to avoid breaking game flow if word detection fails.
+          debugPrint('Error updating found/locked words: $e\n$stack');
+        }
+      }
+    }
   }
 
   static GameBoard _createEmptyBoard(int size) {
@@ -41,6 +76,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       clues: {},
       blackCells: blackCells,
       difficulty: 1,
+      solutionGrid: List.generate(size, (_) => List<String?>.filled(size, null)),
     );
   }
 
@@ -69,6 +105,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       blackCells: newBlack,
       difficulty: state.difficulty,
       entries: state.entries,
+      solutionGrid: state.solutionGrid,
     );
   }
 
@@ -94,6 +131,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       blackCells: newBlack,
       difficulty: state.difficulty,
       entries: state.entries,
+      solutionGrid: state.solutionGrid,
     );
   }
 
@@ -132,10 +170,57 @@ final gameBoardProvider = NotifierProvider<GameBoardNotifier, GameBoard>(
 
 /// Load a puzzle from a JSON asset file and convert to GameBoard.
 Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
+  // Load JSON from assets and parse
   final jsonString = await rootBundle.loadString(assetPath);
   final jsonData = json.decode(jsonString) as Map<String, dynamic>;
   final puzzle = Puzzle.fromJson(jsonData);
-  return PuzzleConverter.puzzleToGameBoard(puzzle);
+
+  // Control prefill via a Dart define: `--dart-define=PREFILL_PUZZLE=true`
+  const prefillEnv = bool.fromEnvironment('PREFILL_PUZZLE', defaultValue: false);
+  const shouldPrefill = kDebugMode && prefillEnv;
+
+  var board = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: shouldPrefill);
+
+  // If prefill is active, clear exactly one non-black cell to leave a single
+  // missing letter for quick manual completion during testing.
+  if (shouldPrefill) {
+    board = _prefillExceptOne(board);
+  }
+
+  return board;
+}
+
+GameBoard _prefillExceptOne(GameBoard board) {
+  // Prefer clearing the center cell to make the prefill deterministic and
+  // easy to find during manual testing. If center is black or not prefilled,
+  // fall back to the first available prefilled cell.
+  final coords = <MapEntry<int, int>>[];
+  for (var r = 0; r < board.gridSize; r++) {
+    for (var c = 0; c < board.gridSize; c++) {
+      if (!board.blackCells[r][c] && (board.grid[r][c] != null)) {
+        coords.add(MapEntry(r, c));
+      }
+    }
+  }
+  if (coords.isEmpty) {
+    return board;
+  }
+
+  final centerR = board.gridSize ~/ 2;
+  final centerC = board.gridSize ~/ 2;
+  MapEntry<int, int>? pick;
+  if (centerR >= 0 && centerR < board.gridSize &&
+      centerC >= 0 && centerC < board.gridSize &&
+      !board.blackCells[centerR][centerC] &&
+      board.grid[centerR][centerC] != null) {
+    pick = MapEntry(centerR, centerC);
+  } else {
+    pick = coords.first;
+  }
+
+  final newGrid = List<List<String?>>.from(board.grid.map(List<String?>.from));
+  newGrid[pick.key][pick.value] = null;
+  return board.copyWith(grid: newGrid);
 }
 
 /// Create sample board by loading from assets/data/sample_5x5.json

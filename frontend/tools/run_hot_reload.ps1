@@ -1,6 +1,8 @@
 param(
   # Optional: connect via Wi‑Fi before running if no devices
-  [string]$Connect
+  [string]$Connect,
+  # Optional: pass this switch to enable puzzle prefill for quick testing
+  [switch]$Prefill
 )
 
 $ErrorActionPreference = 'Stop'
@@ -102,7 +104,9 @@ try {
     # Always (re)build debug APK to ensure latest code is installed
     $apkDebug = Join-Path (Join-Path (Join-Path 'build' 'app') 'outputs') (Join-Path 'flutter-apk' 'app-debug.apk')
     Write-Host 'Building APK (debug)...' -ForegroundColor Cyan
-    flutter build apk --debug
+    $prefillFlag = ''
+    if ($Prefill) { $prefillFlag = '--dart-define=PREFILL_PUZZLE=true' }
+    flutter build apk --debug $prefillFlag
     if (-not (Test-Path $apkDebug)) { throw "Debug APK not found at $apkDebug after build." }
 
     # Install to first adb device and launch
@@ -126,7 +130,9 @@ try {
   $flutterId = $androidDevice.id
   Write-Host "Running on $($androidDevice.name) [$flutterId] (debug, hot reload enabled)." -ForegroundColor Green
   Write-Host "Hot reload: press r | Full restart: R | Quit: q" -ForegroundColor DarkGray
-  flutter run -d $flutterId
+  $prefillFlag = ''
+  if ($Prefill) { $prefillFlag = '--dart-define=PREFILL_PUZZLE=true' }
+  flutter run -d $flutterId $prefillFlag
 }
 finally {
   Pop-Location
