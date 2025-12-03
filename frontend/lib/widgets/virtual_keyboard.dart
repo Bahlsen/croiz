@@ -99,43 +99,55 @@ class VirtualKeyboard extends ConsumerWidget {
             : double.infinity;
 
         // We'll cap keyHeight by both width-derived and height-derived constraints
+        // Ensure the clamp bounds are valid (lower <= upper) to avoid ArgumentError
+        double upperBound = maxKeyHeightByHeight.isFinite ? maxKeyHeightByHeight : double.infinity;
+        if (upperBound < 24.0) upperBound = 24.0;
         final effectiveKeyHeight = (keyHeight.isFinite
-          ? keyHeight.clamp(24, maxKeyHeightByHeight)
-          : maxKeyHeightByHeight.isFinite
-            ? maxKeyHeightByHeight
+          ? keyHeight.clamp(24.0, upperBound)
+          : upperBound.isFinite
+            ? upperBound
             : keyHeight).toDouble();
 
         return Padding(
           padding: padding,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            // Expand to fill available vertical space and let each row
+            // take an equal share. This prevents the column from trying
+            // to size to its intrinsic height and overflowing when the
+            // parent is constrained.
+            mainAxisSize: MainAxisSize.max,
             children: [
               for (var i = 0; i < rows.length; i++) ...[
-                _ResponsiveKeyboardRow(
-                  keys: rows[i],
-                  keyHeight: effectiveKeyHeight,
-                  keySpacing: keySpacing,
-                  onKey: (k) => onKey?.call(k.toUpperCase()),
-                  onBackspace: onBackspace,
-                  onPlayClick: () {
-                    try {
-                      ref.read(gameAudioServiceProvider).playType();
-                    } on Object catch (e, st) {
-                      developer.log('GameAudioService.playType failed', error: e, stackTrace: st);
-                    }
-                  },
-                  onPlayDelete: () {
-                    try {
-                      ref.read(gameAudioServiceProvider).playDelete();
-                    } on Object catch (e, st) {
-                      developer.log('GameAudioService.playDelete failed', error: e, stackTrace: st);
-                    }
-                  },
-                  enabledLetters: enabledLetters,
-                  enableFeedback: enableFeedback,
-                  keyRadius: keyRadius,
-                  keyColor: keyColor,
-                  disabledKeyColor: disabledKeyColor,
+                // Each row gets an Expanded slot so it can shrink to fit
+                // the available height. Spacing is applied as fixed
+                // SizedBox between rows (consumes pixels first).
+                Expanded(
+                  child: _ResponsiveKeyboardRow(
+                    keys: rows[i],
+                    keyHeight: effectiveKeyHeight,
+                    keySpacing: keySpacing,
+                    onKey: (k) => onKey?.call(k.toUpperCase()),
+                    onBackspace: onBackspace,
+                    onPlayClick: () {
+                      try {
+                        ref.read(gameAudioServiceProvider).playType();
+                      } on Object catch (e, st) {
+                        developer.log('GameAudioService.playType failed', error: e, stackTrace: st);
+                      }
+                    },
+                    onPlayDelete: () {
+                      try {
+                        ref.read(gameAudioServiceProvider).playDelete();
+                      } on Object catch (e, st) {
+                        developer.log('GameAudioService.playDelete failed', error: e, stackTrace: st);
+                      }
+                    },
+                    enabledLetters: enabledLetters,
+                    enableFeedback: enableFeedback,
+                    keyRadius: keyRadius,
+                    keyColor: keyColor,
+                    disabledKeyColor: disabledKeyColor,
+                  ),
                 ),
                 if (i != rows.length - 1) SizedBox(height: rowSpacing),
               ],
@@ -201,7 +213,25 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
         // Enlarged keys: raise lower bound but cap the maximum height so
         // extremely wide layouts don't produce enormous key heights.
         final maxFromWidth = unitWidth.isFinite ? (unitWidth * 1.2).clamp(24, 96) : 96;
-        final buttonHeight = keyHeight.clamp(24, maxFromWidth);
+
+        // Respect vertical constraints for the row: if the row is constrained
+        // to a small height (e.g., tests or small screens), cap the button
+        // height to that max. Ensure the clamp bounds are valid.
+        double buttonHeight;
+        if (constraints.maxHeight.isFinite) {
+          final maxRow = constraints.maxHeight;
+          if (maxRow <= 0) {
+            buttonHeight = 0.0;
+          } else if (maxRow < 24.0) {
+            // Very tight; use whatever space is available.
+            buttonHeight = maxRow;
+          } else {
+            buttonHeight = keyHeight.clamp(24.0, maxFromWidth).toDouble();
+            if (buttonHeight > maxRow) buttonHeight = maxRow;
+          }
+        } else {
+          buttonHeight = keyHeight.clamp(24.0, maxFromWidth).toDouble();
+        }
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,

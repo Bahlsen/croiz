@@ -20,7 +20,23 @@ class CrosswordClueBanner extends ConsumerWidget {
     final dir = ref.watch(wordDirectionProvider);
 
     if (selected == null) {
-      return const SizedBox.shrink();
+      // When there's no selection (tests / early startup), render a
+      // small placeholder banner so the layout remains stable and
+      // measurable. This prevents zero-height banners in tests.
+      return Container(
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.grey[700]!, width: 1),
+        ),
+        child: Text(
+          'Select a word',
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        ),
+      );
     }
 
     final entryCtx = computeCurrentEntry(board, selected, dir);
@@ -36,7 +52,8 @@ class CrosswordClueBanner extends ConsumerWidget {
       builder: (context, constraints) {
         // Adapt padding and font based on available height
         final availableHeight = constraints.maxHeight;
-        final isCompact = availableHeight < 60;
+        // Increase compact threshold so compact mode triggers earlier on tighter layouts
+        final isCompact = availableHeight < 72;
         
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -44,8 +61,12 @@ class CrosswordClueBanner extends ConsumerWidget {
             vertical: isCompact ? 2.0 : 4.0,
           ),
           child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 520),
+              child: ConstrainedBox(
+              // Allow a wider banner so clues can use more horizontal space
+              // on larger phones and tablets. Tests that need a small
+              // width still work because the ConstrainedBox only applies
+              // a maximum width.
+              constraints: const BoxConstraints(maxWidth: 760),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -92,13 +113,13 @@ class _NavArrow extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        width: compact ? 32 : 36,
-        height: compact ? 36 : 40,
+        width: compact ? 40 : 44,
+        height: compact ? 44 : 48,
         alignment: Alignment.center,
         child: Icon(
           icon,
           color: Colors.white70,
-          size: compact ? 24 : 28,
+          size: compact ? 28 : 32,
         ),
       ),
     );
@@ -126,15 +147,17 @@ Widget _buildClueContainer({
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: compact ? 4 : 8),
+            // Give the container a little more horizontal breathing room
+            // so it appears wider visually when available.
+            margin: EdgeInsets.symmetric(horizontal: compact ? 8 : 14),
         decoration: BoxDecoration(
           color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(compact ? 8 : 10),
+          borderRadius: BorderRadius.circular(compact ? 10 : 12),
           border: Border.all(color: Colors.grey[700]!, width: 1),
         ),
         padding: EdgeInsets.symmetric(
-          vertical: compact ? 6 : 10,
-          horizontal: compact ? 10 : 14,
+              vertical: compact ? 8 : 12,
+              horizontal: compact ? 14 : 20,
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -147,7 +170,7 @@ Widget _buildClueContainer({
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.white,
-              fontSize: compact ? 14 : 16,
+              fontSize: compact ? 16 : 18,
               fontWeight: FontWeight.w600,
             ),
           ),
