@@ -77,6 +77,7 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
           Column(
             children: [
               Expanded(
+                flex: 2, // Give more space to grid
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: Container(
@@ -85,8 +86,8 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 240,
+              Flexible(
+                flex: 1, // Keyboard takes proportional space
                 child: CrosswordKeyboardBar(
                   onKey: _controller.setLetterAndAdvance,
                   onBackspace: _controller.clearCurrent,

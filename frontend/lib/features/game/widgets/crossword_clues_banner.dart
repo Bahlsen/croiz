@@ -32,56 +32,84 @@ class CrosswordClueBanner extends ConsumerWidget {
     final entry = entryCtx.entry;
     final entries = entryCtx.entries;
 
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 520),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildNavArrow(
-                icon: Icons.chevron_left,
-                onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
-              ),
-              Expanded(
-                child: _buildClueContainer(
-                  ref: ref,
-                  horizontal: horizontal,
-                  entry: entry,
-                ),
-              ),
-              _buildNavArrow(
-                icon: Icons.chevron_right,
-                onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
-              ),
-            ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Adapt padding and font based on available height
+        final availableHeight = constraints.maxHeight;
+        final isCompact = availableHeight < 60;
+        
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: isCompact ? 2.0 : 4.0,
           ),
-        ),
-      ),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 520),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildNavArrow(
+                    icon: Icons.chevron_left,
+                    onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
+                    compact: isCompact,
+                  ),
+                  Expanded(
+                    child: _buildClueContainer(
+                      ref: ref,
+                      horizontal: horizontal,
+                      entry: entry,
+                      compact: isCompact,
+                    ),
+                  ),
+                  _buildNavArrow(
+                    icon: Icons.chevron_right,
+                    onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
+                    compact: isCompact,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
 
 class _NavArrow extends StatelessWidget {
-  const _NavArrow({required this.icon, required this.onTap});
+  const _NavArrow({
+    required this.icon,
+    required this.onTap,
+    this.compact = false,
+  });
   final IconData icon;
   final VoidCallback onTap;
+  final bool compact;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        width: 36,
-        height: 40,
+        width: compact ? 32 : 36,
+        height: compact ? 36 : 40,
         alignment: Alignment.center,
-        child: Icon(icon, color: Colors.white70, size: 28),
+        child: Icon(
+          icon,
+          color: Colors.white70,
+          size: compact ? 24 : 28,
+        ),
       ),
     );
 }
 
-Widget _buildNavArrow({required IconData icon, required VoidCallback onTap}) => _NavArrow(icon: icon, onTap: onTap);
+Widget _buildNavArrow({
+  required IconData icon,
+  required VoidCallback onTap,
+  bool compact = false,
+}) =>
+    _NavArrow(icon: icon, onTap: onTap, compact: compact);
 
 // Entry resolution logic moved to helpers/entry_lookup.dart
 
@@ -89,35 +117,43 @@ Widget _buildClueContainer({
   required WidgetRef ref,
   required bool horizontal,
   required PuzzleEntryData entry,
-}) => GestureDetector(
-    onTap: () {
-      final newDir = horizontal ? WordDirection.vertical : WordDirection.horizontal;
-      ref.read(wordDirectionProvider.notifier).value = newDir;
-    },
-    behavior: HitTestBehavior.opaque,
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey[700]!, width: 1),
-      ),
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-      child: Text(
-        entry.clue == null || entry.clue!.isEmpty
-            ? '${entry.number}'
-            : '${entry.number}  ${entry.clue!}',
-        textAlign: TextAlign.center,
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
+  bool compact = false,
+}) =>
+    GestureDetector(
+      onTap: () {
+        final newDir = horizontal ? WordDirection.vertical : WordDirection.horizontal;
+        ref.read(wordDirectionProvider.notifier).value = newDir;
+      },
+      behavior: HitTestBehavior.opaque,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: compact ? 4 : 8),
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(compact ? 8 : 10),
+          border: Border.all(color: Colors.grey[700]!, width: 1),
+        ),
+        padding: EdgeInsets.symmetric(
+          vertical: compact ? 6 : 10,
+          horizontal: compact ? 10 : 14,
+        ),
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            entry.clue == null || entry.clue!.isEmpty
+                ? '${entry.number}'
+                : '${entry.number}  ${entry.clue!}',
+            textAlign: TextAlign.center,
+            maxLines: compact ? 2 : 3,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: compact ? 14 : 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
 
 void _navigateToAdjacentEntry(
   WidgetRef ref,
