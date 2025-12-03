@@ -85,38 +85,64 @@ class VirtualKeyboard extends ConsumerWidget {
       }
     }
 
-    return Padding(
-      padding: padding,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (var i = 0; i < rows.length; i++) ...[
-            _ResponsiveKeyboardRow(
-              keys: rows[i],
-              keyHeight: keyHeight,
-              keySpacing: keySpacing,
-              onKey: (k) => onKey?.call(k.toUpperCase()),
-              onBackspace: onBackspace,
-              onPlayClick: () {
-                try {
-                  ref.read(gameAudioServiceProvider).playType();
-                } on Object catch (_) {}
-              },
-              onPlayDelete: () {
-                try {
-                  ref.read(gameAudioServiceProvider).playDelete();
-                } on Object catch (_) {}
-              },
-              enabledLetters: enabledLetters,
-              enableFeedback: enableFeedback,
-              keyRadius: keyRadius,
-              keyColor: keyColor,
-              disabledKeyColor: disabledKeyColor,
-            ),
-            if (i != rows.length - 1) SizedBox(height: rowSpacing),
-          ],
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Compute a key height that also respects vertical constraints
+        // when the parent provides a finite height (e.g., tests).
+        final availableHeight = constraints.maxHeight.isFinite
+            ? (constraints.maxHeight - padding.vertical)
+            : double.infinity;
+        final rowCount = rows.length;
+        final totalSpacing = rowCount > 0 ? rowSpacing * (rowCount - 1) : 0.0;
+        final maxKeyHeightByHeight = (availableHeight.isFinite && rowCount > 0)
+            ? ((availableHeight - totalSpacing) / rowCount).clamp(0.0, double.infinity)
+            : double.infinity;
+
+        // We'll cap keyHeight by both width-derived and height-derived constraints
+        final effectiveKeyHeight = (keyHeight.isFinite
+          ? keyHeight.clamp(24, maxKeyHeightByHeight)
+          : maxKeyHeightByHeight.isFinite
+            ? maxKeyHeightByHeight
+            : keyHeight).toDouble();
+
+        return Padding(
+          padding: padding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (var i = 0; i < rows.length; i++) ...[
+                _ResponsiveKeyboardRow(
+                  keys: rows[i],
+                  keyHeight: effectiveKeyHeight,
+                  keySpacing: keySpacing,
+                  onKey: (k) => onKey?.call(k.toUpperCase()),
+                  onBackspace: onBackspace,
+                  onPlayClick: () {
+                    try {
+                      ref.read(gameAudioServiceProvider).playType();
+                    } on Object catch (e, st) {
+                      developer.log('GameAudioService.playType failed', error: e, stackTrace: st);
+                    }
+                  },
+                  onPlayDelete: () {
+                    try {
+                      ref.read(gameAudioServiceProvider).playDelete();
+                    } on Object catch (e, st) {
+                      developer.log('GameAudioService.playDelete failed', error: e, stackTrace: st);
+                    }
+                  },
+                  enabledLetters: enabledLetters,
+                  enableFeedback: enableFeedback,
+                  keyRadius: keyRadius,
+                  keyColor: keyColor,
+                  disabledKeyColor: disabledKeyColor,
+                ),
+                if (i != rows.length - 1) SizedBox(height: rowSpacing),
+              ],
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -165,10 +191,17 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
           totalWeight += k == VirtualKeyboard.backspaceToken ? 2 : 1;
         }
         final spacingTotal = keySpacing * (keys.length - 1);
-        final availableWidth = constraints.maxWidth - spacingTotal;
-        final unitWidth = availableWidth / totalWeight;
-        // Enlarged keys: raise lower bound and allow a slightly larger max ratio.
-        final buttonHeight = keyHeight.clamp(38, unitWidth * 1.6);
+        // If constraints.maxWidth is unbounded (tests / odd layouts), fall
+        // back to MediaQuery width to compute sensible button sizes.
+        final rawMaxWidth = constraints.maxWidth.isFinite
+          ? constraints.maxWidth
+          : MediaQuery.of(context).size.width;
+        final availableWidth = (rawMaxWidth - spacingTotal).clamp(0.0, double.infinity);
+        final unitWidth = totalWeight > 0 ? (availableWidth / totalWeight) : keyHeight;
+        // Enlarged keys: raise lower bound but cap the maximum height so
+        // extremely wide layouts don't produce enormous key heights.
+        final maxFromWidth = unitWidth.isFinite ? (unitWidth * 1.2).clamp(24, 96) : 96;
+        final buttonHeight = keyHeight.clamp(24, maxFromWidth);
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,

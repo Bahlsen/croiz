@@ -65,7 +65,9 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
               onPressed: () {
                 try {
                   ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-                } on Object catch (_) {}
+                } on Object catch (e, st) {
+                  debugPrint('clearIncorrectLetters failed: $e\n$st');
+                }
               },
               icon: const Icon(Icons.delete_sweep_outlined),
               label: const Text('Clear'),
@@ -108,7 +110,9 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
             onPressed: () {
               try {
                 ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-              } on Object catch (_) {}
+              } on Object catch (e, st) {
+                debugPrint('clearIncorrectLetters failed: $e\n$st');
+              }
             },
             icon: const Icon(Icons.delete_sweep_outlined),
           ),

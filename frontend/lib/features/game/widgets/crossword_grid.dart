@@ -29,23 +29,15 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     super.dispose();
   }
 
-  // Physical keyboard is disabled in-app; controller.handleKey is callable
-  // by tests or other non-UI code when needed.
-
-  // Return the next non-black selectable cell after (row,col).
-  // Step is derived from the current `wordDirectionProvider`:
-  // - vertical   => move down (row+1)
-  // - horizontal => move right (col+1)
-  // Arrow keys bypass this by calling `_findNextSelectableInDirection`.
-  // Returns null if none in bounds.
-  // Removed: handled by CrosswordInputController
-
-  // Find the next selectable in an explicit direction (dr,dc). Used for arrow keys.
-  // Removed: handled by CrosswordInputController
+  // Physical keyboard is disabled; input is handled by the controller.
 
   @override
   Widget build(BuildContext context) {
-    final board = ref.watch(gameBoardProvider);
+    // Use the puzzle loader provider as a stable source when gameBoard may
+    // not be synchronously available (e.g., during tests). This avoids
+    // swallowing errors while keeping the UI deterministic.
+    final pu = ref.watch(puzzleLoaderProvider);
+    final board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
     final size = board.gridSize;
     final selected = ref.watch(selectedCellProvider);
     final black = board.blackCells;
@@ -59,12 +51,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       });
     }
 
-    // Compute clue numbers using utility for SRP (used by `CrosswordCell`).
-    // Kept here for compatibility with any logic that may rely on numbering.
-    // final numbers = ClueNumbering.numbersFromBoard(board);
-    // If entries are missing (e.g. during loading or in tests), skip numbering gracefully.
-    // numbers.isEmpty simply means no clue numbers to overlay.
-    // No further validation: numbering is placed strictly at entry coordinates.
+    // Clue numbering is computed in helpers and used by `CrosswordCell`.
 
     // Keep the editing controller in sync with the selected cell's value.
     if (selected != null) {

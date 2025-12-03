@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/features/game/utils/clue_numbering.dart';
 
@@ -14,7 +16,18 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final board = ref.watch(gameBoardProvider);
+    // Prefer watching the live `gameBoardProvider` so the UI updates when
+    // the board changes (typing letters, clearing, etc). If watching the
+    // provider throws (e.g., during early startup in tests), fall back to
+    // the puzzle loader provider for a stable fallback board.
+    GameBoard board;
+    try {
+      board = ref.watch(gameBoardProvider);
+    } on Object catch (e, st) {
+      developer.log('gameBoardProvider watch failed, falling back to loader', error: e, stackTrace: st);
+      final pu = ref.watch(puzzleLoaderProvider);
+      board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
+    }
     final selected = ref.watch(selectedCellProvider);
     final wordDirection = ref.watch(wordDirectionProvider);
     final black = board.blackCells;

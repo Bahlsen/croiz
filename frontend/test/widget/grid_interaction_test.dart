@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/main.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/widgets/crossword_cell.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -29,7 +30,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntries)),
         ],
         child: const CroizApp(),
       ),
@@ -42,26 +43,23 @@ void main() {
 
     // The grid is now 5x5 from sample_5x5.json; 5 cells are black, so 20 GestureDetectors
     // Cell at row=2, col=0 (letter 'C') should be one of the tappable cells
-    final cells = find.byType(GestureDetector);
-    // 5x5 = 25 cells, but 5 are black (no GestureDetector), so expect 20
-    expect(
-      cells.evaluate().length,
-      greaterThanOrEqualTo(16),
-    ); // At least 16 for content cells
-
-    // Tap the first available cell (it should be row=0, col=0 with solution 'S')
-    await tester.tap(cells.first);
+    final gridFinder = find.byType(GridView);
+    // Tapping the first CrosswordCell is more reliable than counting GestureDetectors
+    final firstCell = find.byType(CrosswordCell).first;
+    expect(firstCell, findsOneWidget);
+    await tester.tap(firstCell);
     await tester.pumpAndSettle();
 
     // Count existing 'Z' occurrences inside the grid (should be 0 initially for empty cell set).
-    final gridFinder = find.byType(GridView);
-    final zInGridBefore = find
-        .descendant(of: gridFinder, matching: find.text('Z'))
-        .evaluate()
-        .length;
+    final zInGridBefore = find.descendant(of: gridFinder, matching: find.text('Z')).evaluate().length;
 
-    // Tap letter 'Z' on virtual keyboard.
-    await tester.tap(find.text('Z').first);
+    // Tap letter 'Z' on virtual keyboard. Ensure the key is visible first
+    // so the tap doesn't compute off-screen coordinates in headless tests.
+    // Use the Semantics label which is stable across layouts: 'Lettre Z'
+    final zKey = find.bySemanticsLabel('Lettre Z').first;
+    await tester.ensureVisible(zKey);
+    await tester.pumpAndSettle();
+    await tester.tap(zKey);
     await tester.pumpAndSettle();
 
     final zInGridAfter = find

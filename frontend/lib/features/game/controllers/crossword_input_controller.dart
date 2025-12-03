@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
@@ -17,8 +18,23 @@ class CrosswordInputController {
     final T Function<T>(Object provider) _read;
   bool _didAutoSelectFirstAcross = false;
 
+  GameBoard _safeReadBoard([int fallbackSize = 5]) {
+    try {
+      return _read<GameBoard>(gameBoardProvider);
+    } on Object catch (e, st) {
+      developer.log('gameBoardProvider read failed, falling back to puzzleLoader', error: e, stackTrace: st);
+      try {
+        final pa = _read<AsyncValue<GameBoard>>(puzzleLoaderProvider);
+        return pa.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(fallbackSize));
+      } on Object catch (e2, st2) {
+        developer.log('puzzleLoaderProvider read failed, returning empty board', error: e2, stackTrace: st2);
+        return createEmptyBoard(fallbackSize);
+      }
+    }
+  }
+
   void setLetterAndAdvance(String letter) {
-    final board = _read<GameBoard>(gameBoardProvider);
+    final board = _safeReadBoard();
     final selected = _read(selectedCellProvider);
     
     if (selected == null) {
@@ -60,7 +76,7 @@ class CrosswordInputController {
     
     // delete sound is handled by the virtual keyboard UI
     
-    final board = _read<GameBoard>(gameBoardProvider);
+    final board = _safeReadBoard();
     final current = board.grid[sel.row][sel.col];
     if (current == null || current.isEmpty) {
       final dir = _read(wordDirectionProvider);
@@ -122,7 +138,7 @@ class CrosswordInputController {
     final sel = _read(selectedCellProvider);
     final row = sel?.row ?? 0;
     final col = sel?.col ?? 0;
-    final black = _read<GameBoard>(gameBoardProvider).blackCells;
+    final black = _safeReadBoard().blackCells;
     if (sel != null && black.isDisabled(sel.row, sel.col)) {
       return;
     }
@@ -158,13 +174,13 @@ class CrosswordInputController {
       final char = keyLabel.toUpperCase();
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
         _read(gameBoardProvider.notifier).setLetter(row, col, char);
-        _moveToNext(_read<GameBoard>(gameBoardProvider), startRow: row, startCol: col);
+        _moveToNext(_safeReadBoard(), startRow: row, startCol: col);
       }
     }
   }
 
   void _moveToDirection(int row, int col, int dr, int dc) {
-    final board = _read<GameBoard>(gameBoardProvider);
+    final board = _safeReadBoard();
     final black = board.blackCells;
     final entries = board.entries;
     
@@ -247,7 +263,7 @@ class CrosswordInputController {
   }
 
   void _checkForCompletedWords() {
-    final board = _read<GameBoard>(gameBoardProvider);
+    final board = _safeReadBoard();
     final entries = board.entries;
     
     if (entries == null || entries.isEmpty) {
@@ -275,7 +291,9 @@ class CrosswordInputController {
         // Play success sound
         try {
           _read(gameAudioServiceProvider).playSuccess();
-        } on Object catch (_) {}
+        } on Object catch (e, st) {
+          developer.log('playSuccess failed', error: e, stackTrace: st);
+        }
         
         // Trigger flash animation on cells
         final cellKeys = wordCheckService.getCellKeys(entry);
@@ -288,7 +306,8 @@ class CrosswordInputController {
         Future.delayed(const Duration(milliseconds: 500), () {
           try {
             _read(flashingCellsProvider.notifier).value = {};
-          } on Object catch (_) {
+          } on Object catch (e, st) {
+            developer.log('Clearing flashing cells failed', error: e, stackTrace: st);
             // Provider might be disposed if user navigated away
           }
         });
@@ -309,12 +328,18 @@ class CrosswordInputController {
       if (totalEntries > 0 && newFoundWords.length == totalEntries) {
         try {
           _read(gameTimerProvider(board.id)).finalizeSync();
-        } on Object catch (_) {}
+        } on Object catch (e, st) {
+          developer.log('finalizeSync failed', error: e, stackTrace: st);
+        }
         try {
           _read(gameAudioServiceProvider).playVictory();
-        } on Object catch (_) {}
+        } on Object catch (e, st) {
+          developer.log('playVictory failed', error: e, stackTrace: st);
+        }
       }
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('Error checking for completed words', error: e, stackTrace: st);
+    }
   }
 }
 

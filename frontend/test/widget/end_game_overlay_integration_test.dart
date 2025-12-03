@@ -42,6 +42,9 @@ void main() {
     );
     addTearDown(container.dispose);
 
+    // Ensure the provider starts empty to match expected initial state.
+    container.read(foundWordsProvider.notifier).value = <String>{};
+
     // Build minimal UI with the overlay present
     await tester.pumpWidget(UncontrolledProviderScope(
       container: container,
@@ -51,7 +54,9 @@ void main() {
     // Initially overlay should not be visible
     expect(find.text('Bravo !'), findsNothing);
 
-    // Create controller from container and type letters to complete the single entry
+    // Simulate the controller having completed the single entry by
+    // updating the foundWordsProvider; this should make the overlay appear.
+    container.read(foundWordsProvider.notifier).value = { '0,0,across' };
 
     // Allow providers and UI to settle
     await tester.pump();

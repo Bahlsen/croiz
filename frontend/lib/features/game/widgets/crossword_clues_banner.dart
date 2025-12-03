@@ -11,7 +11,11 @@ class CrosswordClueBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final board = ref.watch(gameBoardProvider);
+    // Prefer using the loader provider as a resilient source of truth
+    // when the full `gameBoardProvider` may not be synchronously available
+    // during tests or early startup.
+    final pu = ref.watch(puzzleLoaderProvider);
+    final board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
     final selected = ref.watch(selectedCellProvider);
     final dir = ref.watch(wordDirectionProvider);
 

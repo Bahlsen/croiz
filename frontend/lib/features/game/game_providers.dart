@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,13 +11,20 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 
 class GameBoardNotifier extends Notifier<GameBoard> {
-  GameBoardNotifier() {
-    // Listen for puzzle loader updates and update state when puzzle data arrives
-    ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, _onPuzzleLoaderChanged);
-  }
+  // Notifier that mirrors `puzzleLoaderProvider`. Attaches a single listener
+  // on first `build()` to react to puzzle load events and update dependent
+  // providers (found/locked words, etc.).
+  bool _listenerAttached = false;
 
   @override
   GameBoard build() {
+    if (!_listenerAttached) {
+      _listenerAttached = true;
+      // Safe to call ref.listen here because build() runs after the
+      // notifier has been created and ref is available. The guard ensures
+      // we don't attach multiple listeners across rebuilds.
+      ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, _onPuzzleLoaderChanged, fireImmediately: true);
+    }
     final defaultBoard = _createEmptyBoard(5);
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
@@ -27,10 +35,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (next is AsyncData<GameBoard>) {
       state = next.value;
 
-      // After loading a new puzzle, automatically detect any words that are
-      // already complete (e.g., when puzzles are prefilling solutions) and
-      // update the found/locked providers so the UI (end-game overlay,
-      // locked cells) reflects the correct state immediately.
+      // Detect any words already complete in the loaded puzzle and update
+      // `foundWordsProvider` / `lockedCellsProvider` so the UI reflects
+      // the correct state immediately.
       final entries = state.entries;
       if (entries != null && entries.isNotEmpty) {
         try {
@@ -51,7 +58,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             ref.read(lockedCellsProvider.notifier).value = newLocked;
           }
         } on Object catch (e, stack) {
-          // Log and ignore errors to avoid breaking game flow if word detection fails.
+          // Log and continue on errors from detection.
           debugPrint('Error updating found/locked words: $e\n$stack');
         }
       }
@@ -81,7 +88,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   }
 
   void setLetter(int row, int col, String? letter) {
-    // Do nothing if this cell is a black cell — no interaction allowed.
+    // No-op when cell is black.
     if (state.blackCells.isDisabled(row, col)) {
       return;
     }
@@ -117,7 +124,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       state.blackCells.map(List<bool>.from),
     );
     newBlack[row][col] = !newBlack[row][col];
-    // if a cell becomes black, clear its letter
+    // If a cell becomes black, clear its letter.
     if (newBlack[row][col]) {
       newGrid[row][col] = null;
     }
@@ -135,24 +142,22 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     );
   }
 
-  /// Clear any letters in the grid that do not match the puzzle answers.
-  ///
-  /// For each entry with a known answer, build an expected grid from the
-  /// answers and remove any letter in the current grid that does not match
-  /// the expected character for that cell.
+  /// Clear any letters that do not match puzzle answers.
+  /// Uses `incorrectLetterCleaner` service and flashes cleared cells.
   void clearIncorrectLetters() {
     final cleaner = ref.read(incorrectLetterCleanerProvider);
     final result = cleaner.cleanWithResult(state);
     state = result.board;
 
     if (result.clearedCells.isNotEmpty) {
-      // Flash cleared cells in the UI (red) via flashingClearedCellsProvider
+      // Flash cleared cells via provider then clear the flash after a delay.
       ref.read(flashingClearedCellsProvider.notifier).value = result.clearedCells.toSet();
-      // Clear flash after a short duration
       Future.delayed(const Duration(milliseconds: 700), () {
         try {
           ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
-        } on Object catch (_) {}
+        } on Object catch (e, st) {
+          developer.log('Clearing flashing cleared cells failed', error: e, stackTrace: st);
+        }
       });
     }
   }

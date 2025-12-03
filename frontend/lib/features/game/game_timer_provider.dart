@@ -1,4 +1,5 @@
 // ignore_for_file: sort_constructors_first
+import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/providers.dart';
 
@@ -30,7 +31,9 @@ class GameTimer {
           _startedAt = DateTime.fromMillisecondsSinceEpoch(ms);
         }
       }
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('GameTimer._restore failed', error: e, stackTrace: st);
+    }
   }
 
   int get elapsedMs {
@@ -60,7 +63,9 @@ class GameTimer {
             key: 'puzzle:$gameId:startedAt',
             value: _startedAt!.millisecondsSinceEpoch.toString(),
           );
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('GameTimer.start: failed to persist startedAt', error: e, stackTrace: st);
+    }
   }
 
   Future<void> pause() async {
@@ -76,7 +81,9 @@ class GameTimer {
         value: _accumulatedMs.toString(),
       );
       await storage.delete(key: 'puzzle:$gameId:startedAt');
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('GameTimer.pause: failed to persist pause state', error: e, stackTrace: st);
+    }
   }
 
   /// Finalize the timer synchronously and persist asynchronously.
@@ -98,7 +105,9 @@ class GameTimer {
         value: DateTime.now().millisecondsSinceEpoch.toString(),
       ).catchError((_) {});
       storage.delete(key: 'puzzle:$gameId:startedAt').catchError((_) {});
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('GameTimer.finalizeSync: failed to persist state', error: e, stackTrace: st);
+    }
 
     return (totalMs / 1000).floor();
   }
@@ -111,7 +120,9 @@ class GameTimer {
       await storage.delete(key: 'puzzle:$gameId:startedAt');
       await storage.delete(key: 'puzzle:$gameId:accumulatedMs');
       await storage.delete(key: 'puzzle:$gameId:completedAt');
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('GameTimer.clear: failed to clear storage keys', error: e, stackTrace: st);
+    }
   }
 }
 

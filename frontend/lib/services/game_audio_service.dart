@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flame_audio/flame_audio.dart';
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
@@ -27,9 +28,10 @@ class GameAudioService {
       _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 4);
 
       _initialized = true;
-    } on Object catch (_) {
-      // Initialization failures should not crash the app; log elsewhere if needed.
+    } on Object catch (e, st) {
+      // Initialization failures should not crash the app; log for visibility.
       _initialized = false;
+      developer.log('GameAudioService initialization failed', error: e, stackTrace: st);
     }
   }
 
@@ -41,7 +43,9 @@ class GameAudioService {
       if (_typePool != null) {
         await _typePool!.start();
       }
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('playType failed', error: e, stackTrace: st);
+    }
     return;
   }
 
@@ -53,7 +57,9 @@ class GameAudioService {
       if (_deletePool != null) {
         await _deletePool!.start();
       }
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('playDelete failed', error: e, stackTrace: st);
+    }
     return;
   }
 
@@ -63,7 +69,9 @@ class GameAudioService {
         return;
       }
       await FlameAudio.play('success.wav');
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('playSuccess failed', error: e, stackTrace: st);
+    }
     return;
   }
   
@@ -73,7 +81,9 @@ class GameAudioService {
         return;
       }
       await FlameAudio.play('victory.wav');
-    } on Object catch (_) {}
+    } on Object catch (e, st) {
+      developer.log('playVictory failed', error: e, stackTrace: st);
+    }
     return;
   }
   
