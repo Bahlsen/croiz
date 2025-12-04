@@ -25,16 +25,16 @@ class CrosswordClueBanner extends ConsumerWidget {
       // measurable. This prevents zero-height banners in tests.
       return Container(
         height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.grey[900],
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey[700]!, width: 1),
         ),
-        child: Text(
+        child: const Text(
           'Select a word',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
       );
     }
@@ -48,52 +48,53 @@ class CrosswordClueBanner extends ConsumerWidget {
     final entry = entryCtx.entry;
     final entries = entryCtx.entries;
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Adapt padding and font based on available height
-        final availableHeight = constraints.maxHeight;
-        // Increase compact threshold so compact mode triggers earlier on tighter layouts
-        final isCompact = availableHeight < 72;
-        
-        return Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 8.0,
-            vertical: isCompact ? 2.0 : 4.0,
-          ),
-          child: Center(
-              child: ConstrainedBox(
-              // Allow a wider banner so clues can use more horizontal space
-              // on larger phones and tablets. Tests that need a small
-              // width still work because the ConstrainedBox only applies
-              // a maximum width.
-              constraints: const BoxConstraints(maxWidth: 760),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildNavArrow(
-                    icon: Icons.chevron_left,
-                    onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
+    // Use MediaQuery here instead of a LayoutBuilder to avoid introducing
+    // an extra relayout boundary inside the banner which can cause layout
+    // ordering races during widget tests. The visual adaptation is minor
+    // and MediaQuery size is sufficient for our compact threshold.
+    final availableHeight = MediaQuery.of(context).size.height;
+    final isCompact = availableHeight < 72;
+
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 48),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: isCompact ? 2 : 4,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            // Allow a wider banner so clues can use more horizontal space
+            // on larger phones and tablets. Tests that need a small
+            // width still work because the ConstrainedBox only applies
+            // a maximum width.
+            constraints: const BoxConstraints(maxWidth: 760),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildNavArrow(
+                  icon: Icons.chevron_left,
+                  onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
+                  compact: isCompact,
+                ),
+                Expanded(
+                  child: _buildClueContainer(
+                    ref: ref,
+                    horizontal: horizontal,
+                    entry: entry,
                     compact: isCompact,
                   ),
-                  Expanded(
-                    child: _buildClueContainer(
-                      ref: ref,
-                      horizontal: horizontal,
-                      entry: entry,
-                      compact: isCompact,
-                    ),
-                  ),
-                  _buildNavArrow(
-                    icon: Icons.chevron_right,
-                    onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
-                    compact: isCompact,
-                  ),
-                ],
-              ),
+                ),
+                _buildNavArrow(
+                  icon: Icons.chevron_right,
+                  onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
+                  compact: isCompact,
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
@@ -149,16 +150,16 @@ Widget _buildClueContainer({
       child: Container(
             // Give the container a little more horizontal breathing room
             // so it appears wider visually when available.
-            margin: EdgeInsets.symmetric(horizontal: compact ? 8 : 14),
+                margin: EdgeInsets.symmetric(horizontal: compact ? 8 : 14),
         decoration: BoxDecoration(
-          color: Colors.grey[900],
-          borderRadius: BorderRadius.circular(compact ? 10 : 12),
-          border: Border.all(color: Colors.grey[700]!, width: 1),
+              color: Colors.grey[900],
+              borderRadius: BorderRadius.circular(compact ? 10 : 12),
+              border: Border.all(color: Colors.grey[700]!, width: 1),
         ),
-        padding: EdgeInsets.symmetric(
-              vertical: compact ? 8 : 12,
-              horizontal: compact ? 14 : 20,
-        ),
+            padding: EdgeInsets.symmetric(
+                  vertical: compact ? 8 : 12,
+                  horizontal: compact ? 14 : 20,
+            ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

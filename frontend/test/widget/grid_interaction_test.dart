@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/main.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/widgets/crossword_cell.dart';
+import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {

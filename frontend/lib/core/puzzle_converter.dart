@@ -87,6 +87,80 @@ class PuzzleConverter {
         ),
       );
     }
+    // Validation: require that every row has at least one across word
+    // and every column has at least one down word, and that those
+    // entries include a non-empty clue (indice).
+    final rowsWithAcross = <int>{};
+    final colsWithDown = <int>{};
+    for (final e in entries) {
+      if (e.length <= 0) {
+        continue;
+      }
+      if (e.direction == 'across') {
+        if (e.clue == null || e.clue!.trim().isEmpty) {
+          throw FormatException('Across entry ${e.number} at (${e.y},${e.x}) is missing a clue');
+        }
+        rowsWithAcross.add(e.y);
+      } else if (e.direction == 'down') {
+        if (e.clue == null || e.clue!.trim().isEmpty) {
+          throw FormatException('Down entry ${e.number} at (${e.y},${e.x}) is missing a clue');
+        }
+        colsWithDown.add(e.x);
+      }
+    }
+
+    // If the source puzzle provided no explicit entries at all (tests or
+    // programmatic puzzles), skip the "every row/column must have an
+    // entry" validation. Real imports should include entries and will be
+    // validated strictly below.
+    if (puzzle.entries.isNotEmpty) {
+      final missingRows = <int>[];
+      for (var r = 0; r < rows; r++) {
+        // If entire row is black, it's valid to have no across entries
+        var rowAllBlack = true;
+        for (var c = 0; c < cols; c++) {
+          if (!blackCells[r][c]) {
+            rowAllBlack = false;
+            break;
+          }
+        }
+        if (rowAllBlack) {
+          continue;
+        }
+        if (!rowsWithAcross.contains(r)) {
+          missingRows.add(r);
+        }
+      }
+
+      final missingCols = <int>[];
+      for (var c = 0; c < cols; c++) {
+        // If entire column is black, it's valid to have no down entries
+        var colAllBlack = true;
+        for (var r = 0; r < rows; r++) {
+          if (!blackCells[r][c]) {
+            colAllBlack = false;
+            break;
+          }
+        }
+        if (colAllBlack) {
+          continue;
+        }
+        if (!colsWithDown.contains(c)) {
+          missingCols.add(c);
+        }
+      }
+
+      if (missingRows.isNotEmpty || missingCols.isNotEmpty) {
+        final parts = <String>[];
+        if (missingRows.isNotEmpty) {
+          parts.add('missing across words for rows: ${missingRows.join(', ')}');
+        }
+        if (missingCols.isNotEmpty) {
+          parts.add('missing down words for cols: ${missingCols.join(', ')}');
+        }
+        throw FormatException('Invalid puzzle: ${parts.join('; ')}');
+      }
+    }
 
     final metadata = puzzle.metadata ?? {};
     final title = metadata['title']?.toString() ?? 'Puzzle ${puzzle.id}';

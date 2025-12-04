@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/widgets/crossword_keyboard_bar.dart';
-import 'package:croiz/features/game/widgets/crossword_clues_banner.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 void main() {

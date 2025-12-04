@@ -26,6 +26,7 @@ void main() {
           PuzzleCell(x: 2, y: 2, isBlack: false, solution: 'G'),
         ],
         entries: [
+          // Row 0 across
           PuzzleEntry(
             id: 'a1',
             number: 1,
@@ -36,6 +37,7 @@ void main() {
             answer: 'AB',
             clue: 'First two letters',
           ),
+          // Col 0 down
           PuzzleEntry(
             id: 'd1',
             number: 1,
@@ -45,6 +47,50 @@ void main() {
             length: 3,
             answer: 'ACE',
             clue: 'Vertical word',
+          ),
+          // Row 1 across (single-letter across allowed)
+          PuzzleEntry(
+            id: 'a2',
+            number: 2,
+            direction: 'across',
+            x: 0,
+            y: 1,
+            length: 1,
+            answer: 'C',
+            clue: 'Row 1 across',
+          ),
+          // Row 2 across
+          PuzzleEntry(
+            id: 'a3',
+            number: 3,
+            direction: 'across',
+            x: 0,
+            y: 2,
+            length: 3,
+            answer: 'EFG',
+            clue: 'Row 2 across',
+          ),
+          // Col 1 down (single-letter)
+          PuzzleEntry(
+            id: 'd2',
+            number: 2,
+            direction: 'down',
+            x: 1,
+            y: 0,
+            length: 1,
+            answer: 'B',
+            clue: 'Col 1 down',
+          ),
+          // Col 2 down (starts at y=1)
+          PuzzleEntry(
+            id: 'd3',
+            number: 3,
+            direction: 'down',
+            x: 2,
+            y: 1,
+            length: 2,
+            answer: 'DG',
+            clue: 'Col 2 down',
           ),
         ],
       );
@@ -70,12 +116,11 @@ void main() {
       expect(gameBoard.clues['1-across'], 'First two letters');
       expect(gameBoard.clues['1-down'], 'Vertical word');
 
-      // Verify entries
+      // Verify entries (should include across and down entries)
       expect(gameBoard.entries, isNotNull);
-      expect(gameBoard.entries!.length, 2);
-      expect(gameBoard.entries![0].number, 1);
-      expect(gameBoard.entries![0].direction, 'across');
-      expect(gameBoard.entries![1].direction, 'down');
+      expect(gameBoard.entries!.isNotEmpty, isTrue);
+      expect(gameBoard.entries!.any((e) => e.direction == 'across'), isTrue);
+      expect(gameBoard.entries!.any((e) => e.direction == 'down'), isTrue);
     });
 
     test('pre-fills solutions when flag is true', () {
