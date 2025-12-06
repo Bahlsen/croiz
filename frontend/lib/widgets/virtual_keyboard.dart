@@ -298,30 +298,34 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
 
     final label = k.toUpperCase();
     final enabled = enabledSet == null || enabledSet.contains(label);
-    return _LetterKey(
-      label: label,
-      height: height,
-      enabled: enabled,
-      onPressed: enabled
-          ? () {
-              if (enableFeedback) {
-                HapticFeedback.selectionClick();
+    return Semantics(
+      label: 'Lettre $label',
+      button: true,
+      child: _LetterKey(
+        label: label,
+        height: height,
+        enabled: enabled,
+        onPressed: enabled
+            ? () {
+                if (enableFeedback) {
+                  HapticFeedback.selectionClick();
+                }
+                try {
+                  onPlayClick?.call();
+                } on Object catch (e, st) {
+                  developer.log(
+                    'GameAudioService.playType failed',
+                    error: e,
+                    stackTrace: st,
+                  );
+                }
+                onKey(label);
               }
-              try {
-                onPlayClick?.call();
-              } on Object catch (e, st) {
-                developer.log(
-                  'GameAudioService.playType failed',
-                  error: e,
-                  stackTrace: st,
-                );
-              }
-              onKey(label);
-            }
-          : null,
-      radius: keyRadius,
-      keyColor: keyColor,
-      disabledKeyColor: disabledKeyColor,
+            : null,
+        radius: keyRadius,
+        keyColor: keyColor,
+        disabledKeyColor: disabledKeyColor,
+      ),
     );
   }
 }
