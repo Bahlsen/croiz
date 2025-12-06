@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -41,7 +41,7 @@ void main() {
       container: container,
       child: MaterialApp(
         home: Scaffold(
-          body: CrosswordKeyboardBar(onKey: (_) {}, onBackspace: () {}),
+          body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
         ),
       ),
     ));

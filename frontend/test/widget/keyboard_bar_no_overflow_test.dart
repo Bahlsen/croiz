@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
@@ -14,7 +14,7 @@ void main() {
           home: Scaffold(
             body: SizedBox(
               height: 100,
-              child: CrosswordKeyboardBar(
+              child: CrosswordControlsBar(
                 onKey: (_) {},
                 onBackspace: () {},
               ),
@@ -32,10 +32,10 @@ void main() {
 
     // Both widgets should still be present.
     expect(find.byType(CrosswordClueBanner), findsOneWidget);
-    expect(find.byType(CrosswordKeyboardBar), findsOneWidget);
+    expect(find.byType(CrosswordControlsBar), findsOneWidget);
 
     // The bar's height equals the constraint we gave it.
-    final barSize = tester.getSize(find.byType(CrosswordKeyboardBar));
+    final barSize = tester.getSize(find.byType(CrosswordControlsBar));
     expect(barSize.height, equals(100.0));
   });
 
@@ -46,7 +46,7 @@ void main() {
           home: Scaffold(
             body: SizedBox(
               height: 150,
-              child: CrosswordKeyboardBar(
+              child: CrosswordControlsBar(
                 onKey: (_) {},
                 onBackspace: () {},
               ),

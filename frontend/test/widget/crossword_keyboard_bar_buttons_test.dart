@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 
 void main() {
   testWidgets('Control buttons are positioned to the right and clear button present', (tester) async {
@@ -10,7 +10,7 @@ void main() {
     await tester.pumpWidget(ProviderScope(child: MaterialApp(home: Scaffold(
       body: Column(children: [
         const Expanded(child: Placeholder()),
-        CrosswordKeyboardBar(onKey: (_) {}, onBackspace: () {}),
+        CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
       ],),
     ))));
 
@@ -20,7 +20,7 @@ void main() {
     expect(clearFinder, findsOneWidget);
 
     // Ensure clear button is on the right side of the bar (x coordinate > center)
-    final barFinder = find.byType(CrosswordKeyboardBar);
+    final barFinder = find.byType(CrosswordControlsBar);
     expect(barFinder, findsOneWidget);
     final barBox = tester.getRect(barFinder);
     final clearBox = tester.getRect(clearFinder);

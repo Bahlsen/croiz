@@ -95,6 +95,7 @@ These guidelines help AI coding agents work productively in this repository. Foc
 ## Quick Commands (PowerShell)
 - `cd frontend; flutter pub get; flutter run`
 - `cd frontend; flutter test --coverage; dart run tools/compute_coverage.dart`
+ - After finishing frontend changes: run `flutter analyze` and apply automated fixes with `flutter fix --apply`.
 - `cd backend; .\\gradlew test jacocoTestReport`
 - `cd tools; pip install -r requirements.txt; python generate_puzzle.py`
 

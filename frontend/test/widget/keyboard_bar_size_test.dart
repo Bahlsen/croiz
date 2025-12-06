@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
@@ -13,7 +13,7 @@ void main() {
           home: Scaffold(
             body: SizedBox(
               height: 400,
-              child: CrosswordKeyboardBar(
+              child: CrosswordControlsBar(
                 onKey: (_) {},
                 onBackspace: () {},
               ),
@@ -39,7 +39,7 @@ void main() {
     expect(keyboardSize.height, greaterThan(150.0));
     expect(keyboardSize.height, lessThan(300.0));
 
-    final barFinder = find.byType(CrosswordKeyboardBar);
+    final barFinder = find.byType(CrosswordControlsBar);
     final barSize = tester.getSize(barFinder);
 
     // Total should equal constraint
@@ -53,7 +53,7 @@ void main() {
           home: Scaffold(
             body: SizedBox(
               height: 180,
-              child: CrosswordKeyboardBar(
+              child: CrosswordControlsBar(
                 onKey: (_) {},
                 onBackspace: () {},
               ),
@@ -75,7 +75,7 @@ void main() {
     // Keyboard should respect minimum
     expect(keyboardSize.height, greaterThanOrEqualTo(100.0));
 
-    final barFinder = find.byType(CrosswordKeyboardBar);
+    final barFinder = find.byType(CrosswordControlsBar);
     final barSize = tester.getSize(barFinder);
     // Ensure the total bar height equals the constraint we provided
     expect(barSize.height, equals(180.0));
@@ -91,7 +91,7 @@ void main() {
             home: Scaffold(
               body: SizedBox(
                 height: height,
-                child: CrosswordKeyboardBar(
+                  child: CrosswordControlsBar(
                   onKey: (_) {},
                   onBackspace: () {},
                 ),
@@ -103,7 +103,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final barSize = tester.getSize(find.byType(CrosswordKeyboardBar));
+      final barSize = tester.getSize(find.byType(CrosswordControlsBar));
       expect(barSize.height, equals(height));
       
       // All components should be present

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_keyboard_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
@@ -44,7 +44,7 @@ void main() {
         body: Column(
           children: [
             const Expanded(child: Placeholder()), // Grid area
-            CrosswordKeyboardBar(
+            CrosswordControlsBar(
               onKey: (_) {},
               onBackspace: () {},
             ),
@@ -86,7 +86,7 @@ void main() {
         body: Column(
           children: [
             const Expanded(child: Placeholder()),
-            CrosswordKeyboardBar(
+            CrosswordControlsBar(
               onKey: (_) {},
               onBackspace: () {},
             ),
@@ -98,9 +98,9 @@ void main() {
 
       // Log sizes for diagnosis before checking for exceptions
       try {
-        final barFinder = find.byType(CrosswordKeyboardBar);
+        final barFinder = find.byType(CrosswordControlsBar);
         if (barFinder.evaluate().isNotEmpty) {
-          debugPrint('DEBUG: CrosswordKeyboardBar size=${tester.getSize(barFinder.first)}');
+          debugPrint('DEBUG: CrosswordControlsBar size=${tester.getSize(barFinder.first)}');
         }
         final kf = find.byType(VirtualKeyboard);
         if (kf.evaluate().isNotEmpty) {
@@ -142,7 +142,7 @@ void main() {
         body: Column(
           children: [
             const Expanded(child: Placeholder()),
-            CrosswordKeyboardBar(
+            CrosswordControlsBar(
               onKey: (_) {},
               onBackspace: () {},
             ),
@@ -170,7 +170,7 @@ void main() {
         body: Column(
           children: [
             const Expanded(child: Placeholder()),
-            CrosswordKeyboardBar(
+            CrosswordControlsBar(
               onKey: (_) {},
               onBackspace: () {},
             ),
@@ -189,7 +189,7 @@ void main() {
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
         body: SizedBox(
           height: 150,
-          child: CrosswordKeyboardBar(
+          child: CrosswordControlsBar(
             onKey: (_) {},
             onBackspace: () {},
           ),
@@ -220,7 +220,7 @@ void main() {
                 child: Placeholder(), // Simulates CrosswordGrid
               ),
             ),
-            CrosswordKeyboardBar(
+            CrosswordControlsBar(
               onKey: (_) {},
               onBackspace: () {},
             ),
@@ -236,7 +236,7 @@ void main() {
       final availableBody = screenHeight - appBarHeight;
       
       // Keyboard bar should take reasonable portion, not fixed 240
-      final keyboardBarSize = tester.getSize(find.byType(CrosswordKeyboardBar));
+          final keyboardBarSize = tester.getSize(find.byType(CrosswordControlsBar));
       expect(keyboardBarSize.height, lessThan(availableBody * 0.5)); // Max 50% of body
       expect(keyboardBarSize.height, greaterThan(120)); // Minimum functional size
       
@@ -249,7 +249,7 @@ void main() {
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
         body: SizedBox(
           height: 400,
-          child: CrosswordKeyboardBar(
+          child: CrosswordControlsBar(
             onKey: (_) {},
             onBackspace: () {},
           ),
@@ -263,7 +263,7 @@ void main() {
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
         body: SizedBox(
           height: 180,
-          child: CrosswordKeyboardBar(
+          child: CrosswordControlsBar(
             onKey: (_) {},
             onBackspace: () {},
           ),
@@ -282,7 +282,7 @@ void main() {
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
         body: SizedBox(
           height: 200,
-          child: CrosswordKeyboardBar(
+          child: CrosswordControlsBar(
             onKey: (_) {},
             onBackspace: () {},
           ),
