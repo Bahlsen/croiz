@@ -9,6 +9,17 @@ import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
 import 'package:croiz/features/game/game_providers.dart';
 
 // Simple, robust controls bar: banner, icon row, and keyboard.
+//
+// IMPORTANT: This widget expects its parent to provide the vertical
+// space it should occupy. The layout contract is:
+// - Parent (e.g. `CrosswordScreen`) must size this widget using
+//   `Expanded` (or an explicit SizedBox) so that the controls take the
+//   remaining height of the screen.
+// - The controls bar will compute internal splits (banner / icons /
+//   keyboard) from the given height and will NOT perform top-level
+//   calculations that assume the full device height. Keeping sizing
+//   responsibility in the parent avoids overlaps and keeps the layout
+//   dynamic across screen sizes.
 class CrosswordControlsBar extends ConsumerStatefulWidget {
   const CrosswordControlsBar({
     required this.onKey,
