@@ -165,7 +165,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
 /// Provider to load the puzzle asynchronously from JSON.
 final puzzleLoaderProvider = FutureProvider<GameBoard>(
-  (ref) async => loadPuzzleFromAsset('assets/data/astronomie_puzzle.json'),
+  (ref) async => loadPuzzleFromAsset('assets/data/nyt2005-01-01.json'),
 );
 
 /// Main game board provider (uses the loaded puzzle or fallback to empty).
@@ -180,11 +180,19 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
   final jsonData = json.decode(jsonString) as Map<String, dynamic>;
   final puzzle = Puzzle.fromJson(jsonData);
 
+  if (kDebugMode) {
+    developer.log('loadPuzzleFromAsset: loaded puzzle id=${puzzle.id} declared rows=${puzzle.rows} cols=${puzzle.cols}', name: 'GameProviders');
+  }
+
   // Control prefill via a Dart define: `--dart-define=PREFILL_PUZZLE=true`
   const prefillEnv = bool.fromEnvironment('PREFILL_PUZZLE', defaultValue: false);
   const shouldPrefill = kDebugMode && prefillEnv;
 
   var board = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: shouldPrefill);
+
+  if (kDebugMode) {
+    developer.log('loadPuzzleFromAsset: converted board id=${board.id} gridSize=${board.gridSize} rows=${board.grid.length} cols=${board.grid.isEmpty ? 0 : board.grid[0].length}', name: 'GameProviders');
+  }
 
   // If prefill is active, clear exactly one non-black cell to leave a single
   // missing letter for quick manual completion during testing.
