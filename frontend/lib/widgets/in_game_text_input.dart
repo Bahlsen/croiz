@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'virtual_keyboard.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 
 /// In-game text input that uses the in-app [VirtualKeyboard]
 /// and prevents the system keyboard from appearing.
@@ -36,6 +37,7 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
   late final FocusNode _focusNode;
   late bool _keyboardVisible;
   late List<List<String>>? _currentLayout;
+  late final CrosswordInputController _gameController;
 
   @override
   void initState() {
@@ -43,12 +45,22 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
     _focusNode = FocusNode(canRequestFocus: false);
     _keyboardVisible = widget.keyboardInitiallyVisible;
     _currentLayout = widget.keyboardLayout ?? VirtualKeyboard.azertyLayout;
+    // Create a single game controller instance to reuse across key events.
+    _gameController = CrosswordInputController.fromRef(ref);
   }
 
   @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void _clearIncorrectLetters() {
+    try {
+      ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+    } on Object catch (e, st) {
+      debugPrint('clearIncorrectLetters failed: $e\n$st');
+    }
   }
 
   @override
@@ -62,13 +74,7 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FilledButton.icon(
-              onPressed: () {
-                try {
-                  ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-                } on Object catch (e, st) {
-                  debugPrint('clearIncorrectLetters failed: $e\n$st');
-                }
-              },
+              onPressed: _clearIncorrectLetters,
               icon: const Icon(Icons.delete_sweep_outlined),
               label: const Text('Clear'),
             ),
@@ -107,13 +113,7 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
         children: [
           IconButton(
             tooltip: 'Clear incorrect letters',
-            onPressed: () {
-              try {
-                ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-              } on Object catch (e, st) {
-                debugPrint('clearIncorrectLetters failed: $e\n$st');
-              }
-            },
+            onPressed: _clearIncorrectLetters,
             icon: const Icon(Icons.delete_sweep_outlined),
           ),
           IconButton(
@@ -142,43 +142,16 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
     if (!_isAZ(letter)) {
       return;
     }
-
     final upper = letter.toUpperCase();
-    final text = widget.controller.text;
-    final sel = widget.controller.selection;
-    final max = widget.maxLength;
-
-    final selectionIndex = sel.isValid ? sel.baseOffset : text.length;
-
-    if (max != null && text.length >= max) {
-      return; // Ignore when at max length
-    }
-
-    final newText = StringBuffer()
-      ..write(text.substring(0, selectionIndex))
-      ..write(upper)
-      ..write(text.substring(selectionIndex));
-
-    final caret = selectionIndex + 1;
-    widget.controller.value = TextEditingValue(
-      text: newText.toString(),
-      selection: TextSelection.collapsed(offset: caret),
-    );
+    // Delegate to the game's input controller so insertion, auto-advance
+    // and locking behavior are handled consistently.
+    _gameController.setLetterAndAdvance(upper);
   }
 
   void _handleBackspace() {
-    final text = widget.controller.text;
-    final sel = widget.controller.selection;
-    final idx = sel.isValid ? sel.baseOffset : text.length;
-    if (idx <= 0 || text.isEmpty) {
-      return;
-    }
-
-    final newText = text.substring(0, idx - 1) + text.substring(idx);
-    widget.controller.value = TextEditingValue(
-      text: newText,
-      selection: TextSelection.collapsed(offset: idx - 1),
-    );
+    // Delegate deletions to the game's input controller so locked cells are
+    // respected.
+    _gameController.clearCurrent();
   }
 
   // Enter key removed from keyboard; submission now triggered externally if needed.
