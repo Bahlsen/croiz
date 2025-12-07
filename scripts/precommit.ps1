@@ -17,7 +17,7 @@ function Invoke-CheckedCommand {
   $code = $LASTEXITCODE
   Pop-Location
   if ($code -ne 0) {
-    Write-Error ("Command failed with exit code " + $code + ": " + $cmd)
+      Write-Error ("Command failed with exit code " + $code + ": " + $cmd)
     exit $code
   }
 }
@@ -33,11 +33,12 @@ $stagedFiles = $stagedRaw -split "`n" | ForEach-Object { $_.Trim() } | Where-Obj
 $frontendDartFiles = $stagedFiles | Where-Object { $_ -like 'frontend/*' -and $_ -match '\.dart$' }
 
 if (-not $frontendDartFiles -or $frontendDartFiles.Count -eq 0) {
-  Write-Host "No staged frontend Dart files found — nothing to do."
+  Write-Host "No staged frontend Dart files found - nothing to do."
   exit 0
 }
 
-Write-Host "Staged frontend Dart files:`n$($frontendDartFiles -join "`n")"
+Write-Host "Staged frontend Dart files:"
+foreach ($file in $frontendDartFiles) { Write-Host " - $file" }
 
 # Run formatter on staged files only
 if (Get-Command dart -ErrorAction SilentlyContinue) {
@@ -68,7 +69,7 @@ foreach ($f in $frontendDartFiles) {
   try {
     & git add -- "$f"
   } catch {
-    Write-Warning "git add failed for $f: $_"
+    Write-Warning ("git add failed for " + $f + ": " + $_)
   }
 }
 

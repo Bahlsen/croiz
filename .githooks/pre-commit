@@ -1,5 +1,6 @@
 #!/bin/sh
 # Forward to the PowerShell precommit script (frontend-only Dart fixer)
+# Use -File to avoid command-string quoting/parsing differences in sh
 powershell -NoProfile -ExecutionPolicy Bypass -File "./scripts/precommit.ps1"
 EXIT_CODE=$?
 exit $EXIT_CODE
