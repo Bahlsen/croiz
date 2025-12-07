@@ -146,7 +146,7 @@ void main() {
         y: 3,
         length: 5,
       );
-      
+
       expect(service.getWordKey(entry), '3,2,across');
     });
 
@@ -158,7 +158,7 @@ void main() {
         y: 2,
         length: 3,
       );
-      
+
       final keys = service.getCellKeys(entry);
       expect(keys, ['2,1', '2,2', '2,3']);
     });
@@ -171,7 +171,7 @@ void main() {
         y: 2,
         length: 3,
       );
-      
+
       final keys = service.getCellKeys(entry);
       expect(keys, ['2,1', '3,1', '4,1']);
     });

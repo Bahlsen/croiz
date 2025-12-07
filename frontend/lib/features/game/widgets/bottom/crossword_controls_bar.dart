@@ -33,7 +33,8 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
   final double heightFactor;
 
   @override
-  ConsumerState<CrosswordControlsBar> createState() => _CrosswordControlsBarState();
+  ConsumerState<CrosswordControlsBar> createState() =>
+      _CrosswordControlsBarState();
 }
 
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
@@ -41,7 +42,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
 
   @override
   Widget build(BuildContext context) {
-    final layout = _isAzerty ? VirtualKeyboard.azertyLayout : VirtualKeyboard.qwertyLayout;
+    final layout = _isAzerty
+        ? VirtualKeyboard.azertyLayout
+        : VirtualKeyboard.qwertyLayout;
 
     const minBannerHeight = 64.0;
     const gapBetween = 2.0;
@@ -51,7 +54,8 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       builder: (context, constraints) {
         // Prefer parent-provided constraints; fall back to a reasonable
         // default when unconstrained to avoid zero/NaN sizes.
-        final total = (constraints.maxHeight.isFinite && constraints.maxHeight > 0)
+        final total =
+            (constraints.maxHeight.isFinite && constraints.maxHeight > 0)
             ? constraints.maxHeight
             : 240.0;
 
@@ -59,13 +63,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         const gap = gapBetween;
         final bannerTarget = total * 0.22;
         final bannerCap = total * 0.30;
-        double bannerHeight = bannerTarget.clamp(minBannerHeight, bannerCap);
+        var bannerHeight = bannerTarget.clamp(minBannerHeight, bannerCap);
 
         final iconsTarget = total * 0.08;
         const minIcons = controlHeight; // 35.0
         final controlsH = math.max(minIcons, iconsTarget);
 
-        double keyboardHeight = total - bannerHeight - controlsH - gap;
+        var keyboardHeight = total - bannerHeight - controlsH - gap;
         if (keyboardHeight < 0) {
           final deficit = -keyboardHeight;
           final reduce = math.min(deficit, bannerHeight - minBannerHeight);
@@ -74,7 +78,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         }
 
         if (kDebugMode) {
-          debugPrint('CrosswordControlsBar (KISS): total=$total banner=$bannerHeight keyboard=$keyboardHeight');
+          debugPrint(
+            'CrosswordControlsBar (KISS): total=$total banner=$bannerHeight keyboard=$keyboardHeight',
+          );
         }
 
         return Column(
@@ -93,10 +99,15 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                 isAzerty: _isAzerty,
                 onClear: () {
                   try {
-                    ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+                    ref
+                        .read(gameBoardProvider.notifier)
+                        .clearIncorrectLetters();
                   } on Object catch (e, st) {
                     if (kDebugMode) {
-                      developer.log('clearIncorrectLetters failed: $e', stackTrace: st);
+                      developer.log(
+                        'clearIncorrectLetters failed: $e',
+                        stackTrace: st,
+                      );
                     }
                   }
                 },

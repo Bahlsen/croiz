@@ -5,9 +5,30 @@ import 'package:croiz/domain/entities/game_entities.dart';
 void main() {
   group('computeAdjacentEntry', () {
     final entries = <PuzzleEntryData>[
-      const PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3, clue: 'A1'),
-      const PuzzleEntryData(number: 2, direction: 'down', x: 1, y: 0, length: 4, clue: 'D2'),
-      const PuzzleEntryData(number: 3, direction: 'across', x: 3, y: 0, length: 4, clue: 'A3'),
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        clue: 'A1',
+      ),
+      const PuzzleEntryData(
+        number: 2,
+        direction: 'down',
+        x: 1,
+        y: 0,
+        length: 4,
+        clue: 'D2',
+      ),
+      const PuzzleEntryData(
+        number: 3,
+        direction: 'across',
+        x: 3,
+        y: 0,
+        length: 4,
+        clue: 'A3',
+      ),
     ];
 
     test('directional order: A1 -> A3; wrap to D2', () {
@@ -41,7 +62,14 @@ void main() {
     });
 
     test('current not found returns current', () {
-      const ghost = PuzzleEntryData(number: 99, direction: 'across', x: 9, y: 9, length: 1, clue: 'X');
+      const ghost = PuzzleEntryData(
+        number: 99,
+        direction: 'across',
+        x: 9,
+        y: 9,
+        length: 1,
+        clue: 'X',
+      );
       final next = computeAdjacentEntry(entries, ghost, 1);
       expect(next, ghost);
     });

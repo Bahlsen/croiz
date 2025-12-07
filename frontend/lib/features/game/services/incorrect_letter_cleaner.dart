@@ -34,7 +34,10 @@ class IncorrectLetterCleaner {
       for (var i = 0; i < entry.length; i++) {
         final row = isHorizontal ? entry.y : entry.y + i;
         final col = isHorizontal ? entry.x + i : entry.x;
-        if (row < 0 || row >= board.gridSize || col < 0 || col >= board.gridSize) {
+        if (row < 0 ||
+            row >= board.gridSize ||
+            col < 0 ||
+            col >= board.gridSize) {
           continue;
         }
 

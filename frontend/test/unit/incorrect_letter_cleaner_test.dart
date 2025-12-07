@@ -28,7 +28,14 @@ void main() {
 
     test('clears letters that do not match known answers', () {
       const entries = [
-        PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3, answer: 'CAT'),
+        PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 3,
+          answer: 'CAT',
+        ),
       ];
 
       final board = GameBoard(
@@ -57,7 +64,14 @@ void main() {
 
     test('preserves nulls and only clears mismatches', () {
       const entries = [
-        PuzzleEntryData(number: 1, direction: 'down', x: 1, y: 0, length: 3, answer: 'DOG'),
+        PuzzleEntryData(
+          number: 1,
+          direction: 'down',
+          x: 1,
+          y: 0,
+          length: 3,
+          answer: 'DOG',
+        ),
       ];
 
       final grid = [
@@ -81,7 +95,10 @@ void main() {
       final result = const IncorrectLetterCleaner().cleanWithResult(board);
       expect(result.board.grid[0][1], 'D');
       expect(result.board.grid[1][1], 'O');
-      expect(result.board.grid[1][2], 'X'); // stays untouched because not part of entry
+      expect(
+        result.board.grid[1][2],
+        'X',
+      ); // stays untouched because not part of entry
       expect(result.board.grid[2][1], 'G');
       expect(result.clearedCells, isNot(contains('1,2')));
     });

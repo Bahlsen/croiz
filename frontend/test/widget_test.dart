@@ -35,7 +35,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntries)),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(boardWithEntries),
+          ),
         ],
         child: const CroizApp(),
       ),

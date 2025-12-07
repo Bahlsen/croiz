@@ -55,6 +55,7 @@ class GameBoard extends GameEntity {
   /// Optional: pre-computed entries (from Puzzle model) with number/position/clue.
   /// If present, UI can use these directly instead of recalculating numbering.
   final List<PuzzleEntryData>? entries;
+
   /// Optional solution grid (from puzzle cells). When available, this is the
   /// authoritative answer for each cell and should be preferred over
   /// `PuzzleEntryData.answer` when validating completed words.

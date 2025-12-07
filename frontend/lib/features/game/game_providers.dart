@@ -23,7 +23,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       // Safe to call ref.listen here because build() runs after the
       // notifier has been created and ref is available. The guard ensures
       // we don't attach multiple listeners across rebuilds.
-      ref.listen<AsyncValue<GameBoard>>(puzzleLoaderProvider, _onPuzzleLoaderChanged, fireImmediately: true);
+      ref.listen<AsyncValue<GameBoard>>(
+        puzzleLoaderProvider,
+        _onPuzzleLoaderChanged,
+        fireImmediately: true,
+      );
     }
     final defaultBoard = _createEmptyBoard(5);
 
@@ -31,7 +35,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     return puzzleAsync.maybeWhen(data: (d) => d, orElse: () => defaultBoard);
   }
 
-  void _onPuzzleLoaderChanged(AsyncValue<GameBoard>? prev, AsyncValue<GameBoard> next) {
+  void _onPuzzleLoaderChanged(
+    AsyncValue<GameBoard>? prev,
+    AsyncValue<GameBoard> next,
+  ) {
     if (next is AsyncData<GameBoard>) {
       state = next.value;
 
@@ -83,7 +90,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       clues: {},
       blackCells: blackCells,
       difficulty: 1,
-      solutionGrid: List.generate(size, (_) => List<String?>.filled(size, null)),
+      solutionGrid: List.generate(
+        size,
+        (_) => List<String?>.filled(size, null),
+      ),
     );
   }
 
@@ -151,12 +161,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     if (result.clearedCells.isNotEmpty) {
       // Flash cleared cells via provider then clear the flash after a delay.
-      ref.read(flashingClearedCellsProvider.notifier).value = result.clearedCells.toSet();
+      ref.read(flashingClearedCellsProvider.notifier).value = result
+          .clearedCells
+          .toSet();
       Future.delayed(const Duration(milliseconds: 700), () {
         try {
           ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
         } on Object catch (e, st) {
-          developer.log('Clearing flashing cleared cells failed', error: e, stackTrace: st);
+          developer.log(
+            'Clearing flashing cleared cells failed',
+            error: e,
+            stackTrace: st,
+          );
         }
       });
     }
@@ -181,17 +197,29 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
   final puzzle = Puzzle.fromJson(jsonData);
 
   if (kDebugMode) {
-    developer.log('loadPuzzleFromAsset: loaded puzzle id=${puzzle.id} declared rows=${puzzle.rows} cols=${puzzle.cols}', name: 'GameProviders');
+    developer.log(
+      'loadPuzzleFromAsset: loaded puzzle id=${puzzle.id} declared rows=${puzzle.rows} cols=${puzzle.cols}',
+      name: 'GameProviders',
+    );
   }
 
   // Control prefill via a Dart define: `--dart-define=PREFILL_PUZZLE=true`
-  const prefillEnv = bool.fromEnvironment('PREFILL_PUZZLE', defaultValue: false);
+  const prefillEnv = bool.fromEnvironment(
+    'PREFILL_PUZZLE',
+    defaultValue: false,
+  );
   const shouldPrefill = kDebugMode && prefillEnv;
 
-  var board = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: shouldPrefill);
+  var board = PuzzleConverter.puzzleToGameBoard(
+    puzzle,
+    preFillSolutions: shouldPrefill,
+  );
 
   if (kDebugMode) {
-    developer.log('loadPuzzleFromAsset: converted board id=${board.id} gridSize=${board.gridSize} rows=${board.grid.length} cols=${board.grid.isEmpty ? 0 : board.grid[0].length}', name: 'GameProviders');
+    developer.log(
+      'loadPuzzleFromAsset: converted board id=${board.id} gridSize=${board.gridSize} rows=${board.grid.length} cols=${board.grid.isEmpty ? 0 : board.grid[0].length}',
+      name: 'GameProviders',
+    );
   }
 
   // If prefill is active, clear exactly one non-black cell to leave a single
@@ -222,8 +250,10 @@ GameBoard _prefillExceptOne(GameBoard board) {
   final centerR = board.gridSize ~/ 2;
   final centerC = board.gridSize ~/ 2;
   MapEntry<int, int>? pick;
-  if (centerR >= 0 && centerR < board.gridSize &&
-      centerC >= 0 && centerC < board.gridSize &&
+  if (centerR >= 0 &&
+      centerR < board.gridSize &&
+      centerC >= 0 &&
+      centerC < board.gridSize &&
       !board.blackCells[centerR][centerC] &&
       board.grid[centerR][centerC] != null) {
     pick = MapEntry(centerR, centerC);
@@ -243,7 +273,8 @@ Future<GameBoard> createSampleBoard() async {
 }
 
 /// Fallback: create empty board if loading fails
-GameBoard createEmptyBoard(int size) => GameBoardNotifier._createEmptyBoard(size);
+GameBoard createEmptyBoard(int size) =>
+    GameBoardNotifier._createEmptyBoard(size);
 
 /// Represents a selected cell in the grid.
 class SelectedCell {
@@ -264,7 +295,9 @@ class SelectedCellNotifier extends Notifier<SelectedCell?> {
 }
 
 final selectedCellProvider =
-    NotifierProvider<SelectedCellNotifier, SelectedCell?>(SelectedCellNotifier.new);
+    NotifierProvider<SelectedCellNotifier, SelectedCell?>(
+      SelectedCellNotifier.new,
+    );
 
 /// Holds the current word direction (horizontal or vertical).
 class WordDirectionNotifier extends Notifier<WordDirection> {
@@ -275,7 +308,9 @@ class WordDirectionNotifier extends Notifier<WordDirection> {
 }
 
 final wordDirectionProvider =
-    NotifierProvider<WordDirectionNotifier, WordDirection>(WordDirectionNotifier.new);
+    NotifierProvider<WordDirectionNotifier, WordDirection>(
+      WordDirectionNotifier.new,
+    );
 
 // Holds the set of found word keys (format: "row,col,direction")
 class FoundWordsNotifier extends Notifier<Set<String>> {
@@ -285,8 +320,9 @@ class FoundWordsNotifier extends Notifier<Set<String>> {
   set value(Set<String> v) => state = v;
 }
 
-final foundWordsProvider =
-    NotifierProvider<FoundWordsNotifier, Set<String>>(FoundWordsNotifier.new);
+final foundWordsProvider = NotifierProvider<FoundWordsNotifier, Set<String>>(
+  FoundWordsNotifier.new,
+);
 
 // Holds cells that should flash (format: "row,col")
 class FlashingCellsNotifier extends Notifier<Set<String>> {
@@ -297,7 +333,9 @@ class FlashingCellsNotifier extends Notifier<Set<String>> {
 }
 
 final flashingCellsProvider =
-    NotifierProvider<FlashingCellsNotifier, Set<String>>(FlashingCellsNotifier.new);
+    NotifierProvider<FlashingCellsNotifier, Set<String>>(
+      FlashingCellsNotifier.new,
+    );
 
 // Holds cells that should flash red because they were cleared by the cleaner.
 class FlashingClearedCellsNotifier extends Notifier<Set<String>> {
@@ -308,7 +346,9 @@ class FlashingClearedCellsNotifier extends Notifier<Set<String>> {
 }
 
 final flashingClearedCellsProvider =
-    NotifierProvider<FlashingClearedCellsNotifier, Set<String>>(FlashingClearedCellsNotifier.new);
+    NotifierProvider<FlashingClearedCellsNotifier, Set<String>>(
+      FlashingClearedCellsNotifier.new,
+    );
 
 // Holds cells that are locked (format: "row,col")
 class LockedCellsNotifier extends Notifier<Set<String>> {
@@ -318,8 +358,9 @@ class LockedCellsNotifier extends Notifier<Set<String>> {
   set value(Set<String> v) => state = v;
 }
 
-final lockedCellsProvider =
-    NotifierProvider<LockedCellsNotifier, Set<String>>(LockedCellsNotifier.new);
+final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<String>>(
+  LockedCellsNotifier.new,
+);
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;

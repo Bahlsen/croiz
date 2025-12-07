@@ -19,7 +19,10 @@ class PuzzleConverter {
       rows,
       (_) => List<bool>.filled(cols, false),
     );
-    final solutionGrid = List.generate(rows, (_) => List<String?>.filled(cols, null));
+    final solutionGrid = List.generate(
+      rows,
+      (_) => List<String?>.filled(cols, null),
+    );
 
     // Fill grid and blackCells from puzzle.cells
     for (final cell in puzzle.cells) {
@@ -71,7 +74,8 @@ class PuzzleConverter {
       }
 
       // Crop provided answer if present to match effectiveLength
-      final croppedAnswer = entry.answer != null && entry.answer!.length >= effectiveLength
+      final croppedAnswer =
+          entry.answer != null && entry.answer!.length >= effectiveLength
           ? entry.answer!.substring(0, effectiveLength)
           : entry.answer;
 
@@ -98,12 +102,16 @@ class PuzzleConverter {
       }
       if (e.direction == 'across') {
         if (e.clue == null || e.clue!.trim().isEmpty) {
-          throw FormatException('Across entry ${e.number} at (${e.y},${e.x}) is missing a clue');
+          throw FormatException(
+            'Across entry ${e.number} at (${e.y},${e.x}) is missing a clue',
+          );
         }
         rowsWithAcross.add(e.y);
       } else if (e.direction == 'down') {
         if (e.clue == null || e.clue!.trim().isEmpty) {
-          throw FormatException('Down entry ${e.number} at (${e.y},${e.x}) is missing a clue');
+          throw FormatException(
+            'Down entry ${e.number} at (${e.y},${e.x}) is missing a clue',
+          );
         }
         colsWithDown.add(e.x);
       }

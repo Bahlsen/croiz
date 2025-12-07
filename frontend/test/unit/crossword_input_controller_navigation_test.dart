@@ -36,7 +36,10 @@ void main() {
     for (var c = 1; c < boardNotifier.state.gridSize; c++) {
       boardNotifier.toggleBlackCell(0, c);
     }
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -61,9 +64,12 @@ void main() {
     );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier)
-    // Put a black cell at (1,0)
-    ..toggleBlackCell(1, 0);
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+      // Put a black cell at (1,0)
+      ..toggleBlackCell(1, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -96,7 +102,10 @@ void main() {
     }
     // Select bottom cell in column 0
     final lastRow = boardNotifier.state.gridSize - 1;
-    container.read(selectedCellProvider.notifier).state = SelectedCell(lastRow, 0);
+    container.read(selectedCellProvider.notifier).state = SelectedCell(
+      lastRow,
+      0,
+    );
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -121,7 +130,10 @@ void main() {
     );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier);
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
     final controller = CrosswordInputController.fromContainer(container);
 
     // Type a letter first
@@ -135,7 +147,10 @@ void main() {
     expect(board.grid[0][0], 'B');
 
     // Move selection back to (0,0) for deterministic check (it advanced)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     const backspaceEvent = KeyDownEvent(
       logicalKey: LogicalKeyboardKey.backspace,

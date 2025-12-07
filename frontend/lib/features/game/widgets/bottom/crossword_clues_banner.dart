@@ -15,7 +15,10 @@ class CrosswordClueBanner extends ConsumerWidget {
     // when the full `gameBoardProvider` may not be synchronously available
     // during tests or early startup.
     final pu = ref.watch(puzzleLoaderProvider);
-    final board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
+    final board = pu.maybeWhen(
+      data: (d) => d,
+      orElse: () => createEmptyBoard(5),
+    );
     final selected = ref.watch(selectedCellProvider);
     final dir = ref.watch(wordDirectionProvider);
 
@@ -74,7 +77,8 @@ class CrosswordClueBanner extends ConsumerWidget {
               children: [
                 _buildNavArrow(
                   icon: Icons.chevron_left,
-                  onTap: () => _navigateToAdjacentEntry(ref, entries, entry, -1),
+                  onTap: () =>
+                      _navigateToAdjacentEntry(ref, entries, entry, -1),
                   compact: isCompact,
                 ),
                 Expanded(
@@ -111,27 +115,22 @@ class _NavArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: compact ? 40 : 44,
-        height: compact ? 44 : 48,
-        alignment: Alignment.center,
-        child: Icon(
-          icon,
-          color: Colors.white70,
-          size: compact ? 28 : 32,
-        ),
-      ),
-    );
+    onTap: onTap,
+    behavior: HitTestBehavior.opaque,
+    child: Container(
+      width: compact ? 40 : 44,
+      height: compact ? 44 : 48,
+      alignment: Alignment.center,
+      child: Icon(icon, color: Colors.white70, size: compact ? 28 : 32),
+    ),
+  );
 }
 
 Widget _buildNavArrow({
   required IconData icon,
   required VoidCallback onTap,
   bool compact = false,
-}) =>
-    _NavArrow(icon: icon, onTap: onTap, compact: compact);
+}) => _NavArrow(icon: icon, onTap: onTap, compact: compact);
 
 // Entry resolution logic moved to helpers/entry_lookup.dart
 
@@ -140,44 +139,45 @@ Widget _buildClueContainer({
   required bool horizontal,
   required PuzzleEntryData entry,
   bool compact = false,
-}) =>
-    GestureDetector(
-      onTap: () {
-        final newDir = horizontal ? WordDirection.vertical : WordDirection.horizontal;
-        ref.read(wordDirectionProvider.notifier).value = newDir;
-      },
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-                // Give the container a little more horizontal breathing room
-                // so it appears wider visually when available.
-                margin: EdgeInsets.symmetric(horizontal: compact ? 10 : 16),
-        decoration: BoxDecoration(
-              color: Colors.grey[900],
-              borderRadius: BorderRadius.circular(compact ? 10 : 12),
-              border: Border.all(color: Colors.grey[700]!, width: 1),
-        ),
-            padding: EdgeInsets.symmetric(
-              vertical: compact ? 12 : 16,
-              horizontal: compact ? 16 : 22,
-            ),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-                entry.clue == null || entry.clue!.isEmpty
-                  ? '${entry.number}.'
-                  : '${entry.number}. ${entry.clue!}',
-            textAlign: TextAlign.center,
-            maxLines: compact ? 2 : 3,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: compact ? 17 : 19,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+}) => GestureDetector(
+  onTap: () {
+    final newDir = horizontal
+        ? WordDirection.vertical
+        : WordDirection.horizontal;
+    ref.read(wordDirectionProvider.notifier).value = newDir;
+  },
+  behavior: HitTestBehavior.opaque,
+  child: Container(
+    // Give the container a little more horizontal breathing room
+    // so it appears wider visually when available.
+    margin: EdgeInsets.symmetric(horizontal: compact ? 10 : 16),
+    decoration: BoxDecoration(
+      color: Colors.grey[900],
+      borderRadius: BorderRadius.circular(compact ? 10 : 12),
+      border: Border.all(color: Colors.grey[700]!, width: 1),
+    ),
+    padding: EdgeInsets.symmetric(
+      vertical: compact ? 12 : 16,
+      horizontal: compact ? 16 : 22,
+    ),
+    child: FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Text(
+        entry.clue == null || entry.clue!.isEmpty
+            ? '${entry.number}.'
+            : '${entry.number}. ${entry.clue!}',
+        textAlign: TextAlign.center,
+        maxLines: compact ? 2 : 3,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: compact ? 17 : 19,
+          fontWeight: FontWeight.w600,
         ),
       ),
-    );
+    ),
+  ),
+);
 
 void _navigateToAdjacentEntry(
   WidgetRef ref,

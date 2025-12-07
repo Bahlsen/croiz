@@ -59,12 +59,18 @@ class GameTimer {
     }
     _startedAt = DateTime.now();
     try {
-      await ref.read(secureStorageProvider).write(
+      await ref
+          .read(secureStorageProvider)
+          .write(
             key: 'puzzle:$gameId:startedAt',
             value: _startedAt!.millisecondsSinceEpoch.toString(),
           );
     } on Object catch (e, st) {
-      developer.log('GameTimer.start: failed to persist startedAt', error: e, stackTrace: st);
+      developer.log(
+        'GameTimer.start: failed to persist startedAt',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 
@@ -82,7 +88,11 @@ class GameTimer {
       );
       await storage.delete(key: 'puzzle:$gameId:startedAt');
     } on Object catch (e, st) {
-      developer.log('GameTimer.pause: failed to persist pause state', error: e, stackTrace: st);
+      developer.log(
+        'GameTimer.pause: failed to persist pause state',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 
@@ -96,17 +106,25 @@ class GameTimer {
     try {
       final storage = ref.read(secureStorageProvider);
       // persist asynchronously, prefer handling errors to avoid unhandled async
-      storage.write(
-        key: 'puzzle:$gameId:accumulatedMs',
-        value: _accumulatedMs.toString(),
-      ).catchError((_) {});
-      storage.write(
-        key: 'puzzle:$gameId:completedAt',
-        value: DateTime.now().millisecondsSinceEpoch.toString(),
-      ).catchError((_) {});
+      storage
+          .write(
+            key: 'puzzle:$gameId:accumulatedMs',
+            value: _accumulatedMs.toString(),
+          )
+          .catchError((_) {});
+      storage
+          .write(
+            key: 'puzzle:$gameId:completedAt',
+            value: DateTime.now().millisecondsSinceEpoch.toString(),
+          )
+          .catchError((_) {});
       storage.delete(key: 'puzzle:$gameId:startedAt').catchError((_) {});
     } on Object catch (e, st) {
-      developer.log('GameTimer.finalizeSync: failed to persist state', error: e, stackTrace: st);
+      developer.log(
+        'GameTimer.finalizeSync: failed to persist state',
+        error: e,
+        stackTrace: st,
+      );
     }
 
     return (totalMs / 1000).floor();
@@ -121,11 +139,13 @@ class GameTimer {
       await storage.delete(key: 'puzzle:$gameId:accumulatedMs');
       await storage.delete(key: 'puzzle:$gameId:completedAt');
     } on Object catch (e, st) {
-      developer.log('GameTimer.clear: failed to clear storage keys', error: e, stackTrace: st);
+      developer.log(
+        'GameTimer.clear: failed to clear storage keys',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 }
 
-final gameTimerProvider = Provider.family<GameTimer, String>(
-  GameTimer.new,
-);
+final gameTimerProvider = Provider.family<GameTimer, String>(GameTimer.new);

@@ -50,9 +50,7 @@ void main() {
   test('GameTimer start/pause/finalize persistence', () async {
     final storage = TestSecureStorage();
     final container = ProviderContainer(
-      overrides: [
-        secureStorageProvider.overrideWithValue(storage),
-      ],
+      overrides: [secureStorageProvider.overrideWithValue(storage)],
     );
 
     addTearDown(() => container.dispose());

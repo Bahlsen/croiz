@@ -6,11 +6,19 @@ import 'package:croiz/widgets/in_game_text_input.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
-  testWidgets('Clear button clears incorrect letters and flashes cells',
-      (WidgetTester tester) async {
+  testWidgets('Clear button clears incorrect letters and flashes cells', (
+    WidgetTester tester,
+  ) async {
     // Prepare a small board with a wrong letter at 0,1
     const entries = [
-      PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3, answer: 'CAT'),
+      PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'CAT',
+      ),
     ];
 
     final initialGrid = [
@@ -33,22 +41,26 @@ void main() {
 
     // Create a ProviderContainer overriding the puzzleLoaderProvider so
     // the GameBoardNotifier.build() returns our test board.
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Build widget tree with our ProviderContainer using UncontrolledProviderScope
-    await tester.pumpWidget(UncontrolledProviderScope(
-      container: container,
-      child: MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: InGameTextInput(controller: TextEditingController()),
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: InGameTextInput(controller: TextEditingController()),
+            ),
           ),
         ),
       ),
-    ));
+    );
 
     await tester.pumpAndSettle();
 

@@ -29,6 +29,7 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     // Hide system UI (navigation buttons) for full-screen gameplay.
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
+
   @override
   void dispose() {
     // Restore system UI when leaving the screen.
@@ -108,7 +109,12 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
                 Flexible(
                   fit: FlexFit.loose,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 0),
+                    padding: const EdgeInsets.only(
+                      left: 12,
+                      right: 12,
+                      top: 12,
+                      bottom: 0,
+                    ),
                     child: Container(
                       color: Colors.black,
                       child: const CrosswordGrid(),
@@ -136,7 +142,8 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
             const EndGameOverlay(),
           ],
         ),
-    ));
+      ),
+    );
   }
 }
 

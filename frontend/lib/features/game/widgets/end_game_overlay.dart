@@ -23,7 +23,10 @@ class EndGameOverlay extends ConsumerWidget {
 
     final entries = board?.entries;
 
-    final completed = entries != null && entries.isNotEmpty && found!.length == entries.length;
+    final completed =
+        entries != null &&
+        entries.isNotEmpty &&
+        found!.length == entries.length;
     if (!completed) {
       return const SizedBox.shrink();
     }
@@ -40,7 +43,7 @@ class EndGameOverlay extends ConsumerWidget {
     return Stack(
       children: [
         // dim background
-          AnimatedOpacity(
+        AnimatedOpacity(
           opacity: 0.85,
           duration: const Duration(milliseconds: 300),
           child: const ModalBarrier(dismissible: false, color: Colors.black54),
@@ -50,10 +53,8 @@ class EndGameOverlay extends ConsumerWidget {
           child: TweenAnimationBuilder<double>(
             tween: Tween(begin: 0.8, end: 1),
             duration: const Duration(milliseconds: 450),
-            builder: (context, scale, child) => Transform.scale(
-              scale: scale,
-              child: child,
-            ),
+            builder: (context, scale, child) =>
+                Transform.scale(scale: scale, child: child),
             child: Container(
               width: 300,
               padding: const EdgeInsets.all(20),
@@ -71,7 +72,10 @@ class EndGameOverlay extends ConsumerWidget {
                   const SizedBox(height: 12),
                   Text(
                     timeText,
-                    style: const TextStyle(fontSize: 42, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 42,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(

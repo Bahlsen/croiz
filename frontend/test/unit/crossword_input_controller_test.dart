@@ -33,7 +33,10 @@ void main() {
 
     // Initialize board and selection
     final board = container.read(gameBoardProvider);
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     final controller = CrosswordInputController.fromContainer(container);
 

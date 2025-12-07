@@ -25,7 +25,14 @@ void main() {
         ],
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number:1, direction: 'across', x: 0, y: 0, length: 3, answer: 'ABC'),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+            answer: 'ABC',
+          ),
         ],
       );
 
@@ -52,7 +59,14 @@ void main() {
         ],
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number:1, direction: 'across', x: 0, y: 0, length: 3, answer: 'ABC'),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+            answer: 'ABC',
+          ),
         ],
       );
 
@@ -79,7 +93,13 @@ void main() {
         ],
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number:1, direction: 'across', x: 0, y: 0, length: 3),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+          ),
         ],
       );
 
@@ -106,7 +126,13 @@ void main() {
         ],
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number:1, direction: 'across', x: 0, y: 0, length: 3),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+          ),
         ],
       );
 

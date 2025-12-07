@@ -1,6 +1,87 @@
 # Copilot Instructions for croiz
 
+Purpose: Provide concise guidance for AI coding agents and human contributors working in the croiz monorepo. Use this as an operational checklist and quick reference.
+
+Table of contents
+- Big Picture
+- Architecture Patterns
+- Key Workflows
+- Conventions & Patterns
+- Integration Points
+- Testing Strategy
+- CI/CD Notes
+- When Implementing New Code
+- Engineering Principles
+- Quick Commands
+- PR Checklist
+- Maintainers & Contact
+- Branching & Releases
+- Minimum Environment Versions
+- Secrets & Credentials
+- How to get help
+
+Maintainers & contact
+- **Repo owner**: `Bahlsen` (GitHub organization owner)
+- **Primary support**: open an Issue in this repository and request reviewers; use CODEOWNERS if present for reviewer suggestions.
+
+PR Checklist (recommended)
+- **Run unit tests**: Frontend `cd frontend; flutter test` and Backend `cd backend; .\gradlew test`.
+- **Run linters/formatters**: Frontend `flutter analyze` / `flutter format .`; Backend `./gradlew spotlessCheck` / `./gradlew spotlessApply`.
+- **Run migrations & DB checks**: If DB schema changes, add a Flyway migration under `backend/src/main/resources/db/migration/`.
+- **Update docs**: Add or modify `docs/` and `shared/` DTOs when API contracts change.
+- **Add tests**: Include unit tests for logic and minimal integration tests where applicable.
+- **Security check**: Don't commit secrets; add config to `.env.example` and use GitHub Secrets for CI.
+
+Branching & releases (recommended)
+- Use feature branches: `feature/<short-description>` or `fix/<issue-number>`.
+- Target `main` for PRs; keep `main` protected in your repo settings.
+- Prefer squash merges for a clean history unless the team prefers merge commits.
+
+Minimum environment versions (recommended)
+- **Flutter**: recommended stable channel (list version in project README if strict requirement exists).
+- **Dart**: use the SDK bundled with the recommended Flutter version.
+- **Java**: `17+` (project uses Java 17 in CI examples).
+- **Gradle**: use the Gradle wrapper included in `backend/`.
+
+Secrets & credentials
+- Do not commit API keys, Firebase credentials, or private keys. Use `gitignore` and store samples in `.env.example` or `application-test.yaml` for tests.
+- Use GitHub Actions secrets or your org's secret store for CI values.
+
+How to get help
+- Open an Issue in this repository describing the problem with steps to reproduce, logs, and environment details.
+- For urgent or interactive help, use the project's preferred chat (Slack/Mattermost) if available — otherwise mention maintainers in the issue.
+
 These guidelines help AI coding agents work productively in this repository. Focus on the actual structure and workflows used here.
+
+Solo developer mode — strict rules
+- You're the single maintainer: move fast, but maintain discipline. When in doubt, follow these rules — no negotiation.
+- Always run tests and format locally before pushing. If you push broken code to `main`, fix it immediately and push a follow-up commit with the message `fix: restore main — <short reason>`.
+- Use `conventional-commits` style for commit messages (e.g. `feat: add crossword generator`, `fix(auth): handle token refresh`).
+
+Enforcement checklist (no excuses)
+- **Local checks (mandatory)**: run these before commit:
+  - `cd frontend; flutter analyze && flutter format . && flutter test`
+  - `cd backend; .\gradlew spotlessCheck && .\gradlew test`
+- **Pre-commit hooks**: install `pre-commit` and use hooks to run formatters and tests; example `.pre-commit-config.yaml` should include a formatter step (Flutter/Dart) and a simple test runner or linter. If you don't want global `pre-commit`, add a local script `scripts/precommit.ps1` and call it from your editor.
+- **CI expectations**: CI must pass on every merge to `main`. Set a minimal coverage gate (recommended 70% overall or per-module for new features).
+
+Quick git workflow (solo, tactical)
+- Fast patch to `main` (when safe):
+  - `git checkout main; git pull --rebase origin main; git commit -am "fix: <short description>"; git push origin main`
+- Feature branch (preferred for non-trivial work):
+  - `git checkout -b feature/short-description`
+  - make changes, run local checks
+  - `git add -A && git commit -m "feat: short description"`
+  - `git push origin feature/short-description` (create PR if you want review later)
+
+Fast recovery
+- If `main` is broken after a push, revert the offending commit or push a fix immediately. Use `git revert <bad-commit>` when appropriate; prefer small, targeted fixes with clear messages.
+
+Optional but useful
+- Add a `scripts/` folder with `precommit.ps1`, `ci-local.ps1` to run the exact CI commands locally. Keep scripts small and deterministic.
+
+Tone and style
+- Be direct in commit messages and PR descriptions. Name-by-purpose: files, functions, and commits should describe exactly what changed and why.
 
 ## Big Picture
 - **Monorepo** with two primary apps:

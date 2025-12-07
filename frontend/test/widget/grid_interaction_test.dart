@@ -30,7 +30,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntries)),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(boardWithEntries),
+          ),
         ],
         child: const CroizApp(),
       ),
@@ -51,7 +53,10 @@ void main() {
     await tester.pumpAndSettle();
 
     // Count existing 'Z' occurrences inside the grid (should be 0 initially for empty cell set).
-    final zInGridBefore = find.descendant(of: gridFinder, matching: find.text('Z')).evaluate().length;
+    final zInGridBefore = find
+        .descendant(of: gridFinder, matching: find.text('Z'))
+        .evaluate()
+        .length;
 
     // Tap letter 'Z' on virtual keyboard. Ensure the key is visible first
     // so the tap doesn't compute off-screen coordinates in headless tests.

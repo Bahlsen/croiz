@@ -3,7 +3,6 @@ import 'package:flame_audio/flame_audio.dart';
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
 class GameAudioService {
-
   GameAudioService() {
     // fire-and-forget initialization
     // ignore: unawaited_futures
@@ -31,7 +30,11 @@ class GameAudioService {
     } on Object catch (e, st) {
       // Initialization failures should not crash the app; log for visibility.
       _initialized = false;
-      developer.log('GameAudioService initialization failed', error: e, stackTrace: st);
+      developer.log(
+        'GameAudioService initialization failed',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 
@@ -74,7 +77,7 @@ class GameAudioService {
     }
     return;
   }
-  
+
   Future<void> playVictory() async {
     try {
       if (!_initialized) {
@@ -86,5 +89,4 @@ class GameAudioService {
     }
     return;
   }
-  
 }

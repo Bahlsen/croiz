@@ -13,11 +13,16 @@ void main() {
     final jsonData = json.decode(jsonString) as Map<String, dynamic>;
     final puzzle = Puzzle.fromJson(jsonData);
 
-    final board = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: true);
+    final board = PuzzleConverter.puzzleToGameBoard(
+      puzzle,
+      preFillSolutions: true,
+    );
 
     final svc = WordCheckService();
     final entries = board.entries!;
-    final e7 = entries.firstWhere((e) => e.number == 7 && e.direction == 'down');
+    final e7 = entries.firstWhere(
+      (e) => e.number == 7 && e.direction == 'down',
+    );
 
     // After sanitization the effective length should stop before the black
     // cell and the service should report the (cropped) word as complete.

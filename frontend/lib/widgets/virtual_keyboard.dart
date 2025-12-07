@@ -200,8 +200,7 @@ class VirtualKeyboard extends ConsumerWidget {
                       disabledKeyColor: disabledKeyColor,
                     ),
                   ),
-                  if (i != rows.length - 1)
-                    SizedBox(height: rowSpacing),
+                  if (i != rows.length - 1) SizedBox(height: rowSpacing),
                 ],
               ],
             ),

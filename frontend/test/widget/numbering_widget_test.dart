@@ -7,13 +7,22 @@ import 'package:croiz/features/game/game_providers.dart';
 
 void main() {
   group('Crossword numbering from entries', () {
-    testWidgets('does not require entries for every potential start cell', (tester) async {
+    testWidgets('does not require entries for every potential start cell', (
+      tester,
+    ) async {
       // Minimal 2x2 grid: valid entry only for across at (0,0); down at (0,0) has no entry.
       const size = 2;
       final grid = List.generate(size, (_) => List<String?>.filled(size, null));
       final black = List.generate(size, (_) => List<bool>.filled(size, false));
       final entries = <PuzzleEntryData>[
-        const PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 2, clue: 'a'),
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 2,
+          clue: 'a',
+        ),
       ];
 
       final board = GameBoard(
@@ -40,13 +49,22 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('does not throw when entries map numbers by coordinates only', (tester) async {
+    testWidgets('does not throw when entries map numbers by coordinates only', (
+      tester,
+    ) async {
       const size = 2;
       final grid = List.generate(size, (_) => List<String?>.filled(size, null));
       final black = List.generate(size, (_) => List<bool>.filled(size, false));
       // No blacks; mapping should be direct at entry coordinates.
       final entries = <PuzzleEntryData>[
-        const PuzzleEntryData(number: 1, direction: 'across', x: 1, y: 0, length: 1, clue: 'coord-only'),
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 1,
+          y: 0,
+          length: 1,
+          clue: 'coord-only',
+        ),
       ];
       final board = GameBoard(
         id: 'ok',
@@ -62,9 +80,7 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [
-            puzzleLoaderProvider.overrideWith((ref) async => board),
-          ],
+          overrides: [puzzleLoaderProvider.overrideWith((ref) async => board)],
           child: const MaterialApp(home: Scaffold(body: CrosswordGrid())),
         ),
       );

@@ -17,7 +17,11 @@ void main() {
         difficulty: 1,
         entries: const [],
       );
-      final res = computeCurrentEntry(board, const SelectedCell(0, 0), WordDirection.horizontal);
+      final res = computeCurrentEntry(
+        board,
+        const SelectedCell(0, 0),
+        WordDirection.horizontal,
+      );
       expect(res, isNull);
     });
 
@@ -32,10 +36,21 @@ void main() {
         blackCells: List.generate(3, (_) => List.generate(3, (_) => false)),
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3, clue: 'A'),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+            clue: 'A',
+          ),
         ],
       );
-      final res = computeCurrentEntry(board, const SelectedCell(0, 0), WordDirection.horizontal);
+      final res = computeCurrentEntry(
+        board,
+        const SelectedCell(0, 0),
+        WordDirection.horizontal,
+      );
       expect(res, isNotNull);
       expect(res!.horizontal, isTrue);
       expect(res.entry.number, 1);
@@ -53,10 +68,21 @@ void main() {
         blackCells: List.generate(3, (_) => List.generate(3, (_) => false)),
         difficulty: 1,
         entries: const [
-          PuzzleEntryData(number: 1, direction: 'down', x: 0, y: 0, length: 3, clue: 'D'),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'down',
+            x: 0,
+            y: 0,
+            length: 3,
+            clue: 'D',
+          ),
         ],
       );
-      final res = computeCurrentEntry(board, const SelectedCell(0, 0), WordDirection.vertical);
+      final res = computeCurrentEntry(
+        board,
+        const SelectedCell(0, 0),
+        WordDirection.vertical,
+      );
       expect(res, isNotNull);
       expect(res!.horizontal, isFalse);
       expect(res.entry.number, 1);

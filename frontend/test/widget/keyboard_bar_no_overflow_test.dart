@@ -40,34 +40,37 @@ void main() {
     expect(barSize.height, equals(100.0));
   });
 
-  testWidgets('Components have minimum functional sizes even in tight constraints', (tester) async {
-    await tester.pumpWidget(
-      ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(
-            body: SizedBox(
-              height: 150,
-              child: CrosswordControlsBar(
-                heightFactor: 0.6,
-                onKey: (_) {},
-                onBackspace: () {},
+  testWidgets(
+    'Components have minimum functional sizes even in tight constraints',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                height: 150,
+                child: CrosswordControlsBar(
+                  heightFactor: 0.6,
+                  onKey: (_) {},
+                  onBackspace: () {},
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    final bannerSize = tester.getSize(find.byType(CrosswordClueBanner));
-    final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
+      final bannerSize = tester.getSize(find.byType(CrosswordClueBanner));
+      final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
-    // Each component maintains minimum size
-    expect(bannerSize.height, greaterThanOrEqualTo(48.0));
-    expect(keyboardSize.height, greaterThanOrEqualTo(100.0));
+      // Each component maintains minimum size
+      expect(bannerSize.height, greaterThanOrEqualTo(48.0));
+      expect(keyboardSize.height, greaterThanOrEqualTo(100.0));
 
-    // No overflow
-    expect(tester.takeException(), isNull);
-  });
+      // No overflow
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

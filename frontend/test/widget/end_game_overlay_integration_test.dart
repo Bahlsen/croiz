@@ -6,7 +6,9 @@ import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
-  testWidgets('EndGameOverlay appears when controller completes all words', (tester) async {
+  testWidgets('EndGameOverlay appears when controller completes all words', (
+    tester,
+  ) async {
     final board = GameBoard(
       id: 'test',
       title: 'T',
@@ -46,17 +48,19 @@ void main() {
     container.read(foundWordsProvider.notifier).value = <String>{};
 
     // Build minimal UI with the overlay present
-    await tester.pumpWidget(UncontrolledProviderScope(
-      container: container,
-      child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
-    ));
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
+      ),
+    );
 
     // Initially overlay should not be visible
     expect(find.text('Bravo !'), findsNothing);
 
     // Simulate the controller having completed the single entry by
     // updating the foundWordsProvider; this should make the overlay appear.
-    container.read(foundWordsProvider.notifier).value = { '0,0,across' };
+    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
 
     // Allow providers and UI to settle
     await tester.pump();

@@ -4,27 +4,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 
 void main() {
-  testWidgets('Control buttons are positioned to the right and clear button present', (tester) async {
-    await tester.binding.setSurfaceSize(const Size(360, 800));
+  testWidgets(
+    'Control buttons are positioned to the right and clear button present',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(360, 800));
 
-    await tester.pumpWidget(ProviderScope(child: MaterialApp(home: Scaffold(
-      body: Column(children: [
-        const Expanded(child: Placeholder()),
-          CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}, heightFactor: 0.8),
-      ],),
-    ))));
+      await tester.pumpWidget(
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  const Expanded(child: Placeholder()),
+                  CrosswordControlsBar(
+                    onKey: (_) {},
+                    onBackspace: () {},
+                    heightFactor: 0.8,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
 
-    await tester.pumpAndSettle();
+      await tester.pumpAndSettle();
 
-    final clearFinder = find.byKey(const Key('clear_button'));
-    expect(clearFinder, findsOneWidget);
+      final clearFinder = find.byKey(const Key('clear_button'));
+      expect(clearFinder, findsOneWidget);
 
-    // Ensure clear button is on the right side of the bar (x coordinate > center)
-    final barFinder = find.byType(CrosswordControlsBar);
-    expect(barFinder, findsOneWidget);
-    final barBox = tester.getRect(barFinder);
-    final clearBox = tester.getRect(clearFinder);
+      // Ensure clear button is on the right side of the bar (x coordinate > center)
+      final barFinder = find.byType(CrosswordControlsBar);
+      expect(barFinder, findsOneWidget);
+      final barBox = tester.getRect(barFinder);
+      final clearBox = tester.getRect(clearFinder);
 
-    expect(clearBox.center.dx, greaterThan(barBox.center.dx));
-  });
+      expect(clearBox.center.dx, greaterThan(barBox.center.dx));
+    },
+  );
 }

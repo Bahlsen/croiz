@@ -4,10 +4,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 class WordCheckService {
   /// Vérifie si le mot à la position donnée est complet et correct.
   /// Retourne true si toutes les lettres du mot correspondent à l'entrée du puzzle.
-  bool isWordComplete(
-    GameBoard board,
-    PuzzleEntryData entry,
-  ) {
+  bool isWordComplete(GameBoard board, PuzzleEntryData entry) {
     final isHorizontal = entry.direction == 'across';
 
     // Prefer authoritative cell solutions when available.
@@ -76,19 +73,20 @@ class WordCheckService {
   }
 
   /// Génère une clé unique pour un mot (utilisée pour le tracking).
-  String getWordKey(PuzzleEntryData entry) => '${entry.y},${entry.x},${entry.direction}';
+  String getWordKey(PuzzleEntryData entry) =>
+      '${entry.y},${entry.x},${entry.direction}';
 
   /// Génère les clés de cellules pour un mot (format: "row,col").
   List<String> getCellKeys(PuzzleEntryData entry) {
     final keys = <String>[];
     final isHorizontal = entry.direction == 'across';
-    
+
     for (var i = 0; i < entry.length; i++) {
       final row = isHorizontal ? entry.y : entry.y + i;
       final col = isHorizontal ? entry.x + i : entry.x;
       keys.add('$row,$col');
     }
-    
+
     return keys;
   }
 }

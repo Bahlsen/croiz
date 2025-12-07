@@ -13,8 +13,47 @@ void main() {
       }
     }
 
-    final entries = <PuzzleEntry>[PuzzleEntry(number: 1, direction: 'across', x: 0, y: 0, length: 2, clue: 'r0'), PuzzleEntry(number: 2, direction: 'across', x: 0, y: 1, length: 2, clue: 'r1'), PuzzleEntry(number: 3, direction: 'down', x: 0, y: 0, length: 2, clue: 'c0'), PuzzleEntry(number: 4, direction: 'down', x: 1, y: 0, length: 2, clue: 'c1')];
-    final puzzle = Puzzle(id: 't1', rows: 2, cols: 2, cells: cells, entries: entries);
+    final entries = <PuzzleEntry>[
+      PuzzleEntry(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'r0',
+      ),
+      PuzzleEntry(
+        number: 2,
+        direction: 'across',
+        x: 0,
+        y: 1,
+        length: 2,
+        clue: 'r1',
+      ),
+      PuzzleEntry(
+        number: 3,
+        direction: 'down',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'c0',
+      ),
+      PuzzleEntry(
+        number: 4,
+        direction: 'down',
+        x: 1,
+        y: 0,
+        length: 2,
+        clue: 'c1',
+      ),
+    ];
+    final puzzle = Puzzle(
+      id: 't1',
+      rows: 2,
+      cols: 2,
+      cells: cells,
+      entries: entries,
+    );
 
     expect(() => PuzzleConverter.puzzleToGameBoard(puzzle), returnsNormally);
   });
@@ -27,11 +66,45 @@ void main() {
       }
     }
 
-    final entries = <PuzzleEntry>[PuzzleEntry(number: 1, direction: 'across', x: 0, y: 0, length: 2, clue: 'r0'), PuzzleEntry(number: 3, direction: 'down', x: 0, y: 0, length: 2, clue: 'c0'), PuzzleEntry(number: 4, direction: 'down', x: 1, y: 0, length: 2, clue: 'c1')];
+    final entries = <PuzzleEntry>[
+      PuzzleEntry(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'r0',
+      ),
+      PuzzleEntry(
+        number: 3,
+        direction: 'down',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'c0',
+      ),
+      PuzzleEntry(
+        number: 4,
+        direction: 'down',
+        x: 1,
+        y: 0,
+        length: 2,
+        clue: 'c1',
+      ),
+    ];
 
-    final puzzle = Puzzle(id: 't2', rows: 2, cols: 2, cells: cells, entries: entries);
+    final puzzle = Puzzle(
+      id: 't2',
+      rows: 2,
+      cols: 2,
+      cells: cells,
+      entries: entries,
+    );
 
-    expect(() => PuzzleConverter.puzzleToGameBoard(puzzle), throwsA(isA<FormatException>()));
+    expect(
+      () => PuzzleConverter.puzzleToGameBoard(puzzle),
+      throwsA(isA<FormatException>()),
+    );
   });
 
   test('entry without clue throws FormatException', () {
@@ -42,10 +115,52 @@ void main() {
       }
     }
 
-    final entries = <PuzzleEntry>[PuzzleEntry(number: 1, direction: 'across', x: 0, y: 0, length: 2, clue: 'r0'), PuzzleEntry(number: 2, direction: 'across', x: 0, y: 1, length: 2, clue: null), PuzzleEntry(number: 3, direction: 'down', x: 0, y: 0, length: 2, clue: 'c0'), PuzzleEntry(number: 4, direction: 'down', x: 1, y: 0, length: 2, clue: 'c1')];
+    final entries = <PuzzleEntry>[
+      PuzzleEntry(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'r0',
+      ),
+      PuzzleEntry(
+        number: 2,
+        direction: 'across',
+        x: 0,
+        y: 1,
+        length: 2,
+        clue: null,
+      ),
+      PuzzleEntry(
+        number: 3,
+        direction: 'down',
+        x: 0,
+        y: 0,
+        length: 2,
+        clue: 'c0',
+      ),
+      PuzzleEntry(
+        number: 4,
+        direction: 'down',
+        x: 1,
+        y: 0,
+        length: 2,
+        clue: 'c1',
+      ),
+    ];
 
-    final puzzle = Puzzle(id: 't3', rows: 2, cols: 2, cells: cells, entries: entries);
+    final puzzle = Puzzle(
+      id: 't3',
+      rows: 2,
+      cols: 2,
+      cells: cells,
+      entries: entries,
+    );
 
-    expect(() => PuzzleConverter.puzzleToGameBoard(puzzle), throwsA(isA<FormatException>()));
+    expect(
+      () => PuzzleConverter.puzzleToGameBoard(puzzle),
+      throwsA(isA<FormatException>()),
+    );
   });
 }

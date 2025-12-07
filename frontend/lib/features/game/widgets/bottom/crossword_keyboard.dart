@@ -5,7 +5,6 @@ import 'package:croiz/widgets/virtual_keyboard.dart';
 /// named, single-responsibility widget. This makes it easier to mock or
 /// substitute the keyboard later without touching layout code.
 class CrosswordKeyboard extends StatelessWidget {
-
   const CrosswordKeyboard({
     required this.layout,
     required this.onKey,
@@ -26,9 +25,9 @@ class CrosswordKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VirtualKeyboard(
-      layout: layout,
-      onKey: onKey,
-      onBackspace: onBackspace,
-      availableHeight: availableHeight,
-    );
+    layout: layout,
+    onKey: onKey,
+    onBackspace: onBackspace,
+    availableHeight: availableHeight,
+  );
 }

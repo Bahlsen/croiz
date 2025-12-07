@@ -37,14 +37,17 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // not be synchronously available (e.g., during tests). This avoids
     // swallowing errors while keeping the UI deterministic.
     final pu = ref.watch(puzzleLoaderProvider);
-    final board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
+    final board = pu.maybeWhen(
+      data: (d) => d,
+      orElse: () => createEmptyBoard(5),
+    );
     final size = board.gridSize;
     final selected = ref.watch(selectedCellProvider);
     final black = board.blackCells;
 
     // If selection somehow points to a disabled cell (from older state), clear it.
     if (selected != null && black.isDisabled(selected.row, selected.col)) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           ref.read(selectedCellProvider.notifier).value = null;
         }

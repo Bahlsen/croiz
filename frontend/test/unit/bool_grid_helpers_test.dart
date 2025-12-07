@@ -36,7 +36,7 @@ void main() {
   test('nextSelectableFrom horizontal wrap going left (dc < 0)', () {
     final black = [
       [false, true], // row0: selectable at col0 only
-      [true, true],  // row1: all black
+      [true, true], // row1: all black
       [true, false], // row2: selectable at last col
     ];
     // Start at row0 col0 move left -> out of bounds triggers wrap scanning next rows right-to-left.
@@ -49,7 +49,7 @@ void main() {
     final black = [
       [true, true, false], // row0: selectable at col2
       [true, false, true], // row1: selectable at col1
-      [true, true, true],  // row2: all black
+      [true, true, true], // row2: all black
     ];
     // From row1 col1 moving up -> linear hits row0 col1 (black), then row0 col1 -> continue until out-of-bounds.
     // Wrap: nextCol = (1+1)%3 = 2, scan rows bottom->top (dr<0) -> row2 col2 black, row1 col2 black, row0 col2 selectable.

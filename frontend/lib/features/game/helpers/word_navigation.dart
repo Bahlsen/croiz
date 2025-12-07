@@ -22,8 +22,12 @@ PuzzleEntryData computeAdjacentEntry(
   final currentList = isAcross ? across : down;
   final otherList = isAcross ? down : across;
 
-  final idxInDir = currentList.indexWhere((e) =>
-      e.x == current.x && e.y == current.y && e.direction == current.direction);
+  final idxInDir = currentList.indexWhere(
+    (e) =>
+        e.x == current.x &&
+        e.y == current.y &&
+        e.direction == current.direction,
+  );
   if (idxInDir == -1) {
     return current;
   }

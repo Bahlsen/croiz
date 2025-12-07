@@ -26,7 +26,13 @@ void main() {
         difficulty: 1,
         entries: const [
           // entry has no answer -> cleaner should ignore it
-          PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 3,
+          ),
         ],
       );
 

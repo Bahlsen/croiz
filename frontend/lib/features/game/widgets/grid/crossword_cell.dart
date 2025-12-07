@@ -9,7 +9,8 @@ import 'package:croiz/features/game/utils/clue_numbering.dart';
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
 class CrosswordCell extends ConsumerWidget {
-  const CrosswordCell({required this.row, required this.col, Key? key}) : super(key: key);
+  const CrosswordCell({required this.row, required this.col, Key? key})
+    : super(key: key);
 
   final int row;
   final int col;
@@ -24,7 +25,11 @@ class CrosswordCell extends ConsumerWidget {
     try {
       board = ref.watch(gameBoardProvider);
     } on Object catch (e, st) {
-      developer.log('gameBoardProvider watch failed, falling back to loader', error: e, stackTrace: st);
+      developer.log(
+        'gameBoardProvider watch failed, falling back to loader',
+        error: e,
+        stackTrace: st,
+      );
       final pu = ref.watch(puzzleLoaderProvider);
       board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
     }
@@ -36,21 +41,27 @@ class CrosswordCell extends ConsumerWidget {
     final flashingCells = ref.watch(flashingCellsProvider);
     final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
 
-    final isSelected = selected != null && selected.row == row && selected.col == col;
+    final isSelected =
+        selected != null && selected.row == row && selected.col == col;
     final isDisabled = black.isDisabled(row, col);
     final isFlashing = flashingCells.contains(cellKey);
     final isClearedFlashing = clearedFlashingCells.contains(cellKey);
-    
 
     // Determine if part of selected word
     var isPartOfSelectedWord = false;
     if (selected != null) {
       final horizontal = wordDirection == WordDirection.horizontal;
-      final bounds = black.wordBounds(selected.row, selected.col, horizontal: horizontal);
+      final bounds = black.wordBounds(
+        selected.row,
+        selected.col,
+        horizontal: horizontal,
+      );
       if (horizontal) {
-        isPartOfSelectedWord = row == selected.row && col >= bounds[0] && col <= bounds[1];
+        isPartOfSelectedWord =
+            row == selected.row && col >= bounds[0] && col <= bounds[1];
       } else {
-        isPartOfSelectedWord = col == selected.col && row >= bounds[0] && row <= bounds[1];
+        isPartOfSelectedWord =
+            col == selected.col && row >= bounds[0] && row <= bounds[1];
       }
     }
 
@@ -64,44 +75,81 @@ class CrosswordCell extends ConsumerWidget {
 
     // Visuals: compute decoration pieces
     final boxShadow = isClearedFlashing
-        ? [BoxShadow(color: Colors.redAccent.withValues(alpha: 0.9), blurRadius: 16, offset: Offset.zero)]
+        ? [
+            BoxShadow(
+              color: Colors.redAccent.withValues(alpha: 0.9),
+              blurRadius: 16,
+              offset: Offset.zero,
+            ),
+          ]
         : isFlashing
-            ? [BoxShadow(color: Colors.greenAccent.withValues(alpha: 0.85), blurRadius: 15, offset: Offset.zero)]
-            : isSelected
-                ? [BoxShadow(color: Colors.purple.withValues(alpha: 0.32), blurRadius: 10, offset: const Offset(0, 2))]
-                : isPartOfSelectedWord
-                    ? [BoxShadow(color: Colors.blue.withValues(alpha: 0.28), blurRadius: 8, offset: const Offset(0, 2))]
-                    : [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 2, offset: const Offset(0, 1))];
+        ? [
+            BoxShadow(
+              color: Colors.greenAccent.withValues(alpha: 0.85),
+              blurRadius: 15,
+              offset: Offset.zero,
+            ),
+          ]
+        : isSelected
+        ? [
+            BoxShadow(
+              color: Colors.purple.withValues(alpha: 0.32),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ]
+        : isPartOfSelectedWord
+        ? [
+            BoxShadow(
+              color: Colors.blue.withValues(alpha: 0.28),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ]
+        : [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.5),
+              blurRadius: 2,
+              offset: const Offset(0, 1),
+            ),
+          ];
 
     final borderColor = isClearedFlashing
-      ? Colors.redAccent
-      : isFlashing
+        ? Colors.redAccent
+        : isFlashing
         ? Colors.greenAccent
         : isSelected
-          ? Colors.purpleAccent
-          : isPartOfSelectedWord
-            ? Colors.blueAccent
-            : Colors.grey.shade700;
+        ? Colors.purpleAccent
+        : isPartOfSelectedWord
+        ? Colors.blueAccent
+        : Colors.grey.shade700;
 
-    final borderWidth = isClearedFlashing ? 3.0 : (isFlashing ? 3.0 : (isSelected ? 2.5 : (isPartOfSelectedWord ? 2.0 : 1.0)));
+    final borderWidth = isClearedFlashing
+        ? 3.0
+        : (isFlashing
+              ? 3.0
+              : (isSelected ? 2.5 : (isPartOfSelectedWord ? 2.0 : 1.0)));
 
     final bgColor = isClearedFlashing
-      ? Colors.redAccent.withValues(alpha: 0.48)
-      : isFlashing
+        ? Colors.redAccent.withValues(alpha: 0.48)
+        : isFlashing
         ? Colors.greenAccent.withValues(alpha: 0.48)
         : isPartOfSelectedWord
-          ? Colors.blue.withValues(alpha: 0.42)
-          : Colors.grey[800]!;
+        ? Colors.blue.withValues(alpha: 0.42)
+        : Colors.grey[800]!;
 
     return GestureDetector(
       onTap: () {
         final wasSelected = isSelected;
         ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
         if (wasSelected) {
-          final newDir = wordDirection == WordDirection.horizontal ? WordDirection.vertical : WordDirection.horizontal;
+          final newDir = wordDirection == WordDirection.horizontal
+              ? WordDirection.vertical
+              : WordDirection.horizontal;
           ref.read(wordDirectionProvider.notifier).value = newDir;
         } else {
-          ref.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+          ref.read(wordDirectionProvider.notifier).value =
+              WordDirection.horizontal;
         }
       },
       child: AnimatedContainer(
@@ -113,27 +161,49 @@ class CrosswordCell extends ConsumerWidget {
           border: Border.all(color: borderColor, width: borderWidth),
           color: bgColor,
         ),
-        child: LayoutBuilder(builder: (context, constraints) {
-          final cellW = constraints.maxWidth;
-          final cellH = constraints.maxHeight;
-          // Number font scales with cell size, with sensible clamps for very small/large grids
-          final numberFont = (cellW * 0.22).clamp(6.0, 12.0);
-          // Position the number with relative offsets so it stays inside the corner
-          final numberLeft = (cellW * 0.07).clamp(2.0, 8.0);
-          final numberTop = (cellH * 0.05).clamp(1.0, 6.0);
-          // Letter font scales to fill the cell while remaining readable
-          final letterFont = (isSelected ? cellW * 0.6 : cellW * 0.5).clamp(10.0, 28.0);
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final cellW = constraints.maxWidth;
+            final cellH = constraints.maxHeight;
+            // Number font scales with cell size, with sensible clamps for very small/large grids
+            final numberFont = (cellW * 0.22).clamp(6.0, 12.0);
+            // Position the number with relative offsets so it stays inside the corner
+            final numberLeft = (cellW * 0.07).clamp(2.0, 8.0);
+            final numberTop = (cellH * 0.05).clamp(1.0, 6.0);
+            // Letter font scales to fill the cell while remaining readable
+            final letterFont = (isSelected ? cellW * 0.6 : cellW * 0.5).clamp(
+              10.0,
+              28.0,
+            );
 
-          return Stack(children: [
-            if (cellNumber != null)
-              Positioned(
-                left: numberLeft,
-                top: numberTop,
-                child: Text('$cellNumber', style: TextStyle(fontSize: numberFont, color: Colors.white70)),
-              ),
-            Center(child: Text(letter ?? '', style: TextStyle(fontSize: letterFont, fontWeight: FontWeight.bold, color: Colors.white))),
-          ]);
-        }),
+            return Stack(
+              children: [
+                if (cellNumber != null)
+                  Positioned(
+                    left: numberLeft,
+                    top: numberTop,
+                    child: Text(
+                      '$cellNumber',
+                      style: TextStyle(
+                        fontSize: numberFont,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ),
+                Center(
+                  child: Text(
+                    letter ?? '',
+                    style: TextStyle(
+                      fontSize: letterFont,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

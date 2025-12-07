@@ -13,7 +13,10 @@ void main() {
     final jsonData = json.decode(jsonString) as Map<String, dynamic>;
     final puzzle = Puzzle.fromJson(jsonData);
 
-    final board = PuzzleConverter.puzzleToGameBoard(puzzle, preFillSolutions: true);
+    final board = PuzzleConverter.puzzleToGameBoard(
+      puzzle,
+      preFillSolutions: true,
+    );
 
     // Check the two cells mentioned by the user: x=6,y=1 and x=6,y=2
     expect(board.grid[1][6], equals('C'));
@@ -24,7 +27,9 @@ void main() {
     final entries = board.entries;
     expect(entries, isNotNull);
     // Entry 1 across (SOLEIL) should be complete when prefilled
-    final e1 = entries!.firstWhere((e) => e.number == 1 && e.direction == 'across');
+    final e1 = entries!.firstWhere(
+      (e) => e.number == 1 && e.direction == 'across',
+    );
     expect(svc.isWordComplete(board, e1), isTrue);
   });
 }

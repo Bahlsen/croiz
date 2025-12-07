@@ -8,26 +8,39 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 
 class CrosswordInputController {
-
-    CrosswordInputController(WidgetRef ref)
-        : _read = (<T>(provider) => ref.read(provider as dynamic) as T);
-      CrosswordInputController._(this._read);
-      factory CrosswordInputController.fromRef(WidgetRef ref) => CrosswordInputController(ref);
-      factory CrosswordInputController.fromContainer(ProviderContainer container) =>
-        CrosswordInputController._(<T>(provider) => container.read(provider as dynamic) as T);
-    final T Function<T>(Object provider) _read;
+  CrosswordInputController(WidgetRef ref)
+    : _read = (<T>(provider) => ref.read(provider as dynamic) as T);
+  CrosswordInputController._(this._read);
+  factory CrosswordInputController.fromRef(WidgetRef ref) =>
+      CrosswordInputController(ref);
+  factory CrosswordInputController.fromContainer(ProviderContainer container) =>
+      CrosswordInputController._(
+        <T>(provider) => container.read(provider as dynamic) as T,
+      );
+  final T Function<T>(Object provider) _read;
   bool _didAutoSelectFirstAcross = false;
 
   GameBoard _safeReadBoard([int fallbackSize = 5]) {
     try {
       return _read<GameBoard>(gameBoardProvider);
     } on Object catch (e, st) {
-      developer.log('gameBoardProvider read failed, falling back to puzzleLoader', error: e, stackTrace: st);
+      developer.log(
+        'gameBoardProvider read failed, falling back to puzzleLoader',
+        error: e,
+        stackTrace: st,
+      );
       try {
         final pa = _read<AsyncValue<GameBoard>>(puzzleLoaderProvider);
-        return pa.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(fallbackSize));
+        return pa.maybeWhen(
+          data: (d) => d,
+          orElse: () => createEmptyBoard(fallbackSize),
+        );
       } on Object catch (e2, st2) {
-        developer.log('puzzleLoaderProvider read failed, returning empty board', error: e2, stackTrace: st2);
+        developer.log(
+          'puzzleLoaderProvider read failed, returning empty board',
+          error: e2,
+          stackTrace: st2,
+        );
         return createEmptyBoard(fallbackSize);
       }
     }
@@ -36,27 +49,32 @@ class CrosswordInputController {
   void setLetterAndAdvance(String letter) {
     final board = _safeReadBoard();
     final selected = _read(selectedCellProvider);
-    
+
     if (selected == null) {
       final first = _firstSelectable(board.blackCells);
       if (first == null) {
         return;
       }
-      _read(selectedCellProvider.notifier).value = SelectedCell(first[0], first[1]);
+      _read(selectedCellProvider.notifier).value = SelectedCell(
+        first[0],
+        first[1],
+      );
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       _checkForCompletedWords();
       _moveToNext(board, startRow: first[0], startCol: first[1]);
       return;
     }
-    
+
     // Check if the cell is locked
     final lockedCells = _read(lockedCellsProvider);
     final cellKey = '${selected.row},${selected.col}';
     if (lockedCells.contains(cellKey)) {
       return; // Cell is locked, cannot modify
     }
-    
-    _read(gameBoardProvider.notifier).setLetter(selected.row, selected.col, letter);
+
+    _read(
+      gameBoardProvider.notifier,
+    ).setLetter(selected.row, selected.col, letter);
     _checkForCompletedWords();
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
   }
@@ -66,16 +84,16 @@ class CrosswordInputController {
     if (sel == null) {
       return;
     }
-    
+
     // Check if the cell is locked
     final lockedCells = _read(lockedCellsProvider);
     final cellKey = '${sel.row},${sel.col}';
     if (lockedCells.contains(cellKey)) {
       return; // Cell is locked, cannot modify
     }
-    
+
     // delete sound is handled by the virtual keyboard UI
-    
+
     final board = _safeReadBoard();
     final current = board.grid[sel.row][sel.col];
     if (current == null || current.isEmpty) {
@@ -87,7 +105,13 @@ class CrosswordInputController {
       var fromC = sel.col;
       final maxSteps = board.gridSize * board.gridSize;
       for (var i = 0; i < maxSteps; i++) {
-        final prev = board.blackCells.nextSelectableFrom(fromR, fromC, dr, dc, wrap: true);
+        final prev = board.blackCells.nextSelectableFrom(
+          fromR,
+          fromC,
+          dr,
+          dc,
+          wrap: true,
+        );
         if (prev == null) {
           break;
         }
@@ -97,7 +121,9 @@ class CrosswordInputController {
         if (letter != null && letter.isNotEmpty) {
           final prevSel = SelectedCell(fromR, fromC);
           _read(selectedCellProvider.notifier).value = prevSel;
-          _read(gameBoardProvider.notifier).setLetter(prevSel.row, prevSel.col, '');
+          _read(
+            gameBoardProvider.notifier,
+          ).setLetter(prevSel.row, prevSel.col, '');
           break;
         }
       }
@@ -118,9 +144,7 @@ class CrosswordInputController {
     if (entries == null || entries.isEmpty) {
       return;
     }
-    final firstAcross = entries
-        .where((e) => e.direction == 'across')
-        .toList()
+    final firstAcross = entries.where((e) => e.direction == 'across').toList()
       ..sort((a, b) => a.number.compareTo(b.number));
     if (firstAcross.isEmpty) {
       return;
@@ -161,7 +185,8 @@ class CrosswordInputController {
       return;
     }
 
-    if (logical == LogicalKeyboardKey.backspace || logical == LogicalKeyboardKey.delete) {
+    if (logical == LogicalKeyboardKey.backspace ||
+        logical == LogicalKeyboardKey.delete) {
       // Use the same deletion logic as the on-screen backspace so that
       // locked cells (found words) are respected and we correctly move
       // to the previous filled cell when current is empty.
@@ -183,43 +208,52 @@ class CrosswordInputController {
     final board = _safeReadBoard();
     final black = board.blackCells;
     final entries = board.entries;
-    
+
     // Try to find next cell that belongs to a valid word
     final maxAttempts = board.gridSize * board.gridSize;
     var currentRow = row;
     var currentCol = col;
-    
+
     for (var i = 0; i < maxAttempts; i++) {
-      final next = black.nextSelectableFrom(currentRow, currentCol, dr, dc, wrap: true);
+      final next = black.nextSelectableFrom(
+        currentRow,
+        currentCol,
+        dr,
+        dc,
+        wrap: true,
+      );
       if (next == null) {
         break;
       }
-      
+
       final nextRow = next[0];
       final nextCol = next[1];
-      
+
       // Check if this cell belongs to at least one word entry
       if (_cellBelongsToWord(nextRow, nextCol, entries)) {
-        _read(selectedCellProvider.notifier).state = SelectedCell(nextRow, nextCol);
+        _read(selectedCellProvider.notifier).state = SelectedCell(
+          nextRow,
+          nextCol,
+        );
         return;
       }
-      
+
       // Continue searching from this cell
       currentRow = nextRow;
       currentCol = nextCol;
-      
+
       // Avoid infinite loop by breaking if we've returned to start
       if (nextRow == row && nextCol == col) {
         break;
       }
     }
   }
-  
+
   bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) {
     if (entries == null || entries.isEmpty) {
       return true; // If no entries defined, allow all non-black cells
     }
-    
+
     for (final entry in entries) {
       final isAcross = entry.direction == 'across';
       if (isAcross) {
@@ -245,9 +279,18 @@ class CrosswordInputController {
     final dir = _read(wordDirectionProvider);
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
-    final next = board.blackCells.nextSelectableFrom(startRow, startCol, dr, dc, wrap: true);
+    final next = board.blackCells.nextSelectableFrom(
+      startRow,
+      startCol,
+      dr,
+      dc,
+      wrap: true,
+    );
     if (next != null) {
-      _read(selectedCellProvider.notifier).state = SelectedCell(next[0], next[1]);
+      _read(selectedCellProvider.notifier).state = SelectedCell(
+        next[0],
+        next[1],
+      );
     }
   }
 
@@ -265,59 +308,63 @@ class CrosswordInputController {
   void _checkForCompletedWords() {
     final board = _safeReadBoard();
     final entries = board.entries;
-    
+
     if (entries == null || entries.isEmpty) {
       return;
     }
-    
+
     final wordCheckService = _read(wordCheckServiceProvider);
     final foundWords = _read(foundWordsProvider);
     final newFoundWords = Set<String>.from(foundWords);
     final lockedCells = _read(lockedCellsProvider);
     final newLockedCells = Set<String>.from(lockedCells);
-    
+
     for (final entry in entries) {
       final wordKey = wordCheckService.getWordKey(entry);
-      
+
       // Skip if already found
       if (foundWords.contains(wordKey)) {
         continue;
       }
-      
+
       // Check if word is complete
       if (wordCheckService.isWordComplete(board, entry)) {
         newFoundWords.add(wordKey);
-        
+
         // Play success sound
         try {
           _read(gameAudioServiceProvider).playSuccess();
         } on Object catch (e, st) {
           developer.log('playSuccess failed', error: e, stackTrace: st);
         }
-        
+
         // Trigger flash animation on cells
         final cellKeys = wordCheckService.getCellKeys(entry);
-          _read(flashingCellsProvider.notifier).value = cellKeys.toSet();
-        
+        _read(flashingCellsProvider.notifier).value = cellKeys.toSet();
+
         // Lock cells of the found word
         newLockedCells.addAll(cellKeys);
-        
+
         // Clear flash after animation (will be handled by UI)
         Future.delayed(const Duration(milliseconds: 500), () {
           try {
             _read(flashingCellsProvider.notifier).value = {};
           } on Object catch (e, st) {
-            developer.log('Clearing flashing cells failed', error: e, stackTrace: st);
+            developer.log(
+              'Clearing flashing cells failed',
+              error: e,
+              stackTrace: st,
+            );
             // Provider might be disposed if user navigated away
           }
         });
       }
     }
-    
+
     if (newFoundWords.length > foundWords.length) {
       _read(foundWordsProvider.notifier).value = newFoundWords;
     }
-    
+
     if (newLockedCells.length > lockedCells.length) {
       _read(lockedCellsProvider.notifier).value = newLockedCells;
     }
@@ -338,7 +385,11 @@ class CrosswordInputController {
         }
       }
     } on Object catch (e, st) {
-      developer.log('Error checking for completed words', error: e, stackTrace: st);
+      developer.log(
+        'Error checking for completed words',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 }

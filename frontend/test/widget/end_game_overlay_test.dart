@@ -85,10 +85,12 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    await tester.pumpWidget(UncontrolledProviderScope(
-      container: container,
-      child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
-    ));
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
+      ),
+    );
 
     // not yet showing because foundWords is empty
     expect(find.text('Bravo !'), findsNothing);

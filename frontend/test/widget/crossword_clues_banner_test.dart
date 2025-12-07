@@ -7,7 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CrosswordClueBanner', () {
-    testWidgets('tapping banner toggles direction and updates clue', (tester) async {
+    testWidgets('tapping banner toggles direction and updates clue', (
+      tester,
+    ) async {
       // Board with both across and down at same start
       final board = GameBoard(
         id: 'toggle',
@@ -15,10 +17,7 @@ void main() {
         gridSize: 3,
         createdAt: DateTime(2025, 1, 1),
         grid: List.generate(3, (_) => List.generate(3, (_) => null)),
-        clues: const {
-          '1-across': 'Across clue',
-          '1-down': 'Down clue',
-        },
+        clues: const {'1-across': 'Across clue', '1-down': 'Down clue'},
         blackCells: List.generate(3, (_) => List.generate(3, (_) => false)),
         difficulty: 1,
         entries: const [
@@ -41,20 +40,22 @@ void main() {
         ],
       );
       final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+        0,
+        0,
+      );
+      container.read(wordDirectionProvider.notifier).value =
+          WordDirection.horizontal;
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(body: CrosswordClueBanner()),
-          ),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
         ),
       );
 
@@ -87,36 +88,37 @@ void main() {
             y: 0,
             length: 3,
             clue: 'Lundi',
-          )
+          ),
         ],
       );
       final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+        0,
+        0,
+      );
+      container.read(wordDirectionProvider.notifier).value =
+          WordDirection.horizontal;
 
       // Act
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(
-              body: CrosswordClueBanner(),
-            ),
-          ),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
         ),
       );
 
       // Assert: banner text is centered and contains clue
-        final textFinder = find.byWidgetPredicate((w) =>
-          w is Text && w.style?.fontWeight == FontWeight.w600);
-        expect(textFinder, findsOneWidget);
-        final textWidget = tester.widget<Text>(textFinder);
-        expect(textWidget.textAlign, TextAlign.center);
+      final textFinder = find.byWidgetPredicate(
+        (w) => w is Text && w.style?.fontWeight == FontWeight.w600,
+      );
+      expect(textFinder, findsOneWidget);
+      final textWidget = tester.widget<Text>(textFinder);
+      expect(textWidget.textAlign, TextAlign.center);
       // Arrows should be present
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
@@ -135,9 +137,9 @@ void main() {
         entries: const [],
       );
       final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
       );
       addTearDown(container.dispose);
       container.read(selectedCellProvider.notifier).value = null;
@@ -145,17 +147,16 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(body: CrosswordClueBanner()),
-          ),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
         ),
       );
 
       expect(find.byType(Center), findsNothing);
     });
 
-    testWidgets('left/right arrows navigate to previous/next word',
-        (tester) async {
+    testWidgets('left/right arrows navigate to previous/next word', (
+      tester,
+    ) async {
       // Two across entries and one down, ensure ordering by number then direction.
       final board = GameBoard(
         id: 'nav',
@@ -194,20 +195,22 @@ void main() {
         ],
       );
       final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(0, 0);
-      container.read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+        0,
+        0,
+      );
+      container.read(wordDirectionProvider.notifier).value =
+          WordDirection.horizontal;
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(body: CrosswordClueBanner()),
-          ),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
         ),
       );
 
