@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:math' as math;
+import 'package:flutter/services.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
@@ -23,19 +25,13 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
   void initState() {
     super.initState();
     _controller = CrosswordInputController(ref);
-    // Controller created here; provider listeners are attached in build().
+    // Hide system UI (navigation buttons) for full-screen gameplay.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
-
-  // Input and navigation logic moved to CrosswordInputController
-
-  
-
-  // Enter no longer toggles direction; kept for potential future use.
-
-  
-
   @override
   void dispose() {
+    // Restore system UI when leaving the screen.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     super.dispose();
   }
 
@@ -65,6 +61,15 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
       // Do not force immediate auto-select here; the listener above will
       // react to changes and perform auto-selection when appropriate.
     }
+    // Determine grid size so we can weight available vertical space
+    // between grid and controls dynamically. The grid provider always
+    // returns a board (fallback empty), so this is synchronous.
+    final board = ref.watch(gameBoardProvider);
+    final gridSize = board.gridSize.clamp(3, 12);
+    // Use a simple fraction-based allocation: controls get a percentage
+    // of the body height based on grid size (smaller grid → larger controls).
+    // This keeps the calculation predictable and avoids the grid starving the controls.
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -72,33 +77,62 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         backgroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Expanded(
-                flex: 2, // Give more space to grid
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Container(
-                    color: Colors.black,
-                    child: const CrosswordGrid(),
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: Stack(
+          children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final bodyHeight = constraints.maxHeight;
+
+              // Percentage-based controls allocation (KISS):
+              // Controls get a fraction of body height depending on gridSize:
+              // - small grids -> controlsFraction near 0.8 (lots of room)
+              // - large grids -> controlsFraction near 0.30 (grid gets more)
+              final minGrid = 3.0;
+              final maxGrid = 12.0;
+              final gs = (gridSize as num).toDouble().clamp(minGrid, maxGrid);
+              final t = ((gs - minGrid) / (maxGrid - minGrid)).clamp(0.0, 1.0);
+
+              const controlsFracMax = 0.80; // for smallest grids
+              const controlsFracMin = 0.30; // for largest grids
+              final controlsFrac = controlsFracMax - (controlsFracMax - controlsFracMin) * t;
+
+              // Compute height and clamp to sensible bounds.
+              final controlsHeightRaw = bodyHeight * controlsFrac;
+              final controlsHeight = controlsHeightRaw.clamp(220.0, bodyHeight * 0.9);
+
+              return Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Container(
+                        color: Colors.black,
+                        child: const CrosswordGrid(),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Flexible(
-                flex: 1, // Keyboard takes proportional space
-                child: CrosswordControlsBar(
-                  onKey: _controller.setLetterAndAdvance,
-                  onBackspace: _controller.clearCurrent,
-                ),
-              ),
-            ],
+
+                  SizedBox(
+                    height: controlsHeight,
+                    child: CrosswordControlsBar(
+                      onKey: _controller.setLetterAndAdvance,
+                      onBackspace: _controller.clearCurrent,
+                    ),
+                  ),
+
+                  // Small gap below controls so content doesn't touch edges
+                  const SizedBox(height: 8),
+                ],
+              );
+            },
           ),
           const EndGameOverlay(),
         ],
       ),
-    );
+    ));
   }
 }
 

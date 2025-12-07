@@ -79,15 +79,25 @@ try {
   # Check devices; attempt Wi‑Fi connect only if none (ADB perspective)
   Write-Host 'Checking connected devices...' -ForegroundColor Cyan
   $adbDevices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
+
+  # Normalize explicit false-like values passed as the Connect argument
+  if ($Connect) {
+    if ($Connect -match '^(?i:false|0|none)$') { $Connect = $null }
+  }
+
   if (-not $adbDevices -or $adbDevices.Count -eq 0) {
     if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
     if ($Connect) {
-      Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
-      $null = & $adb connect $Connect 2>$null
+      Write-Host "Attempting to connect to $Connect ..." -ForegroundColor Cyan
+      try { $null = & $adb connect $Connect 2>$null } catch {}
       $adbDevices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
     }
   }
-  if (-not $adbDevices -or $adbDevices.Count -eq 0) { throw 'No device found. Connect via USB or Wireless debugging.' }
+
+  if (-not $adbDevices -or $adbDevices.Count -eq 0) {
+    Write-Warning 'No device found. Connect via USB or enable Wireless debugging. Exiting.'
+    return 0
+  }
 
   # Use flutter devices to select a valid Flutter device id for Android
   $flutterList = & flutter devices --machine 2>$null | Out-String

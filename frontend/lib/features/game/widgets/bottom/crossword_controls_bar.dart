@@ -2,23 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
+import 'dart:math' as math;
 import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
 import 'package:croiz/features/game/game_providers.dart';
 
-// Renamed from CrosswordKeyboardBar to better reflect that this widget
-// composes multiple controls: the clue banner, the control icon row,
-// and the virtual keyboard.
+// Simple, robust controls bar: banner, icon row, and keyboard.
 class CrosswordControlsBar extends ConsumerStatefulWidget {
   const CrosswordControlsBar({
     required this.onKey,
     required this.onBackspace,
+    this.heightFactor = 0.4,
     Key? key,
   }) : super(key: key);
 
   final void Function(String) onKey;
   final VoidCallback onBackspace;
+  final double heightFactor;
 
   @override
   ConsumerState<CrosswordControlsBar> createState() => _CrosswordControlsBarState();
@@ -31,144 +32,84 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   Widget build(BuildContext context) {
     final layout = _isAzerty ? VirtualKeyboard.azertyLayout : VirtualKeyboard.qwertyLayout;
 
-    const minBannerHeight = 52.0;
-    const minKeyboardHeight = 100.0;
+    const minBannerHeight = 64.0;
     const gapBetween = 2.0;
-    // Keep the control row compact so it doesn't force large totals in
-    // constrained test scenarios.
     const controlHeight = 35.0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final media = MediaQuery.of(context);
-        final bottomInset = media.viewInsets.bottom;
-        final screenAvailable = (media.size.height - media.padding.bottom - bottomInset).clamp(0.0, double.infinity);
-        final maxHeight = constraints.maxHeight.isFinite ? constraints.maxHeight : (screenAvailable * 0.4);
-        final usableHeight = (maxHeight - media.padding.bottom - bottomInset).clamp(0.0, double.infinity);
+        // Prefer parent-provided constraints; fall back to a reasonable
+        // default when unconstrained to avoid zero/NaN sizes.
+        final total = (constraints.maxHeight.isFinite && constraints.maxHeight > 0)
+            ? constraints.maxHeight
+            : 240.0;
 
-        final parentTight = constraints.hasTightHeight;
-        final bannerPercent = parentTight ? 0.3 : 0.15;
-        var bannerHeight = (usableHeight * bannerPercent).clamp(minBannerHeight, usableHeight * 0.6);
+        // Percentage-based simple layout (KISS):
+        const gap = gapBetween;
+        final bannerTarget = total * 0.22;
+        final bannerCap = total * 0.30;
+        double bannerHeight = bannerTarget.clamp(minBannerHeight, bannerCap);
 
-        const minTotalForStacked = minBannerHeight + minKeyboardHeight + gapBetween + controlHeight;
-        final useOverlayBanner = usableHeight < minTotalForStacked;
+        final iconsTarget = total * 0.08;
+        const minIcons = controlHeight; // 35.0
+        final controlsH = math.max(minIcons, iconsTarget);
 
-        double keyboardHeight;
-        if (useOverlayBanner) {
-          keyboardHeight = usableHeight.clamp(minKeyboardHeight, usableHeight);
-        } else {
-          var remaining = (usableHeight - bannerHeight - gapBetween - controlHeight).clamp(0.0, double.infinity);
-          if (remaining < minKeyboardHeight) {
-            final needed = minKeyboardHeight - remaining;
-            final reduced = (bannerHeight - needed).clamp(minBannerHeight, bannerHeight);
-            bannerHeight = reduced;
-            remaining = (usableHeight - bannerHeight - gapBetween - controlHeight).clamp(0.0, double.infinity);
-          }
-          keyboardHeight = remaining.clamp(0.0, usableHeight * 0.8);
+        double keyboardHeight = total - bannerHeight - controlsH - gap;
+        if (keyboardHeight < 0) {
+          final deficit = -keyboardHeight;
+          final reduce = math.min(deficit, bannerHeight - minBannerHeight);
+          bannerHeight = math.max(minBannerHeight, bannerHeight - reduce);
+          keyboardHeight = total - bannerHeight - controlsH - gap;
         }
 
         if (kDebugMode) {
-          debugPrint('CrosswordControlsBar: usable=$usableHeight banner=$bannerHeight keyboard=$keyboardHeight');
+          debugPrint('CrosswordControlsBar (KISS): total=$total banner=$bannerHeight keyboard=$keyboardHeight');
         }
 
-        if (useOverlayBanner) {
-          return SafeArea(
-            top: false,
-            child: SizedBox(
-              height: usableHeight,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Positioned.fill(
-                    child: VirtualKeyboard(
-                      layout: layout,
-                      onKey: widget.onKey,
-                      onBackspace: widget.onBackspace,
-                      availableHeight: keyboardHeight,
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: SizedBox(
-                      height: bannerHeight,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          const CrosswordClueBanner(key: ValueKey('clue-banner')),
-                          Positioned(
-                            top: 4,
-                            right: 4,
-                            child: CrosswordIconBar(
-                              isAzerty: _isAzerty,
-                              onClear: () {
-                                try {
-                                  ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-                                } on Object catch (e, st) {
-                                  if (kDebugMode) {
-                                    developer.log('clearIncorrectLetters failed: $e', stackTrace: st);
-                                  }
-                                }
-                              },
-                              onToggle: () {
-                                setState(() {
-                                  _isAzerty = !_isAzerty;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (bannerHeight > 0)
+              SizedBox(
+                height: bannerHeight,
+                child: const CrosswordClueBanner(key: ValueKey('clue-banner')),
+              ),
+            if (bannerHeight > 0) const SizedBox(height: gap),
+
+            SizedBox(
+              height: controlsH,
+              child: CrosswordIconBar(
+                isAzerty: _isAzerty,
+                onClear: () {
+                  try {
+                    ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+                  } on Object catch (e, st) {
+                    if (kDebugMode) {
+                      developer.log('clearIncorrectLetters failed: $e', stackTrace: st);
+                    }
+                  }
+                },
+                onToggle: () {
+                  setState(() {
+                    _isAzerty = !_isAzerty;
+                  });
+                },
               ),
             ),
-          );
-        }
 
-        return SafeArea(
-          top: false,
-          child: SizedBox(
-            height: usableHeight,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                SizedBox(
-                  height: bannerHeight,
-                  child: const CrosswordClueBanner(key: ValueKey('clue-banner')),
+            if (keyboardHeight > 0)
+              SizedBox(
+                height: keyboardHeight,
+                child: VirtualKeyboard(
+                  layout: layout,
+                  onKey: widget.onKey,
+                  onBackspace: widget.onBackspace,
+                  availableHeight: keyboardHeight,
                 ),
-                const SizedBox(height: gapBetween),
-                CrosswordIconBar(
-                  isAzerty: _isAzerty,
-                  onClear: () {
-                    try {
-                      ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-                    } on Object catch (e, st) {
-                      if (kDebugMode) {
-                        developer.log('clearIncorrectLetters failed: $e', stackTrace: st);
-                      }
-                    }
-                  },
-                  onToggle: () {
-                    setState(() {
-                      _isAzerty = !_isAzerty;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: keyboardHeight,
-                  child: VirtualKeyboard(
-                    layout: layout,
-                    onKey: widget.onKey,
-                    onBackspace: widget.onBackspace,
-                    availableHeight: keyboardHeight,
-                  ),
-                ),
-              ],
-            ),
-          ),
+              )
+            else
+              const SizedBox.shrink(),
+          ],
         );
       },
     );

@@ -72,6 +72,7 @@ These guidelines help AI coding agents work productively in this repository. Foc
 - Place new features under the established `features/` and `domain/` structure.
 - Keep API contracts in sync with `docs/api.md`; update DTOs and tests together.
 - Prefer repository abstractions; avoid direct HTTP calls from widgets or services.
+ - When creating UI widgets that may need to change vertical space depending on parent layout, prefer exposing a caller-controlled parameter (e.g. `heightFactor` in range `0.0-1.0`) instead of hardcoding multipliers inside the widget. Example: `CrosswordControlsBar` exposes `heightFactor` (default `0.4`) so callers can request more space (the app uses `heightFactor: 0.8` where appropriate). Update all call sites and tests when changing this contract.
 
 ## Engineering Principles
 - **KISS**: Favor straightforward solutions over clever ones. Keep widgets/providers small, single-purpose; avoid deep inheritance and unnecessary abstractions.

@@ -41,7 +41,7 @@ void main() {
       container: container,
       child: MaterialApp(
         home: Scaffold(
-          body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+          body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}, heightFactor: 0.8),
         ),
       ),
     ));

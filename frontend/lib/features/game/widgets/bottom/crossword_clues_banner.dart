@@ -24,8 +24,8 @@ class CrosswordClueBanner extends ConsumerWidget {
       // small placeholder banner so the layout remains stable and
       // measurable. This prevents zero-height banners in tests.
       return Container(
-        height: 56,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        height: 80,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Colors.grey[900],
@@ -56,11 +56,11 @@ class CrosswordClueBanner extends ConsumerWidget {
     final isCompact = availableHeight < 72;
 
     return ConstrainedBox(
-      constraints: const BoxConstraints(minHeight: 48),
+      constraints: const BoxConstraints(minHeight: 64),
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 8,
-          vertical: isCompact ? 2 : 4,
+          vertical: isCompact ? 3 : 6,
         ),
         child: Center(
           child: ConstrainedBox(
@@ -68,7 +68,7 @@ class CrosswordClueBanner extends ConsumerWidget {
             // on larger phones and tablets. Tests that need a small
             // width still work because the ConstrainedBox only applies
             // a maximum width.
-            constraints: const BoxConstraints(maxWidth: 760),
+            constraints: const BoxConstraints(maxWidth: 820),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -148,30 +148,30 @@ Widget _buildClueContainer({
       },
       behavior: HitTestBehavior.opaque,
       child: Container(
-            // Give the container a little more horizontal breathing room
-            // so it appears wider visually when available.
-                margin: EdgeInsets.symmetric(horizontal: compact ? 8 : 14),
+                // Give the container a little more horizontal breathing room
+                // so it appears wider visually when available.
+                margin: EdgeInsets.symmetric(horizontal: compact ? 10 : 16),
         decoration: BoxDecoration(
               color: Colors.grey[900],
               borderRadius: BorderRadius.circular(compact ? 10 : 12),
               border: Border.all(color: Colors.grey[700]!, width: 1),
         ),
             padding: EdgeInsets.symmetric(
-                  vertical: compact ? 8 : 12,
-                  horizontal: compact ? 14 : 20,
+              vertical: compact ? 12 : 16,
+              horizontal: compact ? 16 : 22,
             ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            entry.clue == null || entry.clue!.isEmpty
-                ? '${entry.number}'
-                : '${entry.number}  ${entry.clue!}',
+                entry.clue == null || entry.clue!.isEmpty
+                  ? '${entry.number}.'
+                  : '${entry.number}. ${entry.clue!}',
             textAlign: TextAlign.center,
             maxLines: compact ? 2 : 3,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: Colors.white,
-              fontSize: compact ? 16 : 18,
+              fontSize: compact ? 17 : 19,
               fontWeight: FontWeight.w600,
             ),
           ),

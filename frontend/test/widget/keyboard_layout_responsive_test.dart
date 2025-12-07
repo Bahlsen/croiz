@@ -247,13 +247,13 @@ void main() {
     testWidgets('Banner height adapts to available space', (tester) async {
       // Test with generous space
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
-        body: SizedBox(
-          height: 400,
-          child: CrosswordControlsBar(
-            onKey: (_) {},
-            onBackspace: () {},
+          body: SizedBox(
+            height: 400,
+            child: CrosswordControlsBar(
+              onKey: (_) {},
+              onBackspace: () {},
+            ),
           ),
-        ),
       )))));
 
       await tester.pumpAndSettle();
@@ -261,13 +261,13 @@ void main() {
 
       // Test with tight space
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
-        body: SizedBox(
-          height: 180,
-          child: CrosswordControlsBar(
-            onKey: (_) {},
-            onBackspace: () {},
+          body: SizedBox(
+            height: 180,
+            child: CrosswordControlsBar(
+              onKey: (_) {},
+              onBackspace: () {},
+            ),
           ),
-        ),
       )))));
 
       await tester.pumpAndSettle();
@@ -280,13 +280,13 @@ void main() {
 
     testWidgets('Keyboard maintains usable key size', (tester) async {
       await tester.pumpWidget(ProviderScope(child: ExcludeSemantics(child: MaterialApp(home: Scaffold(
-        body: SizedBox(
-          height: 200,
-          child: CrosswordControlsBar(
-            onKey: (_) {},
-            onBackspace: () {},
+          body: SizedBox(
+            height: 200,
+            child: CrosswordControlsBar(
+              onKey: (_) {},
+              onBackspace: () {},
+            ),
           ),
-        ),
       )))));
 
       await tester.pumpAndSettle();

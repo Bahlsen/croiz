@@ -10,7 +10,7 @@ void main() {
     await tester.pumpWidget(ProviderScope(child: MaterialApp(home: Scaffold(
       body: Column(children: [
         const Expanded(child: Placeholder()),
-        CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+          CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}, heightFactor: 0.8),
       ],),
     ))));
 

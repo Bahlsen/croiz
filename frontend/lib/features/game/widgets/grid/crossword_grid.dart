@@ -69,6 +69,11 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
       // Never attach onKeyEvent: ignore physical keyboard entirely.
       onKeyEvent: null,
       child: GridView.builder(
+        // The grid should not be scrollable: parent controls available
+        // space and the controls bar will take remaining area. Use
+        // NeverScrollableScrollPhysics so the grid lays out to its
+        // parent's constraints instead of enabling scrolling.
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: size,
           childAspectRatio: 1,
