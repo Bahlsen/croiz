@@ -364,7 +364,7 @@ final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<String>>(
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
-Set<String> _initialFoundWords(ref) => {};
-Set<String> _initialFlashingCells(ref) => {};
-Set<String> _initialLockedCells(ref) => {};
-Set<String> _initialFlashingClearedCells(ref) => {};
+Set<String> _initialFoundWords(ref) => <String>{};
+Set<String> _initialFlashingCells(ref) => <String>{};
+Set<String> _initialLockedCells(ref) => <String>{};
+Set<String> _initialFlashingClearedCells(ref) => <String>{};

@@ -348,7 +348,7 @@ class CrosswordInputController {
         // Clear flash after animation (will be handled by UI)
         Future.delayed(const Duration(milliseconds: 500), () {
           try {
-            _read(flashingCellsProvider.notifier).value = {};
+            _read(flashingCellsProvider.notifier).value = <String>{};
           } on Object catch (e, st) {
             developer.log(
               'Clearing flashing cells failed',
