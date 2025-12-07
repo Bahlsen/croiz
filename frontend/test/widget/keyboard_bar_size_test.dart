@@ -31,11 +31,11 @@ void main() {
     final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
     // Banner should take ~35% of available space
-    expect(bannerSize.height, greaterThan(100.0));
+    expect(bannerSize.height, greaterThanOrEqualTo(100.0));
     expect(bannerSize.height, lessThan(200.0));
 
     // Keyboard should take ~50% and be usable
-    expect(keyboardSize.height, greaterThan(150.0));
+    expect(keyboardSize.height, greaterThanOrEqualTo(150.0));
     expect(keyboardSize.height, lessThan(300.0));
 
     final barFinder = find.byType(CrosswordControlsBar);

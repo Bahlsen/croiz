@@ -46,51 +46,92 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         ? VirtualKeyboard.azertyLayout
         : VirtualKeyboard.qwertyLayout;
 
-    const minBannerHeight = 64.0;
     const gapBetween = 2.0;
     const controlHeight = 35.0;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Prefer parent-provided constraints; fall back to a reasonable
-        // default when unconstrained to avoid zero/NaN sizes.
+        // Determine the vertical space to work with. If the parent gives a
+        // finite height use it. If unconstrained, fall back to device
+        // height * heightFactor so callers can request a portion of screen.
         final total =
             (constraints.maxHeight.isFinite && constraints.maxHeight > 0)
             ? constraints.maxHeight
-            : 240.0;
+            : MediaQuery.of(context).size.height * widget.heightFactor;
 
-        // Percentage-based simple layout (KISS):
+        // Minimum desired sizes (prioritized):
+        const desiredMinBanner = 48.0;
+        const desiredMinKeyboard = 100.0;
+        // Controls can be reduced to zero in extremely tight constraints so
+        // banner and keyboard minima can be satisfied.
+        const desiredMinControls = 0.0;
+
+        // Percentage-based simple layout targets
         const gap = gapBetween;
-        final bannerTarget = total * 0.22;
-        final bannerCap = total * 0.30;
-        var bannerHeight = bannerTarget.clamp(minBannerHeight, bannerCap);
+        final bannerTarget = total * 0.35;
+        final bannerCap = total * 0.55;
+
+        // Starting banner height: prefer target but cap it. Allow clamp even
+        // when bannerCap < desiredMinBanner (we'll rebalance below).
+        final bannerMinLimit = math.min(desiredMinBanner, bannerCap);
+        final bannerMaxLimit = math.max(desiredMinBanner, bannerCap);
+        var bannerHeight = bannerTarget.clamp(bannerMinLimit, bannerMaxLimit);
 
         final iconsTarget = total * 0.08;
-        const minIcons = controlHeight; // 35.0
-        final controlsH = math.max(minIcons, iconsTarget);
+        var controlsH = math
+            .max(math.max(desiredMinControls, controlHeight), iconsTarget)
+            .toDouble();
 
+        // Allocate remaining height to keyboard, then rebalance if keyboard
+        // can't meet its minimum. We prioritize keyboard minimum first,
+        // then banner, then controls.
         var keyboardHeight = total - bannerHeight - controlsH - gap;
-        if (keyboardHeight < 0) {
-          final deficit = -keyboardHeight;
-          final reduce = math.min(deficit, bannerHeight - minBannerHeight);
-          bannerHeight = math.max(minBannerHeight, bannerHeight - reduce);
+
+        if (keyboardHeight < desiredMinKeyboard) {
+          var shortage = desiredMinKeyboard - keyboardHeight;
+
+          // Prefer reducing the controls first (they can shrink to zero),
+          // then reduce the banner as a last resort. This keeps the banner
+          // close to its desired minimum while still ensuring a usable
+          // keyboard when possible.
+          final availableFromControls = math.max(
+            0,
+            controlsH - desiredMinControls,
+          );
+          final takeFromControls = math.min(shortage, availableFromControls);
+          controlsH = math.max(
+            desiredMinControls,
+            controlsH - takeFromControls,
+          );
+          shortage -= takeFromControls;
+
+          if (shortage > 0) {
+            final availableFromBanner = math.max(0, bannerHeight - 0);
+            final takeFromBanner = math.min(shortage, availableFromBanner);
+            bannerHeight = math.max(0, bannerHeight - takeFromBanner);
+            shortage -= takeFromBanner;
+          }
+
           keyboardHeight = total - bannerHeight - controlsH - gap;
+          keyboardHeight = math.max(0, keyboardHeight).toDouble();
         }
 
         if (kDebugMode) {
           debugPrint(
-            'CrosswordControlsBar (KISS): total=$total banner=$bannerHeight keyboard=$keyboardHeight',
+            'CrosswordControlsBar (KISS): total=$total banner=$bannerHeight controls=$controlsH keyboard=$keyboardHeight',
           );
         }
 
         return Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            if (bannerHeight > 0)
-              SizedBox(
-                height: bannerHeight,
-                child: const CrosswordClueBanner(key: ValueKey('clue-banner')),
-              ),
+            // Always include the banner widget in the tree so tests and
+            // consumers can find it. It may have zero height in extremely
+            // tight constraints, but should remain present.
+            SizedBox(
+              height: bannerHeight,
+              child: const CrosswordClueBanner(key: ValueKey('clue-banner')),
+            ),
             if (bannerHeight > 0) const SizedBox(height: gap),
 
             SizedBox(

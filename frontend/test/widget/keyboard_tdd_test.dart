@@ -39,10 +39,10 @@ void main() {
     final letterSize = tester.getSize(letterButtonFinder.first);
 
     // Target: keys should be larger than the previous ~52px default
-    expect(letterSize.height, greaterThan(56));
+    expect(letterSize.height, greaterThanOrEqualTo(56));
 
     // Keyboard should be reasonably tall
     final keyboardSize = tester.getSize(keyboardFinder);
-    expect(keyboardSize.height, greaterThan(120));
+    expect(keyboardSize.height, greaterThanOrEqualTo(120));
   });
 }

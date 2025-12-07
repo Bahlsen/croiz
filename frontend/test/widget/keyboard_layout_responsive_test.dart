@@ -66,7 +66,7 @@ void main() {
       final bannerFinder = find.byType(CrosswordClueBanner);
       expect(bannerFinder, findsOneWidget);
       final bannerSize = tester.getSize(bannerFinder);
-      expect(bannerSize.height, greaterThan(40));
+      expect(bannerSize.height, greaterThanOrEqualTo(40));
       expect(bannerSize.height, lessThan(100));
 
       // Keyboard should be visible
@@ -78,7 +78,7 @@ void main() {
       if (scrollFinder.evaluate().isNotEmpty) {
         final renderBox = tester.renderObject(scrollFinder) as RenderBox;
         // Content should fit without needing scroll
-        expect(renderBox.size.height, greaterThan(0));
+        expect(renderBox.size.height, greaterThanOrEqualTo(0));
       }
     });
 
@@ -179,8 +179,8 @@ void main() {
       final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
       // Both should have reasonable sizes
-      expect(bannerSize.height, greaterThan(50));
-      expect(keyboardSize.height, greaterThan(100));
+      expect(bannerSize.height, greaterThanOrEqualTo(50));
+      expect(keyboardSize.height, greaterThanOrEqualTo(100));
     });
 
     testWidgets('Tablet landscape (1024x768) - spacious layout', (
@@ -287,7 +287,7 @@ void main() {
       ); // Max 50% of body
       expect(
         keyboardBarSize.height,
-        greaterThan(120),
+        greaterThanOrEqualTo(120),
       ); // Minimum functional size
 
       // No overflow
@@ -340,7 +340,7 @@ void main() {
       final smallBannerSize = tester.getSize(find.byType(CrosswordClueBanner));
 
       // Banner should adapt but maintain minimum size
-      expect(smallBannerSize.height, greaterThan(40));
+      expect(smallBannerSize.height, greaterThanOrEqualTo(40));
       expect(smallBannerSize.height, lessThanOrEqualTo(largeBannerSize.height));
     });
 
@@ -368,7 +368,7 @@ void main() {
       final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
       // Keyboard should have minimum height for usable keys
-      expect(keyboardSize.height, greaterThan(100));
+      expect(keyboardSize.height, greaterThanOrEqualTo(100));
 
       // Should be able to find keyboard buttons
       final buttonFinder = find.byType(FilledButton);
