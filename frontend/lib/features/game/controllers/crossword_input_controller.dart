@@ -119,7 +119,17 @@ class CrosswordInputController {
         fromC = prev[1];
         final letter = board.grid[fromR][fromC];
         if (letter != null && letter.isNotEmpty) {
+          final prevKey = '$fromR,$fromC';
           final prevSel = SelectedCell(fromR, fromC);
+          // If the previous filled cell is locked, move selection there
+          // but do NOT delete its letter. The virtual keyboard already
+          // plays the delete sound before calling into this method, so
+          // user hears feedback even when deletion is blocked.
+          if (lockedCells.contains(prevKey)) {
+            _read(selectedCellProvider.notifier).value = prevSel;
+            return;
+          }
+
           _read(selectedCellProvider.notifier).value = prevSel;
           _read(
             gameBoardProvider.notifier,

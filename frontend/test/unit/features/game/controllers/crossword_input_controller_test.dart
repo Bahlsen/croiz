@@ -391,5 +391,66 @@ void main() {
 
       testContainer.dispose();
     });
+
+    test(
+      'backspace from next cell selects locked previous cell and does not delete it',
+      () {
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Test Board',
+                  gridSize: 3,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['C', null, null],
+                    [null, null, null],
+                    [null, null, null],
+                  ],
+                  clues: {},
+                  blackCells: [
+                    [false, false, false],
+                    [false, false, false],
+                    [false, false, false],
+                  ],
+                  difficulty: 1,
+                ),
+              ),
+            ),
+          ],
+        );
+
+        // lock the previous filled cell (0,0)
+        testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // place selection on cell to the right of the locked cell
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 1);
+
+        // Ensure previous cell has the letter
+        expect(testContainer.read(gameBoardProvider).grid[0][0], 'C');
+
+        // Simulate backspace (controller logic used by keyboard)
+        controller.clearCurrent();
+
+        // Selection should have moved to locked cell
+        final sel = testContainer.read(selectedCellProvider);
+        expect(sel, isNotNull);
+        expect(sel!.row, 0);
+        expect(sel.col, 0);
+
+        // The locked cell's letter must remain intact
+        expect(testContainer.read(gameBoardProvider).grid[0][0], 'C');
+
+        testContainer.dispose();
+      },
+    );
   });
 }
