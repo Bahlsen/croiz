@@ -311,6 +311,97 @@ class CrosswordInputController {
     required int startCol,
   }) {
     final dir = _read(wordDirectionProvider);
+    // If entries are available, and the current cell is the last cell of
+    // its entry in the current direction, advance to the FIRST cell of
+    // the next entry (by number) in the same direction.
+    final entries = board.entries;
+    if (entries != null && entries.isNotEmpty) {
+      final isAcross = dir == WordDirection.horizontal;
+      final dirString = isAcross ? 'across' : 'down';
+      final sameDir = entries.where((e) => e.direction == dirString).toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
+      final wordCheck = _read(wordCheckServiceProvider);
+      final foundWords = _read(foundWordsProvider);
+
+      if (sameDir.isNotEmpty) {
+        PuzzleEntryData? containing;
+        for (final e in sameDir) {
+          if (isAcross) {
+            if (startRow == e.y &&
+                startCol >= e.x &&
+                startCol < e.x + e.length) {
+              containing = e;
+              break;
+            }
+          } else {
+            if (startCol == e.x &&
+                startRow >= e.y &&
+                startRow < e.y + e.length) {
+              containing = e;
+              break;
+            }
+          }
+        }
+
+        if (containing != null) {
+          final isLast = isAcross
+              ? (startCol == containing.x + containing.length - 1)
+              : (startRow == containing.y + containing.length - 1);
+          if (isLast) {
+            // find index of containing in sameDir
+            final idx = sameDir.indexWhere(
+              (e) => e.number == containing!.number,
+            );
+            if (idx != -1) {
+              // Search forward for next entry in sameDir that is NOT already found
+              for (var j = idx + 1; j < sameDir.length; j++) {
+                final candidate = sameDir[j];
+                final key = wordCheck.getWordKey(candidate);
+                if (!foundWords.contains(key)) {
+                  _read(selectedCellProvider.notifier).state = SelectedCell(
+                    candidate.y,
+                    candidate.x,
+                  );
+                  return;
+                }
+              }
+              // Wrap-around search
+              for (var j = 0; j < idx; j++) {
+                final candidate = sameDir[j];
+                final key = wordCheck.getWordKey(candidate);
+                if (!foundWords.contains(key)) {
+                  _read(selectedCellProvider.notifier).state = SelectedCell(
+                    candidate.y,
+                    candidate.x,
+                  );
+                  return;
+                }
+              }
+
+              // No available same-direction entries -> try other direction's first non-found
+              final otherDirString = isAcross ? 'down' : 'across';
+              final otherDir =
+                  entries.where((e) => e.direction == otherDirString).toList()
+                    ..sort((a, b) => a.number.compareTo(b.number));
+              for (final candidate in otherDir) {
+                final key = wordCheck.getWordKey(candidate);
+                if (!foundWords.contains(key)) {
+                  _read(selectedCellProvider.notifier).state = SelectedCell(
+                    candidate.y,
+                    candidate.x,
+                  );
+                  _read(wordDirectionProvider.notifier).state = isAcross
+                      ? WordDirection.vertical
+                      : WordDirection.horizontal;
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
     final next = board.blackCells.nextSelectableFrom(
