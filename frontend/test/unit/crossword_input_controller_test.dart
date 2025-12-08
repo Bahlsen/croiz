@@ -79,6 +79,17 @@ void main() {
     // lock the current cell
     container.read(lockedCellsProvider.notifier).value = <String>{'0,0'};
 
+    final controller = CrosswordInputController.fromContainer(container);
+
+    // Build a KeyDownEvent for letter 'b'
+    const event = KeyDownEvent(
+      logicalKey: LogicalKeyboardKey.keyB,
+      physicalKey: PhysicalKeyboardKey.keyB,
+      timeStamp: Duration(milliseconds: 1),
+    );
+
+    controller.handleKey(event, container.read(gameBoardProvider).gridSize);
+
     final updated = container.read(gameBoardProvider);
     // The locked cell remains empty
     expect(updated.grid[0][0], isNull);
