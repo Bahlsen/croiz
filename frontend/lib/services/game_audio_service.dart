@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flame_audio/flame_audio.dart';
 
@@ -11,6 +12,10 @@ class GameAudioService {
   AudioPool? _typePool;
   AudioPool? _deletePool;
   bool _initialized = false;
+  final Completer<void> _ready = Completer<void>();
+
+  /// Future that completes when initialization is finished (success or failure).
+  Future<void> get ready => _ready.future;
 
   Future<void> _init() async {
     try {
@@ -27,6 +32,9 @@ class GameAudioService {
       _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 4);
 
       _initialized = true;
+      if (!_ready.isCompleted) {
+        _ready.complete();
+      }
     } on Object catch (e, st) {
       // Initialization failures should not crash the app; log for visibility.
       _initialized = false;
@@ -35,6 +43,9 @@ class GameAudioService {
         error: e,
         stackTrace: st,
       );
+      if (!_ready.isCompleted) {
+        _ready.complete();
+      }
     }
   }
 

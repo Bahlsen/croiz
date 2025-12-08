@@ -32,6 +32,9 @@ class MockGameAudioService implements GameAudioService {
   Future<void> playVictory() async {
     successCallCount++;
   }
+
+  @override
+  Future<void> get ready => Future<void>.value();
 }
 
 void main() {

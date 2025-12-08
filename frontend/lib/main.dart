@@ -1,12 +1,32 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:flutter/services.dart';
+import 'package:croiz/services/providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const ProviderScope(child: CroizApp()));
+
+  // Create a ProviderContainer so we can eagerly initialize services
+  final container = ProviderContainer();
+  // Ensure audio service has a chance to preload assets before first input.
+  try {
+    final audioService = container.read(gameAudioServiceProvider);
+    // Wait for initialization to complete (success or failure) so first taps can play.
+    await audioService.ready;
+  } on Object catch (e, st) {
+    developer.log(
+      'GameAudioService initialization failed while waiting in main',
+      error: e,
+      stackTrace: st,
+    );
+  }
+
+  runApp(
+    UncontrolledProviderScope(container: container, child: const CroizApp()),
+  );
 }
 
 class CroizApp extends StatelessWidget {
