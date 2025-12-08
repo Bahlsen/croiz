@@ -125,6 +125,10 @@ Tone and style
   - Data models in `lib/data/models/`; repositories in `lib/data/repositories/`; datasources in `lib/data/datasources/`.
   - Prefer `AsyncValue<T>` for async state; expose `StateNotifier` for complex flows.
   - Store tokens in secure storage; persistent data in Sqflite; simple prefs in `shared_preferences`.
+  - **Physical keyboard**: the app uses an in-app `VirtualKeyboard` and disables
+    physical keyboard input for gameplay. Avoid adding `RawKeyboardListener`
+    or wiring platform `RawKeyEvent`s into game input logic; rely on the
+    virtual keyboard and `CrosswordControlsBar` instead.
 - **Backend**:
   - Controllers return DTOs; avoid exposing entities directly.
   - Security via JWT (config in `src/main/resources/application.yaml`); use profiles: `default`, `test`, `prod`.

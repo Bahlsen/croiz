@@ -69,7 +69,26 @@ class CrosswordInputController {
     final lockedCells = _read(lockedCellsProvider);
     final cellKey = '${selected.row},${selected.col}';
     if (lockedCells.contains(cellKey)) {
-      return; // Cell is locked, cannot modify
+      // If current cell is locked, insert into the next selectable cell
+      final dir = _read(wordDirectionProvider);
+      final dr = dir == WordDirection.vertical ? 1 : 0;
+      final dc = dir == WordDirection.vertical ? 0 : 1;
+      final next = board.blackCells.nextSelectableFrom(
+        selected.row,
+        selected.col,
+        dr,
+        dc,
+        wrap: true,
+      );
+      if (next == null) {
+        return; // No next cell available
+      }
+      final nextRow = next[0];
+      final nextCol = next[1];
+      _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
+      _checkForCompletedWords();
+      _moveToNext(board, startRow: nextRow, startCol: nextCol);
+      return;
     }
 
     _read(
@@ -208,11 +227,16 @@ class CrosswordInputController {
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
       if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
-        _read(gameBoardProvider.notifier).setLetter(row, col, char);
-        _moveToNext(_safeReadBoard(), startRow: row, startCol: col);
+        // Delegate to setLetterAndAdvance so locked cells and advance
+        // behavior are handled consistently for physical keyboard input.
+        setLetterAndAdvance(char);
       }
     }
   }
+
+  // Physical keyboard handling is intentionally disabled in the UI.
+  // Do not route RawKeyEvents into the controller; use the in-app
+  // `VirtualKeyboard` and `CrosswordControlsBar` for all input.
 
   void _moveToDirection(int row, int col, int dr, int dc) {
     final board = _safeReadBoard();

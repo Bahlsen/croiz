@@ -61,4 +61,34 @@ void main() {
     expect(sel!.row, 0);
     expect(sel.col, 1);
   });
+
+  test('typing on a locked cell inserts into next selectable cell', () {
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // ensure selection
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
+
+    // lock the current cell
+    container.read(lockedCellsProvider.notifier).value = <String>{'0,0'};
+
+    final updated = container.read(gameBoardProvider);
+    // The locked cell remains empty
+    expect(updated.grid[0][0], isNull);
+    // The next cell should have the inserted letter
+    expect(updated.grid[0][1], 'B');
+
+    final sel = container.read(selectedCellProvider);
+    expect(sel, isNotNull);
+    // After inserting into next cell, selection advances to the following cell
+    expect(sel!.row, 0);
+    expect(sel.col, 2);
+  });
 }
