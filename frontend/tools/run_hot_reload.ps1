@@ -85,6 +85,15 @@ try {
     if ($Connect -match '^(?i:false|0|none)$') { $Connect = $null }
   }
 
+  # Accept common shorthand where the first positional arg is meant to enable prefill
+  # e.g. callers that pass `true` or `prefill` as a single argument.
+  if ($Connect) {
+    if ($Connect -match '^(?i:true|prefill|--prefill|-prefill)$') {
+      $Prefill = $true
+      $Connect = $null
+    }
+  }
+
   if (-not $adbDevices -or $adbDevices.Count -eq 0) {
     if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
     if ($Connect) {

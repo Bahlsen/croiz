@@ -58,10 +58,10 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     // react to the board becoming available and start the timer.
     if (!_boardListenerAttached) {
       _boardListenerAttached = true;
-      ref.listen<GameBoard?>(gameBoardProvider, (previous, next) {
-        if (next == null) {
-          return;
-        }
+      ref.listen<GameBoard>(gameBoardProvider, (
+        GameBoard? previous,
+        GameBoard next,
+      ) {
         try {
           _controller.tryAutoSelectFirstAcross(next);
         } on Object catch (e, st) {
