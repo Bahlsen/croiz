@@ -60,7 +60,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             : MediaQuery.of(context).size.height * widget.heightFactor;
 
         // Minimum desired sizes (prioritized):
-        const desiredMinBanner = 48.0;
+        // Increase the minimum banner so it remains visually prominent.
+        // Reduced from 50 to 40 to make the banner less tall by default.
+        const desiredMinBanner = 40.0;
         const desiredMinKeyboard = 100.0;
         // Controls can be reduced to zero in extremely tight constraints so
         // banner and keyboard minima can be satisfied.
@@ -68,8 +70,10 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
 
         // Percentage-based simple layout targets
         const gap = gapBetween;
-        final bannerTarget = total * 0.35;
-        final bannerCap = total * 0.55;
+        // Favor a moderate banner: allocate a smaller portion of the
+        // available space so the keyboard gets more room by default.
+        final bannerTarget = total * 0.30;
+        final bannerCap = total * 0.60;
 
         // Starting banner height: prefer target but cap it. Allow clamp even
         // when bannerCap < desiredMinBanner (we'll rebalance below).

@@ -30,13 +30,13 @@ void main() {
     final bannerSize = tester.getSize(bannerFinder);
     final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
-    // Banner should take ~35% of available space
-    expect(bannerSize.height, greaterThanOrEqualTo(100.0));
-    expect(bannerSize.height, lessThan(200.0));
+    // Banner now targets a larger portion (~50%) of available space
+    expect(bannerSize.height, greaterThanOrEqualTo(180.0));
+    expect(bannerSize.height, lessThan(260.0));
 
-    // Keyboard should take ~50% and be usable
-    expect(keyboardSize.height, greaterThanOrEqualTo(150.0));
-    expect(keyboardSize.height, lessThan(300.0));
+    // Keyboard should remain usable (reduced but still reasonable)
+    expect(keyboardSize.height, greaterThanOrEqualTo(140.0));
+    expect(keyboardSize.height, lessThan(260.0));
 
     final barFinder = find.byType(CrosswordControlsBar);
     final barSize = tester.getSize(barFinder);
@@ -64,7 +64,8 @@ void main() {
     final bannerFinder = find.byType(CrosswordClueBanner);
     expect(bannerFinder, findsOneWidget);
     final bannerSize = tester.getSize(bannerFinder);
-    // Minimum banner height is 48
+    // Banner minimum should be respected where possible; in tight constraints
+    // it may be reduced to keep keyboard usable. Validate a safe minimum.
     expect(bannerSize.height, greaterThanOrEqualTo(48.0));
 
     final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));

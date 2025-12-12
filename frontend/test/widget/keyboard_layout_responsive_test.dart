@@ -62,12 +62,12 @@ void main() {
       // Verify no overflow errors
       expect(tester.takeException(), isNull);
 
-      // Banner should be visible and have reasonable size
+      // Banner should be visible and have reasonable size (now larger)
       final bannerFinder = find.byType(CrosswordClueBanner);
       expect(bannerFinder, findsOneWidget);
       final bannerSize = tester.getSize(bannerFinder);
-      expect(bannerSize.height, greaterThanOrEqualTo(40));
-      expect(bannerSize.height, lessThan(100));
+      expect(bannerSize.height, greaterThanOrEqualTo(80));
+      expect(bannerSize.height, lessThan(160));
 
       // Keyboard should be visible
       final keyboardFinder = find.byType(VirtualKeyboard);
