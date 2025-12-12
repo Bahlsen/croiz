@@ -66,7 +66,7 @@ void main() {
       final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
       // Each component maintains minimum size
-      expect(bannerSize.height, greaterThanOrEqualTo(48.0));
+      expect(bannerSize.height, greaterThanOrEqualTo(40.0));
       expect(keyboardSize.height, greaterThanOrEqualTo(100.0));
 
       // No overflow

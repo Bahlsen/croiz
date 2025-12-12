@@ -25,4 +25,6 @@ Always follow KISS, DRY, and SOLID principles when providing code examples or so
 Never implement unnecessary features or code; always focus on the core requirements.
 Never implement fallbacks or alternative solutions unless explicitly requested by the user.
 
+Very important: You MUST use TDD (Test-Driven Development) practices when writing code: always write tests before implementing features or fixing bugs.
+
 You must use task: powershell -NoProfile -ExecutionPolicy Bypass -File frontend/tools/run_hot_reload.ps1 false to deploy the app or hot reload it during development on the user's local machine whenever we make changes to the codebase and need to see the results.
