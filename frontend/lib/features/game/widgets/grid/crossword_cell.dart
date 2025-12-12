@@ -119,7 +119,7 @@ class CrosswordCell extends ConsumerWidget {
         : isFlashing
         ? Colors.greenAccent
         : isSelected
-        ? const Color.fromARGB(255, 14, 11, 196)
+        ? const Color.fromARGB(255, 110, 32, 124)
         : isPartOfSelectedWord
         ? Colors.blueAccent
         : Colors.grey.shade700;
