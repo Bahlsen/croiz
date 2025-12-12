@@ -95,7 +95,7 @@ try {
   }
 
   if (-not $adbDevices -or $adbDevices.Count -eq 0) {
-    Write-Warning 'No device found. Connect via USB or enable Wireless debugging. Exiting.'
+    Write-Host 'No device found. Connect via USB or enable Wireless debugging. Exiting.' -ForegroundColor DarkGray
     return 0
   }
 
@@ -110,7 +110,7 @@ try {
     $androidDevice = $flutterDevices | Where-Object { $_.platformType -eq 'android' -and $_.ephemeral } | Select-Object -First 1
   }
   if (-not $androidDevice) {
-    Write-Warning 'Flutter did not list an Android device; using install+launch+attach fallback.'
+    Write-Host 'Flutter did not list an Android device; using install+launch+attach fallback.' -ForegroundColor DarkGray
     # Always (re)build debug APK to ensure latest code is installed
     $apkDebug = Join-Path (Join-Path (Join-Path 'build' 'app') 'outputs') (Join-Path 'flutter-apk' 'app-debug.apk')
     Write-Host 'Building APK (debug)...' -ForegroundColor Cyan
@@ -128,10 +128,11 @@ try {
 
     # Try to attach for hot reload; first with device id, then without if not recognized
     Write-Host 'Attaching for hot reload (q to quit)...' -ForegroundColor DarkGray
-    try {
-      flutter attach -d $target --app-id ca.charlemagne.croiz
-    } catch {
-      Write-Warning "Attach with device id '$target' failed; retrying without -d."
+    # Attempt a quiet attach first to avoid flutter printing unsupported-device
+    # messages when the adb device id isn't recognized by `flutter devices`.
+    & flutter attach -d $target --app-id ca.charlemagne.croiz 2>$null | Out-Null
+    if ($LASTEXITCODE -ne 0) {
+      Write-Host "Attach with device id '$target' failed; retrying without -d." -ForegroundColor DarkGray
       flutter attach --app-id ca.charlemagne.croiz
     }
     return
