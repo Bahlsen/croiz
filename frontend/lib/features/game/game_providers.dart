@@ -298,6 +298,14 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
   return board;
 }
 
+/// Resolve a puzzle id to a strict asset path under `assets/data/`.
+String assetPathForPuzzleId(String id) => 'assets/data/$id.json';
+
+/// Provider for the loader function so tests can override loading behavior.
+final puzzleAssetLoaderProvider = Provider<Future<GameBoard> Function(String)>(
+  (ref) => loadPuzzleFromAsset,
+);
+
 GameBoard _prefillExceptOne(GameBoard board) {
   // Prefer clearing the center cell to make the prefill deterministic and
   // easy to find during manual testing. If center is black or not prefilled,

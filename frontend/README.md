@@ -91,6 +91,20 @@ flutter test test/unit/game_logic_test.dart
 flutter test --watch
 ```
 
+## AssetManifest.json
+
+- Purpose: tests and the `puzzlesProvider` read `AssetManifest.json` at runtime via `rootBundle.loadString('AssetManifest.json')` to enumerate packaged puzzle files under `assets/data/`.
+- Notes: Flutter normally generates an `AssetManifest.json` at build time from the `flutter.assets` entries in `pubspec.yaml`. For deterministic tests and CI this repository includes a checked-in `frontend/AssetManifest.json` and declares it as an asset in `pubspec.yaml`.
+- Maintaining: when you add or remove JSON puzzle files under `assets/data/`, either update `frontend/AssetManifest.json` or remove the checked-in manifest so Flutter generates one at build time. After edits, run:
+
+```bash
+cd frontend
+flutter pub get
+flutter test
+```
+
+If you prefer to rely on Flutter's generated manifest instead of the checked-in file, remove `frontend/AssetManifest.json` and ensure all asset paths are declared under `flutter.assets` in `pubspec.yaml`; the build will produce a manifest during packaging.
+
 ## Integration Tests & CI notes
 
 - **CI fix:** The GitHub Actions workflow at `.github/workflows/integration-tests.yml` was updated to remove a non-supported `--target` flag for `flutter test`. The workflow now invokes the test file directly: `flutter test integration_test/app_test.dart`.

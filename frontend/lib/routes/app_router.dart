@@ -13,8 +13,9 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/crossword',
-      builder: (context, state) =>
-          CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
+      builder: (context, state) => CrosswordScreen(
+        puzzleId: state.uri.queryParameters['id'],
+      ),
     ),
   ],
 );

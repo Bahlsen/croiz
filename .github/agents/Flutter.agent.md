@@ -42,3 +42,5 @@ When making changes to the codebase, always ensure that you document your change
 
 Never ask for confirmation from the user before proceeding with a analyzing, testing, fixing, linting, or formatting the code.
 You DO NOT need to ask permission for : run flutter analyze, run the widget tests and things like that.
+
+NEVER implement fallbacks, alternative solutions, or extra features unless explicitly requested by the user.

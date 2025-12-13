@@ -5,9 +5,7 @@ import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 
 void main() {
-  testWidgets('PuzzlesListPage shows provided puzzles', (
-    WidgetTester tester,
-  ) async {
+  testWidgets('PuzzlesListPage shows provided puzzles', (tester) async {
     final sample = [
       PuzzleDescriptor(id: 'a', title: 'One', path: 'assets/data/a.json'),
       PuzzleDescriptor(id: 'b', title: 'Two', path: 'assets/data/b.json'),
@@ -20,8 +18,8 @@ void main() {
       ),
     );
 
-    expect(find.text('Puzzles'), findsOneWidget);
     expect(find.text('One'), findsOneWidget);
     expect(find.text('Two'), findsOneWidget);
+    expect(find.byIcon(Icons.chevron_right), findsNWidgets(2));
   });
 }
