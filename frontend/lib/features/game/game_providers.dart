@@ -246,10 +246,36 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   }
 }
 
+/// Holds the currently selected puzzle id.
+///
+/// IMPORTANT: null means "no puzzle selected" (there is no default puzzle).
+class SelectedPuzzleIdNotifier extends Notifier<String?> {
+  @override
+  String? build() => null;
+  String? get value => state;
+  set value(String? v) => state = v;
+}
+
+final selectedPuzzleIdProvider =
+    NotifierProvider<SelectedPuzzleIdNotifier, String?>(
+      SelectedPuzzleIdNotifier.new,
+    );
+
 /// Provider to load the puzzle asynchronously from JSON.
-final puzzleLoaderProvider = FutureProvider<GameBoard>(
-  (ref) async => loadPuzzleFromAsset('assets/data/nyt2005-01-01.json'),
-);
+///
+/// IMPORTANT: this does **not** load any default puzzle. A puzzle id must be
+/// selected via `selectedPuzzleIdProvider` (or tests must override this
+/// provider). This guarantees we never silently load the same puzzle.
+final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
+  final selected = ref.watch(selectedPuzzleIdProvider);
+  if (selected == null || selected.isEmpty) {
+    throw StateError('No puzzle selected');
+  }
+
+  final loader = ref.read(puzzleAssetLoaderProvider);
+  final assetPath = assetPathForPuzzleId(selected);
+  return loader(assetPath);
+});
 
 /// Main game board provider (uses the loaded puzzle or fallback to empty).
 final gameBoardProvider = NotifierProvider<GameBoardNotifier, GameBoard>(

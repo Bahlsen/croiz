@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/main.dart';
+import 'package:croiz/features/game/crossword_screen.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
@@ -30,12 +31,9 @@ void main() {
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
         ],
-        child: const CroizApp(),
+        child: const MaterialApp(home: CrosswordScreen()),
       ),
     );
-
-    // Start game (navigate to crossword screen)
-    await tester.tap(find.text('Start Game'));
     await tester.pumpAndSettle();
 
     // Access provider container via grid context so we can ensure no

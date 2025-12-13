@@ -45,7 +45,7 @@ void main() {
 
     // Verify that the home screen displays the welcome text
     expect(find.text('Welcome to Croiz'), findsOneWidget);
-    expect(find.text('Start Game'), findsOneWidget);
+    expect(find.text('Puzzles'), findsOneWidget);
 
     // NOTE: navigation to the full `Crossword` screen instantiates many
     // game providers and widgets that are harder to run in a headless

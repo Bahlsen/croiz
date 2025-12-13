@@ -30,14 +30,6 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () => context.go('/crossword'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                ),
-                child: const Text('Start Game'),
-              ),
-              const SizedBox(width: 12),
-              OutlinedButton(
                 onPressed: () => context.go('/puzzles'),
                 child: const Text('Puzzles'),
               ),

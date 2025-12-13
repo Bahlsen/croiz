@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/main.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
+import 'package:croiz/features/game/crossword_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -34,13 +34,9 @@ void main() {
             AsyncValue.data(boardWithEntries),
           ),
         ],
-        child: const CroizApp(),
+        child: const MaterialApp(home: CrosswordScreen()),
       ),
     );
-
-    // Navigate to crossword screen
-    expect(find.text('Start Game'), findsOneWidget);
-    await tester.tap(find.text('Start Game'));
     await tester.pumpAndSettle();
 
     // The grid is now 5x5 from sample_5x5.json; 5 cells are black, so 20 GestureDetectors

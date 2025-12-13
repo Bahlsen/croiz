@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/widgets/end_game_overlay.dart';
@@ -30,29 +31,29 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     super.initState();
     _controller = CrosswordInputController(ref);
     // If a puzzle id is provided (via route query), attempt to load it and
-    // set the active game board so providers reflect the selected puzzle.
+    // set the selected puzzle id so the loader provider will load it.
     if (widget.puzzleId != null) {
       final decoded = Uri.decodeComponent(widget.puzzleId!);
-      _loadAndSetPuzzleId(decoded);
+      // Delay setting the provider until after the widget tree has
+      // finished building to avoid Riverpod runtime errors.
+      Future.microtask(() {
+        try {
+          final current = ref.read(selectedPuzzleIdProvider);
+          if (current != decoded) {
+            ref.read(selectedPuzzleIdProvider.notifier).value = decoded;
+          }
+        } on Object catch (e, st) {
+          debugPrint('Failed to set selected puzzle id: $e\n$st');
+        }
+      });
     }
     // Hide system UI (navigation buttons) for full-screen gameplay.
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
-  void _loadAndSetPuzzleId(String id) async {
-    try {
-      final assetPath = assetPathForPuzzleId(id);
-      final loader = ref.read(puzzleAssetLoaderProvider);
-      final board = await loader(assetPath);
-      try {
-        ref.read(gameBoardProvider.notifier).board = board;
-      } on Object catch (e, st) {
-        debugPrint('Failed to set game board provider: $e\n$st');
-      }
-    } on Object catch (e, st) {
-      debugPrint('Failed to load puzzle id=$id: $e\n$st');
-    }
-  }
+  // Note: loading is handled by `puzzleLoaderProvider` which watches
+  // `selectedPuzzleIdProvider`. The GameBoardNotifier listens to the
+  // loader and updates the active board accordingly.
 
   @override
   void dispose() {
@@ -127,6 +128,11 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         title: const Text('Crossword'),
         backgroundColor: Colors.black,
         elevation: 0,
+        leading: IconButton(
+          tooltip: 'Puzzles',
+          icon: const Icon(Icons.list),
+          onPressed: () => context.go('/puzzles'),
+        ),
       ),
       body: SafeArea(
         bottom: true,

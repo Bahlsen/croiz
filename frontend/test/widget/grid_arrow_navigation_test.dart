@@ -2,11 +2,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/main.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/crossword_screen.dart';
 
 void main() {
   testWidgets('arrow right moves selection to next non-black cell', (
@@ -34,10 +34,9 @@ void main() {
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
         ],
-        child: const CroizApp(),
+        child: const MaterialApp(home: CrosswordScreen()),
       ),
     );
-    await tester.tap(find.text('Start Game'));
     await tester.pumpAndSettle();
 
     // Select first selectable cell

@@ -13,6 +13,13 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/crossword',
+      redirect: (context, state) {
+        final id = state.uri.queryParameters['id'];
+        if (id == null || id.isEmpty) {
+          return '/puzzles';
+        }
+        return null;
+      },
       builder: (context, state) => CrosswordScreen(
         puzzleId: state.uri.queryParameters['id'],
       ),

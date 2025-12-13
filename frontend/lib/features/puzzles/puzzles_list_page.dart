@@ -2,28 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/game/game_providers.dart';
 
 /// Displays all packaged puzzles and navigates with a short `id` token.
 class PuzzlesListPage extends ConsumerWidget {
   const PuzzlesListPage({Key? key}) : super(key: key);
 
-  Widget _buildList(BuildContext context, List<PuzzleDescriptor> items) =>
-      ListView.separated(
-        itemCount: items.length,
-        separatorBuilder: (_, __) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final p = items[index];
-          return ListTile(
-            title: Text(p.title),
-            subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              final id = Uri.encodeComponent(p.id);
-              context.go('/crossword?id=$id');
-            },
-          );
+  Widget _buildList(
+    BuildContext context,
+    WidgetRef ref,
+    List<PuzzleDescriptor> items,
+  ) => ListView.separated(
+    itemCount: items.length,
+    separatorBuilder: (_, __) => const Divider(height: 1),
+    itemBuilder: (context, index) {
+      final p = items[index];
+      return ListTile(
+        title: Text(p.title),
+        subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () {
+          // Explicitly select the puzzle before navigating.
+          // This ensures `puzzleLoaderProvider` loads the right asset.
+          ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
+          final id = Uri.encodeComponent(p.id);
+          context.go('/crossword?id=$id');
         },
       );
+    },
+  );
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +44,7 @@ class PuzzlesListPage extends ConsumerWidget {
           if (items.isEmpty) {
             return const Center(child: Text('No puzzles found'));
           }
-          return _buildList(context, items);
+          return _buildList(context, ref, items);
         },
       ),
     );

@@ -44,3 +44,4 @@ Never ask for confirmation from the user before proceeding with a analyzing, tes
 You DO NOT need to ask permission for : run flutter analyze, run the widget tests and things like that.
 
 NEVER implement fallbacks, alternative solutions, or extra features unless explicitly requested by the user.
+ALWAYS add tests for any new feature or bug fix.
