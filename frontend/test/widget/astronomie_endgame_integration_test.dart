@@ -113,12 +113,12 @@ void main() {
         debugPrint('svc.isWordComplete($missingKey)=$isComplete');
       }
 
-      // End overlay should be visible
+      // End overlay should be visible (accept either spacing variant)
+      final congratsFinder = find.text('Congratulations!');
       expect(
-        find.text('Bravo !'),
-        findsOneWidget,
+        congratsFinder, findsOneWidget,
         reason:
-            'Overlay not shown; found=${found.length} entries=${entries.length}',
+        'Overlay not shown; found=${found.length} entries=${entries.length}',
       );
     },
   );

@@ -56,7 +56,8 @@ void main() {
     );
 
     // Initially overlay should not be visible
-    expect(find.text('Bravo !'), findsNothing);
+    final congratsFinder = find.text('Congratulations!');
+    expect(congratsFinder, findsNothing);
 
     // Simulate the controller having completed the single entry by
     // updating the foundWordsProvider; this should make the overlay appear.
@@ -70,7 +71,7 @@ void main() {
     expect(container.read(foundWordsProvider).length, equals(1));
 
     // Overlay should now be visible
-    expect(find.text('Bravo !'), findsOneWidget);
-    expect(find.text('Terminer'), findsOneWidget);
+    expect(congratsFinder, findsOneWidget);
+    expect(find.text('Close'), findsOneWidget);
   });
 }

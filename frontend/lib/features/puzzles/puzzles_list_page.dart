@@ -55,12 +55,12 @@ class PuzzlesListPage extends StatelessWidget {
           }
           if (snapshot.hasError) {
             return Center(
-              child: Text('Erreur chargement puzzles: ${snapshot.error}'),
+              child: Text('Could not load puzzles: ${snapshot.error}'),
             );
           }
           final items = snapshot.data ?? [];
           if (items.isEmpty) {
-            return const Center(child: Text('Aucun puzzle trouvé'));
+            return const Center(child: Text('No puzzles found'));
           }
           return _buildList(context, items);
         },

@@ -93,14 +93,15 @@ void main() {
     );
 
     // not yet showing because foundWords is empty
-    expect(find.text('Bravo !'), findsNothing);
+    final congratsFinder = find.text('Congratulations!');
+    expect(congratsFinder, findsNothing);
 
     // mark words as found
     container.read(foundWordsProvider.notifier).value = {'0,0,across'};
     await tester.pumpAndSettle();
 
     // overlay should appear
-    expect(find.text('Bravo !'), findsOneWidget);
-    expect(find.text('Terminer'), findsOneWidget);
+    expect(congratsFinder, findsOneWidget);
+    expect(find.text('Close'), findsOneWidget);
   });
 }
