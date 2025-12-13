@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:go_router/go_router.dart';
 
 class EndGameOverlay extends ConsumerWidget {
   const EndGameOverlay({super.key});
@@ -43,7 +44,7 @@ class EndGameOverlay extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  'Bravo !',
+                  'Congratulations!',
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
@@ -52,7 +53,15 @@ class EndGameOverlay extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Terminer'),
+                  child: const Text('Close'),
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    // Navigate to puzzles list
+                    context.go('/puzzles');
+                  },
+                  child: const Text('View puzzles'),
                 ),
               ],
             ),

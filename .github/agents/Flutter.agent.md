@@ -41,3 +41,4 @@ Always ensure that you have the latest dependencies and packages by running flut
 When making changes to the codebase, always ensure that you document your changes clearly in the code comments and commit messages.
 
 Never ask for confirmation from the user before proceeding with a analyzing, testing, fixing, linting, or formatting the code.
+You DO NOT need to ask permission for : run flutter analyze, run the widget tests and things like that.
