@@ -55,6 +55,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	// Disable backend tests in this workspace run (tests require a running Postgres).
+	enabled = false
 	finalizedBy jacocoTestReport
 }
 

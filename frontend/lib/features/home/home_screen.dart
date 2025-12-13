@@ -26,10 +26,22 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => context.go('/crossword'),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-            child: const Text('Start Game'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => context.go('/crossword'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                ),
+                child: const Text('Start Game'),
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton(
+                onPressed: () => context.go('/puzzles'),
+                child: const Text('Puzzles'),
+              ),
+            ],
           ),
         ],
       ),

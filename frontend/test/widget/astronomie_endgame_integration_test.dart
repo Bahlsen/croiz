@@ -50,6 +50,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          flashClearDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);

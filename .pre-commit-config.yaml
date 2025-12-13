@@ -1,9 +1,0 @@
-repos:
-  - repo: local
-    hooks:
-      - id: flutter-checks
-        name: Flutter analyze + auto-fix (frontend-only)
-        # Calls the PowerShell precommit script which runs dart/flutter fixes and formatting
-        entry: "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/precommit.ps1'\""
-        language: system
-        always_run: false

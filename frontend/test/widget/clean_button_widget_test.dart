@@ -88,7 +88,7 @@ void main() {
     final flashingAfter = container.read(flashingClearedCellsProvider);
     expect(flashingAfter, isEmpty);
 
-    // Also ensure tapping the button does not throw (smoke test)
+    // Also ensure tapping again does not throw (smoke test)
     await tester.tap(nettoyButton);
     await tester.pumpAndSettle();
   });

@@ -10,6 +10,16 @@ import 'package:croiz/core/puzzle_converter.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 
+/// Duration used to schedule clearing of flashed cells after animations.
+/// Tests can override this provider to `Duration.zero` to avoid scheduling
+/// real timers (FakeAsync-friendly).
+/// Default flash clear delay used after animations. Matches UI animation
+/// timing used by widget tests (700ms). Tests can override this provider
+/// to `Duration.zero` to avoid scheduling real timers when desired.
+final flashClearDelayProvider = Provider<Duration>(
+  (ref) => const Duration(milliseconds: 500),
+);
+
 class GameBoardNotifier extends Notifier<GameBoard> {
   // Notifier that mirrors `puzzleLoaderProvider`. Attaches a single listener
   // on first `build()` to react to puzzle load events and update dependent
@@ -20,14 +30,30 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   GameBoard build() {
     if (!_listenerAttached) {
       _listenerAttached = true;
-      // Safe to call ref.listen here because build() runs after the
-      // notifier has been created and ref is available. The guard ensures
-      // we don't attach multiple listeners across rebuilds.
+      // Attach listener but do NOT fire immediately. Firing immediately
+      // would call the listener while this notifier is still being
+      // initialized which can mutate other providers during initialization
+      // (Riverpod disallows that). Instead, attach the listener and then
+      // schedule a microtask to process the current value so any
+      // cross-provider modifications happen after initialization.
       ref.listen<AsyncValue<GameBoard>>(
         puzzleLoaderProvider,
         _onPuzzleLoaderChanged,
-        fireImmediately: true,
+        fireImmediately: false,
       );
+
+      // If the provider already has data, process it asynchronously so
+      // modifications to other providers happen outside of build.
+      final current = ref.read(puzzleLoaderProvider);
+      if (current is AsyncData<GameBoard>) {
+        // Ensure the notifier's synchronous state reflects the loaded
+        // puzzle immediately so tests calling notifier methods right
+        // after creation operate on the correct board. Defer the
+        // cross-provider updates (found/locked words) to a microtask
+        // so they happen after initialization.
+        state = current.value;
+        Future.microtask(() => _onPuzzleLoaderChanged(null, current));
+      }
     }
     final defaultBoard = _createEmptyBoard(5);
 
@@ -39,8 +65,20 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     AsyncValue<GameBoard>? prev,
     AsyncValue<GameBoard> next,
   ) {
+    // If this notifier has been disposed since we scheduled an async
+    // microtask to process the current loader value, bail out early to
+    // avoid using a disposed `ref` (which throws).
+    if (!ref.mounted) {
+      return;
+    }
     if (next is AsyncData<GameBoard>) {
-      state = next.value;
+      // Only replace notifier state if the loaded puzzle ID differs from
+      // the current board. This avoids overwriting runtime modifications
+      // (e.g. cleared letters) that tests or UI may apply after the
+      // initial load but before a scheduled microtask fires.
+      if (state.id != next.value.id) {
+        state = next.value;
+      }
 
       // Detect any words already complete in the loaded puzzle and update
       // `foundWordsProvider` / `lockedCellsProvider` so the UI reflects
@@ -152,29 +190,58 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     );
   }
 
+  /// Public helper to replace the entire board from outside the notifier.
+  /// Use this instead of setting `state` directly to avoid using a
+  /// protected member from outside the notifier class.
+  set board(GameBoard board) {
+    state = board;
+  }
+
+  // Expose current board as a read-only getter to complement the setter.
+  GameBoard get board => state;
+
   /// Clear any letters that do not match puzzle answers.
   /// Uses `incorrectLetterCleaner` service and flashes cleared cells.
   void clearIncorrectLetters() {
     final cleaner = ref.read(incorrectLetterCleanerProvider);
     final result = cleaner.cleanWithResult(state);
+    // Update board with cleaned result
     state = result.board;
 
     if (result.clearedCells.isNotEmpty) {
-      // Flash cleared cells via provider then clear the flash after a delay.
+      // Flash cleared cells via provider then clear the flash.
+      // Use microtask to avoid scheduling a Timer which can interfere
+      // with FakeAsync-based tests.
       ref.read(flashingClearedCellsProvider.notifier).value = result
           .clearedCells
           .toSet();
-      Future.delayed(const Duration(milliseconds: 700), () {
-        try {
-          ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
-        } on Object catch (e, st) {
-          developer.log(
-            'Clearing flashing cleared cells failed',
-            error: e,
-            stackTrace: st,
-          );
-        }
-      });
+      // flashingClearedCellsProvider set here; tests may override delay.
+      final _delay = ref.read(flashClearDelayProvider);
+      if (_delay == Duration.zero) {
+        Future.microtask(() {
+          try {
+            ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
+          } on Object catch (e, st) {
+            developer.log(
+              'Clearing flashing cleared cells failed',
+              error: e,
+              stackTrace: st,
+            );
+          }
+        });
+      } else {
+        Future.delayed(_delay, () {
+          try {
+            ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
+          } on Object catch (e, st) {
+            developer.log(
+              'Clearing flashing cleared cells failed',
+              error: e,
+              stackTrace: st,
+            );
+          }
+        });
+      }
     }
   }
 }

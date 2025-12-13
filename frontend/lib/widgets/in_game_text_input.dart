@@ -52,6 +52,11 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
   @override
   void dispose() {
     _focusNode.dispose();
+    try {
+      _gameController.dispose();
+    } on Object {
+      // ignore
+    }
     super.dispose();
   }
 

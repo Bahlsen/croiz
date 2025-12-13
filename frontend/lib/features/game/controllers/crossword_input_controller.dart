@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
@@ -18,6 +19,8 @@ class CrosswordInputController {
         <T>(provider) => container.read(provider as dynamic) as T,
       );
   final T Function<T>(Object provider) _read;
+  Timer? _flashClearTimer;
+  bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
   GameBoard _safeReadBoard([int fallbackSize = 5]) {
@@ -470,19 +473,43 @@ class CrosswordInputController {
         // Lock cells of the found word
         newLockedCells.addAll(cellKeys);
 
-        // Clear flash after animation (will be handled by UI)
-        Future.delayed(const Duration(milliseconds: 500), () {
-          try {
-            _read(flashingCellsProvider.notifier).value = <String>{};
-          } on Object catch (e, st) {
-            developer.log(
-              'Clearing flashing cells failed',
-              error: e,
-              stackTrace: st,
-            );
-            // Provider might be disposed if user navigated away
-          }
-        });
+        // Clear flash after animation (will be handled by UI).
+        // Use configured delay provider: tests can override to Duration.zero
+        // which will schedule a microtask (no Timer), otherwise use a Timer.
+        final _delay = _read(flashClearDelayProvider);
+        // Cancel any previously scheduled clear to avoid dangling timers
+        _flashClearTimer?.cancel();
+        if (_delay == Duration.zero) {
+          Future.microtask(() {
+            if (_disposed) {
+              return;
+            }
+            try {
+              _read(flashingCellsProvider.notifier).value = <String>{};
+            } on Object catch (e, st) {
+              developer.log(
+                'Clearing flashing cells failed',
+                error: e,
+                stackTrace: st,
+              );
+            }
+          });
+        } else {
+          _flashClearTimer = Timer(_delay, () {
+            if (_disposed) {
+              return;
+            }
+            try {
+              _read(flashingCellsProvider.notifier).value = <String>{};
+            } on Object catch (e, st) {
+              developer.log(
+                'Clearing flashing cells failed',
+                error: e,
+                stackTrace: st,
+              );
+            }
+          });
+        }
       }
     }
 
@@ -515,6 +542,16 @@ class CrosswordInputController {
         error: e,
         stackTrace: st,
       );
+    }
+  }
+
+  /// Cancel any scheduled timers and mark disposed.
+  void dispose() {
+    _disposed = true;
+    try {
+      _flashClearTimer?.cancel();
+    } on Object {
+      // ignore
     }
   }
 }

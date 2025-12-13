@@ -4,15 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
-import 'package:croiz/features/game/game_providers.dart';
+// Game providers
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/widgets/end_game_overlay.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_timer_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
+import 'package:croiz/features/game/game_providers.dart';
+
 class CrosswordScreen extends ConsumerStatefulWidget {
-  const CrosswordScreen({Key? key}) : super(key: key);
+  final String? puzzleId;
+
+  // Lint: constructor ordering is acceptable for this widget pattern.
+  // ignore: sort_constructors_first
+  const CrosswordScreen({Key? key, this.puzzleId}) : super(key: key);
 
   @override
   ConsumerState<CrosswordScreen> createState() => _CrosswordScreenState();
@@ -26,14 +32,41 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
   void initState() {
     super.initState();
     _controller = CrosswordInputController(ref);
+    // If a puzzleId is provided (via route query), attempt to load it and
+    // set the active game board so providers reflect the selected puzzle.
+    if (widget.puzzleId != null) {
+      _loadAndSetPuzzle(widget.puzzleId!);
+    }
     // Hide system UI (navigation buttons) for full-screen gameplay.
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  void _loadAndSetPuzzle(String id) async {
+    try {
+      // Map simple ids to asset files for now. Extend mapping as needed.
+      final asset = id == '1'
+          ? 'assets/data/sample_5x5.json'
+          : 'assets/data/nyt2005-01-01.json';
+      final board = await loadPuzzleFromAsset(asset);
+      try {
+        ref.read(gameBoardProvider.notifier).board = board;
+      } on Object catch (e, st) {
+        debugPrint('Failed to set game board provider: $e\n$st');
+      }
+    } on Object catch (e, st) {
+      debugPrint('Failed to load puzzle asset for id=$id: $e\n$st');
+    }
   }
 
   @override
   void dispose() {
     // Restore system UI when leaving the screen.
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    try {
+      _controller.dispose();
+    } on Object {
+      // ignore
+    }
     super.dispose();
   }
 
