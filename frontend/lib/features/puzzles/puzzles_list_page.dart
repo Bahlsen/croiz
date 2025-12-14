@@ -21,8 +21,7 @@ class PuzzlesListPage extends ConsumerWidget {
       for (final p in items) {
         final byOrigin = groups.putIfAbsent(p.origin, () => {});
         final y = p.year.isNotEmpty ? p.year : 'unknown';
-        final _ = byOrigin.putIfAbsent(y, () => <PuzzleDescriptor>[])
-        ..add(p);
+        byOrigin.putIfAbsent(y, () => <PuzzleDescriptor>[]).add(p);
       }
 
       final originKeys = List.of(groups.keys)..sort();
@@ -36,27 +35,66 @@ class PuzzlesListPage extends ConsumerWidget {
           final yearsMap = groups[origin]!;
           final yearKeys = List.of(yearsMap.keys)..sort();
           return ExpansionTile(
-            initiallyExpanded: true,
             title: Text(origin),
+            initiallyExpanded: true,
             children: yearKeys.map((year) {
               final list = List.of(yearsMap[year]!)..sort((a, b) => a.title.compareTo(b.title));
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return ExpansionTile(
+                initiallyExpanded: true,
+                title: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Text(year, style: Theme.of(context).textTheme.bodySmall),
+                ),
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Text(year, style: Theme.of(context).textTheme.bodySmall),
+                  SizedBox(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: list.length,
+                      itemBuilder: (context, i) {
+                        final p = list[i];
+                        final token = p.path.split('/').last.replaceAll('.json', '');
+                        if (p.title != token) {
+                          // Caller provided a title (e.g. tests). Show it immediately.
+                          return ListTile(
+                            title: Text(p.title),
+                            subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () {
+                              ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
+                              final id = Uri.encodeComponent(p.id);
+                              context.go('/crossword?id=$id');
+                            },
+                          );
+                        }
+
+                        final meta = ref.watch(puzzleMetadataProvider(p.path));
+                        return meta.when(
+                          loading: () => ListTile(
+                            title: Text(p.title),
+                            subtitle: const Text('Loading...'),
+                            trailing: const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)),
+                          ),
+                          error: (_, __) => ListTile(
+                            title: Text(p.title),
+                            subtitle: const Text('Error loading metadata'),
+                            trailing: const Icon(Icons.error, color: Colors.red),
+                            onTap: () {},
+                          ),
+                          data: (full) => ListTile(
+                            title: Text(full.title),
+                            subtitle: full.subtitle.isNotEmpty ? Text(full.subtitle) : null,
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () {
+                              ref.read(selectedPuzzleIdProvider.notifier).value = full.id;
+                              final id = Uri.encodeComponent(full.id);
+                              context.go('/crossword?id=$id');
+                            },
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  ...list.map((p) => ListTile(
-                        title: Text(p.title),
-                        subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
-                          final id = Uri.encodeComponent(p.id);
-                          context.go('/crossword?id=$id');
-                        },
-                      )),
                 ],
               );
             }).toList(),

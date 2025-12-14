@@ -72,7 +72,42 @@ String puzzleTitleFromJson(
 ///
 /// Strict behaviour: requires `assets/data/puzzles.json` to exist and contain
 /// a JSON array of asset paths. No fallback to `AssetManifest.json`.
+/// Lightweight index provider: only reads the master index and returns minimal
+/// descriptors (title is initially the token). This avoids loading thousands
+/// of individual puzzle JSONs at app startup.
 final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
+  // Prefer a precomputed metadata index if present (fast for web builds).
+  try {
+    final indexContent = await rootBundle.loadString('assets/data/puzzles_index.json');
+    final parsed = jsonDecode(indexContent);
+    if (parsed is List) {
+      final out = <PuzzleDescriptor>[];
+      for (final e in parsed) {
+        if (e is Map<String, dynamic>) {
+          out.add(PuzzleDescriptor(
+            id: e['id']?.toString() ?? '',
+            title: e['title']?.toString() ?? '',
+            path: e['path']?.toString() ?? '',
+            subtitle: e['subtitle']?.toString() ?? '',
+            origin: e['origin']?.toString() ?? 'unknown',
+            year: e['year']?.toString() ?? '',
+          ));
+        }
+      }
+      out.sort((a, b) {
+        final o = a.origin.compareTo(b.origin);
+        if (o != 0) return o;
+        final y = a.year.compareTo(b.year);
+        if (y != 0) return y;
+        return a.title.compareTo(b.title);
+      });
+      return out;
+    }
+  } catch (_) {
+    // ignore and fallback to live index
+  }
+
+  // Fallback: read master list and create lightweight descriptors (no full JSON load)
   final indexContent = await rootBundle.loadString('assets/data/puzzles.json');
   final parsed = jsonDecode(indexContent);
   if (parsed is! List) {
@@ -83,64 +118,66 @@ final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
   final out = <PuzzleDescriptor>[];
   for (final path in keys) {
     final token = puzzleTokenFromAssetPath(path);
-    try {
-      final data =
-          jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
-      // IMPORTANT: do NOT use JSON `id` for routing.
-      // Many puzzle JSONs use a human-readable title in `id`, which does not
-      // match the asset filename. Routing must use the filename token.
-      final title = puzzleTitleFromJson(data, fallback: token);
-      final subtitle = (data['subtitle'] ?? '').toString();
-      // Derive origin and year from the asset path: assets/data/<origin>/<year>/file.json
-      final parts = path.split('/');
-      var origin = 'unknown';
-      var year = '';
-      if (parts.length >= 3) {
-        origin = parts[2];
-      }
-      if (parts.length >= 4) {
-        year = parts[3];
-      }
-      out.add(
-        PuzzleDescriptor(
-          id: token,
-          title: title,
-          path: path,
-          subtitle: subtitle,
-          origin: origin,
-          year: year,
-        ),
-      );
-    } on Object catch (_) {
-      final name = path.split('/').last;
-      final parts = path.split('/');
-      var origin = 'unknown';
-      var year = '';
-      if (parts.length >= 3) {
-        origin = parts[2];
-      }
-      if (parts.length >= 4) {
-        year = parts[3];
-      }
-      out.add(PuzzleDescriptor(
-        id: token,
-        title: name,
-        path: path,
-        origin: origin,
-        year: year,
-      ));
+    final parts = path.split('/');
+    var origin = 'unknown';
+    var year = '';
+    if (parts.length >= 3) {
+      origin = parts[2];
     }
+    if (parts.length >= 4) {
+      year = parts[3];
+    }
+    out.add(PuzzleDescriptor(
+      id: token,
+      title: token,
+      path: path,
+      origin: origin,
+      year: year,
+    ));
   }
   out.sort((a, b) {
     final o = a.origin.compareTo(b.origin);
-    if (o != 0) {
-      return o;
-    }
+    if (o != 0) return o;
     final y = a.year.compareTo(b.year);
-    if (y != 0) {
-      return y;
-    }
+    if (y != 0) return y;
     return a.title.compareTo(b.title);
   });
   return out;
+});
+
+/// Loads full metadata for a single puzzle asset path on demand.
+final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((ref, path) async {
+  final token = puzzleTokenFromAssetPath(path);
+  try {
+    final data = jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
+    final title = puzzleTitleFromJson(data, fallback: token);
+    final subtitle = (data['subtitle'] ?? '').toString();
+    final parts = path.split('/');
+    var origin = 'unknown';
+    var year = '';
+    if (parts.length >= 3) origin = parts[2];
+    if (parts.length >= 4) year = parts[3];
+    return PuzzleDescriptor(
+      id: token,
+      title: title,
+      path: path,
+      subtitle: subtitle,
+      origin: origin,
+      year: year,
+    );
+  } catch (_) {
+    // On error return a minimal descriptor preserving token/path.
+    final parts = path.split('/');
+    var origin = 'unknown';
+    var year = '';
+    if (parts.length >= 3) origin = parts[2];
+    if (parts.length >= 4) year = parts[3];
+    return PuzzleDescriptor(
+      id: token,
+      title: token,
+      path: path,
+      origin: origin,
+      year: year,
+    );
+  }
 });

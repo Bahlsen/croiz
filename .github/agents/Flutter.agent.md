@@ -45,3 +45,8 @@ You DO NOT need to ask permission for : run flutter analyze, run the widget test
 
 NEVER implement fallbacks, alternative solutions, or extra features unless explicitly requested by the user.
 ALWAYS add tests for any new feature or bug fix.
+
+ALWAYS ensure that the code you write builds.
+
+
+"Clean the code" means to remove any unused imports, variables, functions, or classes from the codebase. It also means to refactor the code to improve its readability, maintainability, and performance. This includes following best practices for naming conventions, code structure, and formatting. Additionally, it involves ensuring that the code adheres to the project's coding standards and guidelines. Always run flutter format to ensure consistent code formatting across the codebase, run flutter analyze to identify and fix any potential issues, and run flutter test to verify that all tests pass successfully after cleaning the code.
