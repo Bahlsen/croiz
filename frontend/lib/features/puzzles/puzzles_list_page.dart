@@ -201,10 +201,8 @@ class PuzzlesListPage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
+  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
       appBar: AppBar(title: const Text('Puzzles')),
       body: _buildList(context, ref),
     );
-  }
 }

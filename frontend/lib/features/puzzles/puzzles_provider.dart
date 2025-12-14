@@ -87,7 +87,9 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
       for (final e in parsed) {
         if (e is Map<String, dynamic>) {
           final origin = e['origin']?.toString();
-          if (origin != null) out.add(origin);
+          if (origin != null) {
+            out.add(origin);
+          }
         } else if (e is String) {
           out.add(e);
         }
@@ -95,7 +97,7 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
       out.sort();
       return out;
     }
-  } catch (_) {
+  } on Object catch (_) {
     // ignore and fallback
   }
 
@@ -144,7 +146,7 @@ final originIndexProvider = FutureProvider.family<List<PuzzleDescriptor>, String
       out.sort((a, b) => a.title.compareTo(b.title));
       return out;
     }
-  } catch (_) {
+  } on Object catch (_) {
     // ignore and fallback
   }
 
@@ -206,9 +208,13 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   }
   out.sort((a, b) {
     final o = a.origin.compareTo(b.origin);
-    if (o != 0) return o;
+    if (o != 0) {
+      return o;
+    }
     final y = a.year.compareTo(b.year);
-    if (y != 0) return y;
+    if (y != 0) {
+      return y;
+    }
     return a.title.compareTo(b.title);
   });
   return out;
@@ -224,8 +230,12 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
     final parts = path.split('/');
     var origin = 'unknown';
     var year = '';
-    if (parts.length >= 3) origin = parts[2];
-    if (parts.length >= 4) year = parts[3];
+    if (parts.length >= 3) {
+      origin = parts[2];
+    }
+    if (parts.length >= 4) {
+      year = parts[3];
+    }
     return PuzzleDescriptor(
       id: token,
       title: title,
@@ -234,13 +244,17 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
       origin: origin,
       year: year,
     );
-  } catch (_) {
+  } on Object catch (_) {
     // On error return a minimal descriptor preserving token/path.
     final parts = path.split('/');
     var origin = 'unknown';
     var year = '';
-    if (parts.length >= 3) origin = parts[2];
-    if (parts.length >= 4) year = parts[3];
+    if (parts.length >= 3) {
+      origin = parts[2];
+    }
+    if (parts.length >= 4) {
+      year = parts[3];
+    }
     return PuzzleDescriptor(
       id: token,
       title: token,
