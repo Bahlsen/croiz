@@ -18,9 +18,11 @@ jobs:
 
       - name: Generate puzzles per-origin indexes
         run: |
-          set -e
           echo "Running puzzles index generator"
-          python tools/generate_puzzles_metadata_index.py
+          if ! python tools/generate_puzzles_metadata_index.py; then
+            echo "::error::puzzles metadata index generator failed. See workflow logs for details."
+            exit 1
+          fi
           echo "Generator finished"
         # run from frontend (defaults.working-directory is frontend)
 

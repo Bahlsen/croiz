@@ -154,6 +154,32 @@ Pop-Location
 - `mocktail: ^1.0.0` - Modern mocking
 - `golden_toolkit: ^0.13.0` - Golden tests
 
+## Generated puzzles metadata index
+
+This project includes a small generator that builds a compact metadata index used by the frontend list UI.
+
+- Script: `frontend/tools/generate_puzzles_metadata_index.py`
+- Outputs written to: `frontend/assets/data/`
+      - `puzzles_index.json` — master compact index (id/title/path/origin/year)
+      - `puzzles_index_origins.json` — origins summary with counts
+      - `puzzles_index_by_origin/<origin>.json` — per-origin compact indexes
+
+Why we have this
+- Parsing and rendering the full dataset on the UI thread can be slow on Android devices. The generator lets the app load a small origins list first and lazily load per-origin files when the user expands a section.
+
+CI behavior
+- CI and Deploy workflows run the generator before tests/builds. The workflow will fail early with an explicit error message if the generator exits non-zero.
+
+Running locally
+```bash
+cd frontend
+python tools/generate_puzzles_metadata_index.py
+flutter pub get
+flutter build web --release
+```
+
+If you add or remove raw puzzle JSON files under `frontend/assets/data/`, re-run the generator before building or commit an updated generated index so CI remains deterministic.
+
 ## Development Workflow
 
 ### Adding a New Feature

@@ -35,11 +35,11 @@ class PuzzlesListPage extends ConsumerWidget {
                     final idx = ref2.watch(originIndexProvider(origin));
                     return idx.when(
                       loading: () => const Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(16),
                         child: Center(child: CircularProgressIndicator()),
                       ),
                       error: (e, st) => Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8),
                         child: Text('Error loading $origin: $e'),
                       ),
                       data: (items) {
@@ -55,7 +55,7 @@ class PuzzlesListPage extends ConsumerWidget {
                             final list = years[year]!..sort((a, b) => a.title.compareTo(b.title));
                             return ExpansionTile(
                               title: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                                padding: const EdgeInsets.symmetric(vertical: 4),
                                 child: Text(year, style: Theme.of(context).textTheme.bodySmall),
                               ),
                               initiallyExpanded: false,
@@ -140,7 +140,7 @@ class PuzzlesListPage extends ConsumerWidget {
             return ExpansionTile(
               initiallyExpanded: false,
               title: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Text(year, style: Theme.of(context).textTheme.bodySmall),
               ),
               children: [
