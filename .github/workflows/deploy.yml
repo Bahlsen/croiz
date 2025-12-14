@@ -18,6 +18,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Generate puzzles per-origin indexes
+        run: |
+          set -e
+          echo "Running puzzles index generator"
+          python tools/generate_puzzles_metadata_index.py
+          echo "Generator finished"
+        # defaults.working-directory is frontend
+
+      - name: Cache generated puzzles index
+        uses: actions/cache@v4
+        with:
+          path: |
+            frontend/assets/data/puzzles_index_by_origin
+          key: ${{ runner.os }}-puzzles-index-${{ hashFiles('frontend/tools/generate_puzzles_metadata_index.py', 'frontend/assets/data/puzzles.json') }}
+          restore-keys: |
+            ${{ runner.os }}-puzzles-index-
+
+      - name: Verify generated per-origin index exists
+        run: |
+          if [ ! -d "assets/data/puzzles_index_by_origin" ]; then
+            echo "Missing puzzles_index_by_origin"
+            ls -la assets/data || true
+            exit 1
+          fi
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:

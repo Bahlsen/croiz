@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets' / 'data'
 INDEX_IN = ASSETS / 'puzzles.json'
 INDEX_OUT = ASSETS / 'puzzles_index.json'
+ORIGINS_OUT = ASSETS / 'puzzles_index_origins.json'
+ORIGINS_DIR = ASSETS / 'puzzles_index_by_origin'
 
 
 def token_from_path(path: str) -> str:
@@ -80,6 +82,21 @@ def main():
             print(f'  processed {i}/{total}')
     INDEX_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
     print('Wrote', INDEX_OUT)
+
+    # Group by origin and write per-origin indexes
+    ORIGINS_DIR.mkdir(parents=True, exist_ok=True)
+    origins = {}
+    for e in out:
+        origins.setdefault(e['origin'], []).append(e)
+
+    summary = []
+    for origin, items in origins.items():
+        # write file name safe origin
+        fname = ORIGINS_DIR / f"{origin}.json"
+        fname.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
+        summary.append({'origin': origin, 'count': len(items)})
+    ORIGINS_OUT.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
+    print('Wrote', ORIGINS_OUT, 'and per-origin indexes under', ORIGINS_DIR)
 
 
 if __name__ == '__main__':
