@@ -52,6 +52,10 @@ class CrosswordInputController {
   void setLetterAndAdvance(String letter) {
     final board = _safeReadBoard();
     final selected = _read(selectedCellProvider);
+    final lockedCells = _read(lockedCellsProvider);
+    final dir = _read(wordDirectionProvider);
+    final dr = dir == WordDirection.vertical ? 1 : 0;
+    final dc = dir == WordDirection.vertical ? 0 : 1;
 
     if (selected == null) {
       final first = _firstSelectable(board.blackCells);
@@ -68,26 +72,28 @@ class CrosswordInputController {
       return;
     }
 
-    // Check if the cell is locked
-    final lockedCells = _read(lockedCellsProvider);
     final cellKey = '${selected.row},${selected.col}';
     if (lockedCells.contains(cellKey)) {
-      // If current cell is locked, insert into the next selectable cell
-      final dir = _read(wordDirectionProvider);
-      final dr = dir == WordDirection.vertical ? 1 : 0;
-      final dc = dir == WordDirection.vertical ? 0 : 1;
-      final next = board.blackCells.nextSelectableFrom(
-        selected.row,
-        selected.col,
-        dr,
-        dc,
+      // Current cell is locked: move to the next editable cell (non-black,
+      // non-locked) and type there. This avoids the UX where the cursor stays
+      // on a locked cell but the letter appears one cell to the right.
+      final next = _nextEditableCell(
+        board,
+        fromRow: selected.row,
+        fromCol: selected.col,
+        dr: dr,
+        dc: dc,
         wrap: true,
       );
       if (next == null) {
-        return; // No next cell available
+        return;
       }
       final nextRow = next[0];
       final nextCol = next[1];
+      _read(selectedCellProvider.notifier).value = SelectedCell(
+        nextRow,
+        nextCol,
+      );
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _checkForCompletedWords();
       _moveToNext(board, startRow: nextRow, startCol: nextCol);
@@ -99,6 +105,40 @@ class CrosswordInputController {
     ).setLetter(selected.row, selected.col, letter);
     _checkForCompletedWords();
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
+  }
+
+  List<int>? _nextEditableCell(
+    GameBoard board, {
+    required int fromRow,
+    required int fromCol,
+    required int dr,
+    required int dc,
+    required bool wrap,
+  }) {
+    final lockedCells = _read(lockedCellsProvider);
+    var r = fromRow;
+    var c = fromCol;
+    final maxSteps = board.gridSize * board.gridSize;
+    for (var i = 0; i < maxSteps; i++) {
+      final next = board.blackCells.nextSelectableFrom(
+        r,
+        c,
+        dr,
+        dc,
+        wrap: wrap,
+      );
+      if (next == null) {
+        return null;
+      }
+      final nr = next[0];
+      final nc = next[1];
+      if (!lockedCells.contains('$nr,$nc')) {
+        return [nr, nc];
+      }
+      r = nr;
+      c = nc;
+    }
+    return null;
   }
 
   void clearCurrent() {
@@ -314,6 +354,7 @@ class CrosswordInputController {
     required int startCol,
   }) {
     final dir = _read(wordDirectionProvider);
+    final lockedCells = _read(lockedCellsProvider);
     // If entries are available, and the current cell is the last cell of
     // its entry in the current direction, advance to the FIRST cell of
     // the next entry (by number) in the same direction.
@@ -361,6 +402,10 @@ class CrosswordInputController {
                 final candidate = sameDir[j];
                 final key = wordCheck.getWordKey(candidate);
                 if (!foundWords.contains(key)) {
+                  final candidateKey = '${candidate.y},${candidate.x}';
+                  if (lockedCells.contains(candidateKey)) {
+                    continue;
+                  }
                   _read(selectedCellProvider.notifier).state = SelectedCell(
                     candidate.y,
                     candidate.x,
@@ -373,6 +418,10 @@ class CrosswordInputController {
                 final candidate = sameDir[j];
                 final key = wordCheck.getWordKey(candidate);
                 if (!foundWords.contains(key)) {
+                  final candidateKey = '${candidate.y},${candidate.x}';
+                  if (lockedCells.contains(candidateKey)) {
+                    continue;
+                  }
                   _read(selectedCellProvider.notifier).state = SelectedCell(
                     candidate.y,
                     candidate.x,
@@ -389,6 +438,10 @@ class CrosswordInputController {
               for (final candidate in otherDir) {
                 final key = wordCheck.getWordKey(candidate);
                 if (!foundWords.contains(key)) {
+                  final candidateKey = '${candidate.y},${candidate.x}';
+                  if (lockedCells.contains(candidateKey)) {
+                    continue;
+                  }
                   _read(selectedCellProvider.notifier).state = SelectedCell(
                     candidate.y,
                     candidate.x,
@@ -407,11 +460,12 @@ class CrosswordInputController {
 
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
-    final next = board.blackCells.nextSelectableFrom(
-      startRow,
-      startCol,
-      dr,
-      dc,
+    final next = _nextEditableCell(
+      board,
+      fromRow: startRow,
+      fromCol: startCol,
+      dr: dr,
+      dc: dc,
       wrap: true,
     );
     if (next != null) {

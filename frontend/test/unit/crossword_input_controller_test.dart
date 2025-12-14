@@ -105,6 +105,114 @@ void main() {
   });
 
   test(
+    'typing the final missing letter in the middle of a word does not advance into newly locked cells',
+    () {
+      final container = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+          // Avoid real timers in word-complete flashes.
+          flashClearDelayProvider.overrideWithValue(Duration.zero),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      const size = 5;
+      final grid = List<List<String?>>.generate(
+        size,
+        (_) => List<String?>.filled(size, null),
+      );
+      final blacks = List<List<bool>>.generate(
+        size,
+        (_) => List<bool>.filled(size, false),
+      );
+
+      // Make the remainder of row 0 black so the across entry ends at col 2.
+      blacks[0][3] = true;
+      blacks[0][4] = true;
+
+      // Across entry 1: row 0, col 0..2 => solution "CAT".
+      // Across entry 2: row 1, col 0..1 => solution "HI".
+      final entries = <PuzzleEntryData>[
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 3,
+        ),
+        const PuzzleEntryData(
+          number: 2,
+          direction: 'across',
+          x: 0,
+          y: 1,
+          length: 2,
+        ),
+      ];
+
+      final solutionGrid = List<List<String?>>.generate(
+        size,
+        (_) => List<String?>.filled(size, null),
+      );
+      solutionGrid[0][0] = 'C';
+      solutionGrid[0][1] = 'A';
+      solutionGrid[0][2] = 'T';
+      solutionGrid[1][0] = 'H';
+      solutionGrid[1][1] = 'I';
+
+      // Pre-fill the word except its middle letter.
+      grid[0][0] = 'C';
+      grid[0][2] = 'T';
+
+      final board = GameBoard(
+        id: 'mid-lock',
+        title: 'mid-lock',
+        gridSize: size,
+        createdAt: DateTime.now(),
+        grid: grid,
+        clues: const {},
+        blackCells: blacks,
+        difficulty: 1,
+        entries: entries,
+        solutionGrid: solutionGrid,
+      );
+      container.read(gameBoardProvider.notifier).state = board;
+
+      // Select the missing middle letter of the across word.
+      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+        0,
+        1,
+      );
+      container.read(wordDirectionProvider.notifier).state =
+          WordDirection.horizontal;
+
+      final controller = CrosswordInputController.fromContainer(container);
+
+      // Type the missing letter 'A' -> completes word 1 and locks its cells.
+      const event = KeyDownEvent(
+        logicalKey: LogicalKeyboardKey.keyA,
+        physicalKey: PhysicalKeyboardKey.keyA,
+        timeStamp: Duration(milliseconds: 1),
+      );
+      controller.handleKey(event, size);
+
+      final updated = container.read(gameBoardProvider);
+      expect(updated.grid[0][1], 'A');
+
+      final locked = container.read(lockedCellsProvider);
+      expect(locked, containsAll(<String>{'0,0', '0,1', '0,2'}));
+
+      // Selection should NOT end up in the just-locked word.
+      final sel = container.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(locked.contains('${sel!.row},${sel.col}'), isFalse);
+
+      // With horizontal movement + wrap, next editable cell should be (1,0).
+      expect(sel.row, 1);
+      expect(sel.col, 0);
+    },
+  );
+
+  test(
     'typing last letter of vertical entry moves to next entry first cell',
     () {
       final container = ProviderContainer(

@@ -9,10 +9,6 @@ void main() {
         puzzleTokenFromAssetPath('assets/data/nyt2005-01-01.json'),
         'nyt2005-01-01',
       );
-      expect(
-        puzzleTokenFromAssetPath('assets/data/sample_5x5.json'),
-        'sample_5x5',
-      );
     });
 
     test('returns basename as-is when no .json', () {

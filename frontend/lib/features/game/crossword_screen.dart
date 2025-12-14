@@ -130,7 +130,7 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         elevation: 0,
         leading: IconButton(
           tooltip: 'Puzzles',
-          icon: const Icon(Icons.list),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () => context.go('/puzzles'),
         ),
       ),

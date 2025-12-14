@@ -39,7 +39,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // The grid is now 5x5 from sample_5x5.json; 5 cells are black, so 20 GestureDetectors
+    // The grid is a 5x5 board provided by this test.
     // Cell at row=2, col=0 (letter 'C') should be one of the tappable cells
     final gridFinder = find.byType(GridView);
     // Tapping the first CrosswordCell is more reliable than counting GestureDetectors

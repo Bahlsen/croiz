@@ -367,11 +367,8 @@ GameBoard _prefillExceptOne(GameBoard board) {
   return board.copyWith(grid: newGrid);
 }
 
-/// Create sample board by loading from assets/data/sample_5x5.json
-Future<GameBoard> createSampleBoard() async {
-  final board = await loadPuzzleFromAsset('assets/data/sample_5x5.json');
-  return board;
-}
+/// Create a deterministic in-memory sample board.
+Future<GameBoard> createSampleBoard() async => createEmptyBoard(5);
 
 /// Fallback: create empty board if loading fails
 GameBoard createEmptyBoard(int size) =>
