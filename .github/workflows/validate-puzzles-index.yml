@@ -1,0 +1,27 @@
+name: Validate puzzle indexes
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run index generator
+        working-directory: ./frontend/tools
+        run: |
+          python generate_puzzles_index.py
+
+      - name: Validate index files
+        working-directory: ./frontend/tools
+        run: |
+          python validate_puzzles_index.py
