@@ -1,0 +1,753 @@
+{
+  "id": "PDQ",
+  "version": "1.0",
+  "metadata": {
+    "title": "PDQ",
+    "author": "By Alan Massengill & Jeff Chen/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-05-11",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "NABOB",
+      "clue": "Tycoon"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "NASH",
+      "clue": "\"Parsley is gharsley\" poet"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ALTO",
+      "clue": "Choir member"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "BEAUJOLAIS",
+      "clue": "Wine-producing province of France"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "OUTROW",
+      "clue": "Beat in a sculling race"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "BTU",
+      "clue": "A/C measure"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 4,
+      "answer": "SLOT",
+      "clue": "Piggy bank feature"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "SHOE",
+      "clue": "Chew toy for a puppy"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "LEFT",
+      "clue": "Headed out"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "OIL",
+      "clue": "Massage therapist's supply"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "TRIALS",
+      "clue": "Legal drama events"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "TAB",
+      "clue": "Caps lock neighbor"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "TORO",
+      "clue": "Barcelona bull"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "ANTI",
+      "clue": "Not pro"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "BOYD",
+      "clue": "Tigers pitcher Matthew"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "ALEUT",
+      "clue": "Native Alaskan"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "HEIR",
+      "clue": "Next in line?"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "MONO",
+      "clue": "Like early Beatles records"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Tycoon",
+        "answer": "NABOB"
+      },
+      {
+        "number": 6,
+        "clue": "Piggy bank feature",
+        "answer": "SLOT"
+      },
+      {
+        "number": 10,
+        "clue": "Caps lock neighbor",
+        "answer": "TAB"
+      },
+      {
+        "number": 13,
+        "clue": "Native Alaskan",
+        "answer": "ALEUT"
+      },
+      {
+        "number": 14,
+        "clue": "Next in line?",
+        "answer": "HEIR"
+      },
+      {
+        "number": 15,
+        "clue": "Like early Beatles records",
+        "answer": "MONO"
+      },
+      {
+        "number": 16,
+        "clue": "Welcoming torchbearer",
+        "answer": "STATUEOFLIBERTY"
+      },
+      {
+        "number": 19,
+        "clue": "Billing unit, sometimes",
+        "answer": "HOUR"
+      },
+      {
+        "number": 20,
+        "clue": "Clear, financially",
+        "answer": "NET"
+      },
+      {
+        "number": 21,
+        "clue": "\"Curiously strong\" mint",
+        "answer": "ALTOID"
+      },
+      {
+        "number": 22,
+        "clue": "What a double shot of espresso provides",
+        "answer": "JOLT"
+      },
+      {
+        "number": 24,
+        "clue": "Guzzling sound",
+        "answer": "GLUG"
+      },
+      {
+        "number": 25,
+        "clue": "\"It's all good,\" to an Aussie",
+        "answer": "NOWORRIESMATE"
+      },
+      {
+        "number": 30,
+        "clue": "Lady Gaga's \"___ It Happens to You\"",
+        "answer": "TIL"
+      },
+      {
+        "number": 31,
+        "clue": "Tycoon",
+        "answer": "BARON"
+      },
+      {
+        "number": 32,
+        "clue": "Kagan of the high court",
+        "answer": "ELENA"
+      },
+      {
+        "number": 34,
+        "clue": "Blinds part",
+        "answer": "SLAT"
+      },
+      {
+        "number": 36,
+        "clue": "Window pieces",
+        "answer": "PANES"
+      },
+      {
+        "number": 38,
+        "clue": "\"The Mod Squad\" do",
+        "answer": "AFRO"
+      },
+      {
+        "number": 39,
+        "clue": "Ballet class bends",
+        "answer": "PLIES"
+      },
+      {
+        "number": 41,
+        "clue": "Pioneering DVRs",
+        "answer": "TIVOS"
+      },
+      {
+        "number": 43,
+        "clue": "\"u r 2 funny\"",
+        "answer": "LOL"
+      },
+      {
+        "number": 44,
+        "clue": "Just to be safe",
+        "answer": "ASAPRECAUTION"
+      },
+      {
+        "number": 47,
+        "clue": "Multicolored",
+        "answer": "PIED"
+      },
+      {
+        "number": 48,
+        "clue": "Tim who won an Emmy for \"Project Runway\"",
+        "answer": "GUNN"
+      },
+      {
+        "number": 49,
+        "clue": "Dozen for Hercules",
+        "answer": "LABORS"
+      },
+      {
+        "number": 52,
+        "clue": "\"Gee, ya think?!\"",
+        "answer": "DUH"
+      },
+      {
+        "number": 54,
+        "clue": "Clumsy sorts",
+        "answer": "APES"
+      },
+      {
+        "number": 57,
+        "clue": "Quick out of the blocks, and a hint to the circled letters",
+        "answer": "OFFTOAFASTSTART"
+      },
+      {
+        "number": 60,
+        "clue": "Clumsy sorts",
+        "answer": "OAFS"
+      },
+      {
+        "number": 61,
+        "clue": "Lie around all day",
+        "answer": "LAZE"
+      },
+      {
+        "number": 62,
+        "clue": "Rock Starr",
+        "answer": "RINGO"
+      },
+      {
+        "number": 63,
+        "clue": "\"The Marvelous ___ Maisel\"",
+        "answer": "MRS"
+      },
+      {
+        "number": 64,
+        "clue": "Splitsville parties",
+        "answer": "EXES"
+      },
+      {
+        "number": 65,
+        "clue": "Fabled author?",
+        "answer": "AESOP"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "\"Parsley is gharsley\" poet",
+        "answer": "NASH"
+      },
+      {
+        "number": 2,
+        "clue": "Choir member",
+        "answer": "ALTO"
+      },
+      {
+        "number": 3,
+        "clue": "Wine-producing province of France",
+        "answer": "BEAUJOLAIS"
+      },
+      {
+        "number": 4,
+        "clue": "Beat in a sculling race",
+        "answer": "OUTROW"
+      },
+      {
+        "number": 5,
+        "clue": "A/C measure",
+        "answer": "BTU"
+      },
+      {
+        "number": 6,
+        "clue": "Chew toy for a puppy",
+        "answer": "SHOE"
+      },
+      {
+        "number": 7,
+        "clue": "Headed out",
+        "answer": "LEFT"
+      },
+      {
+        "number": 8,
+        "clue": "Massage therapist's supply",
+        "answer": "OIL"
+      },
+      {
+        "number": 9,
+        "clue": "Legal drama events",
+        "answer": "TRIALS"
+      },
+      {
+        "number": 10,
+        "clue": "Barcelona bull",
+        "answer": "TORO"
+      },
+      {
+        "number": 11,
+        "clue": "Not pro",
+        "answer": "ANTI"
+      },
+      {
+        "number": 12,
+        "clue": "Tigers pitcher Matthew",
+        "answer": "BOYD"
+      },
+      {
+        "number": 15,
+        "clue": "Annual NYC fundraising event",
+        "answer": "METGALA"
+      },
+      {
+        "number": 17,
+        "clue": "Nab in a sting",
+        "answer": "ENTRAP"
+      },
+      {
+        "number": 18,
+        "clue": "\"Tales of a Fourth Grade Nothing\" author Judy",
+        "answer": "BLUME"
+      },
+      {
+        "number": 23,
+        "clue": "Arcing tennis shot",
+        "answer": "LOB"
+      },
+      {
+        "number": 24,
+        "clue": "Site of the World Health Organization's headquarters",
+        "answer": "GENEVA"
+      },
+      {
+        "number": 25,
+        "clue": "Nabisco wafer brand",
+        "answer": "NILLA"
+      },
+      {
+        "number": 26,
+        "clue": "Containing some adult material, per the MPAA",
+        "answer": "RRATED"
+      },
+      {
+        "number": 27,
+        "clue": "Column type",
+        "answer": "IONIC"
+      },
+      {
+        "number": 28,
+        "clue": "Nonstick cookware",
+        "answer": "TEFLONPANS"
+      },
+      {
+        "number": 29,
+        "clue": "Corporation in a 2001-02 scandal",
+        "answer": "ENRON"
+      },
+      {
+        "number": 30,
+        "clue": "Recipe meas.",
+        "answer": "TSP"
+      },
+      {
+        "number": 33,
+        "clue": "Pioneer in email",
+        "answer": "AOL"
+      },
+      {
+        "number": 35,
+        "clue": "Darjeeling servers",
+        "answer": "TEAPOTS"
+      },
+      {
+        "number": 37,
+        "clue": "Pursued",
+        "answer": "SOUGHT"
+      },
+      {
+        "number": 40,
+        "clue": "Agnew who resigned in 1973",
+        "answer": "SPIRO"
+      },
+      {
+        "number": 42,
+        "clue": "Man's nickname that's an alphabetic run",
+        "answer": "STU"
+      },
+      {
+        "number": 45,
+        "clue": "Home flipper's goal",
+        "answer": "RESALE"
+      },
+      {
+        "number": 46,
+        "clue": "How many soccer games end",
+        "answer": "INATIE"
+      },
+      {
+        "number": 49,
+        "clue": "Hover ominously",
+        "answer": "LOOM"
+      },
+      {
+        "number": 50,
+        "clue": "In the distance",
+        "answer": "AFAR"
+      },
+      {
+        "number": 51,
+        "clue": "Buds 4 life",
+        "answer": "BFFS"
+      },
+      {
+        "number": 52,
+        "clue": "Stupefy",
+        "answer": "DAZE"
+      },
+      {
+        "number": 53,
+        "clue": "Duct tape has many",
+        "answer": "USES"
+      },
+      {
+        "number": 55,
+        "clue": "Thus",
+        "answer": "ERGO"
+      },
+      {
+        "number": 56,
+        "clue": "\"That's enough!\"",
+        "answer": "STOP"
+      },
+      {
+        "number": 58,
+        "clue": "Mostly obsolete business machine",
+        "answer": "FAX"
+      },
+      {
+        "number": 59,
+        "clue": "63-Across, in Spain",
+        "answer": "SRA"
+      }
+    ]
+  }
+}

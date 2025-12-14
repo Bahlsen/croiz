@@ -1,0 +1,880 @@
+{
+  "id": "Go Figure",
+  "version": "1.0",
+  "metadata": {
+    "title": "Go Figure",
+    "author": "Adam Wagner",
+    "editor": "Will Shortz",
+    "copyright": "© 2022, The New York Times",
+    "date": "2022-11-27",
+    "special": "circle"
+  },
+  "rows": 1,
+  "cols": 21,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 15,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 16,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 17,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 19,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 20,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 9,
+      "answer": "PIP",
+      "clue": "Gambling spot?"
+    },
+    {
+      "id": "a2",
+      "number": 2,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 11,
+      "answer": "INNERCIRCLE",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Gambling spot?",
+        "answer": "PIP"
+      },
+      {
+        "number": 4,
+        "clue": "Chap",
+        "answer": "GENT"
+      },
+      {
+        "number": 8,
+        "clue": "Addis ___",
+        "answer": "ABABA"
+      },
+      {
+        "number": 13,
+        "clue": "Pro response",
+        "answer": "YEA"
+      },
+      {
+        "number": 16,
+        "clue": "Bit of chicanery",
+        "answer": "JAPE"
+      },
+      {
+        "number": 17,
+        "clue": "___ water (healthful drink)",
+        "answer": "ALOE"
+      },
+      {
+        "number": 18,
+        "clue": "Totally uncool",
+        "answer": "NOTOK"
+      },
+      {
+        "number": 19,
+        "clue": "Rock's Jethro ___",
+        "answer": "TULL"
+      },
+      {
+        "number": 20,
+        "clue": "\"You're gonna love this, I promise!\"",
+        "answer": "ITLLBEFUN"
+      },
+      {
+        "number": 22,
+        "clue": "Urban area typically with the tallest buildings",
+        "answer": "INNERCITY"
+      },
+      {
+        "number": 24,
+        "clue": "Rocky road topping?",
+        "answer": "GRAVEL"
+      },
+      {
+        "number": 25,
+        "clue": "Length for a pregnancy",
+        "answer": "TERM"
+      },
+      {
+        "number": 27,
+        "clue": "Moneymaking venture",
+        "answer": "GIG"
+      },
+      {
+        "number": 28,
+        "clue": "LeBron James became one in 2018",
+        "answer": "LAKER"
+      },
+      {
+        "number": 29,
+        "clue": "That's the spirit!",
+        "answer": "GENIE"
+      },
+      {
+        "number": 30,
+        "clue": "Highway network that famously has sections without a speed limit",
+        "answer": "AUTOBAHN"
+      },
+      {
+        "number": 32,
+        "clue": "Service recipient",
+        "answer": "CLIENT"
+      },
+      {
+        "number": 33,
+        "clue": "An ocean",
+        "answer": "LOTS"
+      },
+      {
+        "number": 34,
+        "clue": "Device dusted off to watch old home movies, maybe",
+        "answer": "VCR"
+      },
+      {
+        "number": 35,
+        "clue": "Flat-topped French hat",
+        "answer": "KEPI"
+      },
+      {
+        "number": 36,
+        "clue": "Ante alternative",
+        "answer": "BLIND"
+      },
+      {
+        "number": 37,
+        "clue": "Musician Brian",
+        "answer": "ENO"
+      },
+      {
+        "number": 38,
+        "clue": "Public court proceeding",
+        "answer": "OPENHEARING"
+      },
+      {
+        "number": 40,
+        "clue": "Many a bad Yelp review",
+        "answer": "RANT"
+      },
+      {
+        "number": 41,
+        "clue": "Luxuriate (in)",
+        "answer": "BASK"
+      },
+      {
+        "number": 42,
+        "clue": "They're not sciences",
+        "answer": "ARTS"
+      },
+      {
+        "number": 43,
+        "clue": "___ Cannon, creator of the \"Pitch Perfect\" film series",
+        "answer": "KAY"
+      },
+      {
+        "number": 44,
+        "clue": "Fish sticks?",
+        "answer": "RODS"
+      },
+      {
+        "number": 48,
+        "clue": "Strength of character",
+        "answer": "GRIT"
+      },
+      {
+        "number": 50,
+        "clue": "\"Me!\"",
+        "answer": "IAM"
+      },
+      {
+        "number": 52,
+        "clue": "Compliment to a French chef",
+        "answer": "CESTSIBON"
+      },
+      {
+        "number": 54,
+        "clue": "Crackerjack",
+        "answer": "WHIZBANG"
+      },
+      {
+        "number": 56,
+        "clue": "Slack-jawed",
+        "answer": "AGAPE"
+      },
+      {
+        "number": 59,
+        "clue": "Automotive successor of the Bel Air",
+        "answer": "IMPALA"
+      },
+      {
+        "number": 60,
+        "clue": "Proudly embody, informally",
+        "answer": "REP"
+      },
+      {
+        "number": 61,
+        "clue": "What you're on when you're making progress",
+        "answer": "RIGHTTRACK"
+      },
+      {
+        "number": 64,
+        "clue": "Product sold on a rack, informally",
+        "answer": "MAG"
+      },
+      {
+        "number": 65,
+        "clue": "\"Them's fightin' words!\"",
+        "answer": "ITSWAR"
+      },
+      {
+        "number": 67,
+        "clue": "Set one's sights",
+        "answer": "AIMED"
+      },
+      {
+        "number": 68,
+        "clue": "Welcome center handouts",
+        "answer": "AREAMAPS"
+      },
+      {
+        "number": 70,
+        "clue": "Free of flaws, as a reputation",
+        "answer": "STAINLESS"
+      },
+      {
+        "number": 72,
+        "clue": "DiFranco of folk",
+        "answer": "ANI"
+      },
+      {
+        "number": 73,
+        "clue": "Sewer in American history",
+        "answer": "ROSS"
+      },
+      {
+        "number": 74,
+        "clue": "Hamlet's cousin",
+        "answer": "TOWN"
+      },
+      {
+        "number": 75,
+        "clue": "Music genre prefix",
+        "answer": "ALT"
+      },
+      {
+        "number": 76,
+        "clue": "Ideal engine sound",
+        "answer": "PURR"
+      },
+      {
+        "number": 79,
+        "clue": "Duel personalities?",
+        "answer": "FOES"
+      },
+      {
+        "number": 81,
+        "clue": "Like some memes",
+        "answer": "DANK"
+      },
+      {
+        "number": 83,
+        "clue": "Major concern for a meteorologist",
+        "answer": "SUPERSTORM"
+      },
+      {
+        "number": 85,
+        "clue": "The Bruins, on scoreboards",
+        "answer": "BOS"
+      },
+      {
+        "number": 88,
+        "clue": "Contents of a household box",
+        "answer": "FUSES"
+      },
+      {
+        "number": 89,
+        "clue": "Pasta whose name means \"barley\" in Italian",
+        "answer": "ORZO"
+      },
+      {
+        "number": 90,
+        "clue": "Startled scream",
+        "answer": "EEK"
+      },
+      {
+        "number": 91,
+        "clue": "Weight",
+        "answer": "HEFT"
+      },
+      {
+        "number": 92,
+        "clue": "Goes from one thing to another",
+        "answer": "MORPHS"
+      },
+      {
+        "number": 94,
+        "clue": "Purchase option for a dedicated fan",
+        "answer": "PREORDER"
+      },
+      {
+        "number": 96,
+        "clue": "Like dumbbells",
+        "answer": "DENSE"
+      },
+      {
+        "number": 97,
+        "clue": "Like Roma tomatoes",
+        "answer": "OVATE"
+      },
+      {
+        "number": 98,
+        "clue": "Something that may be sold by the yard",
+        "answer": "ALE"
+      },
+      {
+        "number": 99,
+        "clue": "The Nature Conservancy and World Wildlife Fund, e.g., in brief",
+        "answer": "NGOS"
+      },
+      {
+        "number": 100,
+        "clue": "Hate, hate, hate",
+        "answer": "LOATHE"
+      },
+      {
+        "number": 101,
+        "clue": "Certain juicing need",
+        "answer": "LEMONSQUEEZER"
+      },
+      {
+        "number": 104,
+        "clue": "Residential construction project",
+        "answer": "PAVEDROAD"
+      },
+      {
+        "number": 106,
+        "clue": "Deep shot, in hoops",
+        "answer": "TREY"
+      },
+      {
+        "number": 107,
+        "clue": "Weird",
+        "answer": "OUTRE"
+      },
+      {
+        "number": 108,
+        "clue": "Brother of Logan Roy on \"Succession\"",
+        "answer": "EWAN"
+      },
+      {
+        "number": 109,
+        "clue": "Has a meal",
+        "answer": "SUPS"
+      },
+      {
+        "number": 110,
+        "clue": "Urban grid: Abbr.",
+        "answer": "STS"
+      },
+      {
+        "number": 111,
+        "clue": "Tennis champ ___ Osaka",
+        "answer": "NAOMI"
+      },
+      {
+        "number": 112,
+        "clue": "Figs. first issued in 1936",
+        "answer": "SSNS"
+      },
+      {
+        "number": 113,
+        "clue": "Summer on the Riviera",
+        "answer": "ETE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Subscription platform for online content creators",
+        "answer": "PATREON"
+      },
+      {
+        "number": 2,
+        "clue": "\"That is my intention\"",
+        "answer": "IPLANTO"
+      },
+      {
+        "number": 3,
+        "clue": "Where the ilium and ischium are",
+        "answer": "PELVIS"
+      },
+      {
+        "number": 4,
+        "clue": "Inhabitant of Ireland or Scotland",
+        "answer": "GAEL"
+      },
+      {
+        "number": 5,
+        "clue": "Holiday helper",
+        "answer": "ELF"
+      },
+      {
+        "number": 6,
+        "clue": "Sign that you can't go back now?",
+        "answer": "NOUTURN"
+      },
+      {
+        "number": 7,
+        "clue": "Philosophical pillar",
+        "answer": "TENET"
+      },
+      {
+        "number": 8,
+        "clue": "___ Arbor, Mich.",
+        "answer": "ANN"
+      },
+      {
+        "number": 9,
+        "clue": "Deep inhalation to get high",
+        "answer": "BONGHIT"
+      },
+      {
+        "number": 10,
+        "clue": "Ordered delivery, perhaps",
+        "answer": "ATEIN"
+      },
+      {
+        "number": 11,
+        "clue": "Hive mind of \"Star Trek: TNG,\" with \"the\"",
+        "answer": "BORG"
+      },
+      {
+        "number": 12,
+        "clue": "National Dog Show org.",
+        "answer": "AKC"
+      },
+      {
+        "number": 13,
+        "clue": "___ someone's yum (criticized a person's tastes, slangily)",
+        "answer": "YUCKED"
+      },
+      {
+        "number": 14,
+        "clue": "Discovery astronaut Ochoa",
+        "answer": "ELLEN"
+      },
+      {
+        "number": 15,
+        "clue": "With it",
+        "answer": "ALERT"
+      },
+      {
+        "number": 16,
+        "clue": "Shake a little",
+        "answer": "JIGGLE"
+      },
+      {
+        "number": 19,
+        "clue": "Amtrak booking",
+        "answer": "TRAINTRIP"
+      },
+      {
+        "number": 21,
+        "clue": "Worker with wax",
+        "answer": "BEE"
+      },
+      {
+        "number": 22,
+        "clue": "\"Oof, what a day!\"",
+        "answer": "IMBEAT"
+      },
+      {
+        "number": 23,
+        "clue": "Run-D.M.C.'s \"You Be ___\"",
+        "answer": "ILLIN"
+      },
+      {
+        "number": 26,
+        "clue": "Longtime co-host of the annual Macy's Thanksgiving Day Parade",
+        "answer": "ROKER"
+      },
+      {
+        "number": 30,
+        "clue": "Good Texas hold 'em hand",
+        "answer": "ACEKING"
+      },
+      {
+        "number": 31,
+        "clue": "Auto loan figs.",
+        "answer": "APRS"
+      },
+      {
+        "number": 32,
+        "clue": "Bit of roofing in Spanish-style architecture",
+        "answer": "CLAYTILE"
+      },
+      {
+        "number": 34,
+        "clue": "Biden and Harris, notably, in brief",
+        "answer": "VPS"
+      },
+      {
+        "number": 36,
+        "clue": "Underwire undergarments",
+        "answer": "BRAS"
+      },
+      {
+        "number": 38,
+        "clue": "Muffin makeup, maybe",
+        "answer": "OATBRAN"
+      },
+      {
+        "number": 39,
+        "clue": "Over-emoter",
+        "answer": "HAM"
+      },
+      {
+        "number": 41,
+        "clue": "Trade, informally",
+        "answer": "BIZ"
+      },
+      {
+        "number": 43,
+        "clue": "Star N.F.L. wide receiver Allen",
+        "answer": "KEENAN"
+      },
+      {
+        "number": 45,
+        "clue": "First family from Illinois",
+        "answer": "OBAMAS"
+      },
+      {
+        "number": 46,
+        "clue": "Exercise in a swimming pool",
+        "answer": "DOLAPS"
+      },
+      {
+        "number": 47,
+        "clue": "Grabs",
+        "answer": "SNAGS"
+      },
+      {
+        "number": 48,
+        "clue": "\"___ Life\" (1981 Rick James single)",
+        "answer": "GHETTO"
+      },
+      {
+        "number": 49,
+        "clue": "Tool for cutting wood along the grain",
+        "answer": "RIPSAW"
+      },
+      {
+        "number": 51,
+        "clue": "Scandalized",
+        "answer": "AGHAST"
+      },
+      {
+        "number": 52,
+        "clue": "Pro who gets many return customers?",
+        "answer": "CPA"
+      },
+      {
+        "number": 53,
+        "clue": "Bad makeup artist",
+        "answer": "SMEARER"
+      },
+      {
+        "number": 54,
+        "clue": "Spot for a band",
+        "answer": "WRIST"
+      },
+      {
+        "number": 55,
+        "clue": "High ways",
+        "answer": "AIRLANES"
+      },
+      {
+        "number": 56,
+        "clue": "Early stop at a casino, maybe",
+        "answer": "ATM"
+      },
+      {
+        "number": 57,
+        "clue": "Univ. senior's hurdle",
+        "answer": "GRE"
+      },
+      {
+        "number": 58,
+        "clue": "Funding",
+        "answer": "AID"
+      },
+      {
+        "number": 62,
+        "clue": "\"___ but a scratch\": oft-quoted Monty Python line",
+        "answer": "TIS"
+      },
+      {
+        "number": 63,
+        "clue": "Con artist",
+        "answer": "GRIFTER"
+      },
+      {
+        "number": 66,
+        "clue": "Chattering plastic teeth, for one",
+        "answer": "WINDUPTOY"
+      },
+      {
+        "number": 69,
+        "clue": "Rapper ___ Def",
+        "answer": "MOS"
+      },
+      {
+        "number": 71,
+        "clue": "Group with lodges",
+        "answer": "ELKS"
+      },
+      {
+        "number": 72,
+        "clue": "Part of E.T.A.: Abbr.",
+        "answer": "ARR"
+      },
+      {
+        "number": 76,
+        "clue": "100%",
+        "answer": "PURE"
+      },
+      {
+        "number": 77,
+        "clue": "Allow for more high-density housing and mixed-use development, in urban planning lingo",
+        "answer": "UPZONE"
+      },
+      {
+        "number": 78,
+        "clue": "Company shake-up, for short",
+        "answer": "REORG"
+      },
+      {
+        "number": 80,
+        "clue": "Symbol of sturdiness",
+        "answer": "OAK"
+      },
+      {
+        "number": 82,
+        "clue": "Pallid",
+        "answer": "ASHEN"
+      },
+      {
+        "number": 83,
+        "clue": "Problem for a pitcher",
+        "answer": "SOREARM"
+      },
+      {
+        "number": 84,
+        "clue": "They have their ups and downs",
+        "answer": "SEESAWS"
+      },
+      {
+        "number": 85,
+        "clue": "With 86-Down, very upset ... like the answers to five of this puzzle's clues?",
+        "answer": "BENTOUT"
+      },
+      {
+        "number": 86,
+        "clue": "See 85-Down",
+        "answer": "OFSHAPE"
+      },
+      {
+        "number": 87,
+        "clue": "Grand mounts",
+        "answer": "STEEDS"
+      },
+      {
+        "number": 88,
+        "clue": "They go around at museums",
+        "answer": "FRAMES"
+      },
+      {
+        "number": 91,
+        "clue": "Coffin carrier",
+        "answer": "HEARSE"
+      },
+      {
+        "number": 92,
+        "clue": "Drops down?",
+        "answer": "MOLTS"
+      },
+      {
+        "number": 93,
+        "clue": "In no way hidden",
+        "answer": "OVERT"
+      },
+      {
+        "number": 94,
+        "clue": "It has only one-sixth of the mass of Earth's moon",
+        "answer": "PLUTO"
+      },
+      {
+        "number": 95,
+        "clue": "Goobers",
+        "answer": "DOPES"
+      },
+      {
+        "number": 96,
+        "clue": "Pentagon inits.",
+        "answer": "DOD"
+      },
+      {
+        "number": 98,
+        "clue": "Cousin of turquoise",
+        "answer": "AQUA"
+      },
+      {
+        "number": 100,
+        "clue": "Part of the eye that focuses light onto the retina",
+        "answer": "LENS"
+      },
+      {
+        "number": 102,
+        "clue": "Momma's boy",
+        "answer": "SON"
+      },
+      {
+        "number": 103,
+        "clue": "Big name in outdoor gear",
+        "answer": "REI"
+      },
+      {
+        "number": 105,
+        "clue": "Jones of CNN",
+        "answer": "VAN"
+      }
+    ]
+  }
+}

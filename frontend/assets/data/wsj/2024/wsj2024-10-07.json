@@ -1,0 +1,763 @@
+{
+  "id": "Take a Trip",
+  "version": "1.0",
+  "metadata": {
+    "title": "Take a Trip",
+    "author": "By Freddie Cheng/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-10-07",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "BEG",
+      "clue": "Panhandle"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "BOOLE",
+      "clue": "Symbolic logic pioneer George"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "ELMOS",
+      "clue": "\"St. ___ Fire\" (Brat Pack film)"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "GOINTOOVERDRIVE",
+      "clue": "Turn on the jets, so to speak"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "LEGO",
+      "clue": "Maker of the Ninjago toy line"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "LCD",
+      "clue": "PC screen type"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "EROS",
+      "clue": "Amorous archer"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "GAWK",
+      "clue": "Rubberneck"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "OMNI",
+      "clue": "Luxury hotel chain"
+    },
+    {
+      "id": "a8",
+      "number": 8,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "AFOUL",
+      "clue": "Run ___ of (conflict with)"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "ARK",
+      "clue": "Noah's construction"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "FINEMOTORSKILLS",
+      "clue": "Infants develop them as they grow"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ONEANDONE",
+      "clue": "Double free throw type"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "USER",
+      "clue": "Manual reader"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "LESS",
+      "clue": "Result after cutbacks"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "SOLO",
+      "clue": "With nobody else"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "CRAM",
+      "clue": "Study for tomorrow's exam"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "RINSE",
+      "clue": "Dentist order"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Panhandle",
+        "answer": "BEG"
+      },
+      {
+        "number": 4,
+        "clue": "Maker of the Ninjago toy line",
+        "answer": "LEGO"
+      },
+      {
+        "number": 8,
+        "clue": "Run ___ of (conflict with)",
+        "answer": "AFOUL"
+      },
+      {
+        "number": 13,
+        "clue": "With nobody else",
+        "answer": "SOLO"
+      },
+      {
+        "number": 14,
+        "clue": "Study for tomorrow's exam",
+        "answer": "CRAM"
+      },
+      {
+        "number": 15,
+        "clue": "Dentist order",
+        "answer": "RINSE"
+      },
+      {
+        "number": 16,
+        "clue": "2007 Paula Cole song",
+        "answer": "COMINDOWN"
+      },
+      {
+        "number": 18,
+        "clue": "Common exposed parts in ripped jeans",
+        "answer": "KNEES"
+      },
+      {
+        "number": 19,
+        "clue": "With nobody else",
+        "answer": "ALONE"
+      },
+      {
+        "number": 20,
+        "clue": "Body cover",
+        "answer": "SKIN"
+      },
+      {
+        "number": 22,
+        "clue": "Prominent parts in King Charles III caricatures",
+        "answer": "EARS"
+      },
+      {
+        "number": 23,
+        "clue": "Get snugly comfortable",
+        "answer": "NESTLE"
+      },
+      {
+        "number": 25,
+        "clue": "\"Curses!\"",
+        "answer": "DAMN"
+      },
+      {
+        "number": 27,
+        "clue": "Collection by Pindar celebrating victories at the Panhellenic Games",
+        "answer": "OLYMPIANODES"
+      },
+      {
+        "number": 33,
+        "clue": "Scheming about",
+        "answer": "UPTO"
+      },
+      {
+        "number": 36,
+        "clue": "Make money",
+        "answer": "EARN"
+      },
+      {
+        "number": 37,
+        "clue": "Coral island",
+        "answer": "ATOLL"
+      },
+      {
+        "number": 38,
+        "clue": "Want desperately",
+        "answer": "CRAVE"
+      },
+      {
+        "number": 40,
+        "clue": "Collar",
+        "answer": "NAB"
+      },
+      {
+        "number": 41,
+        "clue": "Facial product",
+        "answer": "TONER"
+      },
+      {
+        "number": 42,
+        "clue": "Clicked a thumbs-up icon, say",
+        "answer": "LIKED"
+      },
+      {
+        "number": 43,
+        "clue": "Cry from a happy player",
+        "answer": "IWIN"
+      },
+      {
+        "number": 45,
+        "clue": "Guns, as an engine",
+        "answer": "REVS"
+      },
+      {
+        "number": 46,
+        "clue": "Neil Gaiman novel adapted as a Starz series",
+        "answer": "AMERICANGODS"
+      },
+      {
+        "number": 49,
+        "clue": "Many a flat-screen",
+        "answer": "HDTV"
+      },
+      {
+        "number": 50,
+        "clue": "Heating in the microwave",
+        "answer": "NUKING"
+      },
+      {
+        "number": 54,
+        "clue": "With 53-Down, an Ibsen play",
+        "answer": "PEER"
+      },
+      {
+        "number": 56,
+        "clue": "Pert talk",
+        "answer": "SASS"
+      },
+      {
+        "number": 60,
+        "clue": "\"Flowers\" singer Cyrus",
+        "answer": "MILEY"
+      },
+      {
+        "number": 61,
+        "clue": "Anticipate",
+        "answer": "AWAIT"
+      },
+      {
+        "number": 63,
+        "clue": "\"Wow, that's unbelievable!\" and a clue to the circled letters",
+        "answer": "MINDBLOWN"
+      },
+      {
+        "number": 65,
+        "clue": "Caterpillar, for one",
+        "answer": "LARVA"
+      },
+      {
+        "number": 66,
+        "clue": "Scent",
+        "answer": "ODOR"
+      },
+      {
+        "number": 67,
+        "clue": "Exam for an aspiring atty.",
+        "answer": "LSAT"
+      },
+      {
+        "number": 68,
+        "clue": "Stage direction",
+        "answer": "ENTER"
+      },
+      {
+        "number": 69,
+        "clue": "Beer bash containers",
+        "answer": "KEGS"
+      },
+      {
+        "number": 70,
+        "clue": "Group of reps",
+        "answer": "SET"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Symbolic logic pioneer George",
+        "answer": "BOOLE"
+      },
+      {
+        "number": 2,
+        "clue": "\"St. ___ Fire\" (Brat Pack film)",
+        "answer": "ELMOS"
+      },
+      {
+        "number": 3,
+        "clue": "Turn on the jets, so to speak",
+        "answer": "GOINTOOVERDRIVE"
+      },
+      {
+        "number": 4,
+        "clue": "PC screen type",
+        "answer": "LCD"
+      },
+      {
+        "number": 5,
+        "clue": "Amorous archer",
+        "answer": "EROS"
+      },
+      {
+        "number": 6,
+        "clue": "Rubberneck",
+        "answer": "GAWK"
+      },
+      {
+        "number": 7,
+        "clue": "Luxury hotel chain",
+        "answer": "OMNI"
+      },
+      {
+        "number": 8,
+        "clue": "Noah's construction",
+        "answer": "ARK"
+      },
+      {
+        "number": 9,
+        "clue": "Infants develop them as they grow",
+        "answer": "FINEMOTORSKILLS"
+      },
+      {
+        "number": 10,
+        "clue": "Double free throw type",
+        "answer": "ONEANDONE"
+      },
+      {
+        "number": 11,
+        "clue": "Manual reader",
+        "answer": "USER"
+      },
+      {
+        "number": 12,
+        "clue": "Result after cutbacks",
+        "answer": "LESS"
+      },
+      {
+        "number": 13,
+        "clue": "Do a checkout chore",
+        "answer": "SCAN"
+      },
+      {
+        "number": 17,
+        "clue": "Carter of \"Gimme a Break!\"",
+        "answer": "NELL"
+      },
+      {
+        "number": 21,
+        "clue": "Keep-it-to-yourself legal doc.",
+        "answer": "NDA"
+      },
+      {
+        "number": 24,
+        "clue": "Part of a needle or hurricane",
+        "answer": "EYE"
+      },
+      {
+        "number": 26,
+        "clue": "Med. sch. course",
+        "answer": "ANAT"
+      },
+      {
+        "number": 28,
+        "clue": "Craze",
+        "answer": "MANIA"
+      },
+      {
+        "number": 29,
+        "clue": "Shrimp's kin",
+        "answer": "PRAWN"
+      },
+      {
+        "number": 30,
+        "clue": "Having a lot at stake",
+        "answer": "INBIG"
+      },
+      {
+        "number": 31,
+        "clue": "Abbr. on a relief map",
+        "answer": "ELEV"
+      },
+      {
+        "number": 32,
+        "clue": "Some Nikons, for short",
+        "answer": "SLRS"
+      },
+      {
+        "number": 33,
+        "clue": "Home of the NCAA's Bruins",
+        "answer": "UCLA"
+      },
+      {
+        "number": 34,
+        "clue": "Stiffly proper",
+        "answer": "PRIM"
+      },
+      {
+        "number": 35,
+        "clue": "Be optimistic",
+        "answer": "TAKEHEART"
+      },
+      {
+        "number": 39,
+        "clue": "Do some publishing house work",
+        "answer": "EDIT"
+      },
+      {
+        "number": 44,
+        "clue": "Starter for starter",
+        "answer": "NON"
+      },
+      {
+        "number": 47,
+        "clue": "MinuteClinic operator",
+        "answer": "CVS"
+      },
+      {
+        "number": 48,
+        "clue": "Speechless",
+        "answer": "DUMB"
+      },
+      {
+        "number": 51,
+        "clue": "Cry from an unhappy player",
+        "answer": "ILOSE"
+      },
+      {
+        "number": 52,
+        "clue": "Inexperienced with",
+        "answer": "NEWAT"
+      },
+      {
+        "number": 53,
+        "clue": "See 54-Across",
+        "answer": "GYNT"
+      },
+      {
+        "number": 54,
+        "clue": "Not looking well",
+        "answer": "PALE"
+      },
+      {
+        "number": 55,
+        "clue": "McGregor of \"Star Wars\" films",
+        "answer": "EWAN"
+      },
+      {
+        "number": 57,
+        "clue": "Wild way to run",
+        "answer": "AMOK"
+      },
+      {
+        "number": 58,
+        "clue": "Flank",
+        "answer": "SIDE"
+      },
+      {
+        "number": 59,
+        "clue": "Kiss, in Kensington",
+        "answer": "SNOG"
+      },
+      {
+        "number": 62,
+        "clue": "Paving gunk",
+        "answer": "TAR"
+      },
+      {
+        "number": 64,
+        "clue": "Hosp. workers",
+        "answer": "DRS"
+      }
+    ]
+  }
+}

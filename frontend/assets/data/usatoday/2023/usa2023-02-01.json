@@ -1,0 +1,2543 @@
+{
+  "id": "Lane Change",
+  "version": "1.0",
+  "metadata": {
+    "title": "Lane Change",
+    "author": "Zhouqin Burnikel",
+    "editor": "Erik Agard",
+    "copyright": "Universal UClick",
+    "date": "2023-02-01"
+  },
+  "rows": 15,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 12,
+      "y": 4,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 14,
+      "y": 4,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 5,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 5,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 7,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 7,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 1,
+      "y": 8,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 8,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 8,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 8,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 8,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 8,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "is_black": false,
+      "solution": "J"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 11,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 10,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 10,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 10,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 11,
+      "y": 10,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 12,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 13,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 11,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 12,
+      "y": 11,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 11,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 11,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 12,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 12,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 12,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 11,
+      "y": 12,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 12,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 12,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 12,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 13,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 13,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 3,
+      "y": 13,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 13,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 13,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 13,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 13,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 13,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 9,
+      "y": 13,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 10,
+      "y": 13,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 13,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 12,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 13,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 13,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 0,
+      "y": 14,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 1,
+      "y": 14,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 14,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 14,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 14,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 14,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 14,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 9,
+      "y": 14,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 14,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 14,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 14,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 14,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 14,
+      "y": 14,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "SPORK",
+      "clue": "Combo utensil"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "SPLIT",
+      "clue": "Divide evenly"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 5,
+      "answer": "PEEVE",
+      "clue": "\"Pet\" annoyance"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 5,
+      "answer": "OKAYS",
+      "clue": "Gives the go-ahead"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "RON",
+      "clue": "\"Parks and Recreation\" boss"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 4,
+      "answer": "KEPT",
+      "clue": "Held on to"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 7,
+      "y": 0,
+      "length": 4,
+      "answer": "PAID",
+      "clue": "Picked up the tab"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 9,
+      "answer": "PITABREAD",
+      "clue": "Shawarma wrapper"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 3,
+      "answer": "ATE",
+      "clue": "Enjoyed some shawarma"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 4,
+      "answer": "ITIS",
+      "clue": "\"Do you know what time ___?\""
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 7,
+      "answer": "DONTLIE",
+      "clue": "\"Be real with me!\""
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "ONE",
+      "clue": "___-hit wonder"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 10,
+      "answer": "OPTIMISTIC",
+      "clue": "Hopeful"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 5,
+      "answer": "NAACP",
+      "clue": "Civil rights org."
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 5,
+      "answer": "EDITS",
+      "clue": "Changes to a draft"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "PEKOE",
+      "clue": "Orange ___ tea"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 5,
+      "answer": "DITTO",
+      "clue": "\"That makes two of us\""
+    },
+    {
+      "id": "d14",
+      "number": 14,
+      "direction": "down",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "DONE",
+      "clue": "All finished"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "PAD",
+      "clue": "Tablet of paper"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 11,
+      "answer": "LEANPROTEIN",
+      "clue": "Tofu or chicken breast, for example"
+    },
+    {
+      "id": "d17",
+      "number": 17,
+      "direction": "down",
+      "x": 5,
+      "y": 2,
+      "length": 5,
+      "answer": "RIDES",
+      "clue": "Travels by bike"
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 12,
+      "y": 2,
+      "length": 3,
+      "answer": "TAI",
+      "clue": "___ chi classes"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 0,
+      "y": 3,
+      "length": 3,
+      "answer": "IVY",
+      "clue": "Climbing plant"
+    },
+    {
+      "id": "a20",
+      "number": 20,
+      "direction": "across",
+      "x": 4,
+      "y": 3,
+      "length": 4,
+      "answer": "TINA",
+      "clue": "\"Proud Mary\" singer Turner"
+    },
+    {
+      "id": "a21",
+      "number": 21,
+      "direction": "across",
+      "x": 9,
+      "y": 3,
+      "length": 6,
+      "answer": "STRICT",
+      "clue": "Rigid about rules"
+    },
+    {
+      "id": "d22",
+      "number": 22,
+      "direction": "down",
+      "x": 11,
+      "y": 3,
+      "length": 6,
+      "answer": "RUNNER",
+      "clue": "Marathon participant"
+    },
+    {
+      "id": "a23",
+      "number": 23,
+      "direction": "across",
+      "x": 0,
+      "y": 4,
+      "length": 4,
+      "answer": "TEST",
+      "clue": "Word after \"taste\" or \"litmus\""
+    },
+    {
+      "id": "d24",
+      "number": 24,
+      "direction": "down",
+      "x": 3,
+      "y": 4,
+      "length": 5,
+      "answer": "TEASE",
+      "clue": "Make fun of"
+    },
+    {
+      "id": "a25",
+      "number": 25,
+      "direction": "across",
+      "x": 5,
+      "y": 4,
+      "length": 4,
+      "answer": "DEBT",
+      "clue": "Financial obligation"
+    },
+    {
+      "id": "d26",
+      "number": 26,
+      "direction": "down",
+      "x": 8,
+      "y": 4,
+      "length": 7,
+      "answer": "TOPCOAT",
+      "clue": "Outer layer of paint"
+    },
+    {
+      "id": "a27",
+      "number": 27,
+      "direction": "across",
+      "x": 10,
+      "y": 4,
+      "length": 5,
+      "answer": "LUMPS",
+      "clue": "Cubes of sugar"
+    },
+    {
+      "id": "a28",
+      "number": 28,
+      "direction": "across",
+      "x": 3,
+      "y": 5,
+      "length": 3,
+      "answer": "ESE",
+      "clue": "Suffix for \"Benin\""
+    },
+    {
+      "id": "d29",
+      "number": 29,
+      "direction": "down",
+      "x": 4,
+      "y": 5,
+      "length": 6,
+      "answer": "SLYDOG",
+      "clue": "Sneaky person"
+    },
+    {
+      "id": "a30",
+      "number": 30,
+      "direction": "across",
+      "x": 7,
+      "y": 5,
+      "length": 6,
+      "answer": "ROTINI",
+      "clue": "Pasta used for pasta salad"
+    },
+    {
+      "id": "d31",
+      "number": 31,
+      "direction": "down",
+      "x": 9,
+      "y": 5,
+      "length": 6,
+      "answer": "THORNS",
+      "clue": "Prickly parts of plants"
+    },
+    {
+      "id": "a32",
+      "number": 32,
+      "direction": "across",
+      "x": 1,
+      "y": 6,
+      "length": 14,
+      "answer": "NEALSTEPHENSON",
+      "clue": "\"Cryptonomicon\" author"
+    },
+    {
+      "id": "d32",
+      "number": 32,
+      "direction": "down",
+      "x": 1,
+      "y": 6,
+      "length": 9,
+      "answer": "NAILBITER",
+      "clue": "Very close game"
+    },
+    {
+      "id": "d33",
+      "number": 33,
+      "direction": "down",
+      "x": 2,
+      "y": 6,
+      "length": 9,
+      "answer": "ENTOURAGE",
+      "clue": "Group that travels with a superstar"
+    },
+    {
+      "id": "d34",
+      "number": 34,
+      "direction": "down",
+      "x": 6,
+      "y": 6,
+      "length": 4,
+      "answer": "TWOS",
+      "clue": "Worst poker pair"
+    },
+    {
+      "id": "d35",
+      "number": 35,
+      "direction": "down",
+      "x": 13,
+      "y": 6,
+      "length": 4,
+      "answer": "ORSO",
+      "clue": "\". . . roughly\""
+    },
+    {
+      "id": "d36",
+      "number": 36,
+      "direction": "down",
+      "x": 14,
+      "y": 6,
+      "length": 4,
+      "answer": "NEED",
+      "clue": "Must-have"
+    },
+    {
+      "id": "a37",
+      "number": 37,
+      "direction": "across",
+      "x": 0,
+      "y": 7,
+      "length": 5,
+      "answer": "PANSY",
+      "clue": "Flower with an upturned \"face\""
+    },
+    {
+      "id": "d37",
+      "number": 37,
+      "direction": "down",
+      "x": 0,
+      "y": 7,
+      "length": 3,
+      "answer": "PCS",
+      "clue": "Some laptops"
+    },
+    {
+      "id": "a38",
+      "number": 38,
+      "direction": "across",
+      "x": 6,
+      "y": 7,
+      "length": 4,
+      "answer": "WACO",
+      "clue": "Baylor University's city"
+    },
+    {
+      "id": "a39",
+      "number": 39,
+      "direction": "across",
+      "x": 11,
+      "y": 7,
+      "length": 4,
+      "answer": "ETRE",
+      "clue": "Raison d'___"
+    },
+    {
+      "id": "a40",
+      "number": 40,
+      "direction": "across",
+      "x": 0,
+      "y": 8,
+      "length": 5,
+      "answer": "CITED",
+      "clue": "Made reference to"
+    },
+    {
+      "id": "a41",
+      "number": 41,
+      "direction": "across",
+      "x": 6,
+      "y": 8,
+      "length": 4,
+      "answer": "ODOR",
+      "clue": "Unpleasant smell"
+    },
+    {
+      "id": "a42",
+      "number": 42,
+      "direction": "across",
+      "x": 11,
+      "y": 8,
+      "length": 4,
+      "answer": "RISE",
+      "clue": "Fall's opposite"
+    },
+    {
+      "id": "a43",
+      "number": 43,
+      "direction": "across",
+      "x": 0,
+      "y": 9,
+      "length": 3,
+      "answer": "SLO",
+      "clue": "___-mo video"
+    },
+    {
+      "id": "a44",
+      "number": 44,
+      "direction": "across",
+      "x": 4,
+      "y": 9,
+      "length": 3,
+      "answer": "OJS",
+      "clue": "Pulpy breakfast drinks, for short"
+    },
+    {
+      "id": "d45",
+      "number": 45,
+      "direction": "down",
+      "x": 5,
+      "y": 9,
+      "length": 3,
+      "answer": "JEW",
+      "clue": "Sukkot celebrant"
+    },
+    {
+      "id": "a46",
+      "number": 46,
+      "direction": "across",
+      "x": 8,
+      "y": 9,
+      "length": 3,
+      "answer": "ANN",
+      "clue": "___ Arbor, Michigan"
+    },
+    {
+      "id": "d47",
+      "number": 47,
+      "direction": "down",
+      "x": 10,
+      "y": 9,
+      "length": 4,
+      "answer": "NOSH",
+      "clue": "Snack"
+    },
+    {
+      "id": "a48",
+      "number": 48,
+      "direction": "across",
+      "x": 12,
+      "y": 9,
+      "length": 3,
+      "answer": "COD",
+      "clue": "Fish used for fish sticks"
+    },
+    {
+      "id": "a49",
+      "number": 49,
+      "direction": "across",
+      "x": 1,
+      "y": 10,
+      "length": 5,
+      "answer": "BUDGE",
+      "clue": "Move slightly"
+    },
+    {
+      "id": "d50",
+      "number": 50,
+      "direction": "down",
+      "x": 3,
+      "y": 10,
+      "length": 5,
+      "answer": "DELIS",
+      "clue": "Places to get potato salad"
+    },
+    {
+      "id": "a51",
+      "number": 51,
+      "direction": "across",
+      "x": 7,
+      "y": 10,
+      "length": 5,
+      "answer": "ITSOK",
+      "clue": "\"Everything will be alright\""
+    },
+    {
+      "id": "d51",
+      "number": 51,
+      "direction": "down",
+      "x": 7,
+      "y": 10,
+      "length": 5,
+      "answer": "IDEAL",
+      "clue": "Perfect"
+    },
+    {
+      "id": "d52",
+      "number": 52,
+      "direction": "down",
+      "x": 11,
+      "y": 10,
+      "length": 5,
+      "answer": "KTOWN",
+      "clue": "Neighborhood with KBBQ spots"
+    },
+    {
+      "id": "a53",
+      "number": 53,
+      "direction": "across",
+      "x": 1,
+      "y": 11,
+      "length": 3,
+      "answer": "IRE",
+      "clue": "Incensed feeling"
+    },
+    {
+      "id": "a54",
+      "number": 54,
+      "direction": "across",
+      "x": 5,
+      "y": 11,
+      "length": 3,
+      "answer": "WED",
+      "clue": "Join in matrimony"
+    },
+    {
+      "id": "d55",
+      "number": 55,
+      "direction": "down",
+      "x": 6,
+      "y": 11,
+      "length": 4,
+      "answer": "ELSE",
+      "clue": "\". . . but what ___ is new?\""
+    },
+    {
+      "id": "a56",
+      "number": 56,
+      "direction": "across",
+      "x": 10,
+      "y": 11,
+      "length": 5,
+      "answer": "STASH",
+      "clue": "Store away secretly"
+    },
+    {
+      "id": "d57",
+      "number": 57,
+      "direction": "down",
+      "x": 12,
+      "y": 11,
+      "length": 4,
+      "answer": "AREA",
+      "clue": "Square feet are a measure of it"
+    },
+    {
+      "id": "d58",
+      "number": 58,
+      "direction": "down",
+      "x": 13,
+      "y": 11,
+      "length": 4,
+      "answer": "SNAP",
+      "clue": "Sound made with two fingers"
+    },
+    {
+      "id": "d59",
+      "number": 59,
+      "direction": "down",
+      "x": 14,
+      "y": 11,
+      "length": 4,
+      "answer": "HERE",
+      "clue": "\"___ goes nothing!\""
+    },
+    {
+      "id": "a60",
+      "number": 60,
+      "direction": "across",
+      "x": 0,
+      "y": 12,
+      "length": 5,
+      "answer": "STALE",
+      "clue": "Like yesterday's xiaolongbao"
+    },
+    {
+      "id": "d60",
+      "number": 60,
+      "direction": "down",
+      "x": 0,
+      "y": 12,
+      "length": 3,
+      "answer": "SLC",
+      "clue": "Capital that's home to the Utah Jazz, for short"
+    },
+    {
+      "id": "d61",
+      "number": 61,
+      "direction": "down",
+      "x": 4,
+      "y": 12,
+      "length": 3,
+      "answer": "ETS",
+      "clue": "UFO navigators, potentially (Abbr.)"
+    },
+    {
+      "id": "a62",
+      "number": 62,
+      "direction": "across",
+      "x": 6,
+      "y": 12,
+      "length": 9,
+      "answer": "LENAHORNE",
+      "clue": "Singer who starred in \"Stormy Weather\""
+    },
+    {
+      "id": "d63",
+      "number": 63,
+      "direction": "down",
+      "x": 8,
+      "y": 12,
+      "length": 3,
+      "answer": "NIL",
+      "clue": "Zero"
+    },
+    {
+      "id": "d64",
+      "number": 64,
+      "direction": "down",
+      "x": 9,
+      "y": 12,
+      "length": 3,
+      "answer": "ALE",
+      "clue": "India pale ___"
+    },
+    {
+      "id": "a65",
+      "number": 65,
+      "direction": "across",
+      "x": 0,
+      "y": 13,
+      "length": 5,
+      "answer": "LEGIT",
+      "clue": "Authentic, informally"
+    },
+    {
+      "id": "a66",
+      "number": 66,
+      "direction": "across",
+      "x": 6,
+      "y": 13,
+      "length": 4,
+      "answer": "SAIL",
+      "clue": "Boat part often made of polyester"
+    },
+    {
+      "id": "a67",
+      "number": 67,
+      "direction": "across",
+      "x": 11,
+      "y": 13,
+      "length": 4,
+      "answer": "WEAR",
+      "clue": "Be dressed in"
+    },
+    {
+      "id": "a68",
+      "number": 68,
+      "direction": "across",
+      "x": 0,
+      "y": 14,
+      "length": 5,
+      "answer": "CRESS",
+      "clue": "Peppery salad green"
+    },
+    {
+      "id": "a69",
+      "number": 69,
+      "direction": "across",
+      "x": 6,
+      "y": 14,
+      "length": 4,
+      "answer": "ELLE",
+      "clue": "Popular fashion magazine"
+    },
+    {
+      "id": "a70",
+      "number": 70,
+      "direction": "across",
+      "x": 11,
+      "y": 14,
+      "length": 4,
+      "answer": "NAPE",
+      "clue": "Body part under a low bun"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Combo utensil",
+        "answer": "SPORK"
+      },
+      {
+        "number": 6,
+        "clue": "Picked up the tab",
+        "answer": "PAID"
+      },
+      {
+        "number": 10,
+        "clue": "___-hit wonder",
+        "answer": "ONE"
+      },
+      {
+        "number": 13,
+        "clue": "Orange ___ tea",
+        "answer": "PEKOE"
+      },
+      {
+        "number": 14,
+        "clue": "\"That makes two of us\"",
+        "answer": "DITTO"
+      },
+      {
+        "number": 15,
+        "clue": "Tablet of paper",
+        "answer": "PAD"
+      },
+      {
+        "number": 16,
+        "clue": "Tofu or chicken breast, for example",
+        "answer": "LEANPROTEIN"
+      },
+      {
+        "number": 18,
+        "clue": "___ chi classes",
+        "answer": "TAI"
+      },
+      {
+        "number": 19,
+        "clue": "Climbing plant",
+        "answer": "IVY"
+      },
+      {
+        "number": 20,
+        "clue": "\"Proud Mary\" singer Turner",
+        "answer": "TINA"
+      },
+      {
+        "number": 21,
+        "clue": "Rigid about rules",
+        "answer": "STRICT"
+      },
+      {
+        "number": 23,
+        "clue": "Word after \"taste\" or \"litmus\"",
+        "answer": "TEST"
+      },
+      {
+        "number": 25,
+        "clue": "Financial obligation",
+        "answer": "DEBT"
+      },
+      {
+        "number": 27,
+        "clue": "Cubes of sugar",
+        "answer": "LUMPS"
+      },
+      {
+        "number": 28,
+        "clue": "Suffix for \"Benin\"",
+        "answer": "ESE"
+      },
+      {
+        "number": 30,
+        "clue": "Pasta used for pasta salad",
+        "answer": "ROTINI"
+      },
+      {
+        "number": 32,
+        "clue": "\"Cryptonomicon\" author",
+        "answer": "NEALSTEPHENSON"
+      },
+      {
+        "number": 37,
+        "clue": "Flower with an upturned \"face\"",
+        "answer": "PANSY"
+      },
+      {
+        "number": 38,
+        "clue": "Baylor University's city",
+        "answer": "WACO"
+      },
+      {
+        "number": 39,
+        "clue": "Raison d'___",
+        "answer": "ETRE"
+      },
+      {
+        "number": 40,
+        "clue": "Made reference to",
+        "answer": "CITED"
+      },
+      {
+        "number": 41,
+        "clue": "Unpleasant smell",
+        "answer": "ODOR"
+      },
+      {
+        "number": 42,
+        "clue": "Fall's opposite",
+        "answer": "RISE"
+      },
+      {
+        "number": 43,
+        "clue": "___-mo video",
+        "answer": "SLO"
+      },
+      {
+        "number": 44,
+        "clue": "Pulpy breakfast drinks, for short",
+        "answer": "OJS"
+      },
+      {
+        "number": 46,
+        "clue": "___ Arbor, Michigan",
+        "answer": "ANN"
+      },
+      {
+        "number": 48,
+        "clue": "Fish used for fish sticks",
+        "answer": "COD"
+      },
+      {
+        "number": 49,
+        "clue": "Move slightly",
+        "answer": "BUDGE"
+      },
+      {
+        "number": 51,
+        "clue": "\"Everything will be alright\"",
+        "answer": "ITSOK"
+      },
+      {
+        "number": 53,
+        "clue": "Incensed feeling",
+        "answer": "IRE"
+      },
+      {
+        "number": 54,
+        "clue": "Join in matrimony",
+        "answer": "WED"
+      },
+      {
+        "number": 56,
+        "clue": "Store away secretly",
+        "answer": "STASH"
+      },
+      {
+        "number": 60,
+        "clue": "Like yesterday's xiaolongbao",
+        "answer": "STALE"
+      },
+      {
+        "number": 62,
+        "clue": "Singer who starred in \"Stormy Weather\"",
+        "answer": "LENAHORNE"
+      },
+      {
+        "number": 65,
+        "clue": "Authentic, informally",
+        "answer": "LEGIT"
+      },
+      {
+        "number": 66,
+        "clue": "Boat part often made of polyester",
+        "answer": "SAIL"
+      },
+      {
+        "number": 67,
+        "clue": "Be dressed in",
+        "answer": "WEAR"
+      },
+      {
+        "number": 68,
+        "clue": "Peppery salad green",
+        "answer": "CRESS"
+      },
+      {
+        "number": 69,
+        "clue": "Popular fashion magazine",
+        "answer": "ELLE"
+      },
+      {
+        "number": 70,
+        "clue": "Body part under a low bun",
+        "answer": "NAPE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Divide evenly",
+        "answer": "SPLIT"
+      },
+      {
+        "number": 2,
+        "clue": "\"Pet\" annoyance",
+        "answer": "PEEVE"
+      },
+      {
+        "number": 3,
+        "clue": "Gives the go-ahead",
+        "answer": "OKAYS"
+      },
+      {
+        "number": 4,
+        "clue": "\"Parks and Recreation\" boss",
+        "answer": "RON"
+      },
+      {
+        "number": 5,
+        "clue": "Held on to",
+        "answer": "KEPT"
+      },
+      {
+        "number": 6,
+        "clue": "Shawarma wrapper",
+        "answer": "PITABREAD"
+      },
+      {
+        "number": 7,
+        "clue": "Enjoyed some shawarma",
+        "answer": "ATE"
+      },
+      {
+        "number": 8,
+        "clue": "\"Do you know what time ___?\"",
+        "answer": "ITIS"
+      },
+      {
+        "number": 9,
+        "clue": "\"Be real with me!\"",
+        "answer": "DONTLIE"
+      },
+      {
+        "number": 10,
+        "clue": "Hopeful",
+        "answer": "OPTIMISTIC"
+      },
+      {
+        "number": 11,
+        "clue": "Civil rights org.",
+        "answer": "NAACP"
+      },
+      {
+        "number": 12,
+        "clue": "Changes to a draft",
+        "answer": "EDITS"
+      },
+      {
+        "number": 14,
+        "clue": "All finished",
+        "answer": "DONE"
+      },
+      {
+        "number": 17,
+        "clue": "Travels by bike",
+        "answer": "RIDES"
+      },
+      {
+        "number": 22,
+        "clue": "Marathon participant",
+        "answer": "RUNNER"
+      },
+      {
+        "number": 24,
+        "clue": "Make fun of",
+        "answer": "TEASE"
+      },
+      {
+        "number": 26,
+        "clue": "Outer layer of paint",
+        "answer": "TOPCOAT"
+      },
+      {
+        "number": 29,
+        "clue": "Sneaky person",
+        "answer": "SLYDOG"
+      },
+      {
+        "number": 31,
+        "clue": "Prickly parts of plants",
+        "answer": "THORNS"
+      },
+      {
+        "number": 32,
+        "clue": "Very close game",
+        "answer": "NAILBITER"
+      },
+      {
+        "number": 33,
+        "clue": "Group that travels with a superstar",
+        "answer": "ENTOURAGE"
+      },
+      {
+        "number": 34,
+        "clue": "Worst poker pair",
+        "answer": "TWOS"
+      },
+      {
+        "number": 35,
+        "clue": "\". . . roughly\"",
+        "answer": "ORSO"
+      },
+      {
+        "number": 36,
+        "clue": "Must-have",
+        "answer": "NEED"
+      },
+      {
+        "number": 37,
+        "clue": "Some laptops",
+        "answer": "PCS"
+      },
+      {
+        "number": 45,
+        "clue": "Sukkot celebrant",
+        "answer": "JEW"
+      },
+      {
+        "number": 47,
+        "clue": "Snack",
+        "answer": "NOSH"
+      },
+      {
+        "number": 50,
+        "clue": "Places to get potato salad",
+        "answer": "DELIS"
+      },
+      {
+        "number": 51,
+        "clue": "Perfect",
+        "answer": "IDEAL"
+      },
+      {
+        "number": 52,
+        "clue": "Neighborhood with KBBQ spots",
+        "answer": "KTOWN"
+      },
+      {
+        "number": 55,
+        "clue": "\". . . but what ___ is new?\"",
+        "answer": "ELSE"
+      },
+      {
+        "number": 57,
+        "clue": "Square feet are a measure of it",
+        "answer": "AREA"
+      },
+      {
+        "number": 58,
+        "clue": "Sound made with two fingers",
+        "answer": "SNAP"
+      },
+      {
+        "number": 59,
+        "clue": "\"___ goes nothing!\"",
+        "answer": "HERE"
+      },
+      {
+        "number": 60,
+        "clue": "Capital that's home to the Utah Jazz, for short",
+        "answer": "SLC"
+      },
+      {
+        "number": 61,
+        "clue": "UFO navigators, potentially (Abbr.)",
+        "answer": "ETS"
+      },
+      {
+        "number": 63,
+        "clue": "Zero",
+        "answer": "NIL"
+      },
+      {
+        "number": 64,
+        "clue": "India pale ___",
+        "answer": "ALE"
+      }
+    ]
+  }
+}

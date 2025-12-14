@@ -1,0 +1,773 @@
+{
+  "id": "Floating Points",
+  "version": "1.0",
+  "metadata": {
+    "title": "Floating Points",
+    "author": "By Chuck Deodene/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2020-07-08",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "NANA",
+      "clue": "Grammy alternative"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "NADIR",
+      "clue": "Rock bottom"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ABIDE",
+      "clue": "Put up with"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "NATIVEBORN",
+      "clue": "From around here"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "ASTO",
+      "clue": "Concerning"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "STALE",
+      "clue": "Far from original"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "TRE",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ORGANIZATIONMEN",
+      "clue": "Loyal employees, in 1950s lingo"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "DEEM",
+      "clue": "Consider"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "QUICHELORRAINE",
+      "clue": "Dish with bacon, cheese and eggs"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "USERS",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "ASTHMA",
+      "clue": "Inhalers inhibit it"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "NERO",
+      "clue": "Mystery award presented by the Wolfe Pack"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "DRIP",
+      "clue": "Faucet flaw"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "ASPS",
+      "clue": "North African reptiles"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "SP",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "DITTO",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 3,
+      "answer": "TRE",
+      "clue": "Il secondo numero primo"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "USERS",
+      "clue": "Targets of interventions"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Grammy alternative",
+        "answer": "NANA"
+      },
+      {
+        "number": 5,
+        "clue": "Yard makeup",
+        "answer": "SOD"
+      },
+      {
+        "number": 8,
+        "clue": "Post-lecture sesh",
+        "answer": "QANDA"
+      },
+      {
+        "number": 13,
+        "clue": "Leave ashamed",
+        "answer": "ABASH"
+      },
+      {
+        "number": 15,
+        "clue": "Il secondo numero primo",
+        "answer": "TRE"
+      },
+      {
+        "number": 16,
+        "clue": "Targets of interventions",
+        "answer": "USERS"
+      },
+      {
+        "number": 17,
+        "clue": "\"Same for me\"",
+        "answer": "DITTO"
+      },
+      {
+        "number": 18,
+        "clue": "Epoch division",
+        "answer": "AGE"
+      },
+      {
+        "number": 19,
+        "clue": "\"Let ___!\" (\"Go ahead!\")",
+        "answer": "ITRIP"
+      },
+      {
+        "number": 20,
+        "clue": "\"On the ball\" or \"off the wagon,\" e.g.",
+        "answer": "IDIOM"
+      },
+      {
+        "number": 21,
+        "clue": "Entree sometimes paired with mint jelly",
+        "answer": "LAMBCHOPS"
+      },
+      {
+        "number": 23,
+        "clue": "Pulpit speaker, briefly",
+        "answer": "REV"
+      },
+      {
+        "number": 24,
+        "clue": "Idyllic area",
+        "answer": "EDEN"
+      },
+      {
+        "number": 26,
+        "clue": "Resistance unit",
+        "answer": "OHM"
+      },
+      {
+        "number": 27,
+        "clue": "Concern for Keynes, for short",
+        "answer": "ECON"
+      },
+      {
+        "number": 29,
+        "clue": "Conspiring",
+        "answer": "INLEAGUE"
+      },
+      {
+        "number": 34,
+        "clue": "Place to put on a suit",
+        "answer": "CABANA"
+      },
+      {
+        "number": 36,
+        "clue": "Burning desire",
+        "answer": "ZEAL"
+      },
+      {
+        "number": 37,
+        "clue": "Imitating",
+        "answer": "ALA"
+      },
+      {
+        "number": 38,
+        "clue": "Overhead",
+        "answer": "ALOFT"
+      },
+      {
+        "number": 39,
+        "clue": "Like sashimi",
+        "answer": "RAW"
+      },
+      {
+        "number": 40,
+        "clue": "Beginning",
+        "answer": "ONSET"
+      },
+      {
+        "number": 42,
+        "clue": "Copier tray abbr.",
+        "answer": "LTR"
+      },
+      {
+        "number": 43,
+        "clue": "Summer forecast",
+        "answer": "HEAT"
+      },
+      {
+        "number": 45,
+        "clue": "Exploratory spacecraft",
+        "answer": "PROBES"
+      },
+      {
+        "number": 46,
+        "clue": "Election night shower",
+        "answer": "CONFETTI"
+      },
+      {
+        "number": 48,
+        "clue": "Language of many Ghalib poems",
+        "answer": "URDU"
+      },
+      {
+        "number": 49,
+        "clue": "Eon division",
+        "answer": "ERA"
+      },
+      {
+        "number": 50,
+        "clue": "\"Three Sisters\" sister",
+        "answer": "OLGA"
+      },
+      {
+        "number": 52,
+        "clue": "Logan International Airport code",
+        "answer": "BOS"
+      },
+      {
+        "number": 55,
+        "clue": "Old-timey photo hue",
+        "answer": "SEPIATONE"
+      },
+      {
+        "number": 59,
+        "clue": "Suffuse",
+        "answer": "IMBUE"
+      },
+      {
+        "number": 61,
+        "clue": "Come into sync",
+        "answer": "ALIGN"
+      },
+      {
+        "number": 62,
+        "clue": "Awed texter's response",
+        "answer": "OMG"
+      },
+      {
+        "number": 63,
+        "clue": "He played Jefferson in \"Jefferson in Paris\"",
+        "answer": "NOLTE"
+      },
+      {
+        "number": 64,
+        "clue": "Suspended",
+        "answer": "SLUNG"
+      },
+      {
+        "number": 65,
+        "clue": "Pod particle",
+        "answer": "PEA"
+      },
+      {
+        "number": 66,
+        "clue": "Filing need",
+        "answer": "EMERY"
+      },
+      {
+        "number": 67,
+        "clue": "\"The Glass Bead Game\" author",
+        "answer": "HESSE"
+      },
+      {
+        "number": 68,
+        "clue": "Show satirized on \"30 Rock\"",
+        "answer": "SNL"
+      },
+      {
+        "number": 69,
+        "clue": "On a tanker, say",
+        "answer": "ASEA"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Rock bottom",
+        "answer": "NADIR"
+      },
+      {
+        "number": 2,
+        "clue": "Put up with",
+        "answer": "ABIDE"
+      },
+      {
+        "number": 3,
+        "clue": "From around here",
+        "answer": "NATIVEBORN"
+      },
+      {
+        "number": 4,
+        "clue": "Concerning",
+        "answer": "ASTO"
+      },
+      {
+        "number": 5,
+        "clue": "Far from original",
+        "answer": "STALE"
+      },
+      {
+        "number": 6,
+        "clue": "Loyal employees, in 1950s lingo",
+        "answer": "ORGANIZATIONMEN"
+      },
+      {
+        "number": 7,
+        "clue": "Consider",
+        "answer": "DEEM"
+      },
+      {
+        "number": 8,
+        "clue": "Dish with bacon, cheese and eggs",
+        "answer": "QUICHELORRAINE"
+      },
+      {
+        "number": 9,
+        "clue": "Inhalers inhibit it",
+        "answer": "ASTHMA"
+      },
+      {
+        "number": 10,
+        "clue": "Mystery award presented by the Wolfe Pack",
+        "answer": "NERO"
+      },
+      {
+        "number": 11,
+        "clue": "Faucet flaw",
+        "answer": "DRIP"
+      },
+      {
+        "number": 12,
+        "clue": "North African reptiles",
+        "answer": "ASPS"
+      },
+      {
+        "number": 14,
+        "clue": "Classic Western ditty",
+        "answer": "HOMEONTHERANGE"
+      },
+      {
+        "number": 22,
+        "clue": "Gaucho's weapon",
+        "answer": "BOLA"
+      },
+      {
+        "number": 25,
+        "clue": "Paternity test material",
+        "answer": "DNA"
+      },
+      {
+        "number": 28,
+        "clue": "Potent joe, informally",
+        "answer": "CAF"
+      },
+      {
+        "number": 30,
+        "clue": "Original",
+        "answer": "NEW"
+      },
+      {
+        "number": 31,
+        "clue": "What the circles represent, given the words they hold",
+        "answer": "GASBUBBLES"
+      },
+      {
+        "number": 32,
+        "clue": "Beekeeper in a 1997 film",
+        "answer": "ULEE"
+      },
+      {
+        "number": 33,
+        "clue": "Grub",
+        "answer": "EATS"
+      },
+      {
+        "number": 34,
+        "clue": "Trig follower, for some",
+        "answer": "CALC"
+      },
+      {
+        "number": 35,
+        "clue": "Glee club member",
+        "answer": "ALTO"
+      },
+      {
+        "number": 39,
+        "clue": "Dump diner",
+        "answer": "RAT"
+      },
+      {
+        "number": 41,
+        "clue": "Approve gesturally",
+        "answer": "NOD"
+      },
+      {
+        "number": 44,
+        "clue": "Coup target",
+        "answer": "ETAT"
+      },
+      {
+        "number": 45,
+        "clue": "Wrinkly-faced pet",
+        "answer": "PUG"
+      },
+      {
+        "number": 47,
+        "clue": "Simulates",
+        "answer": "FEIGNS"
+      },
+      {
+        "number": 51,
+        "clue": "Permitted",
+        "answer": "LEGAL"
+      },
+      {
+        "number": 53,
+        "clue": "Startlingly weird",
+        "answer": "OUTRE"
+      },
+      {
+        "number": 54,
+        "clue": "\"Later, gator!\"",
+        "answer": "SEEYA"
+      },
+      {
+        "number": 55,
+        "clue": "Bathrobe securer",
+        "answer": "SASH"
+      },
+      {
+        "number": 56,
+        "clue": "Glamour rival",
+        "answer": "ELLE"
+      },
+      {
+        "number": 57,
+        "clue": "Apt papal moniker",
+        "answer": "PIUS"
+      },
+      {
+        "number": 58,
+        "clue": "\"Sorry 'bout that!\"",
+        "answer": "OOPS"
+      },
+      {
+        "number": 60,
+        "clue": "NYC site of \"Christina's World\"",
+        "answer": "MOMA"
+      }
+    ]
+  }
+}

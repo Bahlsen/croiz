@@ -1,0 +1,920 @@
+{
+  "id": "Now You See It, Now You Don't",
+  "version": "1.0",
+  "metadata": {
+    "title": "Now You See It, Now You Don't",
+    "author": "Matt Gaffney",
+    "editor": "Mike Shenk",
+    "copyright": "The Wall Street Journal",
+    "date": "2017-03-17",
+    "rebus": "$=OB %=ON &=OT *=IR +=PE 0=IG 1=AN 2=AS 3=AT 4=CA 5=CH 6=CL 7=CO 8=EG 9=FL ?=LA @=MI ♠=SI ♣=US ♥=SV ♦=UC ⚀=YT",
+    "notes": "The answer to this week's contest crossword is a seven-letter word that you always see in crosswords."
+  },
+  "rows": 3,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "MICHIGAN",
+      "clue": "That Great Lake you always see in crosswords"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "MISLAY",
+      "clue": "Need to look for, maybe"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "CHOICE",
+      "clue": "Decision"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 3,
+      "answer": "IGOTIT",
+      "clue": "Outfielder's cry"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "ANTED",
+      "clue": "Paid for cards"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "DEGAS",
+      "clue": "Painter of dancers"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 3,
+      "answer": "DISROBES",
+      "clue": "Prepares to bathe"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "ELLIOT",
+      "clue": "\"Billy ___\""
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "GOOP",
+      "clue": "Hair gel, e.g."
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "ASP",
+      "clue": "Nasty snake"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 3,
+      "answer": "STEMMED",
+      "clue": "Came (from)"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "LASVEGAS",
+      "clue": "That Nevada city you always see in crosswords"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "LALANNE",
+      "clue": "Fit Jack"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "SVELTE",
+      "clue": "Willowy"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "EGGSON",
+      "clue": "Encourages bad behavior from"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 3,
+      "answer": "ASSORT",
+      "clue": "Classify"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "SOOT",
+      "clue": "Sweep's coating"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 5,
+      "answer": "ILOST",
+      "clue": "Dispirited player's admission"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "LEGS",
+      "clue": "Kicking pair"
+    },
+    {
+      "id": "a17",
+      "number": 17,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 8,
+      "answer": "LITE",
+      "clue": "Lo-cal"
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 9,
+      "y": 2,
+      "length": 6,
+      "answer": "SLOPE",
+      "clue": "Downward trend"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 93,
+        "clue": "*%#SECEDE#EGO",
+        "answer": null
+      },
+      {
+        "number": 1,
+        "clue": "That Great Lake you always see in crosswords",
+        "answer": "MICHIGAN"
+      },
+      {
+        "number": 5,
+        "clue": "Painter of dancers",
+        "answer": "DEGAS"
+      },
+      {
+        "number": 10,
+        "clue": "That Nevada city you always see in crosswords",
+        "answer": "LASVEGAS"
+      },
+      {
+        "number": 14,
+        "clue": "Sweep's coating",
+        "answer": "SOOT"
+      },
+      {
+        "number": 15,
+        "clue": "Dispirited player's admission",
+        "answer": "ILOST"
+      },
+      {
+        "number": 16,
+        "clue": "Kicking pair",
+        "answer": "LEGS"
+      },
+      {
+        "number": 17,
+        "clue": "Lo-cal",
+        "answer": "LITE"
+      },
+      {
+        "number": 18,
+        "clue": "Downward trend",
+        "answer": "SLOPE"
+      },
+      {
+        "number": 19,
+        "clue": "\"And another thing...\"",
+        "answer": "ALSO"
+      },
+      {
+        "number": 20,
+        "clue": "Freaky journey",
+        "answer": "ACIDTRIP"
+      },
+      {
+        "number": 22,
+        "clue": "Teach",
+        "answer": "MENTOR"
+      },
+      {
+        "number": 24,
+        "clue": "In spite of that",
+        "answer": "YET"
+      },
+      {
+        "number": 25,
+        "clue": "That Will Smith movie you always see in crosswords",
+        "answer": "IROBOT"
+      },
+      {
+        "number": 26,
+        "clue": "Widely respected",
+        "answer": "EMINENT"
+      },
+      {
+        "number": 27,
+        "clue": "Diesel alternative",
+        "answer": "LEE"
+      },
+      {
+        "number": 28,
+        "clue": "Linnaeus or Nobel",
+        "answer": "SWEDE"
+      },
+      {
+        "number": 29,
+        "clue": "That district of Manhattan you always see in crosswords",
+        "answer": "FLATIRON"
+      },
+      {
+        "number": 32,
+        "clue": "Leave the union",
+        "answer": "SECEDE"
+      },
+      {
+        "number": 34,
+        "clue": "It may be inflated",
+        "answer": "EGO"
+      },
+      {
+        "number": 37,
+        "clue": "Cali gal pal",
+        "answer": "AMIGA"
+      },
+      {
+        "number": 39,
+        "clue": "\"This is so frustrating...\"",
+        "answer": "GRR"
+      },
+      {
+        "number": 40,
+        "clue": "No longer encumbered by",
+        "answer": "RIDOF"
+      },
+      {
+        "number": 42,
+        "clue": "Decks, briefly",
+        "answer": "KOS"
+      },
+      {
+        "number": 43,
+        "clue": "Acres of trees",
+        "answer": "FOREST"
+      },
+      {
+        "number": 46,
+        "clue": "___ Mountains (that Europe-Asia-straddling range you always see in crosswords)",
+        "answer": "CAUCASUS"
+      },
+      {
+        "number": 47,
+        "clue": "Tendon",
+        "answer": "SINEW"
+      },
+      {
+        "number": 48,
+        "clue": "Beat everybody",
+        "answer": "WIN"
+      },
+      {
+        "number": 50,
+        "clue": "\"Willkommen\" show",
+        "answer": "CABARET"
+      },
+      {
+        "number": 53,
+        "clue": "Detachable vehicle",
+        "answer": "POD"
+      },
+      {
+        "number": 54,
+        "clue": "Goat's sound",
+        "answer": "MAA"
+      },
+      {
+        "number": 57,
+        "clue": "Short form, for short",
+        "answer": "ABBREV"
+      },
+      {
+        "number": 58,
+        "clue": "They often form around a certain model",
+        "answer": "AUTOCLUBS"
+      },
+      {
+        "number": 60,
+        "clue": "Macnee's 1960s co-star",
+        "answer": "RIGG"
+      },
+      {
+        "number": 61,
+        "clue": "Not totally against",
+        "answer": "OPENTO"
+      },
+      {
+        "number": 63,
+        "clue": "Sean of \"Rudy\"",
+        "answer": "ASTIN"
+      },
+      {
+        "number": 64,
+        "clue": "Together, in music",
+        "answer": "ADUE"
+      },
+      {
+        "number": 65,
+        "clue": "Novelist Edward Bulwer-___",
+        "answer": "LYTTON"
+      },
+      {
+        "number": 66,
+        "clue": "Number before ocho",
+        "answer": "SIETE"
+      },
+      {
+        "number": 67,
+        "clue": "Hamilton's bills",
+        "answer": "TENS"
+      },
+      {
+        "number": 68,
+        "clue": "\"About a Quarter __\"",
+        "answer": "TONINE"
+      },
+      {
+        "number": 69,
+        "clue": "C++ user",
+        "answer": "CODER"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Need to look for, maybe",
+        "answer": "MISLAY"
+      },
+      {
+        "number": 2,
+        "clue": "Decision",
+        "answer": "CHOICE"
+      },
+      {
+        "number": 3,
+        "clue": "Outfielder's cry",
+        "answer": "IGOTIT"
+      },
+      {
+        "number": 4,
+        "clue": "Paid for cards",
+        "answer": "ANTED"
+      },
+      {
+        "number": 5,
+        "clue": "Prepares to bathe",
+        "answer": "DISROBES"
+      },
+      {
+        "number": 6,
+        "clue": "\"Billy ___\"",
+        "answer": "ELLIOT"
+      },
+      {
+        "number": 7,
+        "clue": "Hair gel, e.g.",
+        "answer": "GOOP"
+      },
+      {
+        "number": 8,
+        "clue": "Nasty snake",
+        "answer": "ASP"
+      },
+      {
+        "number": 9,
+        "clue": "Came (from)",
+        "answer": "STEMMED"
+      },
+      {
+        "number": 10,
+        "clue": "Fit Jack",
+        "answer": "LALANNE"
+      },
+      {
+        "number": 11,
+        "clue": "Willowy",
+        "answer": "SVELTE"
+      },
+      {
+        "number": 12,
+        "clue": "Encourages bad behavior from",
+        "answer": "EGGSON"
+      },
+      {
+        "number": 13,
+        "clue": "Classify",
+        "answer": "ASSORT"
+      },
+      {
+        "number": 21,
+        "clue": "Flag",
+        "answer": "TIRE"
+      },
+      {
+        "number": 23,
+        "clue": "Soft duck feathers",
+        "answer": "EIDER"
+      },
+      {
+        "number": 26,
+        "clue": "Big pitchers",
+        "answer": "EWERS"
+      },
+      {
+        "number": 27,
+        "clue": "Protracted",
+        "answer": "LONG"
+      },
+      {
+        "number": 28,
+        "clue": "Auger shape",
+        "answer": "SCREW"
+      },
+      {
+        "number": 29,
+        "clue": "Criticism",
+        "answer": "FLAK"
+      },
+      {
+        "number": 30,
+        "clue": "Prefix with sphere",
+        "answer": "ATMO"
+      },
+      {
+        "number": 31,
+        "clue": "Part of the eye",
+        "answer": "IRIS"
+      },
+      {
+        "number": 33,
+        "clue": "Bittern's kin",
+        "answer": "EGRET"
+      },
+      {
+        "number": 34,
+        "clue": "Cabinet dept.",
+        "answer": "EDUC"
+      },
+      {
+        "number": 35,
+        "clue": "Be for Halloween",
+        "answer": "GOAS"
+      },
+      {
+        "number": 36,
+        "clue": "\"The Sum ___\" (Russell Crowe film)",
+        "answer": "OFUS"
+      },
+      {
+        "number": 38,
+        "clue": "Blazing",
+        "answer": "AFIRE"
+      },
+      {
+        "number": 41,
+        "clue": "Volunteer's phrase",
+        "answer": "ICAN"
+      },
+      {
+        "number": 44,
+        "clue": "What will drive an ampere through an ohm",
+        "answer": "ONEVOLT"
+      },
+      {
+        "number": 45,
+        "clue": "Dichromatic",
+        "answer": "TWOTONE"
+      },
+      {
+        "number": 47,
+        "clue": "Looie inferiors",
+        "answer": "SARGES"
+      },
+      {
+        "number": 49,
+        "clue": "Chapel pledge",
+        "answer": "IDO"
+      },
+      {
+        "number": 50,
+        "clue": "Diamond unit",
+        "answer": "CARAT"
+      },
+      {
+        "number": 51,
+        "clue": "Tolerate",
+        "answer": "ABIDE"
+      },
+      {
+        "number": 52,
+        "clue": "\"A Christmas Story\" present",
+        "answer": "BBGUN"
+      },
+      {
+        "number": 53,
+        "clue": "Hoax",
+        "answer": "PUTON"
+      },
+      {
+        "number": 54,
+        "clue": "With no sound",
+        "answer": "MUTED"
+      },
+      {
+        "number": 55,
+        "clue": "\"Take ___ out of crime\"",
+        "answer": "ABITE"
+      },
+      {
+        "number": 56,
+        "clue": "Ed of \"Elf\"",
+        "answer": "ASNER"
+      },
+      {
+        "number": 58,
+        "clue": "Not pro",
+        "answer": "ANTI"
+      },
+      {
+        "number": 59,
+        "clue": "That spaghetti sauce brand you always see in crosswords",
+        "answer": "CLASSICO"
+      },
+      {
+        "number": 62,
+        "clue": "That quarterback Manning you always see in crosswords",
+        "answer": "PEYTON"
+      }
+    ]
+  }
+}

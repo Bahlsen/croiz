@@ -1,0 +1,534 @@
+{
+  "id": "It's More Than a Game",
+  "version": "1.0",
+  "metadata": {
+    "title": "It's More Than a Game",
+    "author": "Ed Sessa",
+    "editor": "Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-11-09",
+    "special": "circle"
+  },
+  "rows": 1,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "FIRE",
+      "clue": "Send packing"
+    },
+    {
+      "id": "a2",
+      "number": 2,
+      "direction": "across",
+      "x": 4,
+      "y": 0,
+      "length": 3,
+      "answer": "MOE",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a3",
+      "number": 3,
+      "direction": "across",
+      "x": 8,
+      "y": 0,
+      "length": 7,
+      "answer": "ELITISM",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Send packing",
+        "answer": "FIRE"
+      },
+      {
+        "number": 5,
+        "clue": "Suspect's out",
+        "answer": "ALIBI"
+      },
+      {
+        "number": 10,
+        "clue": "Lingerie purchase",
+        "answer": "BRA"
+      },
+      {
+        "number": 13,
+        "clue": "Snacks often twisted apart",
+        "answer": "OREOS"
+      },
+      {
+        "number": 15,
+        "clue": "Enticed",
+        "answer": "LEDON"
+      },
+      {
+        "number": 16,
+        "clue": "Slangy denial",
+        "answer": "NAH"
+      },
+      {
+        "number": 17,
+        "clue": "Splashy dives",
+        "answer": "CANNONBALLS"
+      },
+      {
+        "number": 19,
+        "clue": "Inhabitant of a 1968 sci-fi movie planet",
+        "answer": "APE"
+      },
+      {
+        "number": 20,
+        "clue": "Santa ___ Freeway",
+        "answer": "ANA"
+      },
+      {
+        "number": 21,
+        "clue": "TV tavern owner Szyslak",
+        "answer": "MOE"
+      },
+      {
+        "number": 22,
+        "clue": "Snobbish attitude",
+        "answer": "ELITISM"
+      },
+      {
+        "number": 24,
+        "clue": "Noted Dogpatch resident",
+        "answer": "LILABNER"
+      },
+      {
+        "number": 27,
+        "clue": "Marco Polo crossed it",
+        "answer": "GOBI"
+      },
+      {
+        "number": 28,
+        "clue": "August birth sign",
+        "answer": "LEO"
+      },
+      {
+        "number": 29,
+        "clue": "Semi blasters",
+        "answer": "AIRHORNS"
+      },
+      {
+        "number": 33,
+        "clue": "Staples Center hoopster",
+        "answer": "LAKER"
+      },
+      {
+        "number": 36,
+        "clue": "Pale in color",
+        "answer": "LIGHT"
+      },
+      {
+        "number": 37,
+        "clue": "\"Where did ___ wrong?\"",
+        "answer": "IGO"
+      },
+      {
+        "number": 38,
+        "clue": "Reed instrument",
+        "answer": "OBOE"
+      },
+      {
+        "number": 39,
+        "clue": "\"Right on!\"",
+        "answer": "BINGO"
+      },
+      {
+        "number": 40,
+        "clue": "Leaf holder",
+        "answer": "STEM"
+      },
+      {
+        "number": 41,
+        "clue": "Four-term pres.",
+        "answer": "FDR"
+      },
+      {
+        "number": 42,
+        "clue": "TV doctor Marcus",
+        "answer": "WELBY"
+      },
+      {
+        "number": 43,
+        "clue": "Slalom medalist Phil",
+        "answer": "MAHRE"
+      },
+      {
+        "number": 44,
+        "clue": "Integrates with",
+        "answer": "TIESINTO"
+      },
+      {
+        "number": 46,
+        "clue": "Galley hand",
+        "answer": "OAR"
+      },
+      {
+        "number": 47,
+        "clue": "Genesis killer",
+        "answer": "CAIN"
+      },
+      {
+        "number": 48,
+        "clue": "Challenge to a doubter",
+        "answer": "WANNABET"
+      },
+      {
+        "number": 53,
+        "clue": "1993 Nobel Peace Prize co-winner",
+        "answer": "MANDELA"
+      },
+      {
+        "number": 56,
+        "clue": "Reef setting",
+        "answer": "SEA"
+      },
+      {
+        "number": 57,
+        "clue": "Flamenco cry",
+        "answer": "OLE"
+      },
+      {
+        "number": 58,
+        "clue": "Horseplayers' hangout: Abbr.",
+        "answer": "OTB"
+      },
+      {
+        "number": 59,
+        "clue": "Popular word game, or, read differently, a hint to the circled letters",
+        "answer": "BANANAGRAMS"
+      },
+      {
+        "number": 62,
+        "clue": "Interior secretary Haaland",
+        "answer": "DEB"
+      },
+      {
+        "number": 63,
+        "clue": "Battery terminal",
+        "answer": "ANODE"
+      },
+      {
+        "number": 64,
+        "clue": "Auto that debuted in 1957",
+        "answer": "EDSEL"
+      },
+      {
+        "number": 65,
+        "clue": "Lawyer's letters",
+        "answer": "ESQ"
+      },
+      {
+        "number": 66,
+        "clue": "Off-base break, for short",
+        "answer": "RANDR"
+      },
+      {
+        "number": 67,
+        "clue": "Gillette blade brand",
+        "answer": "ATRA"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Kind of point",
+        "answer": "FOCAL"
+      },
+      {
+        "number": 2,
+        "clue": "Afghan's neighbor",
+        "answer": "IRANI"
+      },
+      {
+        "number": 3,
+        "clue": "Kidney-related",
+        "answer": "RENAL"
+      },
+      {
+        "number": 4,
+        "clue": "Long stretch of time",
+        "answer": "EON"
+      },
+      {
+        "number": 5,
+        "clue": "\"The Zoo Story\" playwright",
+        "answer": "ALBEE"
+      },
+      {
+        "number": 6,
+        "clue": "Grassy expanse",
+        "answer": "LEA"
+      },
+      {
+        "number": 7,
+        "clue": "Not at work",
+        "answer": "IDLE"
+      },
+      {
+        "number": 8,
+        "clue": "Cotton seed capsule",
+        "answer": "BOLL"
+      },
+      {
+        "number": 9,
+        "clue": "Understanding",
+        "answer": "INSIGHT"
+      },
+      {
+        "number": 10,
+        "clue": "Jewish service organization",
+        "answer": "BNAIBRITH"
+      },
+      {
+        "number": 11,
+        "clue": "Drake, e.g.",
+        "answer": "RAPSINGER"
+      },
+      {
+        "number": 12,
+        "clue": "\"Um, excuse me...\"",
+        "answer": "AHEM"
+      },
+      {
+        "number": 14,
+        "clue": "Melancholy",
+        "answer": "SOMBER"
+      },
+      {
+        "number": 18,
+        "clue": "Unacceptable act",
+        "answer": "NONO"
+      },
+      {
+        "number": 23,
+        "clue": "Unduly",
+        "answer": "TOO"
+      },
+      {
+        "number": 25,
+        "clue": "Downwind, when sailing",
+        "answer": "ALEE"
+      },
+      {
+        "number": 26,
+        "clue": "Colorful arc",
+        "answer": "RAINBOW"
+      },
+      {
+        "number": 30,
+        "clue": "Pop of punk rock",
+        "answer": "IGGY"
+      },
+      {
+        "number": 31,
+        "clue": "P, for Pythagoras",
+        "answer": "RHO"
+      },
+      {
+        "number": 32,
+        "clue": "A few",
+        "answer": "SOME"
+      },
+      {
+        "number": 33,
+        "clue": "Artist's place, perhaps",
+        "answer": "LOFT"
+      },
+      {
+        "number": 34,
+        "clue": "Relinquishes the throne",
+        "answer": "ABDICATES"
+      },
+      {
+        "number": 35,
+        "clue": "Cuisine that includes grilled bulgogi",
+        "answer": "KOREANBBQ"
+      },
+      {
+        "number": 36,
+        "clue": "Swinging rhythm",
+        "answer": "LILT"
+      },
+      {
+        "number": 39,
+        "clue": "Name on an ice cream carton",
+        "answer": "BEN"
+      },
+      {
+        "number": 40,
+        "clue": "Bareilles of \"Waitress\"",
+        "answer": "SARA"
+      },
+      {
+        "number": 42,
+        "clue": "Place to take in a bouquet",
+        "answer": "WINEBAR"
+      },
+      {
+        "number": 43,
+        "clue": "Make do",
+        "answer": "MANAGE"
+      },
+      {
+        "number": 45,
+        "clue": "Vicious of punk rock",
+        "answer": "SID"
+      },
+      {
+        "number": 46,
+        "clue": "Prime draft designation",
+        "answer": "ONEA"
+      },
+      {
+        "number": 49,
+        "clue": "\"Lou Grant\" star",
+        "answer": "ASNER"
+      },
+      {
+        "number": 50,
+        "clue": "Crow",
+        "answer": "BOAST"
+      },
+      {
+        "number": 51,
+        "clue": "Wabbit hunter's first name",
+        "answer": "ELMER"
+      },
+      {
+        "number": 52,
+        "clue": "Auto that debuted in 2006",
+        "answer": "TESLA"
+      },
+      {
+        "number": 53,
+        "clue": "Style",
+        "answer": "MODE"
+      },
+      {
+        "number": 54,
+        "clue": "Clark's Smallville sweetheart",
+        "answer": "LANA"
+      },
+      {
+        "number": 55,
+        "clue": "Shortly, to Shakespeare",
+        "answer": "ANON"
+      },
+      {
+        "number": 60,
+        "clue": "State further",
+        "answer": "ADD"
+      },
+      {
+        "number": 61,
+        "clue": "Food label letters",
+        "answer": "RDA"
+      }
+    ]
+  }
+}

@@ -1,0 +1,753 @@
+{
+  "id": "Squeeze Play",
+  "version": "1.0",
+  "metadata": {
+    "title": "Squeeze Play",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2023-08-01",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "Z"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "WHIR",
+      "clue": "Fan sound"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "WDS",
+      "clue": "Dict. entries"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "HAUL",
+      "clue": "Drag with effort"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "INFO",
+      "clue": "Dope"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "REFUTING",
+      "clue": "Proving to be false"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "DUPES",
+      "clue": "Hoodwinks"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "DOREMI",
+      "clue": "Scale start"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "UZIS",
+      "clue": "Six-Day War weapons"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "PANT",
+      "clue": "Breathe heavily"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "ERS",
+      "clue": "Hectic hosp. areas"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "SKIPOLES",
+      "clue": "Pair for a slalom competitor"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "AWOL",
+      "clue": "Sought by MPs, maybe"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "AGENDA",
+      "clue": "Program for a meeting"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "WENT",
+      "clue": "Headed out"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "ONCE",
+      "clue": "Sometime earlier"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "LEER",
+      "clue": "Unsavory look"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "DANE",
+      "clue": "Queen Margrethe II, for one"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 5,
+      "answer": "OZARK",
+      "clue": "Jason Bateman/Laura Linney TV series"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "GENE",
+      "clue": "Gift from a parent"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Fan sound",
+        "answer": "WHIR"
+      },
+      {
+        "number": 5,
+        "clue": "Hoodwinks",
+        "answer": "DUPES"
+      },
+      {
+        "number": 10,
+        "clue": "Sought by MPs, maybe",
+        "answer": "AWOL"
+      },
+      {
+        "number": 14,
+        "clue": "Queen Margrethe II, for one",
+        "answer": "DANE"
+      },
+      {
+        "number": 15,
+        "clue": "Jason Bateman/Laura Linney TV series",
+        "answer": "OZARK"
+      },
+      {
+        "number": 16,
+        "clue": "Gift from a parent",
+        "answer": "GENE"
+      },
+      {
+        "number": 17,
+        "clue": "Bottle up one's unhappiness",
+        "answer": "SUFFERINSILENCE"
+      },
+      {
+        "number": 20,
+        "clue": "Like the fortississimo movement, most likely",
+        "answer": "LOUDEST"
+      },
+      {
+        "number": 21,
+        "clue": "Member of a special team, in football",
+        "answer": "PUNTER"
+      },
+      {
+        "number": 22,
+        "clue": "Son of Bob Cratchit",
+        "answer": "TIM"
+      },
+      {
+        "number": 23,
+        "clue": "Cargo compartment",
+        "answer": "HOLD"
+      },
+      {
+        "number": 24,
+        "clue": "Reservoirs",
+        "answer": "ARTIFICIALLAKES"
+      },
+      {
+        "number": 32,
+        "clue": "Noted AFL-CIO leader George",
+        "answer": "MEANY"
+      },
+      {
+        "number": 33,
+        "clue": "\"Picnic\" playwright",
+        "answer": "INGE"
+      },
+      {
+        "number": 34,
+        "clue": "Org. opposed by Everytown for Gun Safety",
+        "answer": "NRA"
+      },
+      {
+        "number": 35,
+        "clue": "Hunger signal",
+        "answer": "PANG"
+      },
+      {
+        "number": 36,
+        "clue": "Septet in the Big Dipper",
+        "answer": "STARS"
+      },
+      {
+        "number": 37,
+        "clue": "Dragged out",
+        "answer": "LONG"
+      },
+      {
+        "number": 38,
+        "clue": "Play division",
+        "answer": "ACT"
+      },
+      {
+        "number": 39,
+        "clue": "Reinhart who plays Betty on \"Riverdale\"",
+        "answer": "LILI"
+      },
+      {
+        "number": 40,
+        "clue": "Contradict",
+        "answer": "BELIE"
+      },
+      {
+        "number": 41,
+        "clue": "Professional rugby team of South Yorkshire",
+        "answer": "SHEFFIELDEAGLES"
+      },
+      {
+        "number": 45,
+        "clue": "Throws in",
+        "answer": "ADDS"
+      },
+      {
+        "number": 46,
+        "clue": "Warning from a watchdog",
+        "answer": "GRR"
+      },
+      {
+        "number": 47,
+        "clue": "Tranquil",
+        "answer": "PLACID"
+      },
+      {
+        "number": 50,
+        "clue": "Sincerely zealous",
+        "answer": "EARNEST"
+      },
+      {
+        "number": 54,
+        "clue": "Aid in saving disk space, as displayed by the circled letters",
+        "answer": "FILECOMPRESSION"
+      },
+      {
+        "number": 57,
+        "clue": "Greek group",
+        "answer": "FRAT"
+      },
+      {
+        "number": 58,
+        "clue": "Tailor's measure",
+        "answer": "WAIST"
+      },
+      {
+        "number": 59,
+        "clue": "Casual farewell",
+        "answer": "TATA"
+      },
+      {
+        "number": 60,
+        "clue": "Offerings from some salons",
+        "answer": "TANS"
+      },
+      {
+        "number": 61,
+        "clue": "Vetoes",
+        "answer": "NIXES"
+      },
+      {
+        "number": 62,
+        "clue": "Urban blanket",
+        "answer": "SMOG"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Dict. entries",
+        "answer": "WDS"
+      },
+      {
+        "number": 2,
+        "clue": "Drag with effort",
+        "answer": "HAUL"
+      },
+      {
+        "number": 3,
+        "clue": "Dope",
+        "answer": "INFO"
+      },
+      {
+        "number": 4,
+        "clue": "Proving to be false",
+        "answer": "REFUTING"
+      },
+      {
+        "number": 5,
+        "clue": "Scale start",
+        "answer": "DOREMI"
+      },
+      {
+        "number": 6,
+        "clue": "Six-Day War weapons",
+        "answer": "UZIS"
+      },
+      {
+        "number": 7,
+        "clue": "Breathe heavily",
+        "answer": "PANT"
+      },
+      {
+        "number": 8,
+        "clue": "Hectic hosp. areas",
+        "answer": "ERS"
+      },
+      {
+        "number": 9,
+        "clue": "Pair for a slalom competitor",
+        "answer": "SKIPOLES"
+      },
+      {
+        "number": 10,
+        "clue": "Program for a meeting",
+        "answer": "AGENDA"
+      },
+      {
+        "number": 11,
+        "clue": "Headed out",
+        "answer": "WENT"
+      },
+      {
+        "number": 12,
+        "clue": "Sometime earlier",
+        "answer": "ONCE"
+      },
+      {
+        "number": 13,
+        "clue": "Unsavory look",
+        "answer": "LEER"
+      },
+      {
+        "number": 18,
+        "clue": "Instruct morally",
+        "answer": "EDIFY"
+      },
+      {
+        "number": 19,
+        "clue": "Quiet moment",
+        "answer": "LULL"
+      },
+      {
+        "number": 23,
+        "clue": "He's first to tell Harry Potter that he's a wizard",
+        "answer": "HAGRID"
+      },
+      {
+        "number": 24,
+        "clue": "Oscars org.",
+        "answer": "AMPAS"
+      },
+      {
+        "number": 25,
+        "clue": "Arrive at",
+        "answer": "REACH"
+      },
+      {
+        "number": 26,
+        "clue": "Spouse of un oncle",
+        "answer": "TANTE"
+      },
+      {
+        "number": 27,
+        "clue": "Mayors' domains",
+        "answer": "CITIES"
+      },
+      {
+        "number": 28,
+        "clue": "Completely",
+        "answer": "INALL"
+      },
+      {
+        "number": 29,
+        "clue": "Small hill",
+        "answer": "KNOLL"
+      },
+      {
+        "number": 30,
+        "clue": "Bert's TV buddy",
+        "answer": "ERNIE"
+      },
+      {
+        "number": 31,
+        "clue": "Wise ones",
+        "answer": "SAGES"
+      },
+      {
+        "number": 36,
+        "clue": "Descended, as a water park chute",
+        "answer": "SLIDDOWN"
+      },
+      {
+        "number": 37,
+        "clue": "Features of some recliners",
+        "answer": "LEGRESTS"
+      },
+      {
+        "number": 40,
+        "clue": "Buildings with haylofts",
+        "answer": "BARNS"
+      },
+      {
+        "number": 42,
+        "clue": "Diamond sides",
+        "answer": "FACETS"
+      },
+      {
+        "number": 43,
+        "clue": "It guarantees accts.",
+        "answer": "FDIC"
+      },
+      {
+        "number": 44,
+        "clue": "White-plumed herons",
+        "answer": "EGRETS"
+      },
+      {
+        "number": 47,
+        "clue": "Sound of a fizzling-out firecracker",
+        "answer": "PFFT"
+      },
+      {
+        "number": 48,
+        "clue": "Italy replaced it with the euro",
+        "answer": "LIRA"
+      },
+      {
+        "number": 49,
+        "clue": "Rickman of \"Die Hard\"",
+        "answer": "ALAN"
+      },
+      {
+        "number": 50,
+        "clue": "Former name of MGM+",
+        "answer": "EPIX"
+      },
+      {
+        "number": 51,
+        "clue": "Brit's backside",
+        "answer": "ARSE"
+      },
+      {
+        "number": 52,
+        "clue": "Thailand, before",
+        "answer": "SIAM"
+      },
+      {
+        "number": 53,
+        "clue": "Dog from Kansas",
+        "answer": "TOTO"
+      },
+      {
+        "number": 55,
+        "clue": "Avril-juin go-between",
+        "answer": "MAI"
+      },
+      {
+        "number": 56,
+        "clue": "Pester persistently",
+        "answer": "NAG"
+      }
+    ]
+  }
+}

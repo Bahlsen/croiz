@@ -1,0 +1,873 @@
+{
+  "id": "Climbing Trees",
+  "version": "1.0",
+  "metadata": {
+    "title": "Climbing Trees",
+    "author": "By Evan Kalish/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2020-07-14",
+    "special": "circle"
+  },
+  "rows": 3,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "Y"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 9,
+      "answer": "LARAM",
+      "clue": "NFL punter Johnny Hekker, for one"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "LABEL",
+      "clue": "Fashion house"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "AROMA",
+      "clue": "Patisserie enticement"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 3,
+      "answer": "RUSES",
+      "clue": "Deceitful distractions"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "ABORTS",
+      "clue": "Cancels, at Cape Canaveral"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 3,
+      "answer": "MANICUREDLAWN",
+      "clue": "Landscaper's pride"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "ACT",
+      "clue": "Take steps"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "RURALPOPULATION",
+      "clue": "It tends to be relatively sparse"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 3,
+      "answer": "TSAR",
+      "clue": "Target of a 1917 ouster"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "UNTIL",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 3,
+      "answer": "SPIGOT",
+      "clue": "Water source"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "FOR",
+      "clue": "Supporting"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "EVILOMENS",
+      "clue": "Sinister signs"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "TADA",
+      "clue": "Revealing interjection"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 3,
+      "answer": "ALEX",
+      "clue": "Borstein of \"The Marvelous Mrs. Maisel\""
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "ARUBA",
+      "clue": "Caribbean island about 18 miles north of Venezuela"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "CUSP",
+      "clue": "Tooth projection"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "OVAL",
+      "clue": "Track shape"
+    },
+    {
+      "id": "a17",
+      "number": 17,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 4,
+      "answer": "BOSON",
+      "clue": "Higgs ___ (elementary particle discovered in 2012)"
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 5,
+      "y": 2,
+      "length": 4,
+      "answer": "TRAINRIDE",
+      "clue": "Commuter's trip, sometimes"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 10,
+      "y": 2,
+      "length": 5,
+      "answer": "ELEGY",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "NFL punter Johnny Hekker, for one",
+        "answer": "LARAM"
+      },
+      {
+        "number": 6,
+        "clue": "Creative fields",
+        "answer": "ARTS"
+      },
+      {
+        "number": 10,
+        "clue": "Spanakopita ingredient",
+        "answer": "FETA"
+      },
+      {
+        "number": 14,
+        "clue": "Caribbean island about 18 miles north of Venezuela",
+        "answer": "ARUBA"
+      },
+      {
+        "number": 15,
+        "clue": "Tooth projection",
+        "answer": "CUSP"
+      },
+      {
+        "number": 16,
+        "clue": "Track shape",
+        "answer": "OVAL"
+      },
+      {
+        "number": 17,
+        "clue": "Higgs ___ (elementary particle discovered in 2012)",
+        "answer": "BOSON"
+      },
+      {
+        "number": 18,
+        "clue": "Commuter's trip, sometimes",
+        "answer": "TRAINRIDE"
+      },
+      {
+        "number": 20,
+        "clue": "Chef known to \"kick it up a notch\"",
+        "answer": "EMERIL"
+      },
+      {
+        "number": 22,
+        "clue": "Best Picture winner directed by Ben Affleck",
+        "answer": "ARGO"
+      },
+      {
+        "number": 23,
+        "clue": "Overly indulgent",
+        "answer": "LAX"
+      },
+      {
+        "number": 24,
+        "clue": "Bar announcement",
+        "answer": "LASTCALL"
+      },
+      {
+        "number": 26,
+        "clue": "Conductor Klemperer",
+        "answer": "OTTO"
+      },
+      {
+        "number": 28,
+        "clue": "Recap",
+        "answer": "SUMUP"
+      },
+      {
+        "number": 29,
+        "clue": "Supersedes",
+        "answer": "TRUMPS"
+      },
+      {
+        "number": 32,
+        "clue": "German exclamation",
+        "answer": "ACH"
+      },
+      {
+        "number": 35,
+        "clue": "Product from Harry's",
+        "answer": "RAZOR"
+      },
+      {
+        "number": 37,
+        "clue": "Bought without question",
+        "answer": "ATEUP"
+      },
+      {
+        "number": 38,
+        "clue": "Largest of the Greek islands",
+        "answer": "CRETE"
+      },
+      {
+        "number": 40,
+        "clue": "\"Adam, now ___ thine eyes\": \"Paradise Lost\"",
+        "answer": "OPE"
+      },
+      {
+        "number": 41,
+        "clue": "One found around the corner?",
+        "answer": "DUNCE"
+      },
+      {
+        "number": 42,
+        "clue": "Issued a decision",
+        "answer": "RULED"
+      },
+      {
+        "number": 43,
+        "clue": "One of 2020's front-line heroes",
+        "answer": "NURSE"
+      },
+      {
+        "number": 45,
+        "clue": "Join a quilting bee",
+        "answer": "SEW"
+      },
+      {
+        "number": 46,
+        "clue": "Throws out",
+        "answer": "EXPELS"
+      },
+      {
+        "number": 48,
+        "clue": "Baby gate feature",
+        "answer": "LATCH"
+      },
+      {
+        "number": 50,
+        "clue": "It has a maximum score of 1520",
+        "answer": "PSAT"
+      },
+      {
+        "number": 51,
+        "clue": "Data pros",
+        "answer": "ANALYSTS"
+      },
+      {
+        "number": 55,
+        "clue": "Showy neckwear",
+        "answer": "BOA"
+      },
+      {
+        "number": 57,
+        "clue": "Gamer's \"Yay!\"",
+        "answer": "WOOT"
+      },
+      {
+        "number": 59,
+        "clue": "Maker of Zuma scooters",
+        "answer": "YAMAHA"
+      },
+      {
+        "number": 60,
+        "clue": "Designed for comfort",
+        "answer": "ERGONOMIC"
+      },
+      {
+        "number": 63,
+        "clue": "Word with an end time",
+        "answer": "UNTIL"
+      },
+      {
+        "number": 64,
+        "clue": "Onion relative",
+        "answer": "LEEK"
+      },
+      {
+        "number": 65,
+        "clue": "Barely passable",
+        "answer": "POOR"
+      },
+      {
+        "number": 66,
+        "clue": "Cathedral namesake",
+        "answer": "SAINT"
+      },
+      {
+        "number": 67,
+        "clue": "Word after coin or ring",
+        "answer": "TOSS"
+      },
+      {
+        "number": 68,
+        "clue": "\"Wheel of Fortune\" studio",
+        "answer": "SONY"
+      },
+      {
+        "number": 69,
+        "clue": "Sorrowful stanzas",
+        "answer": "ELEGY"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Fashion house",
+        "answer": "LABEL"
+      },
+      {
+        "number": 2,
+        "clue": "Patisserie enticement",
+        "answer": "AROMA"
+      },
+      {
+        "number": 3,
+        "clue": "Deceitful distractions",
+        "answer": "RUSES"
+      },
+      {
+        "number": 4,
+        "clue": "Cancels, at Cape Canaveral",
+        "answer": "ABORTS"
+      },
+      {
+        "number": 5,
+        "clue": "Landscaper's pride",
+        "answer": "MANICUREDLAWN"
+      },
+      {
+        "number": 6,
+        "clue": "Take steps",
+        "answer": "ACT"
+      },
+      {
+        "number": 7,
+        "clue": "It tends to be relatively sparse",
+        "answer": "RURALPOPULATION"
+      },
+      {
+        "number": 8,
+        "clue": "Target of a 1917 ouster",
+        "answer": "TSAR"
+      },
+      {
+        "number": 9,
+        "clue": "Water source",
+        "answer": "SPIGOT"
+      },
+      {
+        "number": 10,
+        "clue": "Supporting",
+        "answer": "FOR"
+      },
+      {
+        "number": 11,
+        "clue": "Sinister signs",
+        "answer": "EVILOMENS"
+      },
+      {
+        "number": 12,
+        "clue": "Revealing interjection",
+        "answer": "TADA"
+      },
+      {
+        "number": 13,
+        "clue": "Borstein of \"The Marvelous Mrs. Maisel\"",
+        "answer": "ALEX"
+      },
+      {
+        "number": 19,
+        "clue": "Athlete's contract provision",
+        "answer": "NOTRADECLAUSE"
+      },
+      {
+        "number": 21,
+        "clue": "Priest from Lhasa",
+        "answer": "LAMA"
+      },
+      {
+        "number": 25,
+        "clue": "Largest island in the Philippines",
+        "answer": "LUZON"
+      },
+      {
+        "number": 27,
+        "clue": "Nobel Peace Prize winner who was archbishop of Cape Town",
+        "answer": "TUTU"
+      },
+      {
+        "number": 30,
+        "clue": "Purplish color",
+        "answer": "PUCE"
+      },
+      {
+        "number": 31,
+        "clue": "Gush",
+        "answer": "SPEW"
+      },
+      {
+        "number": 32,
+        "clue": "4,840 square yards",
+        "answer": "ACRE"
+      },
+      {
+        "number": 33,
+        "clue": "Essential point",
+        "answer": "CRUX"
+      },
+      {
+        "number": 34,
+        "clue": "Informational online resources",
+        "answer": "HELPPAGES"
+      },
+      {
+        "number": 36,
+        "clue": "Showed a second time",
+        "answer": "RERAN"
+      },
+      {
+        "number": 39,
+        "clue": "Campaign souvenirs",
+        "answer": "TEES"
+      },
+      {
+        "number": 44,
+        "clue": "Canine command",
+        "answer": "STAY"
+      },
+      {
+        "number": 47,
+        "clue": "Brownstone features",
+        "answer": "STOOPS"
+      },
+      {
+        "number": 49,
+        "clue": "It's bound to be used by a congregant",
+        "answer": "HYMNAL"
+      },
+      {
+        "number": 52,
+        "clue": "\"Socrate\" composer Erik",
+        "answer": "SATIE"
+      },
+      {
+        "number": 53,
+        "clue": "Object",
+        "answer": "THING"
+      },
+      {
+        "number": 54,
+        "clue": "Like ocean air",
+        "answer": "SALTY"
+      },
+      {
+        "number": 55,
+        "clue": "Big swig",
+        "answer": "BELT"
+      },
+      {
+        "number": 56,
+        "clue": "Dunkable treat",
+        "answer": "OREO"
+      },
+      {
+        "number": 58,
+        "clue": "1847 Melville book",
+        "answer": "OMOO"
+      },
+      {
+        "number": 61,
+        "clue": "Approvals",
+        "answer": "OKS"
+      },
+      {
+        "number": 62,
+        "clue": "Exclamation",
+        "answer": "CRY"
+      }
+    ]
+  }
+}

@@ -1,0 +1,763 @@
+{
+  "id": "The Game Is Afoot!",
+  "version": "1.0",
+  "metadata": {
+    "title": "The Game Is Afoot!",
+    "author": "By Jeff Chen/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2022-06-02",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "DADA",
+      "clue": "Pop"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "DELL",
+      "clue": "Small valley"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ALOE",
+      "clue": "Skin soother"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "DONTBERUDE",
+      "clue": "\"Enough with your insults!\""
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "ANGELS",
+      "clue": "2002 World Series champs"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "TGIF",
+      "clue": "End-of-week cheer"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "TLC",
+      "clue": "\"90 Day Fiancé\" airer"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "GEO",
+      "clue": "Head for Earth?"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "INN",
+      "clue": "Public house"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "FATJOE",
+      "clue": "\"The Elephant in the Room\" rapper"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "PHASE",
+      "clue": "Fleeting interest"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "PLANSTO",
+      "clue": "Will, if things proceed as intended"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "HUNT",
+      "clue": "Outing for the foxhounds"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ANYA",
+      "clue": "Taylor-Joy of \"The Queen's Gambit\""
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "SAMS",
+      "clue": "___ Club (Walmart subsidiary)"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ERS",
+      "clue": "Places with cases: Abbr."
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "ELON",
+      "clue": "First name at SpaceX"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "LENA",
+      "clue": "\"A Raisin in the Sun\" matriarch"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "LUNAR",
+      "clue": "Moon-based"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Pop",
+        "answer": "DADA"
+      },
+      {
+        "number": 5,
+        "clue": "End-of-week cheer",
+        "answer": "TGIF"
+      },
+      {
+        "number": 9,
+        "clue": "Fleeting interest",
+        "answer": "PHASE"
+      },
+      {
+        "number": 14,
+        "clue": "First name at SpaceX",
+        "answer": "ELON"
+      },
+      {
+        "number": 15,
+        "clue": "\"A Raisin in the Sun\" matriarch",
+        "answer": "LENA"
+      },
+      {
+        "number": 16,
+        "clue": "Moon-based",
+        "answer": "LUNAR"
+      },
+      {
+        "number": 17,
+        "clue": "Like the description \"drawn out excessively to the point of ridiculousness\"",
+        "answer": "LONG"
+      },
+      {
+        "number": 18,
+        "clue": "Words with two opposite meanings, like \"cleave\" and \"oversight\" (Chester Gould)",
+        "answer": "CONTRANYMS"
+      },
+      {
+        "number": 20,
+        "clue": "\"Like I care what they do\"",
+        "answer": "LETEM"
+      },
+      {
+        "number": 22,
+        "clue": "Coup groups",
+        "answer": "JUNTAS"
+      },
+      {
+        "number": 23,
+        "clue": "Spill the beans",
+        "answer": "BLAB"
+      },
+      {
+        "number": 25,
+        "clue": "History stretches",
+        "answer": "EONS"
+      },
+      {
+        "number": 26,
+        "clue": "Missouri (Arthur Conan Doyle)",
+        "answer": "THESHOWMESTATE"
+      },
+      {
+        "number": 32,
+        "clue": "Stirrup's spot",
+        "answer": "EAR"
+      },
+      {
+        "number": 33,
+        "clue": "\"That makes sense now\"",
+        "answer": "ISEE"
+      },
+      {
+        "number": 34,
+        "clue": "Lobbies",
+        "answer": "FOYERS"
+      },
+      {
+        "number": 36,
+        "clue": "One of los colores primarios",
+        "answer": "AZUL"
+      },
+      {
+        "number": 38,
+        "clue": "Self-correcting mechanical device",
+        "answer": "SERVO"
+      },
+      {
+        "number": 40,
+        "clue": "Wasp nest site",
+        "answer": "EAVE"
+      },
+      {
+        "number": 41,
+        "clue": "Versace logo figure",
+        "answer": "MEDUSA"
+      },
+      {
+        "number": 43,
+        "clue": "Round Table addresses",
+        "answer": "SIRS"
+      },
+      {
+        "number": 45,
+        "clue": "Avocado part",
+        "answer": "PIT"
+      },
+      {
+        "number": 46,
+        "clue": "Diagnoses after diagnoses (Edgar Allan Poe)",
+        "answer": "SECONDOPINIONS"
+      },
+      {
+        "number": 49,
+        "clue": "Loonie or toonie",
+        "answer": "COIN"
+      },
+      {
+        "number": 50,
+        "clue": "Delicacy",
+        "answer": "TACT"
+      },
+      {
+        "number": 51,
+        "clue": "On the go",
+        "answer": "ACTIVE"
+      },
+      {
+        "number": 54,
+        "clue": "Pascal of \"The Mandalorian\"",
+        "answer": "PEDRO"
+      },
+      {
+        "number": 57,
+        "clue": "Desert condition (Carolyn Keene)",
+        "answer": "DRYWEATHER"
+      },
+      {
+        "number": 61,
+        "clue": "\"The Grapes of Wrath\" surname",
+        "answer": "JOAD"
+      },
+      {
+        "number": 62,
+        "clue": "Cornrow component",
+        "answer": "PLAIT"
+      },
+      {
+        "number": 63,
+        "clue": "Seventh incarnation of Vishnu",
+        "answer": "RAMA"
+      },
+      {
+        "number": 64,
+        "clue": "Water balloons and the like",
+        "answer": "AMMO"
+      },
+      {
+        "number": 65,
+        "clue": "Brother of Michael Corleone",
+        "answer": "SONNY"
+      },
+      {
+        "number": 66,
+        "clue": "With 67-Across, \"I need a hint\" and a hint to uncovering four famous detectives",
+        "answer": "CLUE"
+      },
+      {
+        "number": 67,
+        "clue": "See 66-Across",
+        "answer": "MEIN"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Small valley",
+        "answer": "DELL"
+      },
+      {
+        "number": 2,
+        "clue": "Skin soother",
+        "answer": "ALOE"
+      },
+      {
+        "number": 3,
+        "clue": "\"Enough with your insults!\"",
+        "answer": "DONTBERUDE"
+      },
+      {
+        "number": 4,
+        "clue": "2002 World Series champs",
+        "answer": "ANGELS"
+      },
+      {
+        "number": 5,
+        "clue": "\"90 Day Fiancé\" airer",
+        "answer": "TLC"
+      },
+      {
+        "number": 6,
+        "clue": "Head for Earth?",
+        "answer": "GEO"
+      },
+      {
+        "number": 7,
+        "clue": "Public house",
+        "answer": "INN"
+      },
+      {
+        "number": 8,
+        "clue": "\"The Elephant in the Room\" rapper",
+        "answer": "FATJOE"
+      },
+      {
+        "number": 9,
+        "clue": "Will, if things proceed as intended",
+        "answer": "PLANSTO"
+      },
+      {
+        "number": 10,
+        "clue": "Outing for the foxhounds",
+        "answer": "HUNT"
+      },
+      {
+        "number": 11,
+        "clue": "Taylor-Joy of \"The Queen's Gambit\"",
+        "answer": "ANYA"
+      },
+      {
+        "number": 12,
+        "clue": "___ Club (Walmart subsidiary)",
+        "answer": "SAMS"
+      },
+      {
+        "number": 13,
+        "clue": "Places with cases: Abbr.",
+        "answer": "ERS"
+      },
+      {
+        "number": 19,
+        "clue": "Bolts",
+        "answer": "RUNSFORIT"
+      },
+      {
+        "number": 21,
+        "clue": "When doubled, a taco fish",
+        "answer": "MAHI"
+      },
+      {
+        "number": 24,
+        "clue": "\"The Girl From Ipanema\" style",
+        "answer": "BOSSANOVA"
+      },
+      {
+        "number": 25,
+        "clue": "\"Beauty is its own excuse for Being\" writer",
+        "answer": "EMERSON"
+      },
+      {
+        "number": 26,
+        "clue": "Pool pick",
+        "answer": "TEAM"
+      },
+      {
+        "number": 27,
+        "clue": "Puts through a brutal initiation",
+        "answer": "HAZES"
+      },
+      {
+        "number": 28,
+        "clue": "Minute",
+        "answer": "WEE"
+      },
+      {
+        "number": 29,
+        "clue": "Gob's \"got it\"",
+        "answer": "AYE"
+      },
+      {
+        "number": 30,
+        "clue": "Scandal that plagued Harding",
+        "answer": "TEAPOTDOME"
+      },
+      {
+        "number": 31,
+        "clue": "Senator who headed the Senate Watergate Committee",
+        "answer": "ERVIN"
+      },
+      {
+        "number": 35,
+        "clue": "Goes down",
+        "answer": "SETS"
+      },
+      {
+        "number": 37,
+        "clue": "\"March of the Penguins\" director Jacquet",
+        "answer": "LUC"
+      },
+      {
+        "number": 39,
+        "clue": "Luminary",
+        "answer": "VIP"
+      },
+      {
+        "number": 42,
+        "clue": "Upper classes",
+        "answer": "SOCIETY"
+      },
+      {
+        "number": 44,
+        "clue": "Break",
+        "answer": "SNAP"
+      },
+      {
+        "number": 47,
+        "clue": "Zero-calorie cola",
+        "answer": "DIETRC"
+      },
+      {
+        "number": 48,
+        "clue": "Winter river flow blocker",
+        "answer": "ICEJAM"
+      },
+      {
+        "number": 51,
+        "clue": "He played at Woodstock between Melanie and Joan",
+        "answer": "ARLO"
+      },
+      {
+        "number": 52,
+        "clue": "Inkjet color",
+        "answer": "CYAN"
+      },
+      {
+        "number": 53,
+        "clue": "Match",
+        "answer": "TWIN"
+      },
+      {
+        "number": 55,
+        "clue": "Malek of \"Mr. Robot\"",
+        "answer": "RAMI"
+      },
+      {
+        "number": 56,
+        "clue": "Overeat, informally",
+        "answer": "ODON"
+      },
+      {
+        "number": 57,
+        "clue": "Two-out feats in MLB",
+        "answer": "DPS"
+      },
+      {
+        "number": 58,
+        "clue": "Yankees owner Steinbrenner",
+        "answer": "HAL"
+      },
+      {
+        "number": 59,
+        "clue": "There's one on the Australian 50-cent piece",
+        "answer": "EMU"
+      },
+      {
+        "number": 60,
+        "clue": "Issa of \"The Photograph\"",
+        "answer": "RAE"
+      }
+    ]
+  }
+}

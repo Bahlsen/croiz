@@ -1,0 +1,903 @@
+{
+  "id": "Make It a Double",
+  "version": "1.0",
+  "metadata": {
+    "title": "Make It a Double",
+    "author": "By Ryan Mathiason/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-05-08",
+    "special": "circle"
+  },
+  "rows": 3,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "ABBA",
+      "clue": "\"Dancing Queen\" group"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "ADDS",
+      "clue": "Interjects"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "BRIT",
+      "clue": "Nottingham native"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 3,
+      "answer": "BOSE",
+      "clue": "Maker of QuietComfort headphones"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "APCALC",
+      "clue": "High-level math course, for short"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "ANDS",
+      "clue": "No ifs, ___ or buts"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 3,
+      "answer": "APPEALS",
+      "clue": "Lawyers' filings"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "NOON",
+      "clue": "It follows eleven"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "DRUG",
+      "clue": "Pharmacy item"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 3,
+      "answer": "STRIFE",
+      "clue": "Conflict"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "FAVRE",
+      "clue": "Three-time NFL MVP in the 1990s"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 3,
+      "answer": "FIREARMS",
+      "clue": "Colts, for example"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "ADA",
+      "clue": "1969 Vladimir Nabokov novel"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "VENT",
+      "clue": "Go on a rant"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "RAKE",
+      "clue": "Lawn tool"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 3,
+      "answer": "ELSE",
+      "clue": "Otherwise"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "DROP",
+      "clue": "Issue, as a rap album"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "PORT",
+      "clue": "Charger's connection"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "IDEAL",
+      "clue": "Best-case scenario"
+    },
+    {
+      "id": "a17",
+      "number": 17,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 4,
+      "answer": "DISC",
+      "clue": "Dime, essentially"
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 5,
+      "y": 2,
+      "length": 4,
+      "answer": "POUR",
+      "clue": "Rain hard"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 10,
+      "y": 2,
+      "length": 5,
+      "answer": "RANKS",
+      "clue": "Orders"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "\"Dancing Queen\" group",
+        "answer": "ABBA"
+      },
+      {
+        "number": 5,
+        "clue": "No ifs, ___ or buts",
+        "answer": "ANDS"
+      },
+      {
+        "number": 9,
+        "clue": "Three-time NFL MVP in the 1990s",
+        "answer": "FAVRE"
+      },
+      {
+        "number": 14,
+        "clue": "Issue, as a rap album",
+        "answer": "DROP"
+      },
+      {
+        "number": 15,
+        "clue": "Charger's connection",
+        "answer": "PORT"
+      },
+      {
+        "number": 16,
+        "clue": "Best-case scenario",
+        "answer": "IDEAL"
+      },
+      {
+        "number": 17,
+        "clue": "Dime, essentially",
+        "answer": "DISC"
+      },
+      {
+        "number": 18,
+        "clue": "Rain hard",
+        "answer": "POUR"
+      },
+      {
+        "number": 19,
+        "clue": "Orders",
+        "answer": "RANKS"
+      },
+      {
+        "number": 20,
+        "clue": "Industrial Revolution facilitator",
+        "answer": "STEAMENGINE"
+      },
+      {
+        "number": 23,
+        "clue": "Driver's need?",
+        "answer": "TEE"
+      },
+      {
+        "number": 24,
+        "clue": "Mauna ___",
+        "answer": "LOA"
+      },
+      {
+        "number": 25,
+        "clue": "Carmaker based in Turin",
+        "answer": "FIAT"
+      },
+      {
+        "number": 27,
+        "clue": "Topping for some desserts",
+        "answer": "CHOCOLATECRUMBS"
+      },
+      {
+        "number": 35,
+        "clue": "Workout unit",
+        "answer": "REP"
+      },
+      {
+        "number": 36,
+        "clue": "Place for srs.",
+        "answer": "SCH"
+      },
+      {
+        "number": 37,
+        "clue": "Set out",
+        "answer": "EMBARK"
+      },
+      {
+        "number": 38,
+        "clue": "Food processor?",
+        "answer": "EATER"
+      },
+      {
+        "number": 41,
+        "clue": "Texter's chuckle",
+        "answer": "LOL"
+      },
+      {
+        "number": 43,
+        "clue": "Nation crossed when flying from New Zealand to Hawaii",
+        "answer": "SAMOA"
+      },
+      {
+        "number": 44,
+        "clue": "Paperless party notices",
+        "answer": "EVITES"
+      },
+      {
+        "number": 46,
+        "clue": "Dreamy sleep letters",
+        "answer": "REM"
+      },
+      {
+        "number": 48,
+        "clue": "Part of a comic's act",
+        "answer": "BIT"
+      },
+      {
+        "number": 49,
+        "clue": "Vaughan Williams used it in \"The Lark Ascending\"",
+        "answer": "PENTATONICSCALE"
+      },
+      {
+        "number": 53,
+        "clue": "HP competitor",
+        "answer": "ACER"
+      },
+      {
+        "number": 54,
+        "clue": "Flamboyant accessory",
+        "answer": "BOA"
+      },
+      {
+        "number": 55,
+        "clue": "Request",
+        "answer": "ASK"
+      },
+      {
+        "number": 58,
+        "clue": "Limit at the bar, and a hint to the answers with circles",
+        "answer": "TWODRINKMAX"
+      },
+      {
+        "number": 64,
+        "clue": "Hot dog topping",
+        "answer": "CHILI"
+      },
+      {
+        "number": 66,
+        "clue": "Shank or flank",
+        "answer": "MEAT"
+      },
+      {
+        "number": 67,
+        "clue": "Freedom from worries",
+        "answer": "EASE"
+      },
+      {
+        "number": 68,
+        "clue": "County fair event",
+        "answer": "RODEO"
+      },
+      {
+        "number": 69,
+        "clue": "Gutter site",
+        "answer": "EAVE"
+      },
+      {
+        "number": 70,
+        "clue": "Poet Khayyám",
+        "answer": "OMAR"
+      },
+      {
+        "number": 71,
+        "clue": "HP competitor",
+        "answer": "EPSON"
+      },
+      {
+        "number": 72,
+        "clue": "Small bills",
+        "answer": "ONES"
+      },
+      {
+        "number": 73,
+        "clue": "Bonus benefits of retirement, maybe",
+        "answer": "NAPS"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Interjects",
+        "answer": "ADDS"
+      },
+      {
+        "number": 2,
+        "clue": "Nottingham native",
+        "answer": "BRIT"
+      },
+      {
+        "number": 3,
+        "clue": "Maker of QuietComfort headphones",
+        "answer": "BOSE"
+      },
+      {
+        "number": 4,
+        "clue": "High-level math course, for short",
+        "answer": "APCALC"
+      },
+      {
+        "number": 5,
+        "clue": "Lawyers' filings",
+        "answer": "APPEALS"
+      },
+      {
+        "number": 6,
+        "clue": "It follows eleven",
+        "answer": "NOON"
+      },
+      {
+        "number": 7,
+        "clue": "Pharmacy item",
+        "answer": "DRUG"
+      },
+      {
+        "number": 8,
+        "clue": "Conflict",
+        "answer": "STRIFE"
+      },
+      {
+        "number": 9,
+        "clue": "Colts, for example",
+        "answer": "FIREARMS"
+      },
+      {
+        "number": 10,
+        "clue": "1969 Vladimir Nabokov novel",
+        "answer": "ADA"
+      },
+      {
+        "number": 11,
+        "clue": "Go on a rant",
+        "answer": "VENT"
+      },
+      {
+        "number": 12,
+        "clue": "Lawn tool",
+        "answer": "RAKE"
+      },
+      {
+        "number": 13,
+        "clue": "Otherwise",
+        "answer": "ELSE"
+      },
+      {
+        "number": 21,
+        "clue": "Sound from the pasture",
+        "answer": "MOO"
+      },
+      {
+        "number": 22,
+        "clue": "\"Awesome!\"",
+        "answer": "NICE"
+      },
+      {
+        "number": 26,
+        "clue": "Instrument that dots the i of \"Ohio\" for Ohio State's marching band",
+        "answer": "TUBA"
+      },
+      {
+        "number": 27,
+        "clue": "Move sneakily",
+        "answer": "CREEP"
+      },
+      {
+        "number": 28,
+        "clue": "Throw with great effort",
+        "answer": "HEAVE"
+      },
+      {
+        "number": 29,
+        "clue": "Join an email list, say",
+        "answer": "OPTIN"
+      },
+      {
+        "number": 30,
+        "clue": "Target of a sports MRI, sometimes",
+        "answer": "ACL"
+      },
+      {
+        "number": 31,
+        "clue": "Flower sticker",
+        "answer": "THORN"
+      },
+      {
+        "number": 32,
+        "clue": "Feared fast-moving snake",
+        "answer": "MAMBA"
+      },
+      {
+        "number": 33,
+        "clue": "Oven setting",
+        "answer": "BROIL"
+      },
+      {
+        "number": 34,
+        "clue": "Fish in the ray family",
+        "answer": "SKATE"
+      },
+      {
+        "number": 39,
+        "clue": "James of blues",
+        "answer": "ETTA"
+      },
+      {
+        "number": 40,
+        "clue": "Change in a beaker, e.g.",
+        "answer": "REACTION"
+      },
+      {
+        "number": 42,
+        "clue": "Island garland",
+        "answer": "LEI"
+      },
+      {
+        "number": 45,
+        "clue": "Worry",
+        "answer": "STEW"
+      },
+      {
+        "number": 47,
+        "clue": "Chicken ___ (ball-shaped fast food offered in the early 2010s)",
+        "answer": "MCBITES"
+      },
+      {
+        "number": 50,
+        "clue": "Start of a plea from a balcony",
+        "answer": "OROMEO"
+      },
+      {
+        "number": 51,
+        "clue": "Junior, to senior",
+        "answer": "SON"
+      },
+      {
+        "number": 52,
+        "clue": "Apply liberally, as makeup",
+        "answer": "CAKEON"
+      },
+      {
+        "number": 55,
+        "clue": "One in a plot?",
+        "answer": "ACRE"
+      },
+      {
+        "number": 56,
+        "clue": "Find out what's in store",
+        "answer": "SHOP"
+      },
+      {
+        "number": 57,
+        "clue": "LeBron James has three of these",
+        "answer": "KIDS"
+      },
+      {
+        "number": 59,
+        "clue": "Campus figure",
+        "answer": "DEAN"
+      },
+      {
+        "number": 60,
+        "clue": "Review with five stars, say",
+        "answer": "RAVE"
+      },
+      {
+        "number": 61,
+        "clue": "Baby's cry",
+        "answer": "MAMA"
+      },
+      {
+        "number": 62,
+        "clue": "\"Quick!\"",
+        "answer": "ASAP"
+      },
+      {
+        "number": 63,
+        "clue": "Some boomers' children",
+        "answer": "XERS"
+      },
+      {
+        "number": 65,
+        "clue": "Sign of summer",
+        "answer": "LEO"
+      }
+    ]
+  }
+}

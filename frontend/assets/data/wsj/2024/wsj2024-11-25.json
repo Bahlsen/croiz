@@ -1,0 +1,783 @@
+{
+  "id": "Lunch Time",
+  "version": "1.0",
+  "metadata": {
+    "title": "Lunch Time",
+    "author": "By Alan DerKazarian/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-11-25",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "GOSH",
+      "clue": "\"Holy cow!\""
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "GOB",
+      "clue": "Sailor, informally"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ORR",
+      "clue": "Hockey legend Bobby"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "SEE",
+      "clue": "Match, as a bet"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "HOAGIE",
+      "clue": "Long sandwich"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 6,
+      "answer": "LABRAT",
+      "clue": "Maze runner"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "LUIS",
+      "clue": "Mets pitcher Severino"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ANNO",
+      "clue": "___ Domini"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "BYGUM",
+      "clue": "\"So help me!\""
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "ROBROY",
+      "clue": "Cocktail made with Scotch and vermouth"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "AKA",
+      "clue": "Letters before an alias"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "TED",
+      "clue": "TV's Danson"
+    },
+    {
+      "id": "a11",
+      "number": 11,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "APE",
+      "clue": "Gorilla or chimp"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ALAMO",
+      "clue": "San Antonio landmark"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "PIXEL",
+      "clue": "Dot on a screen"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ELENA",
+      "clue": "Justice Kagan"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "OREO",
+      "clue": "Dunkable treat"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 6,
+      "answer": "UNYOKE",
+      "clue": "Free, as a pair of oxen"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "LIL",
+      "clue": "Rap's ___ Nas X"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "\"Holy cow!\"",
+        "answer": "GOSH"
+      },
+      {
+        "number": 5,
+        "clue": "Maze runner",
+        "answer": "LABRAT"
+      },
+      {
+        "number": 11,
+        "clue": "Gorilla or chimp",
+        "answer": "APE"
+      },
+      {
+        "number": 14,
+        "clue": "Dunkable treat",
+        "answer": "OREO"
+      },
+      {
+        "number": 15,
+        "clue": "Free, as a pair of oxen",
+        "answer": "UNYOKE"
+      },
+      {
+        "number": 16,
+        "clue": "Rap's ___ Nas X",
+        "answer": "LIL"
+      },
+      {
+        "number": 17,
+        "clue": "Walter White's show",
+        "answer": "BREAKINGBAD"
+      },
+      {
+        "number": 19,
+        "clue": "Woodsman's tool",
+        "answer": "AXE"
+      },
+      {
+        "number": 20,
+        "clue": "Spoil, as milk",
+        "answer": "GOSOUR"
+      },
+      {
+        "number": 21,
+        "clue": "Prayer ender",
+        "answer": "AMEN"
+      },
+      {
+        "number": 22,
+        "clue": "With all one's might, formerly",
+        "answer": "AMAIN"
+      },
+      {
+        "number": 25,
+        "clue": "Seller of Razr phones",
+        "answer": "MOTOROLA"
+      },
+      {
+        "number": 28,
+        "clue": "Nickname for golf's Ernie Els and New Orleans",
+        "answer": "BIGEASY"
+      },
+      {
+        "number": 31,
+        "clue": "\"Jeepers!\"",
+        "answer": "YIPE"
+      },
+      {
+        "number": 32,
+        "clue": "Lunch hour, for some",
+        "answer": "ONE"
+      },
+      {
+        "number": 33,
+        "clue": "Faucet",
+        "answer": "TAP"
+      },
+      {
+        "number": 35,
+        "clue": "River to the Bay of Bengal",
+        "answer": "GANGES"
+      },
+      {
+        "number": 39,
+        "clue": "\"As if!\"",
+        "answer": "DONTMAKEMELAUGH"
+      },
+      {
+        "number": 43,
+        "clue": "Bible book read during Purim",
+        "answer": "ESTHER"
+      },
+      {
+        "number": 44,
+        "clue": "Vacuum's lack",
+        "answer": "AIR"
+      },
+      {
+        "number": 45,
+        "clue": "Melber on MSNBC",
+        "answer": "ARI"
+      },
+      {
+        "number": 46,
+        "clue": "St. Louis landmark",
+        "answer": "ARCH"
+      },
+      {
+        "number": 48,
+        "clue": "Invite for a visit",
+        "answer": "ASKOVER"
+      },
+      {
+        "number": 51,
+        "clue": "Michigan governor Whitmer",
+        "answer": "GRETCHEN"
+      },
+      {
+        "number": 55,
+        "clue": "Become less intense",
+        "answer": "ABATE"
+      },
+      {
+        "number": 56,
+        "clue": "Tripod's trio",
+        "answer": "LEGS"
+      },
+      {
+        "number": 57,
+        "clue": "Kenyan's neighbor",
+        "answer": "SOMALI"
+      },
+      {
+        "number": 60,
+        "clue": "Adams of \"Arrival\"",
+        "answer": "AMY"
+      },
+      {
+        "number": 61,
+        "clue": "Low-carb lunch, and a hint to the answers with circles",
+        "answer": "LETTUCEWRAP"
+      },
+      {
+        "number": 66,
+        "clue": "Nada",
+        "answer": "ZIP"
+      },
+      {
+        "number": 67,
+        "clue": "Come into view",
+        "answer": "EMERGE"
+      },
+      {
+        "number": 68,
+        "clue": "Luxury car from Germany",
+        "answer": "AUDI"
+      },
+      {
+        "number": 69,
+        "clue": "Business card abbr.",
+        "answer": "EXT"
+      },
+      {
+        "number": 70,
+        "clue": "Emphasize",
+        "answer": "STRESS"
+      },
+      {
+        "number": 71,
+        "clue": "Gas in lights",
+        "answer": "NEON"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Sailor, informally",
+        "answer": "GOB"
+      },
+      {
+        "number": 2,
+        "clue": "Hockey legend Bobby",
+        "answer": "ORR"
+      },
+      {
+        "number": 3,
+        "clue": "Match, as a bet",
+        "answer": "SEE"
+      },
+      {
+        "number": 4,
+        "clue": "Long sandwich",
+        "answer": "HOAGIE"
+      },
+      {
+        "number": 5,
+        "clue": "Mets pitcher Severino",
+        "answer": "LUIS"
+      },
+      {
+        "number": 6,
+        "clue": "___ Domini",
+        "answer": "ANNO"
+      },
+      {
+        "number": 7,
+        "clue": "\"So help me!\"",
+        "answer": "BYGUM"
+      },
+      {
+        "number": 8,
+        "clue": "Cocktail made with Scotch and vermouth",
+        "answer": "ROBROY"
+      },
+      {
+        "number": 9,
+        "clue": "Letters before an alias",
+        "answer": "AKA"
+      },
+      {
+        "number": 10,
+        "clue": "TV's Danson",
+        "answer": "TED"
+      },
+      {
+        "number": 11,
+        "clue": "San Antonio landmark",
+        "answer": "ALAMO"
+      },
+      {
+        "number": 12,
+        "clue": "Dot on a screen",
+        "answer": "PIXEL"
+      },
+      {
+        "number": 13,
+        "clue": "Justice Kagan",
+        "answer": "ELENA"
+      },
+      {
+        "number": 18,
+        "clue": "Prized Hawaiian coffee variety",
+        "answer": "KONA"
+      },
+      {
+        "number": 21,
+        "clue": "Bowl game setting",
+        "answer": "ARENA"
+      },
+      {
+        "number": 22,
+        "clue": "Dwelling",
+        "answer": "ABODE"
+      },
+      {
+        "number": 23,
+        "clue": "King who had the Labyrinth built",
+        "answer": "MINOS"
+      },
+      {
+        "number": 24,
+        "clue": "Actor's negotiator",
+        "answer": "AGENT"
+      },
+      {
+        "number": 26,
+        "clue": "Detroit baseballers",
+        "answer": "TIGERS"
+      },
+      {
+        "number": 27,
+        "clue": "Birthstone after sapphire",
+        "answer": "OPAL"
+      },
+      {
+        "number": 29,
+        "clue": "Substance in rice and potatoes",
+        "answer": "STARCH"
+      },
+      {
+        "number": 30,
+        "clue": "Ox of Tibet",
+        "answer": "YAK"
+      },
+      {
+        "number": 34,
+        "clue": "Casserole sphere",
+        "answer": "PEA"
+      },
+      {
+        "number": 36,
+        "clue": "Pink juice source",
+        "answer": "GUAVA"
+      },
+      {
+        "number": 37,
+        "clue": "White heron",
+        "answer": "EGRET"
+      },
+      {
+        "number": 38,
+        "clue": "Home of Frodo, Sam, Pippin and Merry, with \"the\"",
+        "answer": "SHIRE"
+      },
+      {
+        "number": 40,
+        "clue": "\"___ all she wrote\"",
+        "answer": "THATS"
+      },
+      {
+        "number": 41,
+        "clue": "Gun for hire, for short",
+        "answer": "MERC"
+      },
+      {
+        "number": 42,
+        "clue": "Soccer star Hamm",
+        "answer": "MIA"
+      },
+      {
+        "number": 47,
+        "clue": "Prynne in \"The Scarlet Letter\"",
+        "answer": "HESTER"
+      },
+      {
+        "number": 49,
+        "clue": "Curly cabbage",
+        "answer": "KALE"
+      },
+      {
+        "number": 50,
+        "clue": "Ewan's role in the \"Star Wars\" films",
+        "answer": "OBIWAN"
+      },
+      {
+        "number": 51,
+        "clue": "Sweet coating, as for a ham",
+        "answer": "GLAZE"
+      },
+      {
+        "number": 52,
+        "clue": "Dance version of a hit song",
+        "answer": "REMIX"
+      },
+      {
+        "number": 53,
+        "clue": "Home of the Sphinx",
+        "answer": "EGYPT"
+      },
+      {
+        "number": 54,
+        "clue": "___ Dame",
+        "answer": "NOTRE"
+      },
+      {
+        "number": 58,
+        "clue": "Hot chocolate containers",
+        "answer": "MUGS"
+      },
+      {
+        "number": 59,
+        "clue": "\"Bullets,\" in poker slang",
+        "answer": "ACES"
+      },
+      {
+        "number": 61,
+        "clue": "Guitar designer Paul",
+        "answer": "LES"
+      },
+      {
+        "number": 62,
+        "clue": "Ambulance VIP",
+        "answer": "EMT"
+      },
+      {
+        "number": 63,
+        "clue": "Street, in Paris",
+        "answer": "RUE"
+      },
+      {
+        "number": 64,
+        "clue": "Hullabaloo",
+        "answer": "ADO"
+      },
+      {
+        "number": 65,
+        "clue": "Wrestling victory",
+        "answer": "PIN"
+      }
+    ]
+  }
+}

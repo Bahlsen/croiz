@@ -1,0 +1,4678 @@
+{
+  "id": "Wait and Seek",
+  "version": "1.0",
+  "metadata": {
+    "title": "Wait and Seek",
+    "author": "by Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-11-16"
+  },
+  "rows": 21,
+  "cols": 21,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 15,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 16,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 17,
+      "y": 0,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 19,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 20,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 15,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 16,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 17,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 18,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 19,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 20,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 15,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 16,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 17,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 18,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 19,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 20,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 3,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 3,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 3,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 11,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 3,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 13,
+      "y": 3,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 3,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 15,
+      "y": 3,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 16,
+      "y": 3,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 17,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 18,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 19,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 20,
+      "y": 3,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 4,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 10,
+      "y": 4,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 12,
+      "y": 4,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 4,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 4,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 15,
+      "y": 4,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 16,
+      "y": 4,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 17,
+      "y": 4,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 19,
+      "y": 4,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 20,
+      "y": 4,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 5,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 11,
+      "y": 5,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 5,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 5,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 14,
+      "y": 5,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 15,
+      "y": 5,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 16,
+      "y": 5,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 17,
+      "y": 5,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 18,
+      "y": 5,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 19,
+      "y": 5,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 20,
+      "y": 5,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 8,
+      "y": 6,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 10,
+      "y": 6,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 6,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 6,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 13,
+      "y": 6,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 6,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 15,
+      "y": 6,
+      "is_black": false,
+      "solution": "J"
+    },
+    {
+      "x": 16,
+      "y": 6,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 17,
+      "y": 6,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 18,
+      "y": 6,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 19,
+      "y": 6,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 20,
+      "y": 6,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 0,
+      "y": 7,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 7,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 7,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 7,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 7,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 7,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 7,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 7,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 9,
+      "y": 7,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 10,
+      "y": 7,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 11,
+      "y": 7,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 12,
+      "y": 7,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 13,
+      "y": 7,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 7,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 15,
+      "y": 7,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 16,
+      "y": 7,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 17,
+      "y": 7,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 18,
+      "y": 7,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 19,
+      "y": 7,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 20,
+      "y": 7,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 8,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 8,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 8,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 3,
+      "y": 8,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 8,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 5,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 8,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 8,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 8,
+      "y": 8,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 8,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 10,
+      "y": 8,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 8,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 12,
+      "y": 8,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 13,
+      "y": 8,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 14,
+      "y": 8,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 15,
+      "y": 8,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 16,
+      "y": 8,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 17,
+      "y": 8,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 18,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 19,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 20,
+      "y": 8,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 9,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 1,
+      "y": 9,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 9,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 9,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 6,
+      "y": 9,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 7,
+      "y": 9,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 9,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 9,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 9,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 11,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 9,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 9,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 14,
+      "y": 9,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 15,
+      "y": 9,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 16,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 17,
+      "y": 9,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 18,
+      "y": 9,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 19,
+      "y": 9,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 20,
+      "y": 9,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 10,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 1,
+      "y": 10,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 10,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 10,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 10,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 10,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 7,
+      "y": 10,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 10,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 10,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 10,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 12,
+      "y": 10,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 10,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 14,
+      "y": 10,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 15,
+      "y": 10,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 16,
+      "y": 10,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 17,
+      "y": 10,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 18,
+      "y": 10,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 19,
+      "y": 10,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 20,
+      "y": 10,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 0,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 11,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 2,
+      "y": 11,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 3,
+      "y": 11,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 11,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 6,
+      "y": 11,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 7,
+      "y": 11,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 11,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 9,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 11,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 11,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 11,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 11,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 11,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 15,
+      "y": 11,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 16,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 17,
+      "y": 11,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 18,
+      "y": 11,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 19,
+      "y": 11,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 20,
+      "y": 11,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 0,
+      "y": 12,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 12,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 2,
+      "y": 12,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 4,
+      "y": 12,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 5,
+      "y": 12,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 6,
+      "y": 12,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 12,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 8,
+      "y": 12,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 12,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 10,
+      "y": 12,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 11,
+      "y": 12,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 12,
+      "y": 12,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 13,
+      "y": 12,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 14,
+      "y": 12,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 15,
+      "y": 12,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 16,
+      "y": 12,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 17,
+      "y": 12,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 18,
+      "y": 12,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 19,
+      "y": 12,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 20,
+      "y": 12,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 13,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 13,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 13,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 4,
+      "y": 13,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 5,
+      "y": 13,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 6,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 7,
+      "y": 13,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 13,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 9,
+      "y": 13,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 13,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 11,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 12,
+      "y": 13,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 13,
+      "y": 13,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 13,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 15,
+      "y": 13,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 16,
+      "y": 13,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 17,
+      "y": 13,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 18,
+      "y": 13,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 19,
+      "y": 13,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 20,
+      "y": 13,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 0,
+      "y": 14,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 1,
+      "y": 14,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 2,
+      "y": 14,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 3,
+      "y": 14,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 14,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 5,
+      "y": 14,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 14,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 8,
+      "y": 14,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 14,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 14,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 11,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 12,
+      "y": 14,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 13,
+      "y": 14,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 14,
+      "y": 14,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 15,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 16,
+      "y": 14,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 17,
+      "y": 14,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 18,
+      "y": 14,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 19,
+      "y": 14,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 20,
+      "y": 14,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 15,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 15,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 2,
+      "y": 15,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 15,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 4,
+      "y": 15,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 5,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 15,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 15,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 15,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 9,
+      "y": 15,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 15,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 13,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 14,
+      "y": 15,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 15,
+      "y": 15,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 16,
+      "y": 15,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 17,
+      "y": 15,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 18,
+      "y": 15,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 19,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 20,
+      "y": 15,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 0,
+      "y": 16,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 1,
+      "y": 16,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 16,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 16,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 16,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 5,
+      "y": 16,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 16,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 16,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 16,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 16,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 10,
+      "y": 16,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 16,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 16,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 16,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 14,
+      "y": 16,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 15,
+      "y": 16,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 16,
+      "y": 16,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 17,
+      "y": 16,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 18,
+      "y": 16,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 19,
+      "y": 16,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 20,
+      "y": 16,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 0,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 2,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 3,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 17,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 5,
+      "y": 17,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 17,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 7,
+      "y": 17,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 17,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 9,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 17,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 17,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 17,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 13,
+      "y": 17,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 17,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 15,
+      "y": 17,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 16,
+      "y": 17,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 17,
+      "y": 17,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 18,
+      "y": 17,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 19,
+      "y": 17,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 20,
+      "y": 17,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 0,
+      "y": 18,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 18,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 18,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 18,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 18,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 5,
+      "y": 18,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 6,
+      "y": 18,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 7,
+      "y": 18,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 18,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 9,
+      "y": 18,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 18,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 11,
+      "y": 18,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 18,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 18,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 14,
+      "y": 18,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 15,
+      "y": 18,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 16,
+      "y": 18,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 17,
+      "y": 18,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 18,
+      "y": 18,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 19,
+      "y": 18,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 20,
+      "y": 18,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 0,
+      "y": 19,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 1,
+      "y": 19,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 2,
+      "y": 19,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 19,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 19,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 5,
+      "y": 19,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 6,
+      "y": 19,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 19,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 19,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 19,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 10,
+      "y": 19,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 19,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 12,
+      "y": 19,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 19,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 19,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 15,
+      "y": 19,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 16,
+      "y": 19,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 17,
+      "y": 19,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 18,
+      "y": 19,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 19,
+      "y": 19,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 20,
+      "y": 19,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 20,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 20,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 20,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 3,
+      "y": 20,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 20,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 20,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 20,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 20,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 20,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 20,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 10,
+      "y": 20,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 20,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 12,
+      "y": 20,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 20,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 20,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 15,
+      "y": 20,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 16,
+      "y": 20,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 17,
+      "y": 20,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 18,
+      "y": 20,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 19,
+      "y": 20,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 20,
+      "y": 20,
+      "is_black": false,
+      "solution": "S"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "ORCAS",
+      "clue": "Predators in pods"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "OPENS",
+      "clue": "Starts the bidding"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 5,
+      "answer": "RODIN",
+      "clue": "\"The Burghers of Calais\" artist"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 12,
+      "answer": "CRITICALMASK",
+      "clue": "Disguise for a reviewer?"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "ACT",
+      "clue": "Do something"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 4,
+      "answer": "SHOD",
+      "clue": "Ready for pulling the plow, perhaps"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 7,
+      "y": 0,
+      "length": 6,
+      "answer": "CESSNA",
+      "clue": "Maker of Citation Longitude planes"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 5,
+      "answer": "CLARA",
+      "clue": "\"The Light in the Piazza\" heroine"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 5,
+      "answer": "EULER",
+      "clue": "\"Elements of Algebra\" author"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 5,
+      "answer": "SEWED",
+      "clue": "Put on patches, say"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 4,
+      "answer": "SLED",
+      "clue": "Go downhill, in a way"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "NAE",
+      "clue": "Dunvegan denial"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 7,
+      "answer": "AWKWARD",
+      "clue": "Graceless"
+    },
+    {
+      "id": "a12",
+      "number": 12,
+      "direction": "across",
+      "x": 15,
+      "y": 0,
+      "length": 6,
+      "answer": "HAVANA",
+      "clue": "Palacio de la Revolucion setting"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 15,
+      "y": 0,
+      "length": 5,
+      "answer": "HEAVY",
+      "clue": "Profound, in '60s slang"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 16,
+      "y": 0,
+      "length": 9,
+      "answer": "ANNEFRANK",
+      "clue": "Noted resident of Prinsengracht 263"
+    },
+    {
+      "id": "d14",
+      "number": 14,
+      "direction": "down",
+      "x": 17,
+      "y": 0,
+      "length": 3,
+      "answer": "VAT",
+      "clue": "Brewery sight"
+    },
+    {
+      "id": "d15",
+      "number": 15,
+      "direction": "down",
+      "x": 18,
+      "y": 0,
+      "length": 3,
+      "answer": "ATE",
+      "clue": "Had something"
+    },
+    {
+      "id": "d16",
+      "number": 16,
+      "direction": "down",
+      "x": 19,
+      "y": 0,
+      "length": 3,
+      "answer": "NON",
+      "clue": "Dunkerque denial"
+    },
+    {
+      "id": "d17",
+      "number": 17,
+      "direction": "down",
+      "x": 20,
+      "y": 0,
+      "length": 3,
+      "answer": "ARE",
+      "clue": "\"___ we there yet?\""
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "PORCH",
+      "clue": "Swing site, sometimes"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 7,
+      "answer": "BLUELAW",
+      "clue": "Sunday sales proscription"
+    },
+    {
+      "id": "d19",
+      "number": 19,
+      "direction": "down",
+      "x": 6,
+      "y": 1,
+      "length": 6,
+      "answer": "BICEPS",
+      "clue": "Curls target"
+    },
+    {
+      "id": "a20",
+      "number": 20,
+      "direction": "across",
+      "x": 14,
+      "y": 1,
+      "length": 7,
+      "answer": "SENATOR",
+      "clue": "King of Maine, e.g."
+    },
+    {
+      "id": "d20",
+      "number": 20,
+      "direction": "down",
+      "x": 14,
+      "y": 1,
+      "length": 5,
+      "answer": "SPICY",
+      "clue": "Like Sichuan cuisine"
+    },
+    {
+      "id": "a21",
+      "number": 21,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 13,
+      "answer": "EDITORIALWEEK",
+      "clue": "Stretch when the paper contains only opinion pieces?"
+    },
+    {
+      "id": "d22",
+      "number": 22,
+      "direction": "down",
+      "x": 5,
+      "y": 2,
+      "length": 6,
+      "answer": "REHEAT",
+      "clue": "Fix leftovers, perhaps"
+    },
+    {
+      "id": "a23",
+      "number": 23,
+      "direction": "across",
+      "x": 14,
+      "y": 2,
+      "length": 7,
+      "answer": "PANTENE",
+      "clue": "Redken rival"
+    },
+    {
+      "id": "a24",
+      "number": 24,
+      "direction": "across",
+      "x": 0,
+      "y": 3,
+      "length": 3,
+      "answer": "NIT",
+      "clue": "Small criticism"
+    },
+    {
+      "id": "a25",
+      "number": 25,
+      "direction": "across",
+      "x": 4,
+      "y": 3,
+      "length": 7,
+      "answer": "DECREED",
+      "clue": "Officially ordered"
+    },
+    {
+      "id": "a26",
+      "number": 26,
+      "direction": "across",
+      "x": 12,
+      "y": 3,
+      "length": 5,
+      "answer": "WAIVE",
+      "clue": "Sign away"
+    },
+    {
+      "id": "d27",
+      "number": 27,
+      "direction": "down",
+      "x": 13,
+      "y": 3,
+      "length": 4,
+      "answer": "ANTS",
+      "clue": "Minute marchers"
+    },
+    {
+      "id": "a28",
+      "number": 28,
+      "direction": "across",
+      "x": 0,
+      "y": 4,
+      "length": 4,
+      "answer": "SNIT",
+      "clue": "Fit of pique"
+    },
+    {
+      "id": "d29",
+      "number": 29,
+      "direction": "down",
+      "x": 3,
+      "y": 4,
+      "length": 5,
+      "answer": "THREE",
+      "clue": "Second prime"
+    },
+    {
+      "id": "a30",
+      "number": 30,
+      "direction": "across",
+      "x": 5,
+      "y": 4,
+      "length": 5,
+      "answer": "HEARD",
+      "clue": "Found out, in a way"
+    },
+    {
+      "id": "a31",
+      "number": 31,
+      "direction": "across",
+      "x": 11,
+      "y": 4,
+      "length": 10,
+      "answer": "FANCYFREAK",
+      "clue": "Ostentatious oddball?"
+    },
+    {
+      "id": "d31",
+      "number": 31,
+      "direction": "down",
+      "x": 11,
+      "y": 4,
+      "length": 5,
+      "answer": "FARES",
+      "clue": "Orbitz listings"
+    },
+    {
+      "id": "d32",
+      "number": 32,
+      "direction": "down",
+      "x": 17,
+      "y": 4,
+      "length": 7,
+      "answer": "RANDEEP",
+      "clue": "Was ingrained"
+    },
+    {
+      "id": "d33",
+      "number": 33,
+      "direction": "down",
+      "x": 18,
+      "y": 4,
+      "length": 4,
+      "answer": "ENNE",
+      "clue": "Suffix akin to -ess or -trix"
+    },
+    {
+      "id": "d34",
+      "number": 34,
+      "direction": "down",
+      "x": 19,
+      "y": 4,
+      "length": 4,
+      "answer": "AGER",
+      "clue": "Stress, so they say"
+    },
+    {
+      "id": "d35",
+      "number": 35,
+      "direction": "down",
+      "x": 20,
+      "y": 4,
+      "length": 4,
+      "answer": "KEYS",
+      "clue": "Custodian's collection"
+    },
+    {
+      "id": "a36",
+      "number": 36,
+      "direction": "across",
+      "x": 2,
+      "y": 5,
+      "length": 5,
+      "answer": "CHEEP",
+      "clue": "Sound from the trees"
+    },
+    {
+      "id": "d37",
+      "number": 37,
+      "direction": "down",
+      "x": 4,
+      "y": 5,
+      "length": 4,
+      "answer": "ETSY",
+      "clue": "Crafty site"
+    },
+    {
+      "id": "a38",
+      "number": 38,
+      "direction": "across",
+      "x": 10,
+      "y": 5,
+      "length": 5,
+      "answer": "PARTY",
+      "clue": "Present time, in a way"
+    },
+    {
+      "id": "d38",
+      "number": 38,
+      "direction": "down",
+      "x": 10,
+      "y": 5,
+      "length": 5,
+      "answer": "PATIO",
+      "clue": "Alfresco seating at a restaurant"
+    },
+    {
+      "id": "a39",
+      "number": 39,
+      "direction": "across",
+      "x": 16,
+      "y": 5,
+      "length": 5,
+      "answer": "RANGE",
+      "clue": "Asset for a Broadway performer"
+    },
+    {
+      "id": "a40",
+      "number": 40,
+      "direction": "across",
+      "x": 0,
+      "y": 6,
+      "length": 8,
+      "answer": "SMARTASS",
+      "clue": "Smug sort"
+    },
+    {
+      "id": "d40",
+      "number": 40,
+      "direction": "down",
+      "x": 0,
+      "y": 6,
+      "length": 5,
+      "answer": "SPACE",
+      "clue": "Sun spot?"
+    },
+    {
+      "id": "d41",
+      "number": 41,
+      "direction": "down",
+      "x": 1,
+      "y": 6,
+      "length": 6,
+      "answer": "MARIAS",
+      "clue": "Black ___ (bygone police vans)"
+    },
+    {
+      "id": "d42",
+      "number": 42,
+      "direction": "down",
+      "x": 7,
+      "y": 6,
+      "length": 7,
+      "answer": "SAPIENT",
+      "clue": "Wise"
+    },
+    {
+      "id": "a43",
+      "number": 43,
+      "direction": "across",
+      "x": 9,
+      "y": 6,
+      "length": 5,
+      "answer": "BARDS",
+      "clue": "Singing poets"
+    },
+    {
+      "id": "d43",
+      "number": 43,
+      "direction": "down",
+      "x": 9,
+      "y": 6,
+      "length": 5,
+      "answer": "BUNTS",
+      "clue": "Some sacrifices"
+    },
+    {
+      "id": "a44",
+      "number": 44,
+      "direction": "across",
+      "x": 15,
+      "y": 6,
+      "length": 6,
+      "answer": "JANNEY",
+      "clue": "Allison of \"Mom\""
+    },
+    {
+      "id": "d44",
+      "number": 44,
+      "direction": "down",
+      "x": 15,
+      "y": 6,
+      "length": 6,
+      "answer": "JOULES",
+      "clue": "There are 3,600 in a watt-hour"
+    },
+    {
+      "id": "a45",
+      "number": 45,
+      "direction": "across",
+      "x": 0,
+      "y": 7,
+      "length": 6,
+      "answer": "PALEST",
+      "clue": "Most washed-out"
+    },
+    {
+      "id": "a46",
+      "number": 46,
+      "direction": "across",
+      "x": 7,
+      "y": 7,
+      "length": 5,
+      "answer": "ACUTE",
+      "clue": "Severe"
+    },
+    {
+      "id": "d47",
+      "number": 47,
+      "direction": "down",
+      "x": 8,
+      "y": 7,
+      "length": 6,
+      "answer": "CANADA",
+      "clue": "Home of seven of the 32 NHL teams"
+    },
+    {
+      "id": "a48",
+      "number": 48,
+      "direction": "across",
+      "x": 14,
+      "y": 7,
+      "length": 7,
+      "answer": "PONDERS",
+      "clue": "Reflects on"
+    },
+    {
+      "id": "d48",
+      "number": 48,
+      "direction": "down",
+      "x": 14,
+      "y": 7,
+      "length": 6,
+      "answer": "PLATTE",
+      "clue": "Nebraska river"
+    },
+    {
+      "id": "a49",
+      "number": 49,
+      "direction": "across",
+      "x": 0,
+      "y": 8,
+      "length": 5,
+      "answer": "ARMEY",
+      "clue": "Former Texas congressman Dick"
+    },
+    {
+      "id": "a50",
+      "number": 50,
+      "direction": "across",
+      "x": 6,
+      "y": 8,
+      "length": 12,
+      "answer": "SPANISHFLUKE",
+      "clue": "Stroke of luck in Seville?"
+    },
+    {
+      "id": "d50",
+      "number": 50,
+      "direction": "down",
+      "x": 6,
+      "y": 8,
+      "length": 6,
+      "answer": "SHRINE",
+      "clue": "Sacred spot"
+    },
+    {
+      "id": "d51",
+      "number": 51,
+      "direction": "down",
+      "x": 12,
+      "y": 8,
+      "length": 6,
+      "answer": "HELIUM",
+      "clue": "Its boiling point is close to absolute zero"
+    },
+    {
+      "id": "d52",
+      "number": 52,
+      "direction": "down",
+      "x": 13,
+      "y": 8,
+      "length": 7,
+      "answer": "FLUNKED",
+      "clue": "Didn't make the grade?"
+    },
+    {
+      "id": "a53",
+      "number": 53,
+      "direction": "across",
+      "x": 0,
+      "y": 9,
+      "length": 3,
+      "answer": "CIA",
+      "clue": "Snoop group, briefly"
+    },
+    {
+      "id": "a54",
+      "number": 54,
+      "direction": "across",
+      "x": 5,
+      "y": 9,
+      "length": 6,
+      "answer": "SHINTO",
+      "clue": "Worship of divine beings called \"kami\""
+    },
+    {
+      "id": "d54",
+      "number": 54,
+      "direction": "down",
+      "x": 5,
+      "y": 9,
+      "length": 6,
+      "answer": "SALUTE",
+      "clue": "Major reaction, maybe"
+    },
+    {
+      "id": "a55",
+      "number": 55,
+      "direction": "across",
+      "x": 12,
+      "y": 9,
+      "length": 4,
+      "answer": "ELAL",
+      "clue": "Carrier based at Ben Gurion International"
+    },
+    {
+      "id": "a56",
+      "number": 56,
+      "direction": "across",
+      "x": 17,
+      "y": 9,
+      "length": 3,
+      "answer": "EGO",
+      "clue": "Braggart's problem"
+    },
+    {
+      "id": "d57",
+      "number": 57,
+      "direction": "down",
+      "x": 18,
+      "y": 9,
+      "length": 12,
+      "answer": "GENERALSTORK",
+      "clue": "Commander in the baby-delivering forces?"
+    },
+    {
+      "id": "d58",
+      "number": 58,
+      "direction": "down",
+      "x": 19,
+      "y": 9,
+      "length": 6,
+      "answer": "OLDNAG",
+      "clue": "Track has-been"
+    },
+    {
+      "id": "a59",
+      "number": 59,
+      "direction": "across",
+      "x": 0,
+      "y": 10,
+      "length": 4,
+      "answer": "EAST",
+      "clue": "Jet stream heading"
+    },
+    {
+      "id": "d60",
+      "number": 60,
+      "direction": "down",
+      "x": 3,
+      "y": 10,
+      "length": 7,
+      "answer": "TIMPANI",
+      "clue": "Percussion section instruments"
+    },
+    {
+      "id": "a61",
+      "number": 61,
+      "direction": "across",
+      "x": 5,
+      "y": 10,
+      "length": 5,
+      "answer": "AREAS",
+      "clue": "Neighborhoods"
+    },
+    {
+      "id": "a62",
+      "number": 62,
+      "direction": "across",
+      "x": 11,
+      "y": 10,
+      "length": 5,
+      "answer": "FLUTE",
+      "clue": "Champagne container"
+    },
+    {
+      "id": "d62",
+      "number": 62,
+      "direction": "down",
+      "x": 11,
+      "y": 10,
+      "length": 5,
+      "answer": "FADES",
+      "clue": "Goes dim"
+    },
+    {
+      "id": "a63",
+      "number": 63,
+      "direction": "across",
+      "x": 17,
+      "y": 10,
+      "length": 4,
+      "answer": "PELT",
+      "clue": "Pepper"
+    },
+    {
+      "id": "d64",
+      "number": 64,
+      "direction": "down",
+      "x": 20,
+      "y": 10,
+      "length": 5,
+      "answer": "TASKS",
+      "clue": "Gofer's workload"
+    },
+    {
+      "id": "a65",
+      "number": 65,
+      "direction": "across",
+      "x": 1,
+      "y": 11,
+      "length": 3,
+      "answer": "SKI",
+      "clue": "Go downhill, in a way"
+    },
+    {
+      "id": "a66",
+      "number": 66,
+      "direction": "across",
+      "x": 5,
+      "y": 11,
+      "length": 4,
+      "answer": "LIND",
+      "clue": "\"The Swedish Nightingale\""
+    },
+    {
+      "id": "a67",
+      "number": 67,
+      "direction": "across",
+      "x": 10,
+      "y": 11,
+      "length": 6,
+      "answer": "SAINTS",
+      "clue": "Their helmets feature a fleur-de-lis"
+    },
+    {
+      "id": "d67",
+      "number": 67,
+      "direction": "down",
+      "x": 10,
+      "y": 11,
+      "length": 5,
+      "answer": "SNUBS",
+      "clue": "Surprises on Oscar nomination morning"
+    },
+    {
+      "id": "a68",
+      "number": 68,
+      "direction": "across",
+      "x": 18,
+      "y": 11,
+      "length": 3,
+      "answer": "NDA",
+      "clue": "Don't-talk-about-this contract: Abbr."
+    },
+    {
+      "id": "a69",
+      "number": 69,
+      "direction": "across",
+      "x": 3,
+      "y": 12,
+      "length": 12,
+      "answer": "MOUNTAINDUKE",
+      "clue": "Peer in the Pyrenees, perhaps?"
+    },
+    {
+      "id": "d70",
+      "number": 70,
+      "direction": "down",
+      "x": 4,
+      "y": 12,
+      "length": 9,
+      "answer": "OILANDGAS",
+      "clue": "Fossil fuel twosome"
+    },
+    {
+      "id": "d71",
+      "number": 71,
+      "direction": "down",
+      "x": 9,
+      "y": 12,
+      "length": 5,
+      "answer": "ISAAK",
+      "clue": "\"Wicked Game\" singer Chris"
+    },
+    {
+      "id": "a72",
+      "number": 72,
+      "direction": "across",
+      "x": 16,
+      "y": 12,
+      "length": 5,
+      "answer": "AMENS",
+      "clue": "Calls from the flock"
+    },
+    {
+      "id": "d72",
+      "number": 72,
+      "direction": "down",
+      "x": 16,
+      "y": 12,
+      "length": 4,
+      "answer": "ANTE",
+      "clue": "Cost for a hand"
+    },
+    {
+      "id": "d73",
+      "number": 73,
+      "direction": "down",
+      "x": 17,
+      "y": 12,
+      "length": 5,
+      "answer": "MOREA",
+      "clue": "\"And ___ friend than e'er an enemy\": \"Coriolanus\""
+    },
+    {
+      "id": "a74",
+      "number": 74,
+      "direction": "across",
+      "x": 0,
+      "y": 13,
+      "length": 7,
+      "answer": "DESPITE",
+      "clue": "Regardless of"
+    },
+    {
+      "id": "d74",
+      "number": 74,
+      "direction": "down",
+      "x": 0,
+      "y": 13,
+      "length": 4,
+      "answer": "DIAM",
+      "clue": "Circ. measure"
+    },
+    {
+      "id": "d75",
+      "number": 75,
+      "direction": "down",
+      "x": 1,
+      "y": 13,
+      "length": 4,
+      "answer": "EMMA",
+      "clue": "Austen classic"
+    },
+    {
+      "id": "d76",
+      "number": 76,
+      "direction": "down",
+      "x": 2,
+      "y": 13,
+      "length": 4,
+      "answer": "SPAR",
+      "clue": "Boom, e.g."
+    },
+    {
+      "id": "a77",
+      "number": 77,
+      "direction": "across",
+      "x": 9,
+      "y": 13,
+      "length": 5,
+      "answer": "SUEME",
+      "clue": "\"So I was wrong, live with it!\""
+    },
+    {
+      "id": "a78",
+      "number": 78,
+      "direction": "across",
+      "x": 15,
+      "y": 13,
+      "length": 6,
+      "answer": "ANORAK",
+      "clue": "Winter wear"
+    },
+    {
+      "id": "d78",
+      "number": 78,
+      "direction": "down",
+      "x": 15,
+      "y": 13,
+      "length": 6,
+      "answer": "ASTERN",
+      "clue": "Toward the wake"
+    },
+    {
+      "id": "a79",
+      "number": 79,
+      "direction": "across",
+      "x": 0,
+      "y": 14,
+      "length": 6,
+      "answer": "IMPALE",
+      "clue": "Stick"
+    },
+    {
+      "id": "a80",
+      "number": 80,
+      "direction": "across",
+      "x": 7,
+      "y": 14,
+      "length": 5,
+      "answer": "SAABS",
+      "clue": "Bygone Swedish autos"
+    },
+    {
+      "id": "d80",
+      "number": 80,
+      "direction": "down",
+      "x": 7,
+      "y": 14,
+      "length": 4,
+      "answer": "SLOE",
+      "clue": "Gin flavoring"
+    },
+    {
+      "id": "d81",
+      "number": 81,
+      "direction": "down",
+      "x": 8,
+      "y": 14,
+      "length": 7,
+      "answer": "AIRDROP",
+      "clue": "iPhone-to-iPhone sharing protocol"
+    },
+    {
+      "id": "a82",
+      "number": 82,
+      "direction": "across",
+      "x": 13,
+      "y": 14,
+      "length": 8,
+      "answer": "DUSTRAGS",
+      "clue": "Cloths for cleaners"
+    },
+    {
+      "id": "d83",
+      "number": 83,
+      "direction": "down",
+      "x": 14,
+      "y": 14,
+      "length": 6,
+      "answer": "USERID",
+      "clue": "Email address, often"
+    },
+    {
+      "id": "a84",
+      "number": 84,
+      "direction": "across",
+      "x": 0,
+      "y": 15,
+      "length": 5,
+      "answer": "AMANA",
+      "clue": "Appliance brand founded in Iowa"
+    },
+    {
+      "id": "a85",
+      "number": 85,
+      "direction": "across",
+      "x": 6,
+      "y": 15,
+      "length": 5,
+      "answer": "ALIAS",
+      "clue": "Butch Cassidy, e.g."
+    },
+    {
+      "id": "d85",
+      "number": 85,
+      "direction": "down",
+      "x": 6,
+      "y": 15,
+      "length": 5,
+      "answer": "ACIDS",
+      "clue": "Base balancers"
+    },
+    {
+      "id": "a86",
+      "number": 86,
+      "direction": "across",
+      "x": 14,
+      "y": 15,
+      "length": 5,
+      "answer": "STEEL",
+      "clue": "Rebar makeup"
+    },
+    {
+      "id": "a87",
+      "number": 87,
+      "direction": "across",
+      "x": 0,
+      "y": 16,
+      "length": 10,
+      "answer": "MARINECORK",
+      "clue": "Material for a really lightweight boat?"
+    },
+    {
+      "id": "d88",
+      "number": 88,
+      "direction": "down",
+      "x": 5,
+      "y": 16,
+      "length": 5,
+      "answer": "ERODE",
+      "clue": "Reduce over time"
+    },
+    {
+      "id": "a89",
+      "number": 89,
+      "direction": "across",
+      "x": 11,
+      "y": 16,
+      "length": 5,
+      "answer": "AIMEE",
+      "clue": "Teegarden of TV's \"Friday Night Lights\""
+    },
+    {
+      "id": "d89",
+      "number": 89,
+      "direction": "down",
+      "x": 11,
+      "y": 16,
+      "length": 5,
+      "answer": "ANOSE",
+      "clue": "Win by ___"
+    },
+    {
+      "id": "d90",
+      "number": 90,
+      "direction": "down",
+      "x": 12,
+      "y": 16,
+      "length": 5,
+      "answer": "IDLER",
+      "clue": "Lazybones"
+    },
+    {
+      "id": "d91",
+      "number": 91,
+      "direction": "down",
+      "x": 13,
+      "y": 16,
+      "length": 5,
+      "answer": "MOVES",
+      "clue": "Affects greatly"
+    },
+    {
+      "id": "a92",
+      "number": 92,
+      "direction": "across",
+      "x": 17,
+      "y": 16,
+      "length": 4,
+      "answer": "ASHY",
+      "clue": "Pasty-faced"
+    },
+    {
+      "id": "d93",
+      "number": 93,
+      "direction": "down",
+      "x": 19,
+      "y": 16,
+      "length": 5,
+      "answer": "HORSE",
+      "clue": "58-Down, e.g."
+    },
+    {
+      "id": "d94",
+      "number": 94,
+      "direction": "down",
+      "x": 20,
+      "y": 16,
+      "length": 5,
+      "answer": "YOKES",
+      "clue": "Symbols of oppression"
+    },
+    {
+      "id": "a95",
+      "number": 95,
+      "direction": "across",
+      "x": 4,
+      "y": 17,
+      "length": 5,
+      "answer": "DRIED",
+      "clue": "Helped with the dishes"
+    },
+    {
+      "id": "a96",
+      "number": 96,
+      "direction": "across",
+      "x": 10,
+      "y": 17,
+      "length": 7,
+      "answer": "ANDORRA",
+      "clue": "Nation whose capital is the highest in Europe"
+    },
+    {
+      "id": "d96",
+      "number": 96,
+      "direction": "down",
+      "x": 10,
+      "y": 17,
+      "length": 4,
+      "answer": "AVES",
+      "clue": "Broad sts."
+    },
+    {
+      "id": "d97",
+      "number": 97,
+      "direction": "down",
+      "x": 16,
+      "y": 17,
+      "length": 4,
+      "answer": "AGTS",
+      "clue": "Sales dept. staff"
+    },
+    {
+      "id": "a98",
+      "number": 98,
+      "direction": "across",
+      "x": 18,
+      "y": 17,
+      "length": 3,
+      "answer": "TOO",
+      "clue": "Excessively"
+    },
+    {
+      "id": "a99",
+      "number": 99,
+      "direction": "across",
+      "x": 0,
+      "y": 18,
+      "length": 7,
+      "answer": "DEARGOD",
+      "clue": "\"Heavens!\""
+    },
+    {
+      "id": "d99",
+      "number": 99,
+      "direction": "down",
+      "x": 0,
+      "y": 18,
+      "length": 3,
+      "answer": "DID",
+      "clue": "Accomplished"
+    },
+    {
+      "id": "d100",
+      "number": 100,
+      "direction": "down",
+      "x": 1,
+      "y": 18,
+      "length": 3,
+      "answer": "ENE",
+      "clue": "Opposite of WSW"
+    },
+    {
+      "id": "d101",
+      "number": 101,
+      "direction": "down",
+      "x": 2,
+      "y": 18,
+      "length": 3,
+      "answer": "ARM",
+      "clue": "19-Down setting"
+    },
+    {
+      "id": "d102",
+      "number": 102,
+      "direction": "down",
+      "x": 3,
+      "y": 18,
+      "length": 3,
+      "answer": "ROI",
+      "clue": "King of Québec"
+    },
+    {
+      "id": "a103",
+      "number": 103,
+      "direction": "across",
+      "x": 8,
+      "y": 18,
+      "length": 13,
+      "answer": "REVOLVINGDORK",
+      "clue": "Misfit on a merry-go-round?"
+    },
+    {
+      "id": "d104",
+      "number": 104,
+      "direction": "down",
+      "x": 9,
+      "y": 18,
+      "length": 3,
+      "answer": "ENO",
+      "clue": "Ambient music's Brian"
+    },
+    {
+      "id": "d105",
+      "number": 105,
+      "direction": "down",
+      "x": 17,
+      "y": 18,
+      "length": 3,
+      "answer": "DEA",
+      "clue": "\"Breaking Bad\" org."
+    },
+    {
+      "id": "a106",
+      "number": 106,
+      "direction": "across",
+      "x": 0,
+      "y": 19,
+      "length": 7,
+      "answer": "INROADS",
+      "clue": "Progress"
+    },
+    {
+      "id": "a107",
+      "number": 107,
+      "direction": "across",
+      "x": 8,
+      "y": 19,
+      "length": 7,
+      "answer": "ONESEED",
+      "clue": "Tournament favorite"
+    },
+    {
+      "id": "a108",
+      "number": 108,
+      "direction": "across",
+      "x": 16,
+      "y": 19,
+      "length": 5,
+      "answer": "TERSE",
+      "clue": "Eschewing loquacity"
+    },
+    {
+      "id": "a109",
+      "number": 109,
+      "direction": "across",
+      "x": 0,
+      "y": 20,
+      "length": 6,
+      "answer": "DEMISE",
+      "clue": "Downfall"
+    },
+    {
+      "id": "a110",
+      "number": 110,
+      "direction": "across",
+      "x": 8,
+      "y": 20,
+      "length": 6,
+      "answer": "POSERS",
+      "clue": "Tricky problems"
+    },
+    {
+      "id": "a111",
+      "number": 111,
+      "direction": "across",
+      "x": 16,
+      "y": 20,
+      "length": 5,
+      "answer": "SAKES",
+      "clue": "\"Land ___!\" (quaint oath)"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Predators in pods",
+        "answer": "ORCAS"
+      },
+      {
+        "number": 6,
+        "clue": "Maker of Citation Longitude planes",
+        "answer": "CESSNA"
+      },
+      {
+        "number": 12,
+        "clue": "Palacio de la Revolucion setting",
+        "answer": "HAVANA"
+      },
+      {
+        "number": 18,
+        "clue": "Swing site, sometimes",
+        "answer": "PORCH"
+      },
+      {
+        "number": 19,
+        "clue": "Sunday sales proscription",
+        "answer": "BLUELAW"
+      },
+      {
+        "number": 20,
+        "clue": "King of Maine, e.g.",
+        "answer": "SENATOR"
+      },
+      {
+        "number": 21,
+        "clue": "Stretch when the paper contains only opinion pieces?",
+        "answer": "EDITORIALWEEK"
+      },
+      {
+        "number": 23,
+        "clue": "Redken rival",
+        "answer": "PANTENE"
+      },
+      {
+        "number": 24,
+        "clue": "Small criticism",
+        "answer": "NIT"
+      },
+      {
+        "number": 25,
+        "clue": "Officially ordered",
+        "answer": "DECREED"
+      },
+      {
+        "number": 26,
+        "clue": "Sign away",
+        "answer": "WAIVE"
+      },
+      {
+        "number": 28,
+        "clue": "Fit of pique",
+        "answer": "SNIT"
+      },
+      {
+        "number": 30,
+        "clue": "Found out, in a way",
+        "answer": "HEARD"
+      },
+      {
+        "number": 31,
+        "clue": "Ostentatious oddball?",
+        "answer": "FANCYFREAK"
+      },
+      {
+        "number": 36,
+        "clue": "Sound from the trees",
+        "answer": "CHEEP"
+      },
+      {
+        "number": 38,
+        "clue": "Present time, in a way",
+        "answer": "PARTY"
+      },
+      {
+        "number": 39,
+        "clue": "Asset for a Broadway performer",
+        "answer": "RANGE"
+      },
+      {
+        "number": 40,
+        "clue": "Smug sort",
+        "answer": "SMARTASS"
+      },
+      {
+        "number": 43,
+        "clue": "Singing poets",
+        "answer": "BARDS"
+      },
+      {
+        "number": 44,
+        "clue": "Allison of \"Mom\"",
+        "answer": "JANNEY"
+      },
+      {
+        "number": 45,
+        "clue": "Most washed-out",
+        "answer": "PALEST"
+      },
+      {
+        "number": 46,
+        "clue": "Severe",
+        "answer": "ACUTE"
+      },
+      {
+        "number": 48,
+        "clue": "Reflects on",
+        "answer": "PONDERS"
+      },
+      {
+        "number": 49,
+        "clue": "Former Texas congressman Dick",
+        "answer": "ARMEY"
+      },
+      {
+        "number": 50,
+        "clue": "Stroke of luck in Seville?",
+        "answer": "SPANISHFLUKE"
+      },
+      {
+        "number": 53,
+        "clue": "Snoop group, briefly",
+        "answer": "CIA"
+      },
+      {
+        "number": 54,
+        "clue": "Worship of divine beings called \"kami\"",
+        "answer": "SHINTO"
+      },
+      {
+        "number": 55,
+        "clue": "Carrier based at Ben Gurion International",
+        "answer": "ELAL"
+      },
+      {
+        "number": 56,
+        "clue": "Braggart's problem",
+        "answer": "EGO"
+      },
+      {
+        "number": 59,
+        "clue": "Jet stream heading",
+        "answer": "EAST"
+      },
+      {
+        "number": 61,
+        "clue": "Neighborhoods",
+        "answer": "AREAS"
+      },
+      {
+        "number": 62,
+        "clue": "Champagne container",
+        "answer": "FLUTE"
+      },
+      {
+        "number": 63,
+        "clue": "Pepper",
+        "answer": "PELT"
+      },
+      {
+        "number": 65,
+        "clue": "Go downhill, in a way",
+        "answer": "SKI"
+      },
+      {
+        "number": 66,
+        "clue": "\"The Swedish Nightingale\"",
+        "answer": "LIND"
+      },
+      {
+        "number": 67,
+        "clue": "Their helmets feature a fleur-de-lis",
+        "answer": "SAINTS"
+      },
+      {
+        "number": 68,
+        "clue": "Don't-talk-about-this contract: Abbr.",
+        "answer": "NDA"
+      },
+      {
+        "number": 69,
+        "clue": "Peer in the Pyrenees, perhaps?",
+        "answer": "MOUNTAINDUKE"
+      },
+      {
+        "number": 72,
+        "clue": "Calls from the flock",
+        "answer": "AMENS"
+      },
+      {
+        "number": 74,
+        "clue": "Regardless of",
+        "answer": "DESPITE"
+      },
+      {
+        "number": 77,
+        "clue": "\"So I was wrong, live with it!\"",
+        "answer": "SUEME"
+      },
+      {
+        "number": 78,
+        "clue": "Winter wear",
+        "answer": "ANORAK"
+      },
+      {
+        "number": 79,
+        "clue": "Stick",
+        "answer": "IMPALE"
+      },
+      {
+        "number": 80,
+        "clue": "Bygone Swedish autos",
+        "answer": "SAABS"
+      },
+      {
+        "number": 82,
+        "clue": "Cloths for cleaners",
+        "answer": "DUSTRAGS"
+      },
+      {
+        "number": 84,
+        "clue": "Appliance brand founded in Iowa",
+        "answer": "AMANA"
+      },
+      {
+        "number": 85,
+        "clue": "Butch Cassidy, e.g.",
+        "answer": "ALIAS"
+      },
+      {
+        "number": 86,
+        "clue": "Rebar makeup",
+        "answer": "STEEL"
+      },
+      {
+        "number": 87,
+        "clue": "Material for a really lightweight boat?",
+        "answer": "MARINECORK"
+      },
+      {
+        "number": 89,
+        "clue": "Teegarden of TV's \"Friday Night Lights\"",
+        "answer": "AIMEE"
+      },
+      {
+        "number": 92,
+        "clue": "Pasty-faced",
+        "answer": "ASHY"
+      },
+      {
+        "number": 95,
+        "clue": "Helped with the dishes",
+        "answer": "DRIED"
+      },
+      {
+        "number": 96,
+        "clue": "Nation whose capital is the highest in Europe",
+        "answer": "ANDORRA"
+      },
+      {
+        "number": 98,
+        "clue": "Excessively",
+        "answer": "TOO"
+      },
+      {
+        "number": 99,
+        "clue": "\"Heavens!\"",
+        "answer": "DEARGOD"
+      },
+      {
+        "number": 103,
+        "clue": "Misfit on a merry-go-round?",
+        "answer": "REVOLVINGDORK"
+      },
+      {
+        "number": 106,
+        "clue": "Progress",
+        "answer": "INROADS"
+      },
+      {
+        "number": 107,
+        "clue": "Tournament favorite",
+        "answer": "ONESEED"
+      },
+      {
+        "number": 108,
+        "clue": "Eschewing loquacity",
+        "answer": "TERSE"
+      },
+      {
+        "number": 109,
+        "clue": "Downfall",
+        "answer": "DEMISE"
+      },
+      {
+        "number": 110,
+        "clue": "Tricky problems",
+        "answer": "POSERS"
+      },
+      {
+        "number": 111,
+        "clue": "\"Land ___!\" (quaint oath)",
+        "answer": "SAKES"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Starts the bidding",
+        "answer": "OPENS"
+      },
+      {
+        "number": 2,
+        "clue": "\"The Burghers of Calais\" artist",
+        "answer": "RODIN"
+      },
+      {
+        "number": 3,
+        "clue": "Disguise for a reviewer?",
+        "answer": "CRITICALMASK"
+      },
+      {
+        "number": 4,
+        "clue": "Do something",
+        "answer": "ACT"
+      },
+      {
+        "number": 5,
+        "clue": "Ready for pulling the plow, perhaps",
+        "answer": "SHOD"
+      },
+      {
+        "number": 6,
+        "clue": "\"The Light in the Piazza\" heroine",
+        "answer": "CLARA"
+      },
+      {
+        "number": 7,
+        "clue": "\"Elements of Algebra\" author",
+        "answer": "EULER"
+      },
+      {
+        "number": 8,
+        "clue": "Put on patches, say",
+        "answer": "SEWED"
+      },
+      {
+        "number": 9,
+        "clue": "Go downhill, in a way",
+        "answer": "SLED"
+      },
+      {
+        "number": 10,
+        "clue": "Dunvegan denial",
+        "answer": "NAE"
+      },
+      {
+        "number": 11,
+        "clue": "Graceless",
+        "answer": "AWKWARD"
+      },
+      {
+        "number": 12,
+        "clue": "Profound, in '60s slang",
+        "answer": "HEAVY"
+      },
+      {
+        "number": 13,
+        "clue": "Noted resident of Prinsengracht 263",
+        "answer": "ANNEFRANK"
+      },
+      {
+        "number": 14,
+        "clue": "Brewery sight",
+        "answer": "VAT"
+      },
+      {
+        "number": 15,
+        "clue": "Had something",
+        "answer": "ATE"
+      },
+      {
+        "number": 16,
+        "clue": "Dunkerque denial",
+        "answer": "NON"
+      },
+      {
+        "number": 17,
+        "clue": "\"___ we there yet?\"",
+        "answer": "ARE"
+      },
+      {
+        "number": 19,
+        "clue": "Curls target",
+        "answer": "BICEPS"
+      },
+      {
+        "number": 20,
+        "clue": "Like Sichuan cuisine",
+        "answer": "SPICY"
+      },
+      {
+        "number": 22,
+        "clue": "Fix leftovers, perhaps",
+        "answer": "REHEAT"
+      },
+      {
+        "number": 27,
+        "clue": "Minute marchers",
+        "answer": "ANTS"
+      },
+      {
+        "number": 29,
+        "clue": "Second prime",
+        "answer": "THREE"
+      },
+      {
+        "number": 31,
+        "clue": "Orbitz listings",
+        "answer": "FARES"
+      },
+      {
+        "number": 32,
+        "clue": "Was ingrained",
+        "answer": "RANDEEP"
+      },
+      {
+        "number": 33,
+        "clue": "Suffix akin to -ess or -trix",
+        "answer": "ENNE"
+      },
+      {
+        "number": 34,
+        "clue": "Stress, so they say",
+        "answer": "AGER"
+      },
+      {
+        "number": 35,
+        "clue": "Custodian's collection",
+        "answer": "KEYS"
+      },
+      {
+        "number": 37,
+        "clue": "Crafty site",
+        "answer": "ETSY"
+      },
+      {
+        "number": 38,
+        "clue": "Alfresco seating at a restaurant",
+        "answer": "PATIO"
+      },
+      {
+        "number": 40,
+        "clue": "Sun spot?",
+        "answer": "SPACE"
+      },
+      {
+        "number": 41,
+        "clue": "Black ___ (bygone police vans)",
+        "answer": "MARIAS"
+      },
+      {
+        "number": 42,
+        "clue": "Wise",
+        "answer": "SAPIENT"
+      },
+      {
+        "number": 43,
+        "clue": "Some sacrifices",
+        "answer": "BUNTS"
+      },
+      {
+        "number": 44,
+        "clue": "There are 3,600 in a watt-hour",
+        "answer": "JOULES"
+      },
+      {
+        "number": 47,
+        "clue": "Home of seven of the 32 NHL teams",
+        "answer": "CANADA"
+      },
+      {
+        "number": 48,
+        "clue": "Nebraska river",
+        "answer": "PLATTE"
+      },
+      {
+        "number": 50,
+        "clue": "Sacred spot",
+        "answer": "SHRINE"
+      },
+      {
+        "number": 51,
+        "clue": "Its boiling point is close to absolute zero",
+        "answer": "HELIUM"
+      },
+      {
+        "number": 52,
+        "clue": "Didn't make the grade?",
+        "answer": "FLUNKED"
+      },
+      {
+        "number": 54,
+        "clue": "Major reaction, maybe",
+        "answer": "SALUTE"
+      },
+      {
+        "number": 57,
+        "clue": "Commander in the baby-delivering forces?",
+        "answer": "GENERALSTORK"
+      },
+      {
+        "number": 58,
+        "clue": "Track has-been",
+        "answer": "OLDNAG"
+      },
+      {
+        "number": 60,
+        "clue": "Percussion section instruments",
+        "answer": "TIMPANI"
+      },
+      {
+        "number": 62,
+        "clue": "Goes dim",
+        "answer": "FADES"
+      },
+      {
+        "number": 64,
+        "clue": "Gofer's workload",
+        "answer": "TASKS"
+      },
+      {
+        "number": 67,
+        "clue": "Surprises on Oscar nomination morning",
+        "answer": "SNUBS"
+      },
+      {
+        "number": 70,
+        "clue": "Fossil fuel twosome",
+        "answer": "OILANDGAS"
+      },
+      {
+        "number": 71,
+        "clue": "\"Wicked Game\" singer Chris",
+        "answer": "ISAAK"
+      },
+      {
+        "number": 72,
+        "clue": "Cost for a hand",
+        "answer": "ANTE"
+      },
+      {
+        "number": 73,
+        "clue": "\"And ___ friend than e'er an enemy\": \"Coriolanus\"",
+        "answer": "MOREA"
+      },
+      {
+        "number": 74,
+        "clue": "Circ. measure",
+        "answer": "DIAM"
+      },
+      {
+        "number": 75,
+        "clue": "Austen classic",
+        "answer": "EMMA"
+      },
+      {
+        "number": 76,
+        "clue": "Boom, e.g.",
+        "answer": "SPAR"
+      },
+      {
+        "number": 78,
+        "clue": "Toward the wake",
+        "answer": "ASTERN"
+      },
+      {
+        "number": 80,
+        "clue": "Gin flavoring",
+        "answer": "SLOE"
+      },
+      {
+        "number": 81,
+        "clue": "iPhone-to-iPhone sharing protocol",
+        "answer": "AIRDROP"
+      },
+      {
+        "number": 83,
+        "clue": "Email address, often",
+        "answer": "USERID"
+      },
+      {
+        "number": 85,
+        "clue": "Base balancers",
+        "answer": "ACIDS"
+      },
+      {
+        "number": 88,
+        "clue": "Reduce over time",
+        "answer": "ERODE"
+      },
+      {
+        "number": 89,
+        "clue": "Win by ___",
+        "answer": "ANOSE"
+      },
+      {
+        "number": 90,
+        "clue": "Lazybones",
+        "answer": "IDLER"
+      },
+      {
+        "number": 91,
+        "clue": "Affects greatly",
+        "answer": "MOVES"
+      },
+      {
+        "number": 93,
+        "clue": "58-Down, e.g.",
+        "answer": "HORSE"
+      },
+      {
+        "number": 94,
+        "clue": "Symbols of oppression",
+        "answer": "YOKES"
+      },
+      {
+        "number": 96,
+        "clue": "Broad sts.",
+        "answer": "AVES"
+      },
+      {
+        "number": 97,
+        "clue": "Sales dept. staff",
+        "answer": "AGTS"
+      },
+      {
+        "number": 99,
+        "clue": "Accomplished",
+        "answer": "DID"
+      },
+      {
+        "number": 100,
+        "clue": "Opposite of WSW",
+        "answer": "ENE"
+      },
+      {
+        "number": 101,
+        "clue": "19-Down setting",
+        "answer": "ARM"
+      },
+      {
+        "number": 102,
+        "clue": "King of Québec",
+        "answer": "ROI"
+      },
+      {
+        "number": 104,
+        "clue": "Ambient music's Brian",
+        "answer": "ENO"
+      },
+      {
+        "number": 105,
+        "clue": "\"Breaking Bad\" org.",
+        "answer": "DEA"
+      }
+    ]
+  }
+}

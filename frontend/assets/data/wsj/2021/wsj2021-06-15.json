@@ -1,0 +1,763 @@
+{
+  "id": "Keep a Wide Berth",
+  "version": "1.0",
+  "metadata": {
+    "title": "Keep a Wide Berth",
+    "author": "By Alex Eaton-Salners/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-06-15",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 6,
+      "answer": "CICADA",
+      "clue": "Summer buzzer"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "CATS",
+      "clue": "2019 movie musical flop"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "IDYL",
+      "clue": "Pastoral poem"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "COPY",
+      "clue": "Radio operator's acknowledgment"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "ARE",
+      "clue": "\"The gloves ___ off!\""
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "DEW",
+      "clue": "Drops on the lawn"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "ADRIEN",
+      "clue": "Oscar winner Brody"
+    },
+    {
+      "id": "a7",
+      "number": 7,
+      "direction": "across",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "ACE",
+      "clue": "Top of the hearts"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ANTE",
+      "clue": "Chips for a hand"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "CATAPULT",
+      "clue": "Siege of Troy weapon"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "EYE",
+      "clue": "Something that vanishes in a wink?"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "ABS",
+      "clue": "Crunches target them"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ALPINE",
+      "clue": "Nordic's counterpart, in skiing"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "BERATE",
+      "clue": "Chide"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "STONE",
+      "clue": "Material for masons"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 6,
+      "answer": "ADORED",
+      "clue": "Found darling"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 7,
+      "y": 1,
+      "length": 4,
+      "answer": "NAYA",
+      "clue": "Bottled water brand from Canada"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "LET",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Summer buzzer",
+        "answer": "CICADA"
+      },
+      {
+        "number": 7,
+        "clue": "Top of the hearts",
+        "answer": "ACE"
+      },
+      {
+        "number": 10,
+        "clue": "Crunches target them",
+        "answer": "ABS"
+      },
+      {
+        "number": 13,
+        "clue": "Found darling",
+        "answer": "ADORED"
+      },
+      {
+        "number": 14,
+        "clue": "Bottled water brand from Canada",
+        "answer": "NAYA"
+      },
+      {
+        "number": 16,
+        "clue": "Give permission to",
+        "answer": "LET"
+      },
+      {
+        "number": 17,
+        "clue": "Produced with a Remington, say",
+        "answer": "TYPEWRITTEN"
+      },
+      {
+        "number": 19,
+        "clue": "Old hand",
+        "answer": "PRO"
+      },
+      {
+        "number": 20,
+        "clue": "Calculating",
+        "answer": "SLY"
+      },
+      {
+        "number": 21,
+        "clue": "Notion",
+        "answer": "IDEA"
+      },
+      {
+        "number": 22,
+        "clue": "Thai or Tibetan, e.g.",
+        "answer": "ASIAN"
+      },
+      {
+        "number": 24,
+        "clue": "Dueling sword",
+        "answer": "EPEE"
+      },
+      {
+        "number": 26,
+        "clue": "Salsa choice",
+        "answer": "PICANTE"
+      },
+      {
+        "number": 28,
+        "clue": "Royal happening of 2012",
+        "answer": "DIAMONDJUBILEE"
+      },
+      {
+        "number": 32,
+        "clue": "Pond flora",
+        "answer": "ALGAE"
+      },
+      {
+        "number": 33,
+        "clue": "Dress with flare",
+        "answer": "ALINE"
+      },
+      {
+        "number": 34,
+        "clue": "Allied group",
+        "answer": "BLOC"
+      },
+      {
+        "number": 35,
+        "clue": "Turns across traffic",
+        "answer": "LEFTS"
+      },
+      {
+        "number": 37,
+        "clue": "Tumble in the tub, say",
+        "answer": "SLIP"
+      },
+      {
+        "number": 41,
+        "clue": "\"Frozen\" star Menzel",
+        "answer": "IDINA"
+      },
+      {
+        "number": 43,
+        "clue": "Cheat at drawing, perhaps",
+        "answer": "TRACE"
+      },
+      {
+        "number": 44,
+        "clue": "Time for a network news commercial break, perhaps",
+        "answer": "QUARTERTOSEVEN"
+      },
+      {
+        "number": 48,
+        "clue": "Less recently cleaned",
+        "answer": "DUSTIER"
+      },
+      {
+        "number": 49,
+        "clue": "Working the mess",
+        "answer": "ONKP"
+      },
+      {
+        "number": 50,
+        "clue": "Quick-cooking noodles",
+        "answer": "RAMEN"
+      },
+      {
+        "number": 51,
+        "clue": "\"Where America's Day Begins\" island",
+        "answer": "GUAM"
+      },
+      {
+        "number": 53,
+        "clue": "Soothing spot",
+        "answer": "SPA"
+      },
+      {
+        "number": 56,
+        "clue": "Abbr. before an alias",
+        "answer": "AKA"
+      },
+      {
+        "number": 57,
+        "clue": "\"Bridesmaids\" star",
+        "answer": "KRISTENWIIG"
+      },
+      {
+        "number": 61,
+        "clue": "\"___ XING\" (street sign)",
+        "answer": "PED"
+      },
+      {
+        "number": 62,
+        "clue": "One of four in this grid",
+        "answer": "SIZE"
+      },
+      {
+        "number": 63,
+        "clue": "Longtime California senator Feinstein",
+        "answer": "DIANNE"
+      },
+      {
+        "number": 64,
+        "clue": "Before, in poems",
+        "answer": "ERE"
+      },
+      {
+        "number": 65,
+        "clue": "With 66-Across, cover of sorts, and a description of this puzzle's theme",
+        "answer": "BED"
+      },
+      {
+        "number": 66,
+        "clue": "See 65-Across",
+        "answer": "SPREAD"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "2019 movie musical flop",
+        "answer": "CATS"
+      },
+      {
+        "number": 2,
+        "clue": "Pastoral poem",
+        "answer": "IDYL"
+      },
+      {
+        "number": 3,
+        "clue": "Radio operator's acknowledgment",
+        "answer": "COPY"
+      },
+      {
+        "number": 4,
+        "clue": "\"The gloves ___ off!\"",
+        "answer": "ARE"
+      },
+      {
+        "number": 5,
+        "clue": "Drops on the lawn",
+        "answer": "DEW"
+      },
+      {
+        "number": 6,
+        "clue": "Oscar winner Brody",
+        "answer": "ADRIEN"
+      },
+      {
+        "number": 7,
+        "clue": "Chips for a hand",
+        "answer": "ANTE"
+      },
+      {
+        "number": 8,
+        "clue": "Siege of Troy weapon",
+        "answer": "CATAPULT"
+      },
+      {
+        "number": 9,
+        "clue": "Something that vanishes in a wink?",
+        "answer": "EYE"
+      },
+      {
+        "number": 10,
+        "clue": "Nordic's counterpart, in skiing",
+        "answer": "ALPINE"
+      },
+      {
+        "number": 11,
+        "clue": "Chide",
+        "answer": "BERATE"
+      },
+      {
+        "number": 12,
+        "clue": "Material for masons",
+        "answer": "STONE"
+      },
+      {
+        "number": 15,
+        "clue": "Over-the-counter pain reliever",
+        "answer": "ANACIN"
+      },
+      {
+        "number": 18,
+        "clue": "Picked from a mug shot book",
+        "answer": "IDED"
+      },
+      {
+        "number": 23,
+        "clue": "Pitcher working on commission",
+        "answer": "SALESREP"
+      },
+      {
+        "number": 24,
+        "clue": "Waste away",
+        "answer": "EMACIATE"
+      },
+      {
+        "number": 25,
+        "clue": "\"The Pit and the Pendulum\" author",
+        "answer": "POE"
+      },
+      {
+        "number": 27,
+        "clue": "Sacred bird of Egypt",
+        "answer": "IBIS"
+      },
+      {
+        "number": 28,
+        "clue": "Bit of balm",
+        "answer": "DAB"
+      },
+      {
+        "number": 29,
+        "clue": "Feeling blah",
+        "answer": "ILL"
+      },
+      {
+        "number": 30,
+        "clue": "Prior to now",
+        "answer": "AGO"
+      },
+      {
+        "number": 31,
+        "clue": "Evil wooer of Princess Jasmine",
+        "answer": "JAFAR"
+      },
+      {
+        "number": 35,
+        "clue": "Less filling, on labels",
+        "answer": "LITE"
+      },
+      {
+        "number": 36,
+        "clue": "\"Beam me up!\"",
+        "answer": "ENERGIZE"
+      },
+      {
+        "number": 38,
+        "clue": "Bathroom, in brief",
+        "answer": "LAV"
+      },
+      {
+        "number": 39,
+        "clue": "Cubes in cola",
+        "answer": "ICE"
+      },
+      {
+        "number": 40,
+        "clue": "Ink or oink source",
+        "answer": "PEN"
+      },
+      {
+        "number": 42,
+        "clue": "Chugs, say",
+        "answer": "DRINKS"
+      },
+      {
+        "number": 43,
+        "clue": "\"Such a pity\"",
+        "answer": "TSK"
+      },
+      {
+        "number": 44,
+        "clue": "Friend from Pennsylvania",
+        "answer": "QUAKER"
+      },
+      {
+        "number": 45,
+        "clue": "Not imported",
+        "answer": "USMADE"
+      },
+      {
+        "number": 46,
+        "clue": "Just right",
+        "answer": "TOAT"
+      },
+      {
+        "number": 47,
+        "clue": "Sedated, say",
+        "answer": "ONMEDS"
+      },
+      {
+        "number": 48,
+        "clue": "Hang loosely",
+        "answer": "DRAPE"
+      },
+      {
+        "number": 52,
+        "clue": "Not new",
+        "answer": "USED"
+      },
+      {
+        "number": 53,
+        "clue": "Cosecant's reciprocal",
+        "answer": "SINE"
+      },
+      {
+        "number": 54,
+        "clue": "___ colada",
+        "answer": "PINA"
+      },
+      {
+        "number": 55,
+        "clue": "Got wiser, hopefully",
+        "answer": "AGED"
+      },
+      {
+        "number": 58,
+        "clue": "Chest bone",
+        "answer": "RIB"
+      },
+      {
+        "number": 59,
+        "clue": "Tuck's partner",
+        "answer": "NIP"
+      },
+      {
+        "number": 60,
+        "clue": "Mindless card game",
+        "answer": "WAR"
+      }
+    ]
+  }
+}

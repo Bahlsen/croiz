@@ -1,0 +1,773 @@
+{
+  "id": "Pièces de Résistance",
+  "version": "1.0",
+  "metadata": {
+    "title": "Pièces de Résistance",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-07-14",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "Z"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "X"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "PEZ",
+      "clue": "Brand named from the German for \"peppermint\""
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "PADS",
+      "clue": "Goalie protection"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "EXEC",
+      "clue": "Suit"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "ZOLA",
+      "clue": "\"J'Accuse...!\" writer"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "ROSE",
+      "clue": "Warm pink"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "REBILLS",
+      "clue": "Invoices anew"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ONENIL",
+      "clue": "Soccer score after the first goal"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "SYR",
+      "clue": "Isr. neighbor"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "EATS",
+      "clue": "Chow"
+    },
+    {
+      "id": "a8",
+      "number": 8,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "CHAIN",
+      "clue": "Polypeptide form"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "CHENEY",
+      "clue": "Liz in the House"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "HOLST",
+      "clue": "\"A Moorside Suite\" composer"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "AMI",
+      "clue": "French friend"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "IMO",
+      "clue": "\"If you ask me,\" online"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "NET",
+      "clue": "Bottom line"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "AXON",
+      "clue": "Impulse relayer"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "ENYA",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "ENYA",
+      "clue": "Four-time Grammy winner for Best New Age Album"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Brand named from the German for \"peppermint\"",
+        "answer": "PEZ"
+      },
+      {
+        "number": 4,
+        "clue": "Warm pink",
+        "answer": "ROSE"
+      },
+      {
+        "number": 8,
+        "clue": "Polypeptide form",
+        "answer": "CHAIN"
+      },
+      {
+        "number": 13,
+        "clue": "Impulse relayer",
+        "answer": "AXON"
+      },
+      {
+        "number": 15,
+        "clue": "Four-time Grammy winner for Best New Age Album",
+        "answer": "ENYA"
+      },
+      {
+        "number": 16,
+        "clue": "Man of Marseille",
+        "answer": "HOMME"
+      },
+      {
+        "number": 17,
+        "clue": "Slicer setting",
+        "answer": "DELI"
+      },
+      {
+        "number": 18,
+        "clue": "Mary's chimney sweep friend, in \"Mary Poppins\"",
+        "answer": "BERT"
+      },
+      {
+        "number": 19,
+        "clue": "\"Adam Bede\" author",
+        "answer": "ELIOT"
+      },
+      {
+        "number": 20,
+        "clue": "Digitizes, as a photo",
+        "answer": "SCANSIN"
+      },
+      {
+        "number": 22,
+        "clue": "Romulus and Remus, to Mars",
+        "answer": "SONS"
+      },
+      {
+        "number": 24,
+        "clue": "\"Lucifer\" star Tom",
+        "answer": "ELLIS"
+      },
+      {
+        "number": 26,
+        "clue": "Trademarked Certs ingredient",
+        "answer": "RETSYN"
+      },
+      {
+        "number": 30,
+        "clue": "Common name of France's July 14 \"Fête nationale\"",
+        "answer": "BASTILLEDAY"
+      },
+      {
+        "number": 34,
+        "clue": "Green of \"Casino Royale\"",
+        "answer": "EVA"
+      },
+      {
+        "number": 35,
+        "clue": "Chet in the Country Music Hall of Fame",
+        "answer": "ATKINS"
+      },
+      {
+        "number": 36,
+        "clue": "2015 Verizon acquisition",
+        "answer": "AOL"
+      },
+      {
+        "number": 37,
+        "clue": "A lot of pizzazz?",
+        "answer": "ZEES"
+      },
+      {
+        "number": 38,
+        "clue": "\"Holberg Suite\" composer",
+        "answer": "GRIEG"
+      },
+      {
+        "number": 39,
+        "clue": "Mahershala of \"Moonlight\"",
+        "answer": "ALI"
+      },
+      {
+        "number": 40,
+        "clue": "Lab work",
+        "answer": "TESTS"
+      },
+      {
+        "number": 41,
+        "clue": "Doesn't shut up",
+        "answer": "GABS"
+      },
+      {
+        "number": 42,
+        "clue": "Sixth col. heading",
+        "answer": "FRI"
+      },
+      {
+        "number": 43,
+        "clue": "Choose for inclusion",
+        "answer": "CURATE"
+      },
+      {
+        "number": 44,
+        "clue": "Green start",
+        "answer": "ECO"
+      },
+      {
+        "number": 45,
+        "clue": "Site of a fireworks display on 30-Across",
+        "answer": "EIFFELTOWER"
+      },
+      {
+        "number": 47,
+        "clue": "The stormers celebrated on 30-Across, e.g.",
+        "answer": "REBELS"
+      },
+      {
+        "number": 49,
+        "clue": "Crème de la crème",
+        "answer": "ELITE"
+      },
+      {
+        "number": 50,
+        "clue": "Rms. for rent",
+        "answer": "APTS"
+      },
+      {
+        "number": 52,
+        "clue": "It's not working",
+        "answer": "LEISURE"
+      },
+      {
+        "number": 56,
+        "clue": "Start for structure or red",
+        "answer": "INFRA"
+      },
+      {
+        "number": 59,
+        "clue": "Shore soarer",
+        "answer": "TERN"
+      },
+      {
+        "number": 61,
+        "clue": "Article",
+        "answer": "ITEM"
+      },
+      {
+        "number": 62,
+        "clue": "Some pups",
+        "answer": "SEALS"
+      },
+      {
+        "number": 63,
+        "clue": "Entertainer's \"grand slam\"",
+        "answer": "EGOT"
+      },
+      {
+        "number": 64,
+        "clue": "Tweed tweaker",
+        "answer": "NAST"
+      },
+      {
+        "number": 65,
+        "clue": "Stick figure line",
+        "answer": "TORSO"
+      },
+      {
+        "number": 66,
+        "clue": "North Pole output",
+        "answer": "TOYS"
+      },
+      {
+        "number": 67,
+        "clue": "Abbr. in elevated addresses",
+        "answer": "HTS"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Goalie protection",
+        "answer": "PADS"
+      },
+      {
+        "number": 2,
+        "clue": "Suit",
+        "answer": "EXEC"
+      },
+      {
+        "number": 3,
+        "clue": "\"J'Accuse...!\" writer",
+        "answer": "ZOLA"
+      },
+      {
+        "number": 4,
+        "clue": "Invoices anew",
+        "answer": "REBILLS"
+      },
+      {
+        "number": 5,
+        "clue": "Soccer score after the first goal",
+        "answer": "ONENIL"
+      },
+      {
+        "number": 6,
+        "clue": "Isr. neighbor",
+        "answer": "SYR"
+      },
+      {
+        "number": 7,
+        "clue": "Chow",
+        "answer": "EATS"
+      },
+      {
+        "number": 8,
+        "clue": "Liz in the House",
+        "answer": "CHENEY"
+      },
+      {
+        "number": 9,
+        "clue": "\"A Moorside Suite\" composer",
+        "answer": "HOLST"
+      },
+      {
+        "number": 10,
+        "clue": "French friend",
+        "answer": "AMI"
+      },
+      {
+        "number": 11,
+        "clue": "\"If you ask me,\" online",
+        "answer": "IMO"
+      },
+      {
+        "number": 12,
+        "clue": "Bottom line",
+        "answer": "NET"
+      },
+      {
+        "number": 14,
+        "clue": "When Tickle Me Elmo and pogs were big",
+        "answer": "NINETIES"
+      },
+      {
+        "number": 21,
+        "clue": "Cast supporter",
+        "answer": "SLING"
+      },
+      {
+        "number": 23,
+        "clue": "Spoken",
+        "answer": "ORAL"
+      },
+      {
+        "number": 25,
+        "clue": "Cousteau concern",
+        "answer": "SEALIFE"
+      },
+      {
+        "number": 27,
+        "clue": "It has its ups and downs",
+        "answer": "SEESAW"
+      },
+      {
+        "number": 28,
+        "clue": "___ Nicole Brown of \"Community\"",
+        "answer": "YVETTE"
+      },
+      {
+        "number": 29,
+        "clue": "Sadat's predecessor",
+        "answer": "NASSER"
+      },
+      {
+        "number": 30,
+        "clue": "Cashier's aide",
+        "answer": "BAGGER"
+      },
+      {
+        "number": 31,
+        "clue": "Very little",
+        "answer": "ATRACE"
+      },
+      {
+        "number": 32,
+        "clue": "Bike-like vehicle with runners instead of wheels",
+        "answer": "SKIBOB"
+      },
+      {
+        "number": 33,
+        "clue": "\"___ make myself clear?\"",
+        "answer": "DOI"
+      },
+      {
+        "number": 37,
+        "clue": "Narrows down a search",
+        "answer": "ZEROESIN"
+      },
+      {
+        "number": 39,
+        "clue": "Pound sound",
+        "answer": "ARF"
+      },
+      {
+        "number": 40,
+        "clue": "With all playing at once, musically",
+        "answer": "TUTTI"
+      },
+      {
+        "number": 42,
+        "clue": "Punch ingredient",
+        "answer": "FIST"
+      },
+      {
+        "number": 43,
+        "clue": "Patronizing people",
+        "answer": "CLIENTS"
+      },
+      {
+        "number": 45,
+        "clue": "Sun Bowl site",
+        "answer": "ELPASO"
+      },
+      {
+        "number": 46,
+        "clue": "\"L.A. Confidential\" author James",
+        "answer": "ELLROY"
+      },
+      {
+        "number": 48,
+        "clue": "Counts' counterparts",
+        "answer": "EARLS"
+      },
+      {
+        "number": 51,
+        "clue": "Editor's override",
+        "answer": "STET"
+      },
+      {
+        "number": 53,
+        "clue": "Bonneville Salt Flats location",
+        "answer": "UTAH"
+      },
+      {
+        "number": 54,
+        "clue": "Doctor's advice",
+        "answer": "REST"
+      },
+      {
+        "number": 55,
+        "clue": "Some FDNY workers",
+        "answer": "EMTS"
+      },
+      {
+        "number": 56,
+        "clue": "Follower's suffix",
+        "answer": "IST"
+      },
+      {
+        "number": 57,
+        "clue": "Agent Smith's nemesis",
+        "answer": "NEO"
+      },
+      {
+        "number": 58,
+        "clue": "Remote",
+        "answer": "FAR"
+      },
+      {
+        "number": 60,
+        "clue": "Analyst's focus",
+        "answer": "EGO"
+      }
+    ]
+  }
+}

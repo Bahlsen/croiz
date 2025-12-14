@@ -1,0 +1,783 @@
+{
+  "id": "Splitting the Profits",
+  "version": "1.0",
+  "metadata": {
+    "title": "Splitting the Profits",
+    "author": "By MaryEllen Uthlaut/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-04-21",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "J"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "APLUS",
+      "clue": "Mark of excellence"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "AJAR",
+      "clue": "Slightly open"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "POLE",
+      "clue": "Magnet end"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "LIPS",
+      "clue": "ChapStick target"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "UNHOOK",
+      "clue": "Free, as a fish"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "STALWART",
+      "clue": "Resolutely loyal"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 4,
+      "answer": "SANS",
+      "clue": "Lacking, literarily"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "SPUD",
+      "clue": "Tater"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ALL",
+      "clue": "Maximum amount"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "NOTCH",
+      "clue": "V-cut"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "SPIRIT",
+      "clue": "What pep rallies generate"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "SASH",
+      "clue": "Spot for merit badges"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "SPAY",
+      "clue": "Fix, in a way"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "AUTO",
+      "clue": "Golf, e.g."
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "SPUN",
+      "clue": "Like a cocoon"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "HAMS",
+      "clue": "Some audition rejects"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "JOINT",
+      "clue": "Arthroscopy target"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "PLOP",
+      "clue": "Fall heavily"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "PUPA",
+      "clue": "Chrysalis, e.g."
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Mark of excellence",
+        "answer": "APLUS"
+      },
+      {
+        "number": 6,
+        "clue": "Lacking, literarily",
+        "answer": "SANS"
+      },
+      {
+        "number": 10,
+        "clue": "Spot for merit badges",
+        "answer": "SASH"
+      },
+      {
+        "number": 14,
+        "clue": "Arthroscopy target",
+        "answer": "JOINT"
+      },
+      {
+        "number": 15,
+        "clue": "Fall heavily",
+        "answer": "PLOP"
+      },
+      {
+        "number": 16,
+        "clue": "Chrysalis, e.g.",
+        "answer": "PUPA"
+      },
+      {
+        "number": 17,
+        "clue": "Leader of the pack",
+        "answer": "ALPHA"
+      },
+      {
+        "number": 18,
+        "clue": "Final offer",
+        "answer": "ULTIMATUM"
+      },
+      {
+        "number": 20,
+        "clue": "Fixed, as pumps",
+        "answer": "RESOLED"
+      },
+      {
+        "number": 22,
+        "clue": "Boxful for drawers",
+        "answer": "CRAYONS"
+      },
+      {
+        "number": 23,
+        "clue": "Nocturnal raptor",
+        "answer": "OWL"
+      },
+      {
+        "number": 24,
+        "clue": "Slicer setting",
+        "answer": "THIN"
+      },
+      {
+        "number": 25,
+        "clue": "Game that makes babies laugh",
+        "answer": "PEEKABOO"
+      },
+      {
+        "number": 29,
+        "clue": "Oppressive ruler",
+        "answer": "TYRANT"
+      },
+      {
+        "number": 34,
+        "clue": "Not clergy",
+        "answer": "LAY"
+      },
+      {
+        "number": 35,
+        "clue": "Oakland A's outfielder Laureano",
+        "answer": "RAMON"
+      },
+      {
+        "number": 37,
+        "clue": "Lily family succulent",
+        "answer": "ALOE"
+      },
+      {
+        "number": 38,
+        "clue": "Lopsided",
+        "answer": "ATILT"
+      },
+      {
+        "number": 40,
+        "clue": "Period of history",
+        "answer": "AGE"
+      },
+      {
+        "number": 41,
+        "clue": "Put in an appearance",
+        "answer": "SHOWN"
+      },
+      {
+        "number": 42,
+        "clue": "Fan publication",
+        "answer": "ZINE"
+      },
+      {
+        "number": 43,
+        "clue": "Mocking tribute",
+        "answer": "ROAST"
+      },
+      {
+        "number": 45,
+        "clue": "Crowd-pleaser",
+        "answer": "HIT"
+      },
+      {
+        "number": 46,
+        "clue": "Boxing trainer Dundee",
+        "answer": "ANGELO"
+      },
+      {
+        "number": 49,
+        "clue": "Padded footstools",
+        "answer": "OTTOMANS"
+      },
+      {
+        "number": 51,
+        "clue": "Scorched",
+        "answer": "ARID"
+      },
+      {
+        "number": 53,
+        "clue": "Ram's sister",
+        "answer": "EWE"
+      },
+      {
+        "number": 54,
+        "clue": "Like Muhammad's followers",
+        "answer": "ISLAMIC"
+      },
+      {
+        "number": 58,
+        "clue": "Issue forth",
+        "answer": "EMANATE"
+      },
+      {
+        "number": 62,
+        "clue": "They're divided by victors, and divided in four rows of this puzzle",
+        "answer": "THESPOILS"
+      },
+      {
+        "number": 64,
+        "clue": "Bettor business?",
+        "answer": "WAGER"
+      },
+      {
+        "number": 65,
+        "clue": "Holder of 68-Across",
+        "answer": "COOP"
+      },
+      {
+        "number": 66,
+        "clue": "Some summer babies",
+        "answer": "LEOS"
+      },
+      {
+        "number": 67,
+        "clue": "Map measures",
+        "answer": "ACRES"
+      },
+      {
+        "number": 68,
+        "clue": "Occupants of a 65-Across",
+        "answer": "HENS"
+      },
+      {
+        "number": 69,
+        "clue": "Consequently",
+        "answer": "ERGO"
+      },
+      {
+        "number": 70,
+        "clue": "Agent of an uprising?",
+        "answer": "YEAST"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Slightly open",
+        "answer": "AJAR"
+      },
+      {
+        "number": 2,
+        "clue": "Magnet end",
+        "answer": "POLE"
+      },
+      {
+        "number": 3,
+        "clue": "ChapStick target",
+        "answer": "LIPS"
+      },
+      {
+        "number": 4,
+        "clue": "Free, as a fish",
+        "answer": "UNHOOK"
+      },
+      {
+        "number": 5,
+        "clue": "Resolutely loyal",
+        "answer": "STALWART"
+      },
+      {
+        "number": 6,
+        "clue": "Tater",
+        "answer": "SPUD"
+      },
+      {
+        "number": 7,
+        "clue": "Maximum amount",
+        "answer": "ALL"
+      },
+      {
+        "number": 8,
+        "clue": "V-cut",
+        "answer": "NOTCH"
+      },
+      {
+        "number": 9,
+        "clue": "What pep rallies generate",
+        "answer": "SPIRIT"
+      },
+      {
+        "number": 10,
+        "clue": "Fix, in a way",
+        "answer": "SPAY"
+      },
+      {
+        "number": 11,
+        "clue": "Golf, e.g.",
+        "answer": "AUTO"
+      },
+      {
+        "number": 12,
+        "clue": "Like a cocoon",
+        "answer": "SPUN"
+      },
+      {
+        "number": 13,
+        "clue": "Some audition rejects",
+        "answer": "HAMS"
+      },
+      {
+        "number": 19,
+        "clue": "Multitudinous",
+        "answer": "MANY"
+      },
+      {
+        "number": 21,
+        "clue": "Idris of \"Pacific Rim\"",
+        "answer": "ELBA"
+      },
+      {
+        "number": 24,
+        "clue": "2016 Drake song with guest vocals from Rihanna",
+        "answer": "TOOGOOD"
+      },
+      {
+        "number": 25,
+        "clue": "Square",
+        "answer": "PLAZA"
+      },
+      {
+        "number": 26,
+        "clue": "Like some kitchens",
+        "answer": "EATIN"
+      },
+      {
+        "number": 27,
+        "clue": "Taking a look at",
+        "answer": "EYING"
+      },
+      {
+        "number": 28,
+        "clue": "Bradley with five stars",
+        "answer": "OMAR"
+      },
+      {
+        "number": 30,
+        "clue": "\"Go, team!\"",
+        "answer": "RAH"
+      },
+      {
+        "number": 31,
+        "clue": "Islands welcome",
+        "answer": "ALOHA"
+      },
+      {
+        "number": 32,
+        "clue": "Having only unfavorable outcomes",
+        "answer": "NOWIN"
+      },
+      {
+        "number": 33,
+        "clue": "Portable shelters",
+        "answer": "TENTS"
+      },
+      {
+        "number": 36,
+        "clue": "Undiluted",
+        "answer": "NEAT"
+      },
+      {
+        "number": 39,
+        "clue": "Jeans brand",
+        "answer": "LEE"
+      },
+      {
+        "number": 41,
+        "clue": "Hide for a ride",
+        "answer": "STOWAWAY"
+      },
+      {
+        "number": 44,
+        "clue": "Curb",
+        "answer": "STEM"
+      },
+      {
+        "number": 47,
+        "clue": "Desktop accessory",
+        "answer": "LAMP"
+      },
+      {
+        "number": 48,
+        "clue": "Jim Palmer, notably",
+        "answer": "ORIOLE"
+      },
+      {
+        "number": 50,
+        "clue": "Threat",
+        "answer": "MENACE"
+      },
+      {
+        "number": 52,
+        "clue": "Less welcoming",
+        "answer": "ICIER"
+      },
+      {
+        "number": 54,
+        "clue": "Persistent urge",
+        "answer": "ITCH"
+      },
+      {
+        "number": 55,
+        "clue": "It's about a foot",
+        "answer": "SHOE"
+      },
+      {
+        "number": 56,
+        "clue": "Writer Uris",
+        "answer": "LEON"
+      },
+      {
+        "number": 57,
+        "clue": "Venomous vipers",
+        "answer": "ASPS"
+      },
+      {
+        "number": 58,
+        "clue": "Brand with tiger ads",
+        "answer": "ESSO"
+      },
+      {
+        "number": 59,
+        "clue": "Taj Mahal city",
+        "answer": "AGRA"
+      },
+      {
+        "number": 60,
+        "clue": "Driving aids",
+        "answer": "TEES"
+      },
+      {
+        "number": 61,
+        "clue": "Formerly, formerly",
+        "answer": "ERST"
+      },
+      {
+        "number": 63,
+        "clue": "Hiker's seat",
+        "answer": "LOG"
+      }
+    ]
+  }
+}

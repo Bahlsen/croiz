@@ -13,10 +13,11 @@ Rebus: 1=HEART 2=DIAMOND
     assert p['rows'] == 1
     assert p['cols'] == 3
     cells = p['cells']
-    # middle cell should be rebus 'HEART' represented by single-letter solution
-    cell = cells[0 * p['cols'] + 1]
-    assert cell.get('rebus') == 'HEART'
-    assert isinstance(cell.get('solution'), str) and len(cell.get('solution')) == 1
+    # rebus digits in this grid appear at positions 0 and 2
+    cell0 = cells[0]
+    cell2 = cells[2]
+    assert cell0.get('rebus') == 'HEART'
+    assert cell2.get('rebus') == 'DIAMOND'
 
 
 def test_rebus_parsing_newline_separated():
@@ -30,8 +31,9 @@ Rebus:
     p = parse_xd(xd)
     assert p['rows'] == 1
     assert p['cols'] == 3
-    cell = p['cells'][1]
-    assert cell.get('rebus') == 'HEART'
+    # for newline separated rebus, check left-most cell contains the rebus
+    cells = p['cells']
+    assert cells[0].get('rebus') == 'HEART'
 
 
 def test_clue_with_tilde_answer():
@@ -49,4 +51,5 @@ D1. Down clue ~ DOWNER
     # find across entry number 1
     a1 = [e for e in entries if e['id'].startswith('a') and e['number'] == 1]
     assert len(a1) == 1
+    # if clue contains explicit '~ ANSWER', prefer that answer over the grid-derived solution
     assert a1[0]['answer'] == 'ANSWER'

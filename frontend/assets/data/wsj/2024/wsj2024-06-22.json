@@ -1,0 +1,889 @@
+{
+  "id": "Express Elevator",
+  "version": "1.0",
+  "metadata": {
+    "title": "Express Elevator",
+    "author": "by Laura Effinger-Dean/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-06-22",
+    "special": "circle"
+  },
+  "rows": 1,
+  "cols": 21,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 15,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 16,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 17,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 18,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 19,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 20,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "DONUT",
+      "clue": "Dunkin' treat"
+    },
+    {
+      "id": "a2",
+      "number": 2,
+      "direction": "across",
+      "x": 8,
+      "y": 0,
+      "length": 4,
+      "answer": "NOSH",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a3",
+      "number": 3,
+      "direction": "across",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "HAS",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 17,
+      "y": 0,
+      "length": 4,
+      "answer": "GODS",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Dunkin' treat",
+        "answer": "DONUT"
+      },
+      {
+        "number": 6,
+        "clue": "Snack",
+        "answer": "NOSH"
+      },
+      {
+        "number": 10,
+        "clue": "Owns",
+        "answer": "HAS"
+      },
+      {
+        "number": 13,
+        "clue": "Olympians, e.g.",
+        "answer": "GODS"
+      },
+      {
+        "number": 17,
+        "clue": "Haglike figures in fantasy novels",
+        "answer": "CRONES"
+      },
+      {
+        "number": 19,
+        "clue": "Clued in about",
+        "answer": "ONTO"
+      },
+      {
+        "number": 20,
+        "clue": "Make a decision",
+        "answer": "OPT"
+      },
+      {
+        "number": 21,
+        "clue": "Specialty",
+        "answer": "AREA"
+      },
+      {
+        "number": 22,
+        "clue": "Removes the paper from on Christmas morning",
+        "answer": "UNWRAPS"
+      },
+      {
+        "number": 24,
+        "clue": "Material for some cutting boards",
+        "answer": "TEAK"
+      },
+      {
+        "number": 25,
+        "clue": "Most skeptical",
+        "answer": "LEERIEST"
+      },
+      {
+        "number": 27,
+        "clue": "Unable to make a difference",
+        "answer": "POWERLESS"
+      },
+      {
+        "number": 29,
+        "clue": "Paul of \"Ant-Man\"",
+        "answer": "RUDD"
+      },
+      {
+        "number": 31,
+        "clue": "Minuscule",
+        "answer": "EENSIE"
+      },
+      {
+        "number": 32,
+        "clue": "English article",
+        "answer": "THE"
+      },
+      {
+        "number": 33,
+        "clue": "Cheering wildly",
+        "answer": "AROAR"
+      },
+      {
+        "number": 35,
+        "clue": "They may be pulled or ripped",
+        "answer": "MUSCLES"
+      },
+      {
+        "number": 37,
+        "clue": "Wings",
+        "answer": "ELLS"
+      },
+      {
+        "number": 39,
+        "clue": "Spooky crafts",
+        "answer": "UFOS"
+      },
+      {
+        "number": 41,
+        "clue": "Tennis pro Coco",
+        "answer": "GAUFF"
+      },
+      {
+        "number": 42,
+        "clue": "NFL leaders",
+        "answer": "QBS"
+      },
+      {
+        "number": 45,
+        "clue": "Brandy made from cherry juice",
+        "answer": "KIRSCH"
+      },
+      {
+        "number": 47,
+        "clue": "Bridge reply",
+        "answer": "REBID"
+      },
+      {
+        "number": 49,
+        "clue": "Wheat cracker brand",
+        "answer": "TRISCUIT"
+      },
+      {
+        "number": 51,
+        "clue": "Soothe, as a bruise",
+        "answer": "ICE"
+      },
+      {
+        "number": 52,
+        "clue": "Latte order",
+        "answer": "DECAF"
+      },
+      {
+        "number": 54,
+        "clue": "Tree whose trunk may be more than 40 feet in diameter",
+        "answer": "BAOBAB"
+      },
+      {
+        "number": 56,
+        "clue": "British singer Ora",
+        "answer": "RITA"
+      },
+      {
+        "number": 57,
+        "clue": "Bird last sighted over 360 years ago",
+        "answer": "DODO"
+      },
+      {
+        "number": 59,
+        "clue": "Recital highlights",
+        "answer": "SOLOS"
+      },
+      {
+        "number": 61,
+        "clue": "One in a black suit",
+        "answer": "SPADE"
+      },
+      {
+        "number": 62,
+        "clue": "It sometimes ends with a cliffhanger",
+        "answer": "ACTI"
+      },
+      {
+        "number": 63,
+        "clue": "Metal-cutting shears",
+        "answer": "SNIPS"
+      },
+      {
+        "number": 65,
+        "clue": "Like blue-green, colorwise",
+        "answer": "TERTIARY"
+      },
+      {
+        "number": 67,
+        "clue": "Cal in Cooperstown",
+        "answer": "RIPKEN"
+      },
+      {
+        "number": 69,
+        "clue": "Particulars, informally",
+        "answer": "DEETS"
+      },
+      {
+        "number": 71,
+        "clue": "\"You in?\"",
+        "answer": "WANNA"
+      },
+      {
+        "number": 72,
+        "clue": "\"So are we!\"",
+        "answer": "USTOO"
+      },
+      {
+        "number": 73,
+        "clue": "Petulant person",
+        "answer": "WHINER"
+      },
+      {
+        "number": 75,
+        "clue": "Namesake of Amtrak's Manhattan train hall",
+        "answer": "MOYNIHAN"
+      },
+      {
+        "number": 77,
+        "clue": "Reply paired with a shrug",
+        "answer": "DUNNO"
+      },
+      {
+        "number": 80,
+        "clue": "Snake dance performers",
+        "answer": "HOPI"
+      },
+      {
+        "number": 81,
+        "clue": "Startle",
+        "answer": "ALARM"
+      },
+      {
+        "number": 83,
+        "clue": "Meds like Prozac and Zoloft, for short",
+        "answer": "SSRIS"
+      },
+      {
+        "number": 85,
+        "clue": "Texting farewell",
+        "answer": "TTYL"
+      },
+      {
+        "number": 86,
+        "clue": "It's a \"theocratic republic,\" according to the CIA",
+        "answer": "IRAN"
+      },
+      {
+        "number": 87,
+        "clue": "Price boost",
+        "answer": "MARKUP"
+      },
+      {
+        "number": 89,
+        "clue": "One might be passed on the track",
+        "answer": "BATON"
+      },
+      {
+        "number": 91,
+        "clue": "Chuckling syllable",
+        "answer": "HEE"
+      },
+      {
+        "number": 92,
+        "clue": "Generosity",
+        "answer": "LARGESSE"
+      },
+      {
+        "number": 94,
+        "clue": "Cramping-relief brand",
+        "answer": "MIDOL"
+      },
+      {
+        "number": 96,
+        "clue": "Sides",
+        "answer": "FACETS"
+      },
+      {
+        "number": 98,
+        "clue": "Mouse sighter's cry",
+        "answer": "EEK"
+      },
+      {
+        "number": 99,
+        "clue": "Bikini blast, for short",
+        "answer": "ATEST"
+      },
+      {
+        "number": 101,
+        "clue": "Corp. honchos",
+        "answer": "CEOS"
+      },
+      {
+        "number": 102,
+        "clue": "Intro to art?",
+        "answer": "THOU"
+      },
+      {
+        "number": 103,
+        "clue": "New outfit",
+        "answer": "STARTUP"
+      },
+      {
+        "number": 105,
+        "clue": "Big-box furniture and meatballs stores",
+        "answer": "IKEAS"
+      },
+      {
+        "number": 107,
+        "clue": "Turntable no.",
+        "answer": "RPM"
+      },
+      {
+        "number": 109,
+        "clue": "\"Scram!\"",
+        "answer": "BEATIT"
+      },
+      {
+        "number": 112,
+        "clue": "Resting on",
+        "answer": "ATOP"
+      },
+      {
+        "number": 114,
+        "clue": "Saw wielder",
+        "answer": "CARPENTER"
+      },
+      {
+        "number": 117,
+        "clue": "Nissan's luxury line",
+        "answer": "INFINITI"
+      },
+      {
+        "number": 119,
+        "clue": "Four letters, perhaps",
+        "answer": "MAIL"
+      },
+      {
+        "number": 121,
+        "clue": "Ally",
+        "answer": "COMRADE"
+      },
+      {
+        "number": 122,
+        "clue": "Instrument for Orpheus",
+        "answer": "LYRE"
+      },
+      {
+        "number": 123,
+        "clue": "Creature in ads for Xyzal, TripAdvisor and America's Best Contacts & Eyeglasses",
+        "answer": "OWL"
+      },
+      {
+        "number": 124,
+        "clue": "Curtain color",
+        "answer": "ECRU"
+      },
+      {
+        "number": 125,
+        "clue": "Altered, in a way",
+        "answer": "TOOKIN"
+      },
+      {
+        "number": 126,
+        "clue": "Only landlocked nation in Southeast Asia",
+        "answer": "LAOS"
+      },
+      {
+        "number": 127,
+        "clue": "Dissenting chorus",
+        "answer": "NOS"
+      },
+      {
+        "number": 128,
+        "clue": "Rough guess",
+        "answer": "STAB"
+      },
+      {
+        "number": 129,
+        "clue": "Stress about",
+        "answer": "SWEAT"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Big supporter?",
+        "answer": "DCUP"
+      },
+      {
+        "number": 2,
+        "clue": "\"...but we could do something else instead\"",
+        "answer": "ORNOT"
+      },
+      {
+        "number": 3,
+        "clue": "Utterance upon entering a garage",
+        "answer": "NOWWHEREDIDIPARK"
+      },
+      {
+        "number": 4,
+        "clue": "Lengthens, as a fishing line",
+        "answer": "UNREELS"
+      },
+      {
+        "number": 5,
+        "clue": "Rip",
+        "answer": "TEAR"
+      },
+      {
+        "number": 6,
+        "clue": "\"Don't look at this in front of your boss!\"",
+        "answer": "NOTSAFEFORWORK"
+      },
+      {
+        "number": 7,
+        "clue": "Lunch time, maybe",
+        "answer": "ONE"
+      },
+      {
+        "number": 8,
+        "clue": "Paparazzi target",
+        "answer": "STAR"
+      },
+      {
+        "number": 9,
+        "clue": "Nonsense",
+        "answer": "HOKUM"
+      },
+      {
+        "number": 10,
+        "clue": "Keeps away",
+        "answer": "HOLDSATBAY"
+      },
+      {
+        "number": 11,
+        "clue": "Caesar, in a sci-fi movie franchise",
+        "answer": "APE"
+      },
+      {
+        "number": 12,
+        "clue": "They're used for reinforcing concrete",
+        "answer": "STEELFIBERS"
+      },
+      {
+        "number": 13,
+        "clue": "Progress",
+        "answer": "GAINS"
+      },
+      {
+        "number": 14,
+        "clue": "Lode stones",
+        "answer": "ORES"
+      },
+      {
+        "number": 15,
+        "clue": "Indian abroad",
+        "answer": "DESI"
+      },
+      {
+        "number": 16,
+        "clue": "Fill up",
+        "answer": "SATE"
+      },
+      {
+        "number": 18,
+        "clue": "Dramatic debuts",
+        "answer": "SPLASHES"
+      },
+      {
+        "number": 23,
+        "clue": "Knight's title, on \"Game of Thrones\"",
+        "answer": "SER"
+      },
+      {
+        "number": 26,
+        "clue": "Coral communities",
+        "answer": "REEFS"
+      },
+      {
+        "number": 28,
+        "clue": "Belgian brew",
+        "answer": "SOURALE"
+      },
+      {
+        "number": 30,
+        "clue": "Made hole?",
+        "answer": "DUG"
+      },
+      {
+        "number": 34,
+        "clue": "Mug, say",
+        "answer": "ROB"
+      },
+      {
+        "number": 36,
+        "clue": "Band-Aid rival",
+        "answer": "CURAD"
+      },
+      {
+        "number": 38,
+        "clue": "HDTV type",
+        "answer": "LCD"
+      },
+      {
+        "number": 40,
+        "clue": "Bro, e.g.",
+        "answer": "SIB"
+      },
+      {
+        "number": 42,
+        "clue": "Mentally agile, and a hint to the circled letters",
+        "answer": "QUICKONTHEUPTAKE"
+      },
+      {
+        "number": 43,
+        "clue": "\"Please,\" in Potsdam",
+        "answer": "BITTE"
+      },
+      {
+        "number": 44,
+        "clue": "Mar",
+        "answer": "STAIN"
+      },
+      {
+        "number": 45,
+        "clue": "Isn't serious",
+        "answer": "KIDS"
+      },
+      {
+        "number": 46,
+        "clue": "It's often a stylized letter",
+        "answer": "ICON"
+      },
+      {
+        "number": 48,
+        "clue": "Some bottled waters",
+        "answer": "DASANIS"
+      },
+      {
+        "number": 50,
+        "clue": "Stop functioning, as a computer",
+        "answer": "CRAPOUT"
+      },
+      {
+        "number": 53,
+        "clue": "Foldable furniture",
+        "answer": "COTS"
+      },
+      {
+        "number": 55,
+        "clue": "TV segment whose first selection was \"The Deep End of the Ocean\"",
+        "answer": "OPRAHSBOOKCLUB"
+      },
+      {
+        "number": 58,
+        "clue": "King's Gambit, e.g.",
+        "answer": "OPENING"
+      },
+      {
+        "number": 60,
+        "clue": "Button your lip",
+        "answer": "STAYMUM"
+      },
+      {
+        "number": 64,
+        "clue": "Understand",
+        "answer": "SEE"
+      },
+      {
+        "number": 66,
+        "clue": "Respite on a road trip",
+        "answer": "INN"
+      },
+      {
+        "number": 68,
+        "clue": "\"___ be my pleasure\"",
+        "answer": "ITD"
+      },
+      {
+        "number": 70,
+        "clue": "Any of more than 1,700 in Melbourne",
+        "answer": "TRAMSTATION"
+      },
+      {
+        "number": 72,
+        "clue": "Cop car, to the dispatcher",
+        "answer": "UNIT"
+      },
+      {
+        "number": 73,
+        "clue": "Although",
+        "answer": "WHILE"
+      },
+      {
+        "number": 74,
+        "clue": "Trio of Greek myth personifying the seasons",
+        "answer": "HORAE"
+      },
+      {
+        "number": 75,
+        "clue": "Flowing cirrus clouds",
+        "answer": "MARESTAILS"
+      },
+      {
+        "number": 76,
+        "clue": "Former third-biggest lake in the world",
+        "answer": "ARALSEA"
+      },
+      {
+        "number": 78,
+        "clue": "Russian refusal",
+        "answer": "NYET"
+      },
+      {
+        "number": 79,
+        "clue": "Cheers at soccer matches",
+        "answer": "OLES"
+      },
+      {
+        "number": 82,
+        "clue": "Focused beam",
+        "answer": "LASER"
+      },
+      {
+        "number": 84,
+        "clue": "Sentimental fondness",
+        "answer": "SOFTSPOT"
+      },
+      {
+        "number": 88,
+        "clue": "Insta post",
+        "answer": "PIC"
+      },
+      {
+        "number": 90,
+        "clue": "Informal refusal",
+        "answer": "NAH"
+      },
+      {
+        "number": 93,
+        "clue": "Kind of kitchen",
+        "answer": "EATIN"
+      },
+      {
+        "number": 95,
+        "clue": "___ gratia",
+        "answer": "DEI"
+      },
+      {
+        "number": 97,
+        "clue": "Tightly wound braid",
+        "answer": "CORNROW"
+      },
+      {
+        "number": 100,
+        "clue": "Chiding word",
+        "answer": "TUT"
+      },
+      {
+        "number": 103,
+        "clue": "Places for porkers",
+        "answer": "STIES"
+      },
+      {
+        "number": 104,
+        "clue": "Pears and apples",
+        "answer": "POMES"
+      },
+      {
+        "number": 106,
+        "clue": "Semicircle, for example",
+        "answer": "ARC"
+      },
+      {
+        "number": 108,
+        "clue": "Field for communication majors",
+        "answer": "MEDIA"
+      },
+      {
+        "number": 109,
+        "clue": "It may be outstanding",
+        "answer": "BILL"
+      },
+      {
+        "number": 110,
+        "clue": "Singer from County Donegal",
+        "answer": "ENYA"
+      },
+      {
+        "number": 111,
+        "clue": "Bushy do",
+        "answer": "AFRO"
+      },
+      {
+        "number": 113,
+        "clue": "Formal agreement",
+        "answer": "PACT"
+      },
+      {
+        "number": 115,
+        "clue": "Fall Out Boy fans, maybe",
+        "answer": "EMOS"
+      },
+      {
+        "number": 116,
+        "clue": "Musical set in the East Village",
+        "answer": "RENT"
+      },
+      {
+        "number": 118,
+        "clue": "Binary base",
+        "answer": "TWO"
+      },
+      {
+        "number": 120,
+        "clue": "Savings for senior yrs.",
+        "answer": "IRA"
+      }
+    ]
+  }
+}

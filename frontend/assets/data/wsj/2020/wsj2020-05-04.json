@@ -1,0 +1,763 @@
+{
+  "id": "Knight Line",
+  "version": "1.0",
+  "metadata": {
+    "title": "Knight Line",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2020-05-04",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "REM",
+      "clue": "\"Losing My Religion\" band"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "REMAP",
+      "clue": "Change the borders of, say"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "EVADE",
+      "clue": "Sidestep"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "MAYAS",
+      "clue": "Yucatán Indians"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "AMESS",
+      "clue": "Make ___ of (botch)"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "ANNS",
+      "clue": "Richards and Romney"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "MAA",
+      "clue": "Goat sound"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ERITREA",
+      "clue": "African country on the Red Sea"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "SUSHI",
+      "clue": "California rolls and the like"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "STEEP",
+      "clue": "Exorbitant"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "CROP",
+      "clue": "Field yield"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "CRATEUP",
+      "clue": "Prepare for shipping"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ROLE",
+      "clue": "Audition goal"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "ODOR",
+      "clue": "Floral emanation"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "PETS",
+      "clue": "Cockatoos and cockapoos, e.g."
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 3,
+      "answer": "EVA",
+      "clue": "Juan Perón's wife"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 4,
+      "y": 1,
+      "length": 6,
+      "answer": "INARUT",
+      "clue": "Doing the same boring thing day after day"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "RODE",
+      "clue": "Went on horseback"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "\"Losing My Religion\" band",
+        "answer": "REM"
+      },
+      {
+        "number": 4,
+        "clue": "Make ___ of (botch)",
+        "answer": "AMESS"
+      },
+      {
+        "number": 9,
+        "clue": "Field yield",
+        "answer": "CROP"
+      },
+      {
+        "number": 13,
+        "clue": "Juan Perón's wife",
+        "answer": "EVA"
+      },
+      {
+        "number": 14,
+        "clue": "Doing the same boring thing day after day",
+        "answer": "INARUT"
+      },
+      {
+        "number": 15,
+        "clue": "Went on horseback",
+        "answer": "RODE"
+      },
+      {
+        "number": 16,
+        "clue": "Tartar sauce base",
+        "answer": "MAYONNAISE"
+      },
+      {
+        "number": 18,
+        "clue": "Oodles",
+        "answer": "ALOT"
+      },
+      {
+        "number": 19,
+        "clue": "Responds well to change",
+        "answer": "ADAPTS"
+      },
+      {
+        "number": 20,
+        "clue": "Movie settings",
+        "answer": "THEATERS"
+      },
+      {
+        "number": 22,
+        "clue": "Basil-based sauce",
+        "answer": "PESTO"
+      },
+      {
+        "number": 23,
+        "clue": "Rare baseball hit",
+        "answer": "TRIPLE"
+      },
+      {
+        "number": 24,
+        "clue": "Many a film festival film",
+        "answer": "INDIE"
+      },
+      {
+        "number": 26,
+        "clue": "Pear-shaped instruments",
+        "answer": "LUTES"
+      },
+      {
+        "number": 30,
+        "clue": "Without any doubt",
+        "answer": "FORCERTAIN"
+      },
+      {
+        "number": 35,
+        "clue": "Impudent",
+        "answer": "PERT"
+      },
+      {
+        "number": 36,
+        "clue": "Gorilla, for one",
+        "answer": "APE"
+      },
+      {
+        "number": 37,
+        "clue": "Mineo of \"Exodus\"",
+        "answer": "SAL"
+      },
+      {
+        "number": 38,
+        "clue": "Apprehend",
+        "answer": "NAB"
+      },
+      {
+        "number": 40,
+        "clue": "Farrow of \"Hannah and Her Sisters\"",
+        "answer": "MIA"
+      },
+      {
+        "number": 41,
+        "clue": "Beach crawler",
+        "answer": "CRAB"
+      },
+      {
+        "number": 43,
+        "clue": "Vegetable that comes in red, yellow, orange and green",
+        "answer": "BELLPEPPER"
+      },
+      {
+        "number": 46,
+        "clue": "Keyboard goofs",
+        "answer": "TYPOS"
+      },
+      {
+        "number": 48,
+        "clue": "Stand in a studio",
+        "answer": "EASEL"
+      },
+      {
+        "number": 49,
+        "clue": "Expenditure",
+        "answer": "OUTLAY"
+      },
+      {
+        "number": 52,
+        "clue": "San Diego player",
+        "answer": "PADRE"
+      },
+      {
+        "number": 56,
+        "clue": "Shriveled up",
+        "answer": "WITHERED"
+      },
+      {
+        "number": 59,
+        "clue": "Egyptian god of the afterlife",
+        "answer": "OSIRIS"
+      },
+      {
+        "number": 60,
+        "clue": "Jai ___",
+        "answer": "ALAI"
+      },
+      {
+        "number": 61,
+        "clue": "Bookstore section",
+        "answer": "YOUNGADULT"
+      },
+      {
+        "number": 63,
+        "clue": "Tears",
+        "answer": "RIPS"
+      },
+      {
+        "number": 64,
+        "clue": "To some extent",
+        "answer": "INPART"
+      },
+      {
+        "number": 65,
+        "clue": "1950s presidential nickname",
+        "answer": "IKE"
+      },
+      {
+        "number": 66,
+        "clue": "Spots",
+        "answer": "SEES"
+      },
+      {
+        "number": 67,
+        "clue": "Decorator's asset",
+        "answer": "TASTE"
+      },
+      {
+        "number": 68,
+        "clue": "Billy ___ Williams who played Lando Calrissian",
+        "answer": "DEE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Change the borders of, say",
+        "answer": "REMAP"
+      },
+      {
+        "number": 2,
+        "clue": "Sidestep",
+        "answer": "EVADE"
+      },
+      {
+        "number": 3,
+        "clue": "Yucatán Indians",
+        "answer": "MAYAS"
+      },
+      {
+        "number": 4,
+        "clue": "Richards and Romney",
+        "answer": "ANNS"
+      },
+      {
+        "number": 5,
+        "clue": "Goat sound",
+        "answer": "MAA"
+      },
+      {
+        "number": 6,
+        "clue": "African country on the Red Sea",
+        "answer": "ERITREA"
+      },
+      {
+        "number": 7,
+        "clue": "California rolls and the like",
+        "answer": "SUSHI"
+      },
+      {
+        "number": 8,
+        "clue": "Exorbitant",
+        "answer": "STEEP"
+      },
+      {
+        "number": 9,
+        "clue": "Prepare for shipping",
+        "answer": "CRATEUP"
+      },
+      {
+        "number": 10,
+        "clue": "Audition goal",
+        "answer": "ROLE"
+      },
+      {
+        "number": 11,
+        "clue": "Floral emanation",
+        "answer": "ODOR"
+      },
+      {
+        "number": 12,
+        "clue": "Cockatoos and cockapoos, e.g.",
+        "answer": "PETS"
+      },
+      {
+        "number": 14,
+        "clue": "Chants",
+        "answer": "INTONES"
+      },
+      {
+        "number": 17,
+        "clue": "Vision-related",
+        "answer": "OPTIC"
+      },
+      {
+        "number": 21,
+        "clue": "Maximum amount",
+        "answer": "ALL"
+      },
+      {
+        "number": 23,
+        "clue": "Darth for Vader, e.g.",
+        "answer": "TITLE"
+      },
+      {
+        "number": 25,
+        "clue": "Dull and dreary",
+        "answer": "DRAB"
+      },
+      {
+        "number": 27,
+        "clue": "Office helper",
+        "answer": "TEMP"
+      },
+      {
+        "number": 28,
+        "clue": "Pennsylvania port",
+        "answer": "ERIE"
+      },
+      {
+        "number": 29,
+        "clue": "With 56-Down, series that's the source of the movie line in the circles",
+        "answer": "STAR"
+      },
+      {
+        "number": 30,
+        "clue": "It's true",
+        "answer": "FACT"
+      },
+      {
+        "number": 31,
+        "clue": "Nashville's Grand Ole ___",
+        "answer": "OPRY"
+      },
+      {
+        "number": 32,
+        "clue": "Harvest",
+        "answer": "REAP"
+      },
+      {
+        "number": 33,
+        "clue": "Dental filling",
+        "answer": "INLAY"
+      },
+      {
+        "number": 34,
+        "clue": "Refreshing breaks",
+        "answer": "NAPS"
+      },
+      {
+        "number": 39,
+        "clue": "Warns from the driver's seat",
+        "answer": "BEEPSAT"
+      },
+      {
+        "number": 42,
+        "clue": "\"Get off the stage!\"",
+        "answer": "BOOHISS"
+      },
+      {
+        "number": 44,
+        "clue": "Preparatory periods",
+        "answer": "LEADUPS"
+      },
+      {
+        "number": 45,
+        "clue": "Kilt feature",
+        "answer": "PLAID"
+      },
+      {
+        "number": 47,
+        "clue": "Take to court",
+        "answer": "SUE"
+      },
+      {
+        "number": 50,
+        "clue": "Encouragement to a hesitant eater",
+        "answer": "TRYIT"
+      },
+      {
+        "number": 51,
+        "clue": "British singer Lewis",
+        "answer": "LEONA"
+      },
+      {
+        "number": 53,
+        "clue": "Stonehenge figure",
+        "answer": "DRUID"
+      },
+      {
+        "number": 54,
+        "clue": "Poet Rainer Maria ___",
+        "answer": "RILKE"
+      },
+      {
+        "number": 55,
+        "clue": "Lauder of cosmetics fame",
+        "answer": "ESTEE"
+      },
+      {
+        "number": 56,
+        "clue": "See 29-Down",
+        "answer": "WARS"
+      },
+      {
+        "number": 57,
+        "clue": "\"Why would ___?\"",
+        "answer": "ILIE"
+      },
+      {
+        "number": 58,
+        "clue": "Gift-wrapping need",
+        "answer": "TAPE"
+      },
+      {
+        "number": 59,
+        "clue": "Storybook monster",
+        "answer": "OGRE"
+      },
+      {
+        "number": 62,
+        "clue": "Washington baseballer, familiarly",
+        "answer": "NAT"
+      }
+    ]
+  }
+}

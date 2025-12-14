@@ -1,0 +1,533 @@
+{
+  "id": "Flying Colors",
+  "version": "1.0",
+  "metadata": {
+    "title": "Flying Colors",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2025-07-03",
+    "special": "circle"
+  },
+  "rows": 1,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "AROAR",
+      "clue": "Reacting to a grand slam, perhaps"
+    },
+    {
+      "id": "a2",
+      "number": 2,
+      "direction": "across",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "CBS",
+      "clue": "Clue unavailable"
+    },
+    {
+      "id": "a3",
+      "number": 3,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "MULL",
+      "clue": "Clue unavailable"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Reacting to a grand slam, perhaps",
+        "answer": "AROAR"
+      },
+      {
+        "number": 6,
+        "clue": "\"Fire Country\" airer",
+        "answer": "CBS"
+      },
+      {
+        "number": 9,
+        "clue": "Weigh",
+        "answer": "MULL"
+      },
+      {
+        "number": 13,
+        "clue": "Watched eight episodes in a row, say",
+        "answer": "BINGED"
+      },
+      {
+        "number": 15,
+        "clue": "\"Hereditary\" director Aster",
+        "answer": "ARI"
+      },
+      {
+        "number": 16,
+        "clue": "Birthplace of seven presidents",
+        "answer": "OHIO"
+      },
+      {
+        "number": 17,
+        "clue": "Wash room?",
+        "answer": "LAUNDROMAT"
+      },
+      {
+        "number": 19,
+        "clue": "Talking with your mouth full, e.g.",
+        "answer": "NONO"
+      },
+      {
+        "number": 20,
+        "clue": "Instead",
+        "answer": "ELSE"
+      },
+      {
+        "number": 21,
+        "clue": "Slip up",
+        "answer": "ERR"
+      },
+      {
+        "number": 22,
+        "clue": "Country music?",
+        "answer": "ANTHEM"
+      },
+      {
+        "number": 24,
+        "clue": "Loretta's portrayer in \"Coal Miner's Daughter\"",
+        "answer": "SISSY"
+      },
+      {
+        "number": 26,
+        "clue": "Barbecue offering",
+        "answer": "RIB"
+      },
+      {
+        "number": 27,
+        "clue": "Planet in an old sitcom",
+        "answer": "ORK"
+      },
+      {
+        "number": 30,
+        "clue": "Top-rated TV series of 2003-05",
+        "answer": "CSI"
+      },
+      {
+        "number": 31,
+        "clue": "Lewis's partner",
+        "answer": "CLARK"
+      },
+      {
+        "number": 35,
+        "clue": "Trumpet-shaped blue flowers",
+        "answer": "GENTIANS"
+      },
+      {
+        "number": 38,
+        "clue": "Give a hand",
+        "answer": "DEALIN"
+      },
+      {
+        "number": 39,
+        "clue": "Fragrant accessories",
+        "answer": "LEIS"
+      },
+      {
+        "number": 40,
+        "clue": "Yellow-flowering shrub",
+        "answer": "GORSE"
+      },
+      {
+        "number": 42,
+        "clue": "Baja boy",
+        "answer": "NINO"
+      },
+      {
+        "number": 43,
+        "clue": "Monticello or Mount Vernon",
+        "answer": "ESTATE"
+      },
+      {
+        "number": 45,
+        "clue": "Mined on the surface, in Britain",
+        "answer": "OPENCAST"
+      },
+      {
+        "number": 47,
+        "clue": "Watched over",
+        "answer": "RESAW"
+      },
+      {
+        "number": 48,
+        "clue": "Tach no.",
+        "answer": "RPM"
+      },
+      {
+        "number": 49,
+        "clue": "Frantic appeal",
+        "answer": "SOS"
+      },
+      {
+        "number": 50,
+        "clue": "Paying engagement",
+        "answer": "GIG"
+      },
+      {
+        "number": 52,
+        "clue": "Slew",
+        "answer": "DIDIN"
+      },
+      {
+        "number": 54,
+        "clue": "Armored goddess",
+        "answer": "ATHENA"
+      },
+      {
+        "number": 57,
+        "clue": "Start of an Italian count",
+        "answer": "UNO"
+      },
+      {
+        "number": 58,
+        "clue": "Gobi Desert setting",
+        "answer": "ASIA"
+      },
+      {
+        "number": 62,
+        "clue": "\"Metropolitan Life\" writer Lebowitz",
+        "answer": "FRAN"
+      },
+      {
+        "number": 63,
+        "clue": "Patriotic activity suggested by the circled letters",
+        "answer": "FLAGWAVING"
+      },
+      {
+        "number": 66,
+        "clue": "Bob Dylan's \"It ___ Me, Babe\"",
+        "answer": "AINT"
+      },
+      {
+        "number": 67,
+        "clue": "Ballpark figure",
+        "answer": "FAN"
+      },
+      {
+        "number": 68,
+        "clue": "Subtlety",
+        "answer": "NUANCE"
+      },
+      {
+        "number": 69,
+        "clue": "Noted Philadelphia seamstress",
+        "answer": "ROSS"
+      },
+      {
+        "number": 70,
+        "clue": "Check out",
+        "answer": "EYE"
+      },
+      {
+        "number": 71,
+        "clue": "Rover riders",
+        "answer": "FLEAS"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Fit",
+        "answer": "ABLE"
+      },
+      {
+        "number": 2,
+        "clue": "Omani money",
+        "answer": "RIAL"
+      },
+      {
+        "number": 3,
+        "clue": "Obligation",
+        "answer": "ONUS"
+      },
+      {
+        "number": 4,
+        "clue": "Dance's de Mille",
+        "answer": "AGNES"
+      },
+      {
+        "number": 5,
+        "clue": "One of the colors on Old Glory",
+        "answer": "RED"
+      },
+      {
+        "number": 6,
+        "clue": "Toyota model",
+        "answer": "CAMRY"
+      },
+      {
+        "number": 7,
+        "clue": "Lingerie item",
+        "answer": "BRA"
+      },
+      {
+        "number": 8,
+        "clue": "Twangy instrument",
+        "answer": "SITAR"
+      },
+      {
+        "number": 9,
+        "clue": "Pen maker named for a peak",
+        "answer": "MONTBLANC"
+      },
+      {
+        "number": 10,
+        "clue": "\"This looks bad\"",
+        "answer": "UHOH"
+      },
+      {
+        "number": 11,
+        "clue": "Theme park annoyance",
+        "answer": "LINE"
+      },
+      {
+        "number": 12,
+        "clue": "Appear imminent",
+        "answer": "LOOM"
+      },
+      {
+        "number": 14,
+        "clue": "Equestrian sport",
+        "answer": "DRESSAGE"
+      },
+      {
+        "number": 18,
+        "clue": "\"Twelfth Night\" duke",
+        "answer": "ORSINO"
+      },
+      {
+        "number": 23,
+        "clue": "\"Good shot!\"",
+        "answer": "NICE"
+      },
+      {
+        "number": 25,
+        "clue": "Here, to Hugo",
+        "answer": "ICI"
+      },
+      {
+        "number": 27,
+        "clue": "Creepy looker",
+        "answer": "OGLER"
+      },
+      {
+        "number": 28,
+        "clue": "H.B. in the Candy Hall of Fame",
+        "answer": "REESE"
+      },
+      {
+        "number": 29,
+        "clue": "Polos, e.g.",
+        "answer": "KNITS"
+      },
+      {
+        "number": 32,
+        "clue": "Butch Cassidy, e.g.",
+        "answer": "ALIAS"
+      },
+      {
+        "number": 33,
+        "clue": "Classic detergent brand mentioned in a \"Hair\" lyric",
+        "answer": "RINSO"
+      },
+      {
+        "number": 34,
+        "clue": "Regatta units",
+        "answer": "KNOTS"
+      },
+      {
+        "number": 36,
+        "clue": "Wanders in airports?",
+        "answer": "TSAAGENTS"
+      },
+      {
+        "number": 37,
+        "clue": "Hit letters",
+        "answer": "SRO"
+      },
+      {
+        "number": 38,
+        "clue": "In one's heart of hearts",
+        "answer": "DEEPDOWN"
+      },
+      {
+        "number": 41,
+        "clue": "Pogo stick part",
+        "answer": "SPRING"
+      },
+      {
+        "number": 44,
+        "clue": "Serta size",
+        "answer": "TWIN"
+      },
+      {
+        "number": 46,
+        "clue": "Name placeholder in govt. records",
+        "answer": "NMI"
+      },
+      {
+        "number": 51,
+        "clue": "Slip-up",
+        "answer": "GAFFE"
+      },
+      {
+        "number": 52,
+        "clue": "Boxer Bobick",
+        "answer": "DUANE"
+      },
+      {
+        "number": 53,
+        "clue": "Fleet Week adjective",
+        "answer": "NAVAL"
+      },
+      {
+        "number": 54,
+        "clue": "Miles off",
+        "answer": "AFAR"
+      },
+      {
+        "number": 55,
+        "clue": "The Chicks, e.g.",
+        "answer": "TRIO"
+      },
+      {
+        "number": 56,
+        "clue": "Painter Holbein",
+        "answer": "HANS"
+      },
+      {
+        "number": 59,
+        "clue": "Opposite-side/hypotenuse ratio",
+        "answer": "SINE"
+      },
+      {
+        "number": 60,
+        "clue": "Cuzco dweller",
+        "answer": "INCA"
+      },
+      {
+        "number": 61,
+        "clue": "Gets wiser, maybe",
+        "answer": "AGES"
+      },
+      {
+        "number": 64,
+        "clue": "Set in position",
+        "answer": "LAY"
+      },
+      {
+        "number": 65,
+        "clue": "\"___ Wiedersehen\"",
+        "answer": "AUF"
+      }
+    ]
+  }
+}

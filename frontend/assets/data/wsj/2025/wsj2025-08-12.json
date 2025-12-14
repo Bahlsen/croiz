@@ -1,0 +1,773 @@
+{
+  "id": "Triple Decker",
+  "version": "1.0",
+  "metadata": {
+    "title": "Triple Decker",
+    "author": "By Josh M. Kaufmann/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2025-08-12",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "ICED",
+      "clue": "Coffee bar option"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ITS",
+      "clue": "\"For what ___ worth...\""
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "CUE",
+      "clue": "Performer's prompt"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "ETC",
+      "clue": "List-shortening abbr."
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "DULCE",
+      "clue": "___ de leche (sweet confection)"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "ROMA",
+      "clue": "Tomato variety"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "RADIATED",
+      "clue": "Shone brightly"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ONE",
+      "clue": "Count start"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "MADAM",
+      "clue": "Polite address that's a palindrome"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "APBIO",
+      "clue": "Difficult H.S. course"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "MASON",
+      "clue": "Worker on walls"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "MIA",
+      "clue": "Soccer's Hamm"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "ACCESSING",
+      "clue": "Gaining entry to"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "SOHO",
+      "clue": "Neighborhood of London or Manhattan"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "OMEN",
+      "clue": "Sinister sign"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "NESS",
+      "clue": "Loch that may hold a monster"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "TUTU",
+      "clue": "Garment worn while performing en pointe"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "ANAP",
+      "clue": "\"Somebody needs ___!\" (parent's comment)"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "ICOME",
+      "clue": "\"Ready or not, here ___!\""
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Coffee bar option",
+        "answer": "ICED"
+      },
+      {
+        "number": 5,
+        "clue": "Tomato variety",
+        "answer": "ROMA"
+      },
+      {
+        "number": 9,
+        "clue": "Worker on walls",
+        "answer": "MASON"
+      },
+      {
+        "number": 14,
+        "clue": "Garment worn while performing en pointe",
+        "answer": "TUTU"
+      },
+      {
+        "number": 15,
+        "clue": "\"Somebody needs ___!\" (parent's comment)",
+        "answer": "ANAP"
+      },
+      {
+        "number": 16,
+        "clue": "\"Ready or not, here ___!\"",
+        "answer": "ICOME"
+      },
+      {
+        "number": 17,
+        "clue": "Some coastal oases",
+        "answer": "SECLUDEDBEACHES"
+      },
+      {
+        "number": 20,
+        "clue": "Forensic franchise",
+        "answer": "CSI"
+      },
+      {
+        "number": 21,
+        "clue": "Broadcast",
+        "answer": "AIR"
+      },
+      {
+        "number": 22,
+        "clue": "Ages and ages",
+        "answer": "EONS"
+      },
+      {
+        "number": 23,
+        "clue": "Crunchy salad topping",
+        "answer": "DICEDALMONDS"
+      },
+      {
+        "number": 28,
+        "clue": "Bonfire remnant",
+        "answer": "ASH"
+      },
+      {
+        "number": 29,
+        "clue": "Gobbled up",
+        "answer": "ATE"
+      },
+      {
+        "number": 30,
+        "clue": "Possible playground retort",
+        "answer": "ISSO"
+      },
+      {
+        "number": 33,
+        "clue": "Person, place or thing",
+        "answer": "NOUN"
+      },
+      {
+        "number": 35,
+        "clue": "Spacewalks, for short",
+        "answer": "EVAS"
+      },
+      {
+        "number": 38,
+        "clue": "Nouveau ___",
+        "answer": "RICHE"
+      },
+      {
+        "number": 40,
+        "clue": "What PSAs hope to do",
+        "answer": "SPREADAWARENESS"
+      },
+      {
+        "number": 43,
+        "clue": "Imam's text",
+        "answer": "KORAN"
+      },
+      {
+        "number": 44,
+        "clue": "Contact lens solution brand",
+        "answer": "RENU"
+      },
+      {
+        "number": 45,
+        "clue": "Antelopes with beards",
+        "answer": "GNUS"
+      },
+      {
+        "number": 46,
+        "clue": "Social misfit",
+        "answer": "DORK"
+      },
+      {
+        "number": 47,
+        "clue": "Common clue on 20-Across",
+        "answer": "DNA"
+      },
+      {
+        "number": 49,
+        "clue": "\"Able was I ___ I saw Elba\"",
+        "answer": "ERE"
+      },
+      {
+        "number": 50,
+        "clue": "Luau and masquerade, for two",
+        "answer": "THEMEPARTIES"
+      },
+      {
+        "number": 55,
+        "clue": "Set in stone",
+        "answer": "ETCH"
+      },
+      {
+        "number": 58,
+        "clue": "Chem. or geol., e.g.",
+        "answer": "SCI"
+      },
+      {
+        "number": 59,
+        "clue": "Ring ruling, for short",
+        "answer": "TKO"
+      },
+      {
+        "number": 60,
+        "clue": "Tailor's creations, and a hint to the circled letters",
+        "answer": "THREEPIECESUITS"
+      },
+      {
+        "number": 66,
+        "clue": "Pageant crown",
+        "answer": "TIARA"
+      },
+      {
+        "number": 67,
+        "clue": "Playful puppy bites",
+        "answer": "NIPS"
+      },
+      {
+        "number": 68,
+        "clue": "Spring's shape",
+        "answer": "COIL"
+      },
+      {
+        "number": 69,
+        "clue": "Fury",
+        "answer": "ANGER"
+      },
+      {
+        "number": 70,
+        "clue": "Kid, when grown up",
+        "answer": "GOAT"
+      },
+      {
+        "number": 71,
+        "clue": "One of Donald Duck's nephews",
+        "answer": "HUEY"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "\"For what ___ worth...\"",
+        "answer": "ITS"
+      },
+      {
+        "number": 2,
+        "clue": "Performer's prompt",
+        "answer": "CUE"
+      },
+      {
+        "number": 3,
+        "clue": "List-shortening abbr.",
+        "answer": "ETC"
+      },
+      {
+        "number": 4,
+        "clue": "___ de leche (sweet confection)",
+        "answer": "DULCE"
+      },
+      {
+        "number": 5,
+        "clue": "Shone brightly",
+        "answer": "RADIATED"
+      },
+      {
+        "number": 6,
+        "clue": "Count start",
+        "answer": "ONE"
+      },
+      {
+        "number": 7,
+        "clue": "Polite address that's a palindrome",
+        "answer": "MADAM"
+      },
+      {
+        "number": 8,
+        "clue": "Difficult H.S. course",
+        "answer": "APBIO"
+      },
+      {
+        "number": 9,
+        "clue": "Soccer's Hamm",
+        "answer": "MIA"
+      },
+      {
+        "number": 10,
+        "clue": "Gaining entry to",
+        "answer": "ACCESSING"
+      },
+      {
+        "number": 11,
+        "clue": "Neighborhood of London or Manhattan",
+        "answer": "SOHO"
+      },
+      {
+        "number": 12,
+        "clue": "Sinister sign",
+        "answer": "OMEN"
+      },
+      {
+        "number": 13,
+        "clue": "Loch that may hold a monster",
+        "answer": "NESS"
+      },
+      {
+        "number": 18,
+        "clue": "Food safety org.",
+        "answer": "USDA"
+      },
+      {
+        "number": 19,
+        "clue": "End for a direction",
+        "answer": "ERN"
+      },
+      {
+        "number": 23,
+        "clue": "Copenhagen language, to natives",
+        "answer": "DANSK"
+      },
+      {
+        "number": 24,
+        "clue": "Pill bug, e.g.",
+        "answer": "ISOPOD"
+      },
+      {
+        "number": 25,
+        "clue": "Fried cinnamon stick",
+        "answer": "CHURRO"
+      },
+      {
+        "number": 26,
+        "clue": "Burton of \"Reading Rainbow\"",
+        "answer": "LEVAR"
+      },
+      {
+        "number": 27,
+        "clue": "Dreadful",
+        "answer": "DIRE"
+      },
+      {
+        "number": 31,
+        "clue": "Start of an act",
+        "answer": "SCENEI"
+      },
+      {
+        "number": 32,
+        "clue": "\"Yeah, right!\"",
+        "answer": "OHSURE"
+      },
+      {
+        "number": 34,
+        "clue": "\"In that general vicinity\"",
+        "answer": "NEARTHERE"
+      },
+      {
+        "number": 36,
+        "clue": "Wonder",
+        "answer": "AWE"
+      },
+      {
+        "number": 37,
+        "clue": "Dow's cousin",
+        "answer": "SANDP"
+      },
+      {
+        "number": 39,
+        "clue": "Twisty letters",
+        "answer": "ESSES"
+      },
+      {
+        "number": 41,
+        "clue": "Egyptian symbol of life",
+        "answer": "ANKH"
+      },
+      {
+        "number": 42,
+        "clue": "Do some diagnostics",
+        "answer": "RUNATEST"
+      },
+      {
+        "number": 48,
+        "clue": "Torah cabinets",
+        "answer": "ARKS"
+      },
+      {
+        "number": 51,
+        "clue": "Mentalist's skill, for short",
+        "answer": "ESP"
+      },
+      {
+        "number": 52,
+        "clue": "Hosting with a microphone",
+        "answer": "MCING"
+      },
+      {
+        "number": 53,
+        "clue": "\"Old MacDonald\" refrain",
+        "answer": "EIEIO"
+      },
+      {
+        "number": 54,
+        "clue": "Score in fencing",
+        "answer": "TOUCH"
+      },
+      {
+        "number": 55,
+        "clue": "Singer James or Jones",
+        "answer": "ETTA"
+      },
+      {
+        "number": 56,
+        "clue": "Pizza crust option",
+        "answer": "THIN"
+      },
+      {
+        "number": 57,
+        "clue": "Jagged rock face",
+        "answer": "CRAG"
+      },
+      {
+        "number": 61,
+        "clue": "Piercing site",
+        "answer": "EAR"
+      },
+      {
+        "number": 62,
+        "clue": "Tax pro, for short",
+        "answer": "CPA"
+      },
+      {
+        "number": 63,
+        "clue": "Informal payment plan",
+        "answer": "IOU"
+      },
+      {
+        "number": 64,
+        "clue": "Reason for overtime",
+        "answer": "TIE"
+      },
+      {
+        "number": 65,
+        "clue": "Devious",
+        "answer": "SLY"
+      }
+    ]
+  }
+}

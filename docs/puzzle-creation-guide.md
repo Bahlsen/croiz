@@ -198,6 +198,38 @@ test('my puzzle loads correctly', () {
 }
 ```
 
+## Importation en masse de fichiers .xd
+
+Vous pouvez importer un dossier d'exports XD (.xd) et convertir/valider automatiquement
+les puzzles au format canonical JSON en utilisant le script `tools/bulk_import_xd.py`.
+
+Exemple d'utilisation :
+
+```powershell
+cd tools
+python bulk_import_xd.py --src "C:/Users/frede/Downloads/xd-puzzles/gxd" --dest ../frontend/assets/data --group-by source-folder --recursive --pretty --report ../import_report.json
+```
+
+- **--src** : dossier source contenant les fichiers `.xd`.
+- **--dest** : dossier de destination (par défaut `../frontend/assets/data`).
+- **--group-by source-folder** : préserve la hiérarchie des sous-dossiers source dans `assets/data`.
+- **--recursive** : cherche récursivement les `.xd`.
+- **--pretty** : sauvegarde le JSON avec indentation.
+ - **--report** : écrit un fichier JSON récapitulatif des importations et validations.
+ - **--stop-on-failure** : arrête l'import à la première erreur (utile pour debugging).
+ - **--move-original** : déplace les `.xd` traités dans un sous-dossier `imported` ou `failed` selon le résultat.
+
+Le script utilise `tools/xd_to_canonical.py` pour la conversion et `tools/validate_xd_json.py` pour la vérification.
+En cas d'échec, le script retourne une erreur et imprime les différences de validation. Utilisez `--stop-on-failure` pour interrompre au premier problème et `--move-original` pour séparer les fichiers valides/invalides.
+
+Le fichier de rapport JSON contient un tableau d'objets avec au minimum les clés :
+- `xd`: chemin du fichier source `.xd`.
+- `json`: chemin du fichier `.json` créé.
+- `ok`: booléen indiquant si la validation a réussi.
+- `log`: sortie textuelle du validateur ou message d'erreur.
+- `details`: objet comprenant `parsed`, `parse_error`, `validator_returncode`, `validator_stdout`, `validator_stderr`.
+
+
 ## Dépannage
 
 ### Erreur "Target of URI hasn't been generated"

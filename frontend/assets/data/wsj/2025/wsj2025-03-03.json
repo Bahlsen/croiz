@@ -1,0 +1,783 @@
+{
+  "id": "Hooked",
+  "version": "1.0",
+  "metadata": {
+    "title": "Hooked",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2025-03-03",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "Z"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "MACAW",
+      "clue": "Long-tailed parrot"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "MOPEDS",
+      "clue": "Scooters' cousins"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "AZALEA",
+      "clue": "Flowering shrub"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "CAPLET",
+      "clue": "Smooth-coated pill"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "AWE",
+      "clue": "Reverent wonder"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "WARD",
+      "clue": "Division of a city or hospital"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 4,
+      "answer": "LABS",
+      "clue": "Workplaces for chemists"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "LCHAIM",
+      "clue": "Bar mitzvah toast"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "AHA",
+      "clue": "Exclamation of insight"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "BISECTOR",
+      "clue": "Line through the middle of a circle"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "STENO",
+      "clue": "Dictation pro"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "BAGS",
+      "clue": "Items on an airport carousel"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "BIG",
+      "clue": "Significant"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ADOANNIE",
+      "clue": "\"Oklahoma!\" character who sings \"I Cain't Say No\""
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "GLANCES",
+      "clue": "Little ganders?"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "SETTER",
+      "clue": "Volleyball position"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "OZAWA",
+      "clue": "Conductor Seiji"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "CHIT",
+      "clue": "Debt voucher"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "IDLE",
+      "clue": "Not busy"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Long-tailed parrot",
+        "answer": "MACAW"
+      },
+      {
+        "number": 6,
+        "clue": "Workplaces for chemists",
+        "answer": "LABS"
+      },
+      {
+        "number": 10,
+        "clue": "Items on an airport carousel",
+        "answer": "BAGS"
+      },
+      {
+        "number": 14,
+        "clue": "Conductor Seiji",
+        "answer": "OZAWA"
+      },
+      {
+        "number": 15,
+        "clue": "Debt voucher",
+        "answer": "CHIT"
+      },
+      {
+        "number": 16,
+        "clue": "Not busy",
+        "answer": "IDLE"
+      },
+      {
+        "number": 17,
+        "clue": "Law student's struggle, informally",
+        "answer": "PAPERCHASE"
+      },
+      {
+        "number": 19,
+        "clue": "Nanny on a farm",
+        "answer": "GOAT"
+      },
+      {
+        "number": 20,
+        "clue": "Building wing",
+        "answer": "ELL"
+      },
+      {
+        "number": 21,
+        "clue": "Singer Lipa",
+        "answer": "DUA"
+      },
+      {
+        "number": 22,
+        "clue": "Bring to a close",
+        "answer": "END"
+      },
+      {
+        "number": 24,
+        "clue": "Six-legged worker",
+        "answer": "ANT"
+      },
+      {
+        "number": 25,
+        "clue": "Poor grades",
+        "answer": "DEES"
+      },
+      {
+        "number": 27,
+        "clue": "The Hustle or the Robot, e.g.",
+        "answer": "DISCODANCE"
+      },
+      {
+        "number": 30,
+        "clue": "Glossy fabric",
+        "answer": "SATIN"
+      },
+      {
+        "number": 32,
+        "clue": "Got together",
+        "answer": "MET"
+      },
+      {
+        "number": 33,
+        "clue": "Radio dial",
+        "answer": "TUNER"
+      },
+      {
+        "number": 34,
+        "clue": "Perp pursuer",
+        "answer": "COP"
+      },
+      {
+        "number": 36,
+        "clue": "Slinky or sock monkey, e.g.",
+        "answer": "TOY"
+      },
+      {
+        "number": 38,
+        "clue": "Bro's sibling",
+        "answer": "SIS"
+      },
+      {
+        "number": 39,
+        "clue": "Beeline, say",
+        "answer": "DIRECTROUTE"
+      },
+      {
+        "number": 42,
+        "clue": "\"u r 2 funny!\"",
+        "answer": "LOL"
+      },
+      {
+        "number": 43,
+        "clue": "Buddy",
+        "answer": "PAL"
+      },
+      {
+        "number": 44,
+        "clue": "Press into service",
+        "answer": "USE"
+      },
+      {
+        "number": 45,
+        "clue": "Tricky activity?",
+        "answer": "MAGIC"
+      },
+      {
+        "number": 47,
+        "clue": "Jazz bandleader Elgart",
+        "answer": "LES"
+      },
+      {
+        "number": 49,
+        "clue": "Colgate rival",
+        "answer": "CREST"
+      },
+      {
+        "number": 53,
+        "clue": "Annual event for movie fans",
+        "answer": "OSCARPARTY"
+      },
+      {
+        "number": 56,
+        "clue": "City of northwest Pennsylvania",
+        "answer": "ERIE"
+      },
+      {
+        "number": 57,
+        "clue": "Onetime owner of NBC",
+        "answer": "RCA"
+      },
+      {
+        "number": 58,
+        "clue": "Veggie on Thanksgiving menus",
+        "answer": "YAM"
+      },
+      {
+        "number": 59,
+        "clue": "Clumsy fellow",
+        "answer": "OAF"
+      },
+      {
+        "number": 61,
+        "clue": "Hound healer",
+        "answer": "VET"
+      },
+      {
+        "number": 62,
+        "clue": "Coverage during a rain delay?",
+        "answer": "TARP"
+      },
+      {
+        "number": 64,
+        "clue": "Have success angling, and what this puzzle's theme answers do",
+        "answer": "CATCHAFISH"
+      },
+      {
+        "number": 67,
+        "clue": "Member of the choir",
+        "answer": "ALTO"
+      },
+      {
+        "number": 68,
+        "clue": "Composer Satie",
+        "answer": "ERIK"
+      },
+      {
+        "number": 69,
+        "clue": "\"Inferno\" author",
+        "answer": "DANTE"
+      },
+      {
+        "number": 70,
+        "clue": "Ultimate",
+        "answer": "LAST"
+      },
+      {
+        "number": 71,
+        "clue": "Covered with frost",
+        "answer": "RIMY"
+      },
+      {
+        "number": 72,
+        "clue": "Painter Degas",
+        "answer": "EDGAR"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Scooters' cousins",
+        "answer": "MOPEDS"
+      },
+      {
+        "number": 2,
+        "clue": "Flowering shrub",
+        "answer": "AZALEA"
+      },
+      {
+        "number": 3,
+        "clue": "Smooth-coated pill",
+        "answer": "CAPLET"
+      },
+      {
+        "number": 4,
+        "clue": "Reverent wonder",
+        "answer": "AWE"
+      },
+      {
+        "number": 5,
+        "clue": "Division of a city or hospital",
+        "answer": "WARD"
+      },
+      {
+        "number": 6,
+        "clue": "Bar mitzvah toast",
+        "answer": "LCHAIM"
+      },
+      {
+        "number": 7,
+        "clue": "Exclamation of insight",
+        "answer": "AHA"
+      },
+      {
+        "number": 8,
+        "clue": "Line through the middle of a circle",
+        "answer": "BISECTOR"
+      },
+      {
+        "number": 9,
+        "clue": "Dictation pro",
+        "answer": "STENO"
+      },
+      {
+        "number": 10,
+        "clue": "Significant",
+        "answer": "BIG"
+      },
+      {
+        "number": 11,
+        "clue": "\"Oklahoma!\" character who sings \"I Cain't Say No\"",
+        "answer": "ADOANNIE"
+      },
+      {
+        "number": 12,
+        "clue": "Little ganders?",
+        "answer": "GLANCES"
+      },
+      {
+        "number": 13,
+        "clue": "Volleyball position",
+        "answer": "SETTER"
+      },
+      {
+        "number": 18,
+        "clue": "Mouthful for Bossy",
+        "answer": "CUD"
+      },
+      {
+        "number": 23,
+        "clue": "Pesticide banned since 1972",
+        "answer": "DDT"
+      },
+      {
+        "number": 26,
+        "clue": "Italian island, to natives",
+        "answer": "SICILIA"
+      },
+      {
+        "number": 28,
+        "clue": "Colonist",
+        "answer": "SETTLER"
+      },
+      {
+        "number": 29,
+        "clue": "Devoid of comforts",
+        "answer": "AUSTERE"
+      },
+      {
+        "number": 31,
+        "clue": "Neither partner",
+        "answer": "NOR"
+      },
+      {
+        "number": 35,
+        "clue": "High spirits",
+        "answer": "PEP"
+      },
+      {
+        "number": 37,
+        "clue": "Pointer's pronoun",
+        "answer": "YOU"
+      },
+      {
+        "number": 39,
+        "clue": "Oddly-named horse-drawn vehicles",
+        "answer": "DOGCARTS"
+      },
+      {
+        "number": 40,
+        "clue": "Squid on trattoria menus",
+        "answer": "CALAMARI"
+      },
+      {
+        "number": 41,
+        "clue": "The Trojans' sch.",
+        "answer": "USC"
+      },
+      {
+        "number": 42,
+        "clue": "Milan opera house",
+        "answer": "LASCALA"
+      },
+      {
+        "number": 45,
+        "clue": "Pawn for the Olympic gods",
+        "answer": "MORTAL"
+      },
+      {
+        "number": 46,
+        "clue": "Betray sorrow",
+        "answer": "CRY"
+      },
+      {
+        "number": 48,
+        "clue": "Heavily built",
+        "answer": "STOCKY"
+      },
+      {
+        "number": 50,
+        "clue": "Basketball legend Julius",
+        "answer": "ERVING"
+      },
+      {
+        "number": 51,
+        "clue": "Afternoon nap",
+        "answer": "SIESTA"
+      },
+      {
+        "number": 52,
+        "clue": "Connecting cord",
+        "answer": "TETHER"
+      },
+      {
+        "number": 54,
+        "clue": "Sulky puller",
+        "answer": "PACER"
+      },
+      {
+        "number": 55,
+        "clue": "Affirmative in \"Fargo\"",
+        "answer": "YAH"
+      },
+      {
+        "number": 60,
+        "clue": "Lose brightness",
+        "answer": "FADE"
+      },
+      {
+        "number": 63,
+        "clue": "Prize for the winning hand",
+        "answer": "POT"
+      },
+      {
+        "number": 65,
+        "clue": "Kamala's 2024 running mate",
+        "answer": "TIM"
+      },
+      {
+        "number": 66,
+        "clue": "Passing craze",
+        "answer": "FAD"
+      }
+    ]
+  }
+}

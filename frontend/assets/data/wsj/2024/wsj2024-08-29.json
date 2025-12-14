@@ -1,0 +1,773 @@
+{
+  "id": "Two of a Kind",
+  "version": "1.0",
+  "metadata": {
+    "title": "Two of a Kind",
+    "author": "By David W. Tuffs/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-08-29",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "W"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "OLD",
+      "clue": "Played out"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ONCE",
+      "clue": "As soon as"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "LOOS",
+      "clue": "King John's johns"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "DRACONIAN",
+      "clue": "Excessively harsh"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 4,
+      "y": 0,
+      "length": 5,
+      "answer": "SPASM",
+      "clue": "Muscular jerk?"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "SWIPES",
+      "clue": "Makes a decision on a dating app, say"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "PATEL",
+      "clue": "Dev of \"Monkey Man\""
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ANI",
+      "clue": "\"The Phantom Menace\" nickname"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "SNOWPEA",
+      "clue": "Stir-fry veggie"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "MANORS",
+      "clue": "Country houses"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "UPTOP",
+      "clue": "Request for a high-five"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "UMS",
+      "clue": "Speakers' fillers"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "POPSCENE",
+      "clue": "Domain for Ariana Grande and Billie Eilish"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "TORAH",
+      "clue": "Hebrew word for \"instruction\""
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "OLIVE",
+      "clue": "Branch of the United Nations?"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "PAGED",
+      "clue": "Summoned to the ICU, say"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 3,
+      "answer": "NOR",
+      "clue": "Both : and :: neither : ___"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 4,
+      "y": 1,
+      "length": 5,
+      "answer": "WANNA",
+      "clue": "\"You in?\""
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "MOOLA",
+      "clue": "Bread"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Played out",
+        "answer": "OLD"
+      },
+      {
+        "number": 4,
+        "clue": "Muscular jerk?",
+        "answer": "SPASM"
+      },
+      {
+        "number": 9,
+        "clue": "Request for a high-five",
+        "answer": "UPTOP"
+      },
+      {
+        "number": 14,
+        "clue": "Both : and :: neither : ___",
+        "answer": "NOR"
+      },
+      {
+        "number": 15,
+        "clue": "\"You in?\"",
+        "answer": "WANNA"
+      },
+      {
+        "number": 16,
+        "clue": "Bread",
+        "answer": "MOOLA"
+      },
+      {
+        "number": 17,
+        "clue": "Bloc (made from two mammals)",
+        "answer": "COALITION"
+      },
+      {
+        "number": 19,
+        "clue": "Herb cutting",
+        "answer": "SPRIG"
+      },
+      {
+        "number": 20,
+        "clue": "Fly the coop",
+        "answer": "ESCAPE"
+      },
+      {
+        "number": 21,
+        "clue": "Really dazzle",
+        "answer": "WOW"
+      },
+      {
+        "number": 23,
+        "clue": "Closer's goal",
+        "answer": "SAVE"
+      },
+      {
+        "number": 24,
+        "clue": "Student learning civil procedure",
+        "answer": "ONEL"
+      },
+      {
+        "number": 25,
+        "clue": "Made a Sunday delivery (made from two colors)",
+        "answer": "PREACHED"
+      },
+      {
+        "number": 27,
+        "clue": "Elements of sounds and colors",
+        "answer": "TONES"
+      },
+      {
+        "number": 29,
+        "clue": "Cuddle up",
+        "answer": "NESTLE"
+      },
+      {
+        "number": 30,
+        "clue": "Tuna in a poke bowl",
+        "answer": "AHI"
+      },
+      {
+        "number": 31,
+        "clue": "Pepa to Mirabel, in \"Encanto\"",
+        "answer": "TIA"
+      },
+      {
+        "number": 32,
+        "clue": "\"Don't start anything\"",
+        "answer": "BENICE"
+      },
+      {
+        "number": 36,
+        "clue": "Bathroom brand (made from two body parts)",
+        "answer": "CHARMIN"
+      },
+      {
+        "number": 39,
+        "clue": "Monopoly token choice (made from two electronics companies)",
+        "answer": "RACECAR"
+      },
+      {
+        "number": 40,
+        "clue": "Handicap for a composer",
+        "answer": "TINEAR"
+      },
+      {
+        "number": 41,
+        "clue": "Not a good dog",
+        "answer": "CUR"
+      },
+      {
+        "number": 42,
+        "clue": "Ally of France?",
+        "answer": "AMI"
+      },
+      {
+        "number": 43,
+        "clue": "2002 Christopher Paolini fantasy book",
+        "answer": "ERAGON"
+      },
+      {
+        "number": 45,
+        "clue": "\"Nomadland\" director Zhao",
+        "answer": "CHLOE"
+      },
+      {
+        "number": 47,
+        "clue": "Pressured (made from two elements)",
+        "answer": "LEANEDON"
+      },
+      {
+        "number": 50,
+        "clue": "Swirl turbulently",
+        "answer": "ROIL"
+      },
+      {
+        "number": 51,
+        "clue": "Faris of \"Scary Movie\"",
+        "answer": "ANNA"
+      },
+      {
+        "number": 52,
+        "clue": "She turned Tithonus into a cicada",
+        "answer": "EOS"
+      },
+      {
+        "number": 53,
+        "clue": "Website with a \"Fact Check\" section",
+        "answer": "APNEWS"
+      },
+      {
+        "number": 56,
+        "clue": "Raid target",
+        "answer": "ROACH"
+      },
+      {
+        "number": 58,
+        "clue": "Banned (made from two presidents)",
+        "answer": "FORBIDDEN"
+      },
+      {
+        "number": 60,
+        "clue": "Dog with a curly tail",
+        "answer": "AKITA"
+      },
+      {
+        "number": 61,
+        "clue": "Radii relatives",
+        "answer": "ULNAE"
+      },
+      {
+        "number": 62,
+        "clue": "Civil rights leader ___ B. Wells",
+        "answer": "IDA"
+      },
+      {
+        "number": 63,
+        "clue": "Elliott with four Grammys",
+        "answer": "MISSY"
+      },
+      {
+        "number": 64,
+        "clue": "Senate spots",
+        "answer": "SEATS"
+      },
+      {
+        "number": 65,
+        "clue": "About 4.9 ml",
+        "answer": "TSP"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "As soon as",
+        "answer": "ONCE"
+      },
+      {
+        "number": 2,
+        "clue": "King John's johns",
+        "answer": "LOOS"
+      },
+      {
+        "number": 3,
+        "clue": "Excessively harsh",
+        "answer": "DRACONIAN"
+      },
+      {
+        "number": 4,
+        "clue": "Makes a decision on a dating app, say",
+        "answer": "SWIPES"
+      },
+      {
+        "number": 5,
+        "clue": "Dev of \"Monkey Man\"",
+        "answer": "PATEL"
+      },
+      {
+        "number": 6,
+        "clue": "\"The Phantom Menace\" nickname",
+        "answer": "ANI"
+      },
+      {
+        "number": 7,
+        "clue": "Stir-fry veggie",
+        "answer": "SNOWPEA"
+      },
+      {
+        "number": 8,
+        "clue": "Country houses",
+        "answer": "MANORS"
+      },
+      {
+        "number": 9,
+        "clue": "Speakers' fillers",
+        "answer": "UMS"
+      },
+      {
+        "number": 10,
+        "clue": "Domain for Ariana Grande and Billie Eilish",
+        "answer": "POPSCENE"
+      },
+      {
+        "number": 11,
+        "clue": "Hebrew word for \"instruction\"",
+        "answer": "TORAH"
+      },
+      {
+        "number": 12,
+        "clue": "Branch of the United Nations?",
+        "answer": "OLIVE"
+      },
+      {
+        "number": 13,
+        "clue": "Summoned to the ICU, say",
+        "answer": "PAGED"
+      },
+      {
+        "number": 18,
+        "clue": "Track division",
+        "answer": "LANE"
+      },
+      {
+        "number": 22,
+        "clue": "Amenity with a sink",
+        "answer": "WETBAR"
+      },
+      {
+        "number": 26,
+        "clue": "Guinness of \"Doctor Zhivago\"",
+        "answer": "ALEC"
+      },
+      {
+        "number": 27,
+        "clue": "Diplomacy",
+        "answer": "TACT"
+      },
+      {
+        "number": 28,
+        "clue": "\"Didn't see you there!\"",
+        "answer": "OHHI"
+      },
+      {
+        "number": 29,
+        "clue": "See 49-Down",
+        "answer": "NIN"
+      },
+      {
+        "number": 31,
+        "clue": "Fiery eruption, of a sort",
+        "answer": "TIRADE"
+      },
+      {
+        "number": 33,
+        "clue": "\"Told ya so!\"",
+        "answer": "ICALLEDIT"
+      },
+      {
+        "number": 34,
+        "clue": "Garb for grunts",
+        "answer": "CAMO"
+      },
+      {
+        "number": 35,
+        "clue": "View from Sandusky",
+        "answer": "ERIE"
+      },
+      {
+        "number": 37,
+        "clue": "Depicts, as a historic battle",
+        "answer": "REENACTS"
+      },
+      {
+        "number": 38,
+        "clue": "Stable parent",
+        "answer": "MARE"
+      },
+      {
+        "number": 39,
+        "clue": "Bolt, say",
+        "answer": "RUN"
+      },
+      {
+        "number": 41,
+        "clue": "Nintendo Switch, e.g.",
+        "answer": "CONSOLE"
+      },
+      {
+        "number": 44,
+        "clue": "Foolish person",
+        "answer": "GOOFUS"
+      },
+      {
+        "number": 45,
+        "clue": "Backs up, say",
+        "answer": "COPIES"
+      },
+      {
+        "number": 46,
+        "clue": "Symbol of Artemis",
+        "answer": "HIND"
+      },
+      {
+        "number": 47,
+        "clue": "NFL player in SoFi Stadium",
+        "answer": "LARAM"
+      },
+      {
+        "number": 48,
+        "clue": "Ramen mushroom",
+        "answer": "ENOKI"
+      },
+      {
+        "number": 49,
+        "clue": "With 29-Down, \"Little Birds\" writer",
+        "answer": "ANAIS"
+      },
+      {
+        "number": 50,
+        "clue": "Capital of Morocco",
+        "answer": "RABAT"
+      },
+      {
+        "number": 54,
+        "clue": "Joins a union?",
+        "answer": "WEDS"
+      },
+      {
+        "number": 55,
+        "clue": "Easy task",
+        "answer": "SNAP"
+      },
+      {
+        "number": 57,
+        "clue": "Cow chow",
+        "answer": "HAY"
+      },
+      {
+        "number": 59,
+        "clue": "Protein-production facilitator",
+        "answer": "RNA"
+      }
+    ]
+  }
+}

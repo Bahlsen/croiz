@@ -1,0 +1,773 @@
+{
+  "id": "Jumping Jacks",
+  "version": "1.0",
+  "metadata": {
+    "title": "Jumping Jacks",
+    "author": "By David Poole/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2022-02-02",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "X"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "ALTA",
+      "clue": "Utah ski resort"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ALAS",
+      "clue": "Sigh of resignation"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "LIFT",
+      "clue": "Hitchhiking hope"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "TARA",
+      "clue": "Margaret Mitchell mansion"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "AMORAL",
+      "clue": "Unconcerned with ethics"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 6,
+      "answer": "MADAME",
+      "clue": "Tussaud title"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "MUSLIM",
+      "clue": "Halal food consumer"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ANTES",
+      "clue": "Pays to play"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "DIADEMS",
+      "clue": "Royal crowns"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "ASP",
+      "clue": "Ancient Egyptian symbol of royalty"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "MELS",
+      "clue": "Alice and Flo's diner"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "EXEC",
+      "clue": "Suit"
+    },
+    {
+      "id": "a11",
+      "number": 11,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "BBC",
+      "clue": "\"Fleabag\" airer"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "BRUNEI",
+      "clue": "Oil-rich sultanate"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "BONERS",
+      "clue": "Stupid blunders"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "CESSNA",
+      "clue": "Maker of the Skylane and SkyCourier"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "LIAM",
+      "clue": "Hemsworth of \"The Hunger Games\""
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 6,
+      "answer": "UNISEX",
+      "clue": "Like some restrooms"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "ROE",
+      "clue": "Ikura, tobiko or masago on a sushi menu"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Utah ski resort",
+        "answer": "ALTA"
+      },
+      {
+        "number": 5,
+        "clue": "Tussaud title",
+        "answer": "MADAME"
+      },
+      {
+        "number": 11,
+        "clue": "\"Fleabag\" airer",
+        "answer": "BBC"
+      },
+      {
+        "number": 14,
+        "clue": "Hemsworth of \"The Hunger Games\"",
+        "answer": "LIAM"
+      },
+      {
+        "number": 15,
+        "clue": "Like some restrooms",
+        "answer": "UNISEX"
+      },
+      {
+        "number": 16,
+        "clue": "Ikura, tobiko or masago on a sushi menu",
+        "answer": "ROE"
+      },
+      {
+        "number": 17,
+        "clue": "Colin Kaepernick sports one",
+        "answer": "AFRO"
+      },
+      {
+        "number": 18,
+        "clue": "Upholsterers' tools",
+        "answer": "STAPLEGUNS"
+      },
+      {
+        "number": 20,
+        "clue": "Caught by surprise",
+        "answer": "STARTLED"
+      },
+      {
+        "number": 22,
+        "clue": "Tea cart treats",
+        "answer": "SCONES"
+      },
+      {
+        "number": 23,
+        "clue": "Comes to light",
+        "answer": "ARISES"
+      },
+      {
+        "number": 25,
+        "clue": "Where the Swiss Bundesrat meets",
+        "answer": "BERN"
+      },
+      {
+        "number": 26,
+        "clue": "Chrysanthemum, for the Japanese emperor",
+        "answer": "EMBLEM"
+      },
+      {
+        "number": 29,
+        "clue": "Nat King Cole hit",
+        "answer": "MONALISA"
+      },
+      {
+        "number": 32,
+        "clue": "Fête des Mères month",
+        "answer": "MAI"
+      },
+      {
+        "number": 33,
+        "clue": "In working order",
+        "answer": "USABLE"
+      },
+      {
+        "number": 34,
+        "clue": "Prepare to take off, as a bracelet",
+        "answer": "UNCLASP"
+      },
+      {
+        "number": 38,
+        "clue": "Sidewinder, e.g.",
+        "answer": "RATTLER"
+      },
+      {
+        "number": 42,
+        "clue": "Hounds from Honshu",
+        "answer": "AKITAS"
+      },
+      {
+        "number": 44,
+        "clue": "Perrier, par exemple",
+        "answer": "EAU"
+      },
+      {
+        "number": 45,
+        "clue": "Exhibition of paintings",
+        "answer": "ARTSALON"
+      },
+      {
+        "number": 48,
+        "clue": "Join a drive",
+        "answer": "DONATE"
+      },
+      {
+        "number": 51,
+        "clue": "Calls from the kids",
+        "answer": "MAAS"
+      },
+      {
+        "number": 52,
+        "clue": "Vichyssoise ingredient",
+        "answer": "POTATO"
+      },
+      {
+        "number": 54,
+        "clue": "Melodic passage",
+        "answer": "ARIOSO"
+      },
+      {
+        "number": 57,
+        "clue": "Adds at no extra cost",
+        "answer": "THROWSIN"
+      },
+      {
+        "number": 61,
+        "clue": "Rather, once",
+        "answer": "NEWSANCHOR"
+      },
+      {
+        "number": 63,
+        "clue": "Successor of Claudius",
+        "answer": "NERO"
+      },
+      {
+        "number": 64,
+        "clue": "Mimicking",
+        "answer": "ALA"
+      },
+      {
+        "number": 65,
+        "clue": "Joan of Arc's offense",
+        "answer": "HERESY"
+      },
+      {
+        "number": 66,
+        "clue": "Drop",
+        "answer": "OMIT"
+      },
+      {
+        "number": 67,
+        "clue": "Wd. in a thesaurus",
+        "answer": "SYN"
+      },
+      {
+        "number": 68,
+        "clue": "Aromatic evergreen",
+        "answer": "LAUREL"
+      },
+      {
+        "number": 69,
+        "clue": "Sensible",
+        "answer": "WISE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Sigh of resignation",
+        "answer": "ALAS"
+      },
+      {
+        "number": 2,
+        "clue": "Hitchhiking hope",
+        "answer": "LIFT"
+      },
+      {
+        "number": 3,
+        "clue": "Margaret Mitchell mansion",
+        "answer": "TARA"
+      },
+      {
+        "number": 4,
+        "clue": "Unconcerned with ethics",
+        "answer": "AMORAL"
+      },
+      {
+        "number": 5,
+        "clue": "Halal food consumer",
+        "answer": "MUSLIM"
+      },
+      {
+        "number": 6,
+        "clue": "Pays to play",
+        "answer": "ANTES"
+      },
+      {
+        "number": 7,
+        "clue": "Royal crowns",
+        "answer": "DIADEMS"
+      },
+      {
+        "number": 8,
+        "clue": "Ancient Egyptian symbol of royalty",
+        "answer": "ASP"
+      },
+      {
+        "number": 9,
+        "clue": "Alice and Flo's diner",
+        "answer": "MELS"
+      },
+      {
+        "number": 10,
+        "clue": "Suit",
+        "answer": "EXEC"
+      },
+      {
+        "number": 11,
+        "clue": "Oil-rich sultanate",
+        "answer": "BRUNEI"
+      },
+      {
+        "number": 12,
+        "clue": "Stupid blunders",
+        "answer": "BONERS"
+      },
+      {
+        "number": 13,
+        "clue": "Maker of the Skylane and SkyCourier",
+        "answer": "CESSNA"
+      },
+      {
+        "number": 19,
+        "clue": "Tumbler's kin",
+        "answer": "GOBLET"
+      },
+      {
+        "number": 21,
+        "clue": "Sei diviso due",
+        "answer": "TRE"
+      },
+      {
+        "number": 24,
+        "clue": "Heads for the heavens",
+        "answer": "SOARS"
+      },
+      {
+        "number": 26,
+        "clue": "Producer of extra-large eggs",
+        "answer": "EMU"
+      },
+      {
+        "number": 27,
+        "clue": "\"Holy cow!\"",
+        "answer": "MAN"
+      },
+      {
+        "number": 28,
+        "clue": "Pen name",
+        "answer": "BIC"
+      },
+      {
+        "number": 30,
+        "clue": "Curry's in it",
+        "answer": "NBA"
+      },
+      {
+        "number": 31,
+        "clue": "Music genre prefix",
+        "answer": "ALT"
+      },
+      {
+        "number": 33,
+        "clue": "\"High five!\"",
+        "answer": "UPTOP"
+      },
+      {
+        "number": 35,
+        "clue": "Cow catchers",
+        "answer": "LASSOS"
+      },
+      {
+        "number": 36,
+        "clue": "Wanted poster letters",
+        "answer": "AKA"
+      },
+      {
+        "number": 37,
+        "clue": "Part of RSVP",
+        "answer": "SIL"
+      },
+      {
+        "number": 39,
+        "clue": "Perrins's partner in the Worcestershire sauce business",
+        "answer": "LEA"
+      },
+      {
+        "number": 40,
+        "clue": "\"Dig in!\"",
+        "answer": "EAT"
+      },
+      {
+        "number": 41,
+        "clue": "Aromatic evergreen",
+        "answer": "RUE"
+      },
+      {
+        "number": 43,
+        "clue": "Bar request",
+        "answer": "ANOTHER"
+      },
+      {
+        "number": 45,
+        "clue": "Some ranges",
+        "answer": "AMANAS"
+      },
+      {
+        "number": 46,
+        "clue": "Once in a blue moon",
+        "answer": "RARELY"
+      },
+      {
+        "number": 47,
+        "clue": "Ang Lee's birthplace",
+        "answer": "TAIWAN"
+      },
+      {
+        "number": 48,
+        "clue": "Strawberry, for one",
+        "answer": "DARRYL"
+      },
+      {
+        "number": 49,
+        "clue": "Indigenous Oklahoman",
+        "answer": "OTO"
+      },
+      {
+        "number": 50,
+        "clue": "\"Calm down!\"",
+        "answer": "NOWNOW"
+      },
+      {
+        "number": 53,
+        "clue": "Yonder things",
+        "answer": "THOSE"
+      },
+      {
+        "number": 55,
+        "clue": "Satirist Mort",
+        "answer": "SAHL"
+      },
+      {
+        "number": 56,
+        "clue": "Fit for service",
+        "answer": "ONEA"
+      },
+      {
+        "number": 58,
+        "clue": "Big hauler",
+        "answer": "SEMI"
+      },
+      {
+        "number": 59,
+        "clue": "Pupil's surroundings",
+        "answer": "IRIS"
+      },
+      {
+        "number": 60,
+        "clue": "Staff item",
+        "answer": "NOTE"
+      },
+      {
+        "number": 62,
+        "clue": "French vineyard",
+        "answer": "CRU"
+      }
+    ]
+  }
+}

@@ -1,0 +1,763 @@
+{
+  "id": "Look Sharp!",
+  "version": "1.0",
+  "metadata": {
+    "title": "Look Sharp!",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2023-09-25",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "B"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "NASAL",
+      "clue": "Like a twangy voice"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "NUB",
+      "clue": "Main point"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ALLURES",
+      "clue": "Powerfully attracts"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "STANKAT",
+      "clue": "Did terribly"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "ARCS",
+      "clue": "They're measured in degrees"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "LAKE",
+      "clue": "Victoria, Constance or Louise"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 7,
+      "y": 0,
+      "length": 4,
+      "answer": "TALC",
+      "clue": "Soft mineral"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "TERSE",
+      "clue": "Far from loquacious"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "AHA",
+      "clue": "Cry of insight"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "LAD",
+      "clue": "Young fellow"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "CREATE",
+      "clue": "Bring into being"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "ASP",
+      "clue": "Egyptian serpent"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ATLEAST",
+      "clue": "In any event"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "SUBARUS",
+      "clue": "Outback and Ascent, for two"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "PBS",
+      "clue": "\"Antiques Roadshow\" network"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "ULTRA",
+      "clue": "Extreme"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 5,
+      "answer": "LEHAR",
+      "clue": "\"The Merry Widow\" composer"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "TUB",
+      "clue": "Dilapidated boat"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Like a twangy voice",
+        "answer": "NASAL"
+      },
+      {
+        "number": 6,
+        "clue": "Soft mineral",
+        "answer": "TALC"
+      },
+      {
+        "number": 10,
+        "clue": "Egyptian serpent",
+        "answer": "ASP"
+      },
+      {
+        "number": 13,
+        "clue": "Extreme",
+        "answer": "ULTRA"
+      },
+      {
+        "number": 14,
+        "clue": "\"The Merry Widow\" composer",
+        "answer": "LEHAR"
+      },
+      {
+        "number": 15,
+        "clue": "Dilapidated boat",
+        "answer": "TUB"
+      },
+      {
+        "number": 16,
+        "clue": "Song for which Beyoncé won her 28th Grammy",
+        "answer": "BLACKPARADE"
+      },
+      {
+        "number": 18,
+        "clue": "Scale units: Abbr.",
+        "answer": "LBS"
+      },
+      {
+        "number": 19,
+        "clue": "Removes from office",
+        "answer": "UNSEATS"
+      },
+      {
+        "number": 20,
+        "clue": "Geometry class calculation",
+        "answer": "AREA"
+      },
+      {
+        "number": 22,
+        "clue": "Synagogue chest",
+        "answer": "ARK"
+      },
+      {
+        "number": 23,
+        "clue": "Weeps",
+        "answer": "SHEDSTEARS"
+      },
+      {
+        "number": 27,
+        "clue": "Brewing vessel",
+        "answer": "TEAPOT"
+      },
+      {
+        "number": 30,
+        "clue": "Starts sharing personal information",
+        "answer": "OPENSUP"
+      },
+      {
+        "number": 31,
+        "clue": "Tycoon John Jacob ___",
+        "answer": "ASTOR"
+      },
+      {
+        "number": 32,
+        "clue": "Eruption output",
+        "answer": "LAVA"
+      },
+      {
+        "number": 34,
+        "clue": "Online craft market",
+        "answer": "ETSY"
+      },
+      {
+        "number": 35,
+        "clue": "London street famed for its tailors",
+        "answer": "SAVILEROW"
+      },
+      {
+        "number": 38,
+        "clue": "Easy run",
+        "answer": "TROT"
+      },
+      {
+        "number": 41,
+        "clue": "At any time",
+        "answer": "EVER"
+      },
+      {
+        "number": 42,
+        "clue": "Dangerous animal",
+        "answer": "BEAST"
+      },
+      {
+        "number": 46,
+        "clue": "\"Girl With a Pearl Earring\" painter",
+        "answer": "VERMEER"
+      },
+      {
+        "number": 48,
+        "clue": "Bluegrass instrument",
+        "answer": "FIDDLE"
+      },
+      {
+        "number": 49,
+        "clue": "Trucker's lubricant",
+        "answer": "AXLEGREASE"
+      },
+      {
+        "number": 52,
+        "clue": "Buck's partner",
+        "answer": "DOE"
+      },
+      {
+        "number": 53,
+        "clue": "Called up",
+        "answer": "RANG"
+      },
+      {
+        "number": 54,
+        "clue": "Cake brand found in the frozen food aisle",
+        "answer": "SARALEE"
+      },
+      {
+        "number": 57,
+        "clue": "Thesaurus wd.",
+        "answer": "SYN"
+      },
+      {
+        "number": 58,
+        "clue": "State-of-the-art, and a clue to this puzzle's circled letters",
+        "answer": "CUTTINGEDGE"
+      },
+      {
+        "number": 62,
+        "clue": "Fuming",
+        "answer": "MAD"
+      },
+      {
+        "number": 63,
+        "clue": "Single",
+        "answer": "UNWED"
+      },
+      {
+        "number": 64,
+        "clue": "Like some kitchens",
+        "answer": "EATIN"
+      },
+      {
+        "number": 65,
+        "clue": "Game with Reverse and Draw 2 cards",
+        "answer": "UNO"
+      },
+      {
+        "number": 66,
+        "clue": "Fruit basket fruit",
+        "answer": "PEAR"
+      },
+      {
+        "number": 67,
+        "clue": "Aerial footage provider",
+        "answer": "DRONE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Main point",
+        "answer": "NUB"
+      },
+      {
+        "number": 2,
+        "clue": "Powerfully attracts",
+        "answer": "ALLURES"
+      },
+      {
+        "number": 3,
+        "clue": "Did terribly",
+        "answer": "STANKAT"
+      },
+      {
+        "number": 4,
+        "clue": "They're measured in degrees",
+        "answer": "ARCS"
+      },
+      {
+        "number": 5,
+        "clue": "Victoria, Constance or Louise",
+        "answer": "LAKE"
+      },
+      {
+        "number": 6,
+        "clue": "Far from loquacious",
+        "answer": "TERSE"
+      },
+      {
+        "number": 7,
+        "clue": "Cry of insight",
+        "answer": "AHA"
+      },
+      {
+        "number": 8,
+        "clue": "Young fellow",
+        "answer": "LAD"
+      },
+      {
+        "number": 9,
+        "clue": "Bring into being",
+        "answer": "CREATE"
+      },
+      {
+        "number": 10,
+        "clue": "In any event",
+        "answer": "ATLEAST"
+      },
+      {
+        "number": 11,
+        "clue": "Outback and Ascent, for two",
+        "answer": "SUBARUS"
+      },
+      {
+        "number": 12,
+        "clue": "\"Antiques Roadshow\" network",
+        "answer": "PBS"
+      },
+      {
+        "number": 14,
+        "clue": "Wood strip",
+        "answer": "LATH"
+      },
+      {
+        "number": 17,
+        "clue": "Historian's focus",
+        "answer": "PAST"
+      },
+      {
+        "number": 21,
+        "clue": "Gave fresh strength to",
+        "answer": "RENEWED"
+      },
+      {
+        "number": 22,
+        "clue": "Words with glance or loss",
+        "answer": "ATA"
+      },
+      {
+        "number": 24,
+        "clue": "State capital founded by William Penn",
+        "answer": "DOVER"
+      },
+      {
+        "number": 25,
+        "clue": "Prepare for a bout",
+        "answer": "SPAR"
+      },
+      {
+        "number": 26,
+        "clue": "Person with a cover",
+        "answer": "SPY"
+      },
+      {
+        "number": 28,
+        "clue": "Some deliverers",
+        "answer": "POSTMEN"
+      },
+      {
+        "number": 29,
+        "clue": "British singer Rita",
+        "answer": "ORA"
+      },
+      {
+        "number": 32,
+        "clue": "Book, in Bordeaux",
+        "answer": "LIVRE"
+      },
+      {
+        "number": 33,
+        "clue": "Brewer's bottleful",
+        "answer": "ALE"
+      },
+      {
+        "number": 36,
+        "clue": "Turn unexpectedly",
+        "answer": "VEER"
+      },
+      {
+        "number": 37,
+        "clue": "Kimono sash",
+        "answer": "OBI"
+      },
+      {
+        "number": 38,
+        "clue": "Dam-building org.",
+        "answer": "TVA"
+      },
+      {
+        "number": 39,
+        "clue": "Former coach of the Jets and Bills",
+        "answer": "REXRYAN"
+      },
+      {
+        "number": 40,
+        "clue": "Home of the Magic",
+        "answer": "ORLANDO"
+      },
+      {
+        "number": 43,
+        "clue": "Increased",
+        "answer": "ADDEDTO"
+      },
+      {
+        "number": 44,
+        "clue": "Liquor in some fizzes",
+        "answer": "SLOEGIN"
+      },
+      {
+        "number": 45,
+        "clue": "Simple shirt",
+        "answer": "TEE"
+      },
+      {
+        "number": 47,
+        "clue": "Bit of breakfast tableware",
+        "answer": "EGGCUP"
+      },
+      {
+        "number": 48,
+        "clue": "Office plant",
+        "answer": "FERN"
+      },
+      {
+        "number": 50,
+        "clue": "Daisy's kin",
+        "answer": "ASTER"
+      },
+      {
+        "number": 51,
+        "clue": "Put into words",
+        "answer": "SAID"
+      },
+      {
+        "number": 55,
+        "clue": "Like some wine and cheese",
+        "answer": "AGED"
+      },
+      {
+        "number": 56,
+        "clue": "Tragic king of drama",
+        "answer": "LEAR"
+      },
+      {
+        "number": 57,
+        "clue": "Home of the NCAA's Mustangs",
+        "answer": "SMU"
+      },
+      {
+        "number": 59,
+        "clue": "French article",
+        "answer": "UNE"
+      },
+      {
+        "number": 60,
+        "clue": "Airline that used an \"up up and away\" slogan",
+        "answer": "TWA"
+      },
+      {
+        "number": 61,
+        "clue": "Direction opposite WSW",
+        "answer": "ENE"
+      }
+    ]
+  }
+}

@@ -1,0 +1,784 @@
+{
+  "id": "Defensive Position",
+  "version": "1.0",
+  "metadata": {
+    "title": "Defensive Position",
+    "author": "Bojan Koprivica",
+    "editor": "Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2021-11-15",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "SEAM",
+      "clue": "Site of stitching"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "SAWS",
+      "clue": "Carpentry tools"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ECHO",
+      "clue": "Repeated sound"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "ARAB",
+      "clue": "Many a Moroccan"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "MEL",
+      "clue": "Singer Tormé"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "CHAFF",
+      "clue": "Grain husks separated by threshing"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "COMEON",
+      "clue": "\"You've gotta be kidding me!\""
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "HAILED",
+      "clue": "Called out to"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ARGO",
+      "clue": "Jason's ship"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "FERN",
+      "clue": "Plant with fronds"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "FDA",
+      "clue": "Org. that issues emergency authorizations for vaccines"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "TSKS",
+      "clue": "Disapproving sounds"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "TRIOS",
+      "clue": "Six-legged groups?"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "SHOOTSPOOL",
+      "clue": "Plays nine ball, say"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "KENT",
+      "clue": "Clark from Smallville"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "SASS",
+      "clue": "Cheeky talk"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "ACRE",
+      "clue": "Meadow measure"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 5,
+      "answer": "OARED",
+      "clue": "Like rowboats"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "RHEA",
+      "clue": "TV's Perlman or Seehorn"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Site of stitching",
+        "answer": "SEAM"
+      },
+      {
+        "number": 5,
+        "clue": "Grain husks separated by threshing",
+        "answer": "CHAFF"
+      },
+      {
+        "number": 10,
+        "clue": "Disapproving sounds",
+        "answer": "TSKS"
+      },
+      {
+        "number": 14,
+        "clue": "Meadow measure",
+        "answer": "ACRE"
+      },
+      {
+        "number": 15,
+        "clue": "Like rowboats",
+        "answer": "OARED"
+      },
+      {
+        "number": 16,
+        "clue": "TV's Perlman or Seehorn",
+        "answer": "RHEA"
+      },
+      {
+        "number": 17,
+        "clue": "Humpbacks' annual journeys to polar waters",
+        "answer": "WHALEMIGRATIONS"
+      },
+      {
+        "number": 20,
+        "clue": "Loud lament",
+        "answer": "SOB"
+      },
+      {
+        "number": 21,
+        "clue": "Arsonist or kidnapper, for example",
+        "answer": "FELON"
+      },
+      {
+        "number": 22,
+        "clue": "Parts of trees and teeth",
+        "answer": "ROOTS"
+      },
+      {
+        "number": 23,
+        "clue": "Lotion ingredient",
+        "answer": "ALOE"
+      },
+      {
+        "number": 24,
+        "clue": "Final, for one",
+        "answer": "TEST"
+      },
+      {
+        "number": 25,
+        "clue": "Coexisting campus/off-campus community",
+        "answer": "TOWNANDGOWN"
+      },
+      {
+        "number": 30,
+        "clue": "Gender pronoun option",
+        "answer": "SHE"
+      },
+      {
+        "number": 33,
+        "clue": "Bonehead",
+        "answer": "IDIOT"
+      },
+      {
+        "number": 34,
+        "clue": "Latin poet",
+        "answer": "OVID"
+      },
+      {
+        "number": 35,
+        "clue": "Part of a pod cast?",
+        "answer": "PEA"
+      },
+      {
+        "number": 36,
+        "clue": "Brought into the world",
+        "answer": "BORN"
+      },
+      {
+        "number": 37,
+        "clue": "Dieter Jack of rhyme",
+        "answer": "SPRAT"
+      },
+      {
+        "number": 39,
+        "clue": "Chevy hybrid",
+        "answer": "VOLT"
+      },
+      {
+        "number": 40,
+        "clue": "Great anger",
+        "answer": "IRE"
+      },
+      {
+        "number": 41,
+        "clue": "Boat deck wood",
+        "answer": "TEAK"
+      },
+      {
+        "number": 42,
+        "clue": "Garlic-seasoned mayo",
+        "answer": "AIOLI"
+      },
+      {
+        "number": 43,
+        "clue": "Cigar dangler",
+        "answer": "ASH"
+      },
+      {
+        "number": 44,
+        "clue": "Business offering Brazilians",
+        "answer": "WAXINGSALON"
+      },
+      {
+        "number": 47,
+        "clue": "\"B ___ boy\"",
+        "answer": "ASIN"
+      },
+      {
+        "number": 49,
+        "clue": "By word of mouth",
+        "answer": "ORAL"
+      },
+      {
+        "number": 50,
+        "clue": "\"The Little Mermaid\" mermaid",
+        "answer": "ARIEL"
+      },
+      {
+        "number": 52,
+        "clue": "Follow, as advice",
+        "answer": "ACTON"
+      },
+      {
+        "number": 54,
+        "clue": "Key lime or coconut cream",
+        "answer": "PIE"
+      },
+      {
+        "number": 57,
+        "clue": "Get into a defensive position, and what we do in this grid",
+        "answer": "CIRCLETHEWAGONS"
+      },
+      {
+        "number": 60,
+        "clue": "Rapper who's a regular on \"Law & Order: SVU\"",
+        "answer": "ICET"
+      },
+      {
+        "number": 61,
+        "clue": "Fragrance",
+        "answer": "SMELL"
+      },
+      {
+        "number": 62,
+        "clue": "They may clash",
+        "answer": "EGOS"
+      },
+      {
+        "number": 63,
+        "clue": "Some Little League coaches",
+        "answer": "DADS"
+      },
+      {
+        "number": 64,
+        "clue": "Hoods for monks",
+        "answer": "COWLS"
+      },
+      {
+        "number": 65,
+        "clue": "Stereo precursor",
+        "answer": "MONO"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Carpentry tools",
+        "answer": "SAWS"
+      },
+      {
+        "number": 2,
+        "clue": "Repeated sound",
+        "answer": "ECHO"
+      },
+      {
+        "number": 3,
+        "clue": "Many a Moroccan",
+        "answer": "ARAB"
+      },
+      {
+        "number": 4,
+        "clue": "Singer Tormé",
+        "answer": "MEL"
+      },
+      {
+        "number": 5,
+        "clue": "\"You've gotta be kidding me!\"",
+        "answer": "COMEON"
+      },
+      {
+        "number": 6,
+        "clue": "Called out to",
+        "answer": "HAILED"
+      },
+      {
+        "number": 7,
+        "clue": "Jason's ship",
+        "answer": "ARGO"
+      },
+      {
+        "number": 8,
+        "clue": "Plant with fronds",
+        "answer": "FERN"
+      },
+      {
+        "number": 9,
+        "clue": "Org. that issues emergency authorizations for vaccines",
+        "answer": "FDA"
+      },
+      {
+        "number": 10,
+        "clue": "Six-legged groups?",
+        "answer": "TRIOS"
+      },
+      {
+        "number": 11,
+        "clue": "Plays nine ball, say",
+        "answer": "SHOOTSPOOL"
+      },
+      {
+        "number": 12,
+        "clue": "Clark from Smallville",
+        "answer": "KENT"
+      },
+      {
+        "number": 13,
+        "clue": "Cheeky talk",
+        "answer": "SASS"
+      },
+      {
+        "number": 18,
+        "clue": "Key just above D",
+        "answer": "EFLAT"
+      },
+      {
+        "number": 19,
+        "clue": "Blow up on Twitter",
+        "answer": "TREND"
+      },
+      {
+        "number": 23,
+        "clue": "Before long, to poets",
+        "answer": "ANON"
+      },
+      {
+        "number": 24,
+        "clue": "Bonehead",
+        "answer": "TWIT"
+      },
+      {
+        "number": 25,
+        "clue": "Bone in the leg",
+        "answer": "TIBIA"
+      },
+      {
+        "number": 26,
+        "clue": "Fragrances",
+        "answer": "ODORS"
+      },
+      {
+        "number": 27,
+        "clue": "Terrier type",
+        "answer": "WIREHAIRED"
+      },
+      {
+        "number": 28,
+        "clue": "Russian novelist Maxim",
+        "answer": "GORKI"
+      },
+      {
+        "number": 29,
+        "clue": "Eggs in labs",
+        "answer": "OVA"
+      },
+      {
+        "number": 31,
+        "clue": "Adele hit that won Grammys for Song and Record of the Year",
+        "answer": "HELLO"
+      },
+      {
+        "number": 32,
+        "clue": "Avoid restaurant crowds, perhaps",
+        "answer": "EATIN"
+      },
+      {
+        "number": 37,
+        "clue": "Penn with a pair of Oscars",
+        "answer": "SEAN"
+      },
+      {
+        "number": 38,
+        "clue": "Roman goddess of peace",
+        "answer": "PAX"
+      },
+      {
+        "number": 39,
+        "clue": "Glass vessel",
+        "answer": "VIAL"
+      },
+      {
+        "number": 41,
+        "clue": "Suit fabric",
+        "answer": "TWILL"
+      },
+      {
+        "number": 42,
+        "clue": "Downward Dog or Reverse Warrior",
+        "answer": "ASANA"
+      },
+      {
+        "number": 45,
+        "clue": "Like a discreet motel",
+        "answer": "NOTELL"
+      },
+      {
+        "number": 46,
+        "clue": "Watchdog's warnings",
+        "answer": "GROWLS"
+      },
+      {
+        "number": 48,
+        "clue": "Faith factions",
+        "answer": "SECTS"
+      },
+      {
+        "number": 50,
+        "clue": "Corrosive stuff",
+        "answer": "ACID"
+      },
+      {
+        "number": 51,
+        "clue": "Costa ___",
+        "answer": "RICA"
+      },
+      {
+        "number": 52,
+        "clue": "Airy prefix",
+        "answer": "ATMO"
+      },
+      {
+        "number": 53,
+        "clue": "Work with the teeth",
+        "answer": "CHEW"
+      },
+      {
+        "number": 54,
+        "clue": "Possum of the funny papers",
+        "answer": "POGO"
+      },
+      {
+        "number": 55,
+        "clue": "A party to",
+        "answer": "INON"
+      },
+      {
+        "number": 56,
+        "clue": "Brand with tiger ads",
+        "answer": "ESSO"
+      },
+      {
+        "number": 58,
+        "clue": "Cancel key",
+        "answer": "ESC"
+      },
+      {
+        "number": 59,
+        "clue": "Topaz or tourmaline",
+        "answer": "GEM"
+      }
+    ]
+  }
+}

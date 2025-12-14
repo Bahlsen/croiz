@@ -1,0 +1,743 @@
+{
+  "id": "Dish on This",
+  "version": "1.0",
+  "metadata": {
+    "title": "Dish on This",
+    "author": "By Bill Thompson/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2023-07-26",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "TBS",
+      "clue": "First so-called \"superstation\""
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "TOILSAT",
+      "clue": "Labors over"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "BLEDSOE",
+      "clue": "Patriots quarterback before Brady"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "SIDEA",
+      "clue": "\"Wouldn't It Be Nice,\" vis-à-vis \"God Only Knows\""
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "VALET",
+      "clue": "Male counterpart of a lady's maid"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "VARIETAL",
+      "clue": "Chardonnay or Merlot, e.g."
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ALE",
+      "clue": "Gastropub glassful"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "LOAM",
+      "clue": "Fertile soil"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "ENIAC",
+      "clue": "30-ton computer"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "TERROR",
+      "clue": "Little hellion"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "GERT",
+      "clue": "Goldfinger portrayer Frobe"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "GOPOSTAL",
+      "clue": "Erupt"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ELASTIN",
+      "clue": "Protein essential to tissue stretching"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "RELEARN",
+      "clue": "Brush up on"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "TOOTLES",
+      "clue": "Casually plays a horn"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "SOLI",
+      "clue": "Arias, e.g."
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 5,
+      "answer": "ALONE",
+      "clue": "Unescorted"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "OLEO",
+      "clue": "Aussie's \"marge\""
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "First so-called \"superstation\"",
+        "answer": "TBS"
+      },
+      {
+        "number": 4,
+        "clue": "Male counterpart of a lady's maid",
+        "answer": "VALET"
+      },
+      {
+        "number": 9,
+        "clue": "Goldfinger portrayer Frobe",
+        "answer": "GERT"
+      },
+      {
+        "number": 13,
+        "clue": "Arias, e.g.",
+        "answer": "SOLI"
+      },
+      {
+        "number": 14,
+        "clue": "Unescorted",
+        "answer": "ALONE"
+      },
+      {
+        "number": 15,
+        "clue": "Aussie's \"marge\"",
+        "answer": "OLEO"
+      },
+      {
+        "number": 16,
+        "clue": "Even",
+        "answer": "TIED"
+      },
+      {
+        "number": 17,
+        "clue": "Put on again",
+        "answer": "REAIR"
+      },
+      {
+        "number": 18,
+        "clue": "___ Alto",
+        "answer": "PALO"
+      },
+      {
+        "number": 19,
+        "clue": "Yale, colloquially",
+        "answer": "OLDELI"
+      },
+      {
+        "number": 21,
+        "clue": "Silky-coated monkey",
+        "answer": "MARMOSET"
+      },
+      {
+        "number": 23,
+        "clue": "Mining town figure",
+        "answer": "ASSAYER"
+      },
+      {
+        "number": 25,
+        "clue": "Like some erosion",
+        "answer": "COASTAL"
+      },
+      {
+        "number": 26,
+        "clue": "Chinese path",
+        "answer": "TAO"
+      },
+      {
+        "number": 27,
+        "clue": "British submachine gun",
+        "answer": "STEN"
+      },
+      {
+        "number": 29,
+        "clue": "Head to bed",
+        "answer": "RETIRE"
+      },
+      {
+        "number": 30,
+        "clue": "Canonized femme: Abbr.",
+        "answer": "STE"
+      },
+      {
+        "number": 31,
+        "clue": "Girl Scout cookie with coconut and caramel",
+        "answer": "SAMOA"
+      },
+      {
+        "number": 33,
+        "clue": "Romney and Richards",
+        "answer": "ANNS"
+      },
+      {
+        "number": 34,
+        "clue": "Common kitchen item depicted by the circled letters",
+        "answer": "SALADBOWL"
+      },
+      {
+        "number": 37,
+        "clue": "[This could get you fired]",
+        "answer": "NSFW"
+      },
+      {
+        "number": 40,
+        "clue": "It might be screened",
+        "answer": "PORCH"
+      },
+      {
+        "number": 41,
+        "clue": "Runner in the Olympics",
+        "answer": "SKI"
+      },
+      {
+        "number": 44,
+        "clue": "\"Paper Moon\" co-stars",
+        "answer": "ONEALS"
+      },
+      {
+        "number": 47,
+        "clue": "Traditional dish at a Sicilian wedding feast",
+        "answer": "ZITI"
+      },
+      {
+        "number": 48,
+        "clue": "These, in France",
+        "answer": "CES"
+      },
+      {
+        "number": 49,
+        "clue": "Oscar-nominated 1973 role for Pacino",
+        "answer": "SERPICO"
+      },
+      {
+        "number": 51,
+        "clue": "Protester, at times",
+        "answer": "MARCHER"
+      },
+      {
+        "number": 53,
+        "clue": "Daughter of two Muggle dentists",
+        "answer": "HERMIONE"
+      },
+      {
+        "number": 55,
+        "clue": "Meemaw's mate",
+        "answer": "GRAMPA"
+      },
+      {
+        "number": 56,
+        "clue": "1813 naval battle site",
+        "answer": "ERIE"
+      },
+      {
+        "number": 57,
+        "clue": "Alt-rock band named for a radio reply",
+        "answer": "WILCO"
+      },
+      {
+        "number": 59,
+        "clue": "___-majesté",
+        "answer": "LESE"
+      },
+      {
+        "number": 60,
+        "clue": "Merit",
+        "answer": "RATE"
+      },
+      {
+        "number": 61,
+        "clue": "Miller protagonist",
+        "answer": "LOMAN"
+      },
+      {
+        "number": 62,
+        "clue": "Site of the GoPro Mountain Games",
+        "answer": "VAIL"
+      },
+      {
+        "number": 63,
+        "clue": "Leave in",
+        "answer": "STET"
+      },
+      {
+        "number": 64,
+        "clue": "Some oenophiles",
+        "answer": "SNOBS"
+      },
+      {
+        "number": 65,
+        "clue": "Follower of directions?",
+        "answer": "ERN"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Labors over",
+        "answer": "TOILSAT"
+      },
+      {
+        "number": 2,
+        "clue": "Patriots quarterback before Brady",
+        "answer": "BLEDSOE"
+      },
+      {
+        "number": 3,
+        "clue": "\"Wouldn't It Be Nice,\" vis-à-vis \"God Only Knows\"",
+        "answer": "SIDEA"
+      },
+      {
+        "number": 4,
+        "clue": "Chardonnay or Merlot, e.g.",
+        "answer": "VARIETAL"
+      },
+      {
+        "number": 5,
+        "clue": "Gastropub glassful",
+        "answer": "ALE"
+      },
+      {
+        "number": 6,
+        "clue": "Fertile soil",
+        "answer": "LOAM"
+      },
+      {
+        "number": 7,
+        "clue": "30-ton computer",
+        "answer": "ENIAC"
+      },
+      {
+        "number": 8,
+        "clue": "Little hellion",
+        "answer": "TERROR"
+      },
+      {
+        "number": 9,
+        "clue": "Erupt",
+        "answer": "GOPOSTAL"
+      },
+      {
+        "number": 10,
+        "clue": "Protein essential to tissue stretching",
+        "answer": "ELASTIN"
+      },
+      {
+        "number": 11,
+        "clue": "Brush up on",
+        "answer": "RELEARN"
+      },
+      {
+        "number": 12,
+        "clue": "Casually plays a horn",
+        "answer": "TOOTLES"
+      },
+      {
+        "number": 13,
+        "clue": "Weasels' kin",
+        "answer": "STOATS"
+      },
+      {
+        "number": 20,
+        "clue": "Goddess of mad rage",
+        "answer": "LYSSA"
+      },
+      {
+        "number": 22,
+        "clue": "Jemison in the International Space Hall of Fame",
+        "answer": "MAE"
+      },
+      {
+        "number": 24,
+        "clue": "Gerrymander, essentially",
+        "answer": "REMAP"
+      },
+      {
+        "number": 28,
+        "clue": "Vivarin alternative",
+        "answer": "NODOZ"
+      },
+      {
+        "number": 32,
+        "clue": "Nearly spilling over",
+        "answer": "ABRIM"
+      },
+      {
+        "number": 34,
+        "clue": "Flea market's cousin",
+        "answer": "SWAPMEET"
+      },
+      {
+        "number": 35,
+        "clue": "Shapes at intersections",
+        "answer": "OCTAGONS"
+      },
+      {
+        "number": 36,
+        "clue": "Fan sound",
+        "answer": "WHIRR"
+      },
+      {
+        "number": 37,
+        "clue": "Fridge raiders, e.g.",
+        "answer": "NOSHERS"
+      },
+      {
+        "number": 38,
+        "clue": "Scorn",
+        "answer": "SNEERAT"
+      },
+      {
+        "number": 39,
+        "clue": "Compound in low-carbon steel",
+        "answer": "FERRITE"
+      },
+      {
+        "number": 41,
+        "clue": "Bagel topping",
+        "answer": "SCHMEAR"
+      },
+      {
+        "number": 42,
+        "clue": "Represses",
+        "answer": "KEEPSIN"
+      },
+      {
+        "number": 43,
+        "clue": "Gal Gadot's homeland",
+        "answer": "ISRAEL"
+      },
+      {
+        "number": 45,
+        "clue": "Number of weeks per annum",
+        "answer": "LII"
+      },
+      {
+        "number": 46,
+        "clue": "Grumpy expressions",
+        "answer": "SCOWLS"
+      },
+      {
+        "number": 50,
+        "clue": "Gibson garnish",
+        "answer": "ONION"
+      },
+      {
+        "number": 52,
+        "clue": "Break off from a glacier",
+        "answer": "CALVE"
+      },
+      {
+        "number": 54,
+        "clue": "\"Sesame Street\" spinoff \"The Not-Too-Late Show With ___\"",
+        "answer": "ELMO"
+      },
+      {
+        "number": 58,
+        "clue": "Trucker's spot",
+        "answer": "CAB"
+      }
+    ]
+  }
+}

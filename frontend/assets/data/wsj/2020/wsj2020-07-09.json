@@ -1,0 +1,893 @@
+{
+  "id": "Plus One",
+  "version": "1.0",
+  "metadata": {
+    "title": "Plus One",
+    "author": "By Erik Agard & Alison Ohringer/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2020-07-09",
+    "special": "circle"
+  },
+  "rows": 3,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "REST",
+      "clue": "Downtime"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "ROSA",
+      "clue": "Parks on a bus"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "EVIL",
+      "clue": "Good match"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 3,
+      "answer": "SERB",
+      "clue": "Belgrade native"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "TRIUMPH",
+      "clue": "Carry the day"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 5,
+      "answer": "SCABS",
+      "clue": "Union foes"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 3,
+      "answer": "SKA",
+      "clue": "Rocksteady precursor"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "CODS",
+      "clue": "Fish and chips ingredients"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "ADEAR",
+      "clue": "\"Would you be ___ and help me?\""
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 3,
+      "answer": "BALLETSHOE",
+      "clue": "It has a flexible sole"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 3,
+      "answer": "SKETCH",
+      "clue": "Painter's first draft"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "DING",
+      "clue": "Phone alert sound"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "DAHLIAS",
+      "clue": "Symbols of Mexico"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "IMEAN",
+      "clue": "Lead-in to a clarification or correction"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "NORTE",
+      "clue": "Marruecos-a-España dirección"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 3,
+      "answer": "GROSS",
+      "clue": "Box office figure"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "OVER",
+      "clue": "In excess of"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 5,
+      "answer": "KODAK",
+      "clue": "Pioneering company in imaging technology"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "AMOR",
+      "clue": "\"Te quiero\" sentiment"
+    },
+    {
+      "id": "a17",
+      "number": 17,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 4,
+      "answer": "SIRI",
+      "clue": "She may read your messages"
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 5,
+      "y": 2,
+      "length": 5,
+      "answer": "ADELE",
+      "clue": "Winner of six Grammys on February 12, 2012"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 11,
+      "y": 2,
+      "length": 4,
+      "answer": "HERO",
+      "clue": "Subway fare"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Downtime",
+        "answer": "REST"
+      },
+      {
+        "number": 5,
+        "clue": "Union foes",
+        "answer": "SCABS"
+      },
+      {
+        "number": 10,
+        "clue": "Phone alert sound",
+        "answer": "DING"
+      },
+      {
+        "number": 14,
+        "clue": "In excess of",
+        "answer": "OVER"
+      },
+      {
+        "number": 15,
+        "clue": "Pioneering company in imaging technology",
+        "answer": "KODAK"
+      },
+      {
+        "number": 16,
+        "clue": "\"Te quiero\" sentiment",
+        "answer": "AMOR"
+      },
+      {
+        "number": 17,
+        "clue": "She may read your messages",
+        "answer": "SIRI"
+      },
+      {
+        "number": 18,
+        "clue": "Winner of six Grammys on February 12, 2012",
+        "answer": "ADELE"
+      },
+      {
+        "number": 19,
+        "clue": "Subway fare",
+        "answer": "HERO"
+      },
+      {
+        "number": 20,
+        "clue": "Photo collection",
+        "answer": "ALBUM"
+      },
+      {
+        "number": 22,
+        "clue": "Shining expanses formed by evaporation",
+        "answer": "SALTFLATS"
+      },
+      {
+        "number": 24,
+        "clue": "Yoga necessity",
+        "answer": "MAT"
+      },
+      {
+        "number": 26,
+        "clue": "Lies",
+        "answer": "RECLINES"
+      },
+      {
+        "number": 27,
+        "clue": "Like many ketchup bottles",
+        "answer": "FLIPTOP"
+      },
+      {
+        "number": 31,
+        "clue": "Main character in Cather's \"The Song of the Lark\"",
+        "answer": "THEA"
+      },
+      {
+        "number": 32,
+        "clue": "Peak times for jams",
+        "answer": "RUSHHOURS"
+      },
+      {
+        "number": 34,
+        "clue": "Fire proof",
+        "answer": "ASHES"
+      },
+      {
+        "number": 38,
+        "clue": "Cry in la plaza de toros",
+        "answer": "OLE"
+      },
+      {
+        "number": 39,
+        "clue": "Drama performed in front of a painted image of a pine tree",
+        "answer": "NOH"
+      },
+      {
+        "number": 40,
+        "clue": "Back in time",
+        "answer": "AGO"
+      },
+      {
+        "number": 41,
+        "clue": "Flash of light",
+        "answer": "GLEAM"
+      },
+      {
+        "number": 44,
+        "clue": "Turquoise, e.g.",
+        "answer": "COOLCOLOR"
+      },
+      {
+        "number": 48,
+        "clue": "Colleague of Elena and Sonia",
+        "answer": "RUTH"
+      },
+      {
+        "number": 50,
+        "clue": "Grave",
+        "answer": "EARNEST"
+      },
+      {
+        "number": 51,
+        "clue": "Less crunchy Tex-Mex option",
+        "answer": "SOFTTACO"
+      },
+      {
+        "number": 55,
+        "clue": "Abject sorrow",
+        "answer": "WOE"
+      },
+      {
+        "number": 56,
+        "clue": "Rutted road",
+        "answer": "CARTTRACK"
+      },
+      {
+        "number": 58,
+        "clue": "Pecs' place",
+        "answer": "CHEST"
+      },
+      {
+        "number": 62,
+        "clue": "What some teams play to",
+        "answer": "ATIE"
+      },
+      {
+        "number": 63,
+        "clue": "Quarters",
+        "answer": "AREAS"
+      },
+      {
+        "number": 65,
+        "clue": "High in Honduras",
+        "answer": "ALTO"
+      },
+      {
+        "number": 66,
+        "clue": "They share their home arena with the WNBA's Liberty",
+        "answer": "NETS"
+      },
+      {
+        "number": 67,
+        "clue": "Where an eligible Goldberg may meet an eligible Katz",
+        "answer": "JDATE"
+      },
+      {
+        "number": 68,
+        "clue": "\"lol,\" escalated",
+        "answer": "LMAO"
+      },
+      {
+        "number": 69,
+        "clue": "Scamper",
+        "answer": "TROT"
+      },
+      {
+        "number": 70,
+        "clue": "Formal \"ain't\"",
+        "answer": "ISNOT"
+      },
+      {
+        "number": 71,
+        "clue": "What the letters added to the four \"stirred\" words in this puzzle spell",
+        "answer": "FORK"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Parks on a bus",
+        "answer": "ROSA"
+      },
+      {
+        "number": 2,
+        "clue": "Good match",
+        "answer": "EVIL"
+      },
+      {
+        "number": 3,
+        "clue": "Belgrade native",
+        "answer": "SERB"
+      },
+      {
+        "number": 4,
+        "clue": "Carry the day",
+        "answer": "TRIUMPH"
+      },
+      {
+        "number": 5,
+        "clue": "Rocksteady precursor",
+        "answer": "SKA"
+      },
+      {
+        "number": 6,
+        "clue": "Fish and chips ingredients",
+        "answer": "CODS"
+      },
+      {
+        "number": 7,
+        "clue": "\"Would you be ___ and help me?\"",
+        "answer": "ADEAR"
+      },
+      {
+        "number": 8,
+        "clue": "It has a flexible sole",
+        "answer": "BALLETSHOE"
+      },
+      {
+        "number": 9,
+        "clue": "Painter's first draft",
+        "answer": "SKETCH"
+      },
+      {
+        "number": 10,
+        "clue": "Symbols of Mexico",
+        "answer": "DAHLIAS"
+      },
+      {
+        "number": 11,
+        "clue": "Lead-in to a clarification or correction",
+        "answer": "IMEAN"
+      },
+      {
+        "number": 12,
+        "clue": "Marruecos-a-España dirección",
+        "answer": "NORTE"
+      },
+      {
+        "number": 13,
+        "clue": "Box office figure",
+        "answer": "GROSS"
+      },
+      {
+        "number": 21,
+        "clue": "SAT section",
+        "answer": "MATH"
+      },
+      {
+        "number": 23,
+        "clue": "Lab coat problem",
+        "answer": "FLEA"
+      },
+      {
+        "number": 25,
+        "clue": "Unduly",
+        "answer": "TOO"
+      },
+      {
+        "number": 27,
+        "clue": "Who (or what) Princess Tiana kissed",
+        "answer": "FROG"
+      },
+      {
+        "number": 28,
+        "clue": "Respite",
+        "answer": "LULL"
+      },
+      {
+        "number": 29,
+        "clue": "\"Ohhh!\"",
+        "answer": "ISEE"
+      },
+      {
+        "number": 30,
+        "clue": "Early computer inputs",
+        "answer": "PUNCHCARDS"
+      },
+      {
+        "number": 33,
+        "clue": "Bush jumper",
+        "answer": "ROO"
+      },
+      {
+        "number": 35,
+        "clue": "Robust",
+        "answer": "HALE"
+      },
+      {
+        "number": 36,
+        "clue": "They might be checked at the door",
+        "answer": "EGOS"
+      },
+      {
+        "number": 37,
+        "clue": "Ilk",
+        "answer": "SORT"
+      },
+      {
+        "number": 42,
+        "clue": "Drawing challenge",
+        "answer": "ARTTEST"
+      },
+      {
+        "number": 43,
+        "clue": "Pound pick",
+        "answer": "MUTT"
+      },
+      {
+        "number": 45,
+        "clue": "Bar concern",
+        "answer": "LAW"
+      },
+      {
+        "number": 46,
+        "clue": "Gator's look-alike",
+        "answer": "CROC"
+      },
+      {
+        "number": 47,
+        "clue": "Partner's share, often",
+        "answer": "ONEHALF"
+      },
+      {
+        "number": 49,
+        "clue": "___ P. Henson of \"Empire\"",
+        "answer": "TARAJI"
+      },
+      {
+        "number": 51,
+        "clue": "Barely sufficient",
+        "answer": "SCANT"
+      },
+      {
+        "number": 52,
+        "clue": "Western, informally",
+        "answer": "OATER"
+      },
+      {
+        "number": 53,
+        "clue": "Corn chip",
+        "answer": "FRITO"
+      },
+      {
+        "number": 54,
+        "clue": "Hurricane's birthplace",
+        "answer": "OCEAN"
+      },
+      {
+        "number": 57,
+        "clue": "1960s TV role for Bruce Lee",
+        "answer": "KATO"
+      },
+      {
+        "number": 59,
+        "clue": "Michelle Obama's partner in a 2009 health PSA",
+        "answer": "ELMO"
+      },
+      {
+        "number": 60,
+        "clue": "Cowboys helmet feature",
+        "answer": "STAR"
+      },
+      {
+        "number": 61,
+        "clue": "Made off with",
+        "answer": "TOOK"
+      },
+      {
+        "number": 64,
+        "clue": "Filming locale",
+        "answer": "SET"
+      }
+    ]
+  }
+}

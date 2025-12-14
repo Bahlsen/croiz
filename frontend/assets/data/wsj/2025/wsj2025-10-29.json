@@ -1,0 +1,783 @@
+{
+  "id": "Creature Feature",
+  "version": "1.0",
+  "metadata": {
+    "title": "Creature Feature",
+    "author": "By AJ Phillips/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2025-10-29",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "STEEP",
+      "clue": "Get in hot water?"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "SLED",
+      "clue": "Travel tirelessly?"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "TOXIN",
+      "clue": "Substance marked with a skull and crossbones"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "ESPNU",
+      "clue": "Carrier of many NCAA games"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "EEL",
+      "clue": "Snaky swimmer"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "PREVENTABLE",
+      "clue": "Like nearly half of all premature deaths"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "IDA",
+      "clue": "Wash. neighbor"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "IBIZA",
+      "clue": "Spanish party island"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "DEVILWORSHIPPER",
+      "clue": "User of an inverted pentagram, maybe"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "AGEE",
+      "clue": "\"A Death in the Family\" author"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "MOCHA",
+      "clue": "No average joe"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "MAW",
+      "clue": "Gaping chasm"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "ONICE",
+      "clue": "Chilling"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "CATACOMBS",
+      "clue": "Mazes full of dead ends?"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "HICS",
+      "clue": "Sounds from sots"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ASHE",
+      "clue": "Arthur of the court"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "LOSER",
+      "clue": "Locker room sulker"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 3,
+      "answer": "BEG",
+      "clue": "Plead"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "ANAIS",
+      "clue": "Diarist Nin"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Get in hot water?",
+        "answer": "STEEP"
+      },
+      {
+        "number": 6,
+        "clue": "Wash. neighbor",
+        "answer": "IDA"
+      },
+      {
+        "number": 9,
+        "clue": "No average joe",
+        "answer": "MOCHA"
+      },
+      {
+        "number": 14,
+        "clue": "Locker room sulker",
+        "answer": "LOSER"
+      },
+      {
+        "number": 15,
+        "clue": "Plead",
+        "answer": "BEG"
+      },
+      {
+        "number": 16,
+        "clue": "Diarist Nin",
+        "answer": "ANAIS"
+      },
+      {
+        "number": 17,
+        "clue": "Bleeped word",
+        "answer": "EXPLETIVE"
+      },
+      {
+        "number": 19,
+        "clue": "Spelling champ?",
+        "answer": "WITCH"
+      },
+      {
+        "number": 20,
+        "clue": "Cacophony",
+        "answer": "DIN"
+      },
+      {
+        "number": 21,
+        "clue": "Ottoman official",
+        "answer": "VIZIER"
+      },
+      {
+        "number": 23,
+        "clue": "Check out, before a heist",
+        "answer": "CASE"
+      },
+      {
+        "number": 24,
+        "clue": "666, e.g.",
+        "answer": "NUMERAL"
+      },
+      {
+        "number": 26,
+        "clue": "Well-funded grp.?",
+        "answer": "OPEC"
+      },
+      {
+        "number": 28,
+        "clue": "Eye count for a Cyclops",
+        "answer": "ONE"
+      },
+      {
+        "number": 29,
+        "clue": "Make like an ibis",
+        "answer": "WADE"
+      },
+      {
+        "number": 31,
+        "clue": "Mined matter",
+        "answer": "ORE"
+      },
+      {
+        "number": 34,
+        "clue": "Brothers' keepers?",
+        "answer": "ABBOTS"
+      },
+      {
+        "number": 37,
+        "clue": "Give the boot",
+        "answer": "OUST"
+      },
+      {
+        "number": 38,
+        "clue": "Discussion forum leader",
+        "answer": "MOD"
+      },
+      {
+        "number": 39,
+        "clue": "Light wood",
+        "answer": "BALSA"
+      },
+      {
+        "number": 40,
+        "clue": "Creature-filled craft",
+        "answer": "ARK"
+      },
+      {
+        "number": 41,
+        "clue": "Jet black",
+        "answer": "SABLE"
+      },
+      {
+        "number": 43,
+        "clue": "Rock with a blue tinge?",
+        "answer": "EMO"
+      },
+      {
+        "number": 44,
+        "clue": "Subwoofer output",
+        "answer": "BASS"
+      },
+      {
+        "number": 46,
+        "clue": "Activist Mandela",
+        "answer": "NELSON"
+      },
+      {
+        "number": 47,
+        "clue": "Confucian concept",
+        "answer": "TAO"
+      },
+      {
+        "number": 48,
+        "clue": "Rife with life",
+        "answer": "LUSH"
+      },
+      {
+        "number": 49,
+        "clue": "\"Personally...,\" online",
+        "answer": "IMO"
+      },
+      {
+        "number": 50,
+        "clue": "A few bucks, maybe",
+        "answer": "DEER"
+      },
+      {
+        "number": 52,
+        "clue": "Thought",
+        "answer": "IDEATED"
+      },
+      {
+        "number": 56,
+        "clue": "Radio toggle",
+        "answer": "AMFM"
+      },
+      {
+        "number": 58,
+        "clue": "Facet",
+        "answer": "ASPECT"
+      },
+      {
+        "number": 60,
+        "clue": "Mens ___",
+        "answer": "REA"
+      },
+      {
+        "number": 62,
+        "clue": "Good place to dye",
+        "answer": "SALON"
+      },
+      {
+        "number": 64,
+        "clue": "Placating",
+        "answer": "APPEASING"
+      },
+      {
+        "number": 66,
+        "clue": "Site of Japan's Nijo Castle",
+        "answer": "KYOTO"
+      },
+      {
+        "number": 67,
+        "clue": "Earth, in combinations",
+        "answer": "GEO"
+      },
+      {
+        "number": 68,
+        "clue": "Halloween candy eponym",
+        "answer": "REESE"
+      },
+      {
+        "number": 69,
+        "clue": "Planted",
+        "answer": "SOWED"
+      },
+      {
+        "number": 70,
+        "clue": "Gallery stuff",
+        "answer": "ART"
+      },
+      {
+        "number": 71,
+        "clue": "Some RSVPs",
+        "answer": "YESES"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Travel tirelessly?",
+        "answer": "SLED"
+      },
+      {
+        "number": 2,
+        "clue": "Substance marked with a skull and crossbones",
+        "answer": "TOXIN"
+      },
+      {
+        "number": 3,
+        "clue": "Carrier of many NCAA games",
+        "answer": "ESPNU"
+      },
+      {
+        "number": 4,
+        "clue": "Snaky swimmer",
+        "answer": "EEL"
+      },
+      {
+        "number": 5,
+        "clue": "Like nearly half of all premature deaths",
+        "answer": "PREVENTABLE"
+      },
+      {
+        "number": 6,
+        "clue": "Spanish party island",
+        "answer": "IBIZA"
+      },
+      {
+        "number": 7,
+        "clue": "User of an inverted pentagram, maybe",
+        "answer": "DEVILWORSHIPPER"
+      },
+      {
+        "number": 8,
+        "clue": "\"A Death in the Family\" author",
+        "answer": "AGEE"
+      },
+      {
+        "number": 9,
+        "clue": "Gaping chasm",
+        "answer": "MAW"
+      },
+      {
+        "number": 10,
+        "clue": "Chilling",
+        "answer": "ONICE"
+      },
+      {
+        "number": 11,
+        "clue": "Mazes full of dead ends?",
+        "answer": "CATACOMBS"
+      },
+      {
+        "number": 12,
+        "clue": "Sounds from sots",
+        "answer": "HICS"
+      },
+      {
+        "number": 13,
+        "clue": "Arthur of the court",
+        "answer": "ASHE"
+      },
+      {
+        "number": 18,
+        "clue": "Runs out of steam",
+        "answer": "TIRES"
+      },
+      {
+        "number": 22,
+        "clue": "Retina cells",
+        "answer": "RODS"
+      },
+      {
+        "number": 25,
+        "clue": "Heifers' hellos",
+        "answer": "MOOS"
+      },
+      {
+        "number": 27,
+        "clue": "Stephen King book in which dead animals rise again, like five spooky creatures do in this puzzle",
+        "answer": "PETSEMATARY"
+      },
+      {
+        "number": 30,
+        "clue": "Diving seabird",
+        "answer": "AUK"
+      },
+      {
+        "number": 32,
+        "clue": "Conical caramel candy",
+        "answer": "ROLO"
+      },
+      {
+        "number": 33,
+        "clue": "Garden with a serpent",
+        "answer": "EDEN"
+      },
+      {
+        "number": 34,
+        "clue": "Assist an arsonist, say",
+        "answer": "ABET"
+      },
+      {
+        "number": 35,
+        "clue": "Crimson Tide school",
+        "answer": "BAMA"
+      },
+      {
+        "number": 36,
+        "clue": "Movement that's in vein",
+        "answer": "BLOODFLOW"
+      },
+      {
+        "number": 40,
+        "clue": "Numbskull",
+        "answer": "ASS"
+      },
+      {
+        "number": 42,
+        "clue": "Hordes",
+        "answer": "ALOT"
+      },
+      {
+        "number": 45,
+        "clue": "Mysterious glow",
+        "answer": "AURA"
+      },
+      {
+        "number": 46,
+        "clue": "Many a flower girl",
+        "answer": "NIECE"
+      },
+      {
+        "number": 51,
+        "clue": "Ham it up",
+        "answer": "EMOTE"
+      },
+      {
+        "number": 53,
+        "clue": "Stop on a line",
+        "answer": "DEPOT"
+      },
+      {
+        "number": 54,
+        "clue": "Great Lakes natives",
+        "answer": "ERIES"
+      },
+      {
+        "number": 55,
+        "clue": "Like a numbskull",
+        "answer": "DENSE"
+      },
+      {
+        "number": 56,
+        "clue": "Names as a price",
+        "answer": "ASKS"
+      },
+      {
+        "number": 57,
+        "clue": "Deli spread",
+        "answer": "MAYO"
+      },
+      {
+        "number": 59,
+        "clue": "It's a long story",
+        "answer": "SAGA"
+      },
+      {
+        "number": 61,
+        "clue": "Epoch divisions",
+        "answer": "AGES"
+      },
+      {
+        "number": 63,
+        "clue": "Affirmative action",
+        "answer": "NOD"
+      },
+      {
+        "number": 65,
+        "clue": "\"What did I tell you?\"",
+        "answer": "SEE"
+      }
+    ]
+  }
+}

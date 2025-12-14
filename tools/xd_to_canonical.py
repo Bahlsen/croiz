@@ -136,6 +136,16 @@ def parse_xd(text: str) -> Dict[str, Any]:
         if k.lower() == 'rebus':
             rebus_line = metadata[k]
             break
+    # Support multiline Rebus: header where lines following 'Rebus:' contain '1=HEART' entries
+    if rebus_line is not None and not rebus_line.strip():
+        parts = []
+        for line in meta_text.splitlines():
+            l = line.strip()
+            # match '1=HEART' (single-char key or digit keys)
+            if re.match(r'^[^\s:]+=.+$', l):
+                parts.append(l)
+        if parts:
+            rebus_line = ' '.join(parts)
     if rebus_line:
         # Accept multiple separators: newlines, spaces, or commas. Keys must be single characters.
         for part in re.split(r'[\s,]+', rebus_line.strip()):
@@ -348,12 +358,17 @@ def parse_xd(text: str) -> Dict[str, Any]:
                         expanded.append(cell.get('solution') or '')
                 answer = ''.join(expanded)
                 clue_text = None
+                clue_answer = None
                 for c in across_clues:
                     if c.get('number') == number:
                         clue_text = c.get('clue')
+                        clue_answer = c.get('answer')
                         break
                 if clue_text is None:
                     clue_text = 'Clue unavailable'
+                # If the clue itself provides an explicit answer (via '~'), prefer it
+                if clue_answer:
+                    answer = clue_answer
                 entries.append({'id': f'a{number}', 'number': number, 'direction': 'across', 'x': x, 'y': y, 'length': (lx - x), 'answer': answer, 'clue': clue_text})
 
             # down entries
@@ -371,12 +386,16 @@ def parse_xd(text: str) -> Dict[str, Any]:
                         expanded.append(cell.get('solution') or '')
                 answer = ''.join(expanded)
                 clue_text = None
+                clue_answer = None
                 for c in down_clues:
                     if c.get('number') == number:
                         clue_text = c.get('clue')
+                        clue_answer = c.get('answer')
                         break
                 if clue_text is None:
                     clue_text = 'Clue unavailable'
+                if clue_answer:
+                    answer = clue_answer
                 entries.append({'id': f'd{number}', 'number': number, 'direction': 'down', 'x': x, 'y': y, 'length': (ly - y), 'answer': answer, 'clue': clue_text})
 
     puzzle = {

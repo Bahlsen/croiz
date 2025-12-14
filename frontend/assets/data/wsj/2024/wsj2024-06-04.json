@@ -1,0 +1,753 @@
+{
+  "id": "Backfield",
+  "version": "1.0",
+  "metadata": {
+    "title": "Backfield",
+    "author": "By Josh Goodman/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2024-06-04",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "K"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "ACT",
+      "clue": "House work"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ACQUIT",
+      "clue": "Let off, in a way"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "CHUMBAWAMBA",
+      "clue": "\"Tubthumping\" band"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "TEA",
+      "clue": "Lapsang souchong, e.g."
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "FRET",
+      "clue": "Stew"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "FRERE",
+      "clue": "Brother, in Bretagne"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "RATEDM",
+      "clue": "Like Red Dead Redemption 2"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ECHO",
+      "clue": "Cavern effect"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "TEE",
+      "clue": "Placekicker's aid"
+    },
+    {
+      "id": "a8",
+      "number": 8,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "CAME",
+      "clue": "Arrived"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "CHRONOS",
+      "clue": "Time personified, in ancient times"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ARC",
+      "clue": "Compass trace"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "MEL",
+      "clue": "Brooks of \"High Anxiety\""
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "EKE",
+      "clue": "Squeeze (out)"
+    },
+    {
+      "id": "a12",
+      "number": 12,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "ACHE",
+      "clue": "Feeling after doing squat?"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "RACE",
+      "clue": "Dash, e.g."
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "SHREK",
+      "clue": "Winner of the first Oscar for Best Animated Feature"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "House work",
+        "answer": "ACT"
+      },
+      {
+        "number": 4,
+        "clue": "Stew",
+        "answer": "FRET"
+      },
+      {
+        "number": 8,
+        "clue": "Arrived",
+        "answer": "CAME"
+      },
+      {
+        "number": 12,
+        "clue": "Feeling after doing squat?",
+        "answer": "ACHE"
+      },
+      {
+        "number": 13,
+        "clue": "Dash, e.g.",
+        "answer": "RACE"
+      },
+      {
+        "number": 14,
+        "clue": "Winner of the first Oscar for Best Animated Feature",
+        "answer": "SHREK"
+      },
+      {
+        "number": 15,
+        "clue": "Do an impossible geometry feat",
+        "answer": "SQUARETHECIRCLE"
+      },
+      {
+        "number": 18,
+        "clue": "___! Brands (parent of KFC and Taco Bell)",
+        "answer": "YUM"
+      },
+      {
+        "number": 19,
+        "clue": "Cookie that's been vegan since 1998",
+        "answer": "OREO"
+      },
+      {
+        "number": 20,
+        "clue": "Ear-related prefix",
+        "answer": "OTO"
+      },
+      {
+        "number": 21,
+        "clue": "Smeared in ink?",
+        "answer": "LIBELED"
+      },
+      {
+        "number": 23,
+        "clue": "Movement of riders",
+        "answer": "TRANSIT"
+      },
+      {
+        "number": 27,
+        "clue": "To any extent",
+        "answer": "ATALL"
+      },
+      {
+        "number": 28,
+        "clue": "Armstrong and Aldrin collected about 47 pounds of them",
+        "answer": "MOONROCKS"
+      },
+      {
+        "number": 30,
+        "clue": "Sorrows",
+        "answer": "WOES"
+      },
+      {
+        "number": 32,
+        "clue": "Charlemagne ruled it: Abbr.",
+        "answer": "HRE"
+      },
+      {
+        "number": 33,
+        "clue": "Butter in moisturizers",
+        "answer": "SHEA"
+      },
+      {
+        "number": 34,
+        "clue": "\"Abbott Elementary\" principal",
+        "answer": "AVA"
+      },
+      {
+        "number": 36,
+        "clue": "\"Let You Love Me\" singer",
+        "answer": "RITAORA"
+      },
+      {
+        "number": 39,
+        "clue": "Henley Regatta tool",
+        "answer": "OAR"
+      },
+      {
+        "number": 40,
+        "clue": "Like a wet noodle",
+        "answer": "LIMP"
+      },
+      {
+        "number": 42,
+        "clue": "Be off the mark",
+        "answer": "ERR"
+      },
+      {
+        "number": 43,
+        "clue": "Highest part of many a farmstead",
+        "answer": "SILO"
+      },
+      {
+        "number": 45,
+        "clue": "Site of a famous London \"zebra crossing\"",
+        "answer": "ABBEYROAD"
+      },
+      {
+        "number": 48,
+        "clue": "Romeo and Juliet, e.g.",
+        "answer": "ROLES"
+      },
+      {
+        "number": 51,
+        "clue": "Liner stop",
+        "answer": "SEAPORT"
+      },
+      {
+        "number": 52,
+        "clue": "At the plate",
+        "answer": "UPTOBAT"
+      },
+      {
+        "number": 54,
+        "clue": "\"Chandelier\" singer",
+        "answer": "SIA"
+      },
+      {
+        "number": 55,
+        "clue": "Vicinity",
+        "answer": "AREA"
+      },
+      {
+        "number": 56,
+        "clue": "Buckeyes of the NCAA",
+        "answer": "OSU"
+      },
+      {
+        "number": 57,
+        "clue": "Contrary to what's expected, or how the circled letters are flowing",
+        "answer": "AGAINSTTHEGRAIN"
+      },
+      {
+        "number": 62,
+        "clue": "Bad basketball shot, in slang",
+        "answer": "BRICK"
+      },
+      {
+        "number": 63,
+        "clue": "Omani money",
+        "answer": "RIAL"
+      },
+      {
+        "number": 64,
+        "clue": "Places to visit on Safari?",
+        "answer": "URLS"
+      },
+      {
+        "number": 65,
+        "clue": "Sport of heavyweights",
+        "answer": "SUMO"
+      },
+      {
+        "number": 66,
+        "clue": "Bread boxes?",
+        "answer": "ATMS"
+      },
+      {
+        "number": 67,
+        "clue": "Ice cream mogul Joseph",
+        "answer": "EDY"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Let off, in a way",
+        "answer": "ACQUIT"
+      },
+      {
+        "number": 2,
+        "clue": "\"Tubthumping\" band",
+        "answer": "CHUMBAWAMBA"
+      },
+      {
+        "number": 3,
+        "clue": "Lapsang souchong, e.g.",
+        "answer": "TEA"
+      },
+      {
+        "number": 4,
+        "clue": "Brother, in Bretagne",
+        "answer": "FRERE"
+      },
+      {
+        "number": 5,
+        "clue": "Like Red Dead Redemption 2",
+        "answer": "RATEDM"
+      },
+      {
+        "number": 6,
+        "clue": "Cavern effect",
+        "answer": "ECHO"
+      },
+      {
+        "number": 7,
+        "clue": "Placekicker's aid",
+        "answer": "TEE"
+      },
+      {
+        "number": 8,
+        "clue": "Time personified, in ancient times",
+        "answer": "CHRONOS"
+      },
+      {
+        "number": 9,
+        "clue": "Compass trace",
+        "answer": "ARC"
+      },
+      {
+        "number": 10,
+        "clue": "Brooks of \"High Anxiety\"",
+        "answer": "MEL"
+      },
+      {
+        "number": 11,
+        "clue": "Squeeze (out)",
+        "answer": "EKE"
+      },
+      {
+        "number": 12,
+        "clue": "Safe havens",
+        "answer": "ASYLA"
+      },
+      {
+        "number": 14,
+        "clue": "Indian lute",
+        "answer": "SITAR"
+      },
+      {
+        "number": 16,
+        "clue": "Salon item",
+        "answer": "ROLLER"
+      },
+      {
+        "number": 17,
+        "clue": "Bodega locations, often",
+        "answer": "CORNERS"
+      },
+      {
+        "number": 22,
+        "clue": "\"Mr. Blue Sky\" band",
+        "answer": "ELO"
+      },
+      {
+        "number": 23,
+        "clue": "Lawn mower brand",
+        "answer": "TORO"
+      },
+      {
+        "number": 24,
+        "clue": "Class-conscious group?",
+        "answer": "SCHOOLBOARD"
+      },
+      {
+        "number": 25,
+        "clue": "Seller of Jokkmokk tables",
+        "answer": "IKEA"
+      },
+      {
+        "number": 26,
+        "clue": "Nicholas II, e.g.",
+        "answer": "TSAR"
+      },
+      {
+        "number": 29,
+        "clue": "Catherine of \"Best in Show\"",
+        "answer": "OHARA"
+      },
+      {
+        "number": 31,
+        "clue": "Western range",
+        "answer": "SIERRAS"
+      },
+      {
+        "number": 34,
+        "clue": "\"Such a pity\"",
+        "answer": "ALAS"
+      },
+      {
+        "number": 35,
+        "clue": "General atmosphere",
+        "answer": "VIBE"
+      },
+      {
+        "number": 37,
+        "clue": "Relaxed pace",
+        "answer": "TROT"
+      },
+      {
+        "number": 38,
+        "clue": "Apple tracking device",
+        "answer": "AIRTAG"
+      },
+      {
+        "number": 41,
+        "clue": "Parent of Frito-Lay and Bubly",
+        "answer": "PEPSICO"
+      },
+      {
+        "number": 44,
+        "clue": "Bathroom, in Bath",
+        "answer": "LOO"
+      },
+      {
+        "number": 46,
+        "clue": "Snatching sound coined by \"The Simpsons\" writers",
+        "answer": "YOINK"
+      },
+      {
+        "number": 47,
+        "clue": "Home of Duke",
+        "answer": "DURHAM"
+      },
+      {
+        "number": 49,
+        "clue": "Without difficulty",
+        "answer": "EASILY"
+      },
+      {
+        "number": 50,
+        "clue": "Astounds",
+        "answer": "STUNS"
+      },
+      {
+        "number": 53,
+        "clue": "Some produce discards",
+        "answer": "PEELS"
+      },
+      {
+        "number": 55,
+        "clue": "Squabbling",
+        "answer": "ATIT"
+      },
+      {
+        "number": 57,
+        "clue": "Six-pack makeup",
+        "answer": "ABS"
+      },
+      {
+        "number": 58,
+        "clue": "\"Despicable Me\" villain",
+        "answer": "GRU"
+      },
+      {
+        "number": 59,
+        "clue": "Goal",
+        "answer": "AIM"
+      },
+      {
+        "number": 60,
+        "clue": "Refrain syllable",
+        "answer": "TRA"
+      },
+      {
+        "number": 61,
+        "clue": "Feel remorse about",
+        "answer": "RUE"
+      }
+    ]
+  }
+}

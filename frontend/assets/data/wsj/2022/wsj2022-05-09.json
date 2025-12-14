@@ -1,0 +1,883 @@
+{
+  "id": "Patchwork",
+  "version": "1.0",
+  "metadata": {
+    "title": "Patchwork",
+    "author": "By Chase Dittrich/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2022-05-09",
+    "special": "circle"
+  },
+  "rows": 3,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "F"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "B"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "is_black": false,
+      "solution": "Y"
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 2,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 8,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 10,
+      "y": 2,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 2,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 12,
+      "y": 2,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 13,
+      "y": 2,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 2,
+      "is_black": false,
+      "solution": "E"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "ALFA",
+      "clue": "___ Romeo (Italian luxury auto)"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "ARM",
+      "clue": "Sleeve filler"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 3,
+      "answer": "LAOS",
+      "clue": "Vientiane's nation"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 3,
+      "answer": "FINN",
+      "clue": "Swede's neighbor"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 3,
+      "answer": "ATTACKAD",
+      "clue": "TV spot besmirching an opponent"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 4,
+      "answer": "SNOB",
+      "clue": "Uppity sort"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 3,
+      "answer": "SCAR",
+      "clue": "Wound remnant"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 3,
+      "answer": "NOLA",
+      "clue": "The Big Easy, familiarly"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 3,
+      "answer": "OPEC",
+      "clue": "Crude-shipping grp."
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 3,
+      "answer": "BACKSTOP",
+      "clue": "Screen behind home plate"
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "REDS",
+      "clue": "Cincinnati team"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 3,
+      "answer": "RATEDR",
+      "clue": "Like every Quentin Tarantino movie"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "ELOPE",
+      "clue": "Wed in haste"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 3,
+      "answer": "DONOR",
+      "clue": "Drive supporter"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 3,
+      "answer": "SEEPS",
+      "clue": "Oozes"
+    },
+    {
+      "id": "a13",
+      "number": 13,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "RAITT",
+      "clue": "\"Just Like That...\" singer Bonnie"
+    },
+    {
+      "id": "d14",
+      "number": 14,
+      "direction": "down",
+      "x": 4,
+      "y": 1,
+      "length": 2,
+      "answer": "TYPEIN",
+      "clue": "Enter via keyboard"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 4,
+      "answer": "COPA",
+      "clue": "Club in a Manilow hit"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "ALOE",
+      "clue": "Lotion additive"
+    },
+    {
+      "id": "a17",
+      "number": 17,
+      "direction": "across",
+      "x": 0,
+      "y": 2,
+      "length": 5,
+      "answer": "MONTY",
+      "clue": "\"___ Python's Flying Circus\""
+    },
+    {
+      "id": "a18",
+      "number": 18,
+      "direction": "across",
+      "x": 6,
+      "y": 2,
+      "length": 4,
+      "answer": "ALEC",
+      "clue": "Guinness of films"
+    },
+    {
+      "id": "a19",
+      "number": 19,
+      "direction": "across",
+      "x": 11,
+      "y": 2,
+      "length": 4,
+      "answer": "TONE",
+      "clue": "Muscle quality"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "___ Romeo (Italian luxury auto)",
+        "answer": "ALFA"
+      },
+      {
+        "number": 5,
+        "clue": "Uppity sort",
+        "answer": "SNOB"
+      },
+      {
+        "number": 9,
+        "clue": "Cincinnati team",
+        "answer": "REDS"
+      },
+      {
+        "number": 13,
+        "clue": "\"Just Like That...\" singer Bonnie",
+        "answer": "RAITT"
+      },
+      {
+        "number": 15,
+        "clue": "Club in a Manilow hit",
+        "answer": "COPA"
+      },
+      {
+        "number": 16,
+        "clue": "Lotion additive",
+        "answer": "ALOE"
+      },
+      {
+        "number": 17,
+        "clue": "\"___ Python's Flying Circus\"",
+        "answer": "MONTY"
+      },
+      {
+        "number": 18,
+        "clue": "Guinness of films",
+        "answer": "ALEC"
+      },
+      {
+        "number": 19,
+        "clue": "Muscle quality",
+        "answer": "TONE"
+      },
+      {
+        "number": 20,
+        "clue": "Cereal mascot trio",
+        "answer": "SNAPCRACKLEPOP"
+      },
+      {
+        "number": 23,
+        "clue": "Company VIP",
+        "answer": "CEO"
+      },
+      {
+        "number": 24,
+        "clue": "Passover meals",
+        "answer": "SEDERS"
+      },
+      {
+        "number": 25,
+        "clue": "It's fed on the sidewalk",
+        "answer": "PARKINGMETER"
+      },
+      {
+        "number": 31,
+        "clue": "Porpoise's place",
+        "answer": "OCEAN"
+      },
+      {
+        "number": 32,
+        "clue": "Coins in Cadiz, Calais and Cologne",
+        "answer": "EUROS"
+      },
+      {
+        "number": 33,
+        "clue": "Company with almost 8,000 U.S. screens",
+        "answer": "AMC"
+      },
+      {
+        "number": 36,
+        "clue": "Storage building",
+        "answer": "SHED"
+      },
+      {
+        "number": 37,
+        "clue": "Open again, as a keg",
+        "answer": "RETAP"
+      },
+      {
+        "number": 38,
+        "clue": "Pore's place",
+        "answer": "SKIN"
+      },
+      {
+        "number": 39,
+        "clue": "Danson of \"Mr. Mayor\"",
+        "answer": "TED"
+      },
+      {
+        "number": 40,
+        "clue": "Complex 2020 Christopher Nolan movie",
+        "answer": "TENET"
+      },
+      {
+        "number": 41,
+        "clue": "Chiropractor's focus",
+        "answer": "SPINE"
+      },
+      {
+        "number": 42,
+        "clue": "\"Oh, be quiet!\"",
+        "answer": "PUTASOCKINIT"
+      },
+      {
+        "number": 44,
+        "clue": "Still buggy, perhaps",
+        "answer": "INBETA"
+      },
+      {
+        "number": 47,
+        "clue": "\"I'm with ___\"",
+        "answer": "HER"
+      },
+      {
+        "number": 48,
+        "clue": "Dingy bars, or what the circled letters can help fix",
+        "answer": "HOLESINTHEWALL"
+      },
+      {
+        "number": 54,
+        "clue": "Ice rink shape",
+        "answer": "OVAL"
+      },
+      {
+        "number": 55,
+        "clue": "La or ti, e.g.",
+        "answer": "NOTE"
+      },
+      {
+        "number": 56,
+        "clue": "\"The Waste Land\" poet",
+        "answer": "ELIOT"
+      },
+      {
+        "number": 58,
+        "clue": "Trim",
+        "answer": "PARE"
+      },
+      {
+        "number": 59,
+        "clue": "\"Only Time\" singer",
+        "answer": "ENYA"
+      },
+      {
+        "number": 60,
+        "clue": "Brother of Romulus",
+        "answer": "REMUS"
+      },
+      {
+        "number": 61,
+        "clue": "Scraped (out)",
+        "answer": "EKED"
+      },
+      {
+        "number": 62,
+        "clue": "Small valley",
+        "answer": "DELL"
+      },
+      {
+        "number": 63,
+        "clue": "What grandparents might do",
+        "answer": "DOTE"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Sleeve filler",
+        "answer": "ARM"
+      },
+      {
+        "number": 2,
+        "clue": "Vientiane's nation",
+        "answer": "LAOS"
+      },
+      {
+        "number": 3,
+        "clue": "Swede's neighbor",
+        "answer": "FINN"
+      },
+      {
+        "number": 4,
+        "clue": "TV spot besmirching an opponent",
+        "answer": "ATTACKAD"
+      },
+      {
+        "number": 5,
+        "clue": "Wound remnant",
+        "answer": "SCAR"
+      },
+      {
+        "number": 6,
+        "clue": "The Big Easy, familiarly",
+        "answer": "NOLA"
+      },
+      {
+        "number": 7,
+        "clue": "Crude-shipping grp.",
+        "answer": "OPEC"
+      },
+      {
+        "number": 8,
+        "clue": "Screen behind home plate",
+        "answer": "BACKSTOP"
+      },
+      {
+        "number": 9,
+        "clue": "Like every Quentin Tarantino movie",
+        "answer": "RATEDR"
+      },
+      {
+        "number": 10,
+        "clue": "Wed in haste",
+        "answer": "ELOPE"
+      },
+      {
+        "number": 11,
+        "clue": "Drive supporter",
+        "answer": "DONOR"
+      },
+      {
+        "number": 12,
+        "clue": "Oozes",
+        "answer": "SEEPS"
+      },
+      {
+        "number": 14,
+        "clue": "Enter via keyboard",
+        "answer": "TYPEIN"
+      },
+      {
+        "number": 21,
+        "clue": "Swindle",
+        "answer": "CON"
+      },
+      {
+        "number": 22,
+        "clue": "Some jeans",
+        "answer": "LEES"
+      },
+      {
+        "number": 25,
+        "clue": "Fence support",
+        "answer": "POST"
+      },
+      {
+        "number": 26,
+        "clue": "Massage target",
+        "answer": "ACHE"
+      },
+      {
+        "number": 27,
+        "clue": "Clarinet part",
+        "answer": "REED"
+      },
+      {
+        "number": 28,
+        "clue": "Davis of \"Beetlejuice\"",
+        "answer": "GEENA"
+      },
+      {
+        "number": 29,
+        "clue": "Silences with a remote",
+        "answer": "MUTES"
+      },
+      {
+        "number": 30,
+        "clue": "Poetic Muse",
+        "answer": "ERATO"
+      },
+      {
+        "number": 33,
+        "clue": "Related",
+        "answer": "AKIN"
+      },
+      {
+        "number": 34,
+        "clue": "iPad or iPhone model",
+        "answer": "MINI"
+      },
+      {
+        "number": 35,
+        "clue": "Site for techies",
+        "answer": "CNET"
+      },
+      {
+        "number": 37,
+        "clue": "Kept",
+        "answer": "RETAINED"
+      },
+      {
+        "number": 38,
+        "clue": "Twisted, like a thrown football",
+        "answer": "SPIRALED"
+      },
+      {
+        "number": 40,
+        "clue": "Sounds of disapproval",
+        "answer": "TUTS"
+      },
+      {
+        "number": 41,
+        "clue": "Kebab holder",
+        "answer": "SKEWER"
+      },
+      {
+        "number": 42,
+        "clue": "Like a banana in a banana split",
+        "answer": "PEELED"
+      },
+      {
+        "number": 43,
+        "clue": "Michael of \"Weekend Update\"",
+        "answer": "CHE"
+      },
+      {
+        "number": 44,
+        "clue": "\"Fingers crossed!\"",
+        "answer": "IHOPE"
+      },
+      {
+        "number": 45,
+        "clue": "Tennis star Djokovic",
+        "answer": "NOVAK"
+      },
+      {
+        "number": 46,
+        "clue": "Trumpet sound",
+        "answer": "BLARE"
+      },
+      {
+        "number": 49,
+        "clue": "Fewer than any",
+        "answer": "NONE"
+      },
+      {
+        "number": 50,
+        "clue": "Texting farewell",
+        "answer": "TTYL"
+      },
+      {
+        "number": 51,
+        "clue": "Mend",
+        "answer": "HEAL"
+      },
+      {
+        "number": 52,
+        "clue": "Ride to the prom",
+        "answer": "LIMO"
+      },
+      {
+        "number": 53,
+        "clue": "Uncouth fellow",
+        "answer": "LOUT"
+      },
+      {
+        "number": 57,
+        "clue": "Mao ___-tung",
+        "answer": "TSE"
+      }
+    ]
+  }
+}

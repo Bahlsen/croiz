@@ -1,0 +1,753 @@
+{
+  "id": "Shell Game",
+  "version": "1.0",
+  "metadata": {
+    "title": "Shell Game",
+    "author": "By Mike Shenk/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2022-04-19",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "POST",
+      "clue": "Forum contribution"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "PASTEL",
+      "clue": "Easter color"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "ONTIME",
+      "clue": "Prompt"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "STUPID",
+      "clue": "Ill-advised"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "TEMPT",
+      "clue": "Try to persuade"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 6,
+      "answer": "HASTEN",
+      "clue": "Speed up"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "HELD",
+      "clue": "Didn't break"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "ALE",
+      "clue": "Hoppy brew"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "STU",
+      "clue": "\"Fifth Beatle\" Sutcliffe"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "TOPOFF",
+      "clue": "Add a bit more coffee to, say"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "ERODE",
+      "clue": "Wear down"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "NONETS",
+      "clue": "Trios tripled"
+    },
+    {
+      "id": "a11",
+      "number": 11,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "ERA",
+      "clue": "Focus for a historian"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "EDMCBAIN",
+      "clue": "Crime writer with an 87th Precinct series"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "REGALING",
+      "clue": "Entertaining lavishly"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ANSWERS",
+      "clue": "Makes a comeback?"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "ANTE",
+      "clue": "Player's payment"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 6,
+      "answer": "ELTORO",
+      "clue": "Matador's opponent"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "DEN",
+      "clue": "Fox hole, e.g."
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Forum contribution",
+        "answer": "POST"
+      },
+      {
+        "number": 5,
+        "clue": "Speed up",
+        "answer": "HASTEN"
+      },
+      {
+        "number": 11,
+        "clue": "Focus for a historian",
+        "answer": "ERA"
+      },
+      {
+        "number": 14,
+        "clue": "Player's payment",
+        "answer": "ANTE"
+      },
+      {
+        "number": 15,
+        "clue": "Matador's opponent",
+        "answer": "ELTORO"
+      },
+      {
+        "number": 16,
+        "clue": "Fox hole, e.g.",
+        "answer": "DEN"
+      },
+      {
+        "number": 17,
+        "clue": "Discover by chance",
+        "answer": "STUMBLEUPON"
+      },
+      {
+        "number": 19,
+        "clue": "Sports cars from Britain",
+        "answer": "MGS"
+      },
+      {
+        "number": 20,
+        "clue": "Showed appreciation for the waitstaff",
+        "answer": "TIPPED"
+      },
+      {
+        "number": 21,
+        "clue": "Tribute with rhymes",
+        "answer": "ODE"
+      },
+      {
+        "number": 22,
+        "clue": "Crow sound",
+        "answer": "CAW"
+      },
+      {
+        "number": 23,
+        "clue": "Puts out",
+        "answer": "EMITS"
+      },
+      {
+        "number": 24,
+        "clue": "Actuary's list of mortality rates",
+        "answer": "LIFETABLE"
+      },
+      {
+        "number": 27,
+        "clue": "Went first",
+        "answer": "LED"
+      },
+      {
+        "number": 28,
+        "clue": "Character in a mushroom-shaped house",
+        "answer": "SMURF"
+      },
+      {
+        "number": 30,
+        "clue": "Flight unit",
+        "answer": "STAIR"
+      },
+      {
+        "number": 31,
+        "clue": "They get into hard rock",
+        "answer": "PICKS"
+      },
+      {
+        "number": 32,
+        "clue": "Number before zwei",
+        "answer": "EINS"
+      },
+      {
+        "number": 33,
+        "clue": "Feature of some pasta shells, and 17-, 24-, 46- and 54-Across",
+        "answer": "CHEESEFILLING"
+      },
+      {
+        "number": 38,
+        "clue": "Kick starter?",
+        "answer": "FOOT"
+      },
+      {
+        "number": 39,
+        "clue": "\"WandaVision\" star Elizabeth",
+        "answer": "OLSEN"
+      },
+      {
+        "number": 40,
+        "clue": "Took measures",
+        "answer": "ACTED"
+      },
+      {
+        "number": 42,
+        "clue": "Woman with a train",
+        "answer": "BRIDE"
+      },
+      {
+        "number": 43,
+        "clue": "Relevant",
+        "answer": "APT"
+      },
+      {
+        "number": 46,
+        "clue": "School with a leprechaun mascot",
+        "answer": "NOTREDAME"
+      },
+      {
+        "number": 48,
+        "clue": "Mathematician's comparison",
+        "answer": "RATIO"
+      },
+      {
+        "number": 50,
+        "clue": "Rock's ___ Fighters",
+        "answer": "FOO"
+      },
+      {
+        "number": 51,
+        "clue": "Unspoken agreement",
+        "answer": "NOD"
+      },
+      {
+        "number": 52,
+        "clue": "Winery worker",
+        "answer": "TASTER"
+      },
+      {
+        "number": 53,
+        "clue": "\"Then what happened?\"",
+        "answer": "AND"
+      },
+      {
+        "number": 54,
+        "clue": "Patisserie purchase",
+        "answer": "APRICOTTART"
+      },
+      {
+        "number": 57,
+        "clue": "Roulette bet",
+        "answer": "RED"
+      },
+      {
+        "number": 58,
+        "clue": "Priest's subordinate",
+        "answer": "DEACON"
+      },
+      {
+        "number": 59,
+        "clue": "Sushi chef's supply",
+        "answer": "RICE"
+      },
+      {
+        "number": 60,
+        "clue": "Surname in the freezer aisle",
+        "answer": "EDY"
+      },
+      {
+        "number": 61,
+        "clue": "Quaking trees",
+        "answer": "ASPENS"
+      },
+      {
+        "number": 62,
+        "clue": "Addition column",
+        "answer": "ONES"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Easter color",
+        "answer": "PASTEL"
+      },
+      {
+        "number": 2,
+        "clue": "Prompt",
+        "answer": "ONTIME"
+      },
+      {
+        "number": 3,
+        "clue": "Ill-advised",
+        "answer": "STUPID"
+      },
+      {
+        "number": 4,
+        "clue": "Try to persuade",
+        "answer": "TEMPT"
+      },
+      {
+        "number": 5,
+        "clue": "Didn't break",
+        "answer": "HELD"
+      },
+      {
+        "number": 6,
+        "clue": "Hoppy brew",
+        "answer": "ALE"
+      },
+      {
+        "number": 7,
+        "clue": "\"Fifth Beatle\" Sutcliffe",
+        "answer": "STU"
+      },
+      {
+        "number": 8,
+        "clue": "Add a bit more coffee to, say",
+        "answer": "TOPOFF"
+      },
+      {
+        "number": 9,
+        "clue": "Wear down",
+        "answer": "ERODE"
+      },
+      {
+        "number": 10,
+        "clue": "Trios tripled",
+        "answer": "NONETS"
+      },
+      {
+        "number": 11,
+        "clue": "Crime writer with an 87th Precinct series",
+        "answer": "EDMCBAIN"
+      },
+      {
+        "number": 12,
+        "clue": "Entertaining lavishly",
+        "answer": "REGALING"
+      },
+      {
+        "number": 13,
+        "clue": "Makes a comeback?",
+        "answer": "ANSWERS"
+      },
+      {
+        "number": 18,
+        "clue": "Jazz Age singer Smith",
+        "answer": "BESSIE"
+      },
+      {
+        "number": 24,
+        "clue": "Leia's brother",
+        "answer": "LUKE"
+      },
+      {
+        "number": 25,
+        "clue": "Schedule C, e.g.",
+        "answer": "IRSFORM"
+      },
+      {
+        "number": 26,
+        "clue": "Dined at home",
+        "answer": "ATEIN"
+      },
+      {
+        "number": 29,
+        "clue": "Hip-hop figures",
+        "answer": "MCS"
+      },
+      {
+        "number": 31,
+        "clue": "First emperor of Russia",
+        "answer": "PETER"
+      },
+      {
+        "number": 33,
+        "clue": "Protectively enveloped",
+        "answer": "COCOONED"
+      },
+      {
+        "number": 34,
+        "clue": "Ski lodge quaff",
+        "answer": "HOTTODDY"
+      },
+      {
+        "number": 35,
+        "clue": "Tennis's Nastase",
+        "answer": "ILIE"
+      },
+      {
+        "number": 36,
+        "clue": "Potent hallucinogen",
+        "answer": "LSD"
+      },
+      {
+        "number": 37,
+        "clue": "Eye inappropriately",
+        "answer": "LEERAT"
+      },
+      {
+        "number": 38,
+        "clue": "Ostentatious display",
+        "answer": "FANFARE"
+      },
+      {
+        "number": 41,
+        "clue": "Response to \"Gracias!\"",
+        "answer": "DENADA"
+      },
+      {
+        "number": 42,
+        "clue": "Undeserved charge",
+        "answer": "BADRAP"
+      },
+      {
+        "number": 43,
+        "clue": "Procure",
+        "answer": "ATTAIN"
+      },
+      {
+        "number": 44,
+        "clue": "Fillmore's successor",
+        "answer": "PIERCE"
+      },
+      {
+        "number": 45,
+        "clue": "Patisserie purchases",
+        "answer": "TORTES"
+      },
+      {
+        "number": 47,
+        "clue": "Chowderheads",
+        "answer": "DOPES"
+      },
+      {
+        "number": 49,
+        "clue": "The Jetsons' dog",
+        "answer": "ASTRO"
+      },
+      {
+        "number": 52,
+        "clue": "A whole lot",
+        "answer": "TONS"
+      },
+      {
+        "number": 55,
+        "clue": "Surface for salchows",
+        "answer": "ICE"
+      },
+      {
+        "number": 56,
+        "clue": "Swindle",
+        "answer": "CON"
+      }
+    ]
+  }
+}

@@ -1,0 +1,753 @@
+{
+  "id": "Swine Dining",
+  "version": "1.0",
+  "metadata": {
+    "title": "Swine Dining",
+    "author": "By Jeff Stillman/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2022-08-23",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "U"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "N"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 4,
+      "answer": "ASPS",
+      "clue": "Cobras at Karnak"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ALPACAS",
+      "clue": "Andes grazers"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "SILKHATS",
+      "clue": "Stovepipes, e.g."
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "PLACEMAT",
+      "clue": "Table setting item"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "SOY",
+      "clue": "Teriyaki sauce base"
+    },
+    {
+      "id": "a5",
+      "number": 5,
+      "direction": "across",
+      "x": 5,
+      "y": 0,
+      "length": 4,
+      "answer": "LPGA",
+      "clue": "Women's links org."
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "LEADON",
+      "clue": "Seduce"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "PCGAME",
+      "clue": "Minecraft, for one"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "GRIME",
+      "clue": "Engine buildup"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "AUG",
+      "clue": "Summer mo."
+    },
+    {
+      "id": "a9",
+      "number": 9,
+      "direction": "across",
+      "x": 10,
+      "y": 0,
+      "length": 5,
+      "answer": "SPIRE",
+      "clue": "Chapel topper"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "SEQUOIAS",
+      "clue": "Giants of California"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "PLUCK",
+      "clue": "Spirited courage"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "ITALIC",
+      "clue": "Inclined to emphasize?"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "RODENT",
+      "clue": "Marmot or mouse"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ENSIGN",
+      "clue": "Low naval rank"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 4,
+      "answer": "LILO",
+      "clue": "Friend of Disney's Stitch"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 5,
+      "y": 1,
+      "length": 4,
+      "answer": "ECRU",
+      "clue": "Light yellow-brown shade"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 10,
+      "y": 1,
+      "length": 5,
+      "answer": "ELTON",
+      "clue": "Rocker John"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Cobras at Karnak",
+        "answer": "ASPS"
+      },
+      {
+        "number": 5,
+        "clue": "Women's links org.",
+        "answer": "LPGA"
+      },
+      {
+        "number": 9,
+        "clue": "Chapel topper",
+        "answer": "SPIRE"
+      },
+      {
+        "number": 14,
+        "clue": "Friend of Disney's Stitch",
+        "answer": "LILO"
+      },
+      {
+        "number": 15,
+        "clue": "Light yellow-brown shade",
+        "answer": "ECRU"
+      },
+      {
+        "number": 16,
+        "clue": "Rocker John",
+        "answer": "ELTON"
+      },
+      {
+        "number": 17,
+        "clue": "Gets amped up at a bar?",
+        "answer": "PLAYSAGIG"
+      },
+      {
+        "number": 19,
+        "clue": "Targets of squats",
+        "answer": "QUADS"
+      },
+      {
+        "number": 20,
+        "clue": "Dog breeders' org.",
+        "answer": "AKC"
+      },
+      {
+        "number": 21,
+        "clue": "First father",
+        "answer": "ADAM"
+      },
+      {
+        "number": 22,
+        "clue": "Atomic centers",
+        "answer": "NUCLEI"
+      },
+      {
+        "number": 23,
+        "clue": "Compadre of Fidel",
+        "answer": "CHE"
+      },
+      {
+        "number": 24,
+        "clue": "College student's delight, often",
+        "answer": "HOMECOOKING"
+      },
+      {
+        "number": 26,
+        "clue": "Creator of Eeyore, Kanga and Roo",
+        "answer": "AAMILNE"
+      },
+      {
+        "number": 28,
+        "clue": "Flying start?",
+        "answer": "AVI"
+      },
+      {
+        "number": 29,
+        "clue": "Container for a doz. eggs",
+        "answer": "CTN"
+      },
+      {
+        "number": 30,
+        "clue": "Baseball card figure",
+        "answer": "STAT"
+      },
+      {
+        "number": 31,
+        "clue": "Stern with a bow",
+        "answer": "ISAAC"
+      },
+      {
+        "number": 33,
+        "clue": "Shines brighter than a star?",
+        "answer": "STEALSTHESHOW"
+      },
+      {
+        "number": 39,
+        "clue": "Alternative to buttons",
+        "answer": "SNAPS"
+      },
+      {
+        "number": 40,
+        "clue": "Footnote abbr.",
+        "answer": "IBID"
+      },
+      {
+        "number": 42,
+        "clue": "Grp. for Duke and Wake Forest",
+        "answer": "ACC"
+      },
+      {
+        "number": 45,
+        "clue": "Idiosyncrasy",
+        "answer": "TIC"
+      },
+      {
+        "number": 46,
+        "clue": "Programmer's output",
+        "answer": "APPCODE"
+      },
+      {
+        "number": 49,
+        "clue": "Weekend adventurer's need",
+        "answer": "BOATTRAILER"
+      },
+      {
+        "number": 52,
+        "clue": "Broad shoe spec",
+        "answer": "EEE"
+      },
+      {
+        "number": 53,
+        "clue": "Blood drive supporters",
+        "answer": "DONORS"
+      },
+      {
+        "number": 54,
+        "clue": "Chrysler Building's style",
+        "answer": "DECO"
+      },
+      {
+        "number": 55,
+        "clue": "Music genre",
+        "answer": "POP"
+      },
+      {
+        "number": 56,
+        "clue": "Extreme",
+        "answer": "ULTRA"
+      },
+      {
+        "number": 57,
+        "clue": "Greek or Asian meat offerings, or a description of the circled answers",
+        "answer": "PORKWRAPS"
+      },
+      {
+        "number": 59,
+        "clue": "Tread heavily",
+        "answer": "CLOMP"
+      },
+      {
+        "number": 60,
+        "clue": "\"The Thin Man\" canine",
+        "answer": "ASTA"
+      },
+      {
+        "number": 61,
+        "clue": "Branch headquarters?",
+        "answer": "TREE"
+      },
+      {
+        "number": 62,
+        "clue": "Radials, in Reading",
+        "answer": "TYRES"
+      },
+      {
+        "number": 63,
+        "clue": "Gave the slip",
+        "answer": "LOST"
+      },
+      {
+        "number": 64,
+        "clue": "Volcano overlooking the Mediterranean",
+        "answer": "ETNA"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Andes grazers",
+        "answer": "ALPACAS"
+      },
+      {
+        "number": 2,
+        "clue": "Stovepipes, e.g.",
+        "answer": "SILKHATS"
+      },
+      {
+        "number": 3,
+        "clue": "Table setting item",
+        "answer": "PLACEMAT"
+      },
+      {
+        "number": 4,
+        "clue": "Teriyaki sauce base",
+        "answer": "SOY"
+      },
+      {
+        "number": 5,
+        "clue": "Seduce",
+        "answer": "LEADON"
+      },
+      {
+        "number": 6,
+        "clue": "Minecraft, for one",
+        "answer": "PCGAME"
+      },
+      {
+        "number": 7,
+        "clue": "Engine buildup",
+        "answer": "GRIME"
+      },
+      {
+        "number": 8,
+        "clue": "Summer mo.",
+        "answer": "AUG"
+      },
+      {
+        "number": 9,
+        "clue": "Giants of California",
+        "answer": "SEQUOIAS"
+      },
+      {
+        "number": 10,
+        "clue": "Spirited courage",
+        "answer": "PLUCK"
+      },
+      {
+        "number": 11,
+        "clue": "Inclined to emphasize?",
+        "answer": "ITALIC"
+      },
+      {
+        "number": 12,
+        "clue": "Marmot or mouse",
+        "answer": "RODENT"
+      },
+      {
+        "number": 13,
+        "clue": "Low naval rank",
+        "answer": "ENSIGN"
+      },
+      {
+        "number": 18,
+        "clue": "Political satirist Mort",
+        "answer": "SAHL"
+      },
+      {
+        "number": 22,
+        "clue": "Astronomical sightings",
+        "answer": "NOVAE"
+      },
+      {
+        "number": 25,
+        "clue": "Checkout choice",
+        "answer": "CASH"
+      },
+      {
+        "number": 27,
+        "clue": "Followers' suffixes",
+        "answer": "ITES"
+      },
+      {
+        "number": 31,
+        "clue": "\"___ only money\"",
+        "answer": "ITS"
+      },
+      {
+        "number": 32,
+        "clue": "Smart",
+        "answer": "CHIC"
+      },
+      {
+        "number": 34,
+        "clue": "Raid products",
+        "answer": "ANTTRAPS"
+      },
+      {
+        "number": 35,
+        "clue": "Burrows",
+        "answer": "LAIRS"
+      },
+      {
+        "number": 36,
+        "clue": "Pet lovers' org.",
+        "answer": "SPCA"
+      },
+      {
+        "number": 37,
+        "clue": "The duck in \"Peter and the Wolf,\" e.g.",
+        "answer": "OBOEPART"
+      },
+      {
+        "number": 38,
+        "clue": "Like an unchallenged receiver",
+        "answer": "WIDEOPEN"
+      },
+      {
+        "number": 41,
+        "clue": "Like some fishing and diving",
+        "answer": "DEEPSEA"
+      },
+      {
+        "number": 42,
+        "clue": "Kidnap",
+        "answer": "ABDUCT"
+      },
+      {
+        "number": 43,
+        "clue": "In a calm manner",
+        "answer": "COOLLY"
+      },
+      {
+        "number": 44,
+        "clue": "Synagogue singer",
+        "answer": "CANTOR"
+      },
+      {
+        "number": 46,
+        "clue": "Warning signals",
+        "answer": "ALERTS"
+      },
+      {
+        "number": 47,
+        "clue": "Eat like a chicken",
+        "answer": "PECKAT"
+      },
+      {
+        "number": 48,
+        "clue": "Figurehead's spot",
+        "answer": "PROW"
+      },
+      {
+        "number": 50,
+        "clue": "Mel nicknamed \"The Velvet Fog\"",
+        "answer": "TORME"
+      },
+      {
+        "number": 51,
+        "clue": "Schoolyard retort",
+        "answer": "IDOSO"
+      },
+      {
+        "number": 57,
+        "clue": "Buddy",
+        "answer": "PAL"
+      },
+      {
+        "number": 58,
+        "clue": "AAA recommendation",
+        "answer": "RTE"
+      }
+    ]
+  }
+}

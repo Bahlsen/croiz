@@ -1,0 +1,773 @@
+{
+  "id": "Sporting Chance",
+  "version": "1.0",
+  "metadata": {
+    "title": "Sporting Chance",
+    "author": "By Carl Larson/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2020-04-07",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "L"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "P"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "T"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "M"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 5,
+      "answer": "OPRAH",
+      "clue": "She has her OWN network"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ORB",
+      "clue": "Sphere"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "PEASOUP",
+      "clue": "Dense fog"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "REDHOTS",
+      "clue": "Fiery candies"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 3,
+      "y": 0,
+      "length": 2,
+      "answer": "AVOIDS",
+      "clue": "Dodges"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "HENNA",
+      "clue": "Dye for temporary tattoos"
+    },
+    {
+      "id": "a6",
+      "number": 6,
+      "direction": "across",
+      "x": 6,
+      "y": 0,
+      "length": 5,
+      "answer": "POPPA",
+      "clue": "Old man, familiarly"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "PTAS",
+      "clue": "Mom-and-dad orgs."
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "ORD",
+      "clue": "Chicago airport letters"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "POODLE",
+      "clue": "Dog with a curly coat"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "PINION",
+      "clue": "Drivetrain gear"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 10,
+      "y": 0,
+      "length": 2,
+      "answer": "ASKEW",
+      "clue": "Off-kilter"
+    },
+    {
+      "id": "a11",
+      "number": 11,
+      "direction": "across",
+      "x": 12,
+      "y": 0,
+      "length": 3,
+      "answer": "LAP",
+      "clue": "It disappears on rising"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "LEVELUP",
+      "clue": "Improve a video game character's abilities"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "AMILATE",
+      "clue": "\"Did you start without me?\""
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "POM",
+      "clue": "Juice brand with a distinctive bottle"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 5,
+      "answer": "REEVE",
+      "clue": "Christopher of \"Superman\""
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 6,
+      "y": 1,
+      "length": 5,
+      "answer": "TROIS",
+      "clue": "Number of Mousquetaires in a Dumas book title"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 12,
+      "y": 1,
+      "length": 3,
+      "answer": "EMO",
+      "clue": "Broody rock genre"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "She has her OWN network",
+        "answer": "OPRAH"
+      },
+      {
+        "number": 6,
+        "clue": "Old man, familiarly",
+        "answer": "POPPA"
+      },
+      {
+        "number": 11,
+        "clue": "It disappears on rising",
+        "answer": "LAP"
+      },
+      {
+        "number": 14,
+        "clue": "Christopher of \"Superman\"",
+        "answer": "REEVE"
+      },
+      {
+        "number": 15,
+        "clue": "Number of Mousquetaires in a Dumas book title",
+        "answer": "TROIS"
+      },
+      {
+        "number": 16,
+        "clue": "Broody rock genre",
+        "answer": "EMO"
+      },
+      {
+        "number": 17,
+        "clue": "Big booty",
+        "answer": "BADONKADONK"
+      },
+      {
+        "number": 19,
+        "clue": "Energy",
+        "answer": "VIM"
+      },
+      {
+        "number": 20,
+        "clue": "Performs brilliantly",
+        "answer": "SHINES"
+      },
+      {
+        "number": 21,
+        "clue": "Shell variety?",
+        "answer": "DIESEL"
+      },
+      {
+        "number": 23,
+        "clue": "Having a knack for",
+        "answer": "GOODAT"
+      },
+      {
+        "number": 24,
+        "clue": "Audience's show of impatience",
+        "answer": "SLOWCLAP"
+      },
+      {
+        "number": 26,
+        "clue": "\"Aw, heck!\"",
+        "answer": "NUTS"
+      },
+      {
+        "number": 27,
+        "clue": "Like many wine barrels",
+        "answer": "OAKEN"
+      },
+      {
+        "number": 29,
+        "clue": "Camera setting",
+        "answer": "AUTO"
+      },
+      {
+        "number": 30,
+        "clue": "Co. with brown trucks",
+        "answer": "UPS"
+      },
+      {
+        "number": 31,
+        "clue": "Opposition member",
+        "answer": "ANTI"
+      },
+      {
+        "number": 32,
+        "clue": "Super stoked",
+        "answer": "AMPED"
+      },
+      {
+        "number": 33,
+        "clue": "Salsa alternative",
+        "answer": "CHEESEDIP"
+      },
+      {
+        "number": 36,
+        "clue": "Wooden strips",
+        "answer": "LATHS"
+      },
+      {
+        "number": 39,
+        "clue": "Broke ground?",
+        "answer": "HOED"
+      },
+      {
+        "number": 40,
+        "clue": "Hive inhabitant",
+        "answer": "BEE"
+      },
+      {
+        "number": 43,
+        "clue": "Alexa alternative",
+        "answer": "SIRI"
+      },
+      {
+        "number": 44,
+        "clue": "River through Lake Geneva",
+        "answer": "RHONE"
+      },
+      {
+        "number": 46,
+        "clue": "Is profitable",
+        "answer": "PAYS"
+      },
+      {
+        "number": 47,
+        "clue": "Repeating electronic rhythm sample",
+        "answer": "DRUMLOOP"
+      },
+      {
+        "number": 49,
+        "clue": "Polo need",
+        "answer": "MALLET"
+      },
+      {
+        "number": 51,
+        "clue": "Transplants in a greenhouse",
+        "answer": "REPOTS"
+      },
+      {
+        "number": 52,
+        "clue": "About 80% of the elements in the period table",
+        "answer": "METALS"
+      },
+      {
+        "number": 53,
+        "clue": "Regrettable",
+        "answer": "SAD"
+      },
+      {
+        "number": 54,
+        "clue": "Low probability of success, and a hint to the circled letters",
+        "answer": "OUTSIDESHOT"
+      },
+      {
+        "number": 57,
+        "clue": "Org. whose members are experts at driving",
+        "answer": "PGA"
+      },
+      {
+        "number": 58,
+        "clue": "Stationary",
+        "answer": "INERT"
+      },
+      {
+        "number": 59,
+        "clue": "Love at La Scala",
+        "answer": "AMORE"
+      },
+      {
+        "number": 60,
+        "clue": "Still",
+        "answer": "YET"
+      },
+      {
+        "number": 61,
+        "clue": "Vedder of Pearl Jam",
+        "answer": "EDDIE"
+      },
+      {
+        "number": 62,
+        "clue": "World of Warcraft spellcasters",
+        "answer": "MAGES"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Sphere",
+        "answer": "ORB"
+      },
+      {
+        "number": 2,
+        "clue": "Dense fog",
+        "answer": "PEASOUP"
+      },
+      {
+        "number": 3,
+        "clue": "Fiery candies",
+        "answer": "REDHOTS"
+      },
+      {
+        "number": 4,
+        "clue": "Dodges",
+        "answer": "AVOIDS"
+      },
+      {
+        "number": 5,
+        "clue": "Dye for temporary tattoos",
+        "answer": "HENNA"
+      },
+      {
+        "number": 6,
+        "clue": "Mom-and-dad orgs.",
+        "answer": "PTAS"
+      },
+      {
+        "number": 7,
+        "clue": "Chicago airport letters",
+        "answer": "ORD"
+      },
+      {
+        "number": 8,
+        "clue": "Dog with a curly coat",
+        "answer": "POODLE"
+      },
+      {
+        "number": 9,
+        "clue": "Drivetrain gear",
+        "answer": "PINION"
+      },
+      {
+        "number": 10,
+        "clue": "Off-kilter",
+        "answer": "ASKEW"
+      },
+      {
+        "number": 11,
+        "clue": "Improve a video game character's abilities",
+        "answer": "LEVELUP"
+      },
+      {
+        "number": 12,
+        "clue": "\"Did you start without me?\"",
+        "answer": "AMILATE"
+      },
+      {
+        "number": 13,
+        "clue": "Juice brand with a distinctive bottle",
+        "answer": "POM"
+      },
+      {
+        "number": 18,
+        "clue": "Compound used in solvents",
+        "answer": "KETONE"
+      },
+      {
+        "number": 22,
+        "clue": "Rogue",
+        "answer": "SCAMP"
+      },
+      {
+        "number": 23,
+        "clue": "Bearded antelope",
+        "answer": "GNU"
+      },
+      {
+        "number": 24,
+        "clue": "Place to get boots and bindings",
+        "answer": "SKISHOP"
+      },
+      {
+        "number": 25,
+        "clue": "Group of whales",
+        "answer": "POD"
+      },
+      {
+        "number": 28,
+        "clue": "Didn't fast",
+        "answer": "ATE"
+      },
+      {
+        "number": 31,
+        "clue": "Sounds at a fireworks display",
+        "answer": "AHS"
+      },
+      {
+        "number": 32,
+        "clue": "Foreign policy issue",
+        "answer": "AID"
+      },
+      {
+        "number": 33,
+        "clue": "Early rocket traveler",
+        "answer": "CHIMP"
+      },
+      {
+        "number": 34,
+        "clue": "Interminable time",
+        "answer": "EON"
+      },
+      {
+        "number": 35,
+        "clue": "Judged",
+        "answer": "DEEMED"
+      },
+      {
+        "number": 36,
+        "clue": "You might trip on it",
+        "answer": "LSD"
+      },
+      {
+        "number": 37,
+        "clue": "Result of too much cabin pressure?",
+        "answer": "AIRRAGE"
+      },
+      {
+        "number": 38,
+        "clue": "\"You said it!\"",
+        "answer": "TRUEDAT"
+      },
+      {
+        "number": 40,
+        "clue": "Player who passes on passing",
+        "answer": "BALLHOG"
+      },
+      {
+        "number": 41,
+        "clue": "Unsightly sight",
+        "answer": "EYESORE"
+      },
+      {
+        "number": 42,
+        "clue": "Superlative suffix",
+        "answer": "EST"
+      },
+      {
+        "number": 44,
+        "clue": "Plump",
+        "answer": "ROTUND"
+      },
+      {
+        "number": 45,
+        "clue": "Welcomed into one's home",
+        "answer": "HOSTED"
+      },
+      {
+        "number": 46,
+        "clue": "Ionized gas",
+        "answer": "PLASMA"
+      },
+      {
+        "number": 48,
+        "clue": "Sarge's superior",
+        "answer": "LOOIE"
+      },
+      {
+        "number": 50,
+        "clue": "Elite group",
+        "answer": "ATEAM"
+      },
+      {
+        "number": 52,
+        "clue": "Tiny bit",
+        "answer": "MITE"
+      },
+      {
+        "number": 53,
+        "clue": "Eve in \"Killing Eve,\" for one",
+        "answer": "SPY"
+      },
+      {
+        "number": 55,
+        "clue": "Indian honorific",
+        "answer": "SRI"
+      },
+      {
+        "number": 56,
+        "clue": "Some NFL linemen",
+        "answer": "TES"
+      }
+    ]
+  }
+}

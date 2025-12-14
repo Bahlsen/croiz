@@ -1,0 +1,773 @@
+{
+  "id": "Nuclear Core",
+  "version": "1.0",
+  "metadata": {
+    "title": "Nuclear Core",
+    "author": "By Peter Silsbee/Edited by Mike Shenk",
+    "copyright": "© The Wall Street Journal",
+    "date": "2023-11-13",
+    "special": "circle"
+  },
+  "rows": 2,
+  "cols": 15,
+  "cells": [
+    {
+      "x": 0,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "is_black": false,
+      "solution": "H"
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "is_black": false,
+      "solution": "G"
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 0,
+      "is_black": false,
+      "solution": "S"
+    },
+    {
+      "x": 10,
+      "y": 0,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 0,
+      "is_black": false,
+      "solution": "C"
+    },
+    {
+      "x": 12,
+      "y": 0,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 13,
+      "y": 0,
+      "is_black": false,
+      "solution": "N"
+    },
+    {
+      "x": 14,
+      "y": 0,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "is_black": false,
+      "solution": "D"
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "is_black": false,
+      "solution": "O"
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 8,
+      "y": 1,
+      "is_black": false,
+      "solution": "E"
+    },
+    {
+      "x": 9,
+      "y": 1,
+      "is_black": false,
+      "solution": "R"
+    },
+    {
+      "x": 10,
+      "y": 1,
+      "is_black": true,
+      "solution": null
+    },
+    {
+      "x": 11,
+      "y": 1,
+      "is_black": false,
+      "solution": "A"
+    },
+    {
+      "x": 12,
+      "y": 1,
+      "is_black": false,
+      "solution": "V"
+    },
+    {
+      "x": 13,
+      "y": 1,
+      "is_black": false,
+      "solution": "I"
+    },
+    {
+      "x": 14,
+      "y": 1,
+      "is_black": false,
+      "solution": "S"
+    }
+  ],
+  "entries": [
+    {
+      "id": "a1",
+      "number": 1,
+      "direction": "across",
+      "x": 0,
+      "y": 0,
+      "length": 3,
+      "answer": "ASH",
+      "clue": "Campfire remnant"
+    },
+    {
+      "id": "d1",
+      "number": 1,
+      "direction": "down",
+      "x": 0,
+      "y": 0,
+      "length": 2,
+      "answer": "ARDOR",
+      "clue": "Passion"
+    },
+    {
+      "id": "d2",
+      "number": 2,
+      "direction": "down",
+      "x": 1,
+      "y": 0,
+      "length": 2,
+      "answer": "SEENO",
+      "clue": "\"___ Evil\" (1971 Mia Farrow movie)"
+    },
+    {
+      "id": "d3",
+      "number": 3,
+      "direction": "down",
+      "x": 2,
+      "y": 0,
+      "length": 2,
+      "answer": "HOMEWORLD",
+      "clue": "Birthplace of science fiction?"
+    },
+    {
+      "id": "a4",
+      "number": 4,
+      "direction": "across",
+      "x": 4,
+      "y": 0,
+      "length": 6,
+      "answer": "RIDGES",
+      "clue": "Corduroy features"
+    },
+    {
+      "id": "d4",
+      "number": 4,
+      "direction": "down",
+      "x": 4,
+      "y": 0,
+      "length": 2,
+      "answer": "RAM",
+      "clue": "Zodiac mammal"
+    },
+    {
+      "id": "d5",
+      "number": 5,
+      "direction": "down",
+      "x": 5,
+      "y": 0,
+      "length": 2,
+      "answer": "IDOL",
+      "clue": "Revered star"
+    },
+    {
+      "id": "d6",
+      "number": 6,
+      "direction": "down",
+      "x": 6,
+      "y": 0,
+      "length": 2,
+      "answer": "DODECA",
+      "clue": "Tetra- : 4 :: ___ : 12"
+    },
+    {
+      "id": "d7",
+      "number": 7,
+      "direction": "down",
+      "x": 7,
+      "y": 0,
+      "length": 2,
+      "answer": "GRETA",
+      "clue": "Screen legend Garbo"
+    },
+    {
+      "id": "d8",
+      "number": 8,
+      "direction": "down",
+      "x": 8,
+      "y": 0,
+      "length": 2,
+      "answer": "EEL",
+      "clue": "Snaky fish"
+    },
+    {
+      "id": "d9",
+      "number": 9,
+      "direction": "down",
+      "x": 9,
+      "y": 0,
+      "length": 2,
+      "answer": "SRS",
+      "clue": "Fourth-yr. students"
+    },
+    {
+      "id": "a10",
+      "number": 10,
+      "direction": "across",
+      "x": 11,
+      "y": 0,
+      "length": 4,
+      "answer": "CANE",
+      "clue": "Walking aid"
+    },
+    {
+      "id": "d10",
+      "number": 10,
+      "direction": "down",
+      "x": 11,
+      "y": 0,
+      "length": 2,
+      "answer": "CASUAL",
+      "clue": "Not at all formal"
+    },
+    {
+      "id": "d11",
+      "number": 11,
+      "direction": "down",
+      "x": 12,
+      "y": 0,
+      "length": 2,
+      "answer": "AVOID",
+      "clue": "Steer clear of"
+    },
+    {
+      "id": "d12",
+      "number": 12,
+      "direction": "down",
+      "x": 13,
+      "y": 0,
+      "length": 2,
+      "answer": "NINJA",
+      "clue": "Stealthy assassin"
+    },
+    {
+      "id": "d13",
+      "number": 13,
+      "direction": "down",
+      "x": 14,
+      "y": 0,
+      "length": 2,
+      "answer": "ESSAY",
+      "clue": "Class writing assignment"
+    },
+    {
+      "id": "a14",
+      "number": 14,
+      "direction": "across",
+      "x": 0,
+      "y": 1,
+      "length": 3,
+      "answer": "REO",
+      "clue": "Early auto"
+    },
+    {
+      "id": "a15",
+      "number": 15,
+      "direction": "across",
+      "x": 4,
+      "y": 1,
+      "length": 6,
+      "answer": "ADORER",
+      "clue": "Avid fan"
+    },
+    {
+      "id": "a16",
+      "number": 16,
+      "direction": "across",
+      "x": 11,
+      "y": 1,
+      "length": 4,
+      "answer": "AVIS",
+      "clue": "Alamo rival"
+    }
+  ],
+  "clues": {
+    "across": [
+      {
+        "number": 1,
+        "clue": "Campfire remnant",
+        "answer": "ASH"
+      },
+      {
+        "number": 4,
+        "clue": "Corduroy features",
+        "answer": "RIDGES"
+      },
+      {
+        "number": 10,
+        "clue": "Walking aid",
+        "answer": "CANE"
+      },
+      {
+        "number": 14,
+        "clue": "Early auto",
+        "answer": "REO"
+      },
+      {
+        "number": 15,
+        "clue": "Avid fan",
+        "answer": "ADORER"
+      },
+      {
+        "number": 16,
+        "clue": "Alamo rival",
+        "answer": "AVIS"
+      },
+      {
+        "number": 17,
+        "clue": "Some cars at dealerships",
+        "answer": "DEMOMODELS"
+      },
+      {
+        "number": 19,
+        "clue": "Some relatives (not, strictly speaking, part of the puzzle's theme)",
+        "answer": "SONS"
+      },
+      {
+        "number": 20,
+        "clue": "First-year law school student",
+        "answer": "ONEL"
+      },
+      {
+        "number": 21,
+        "clue": "\"___ them eat cake\"",
+        "answer": "LET"
+      },
+      {
+        "number": 22,
+        "clue": "Board featuring an alphabet",
+        "answer": "OUIJA"
+      },
+      {
+        "number": 23,
+        "clue": "Inclined to cause a ruckus",
+        "answer": "ROWDY"
+      },
+      {
+        "number": 25,
+        "clue": "July 1 observation",
+        "answer": "CANADADAY"
+      },
+      {
+        "number": 28,
+        "clue": "Drama with divas",
+        "answer": "OPERA"
+      },
+      {
+        "number": 30,
+        "clue": "Pastoral poem",
+        "answer": "IDYL"
+      },
+      {
+        "number": 31,
+        "clue": "The last two words of this clue, for example",
+        "answer": "PHRASE"
+      },
+      {
+        "number": 33,
+        "clue": "Woes",
+        "answer": "ILLS"
+      },
+      {
+        "number": 34,
+        "clue": "Amorphous mass",
+        "answer": "WAD"
+      },
+      {
+        "number": 37,
+        "clue": "Minnow's beaching site",
+        "answer": "GILLIGANSISLAND"
+      },
+      {
+        "number": 40,
+        "clue": "Put two and two together",
+        "answer": "ADD"
+      },
+      {
+        "number": 41,
+        "clue": "Potter's oven",
+        "answer": "KILN"
+      },
+      {
+        "number": 42,
+        "clue": "What to do while you grin",
+        "answer": "BEARIT"
+      },
+      {
+        "number": 43,
+        "clue": "Oscar winner Bancroft",
+        "answer": "ANNE"
+      },
+      {
+        "number": 44,
+        "clue": "Take the wrong way?",
+        "answer": "USURP"
+      },
+      {
+        "number": 45,
+        "clue": "Hearty cuts of beef",
+        "answer": "RIBROASTS"
+      },
+      {
+        "number": 49,
+        "clue": "Hit half of a single",
+        "answer": "SIDEA"
+      },
+      {
+        "number": 52,
+        "clue": "Bolt from a crossbow",
+        "answer": "ARROW"
+      },
+      {
+        "number": 53,
+        "clue": "\"According to me,\" online",
+        "answer": "IMO"
+      },
+      {
+        "number": 55,
+        "clue": "Some Dada works",
+        "answer": "ARPS"
+      },
+      {
+        "number": 56,
+        "clue": "Palindromic honorific",
+        "answer": "MAAM"
+      },
+      {
+        "number": 57,
+        "clue": "Kinship, and what holds this puzzle's theme together",
+        "answer": "FAMILYTIES"
+      },
+      {
+        "number": 60,
+        "clue": "\"At Last\" singer James",
+        "answer": "ETTA"
+      },
+      {
+        "number": 61,
+        "clue": "Exact retribution for",
+        "answer": "AVENGE"
+      },
+      {
+        "number": 62,
+        "clue": "Neckline shape",
+        "answer": "VEE"
+      },
+      {
+        "number": 63,
+        "clue": "Famous Scottish loch",
+        "answer": "NESS"
+      },
+      {
+        "number": 64,
+        "clue": "Kilt pattern",
+        "answer": "TARTAN"
+      },
+      {
+        "number": 65,
+        "clue": "D.C. clock setting",
+        "answer": "EST"
+      }
+    ],
+    "down": [
+      {
+        "number": 1,
+        "clue": "Passion",
+        "answer": "ARDOR"
+      },
+      {
+        "number": 2,
+        "clue": "\"___ Evil\" (1971 Mia Farrow movie)",
+        "answer": "SEENO"
+      },
+      {
+        "number": 3,
+        "clue": "Birthplace of science fiction?",
+        "answer": "HOMEWORLD"
+      },
+      {
+        "number": 4,
+        "clue": "Zodiac mammal",
+        "answer": "RAM"
+      },
+      {
+        "number": 5,
+        "clue": "Revered star",
+        "answer": "IDOL"
+      },
+      {
+        "number": 6,
+        "clue": "Tetra- : 4 :: ___ : 12",
+        "answer": "DODECA"
+      },
+      {
+        "number": 7,
+        "clue": "Screen legend Garbo",
+        "answer": "GRETA"
+      },
+      {
+        "number": 8,
+        "clue": "Snaky fish",
+        "answer": "EEL"
+      },
+      {
+        "number": 9,
+        "clue": "Fourth-yr. students",
+        "answer": "SRS"
+      },
+      {
+        "number": 10,
+        "clue": "Not at all formal",
+        "answer": "CASUAL"
+      },
+      {
+        "number": 11,
+        "clue": "Steer clear of",
+        "answer": "AVOID"
+      },
+      {
+        "number": 12,
+        "clue": "Stealthy assassin",
+        "answer": "NINJA"
+      },
+      {
+        "number": 13,
+        "clue": "Class writing assignment",
+        "answer": "ESSAY"
+      },
+      {
+        "number": 18,
+        "clue": "School bud, perhaps",
+        "answer": "OLDPAL"
+      },
+      {
+        "number": 22,
+        "clue": "Hero of a Homer epic",
+        "answer": "ODYSSEUS"
+      },
+      {
+        "number": 24,
+        "clue": "\"You don't have to tell me\"",
+        "answer": "YESIKNOW"
+      },
+      {
+        "number": 26,
+        "clue": "Lofgren of the E Street Band",
+        "answer": "NILS"
+      },
+      {
+        "number": 27,
+        "clue": "Abandons the script",
+        "answer": "ADLIBS"
+      },
+      {
+        "number": 29,
+        "clue": "Capital of Saskatchewan",
+        "answer": "REGINA"
+      },
+      {
+        "number": 31,
+        "clue": "Org. that tracks eagles?",
+        "answer": "PGA"
+      },
+      {
+        "number": 32,
+        "clue": "Stayed out of sight",
+        "answer": "HID"
+      },
+      {
+        "number": 33,
+        "clue": "Quaint place to stay",
+        "answer": "INN"
+      },
+      {
+        "number": 34,
+        "clue": "Enterprise mover",
+        "answer": "WARPDRIVE"
+      },
+      {
+        "number": 35,
+        "clue": "Singer DiFranco",
+        "answer": "ANI"
+      },
+      {
+        "number": 36,
+        "clue": "Banned pesticide",
+        "answer": "DDT"
+      },
+      {
+        "number": 38,
+        "clue": "Pints at pubs",
+        "answer": "ALES"
+      },
+      {
+        "number": 39,
+        "clue": "Rodeo rope",
+        "answer": "LARIAT"
+      },
+      {
+        "number": 43,
+        "clue": "Baking emissions",
+        "answer": "AROMAS"
+      },
+      {
+        "number": 44,
+        "clue": "Major money maker?",
+        "answer": "USMINT"
+      },
+      {
+        "number": 45,
+        "clue": "Noodles made with kansui",
+        "answer": "RAMEN"
+      },
+      {
+        "number": 46,
+        "clue": "Ticked off",
+        "answer": "IRATE"
+      },
+      {
+        "number": 47,
+        "clue": "Short sausages?",
+        "answer": "BRATS"
+      },
+      {
+        "number": 48,
+        "clue": "Microwave feature",
+        "answer": "TIMER"
+      },
+      {
+        "number": 50,
+        "clue": "Alternatives to foils and sabers",
+        "answer": "EPEES"
+      },
+      {
+        "number": 51,
+        "clue": "Valuable thing",
+        "answer": "ASSET"
+      },
+      {
+        "number": 54,
+        "clue": "Gymnast Korbut",
+        "answer": "OLGA"
+      },
+      {
+        "number": 57,
+        "clue": "No-no for Jack Sprat",
+        "answer": "FAT"
+      },
+      {
+        "number": 58,
+        "clue": "\"Selma\" director DuVernay",
+        "answer": "AVA"
+      },
+      {
+        "number": 59,
+        "clue": "Desire",
+        "answer": "YEN"
+      }
+    ]
+  }
+}
