@@ -6,7 +6,7 @@ Run from repo root (or adapt paths):
 python frontend/tools/generate_puzzles_index.py
 
 This will walk `frontend/assets/data` and write `frontend/assets/data/puzzles.json`
-with a JSON array of relative POSIX paths (e.g. "assets/data/tribune/1999/tri1999-01-01.json").
+with a JSON array of POSIX paths relative to `assets/data` (e.g. "tribune/1999/tri1999-01-01.json").
 """
 import os
 import json
@@ -20,9 +20,10 @@ for dirpath, dirnames, filenames in os.walk(ASSETS_DATA):
     for f in filenames:
         if not f.lower().endswith('.json'):
             continue
-        rel = os.path.relpath(os.path.join(dirpath, f), ROOT).replace('\\', '/')
+        # path relative to the `assets/data` folder (no leading 'assets/' or 'data/')
+        rel = os.path.relpath(os.path.join(dirpath, f), ASSETS_DATA).replace('\\', '/')
         # skip the index file itself if it exists
-        if rel == 'assets/data/puzzles.json':
+        if rel == 'puzzles.json':
             continue
         paths.append(rel)
 

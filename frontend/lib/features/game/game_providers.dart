@@ -9,6 +9,7 @@ import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
+import 'package:croiz/features/puzzles/puzzles_provider.dart';
 
 /// Duration used to schedule clearing of flashed cells after animations.
 /// Tests can override this provider to `Duration.zero` to avoid scheduling
@@ -272,8 +273,19 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
     throw StateError('No puzzle selected');
   }
 
+  // Strict behaviour: resolve the selected id by looking it up in the
+  // precomputed index. If the id is not present in the index we fail
+  // loudly instead of attempting heuristic fallbacks.
+  final index = await ref.watch(puzzlesProvider.future);
+  final match = index.firstWhere(
+    (p) => p.id == selected,
+    orElse: () =>
+        throw StateError('Selected puzzle id not found in index: $selected'),
+  );
+  // Use the indexed path (normalized by providers) and build a proper
+  // asset key for `rootBundle` by prefixing `assets/data/`.
+  final assetPath = 'assets/data/${match.path}';
   final loader = ref.read(puzzleAssetLoaderProvider);
-  final assetPath = assetPathForPuzzleId(selected);
   return loader(assetPath);
 });
 

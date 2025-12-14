@@ -26,7 +26,11 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [puzzlesProvider.overrideWithValue(const AsyncValue.data(<PuzzleDescriptor>[]))],
+          overrides: [
+            puzzlesProvider.overrideWithValue(
+              const AsyncValue.data(<PuzzleDescriptor>[]),
+            ),
+          ],
           child: MaterialApp.router(routerConfig: router),
         ),
       );

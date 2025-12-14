@@ -11,7 +11,11 @@ import 'package:croiz/domain/entities/game_entities.dart';
 void main() {
   testWidgets('Selecting a puzzle loads board and navigates', (tester) async {
     final sample = [
-      PuzzleDescriptor(id: 'sample1', title: 'Sample', path: 'assets/data/sample1.json'),
+      PuzzleDescriptor(
+        id: 'sample1',
+        title: 'Sample',
+        path: 'assets/data/sample1.json',
+      ),
     ];
 
     final fakeBoard = GameBoard(
@@ -29,12 +33,14 @@ void main() {
     final router = GoRouter(
       initialLocation: '/puzzles',
       routes: [
-        GoRoute(path: '/puzzles', builder: (context, state) => const PuzzlesListPage()),
+        GoRoute(
+          path: '/puzzles',
+          builder: (context, state) => const PuzzlesListPage(),
+        ),
         GoRoute(
           path: '/crossword',
-          builder: (context, state) => CrosswordScreen(
-            puzzleId: state.uri.queryParameters['id'],
-          ),
+          builder: (context, state) =>
+              CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
         ),
       ],
     );
@@ -43,12 +49,20 @@ void main() {
       ProviderScope(
         overrides: [
           puzzlesProvider.overrideWithValue(AsyncValue.data(sample)),
-          puzzleAssetLoaderProvider.overrideWithValue((String path) async => fakeBoard),
+          puzzleAssetLoaderProvider.overrideWithValue(
+            (String path) async => fakeBoard,
+          ),
         ],
         child: MaterialApp.router(routerConfig: router),
       ),
     );
 
+    await tester.pumpAndSettle();
+
+    // Expand nested origin/year tiles to reveal the puzzle
+    await tester.tap(find.text('unknown').at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('unknown').at(1));
     await tester.pumpAndSettle();
 
     expect(find.text('Sample'), findsOneWidget);

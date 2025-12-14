@@ -20,6 +20,12 @@ void main() {
       ),
     );
 
+    // Expand nested tiles to reveal list items
+    await tester.tap(find.text('unknown').at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('unknown').at(1));
+    await tester.pumpAndSettle();
+
     expect(find.text('Puzzles'), findsOneWidget);
     expect(find.text('One'), findsOneWidget);
     expect(find.text('Two'), findsOneWidget);

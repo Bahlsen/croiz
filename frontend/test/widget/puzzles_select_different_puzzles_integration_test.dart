@@ -74,6 +74,11 @@ void main() {
     );
 
     await tester.pumpAndSettle();
+    // Expand nested origin/year tiles to reveal puzzles
+    await tester.tap(find.text('unknown').at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('unknown').at(1));
+    await tester.pumpAndSettle();
 
     // Select first puzzle.
     await tester.tap(find.text('Puzzle 1'));
@@ -84,6 +89,11 @@ void main() {
     await tester.tap(find.byTooltip('Puzzles'));
     await tester.pumpAndSettle();
     expect(find.text('Puzzles'), findsOneWidget);
+    // Re-expand nested tiles to reveal puzzles again, then select second puzzle.
+    await tester.tap(find.text('unknown').at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('unknown').at(1));
+    await tester.pumpAndSettle();
 
     // Select second puzzle.
     await tester.tap(find.text('Puzzle 2'));

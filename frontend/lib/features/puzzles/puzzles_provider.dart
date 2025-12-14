@@ -35,6 +35,16 @@ String puzzleTokenFromAssetPath(String assetPath) {
   }
   return file;
 }
+String _normalizeIndexedPath(String assetPath) {
+  // Strict behaviour: indexed paths MUST be relative to `assets/data/`.
+  // Do not perform any legacy fallback or normalization here. If the
+  // generator produced a path with a leading `assets/` or `data/`, fail
+  // loudly so the index generation can be corrected.
+  if (assetPath.startsWith('assets/') || assetPath.startsWith('data/')) {
+    throw StateError('Indexed path must be relative to assets/data/: $assetPath');
+  }
+  return assetPath;
+}
 
 /// Extract a display title from puzzle JSON.
 ///
@@ -80,7 +90,9 @@ String puzzleTitleFromJson(
 final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
   // Prefer a precomputed origins summary if present.
   try {
-    final raw = await rootBundle.loadString('assets/data/puzzles_index_origins.json');
+    final raw = await rootBundle.loadString(
+      'assets/data/puzzles_index_origins.json',
+    );
     final parsed = jsonDecode(raw);
     if (parsed is List) {
       final out = <String>[];
@@ -123,38 +135,45 @@ List<String> _parseOriginsFromIndex(String raw) {
 }
 
 /// Provider to load the compact index for a single origin lazily.
-final originIndexProvider = FutureProvider.family<List<PuzzleDescriptor>, String>((ref, origin) async {
-  // Try per-origin file first.
-  final originPath = 'assets/data/puzzles_index_by_origin/$origin.json';
-  try {
-    final raw = await rootBundle.loadString(originPath);
-    final parsed = jsonDecode(raw);
-    if (parsed is List) {
-      final out = <PuzzleDescriptor>[];
-      for (final e in parsed) {
-        if (e is Map<String, dynamic>) {
-          out.add(PuzzleDescriptor(
-            id: e['id']?.toString() ?? '',
-            title: e['title']?.toString() ?? '',
-            path: e['path']?.toString() ?? '',
-            subtitle: e['subtitle']?.toString() ?? '',
-            origin: e['origin']?.toString() ?? origin,
-            year: e['year']?.toString() ?? '',
-          ));
+final originIndexProvider =
+    FutureProvider.family<List<PuzzleDescriptor>, String>((ref, origin) async {
+      // Try per-origin file first.
+      final originPath = 'assets/data/puzzles_index_by_origin/$origin.json';
+      try {
+        final raw = await rootBundle.loadString(originPath);
+        final parsed = jsonDecode(raw);
+        if (parsed is List) {
+          final out = <PuzzleDescriptor>[];
+          for (final e in parsed) {
+            if (e is Map<String, dynamic>) {
+              final rawPath = e['path']?.toString() ?? '';
+              out.add(
+                PuzzleDescriptor(
+                  id: e['id']?.toString() ?? '',
+                  title: e['title']?.toString() ?? '',
+                  path: _normalizeIndexedPath(rawPath),
+                  subtitle: e['subtitle']?.toString() ?? '',
+                  origin: e['origin']?.toString() ?? origin,
+                  year: e['year']?.toString() ?? '',
+                ),
+              );
+            }
+          }
+          out.sort((a, b) => a.title.compareTo(b.title));
+          return out;
         }
+      } on Object catch (_) {
+        // ignore and fallback
       }
-      out.sort((a, b) => a.title.compareTo(b.title));
-      return out;
-    }
-  } on Object catch (_) {
-    // ignore and fallback
-  }
 
-  // Fallback: filter master index (parse off UI thread)
-  final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
-  final list = await compute(_parseOriginListFromIndex, {'raw': raw, 'origin': origin});
-  return list;
-});
+      // Fallback: filter master index (parse off UI thread)
+      final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
+      final list = await compute(_parseOriginListFromIndex, {
+        'raw': raw,
+        'origin': origin,
+      });
+      return list;
+    });
 
 List<PuzzleDescriptor> _parseOriginListFromIndex(Map<String, String> args) {
   final raw = args['raw']!;
@@ -166,14 +185,17 @@ List<PuzzleDescriptor> _parseOriginListFromIndex(Map<String, String> args) {
       if (e is Map<String, dynamic>) {
         final o = e['origin']?.toString() ?? 'unknown';
         if (o == origin) {
-          out.add(PuzzleDescriptor(
-            id: e['id']?.toString() ?? '',
-            title: e['title']?.toString() ?? '',
-            path: e['path']?.toString() ?? '',
-            subtitle: e['subtitle']?.toString() ?? '',
-            origin: o,
-            year: e['year']?.toString() ?? '',
-          ));
+          final rawPath = e['path']?.toString() ?? '';
+          out.add(
+            PuzzleDescriptor(
+              id: e['id']?.toString() ?? '',
+              title: e['title']?.toString() ?? '',
+              path: _normalizeIndexedPath(rawPath),
+              subtitle: e['subtitle']?.toString() ?? '',
+              origin: o,
+              year: e['year']?.toString() ?? '',
+            ),
+          );
         }
       }
     }
@@ -194,15 +216,18 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   final out = <PuzzleDescriptor>[];
   if (parsed is List) {
     for (final e in parsed) {
-      if (e is Map<String, dynamic>) {
-        out.add(PuzzleDescriptor(
-          id: e['id']?.toString() ?? '',
-          title: e['title']?.toString() ?? '',
-          path: e['path']?.toString() ?? '',
-          subtitle: e['subtitle']?.toString() ?? '',
-          origin: e['origin']?.toString() ?? '',
-          year: e['year']?.toString() ?? '',
-        ));
+        if (e is Map<String, dynamic>) {
+        final rawPath = e['path']?.toString() ?? '';
+        out.add(
+          PuzzleDescriptor(
+            id: e['id']?.toString() ?? '',
+            title: e['title']?.toString() ?? '',
+            path: _normalizeIndexedPath(rawPath),
+            subtitle: e['subtitle']?.toString() ?? '',
+            origin: e['origin']?.toString() ?? '',
+            year: e['year']?.toString() ?? '',
+          ),
+        );
       }
     }
   }
@@ -221,20 +246,26 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
 }
 
 /// Loads full metadata for a single puzzle asset path on demand.
-final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((ref, path) async {
-  final token = puzzleTokenFromAssetPath(path);
-  try {
-    final data = jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
+final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>(
+  (
+    ref,
+    path,
+  ) async {
+    // `path` here is the normalized indexed path (no leading `assets/`).
+    final token = puzzleTokenFromAssetPath(path);
+    try {
+      // `path` is relative to `assets/data/` (e.g. "crosswordsclub/2001/cc-1162.json").
+      final data = jsonDecode(await rootBundle.loadString('assets/data/$path')) as Map<String, dynamic>;
     final title = puzzleTitleFromJson(data, fallback: token);
     final subtitle = (data['subtitle'] ?? '').toString();
     final parts = path.split('/');
     var origin = 'unknown';
     var year = '';
-    if (parts.length >= 3) {
-      origin = parts[2];
+    if (parts.isNotEmpty) {
+      origin = parts[0];
     }
-    if (parts.length >= 4) {
-      year = parts[3];
+    if (parts.length >= 2) {
+      year = parts[1];
     }
     return PuzzleDescriptor(
       id: token,
@@ -249,11 +280,11 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
     final parts = path.split('/');
     var origin = 'unknown';
     var year = '';
-    if (parts.length >= 3) {
-      origin = parts[2];
+    if (parts.isNotEmpty) {
+      origin = parts[0];
     }
-    if (parts.length >= 4) {
-      year = parts[3];
+    if (parts.length >= 2) {
+      year = parts[1];
     }
     return PuzzleDescriptor(
       id: token,

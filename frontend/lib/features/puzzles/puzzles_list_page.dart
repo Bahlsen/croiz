@@ -52,46 +52,82 @@ class PuzzlesListPage extends ConsumerWidget {
                         final yearKeys = years.keys.toList()..sort();
                         return Column(
                           children: yearKeys.map((year) {
-                            final list = years[year]!..sort((a, b) => a.title.compareTo(b.title));
+                            final list = years[year]!
+                              ..sort((a, b) => a.title.compareTo(b.title));
                             return ExpansionTile(
                               title: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Text(year, style: Theme.of(context).textTheme.bodySmall),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: Text(
+                                  year,
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
                               ),
                               initiallyExpanded: false,
                               children: list.map((p) {
-                                final token = p.path.split('/').last.replaceAll('.json', '');
+                                final token = p.path
+                                    .split('/')
+                                    .last
+                                    .replaceAll('.json', '');
                                 if (p.title != token) {
                                   return ListTile(
                                     title: Text(p.title),
-                                    subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
+                                    subtitle: p.subtitle.isNotEmpty
+                                        ? Text(p.subtitle)
+                                        : null,
                                     trailing: const Icon(Icons.chevron_right),
                                     onTap: () {
-                                      ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
+                                      ref
+                                          .read(
+                                            selectedPuzzleIdProvider.notifier,
+                                          )
+                                          .value = p
+                                          .id;
                                       final id = Uri.encodeComponent(p.id);
                                       context.go('/crossword?id=$id');
                                     },
                                   );
                                 }
-                                final meta = ref.watch(puzzleMetadataProvider(p.path));
+                                final meta = ref.watch(
+                                  puzzleMetadataProvider(p.path),
+                                );
                                 return meta.when(
                                   loading: () => ListTile(
                                     title: Text(p.title),
                                     subtitle: const Text('Loading...'),
-                                    trailing: const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)),
+                                    trailing: const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
                                   ),
                                   error: (_, __) => ListTile(
                                     title: Text(p.title),
-                                    subtitle: const Text('Error loading metadata'),
-                                    trailing: const Icon(Icons.error, color: Colors.red),
+                                    subtitle: const Text(
+                                      'Error loading metadata',
+                                    ),
+                                    trailing: const Icon(
+                                      Icons.error,
+                                      color: Colors.red,
+                                    ),
                                     onTap: () {},
                                   ),
                                   data: (full) => ListTile(
                                     title: Text(full.title),
-                                    subtitle: full.subtitle.isNotEmpty ? Text(full.subtitle) : null,
+                                    subtitle: full.subtitle.isNotEmpty
+                                        ? Text(full.subtitle)
+                                        : null,
                                     trailing: const Icon(Icons.chevron_right),
                                     onTap: () {
-                                      ref.read(selectedPuzzleIdProvider.notifier).value = full.id;
+                                      ref
+                                          .read(
+                                            selectedPuzzleIdProvider.notifier,
+                                          )
+                                          .value = full
+                                          .id;
                                       final id = Uri.encodeComponent(full.id);
                                       context.go('/crossword?id=$id');
                                     },
@@ -113,7 +149,11 @@ class PuzzlesListPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildFromItems(BuildContext context, WidgetRef ref, List<PuzzleDescriptor> items) {
+  Widget _buildFromItems(
+    BuildContext context,
+    WidgetRef ref,
+    List<PuzzleDescriptor> items,
+  ) {
     // Group by origin then by year
     final groups = <String, Map<String, List<PuzzleDescriptor>>>{};
     for (final p in items) {
@@ -124,7 +164,7 @@ class PuzzlesListPage extends ConsumerWidget {
 
     final originKeys = List.of(groups.keys)..sort();
 
-                        return ListView.builder(
+    return ListView.builder(
       shrinkWrap: true,
       physics: const AlwaysScrollableScrollPhysics(),
       itemCount: originKeys.length,
@@ -136,7 +176,8 @@ class PuzzlesListPage extends ConsumerWidget {
           title: Text(origin),
           initiallyExpanded: false,
           children: yearKeys.map((year) {
-            final list = List.of(yearsMap[year]!)..sort((a, b) => a.title.compareTo(b.title));
+            final list = List.of(yearsMap[year]!)
+              ..sort((a, b) => a.title.compareTo(b.title));
             return ExpansionTile(
               initiallyExpanded: false,
               title: Padding(
@@ -151,14 +192,20 @@ class PuzzlesListPage extends ConsumerWidget {
                     itemCount: list.length,
                     itemBuilder: (context, i) {
                       final p = list[i];
-                      final token = p.path.split('/').last.replaceAll('.json', '');
+                      final token = p.path
+                          .split('/')
+                          .last
+                          .replaceAll('.json', '');
                       if (p.title != token) {
                         return ListTile(
                           title: Text(p.title),
-                          subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
+                          subtitle: p.subtitle.isNotEmpty
+                              ? Text(p.subtitle)
+                              : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () {
-                            ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
+                            ref.read(selectedPuzzleIdProvider.notifier).value =
+                                p.id;
                             final id = Uri.encodeComponent(p.id);
                             context.go('/crossword?id=$id');
                           },
@@ -170,7 +217,11 @@ class PuzzlesListPage extends ConsumerWidget {
                         loading: () => ListTile(
                           title: Text(p.title),
                           subtitle: const Text('Loading...'),
-                          trailing: const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2)),
+                          trailing: const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         ),
                         error: (_, __) => ListTile(
                           title: Text(p.title),
@@ -180,10 +231,13 @@ class PuzzlesListPage extends ConsumerWidget {
                         ),
                         data: (full) => ListTile(
                           title: Text(full.title),
-                          subtitle: full.subtitle.isNotEmpty ? Text(full.subtitle) : null,
+                          subtitle: full.subtitle.isNotEmpty
+                              ? Text(full.subtitle)
+                              : null,
                           trailing: const Icon(Icons.chevron_right),
                           onTap: () {
-                            ref.read(selectedPuzzleIdProvider.notifier).value = full.id;
+                            ref.read(selectedPuzzleIdProvider.notifier).value =
+                                full.id;
                             final id = Uri.encodeComponent(full.id);
                             context.go('/crossword?id=$id');
                           },
@@ -202,7 +256,7 @@ class PuzzlesListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-      appBar: AppBar(title: const Text('Puzzles')),
-      body: _buildList(context, ref),
-    );
+    appBar: AppBar(title: const Text('Puzzles')),
+    body: _buildList(context, ref),
+  );
 }

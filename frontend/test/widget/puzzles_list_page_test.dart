@@ -18,6 +18,12 @@ void main() {
       ),
     );
 
+    // Expand origin and year tiles to reveal list items
+    await tester.tap(find.text('unknown').at(0));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('unknown').at(1));
+    await tester.pumpAndSettle();
+
     expect(find.text('One'), findsOneWidget);
     expect(find.text('Two'), findsOneWidget);
     expect(find.byIcon(Icons.chevron_right), findsNWidgets(2));
