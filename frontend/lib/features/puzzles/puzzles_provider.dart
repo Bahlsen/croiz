@@ -10,11 +10,15 @@ class PuzzleDescriptor {
     required this.title,
     required this.path,
     this.subtitle = '',
+    this.origin = 'unknown',
+    this.year = '',
   });
   final String id;
   final String title;
   final String path;
   final String subtitle;
+  final String origin;
+  final String year;
 }
 
 /// Extract a stable short token from an asset path.
@@ -64,19 +68,17 @@ String puzzleTitleFromJson(
   return fallback;
 }
 
-/// Parse AssetManifest.json content into a list of asset paths under assets/data/*.json
-List<String> parseAssetManifest(String manifestContent) {
-  final manifest = jsonDecode(manifestContent) as Map<String, dynamic>;
-  return manifest.keys
-      .where((k) => k.startsWith('assets/data/') && k.endsWith('.json'))
-      .where((k) => !k.endsWith('puzzles.json'))
-      .toList();
-}
-
 /// FutureProvider that enumerates puzzle JSONs and extracts basic metadata (id/title/path).
+///
+/// Strict behaviour: requires `assets/data/puzzles.json` to exist and contain
+/// a JSON array of asset paths. No fallback to `AssetManifest.json`.
 final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
-  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  final keys = parseAssetManifest(manifestContent);
+  final indexContent = await rootBundle.loadString('assets/data/puzzles.json');
+  final parsed = jsonDecode(indexContent);
+  if (parsed is! List) {
+    throw Exception('assets/data/puzzles.json must contain a JSON array of asset paths');
+  }
+  final keys = parsed.whereType<String>().toList();
 
   final out = <PuzzleDescriptor>[];
   for (final path in keys) {
@@ -89,20 +91,56 @@ final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
       // match the asset filename. Routing must use the filename token.
       final title = puzzleTitleFromJson(data, fallback: token);
       final subtitle = (data['subtitle'] ?? '').toString();
+      // Derive origin and year from the asset path: assets/data/<origin>/<year>/file.json
+      final parts = path.split('/');
+      var origin = 'unknown';
+      var year = '';
+      if (parts.length >= 3) {
+        origin = parts[2];
+      }
+      if (parts.length >= 4) {
+        year = parts[3];
+      }
       out.add(
         PuzzleDescriptor(
           id: token,
           title: title,
           path: path,
           subtitle: subtitle,
+          origin: origin,
+          year: year,
         ),
       );
     } on Object catch (_) {
       final name = path.split('/').last;
-      out.add(PuzzleDescriptor(id: token, title: name, path: path));
+      final parts = path.split('/');
+      var origin = 'unknown';
+      var year = '';
+      if (parts.length >= 3) {
+        origin = parts[2];
+      }
+      if (parts.length >= 4) {
+        year = parts[3];
+      }
+      out.add(PuzzleDescriptor(
+        id: token,
+        title: name,
+        path: path,
+        origin: origin,
+        year: year,
+      ));
     }
   }
-
-  out.sort((a, b) => a.title.compareTo(b.title));
+  out.sort((a, b) {
+    final o = a.origin.compareTo(b.origin);
+    if (o != 0) {
+      return o;
+    }
+    final y = a.year.compareTo(b.year);
+    if (y != 0) {
+      return y;
+    }
+    return a.title.compareTo(b.title);
+  });
   return out;
 });

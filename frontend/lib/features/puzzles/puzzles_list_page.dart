@@ -13,20 +13,54 @@ class PuzzlesListPage extends ConsumerWidget {
     WidgetRef ref,
     List<PuzzleDescriptor> items,
   ) => ListView.separated(
-    itemCount: items.length,
+    itemCount: 1,
     separatorBuilder: (_, __) => const Divider(height: 1),
     itemBuilder: (context, index) {
-      final p = items[index];
-      return ListTile(
-        title: Text(p.title),
-        subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          // Explicitly select the puzzle before navigating.
-          // This ensures `puzzleLoaderProvider` loads the right asset.
-          ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
-          final id = Uri.encodeComponent(p.id);
-          context.go('/crossword?id=$id');
+      // Group by origin then by year
+      final groups = <String, Map<String, List<PuzzleDescriptor>>>{};
+      for (final p in items) {
+        final byOrigin = groups.putIfAbsent(p.origin, () => {});
+        final y = p.year.isNotEmpty ? p.year : 'unknown';
+        final _ = byOrigin.putIfAbsent(y, () => <PuzzleDescriptor>[])
+        ..add(p);
+      }
+
+      final originKeys = List.of(groups.keys)..sort();
+
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: originKeys.length,
+        itemBuilder: (context, oi) {
+          final origin = originKeys[oi];
+          final yearsMap = groups[origin]!;
+          final yearKeys = List.of(yearsMap.keys)..sort();
+          return ExpansionTile(
+            initiallyExpanded: true,
+            title: Text(origin),
+            children: yearKeys.map((year) {
+              final list = List.of(yearsMap[year]!)..sort((a, b) => a.title.compareTo(b.title));
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: Text(year, style: Theme.of(context).textTheme.bodySmall),
+                  ),
+                  ...list.map((p) => ListTile(
+                        title: Text(p.title),
+                        subtitle: p.subtitle.isNotEmpty ? Text(p.subtitle) : null,
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          ref.read(selectedPuzzleIdProvider.notifier).value = p.id;
+                          final id = Uri.encodeComponent(p.id);
+                          context.go('/crossword?id=$id');
+                        },
+                      )),
+                ],
+              );
+            }).toList(),
+          );
         },
       );
     },
