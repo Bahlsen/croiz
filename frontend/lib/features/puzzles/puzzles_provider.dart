@@ -219,23 +219,8 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
       origin: origin,
       year: year,
     );
-  } on Object catch (_) {
-    // On error return a minimal descriptor preserving token/path.
-    final parts = path.split('/');
-    var origin = 'unknown';
-    var year = '';
-    if (parts.isNotEmpty) {
-      origin = parts[0];
-    }
-    if (parts.length >= 2) {
-      year = parts[1];
-    }
-    return PuzzleDescriptor(
-      id: token,
-      title: token,
-      path: path,
-      origin: origin,
-      year: year,
-    );
+  } on Object catch (err) {
+    // Strict behavior: propagate error so UI can show an explicit failure.
+    throw StateError('Failed to load puzzle metadata for "$path": ${err}');
   }
 });

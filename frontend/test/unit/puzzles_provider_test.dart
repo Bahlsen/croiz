@@ -62,7 +62,9 @@ void main() {
 
       final origins = await container.read(puzzleOriginsProvider.future);
       expect(origins, isNotEmpty);
-      expect(origins, contains('crossynergy'));
+      // Assert known present origins from current assets
+      expect(origins, contains('latimes'));
+      expect(origins, contains('nytimes'));
     });
 
     testWidgets('originIndexProvider loads per-origin compact index', (
