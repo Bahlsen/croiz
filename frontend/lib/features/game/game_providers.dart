@@ -69,26 +69,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         // operate without a selected puzzle. If a puzzle *is*
         // selected, surface a thrown StateError so UI can show a
         // spinner or navigation can handle loading explicitly.
+        // Do not fabricate any board in production. If no puzzle is
+        // selected we surface an explicit error so callers (UI/tests)
+        // handle the absence of a selected puzzle deliberately.
         if (selected == null) {
-          const size = 5;
-          final grid = List<List<String?>>.generate(
-            size,
-            (_) => List<String?>.filled(size, null),
-          );
-          final blacks = List<List<bool>>.generate(
-            size,
-            (_) => List<bool>.filled(size, false),
-          );
-          return GameBoard(
-            id: '<empty>',
-            title: '<empty>',
-            gridSize: size,
-            createdAt: DateTime.fromMillisecondsSinceEpoch(0),
-            grid: grid,
-            clues: const {},
-            blackCells: blacks,
-            difficulty: 1,
-          );
+          throw StateError('No puzzle selected');
         }
         throw StateError('Puzzle is loading: $selected');
       },
@@ -298,7 +283,7 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
   );
   // Use the indexed path (normalized by providers) and build a proper
   // asset key for `rootBundle` by prefixing `data/`.
-  final assetPath = 'data/${match.path}';
+  final assetPath = 'assets/data/${match.path}';
   final loader = ref.read(puzzleAssetLoaderProvider);
   return loader(assetPath);
 });

@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import '../test_utils/test_board.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/game_audio_service.dart';
 
@@ -26,9 +27,11 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('arrow right skips black cells and wraps to next row', () {
+    final testBoard = makeEmptyBoard();
     final container = ProviderContainer(
       overrides: [
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
       ],
     );
     addTearDown(container.dispose);
@@ -59,9 +62,11 @@ void main() {
   });
 
   test('arrow down skips a black cell directly below', () {
+    final testBoard = makeEmptyBoard();
     final container = ProviderContainer(
       overrides: [
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
       ],
     );
     addTearDown(container.dispose);
@@ -89,9 +94,11 @@ void main() {
   });
 
   test('arrow down from bottom row wraps vertically to next column', () {
+    final testBoard = makeEmptyBoard();
     final container = ProviderContainer(
       overrides: [
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
       ],
     );
     addTearDown(container.dispose);
@@ -125,9 +132,11 @@ void main() {
   });
 
   test('backspace clears letter without moving selection', () {
+    final testBoard = makeEmptyBoard();
     final container = ProviderContainer(
       overrides: [
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
       ],
     );
     addTearDown(container.dispose);
@@ -145,8 +154,8 @@ void main() {
       timeStamp: Duration(milliseconds: 4),
     );
     controller.handleKey(typeEvent, boardNotifier.state.gridSize);
-    var board = container.read(gameBoardProvider);
-    expect(board.grid[0][0], 'B');
+    final afterBoard = container.read(gameBoardProvider);
+    expect(afterBoard.grid[0][0], 'B');
 
     // Move selection back to (0,0) for deterministic check (it advanced)
     container.read(selectedCellProvider.notifier).state = const SelectedCell(
@@ -160,8 +169,8 @@ void main() {
       timeStamp: Duration(milliseconds: 5),
     );
     controller.handleKey(backspaceEvent, boardNotifier.state.gridSize);
-    board = container.read(gameBoardProvider);
-    expect(board.grid[0][0], isNull);
+    final afterBoard2 = container.read(gameBoardProvider);
+    expect(afterBoard2.grid[0][0], isNull);
 
     final sel = container.read(selectedCellProvider);
     // Selection should remain at (0,0)

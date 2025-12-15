@@ -91,7 +91,7 @@ void main() {
 
     // The loader receives the full asset key used for rootBundle, which is
     // `assets/data/<relative_path>`.
-    final expected = 'data/${descriptor.path}';
+    final expected = 'assets/data/${descriptor.path}';
     expect(observed, equals(expected));
   });
 }

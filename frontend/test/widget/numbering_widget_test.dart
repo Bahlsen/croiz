@@ -80,7 +80,9 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          overrides: [puzzleLoaderProvider.overrideWith((ref) async => board)],
+          overrides: [
+            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          ],
           child: const MaterialApp(home: Scaffold(body: CrosswordGrid())),
         ),
       );

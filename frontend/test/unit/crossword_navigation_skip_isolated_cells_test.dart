@@ -3,11 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import '../test_utils/test_board.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
   test('arrow navigation skips cells that do not belong to any word', () {
-    final container = ProviderContainer();
+    final testBoard = makeEmptyBoard();
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
+      ],
+    );
     addTearDown(container.dispose);
 
     final boardNotifier = container.read(gameBoardProvider.notifier);
@@ -18,7 +24,7 @@ void main() {
     // - Cell (0,3) is NOT black but doesn't belong to any word
     // - Word 3: horizontal at (0,4) length 1 -> cell (0,4)
 
-    final board = boardNotifier.state.copyWith(
+    final boardWithEntries = boardNotifier.state.copyWith(
       entries: const [
         PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
         PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 0, length: 3),
@@ -26,7 +32,7 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).state = board;
+    container.read(gameBoardProvider.notifier).state = boardWithEntries;
 
     // Start at cell (0,2) - end of word 1
     container.read(selectedCellProvider.notifier).state = const SelectedCell(
@@ -54,7 +60,12 @@ void main() {
   test(
     'arrow navigation works when no entries are defined (legacy behavior)',
     () {
-      final container = ProviderContainer();
+      final testBoard = makeEmptyBoard();
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
+        ],
+      );
       addTearDown(container.dispose);
 
       // Board with no entries (legacy mode)
@@ -80,20 +91,25 @@ void main() {
   );
 
   test('arrow navigation wraps around when skipping isolated cells', () {
-    final container = ProviderContainer();
+    final testBoard = makeEmptyBoard();
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
+      ],
+    );
     addTearDown(container.dispose);
 
     final boardNotifier = container.read(gameBoardProvider.notifier);
 
     // Only one word at (1,1) horizontal length 2
     // Cell (0,0) is isolated (not part of any word)
-    final board = boardNotifier.state.copyWith(
+    final boardWithEntries2 = boardNotifier.state.copyWith(
       entries: const [
         PuzzleEntryData(number: 1, direction: 'across', x: 1, y: 1, length: 2),
       ],
     );
 
-    container.read(gameBoardProvider.notifier).state = board;
+    container.read(gameBoardProvider.notifier).state = boardWithEntries2;
 
     // Start at cell (1,2) - end of the only word
     container.read(selectedCellProvider.notifier).state = const SelectedCell(
