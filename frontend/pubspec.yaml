@@ -12,6 +12,8 @@ dependencies:
   audioplayers: ^6.5.1
   dio: ^5.7.0
   flame_audio: ^2.6.0
+  flutter:
+    sdk: flutter
   flutter_riverpod: ^3.0.0
   flutter_secure_storage: ^10.0.0
   flutter_svg: ^2.0.0
@@ -29,8 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
 dev_dependencies:
-  fake_async: any
   build_runner: ^2.6.1
+  fake_async: any
   freezed: ^3.0.0
   flutter_lints: ^6.0.0
   flutter_test:
