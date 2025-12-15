@@ -65,6 +65,67 @@ flutter:
     - assets/data/wapost/
     - assets/data/wsj/
     - assets/audio/
+    # Explicitly include nested year subdirectories for Android packaging
+    # (Flutter does not include nested subdirectories automatically).
+    # Atlantic
+    - assets/data/atlantic/2020/
+    - assets/data/atlantic/2021/
+    - assets/data/atlantic/2022/
+    # Crosswords Club
+    - assets/data/crosswordsclub/unknown/
+    # Eltana
+    - assets/data/eltana/unknown/
+    # LA Times
+    - assets/data/latimes/2020/
+    - assets/data/latimes/2021/
+    - assets/data/latimes/2022/
+    - assets/data/latimes/2023/
+    - assets/data/latimes/2024/
+    - assets/data/latimes/2025/
+    # Newsday
+    - assets/data/newsday/2020/
+    - assets/data/newsday/2021/
+    - assets/data/newsday/2022/
+    - assets/data/newsday/2023/
+    # New Yorker
+    - assets/data/newyorker/2020/
+    - assets/data/newyorker/2021/
+    - assets/data/newyorker/2022/
+    - assets/data/newyorker/2023/
+    # NYTimes
+    - assets/data/nytimes/2020/
+    - assets/data/nytimes/2021/
+    - assets/data/nytimes/2022/
+    - assets/data/nytimes/2023/
+    - assets/data/nytimes/2024/
+    - assets/data/nytimes/2025/
+    # Slate
+    - assets/data/slate/2024/
+    # Universal
+    - assets/data/universal/2020/
+    - assets/data/universal/2021/
+    - assets/data/universal/2022/
+    - assets/data/universal/2023/
+    - assets/data/universal/2024/
+    - assets/data/universal/2025/
+    # USA Today
+    - assets/data/usatoday/2020/
+    - assets/data/usatoday/2021/
+    - assets/data/usatoday/2022/
+    - assets/data/usatoday/2023/
+    - assets/data/usatoday/2024/
+    - assets/data/usatoday/2025/
+    # Washington Post
+    - assets/data/wapost/2022/
+    - assets/data/wapost/2023/
+    - assets/data/wapost/2024/
+    # WSJ
+    - assets/data/wsj/2020/
+    - assets/data/wsj/2021/
+    - assets/data/wsj/2022/
+    - assets/data/wsj/2023/
+    - assets/data/wsj/2024/
+    - assets/data/wsj/2025/
 
   # Uncomment and customize as needed:
   # fonts:
