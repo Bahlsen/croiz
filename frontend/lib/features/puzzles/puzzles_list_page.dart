@@ -103,6 +103,17 @@ class PuzzlesListPage extends ConsumerWidget {
                                         strokeWidth: 2,
                                       ),
                                     ),
+                                    onTap: () {
+                                      ref
+                                              .read(
+                                                selectedPuzzleIdProvider
+                                                    .notifier,
+                                              )
+                                              .value =
+                                          token;
+                                      final id = Uri.encodeComponent(token);
+                                      context.go('/crossword?id=$id');
+                                    },
                                   ),
                                   error: (_, __) => ListTile(
                                     title: Text(p.title),
@@ -113,7 +124,17 @@ class PuzzlesListPage extends ConsumerWidget {
                                       Icons.error,
                                       color: Colors.red,
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      ref
+                                              .read(
+                                                selectedPuzzleIdProvider
+                                                    .notifier,
+                                              )
+                                              .value =
+                                          token;
+                                      final id = Uri.encodeComponent(token);
+                                      context.go('/crossword?id=$id');
+                                    },
                                   ),
                                   data: (full) => ListTile(
                                     title: Text(full.title),
@@ -222,12 +243,23 @@ class PuzzlesListPage extends ConsumerWidget {
                             height: 24,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           ),
+                          onTap: () {
+                            ref.read(selectedPuzzleIdProvider.notifier).value =
+                                token;
+                            final id = Uri.encodeComponent(token);
+                            context.go('/crossword?id=$id');
+                          },
                         ),
                         error: (_, __) => ListTile(
                           title: Text(p.title),
                           subtitle: const Text('Error loading metadata'),
                           trailing: const Icon(Icons.error, color: Colors.red),
-                          onTap: () {},
+                          onTap: () {
+                            ref.read(selectedPuzzleIdProvider.notifier).value =
+                                token;
+                            final id = Uri.encodeComponent(token);
+                            context.go('/crossword?id=$id');
+                          },
                         ),
                         data: (full) => ListTile(
                           title: Text(full.title),

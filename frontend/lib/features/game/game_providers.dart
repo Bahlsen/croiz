@@ -283,8 +283,8 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
         throw StateError('Selected puzzle id not found in index: $selected'),
   );
   // Use the indexed path (normalized by providers) and build a proper
-  // asset key for `rootBundle` by prefixing `assets/data/`.
-  final assetPath = 'assets/data/${match.path}';
+  // asset key for `rootBundle` by prefixing `data/`.
+  final assetPath = 'data/${match.path}';
   final loader = ref.read(puzzleAssetLoaderProvider);
   return loader(assetPath);
 });

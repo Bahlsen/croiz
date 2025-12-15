@@ -17,7 +17,9 @@ import 'package:croiz/domain/entities/game_entities.dart';
 /// bug where selection yields `assets/data/<id>.json` instead of the
 /// full indexed path under subfolders.
 void main() {
-  testWidgets('Selecting a puzzle passes wrong asset path to loader', (tester) async {
+  testWidgets('Selecting a puzzle passes wrong asset path to loader', (
+    tester,
+  ) async {
     final descriptor = PuzzleDescriptor(
       id: 'mm1998-05-06',
       title: 'RIGHT ON THE MONEY (May/June 1998)',
@@ -89,7 +91,7 @@ void main() {
 
     // The loader receives the full asset key used for rootBundle, which is
     // `assets/data/<relative_path>`.
-    final expected = 'assets/data/${descriptor.path}';
+    final expected = 'data/${descriptor.path}';
     expect(observed, equals(expected));
   });
 }

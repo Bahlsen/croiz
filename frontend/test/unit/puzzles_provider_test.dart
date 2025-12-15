@@ -1,8 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   group('puzzleTokenFromAssetPath', () {
     test('uses basename without .json extension', () {
       expect(
@@ -50,6 +52,66 @@ void main() {
     test('falls back when no title fields present', () {
       final data = <String, dynamic>{'id': 'Not used for title by this helper'};
       expect(puzzleTitleFromJson(data, fallback: 'fallback'), 'fallback');
+    });
+  });
+
+  group('strict providers (no fallbacks)', () {
+    testWidgets('puzzleOriginsProvider loads origins summary', (tester) async {
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      final origins = await container.read(puzzleOriginsProvider.future);
+      expect(origins, isNotEmpty);
+      expect(origins, contains('crossynergy'));
+    });
+
+    testWidgets('originIndexProvider loads per-origin compact index', (
+      tester,
+    ) async {
+      // Mock assets for this test to avoid relying on full bundle.
+      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
+        'flutter/assets',
+        (message) async {
+          final key = const StringCodec().decodeMessage(message);
+          if (key == 'assets/data/puzzles_index_by_origin/crossynergy.json') {
+            const json =
+                '[{"id":"cs2000-04-12","title":"Apr 12, 2000","subtitle":"","path":"crossynergy/2000/cs2000-04-12.json","origin":"crossynergy","year":"2000"}]';
+            final bytes = Uint8List.fromList(json.codeUnits);
+            return ByteData.view(bytes.buffer);
+          }
+          if (key == 'assets/data/puzzles_index_origins.json') {
+            const json = '["crossynergy"]';
+            final bytes = Uint8List.fromList(json.codeUnits);
+            return ByteData.view(bytes.buffer);
+          }
+          return null;
+        },
+      );
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+
+      final list = await container.read(
+        originIndexProvider('crossynergy').future,
+      );
+      expect(list, isNotEmpty);
+      // All paths must be relative (no leading assets/ or data/)
+      expect(
+        list.every(
+          (e) => !e.path.startsWith('assets/') && !e.path.startsWith('data/'),
+        ),
+        isTrue,
+      );
+      // contains a known entry from 2000
+      expect(
+        list.any((e) => e.path.endsWith('2000/cs2000-04-12.json')),
+        isTrue,
+      );
+
+      // Restore handler
+      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
+        'flutter/assets',
+        null,
+      );
     });
   });
 }
