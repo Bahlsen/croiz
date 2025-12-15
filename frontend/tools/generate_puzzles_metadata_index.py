@@ -51,16 +51,17 @@ def main():
     total = len(paths)
     print(f'Indexing {total} puzzle paths...')
     for i, path in enumerate(paths, 1):
-        pfile = ROOT / Path(path)
+        # paths in puzzles.json are relative to assets/data
+        pfile = ASSETS / Path(path)
         token = token_from_path(path)
         origin = 'unknown'
         year = ''
         parts = Path(path).parts
-        # assets/data/<origin>/<year>/file.json
-        if len(parts) >= 3:
-            origin = parts[2]
-        if len(parts) >= 4:
-            year = parts[3]
+        # expected structure: <origin>/<year>/file.json
+        if len(parts) >= 1:
+            origin = parts[0]
+        if len(parts) >= 2:
+            year = parts[1]
         title = token
         subtitle = ''
         if pfile.exists():

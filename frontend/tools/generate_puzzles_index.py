@@ -23,7 +23,7 @@ for dirpath, dirnames, filenames in os.walk(ASSETS_DATA):
         # path relative to the `assets/data` folder (no leading 'assets/' or 'data/')
         rel = os.path.relpath(os.path.join(dirpath, f), ASSETS_DATA).replace('\\', '/')
         # skip the index file itself if it exists
-        if rel == 'puzzles.json':
+        if rel == 'puzzles.json' or rel == 'puzzles_index.json' or rel == 'puzzles_index_origins.json' or rel.startswith('puzzles_index_by_origin/'):
             continue
         paths.append(rel)
 
