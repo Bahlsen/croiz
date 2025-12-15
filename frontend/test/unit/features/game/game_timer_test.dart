@@ -14,9 +14,9 @@ class TestSecureStorage extends FlutterSecureStorage {
     required String key,
     required String? value,
     AndroidOptions? aOptions,
-    IOSOptions? iOptions,
+    AppleOptions? iOptions,
     LinuxOptions? lOptions,
-    MacOsOptions? mOptions,
+    AppleOptions? mOptions,
     WindowsOptions? wOptions,
     WebOptions? webOptions,
   }) async {
@@ -27,9 +27,9 @@ class TestSecureStorage extends FlutterSecureStorage {
   Future<String?> read({
     required String key,
     AndroidOptions? aOptions,
-    IOSOptions? iOptions,
+    AppleOptions? iOptions,
     LinuxOptions? lOptions,
-    MacOsOptions? mOptions,
+    AppleOptions? mOptions,
     WindowsOptions? wOptions,
     WebOptions? webOptions,
   }) async => _map[key];
@@ -38,9 +38,9 @@ class TestSecureStorage extends FlutterSecureStorage {
   Future<void> delete({
     required String key,
     AndroidOptions? aOptions,
-    IOSOptions? iOptions,
+    AppleOptions? iOptions,
     LinuxOptions? lOptions,
-    MacOsOptions? mOptions,
+    AppleOptions? mOptions,
     WindowsOptions? wOptions,
     WebOptions? webOptions,
   }) async => _map.remove(key);
