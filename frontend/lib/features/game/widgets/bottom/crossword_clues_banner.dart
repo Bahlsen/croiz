@@ -11,15 +11,8 @@ class CrosswordClueBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Prefer using the loader provider as a resilient source of truth
-    // when the full `gameBoardProvider` may not be synchronously available
-    // during tests or early startup.
-    final pu = ref.watch(puzzleLoaderProvider);
-    final board = pu.maybeWhen(
-      data: (d) => d,
-      orElse: () => createEmptyBoard(5),
-    );
     final selected = ref.watch(selectedCellProvider);
+    // If nothing selected, render the stable placeholder immediately.
     final dir = ref.watch(wordDirectionProvider);
 
     // Determine available vertical space to decide compact mode.
@@ -45,6 +38,15 @@ class CrosswordClueBanner extends ConsumerWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
         ),
       );
+    }
+
+    // Board must be available to compute the current entry. If the
+    // provider isn't ready, render nothing — the screen shows loading.
+    GameBoard board;
+    try {
+      board = ref.watch(gameBoardProvider);
+    } on Object catch (_) {
+      return const SizedBox.shrink();
     }
 
     final entryCtx = computeCurrentEntry(board, selected, dir);

@@ -34,9 +34,27 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-
-    // Initialize board and selection
-    final board = container.read(gameBoardProvider);
+    // Initialize a simple board and selection
+    const size = 5;
+    final grid = List<List<String?>>.generate(
+      size,
+      (_) => List<String?>.filled(size, null),
+    );
+    final blacks = List<List<bool>>.generate(
+      size,
+      (_) => List<bool>.filled(size, false),
+    );
+    final board = GameBoard(
+      id: 'test-1',
+      title: 'test',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: grid,
+      clues: const {},
+      blackCells: blacks,
+      difficulty: 1,
+    );
+    container.read(gameBoardProvider.notifier).state = board;
     container.read(selectedCellProvider.notifier).state = const SelectedCell(
       0,
       0,
@@ -71,7 +89,28 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    // ensure selection
+    // Initialize a simple board and ensure selection
+    const size = 5;
+    final grid = List<List<String?>>.generate(
+      size,
+      (_) => List<String?>.filled(size, null),
+    );
+    final blacks = List<List<bool>>.generate(
+      size,
+      (_) => List<bool>.filled(size, false),
+    );
+    final board = GameBoard(
+      id: 'test-2',
+      title: 'test',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: grid,
+      clues: const {},
+      blackCells: blacks,
+      difficulty: 1,
+    );
+    container.read(gameBoardProvider.notifier).state = board;
+
     container.read(selectedCellProvider.notifier).state = const SelectedCell(
       0,
       0,

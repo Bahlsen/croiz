@@ -84,8 +84,100 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     // explicit pixel heights in the screen — sizing should be driven by
     // parent constraints and simple Expanded/Flexible layout.
 
-    // Attach listener once during build (required by Riverpod). It will
-    // react to the board becoming available and start the timer.
+    // NOTE: do not attach the game board listener until after we have
+    // checked the loader state below. Attaching it earlier forces the
+    // `gameBoardProvider` to build while the puzzle loader may still be
+    // loading, which can synchronously throw. We'll attach the listener
+    // after confirming the loader is not loading or errored.
+    // Watch the loader provider first so we can display loading/error
+    // UI before attempting to read the active board (which may throw
+    // if the loader is in an error state).
+    final puzzleAsync = ref.watch(puzzleLoaderProvider);
+
+    // If the loader is still loading, show a centered spinner instead of
+    // the default board UI.
+    if (puzzleAsync is AsyncLoading) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: const Text('Crossword'),
+          backgroundColor: Colors.black,
+          elevation: 0,
+          leading: IconButton(
+            tooltip: 'Puzzles',
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/puzzles'),
+          ),
+        ),
+        body: const SafeArea(
+          bottom: true,
+          top: false,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 96,
+                  height: 96,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 6,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  'Chargement du puzzle...',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  'Patientez un instant',
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    // If the loader errored, display a clear error containing the selected id.
+    if (puzzleAsync is AsyncError) {
+      final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: const Text('Crossword'),
+          backgroundColor: Colors.black,
+          elevation: 0,
+          leading: IconButton(
+            tooltip: 'Puzzles',
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/puzzles'),
+          ),
+        ),
+        body: SafeArea(
+          bottom: true,
+          top: false,
+          child: Center(
+            child: Text(
+              'Erreur au chargement du puzzle id="$selected"',
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Determine grid size so we can weight available vertical space
+    // between grid and controls dynamically. The board provider now
+    // can be read safely because the loader isn't loading or errored.
+    // Safe to attach/listen now: loader isn't loading or errored.
     if (!_boardListenerAttached) {
       _boardListenerAttached = true;
       ref.listen<GameBoard>(gameBoardProvider, (
@@ -104,13 +196,8 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
           debugPrint('Error starting game timer: $e\n$st');
         }
       });
-
-      // Do not force immediate auto-select here; the listener above will
-      // react to changes and perform auto-selection when appropriate.
     }
-    // Determine grid size so we can weight available vertical space
-    // between grid and controls dynamically. The grid provider always
-    // returns a board (fallback empty), so this is synchronous.
+
     final board = ref.watch(gameBoardProvider);
     // We no longer use gridSize for explicit calculations here; keep
     // it available for future logic if needed.

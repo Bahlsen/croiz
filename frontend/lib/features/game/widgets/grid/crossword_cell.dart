@@ -18,20 +18,15 @@ class CrosswordCell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Prefer watching the live `gameBoardProvider` so the UI updates when
-    // the board changes (typing letters, clearing, etc). If watching the
-    // provider throws (e.g., during early startup in tests), fall back to
-    // the puzzle loader provider for a stable fallback board.
+    // the board changes. If the provider isn't available (loading/error),
+    // render a fallback empty container — the top-level screen presents
+    // loading/error state to the user.
     GameBoard board;
     try {
       board = ref.watch(gameBoardProvider);
     } on Object catch (e, st) {
-      developer.log(
-        'gameBoardProvider watch failed, falling back to loader',
-        error: e,
-        stackTrace: st,
-      );
-      final pu = ref.watch(puzzleLoaderProvider);
-      board = pu.maybeWhen(data: (d) => d, orElse: () => createEmptyBoard(5));
+      developer.log('gameBoardProvider watch failed', error: e, stackTrace: st);
+      return Container(color: Colors.black);
     }
     final selected = ref.watch(selectedCellProvider);
     final wordDirection = ref.watch(wordDirectionProvider);

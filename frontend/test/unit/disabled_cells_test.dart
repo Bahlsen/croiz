@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -37,12 +38,19 @@ void main() {
       'GameBoardNotifier.setLetter does not write to disabled cells',
       () async {
         // Build a small board with a known black cell.
-        final base = createEmptyBoard(5);
-        final blacks = List<List<bool>>.from(
-          base.blackCells.map(List<bool>.from),
-        );
+        final grid = List.generate(5, (_) => List<String?>.filled(5, null));
+        final blacks = List.generate(5, (_) => List<bool>.filled(5, false));
         blacks[0][3] = true;
-        final board = base.copyWith(blackCells: blacks);
+        final board = GameBoard(
+          id: 'test',
+          title: 'test',
+          gridSize: 5,
+          createdAt: DateTime.now(),
+          grid: grid,
+          clues: {},
+          blackCells: blacks,
+          difficulty: 1,
+        );
         final container = ProviderContainer(
           overrides: [
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),

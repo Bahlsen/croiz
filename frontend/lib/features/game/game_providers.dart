@@ -56,10 +56,47 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         Future.microtask(() => _onPuzzleLoaderChanged(null, current));
       }
     }
-    final defaultBoard = _createEmptyBoard(5);
-
+    // Do not provide any default board while loading — surface loading
+    // / error states as provider errors so callers can react explicitly.
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
-    return puzzleAsync.maybeWhen(data: (d) => d, orElse: () => defaultBoard);
+
+    return puzzleAsync.when(
+      data: (d) => d,
+      loading: () {
+        final selected = ref.read(selectedPuzzleIdProvider);
+        // If no puzzle is selected (common in unit tests and initial
+        // app state), provide a minimal empty board so consumers can
+        // operate without a selected puzzle. If a puzzle *is*
+        // selected, surface a thrown StateError so UI can show a
+        // spinner or navigation can handle loading explicitly.
+        if (selected == null) {
+          const size = 5;
+          final grid = List<List<String?>>.generate(
+            size,
+            (_) => List<String?>.filled(size, null),
+          );
+          final blacks = List<List<bool>>.generate(
+            size,
+            (_) => List<bool>.filled(size, false),
+          );
+          return GameBoard(
+            id: '<empty>',
+            title: '<empty>',
+            gridSize: size,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(0),
+            grid: grid,
+            clues: const {},
+            blackCells: blacks,
+            difficulty: 1,
+          );
+        }
+        throw StateError('Puzzle is loading: $selected');
+      },
+      error: (e, st) {
+        final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
+        throw StateError('Failed to load puzzle id="$selected": $e');
+      },
+    );
   }
 
   void _onPuzzleLoaderChanged(
@@ -111,30 +148,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     }
   }
 
-  static GameBoard _createEmptyBoard(int size) {
-    final grid = <List<String?>>[];
-    for (var i = 0; i < size; i++) {
-      grid.add(List<String?>.filled(size, null));
-    }
-    final blackCells = <List<bool>>[];
-    for (var i = 0; i < size; i++) {
-      blackCells.add(List<bool>.filled(size, false));
-    }
-    return GameBoard(
-      id: 'local',
-      title: 'Local Game',
-      gridSize: size,
-      createdAt: DateTime.now(),
-      grid: grid,
-      clues: {},
-      blackCells: blackCells,
-      difficulty: 1,
-      solutionGrid: List.generate(
-        size,
-        (_) => List<String?>.filled(size, null),
-      ),
-    );
-  }
+  // (helper removed) _createEmptyBoard was inlined in `build()` above.
 
   void setLetter(int row, int col, String? letter) {
     // No-op when cell is black.
@@ -379,12 +393,12 @@ GameBoard _prefillExceptOne(GameBoard board) {
   return board.copyWith(grid: newGrid);
 }
 
-/// Create a deterministic in-memory sample board.
-Future<GameBoard> createSampleBoard() async => createEmptyBoard(5);
+/// (removed) `createSampleBoard` and `createEmptyBoard` were removed
+/// as the empty board creation is now inlined inside `GameBoardNotifier`.
 
-/// Fallback: create empty board if loading fails
-GameBoard createEmptyBoard(int size) =>
-    GameBoardNotifier._createEmptyBoard(size);
+// Note: `createEmptyBoard` and `createSampleBoard` intentionally removed.
+// Production code must not fabricate a default board; callers should
+// explicitly handle loading/error states from `puzzleLoaderProvider`.
 
 /// Represents a selected cell in the grid.
 class SelectedCell {

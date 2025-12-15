@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 // clue_numbering is used by `CrosswordCell` instead; avoid direct import here.
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
@@ -33,14 +34,15 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
   @override
   Widget build(BuildContext context) {
-    // Use the puzzle loader provider as a stable source when gameBoard may
-    // not be synchronously available (e.g., during tests). This avoids
-    // swallowing errors while keeping the UI deterministic.
-    final pu = ref.watch(puzzleLoaderProvider);
-    final board = pu.maybeWhen(
-      data: (d) => d,
-      orElse: () => createEmptyBoard(5),
-    );
+    // Read the active board. If the board isn't available (still loading
+    // or errored), bail out gracefully by rendering nothing — the
+    // top-level screen is responsible for showing loading/error UI.
+    GameBoard board;
+    try {
+      board = ref.watch(gameBoardProvider);
+    } on Object catch (_) {
+      return const SizedBox.shrink();
+    }
     final size = board.gridSize;
     final selected = ref.watch(selectedCellProvider);
     final black = board.blackCells;

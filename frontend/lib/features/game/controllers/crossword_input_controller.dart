@@ -23,28 +23,26 @@ class CrosswordInputController {
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
-  GameBoard _safeReadBoard([int fallbackSize = 5]) {
+  GameBoard _safeReadBoard() {
     try {
       return _read<GameBoard>(gameBoardProvider);
     } on Object catch (e, st) {
-      developer.log(
-        'gameBoardProvider read failed, falling back to puzzleLoader',
-        error: e,
-        stackTrace: st,
-      );
+      developer.log('gameBoardProvider read failed', error: e, stackTrace: st);
+      // Try to obtain the loaded puzzle synchronously from the loader.
       try {
         final pa = _read<AsyncValue<GameBoard>>(puzzleLoaderProvider);
-        return pa.maybeWhen(
+        return pa.when(
           data: (d) => d,
-          orElse: () => createEmptyBoard(fallbackSize),
+          loading: () => throw StateError('No board available'),
+          error: (e2, st2) => throw StateError('No board available'),
         );
       } on Object catch (e2, st2) {
         developer.log(
-          'puzzleLoaderProvider read failed, returning empty board',
+          'puzzleLoaderProvider read failed',
           error: e2,
           stackTrace: st2,
         );
-        return createEmptyBoard(fallbackSize);
+        throw StateError('No board available');
       }
     }
   }
