@@ -221,6 +221,6 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
     );
   } on Object catch (err) {
     // Strict behavior: propagate error so UI can show an explicit failure.
-    throw StateError('Failed to load puzzle metadata for "$path": ${err}');
+    throw StateError('Failed to load puzzle metadata for "$path": $err');
   }
 });

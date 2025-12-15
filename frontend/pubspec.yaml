@@ -10,11 +10,8 @@ environment:
 
 dependencies:
   audioplayers: ^6.5.1
-  cupertino_icons: ^1.0.6
-  dio: ^5.3.0
-  flame_audio: ^2.11.12
-  flutter:
-    sdk: flutter
+  dio: ^5.7.0
+  flame_audio: ^2.6.0
   flutter_riverpod: ^3.0.0
   flutter_secure_storage: ^10.0.0
   flutter_svg: ^2.0.0
@@ -25,17 +22,13 @@ dependencies:
   json_annotation: ^4.8.0
   json_serializable: ^6.7.0
   logger: ^2.0.0
-  path: ^1.8.0
-  riverpod: ^3.0.0
-  riverpod_generator: ^3.0.0
-  sentry_flutter: ^9.8.0
   shared_preferences: ^2.3.0
   sqflite: ^2.3.0
   uuid: ^4.0.0
 
+  flutter: any
 dev_dependencies:
   build_runner: ^2.6.1
-  fake_async: any
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
@@ -44,6 +37,8 @@ dev_dependencies:
   mockito: ^5.4.0
   mocktail: ^1.0.0
 
+  flutter: any
+  fake_async: any
 flutter:
   uses-material-design: true
   
@@ -53,8 +48,6 @@ flutter:
     - assets/fonts/
     - assets/data/
     - assets/data/atlantic/
-    - assets/data/crosswordsclub/
-    - assets/data/eltana/
     - assets/data/latimes/
     - assets/data/newsday/
     - assets/data/newyorker/
@@ -71,10 +64,6 @@ flutter:
     - assets/data/atlantic/2020/
     - assets/data/atlantic/2021/
     - assets/data/atlantic/2022/
-    # Crosswords Club
-    - assets/data/crosswordsclub/unknown/
-    # Eltana
-    - assets/data/eltana/unknown/
     # LA Times
     - assets/data/latimes/2020/
     - assets/data/latimes/2021/

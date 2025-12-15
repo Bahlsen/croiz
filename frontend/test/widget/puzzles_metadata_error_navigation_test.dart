@@ -72,7 +72,10 @@ void main() {
       // Tap the error tile (will show error subtitle but still navigates).
       expect(find.text('Error loading metadata'), findsOneWidget);
       final titleText = find.text('test-err-0001');
-      final tileFinder = find.ancestor(of: titleText, matching: find.byType(ListTile));
+      final tileFinder = find.ancestor(
+        of: titleText,
+        matching: find.byType(ListTile),
+      );
       await tester.tap(tileFinder);
       await tester.pumpAndSettle();
 
