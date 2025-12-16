@@ -104,9 +104,13 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
       for (final e in o) {
         if (e is Map<String, dynamic>) {
           final origin = e['origin']?.toString();
-          if (origin != null && origin.isNotEmpty) origins.add(origin);
+          if (origin != null && origin.isNotEmpty) {
+            origins.add(origin);
+          }
         } else if (e is String) {
-          if (e.isNotEmpty) origins.add(e);
+          if (e.isNotEmpty) {
+            origins.add(e);
+          }
         }
       }
       origins.sort();
@@ -127,7 +131,9 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
           origins.add(origin);
         }
       } else if (e is String) {
-        if (e.isNotEmpty) origins.add(e);
+        if (e.isNotEmpty) {
+          origins.add(e);
+        }
       }
     }
     origins.sort();
@@ -164,7 +170,9 @@ final originIndexProvider =
           final ai = int.tryParse(a.year) ?? -9999;
           final bi = int.tryParse(b.year) ?? -9999;
           final yc = bi.compareTo(ai);
-          if (yc != 0) return yc;
+          if (yc != 0) {
+            return yc;
+          }
           return a.title.compareTo(b.title);
         });
         return out;
@@ -194,7 +202,9 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
     entries = parsed;
   } else if (parsed is Map<String, dynamic>) {
     final items = parsed['items'];
-    if (items is List) entries = items;
+    if (items is List) {
+      entries = items;
+    }
   }
 
   for (final e in entries) {
