@@ -49,7 +49,12 @@ class PuzzlesListPage extends ConsumerWidget {
                           final y = p.year.isNotEmpty ? p.year : 'unknown';
                           years.putIfAbsent(y, () => []).add(p);
                         }
-                        final yearKeys = years.keys.toList()..sort();
+                        final yearKeys = years.keys.toList()
+                          ..sort((a, b) {
+                            final ai = int.tryParse(a) ?? -9999;
+                            final bi = int.tryParse(b) ?? -9999;
+                            return bi.compareTo(ai);
+                          });
                         return Column(
                           children: yearKeys.map((year) {
                             final list = years[year]!
@@ -192,7 +197,12 @@ class PuzzlesListPage extends ConsumerWidget {
       itemBuilder: (context, oi) {
         final origin = originKeys[oi];
         final yearsMap = groups[origin]!;
-        final yearKeys = List.of(yearsMap.keys)..sort();
+        final yearKeys = List.of(yearsMap.keys)
+          ..sort((a, b) {
+            final ai = int.tryParse(a) ?? -9999;
+            final bi = int.tryParse(b) ?? -9999;
+            return bi.compareTo(ai);
+          });
         return ExpansionTile(
           title: Text(origin),
           initiallyExpanded: false,

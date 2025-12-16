@@ -91,25 +91,47 @@ String puzzleTitleFromJson(
 /// of individual puzzle JSONs at app startup.
 /// Provider that returns the list of available origins (for lazy-loading).
 final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
-  // Strict: require precomputed origins summary; no fallback.
+  // Prefer a merged index file that contains origins (recommended).
+  final rawIndex = await rootBundle.loadString(
+    'assets/data/puzzles_index.json',
+  );
+  final parsedIndex = jsonDecode(rawIndex);
+  final origins = <String>[];
+
+  if (parsedIndex is Map<String, dynamic>) {
+    final o = parsedIndex['origins'];
+    if (o is List) {
+      for (final e in o) {
+        if (e is Map<String, dynamic>) {
+          final origin = e['origin']?.toString();
+          if (origin != null && origin.isNotEmpty) origins.add(origin);
+        } else if (e is String) {
+          if (e.isNotEmpty) origins.add(e);
+        }
+      }
+      origins.sort();
+      return origins;
+    }
+  }
+
+  // Backwards-compat: fall back to the legacy origins summary file.
   final raw = await rootBundle.loadString(
     'assets/data/puzzles_index_origins.json',
   );
   final parsed = jsonDecode(raw);
   if (parsed is List) {
-    final out = <String>[];
     for (final e in parsed) {
       if (e is Map<String, dynamic>) {
         final origin = e['origin']?.toString();
-        if (origin != null) {
-          out.add(origin);
+        if (origin != null && origin.isNotEmpty) {
+          origins.add(origin);
         }
       } else if (e is String) {
-        out.add(e);
+        if (e.isNotEmpty) origins.add(e);
       }
     }
-    out.sort();
-    return out;
+    origins.sort();
+    return origins;
   }
   throw StateError('Invalid origins summary format.');
 });
@@ -138,7 +160,13 @@ final originIndexProvider =
             );
           }
         }
-        out.sort((a, b) => a.title.compareTo(b.title));
+        out.sort((a, b) {
+          final ai = int.tryParse(a.year) ?? -9999;
+          final bi = int.tryParse(b.year) ?? -9999;
+          final yc = bi.compareTo(ai);
+          if (yc != 0) return yc;
+          return a.title.compareTo(b.title);
+        });
         return out;
       }
       throw StateError('Invalid origin index format for $origin.');
@@ -157,21 +185,31 @@ final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
 List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   final parsed = jsonDecode(raw);
   final out = <PuzzleDescriptor>[];
+
+  // Support two formats:
+  // 1) Legacy: JSON array of entries
+  // 2) Merged: object { items: [ ... ], origins: [...] }
+  var entries = <dynamic>[];
   if (parsed is List) {
-    for (final e in parsed) {
-      if (e is Map<String, dynamic>) {
-        final rawPath = e['path']?.toString() ?? '';
-        out.add(
-          PuzzleDescriptor(
-            id: e['id']?.toString() ?? '',
-            title: e['title']?.toString() ?? '',
-            path: _normalizeIndexedPath(rawPath),
-            subtitle: e['subtitle']?.toString() ?? '',
-            origin: e['origin']?.toString() ?? '',
-            year: e['year']?.toString() ?? '',
-          ),
-        );
-      }
+    entries = parsed;
+  } else if (parsed is Map<String, dynamic>) {
+    final items = parsed['items'];
+    if (items is List) entries = items;
+  }
+
+  for (final e in entries) {
+    if (e is Map<String, dynamic>) {
+      final rawPath = e['path']?.toString() ?? '';
+      out.add(
+        PuzzleDescriptor(
+          id: e['id']?.toString() ?? '',
+          title: e['title']?.toString() ?? '',
+          path: _normalizeIndexedPath(rawPath),
+          subtitle: e['subtitle']?.toString() ?? '',
+          origin: e['origin']?.toString() ?? '',
+          year: e['year']?.toString() ?? '',
+        ),
+      );
     }
   }
   out.sort((a, b) {
@@ -179,7 +217,9 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
     if (o != 0) {
       return o;
     }
-    final y = a.year.compareTo(b.year);
+    final ai = int.tryParse(a.year) ?? -9999;
+    final bi = int.tryParse(b.year) ?? -9999;
+    final y = bi.compareTo(ai);
     if (y != 0) {
       return y;
     }

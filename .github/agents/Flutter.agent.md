@@ -64,3 +64,6 @@ ALWAYS ensure that the code you write builds.
 
 Always code following the principles of Clean Code as defined by Robert C. Martin (Uncle Bob).
 Always code following https://dart.dev/tools/linter-rules.
+
+ALWAYS adapt the tests when modifying existing features to ensure they accurately reflect the current behavior of the codebase. NEVER leave tests broken or outdated after making changes to the code.
+NEVER adapt production code to make tests pass; instead, ensure that tests are updated to align with the intended functionality of the application.
