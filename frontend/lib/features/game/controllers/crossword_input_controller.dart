@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/features/game/game_timer_provider.dart';
 import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/controllers/crossword_navigation.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 
@@ -57,7 +58,9 @@ class CrosswordInputController {
 
     if (selected == null) {
       final first = _firstSelectable(board.blackCells);
-      if (first == null) return;
+      if (first == null) {
+        return;
+      }
       _read(selectedCellProvider.notifier).value = SelectedCell(
         first[0],
         first[1],
@@ -78,7 +81,9 @@ class CrosswordInputController {
         dc: dc,
         wrap: true,
       );
-      if (next == null) return;
+      if (next == null) {
+        return;
+      }
       final nextRow = next[0];
       final nextCol = next[1];
       _read(selectedCellProvider.notifier).value = SelectedCell(
@@ -96,44 +101,14 @@ class CrosswordInputController {
       final wantAcross = dir == WordDirection.horizontal;
       final entries = board.entries ?? <PuzzleEntryData>[];
 
-      SelectedCell? _firstEmptyInEntry(PuzzleEntryData e) {
-        if (e.direction == 'across') {
-          for (var cc = e.x; cc < e.x + e.length; cc++) {
-            final key = '${e.y},$cc';
-            if (_read(lockedCellsProvider).contains(key)) continue;
-            final val = board.grid[e.y][cc];
-            if (val == null || val.isEmpty) return SelectedCell(e.y, cc);
-          }
-        } else {
-          for (var rr = e.y; rr < e.y + e.length; rr++) {
-            final key = '$rr,${e.x}';
-            if (_read(lockedCellsProvider).contains(key)) continue;
-            final val = board.grid[rr][e.x];
-            if (val == null || val.isEmpty) return SelectedCell(rr, e.x);
-          }
-        }
-        return null;
-      }
-
-      PuzzleEntryData? containing;
-      for (final e in entries) {
-        if (wantAcross && e.direction != 'across') continue;
-        if (!wantAcross && e.direction != 'down') continue;
-        final contains = wantAcross
-            ? (selected.row == e.y &&
-                  selected.col >= e.x &&
-                  selected.col < e.x + e.length)
-            : (selected.col == e.x &&
-                  selected.row >= e.y &&
-                  selected.row < e.y + e.length);
-        if (contains) {
-          containing = e;
-          break;
-        }
-      }
-
+      final containing = _findContainingEntry(
+        selected.row,
+        selected.col,
+        wantAcross,
+        entries,
+      );
       if (containing != null) {
-        final f = _firstEmptyInEntry(containing);
+        final f = _firstEmptyInEntry(containing, board, skipLocked: true);
         if (f != null) {
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
           _checkForCompletedWords();
@@ -141,52 +116,19 @@ class CrosswordInputController {
           return;
         }
 
-        final sameDir =
-            entries
-                .where((e) => e.direction == (wantAcross ? 'across' : 'down'))
-                .toList()
-              ..sort((a, b) => a.number.compareTo(b.number));
-        final idx = sameDir.indexWhere((e) => e.number == containing!.number);
-        if (idx != -1) {
-          for (var j = idx + 1; j < sameDir.length; j++) {
-            final candidate = sameDir[j];
-            final ff = _firstEmptyInEntry(candidate);
-            if (ff != null) {
-              _read(
-                gameBoardProvider.notifier,
-              ).setLetter(ff.row, ff.col, letter);
-              _checkForCompletedWords();
-              _moveToNext(board, startRow: ff.row, startCol: ff.col);
-              return;
-            }
-          }
-          for (var j = 0; j < idx; j++) {
-            final candidate = sameDir[j];
-            final ff = _firstEmptyInEntry(candidate);
-            if (ff != null) {
-              _read(
-                gameBoardProvider.notifier,
-              ).setLetter(ff.row, ff.col, letter);
-              _checkForCompletedWords();
-              _moveToNext(board, startRow: ff.row, startCol: ff.col);
-              return;
-            }
-          }
-        }
-
-        final otherDir =
-            entries
-                .where((e) => e.direction != (wantAcross ? 'across' : 'down'))
-                .toList()
-              ..sort((a, b) => a.number.compareTo(b.number));
-        for (final candidate in otherDir) {
-          final ff = _firstEmptyInEntry(candidate);
-          if (ff != null) {
-            _read(gameBoardProvider.notifier).setLetter(ff.row, ff.col, letter);
-            _checkForCompletedWords();
-            _moveToNext(board, startRow: ff.row, startCol: ff.col);
-            return;
-          }
+        final nextF = _findNextEmptyFromEntry(
+          containing,
+          wantAcross,
+          board,
+          entries,
+        );
+        if (nextF != null) {
+          _read(
+            gameBoardProvider.notifier,
+          ).setLetter(nextF.row, nextF.col, letter);
+          _checkForCompletedWords();
+          _moveToNext(board, startRow: nextF.row, startCol: nextF.col);
+          return;
         }
       }
     }
@@ -207,29 +149,15 @@ class CrosswordInputController {
     required bool wrap,
   }) {
     final lockedCells = _read(lockedCellsProvider);
-    var r = fromRow;
-    var c = fromCol;
-    final maxSteps = board.gridSize * board.gridSize;
-    for (var i = 0; i < maxSteps; i++) {
-      final next = board.blackCells.nextSelectableFrom(
-        r,
-        c,
-        dr,
-        dc,
-        wrap: wrap,
-      );
-      if (next == null) {
-        return null;
-      }
-      final nr = next[0];
-      final nc = next[1];
-      if (!lockedCells.contains('$nr,$nc')) {
-        return [nr, nc];
-      }
-      r = nr;
-      c = nc;
-    }
-    return null;
+    return nextEditableCell(
+      board,
+      fromRow: fromRow,
+      fromCol: fromCol,
+      dr: dr,
+      dc: dc,
+      wrap: wrap,
+      lockedCells: lockedCells,
+    );
   }
 
   void clearCurrent() {
@@ -296,7 +224,7 @@ class CrosswordInputController {
   }
 
   void tryAutoSelectFirstAcross(GameBoard board) {
-    if (_didAutoSelectFirstAcross) {
+    if (_didAutoSelectFirstAcross) { 
       return;
     }
     final alreadySelected = _read(selectedCellProvider);
@@ -304,7 +232,7 @@ class CrosswordInputController {
       return;
     }
     final entries = board.entries;
-    if (entries == null || entries.isEmpty) {
+    if (entries == null || entries.isEmpty) { 
       return;
     }
     final firstAcross = entries.where((e) => e.direction == 'across').toList()
@@ -408,51 +336,19 @@ class CrosswordInputController {
         try {
           if (entries != null) {
             final wantAcross = dc != 0;
-
-            // helper to find first empty in an entry
-            SelectedCell? _firstEmptyInEntry(PuzzleEntryData e) {
-              if (e.direction == 'across') {
-                for (var cc = e.x; cc < e.x + e.length; cc++) {
-                  final val = board.grid[e.y][cc];
-                  if (val == null || val.isEmpty) {
-                    return SelectedCell(e.y, cc);
-                  }
-                }
-              } else {
-                for (var rr = e.y; rr < e.y + e.length; rr++) {
-                  final val = board.grid[rr][e.x];
-                  if (val == null || val.isEmpty) {
-                    return SelectedCell(rr, e.x);
-                  }
-                }
-              }
-              return null;
-            }
-
-            // find the entry that contains this cell
-            PuzzleEntryData? containing;
-            for (final e in entries) {
-              if (wantAcross && e.direction != 'across') continue;
-              if (!wantAcross && e.direction != 'down') continue;
-              final contains = wantAcross
-                  ? (nextRow == e.y &&
-                        nextCol >= e.x &&
-                        nextCol < e.x + e.length)
-                  : (nextCol == e.x &&
-                        nextRow >= e.y &&
-                        nextRow < e.y + e.length);
-              if (contains) {
-                containing = e;
-                break;
-              }
-            }
-
+            final containing = _findContainingEntry(
+              nextRow,
+              nextCol,
+              wantAcross,
+              entries,
+            );
             if (containing != null) {
-              final found = _firstEmptyInEntry(containing);
+              final found = _firstEmptyInEntry(
+                containing,
+                board,
+                skipLocked: false,
+              );
               if (found != null) {
-                // If the first empty in the entry is the cell we started from,
-                // prefer the cell we landed on (advance) so arrow navigation
-                // actually moves the selection forward.
                 if (found.row == row && found.col == col) {
                   _read(selectedCellProvider.notifier).state = SelectedCell(
                     nextRow,
@@ -464,50 +360,16 @@ class CrosswordInputController {
                 return;
               }
 
-              // search forward in same direction entries
-              final sameDir =
-                  entries
-                      .where(
-                        (e) => e.direction == (wantAcross ? 'across' : 'down'),
-                      )
-                      .toList()
-                    ..sort((a, b) => a.number.compareTo(b.number));
-              final idx = sameDir.indexWhere(
-                (e) => e.number == containing!.number,
+              final nextF = _findNextEmptyFromEntry(
+                containing,
+                wantAcross,
+                board,
+                entries,
+                skipLocked: false,
               );
-              if (idx != -1) {
-                for (var j = idx + 1; j < sameDir.length; j++) {
-                  final candidate = sameDir[j];
-                  final f = _firstEmptyInEntry(candidate);
-                  if (f != null) {
-                    _read(selectedCellProvider.notifier).state = f;
-                    return;
-                  }
-                }
-                for (var j = 0; j < idx; j++) {
-                  final candidate = sameDir[j];
-                  final f = _firstEmptyInEntry(candidate);
-                  if (f != null) {
-                    _read(selectedCellProvider.notifier).state = f;
-                    return;
-                  }
-                }
-              }
-
-              // try other direction
-              final otherDir =
-                  entries
-                      .where(
-                        (e) => e.direction != (wantAcross ? 'across' : 'down'),
-                      )
-                      .toList()
-                    ..sort((a, b) => a.number.compareTo(b.number));
-              for (final candidate in otherDir) {
-                final f = _firstEmptyInEntry(candidate);
-                if (f != null) {
-                  _read(selectedCellProvider.notifier).state = f;
-                  return;
-                }
+              if (nextF != null) {
+                _read(selectedCellProvider.notifier).state = nextF;
+                return;
               }
             }
           }
@@ -534,27 +396,7 @@ class CrosswordInputController {
     }
   }
 
-  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) {
-    if (entries == null || entries.isEmpty) {
-      return true; // If no entries defined, allow all non-black cells
-    }
-
-    for (final entry in entries) {
-      final isAcross = entry.direction == 'across';
-      if (isAcross) {
-        // Check if cell is in this horizontal word
-        if (row == entry.y && col >= entry.x && col < entry.x + entry.length) {
-          return true;
-        }
-      } else {
-        // Check if cell is in this vertical word
-        if (col == entry.x && row >= entry.y && row < entry.y + entry.length) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) => cellBelongsToWord(row, col, entries);
 
   void _moveToNext(
     GameBoard board, {
@@ -605,40 +447,21 @@ class CrosswordInputController {
               (e) => e.number == containing!.number,
             );
             if (idx != -1) {
-              // Search forward for next entry in sameDir that is NOT already found
-              for (var j = idx + 1; j < sameDir.length; j++) {
-                final candidate = sameDir[j];
-                final key = wordCheck.getWordKey(candidate);
-                if (!foundWords.contains(key)) {
-                  final candidateKey = '${candidate.y},${candidate.x}';
-                  if (lockedCells.contains(candidateKey)) {
-                    continue;
-                  }
-                  _read(selectedCellProvider.notifier).state = SelectedCell(
-                    candidate.y,
-                    candidate.x,
-                  );
-                  return;
-                }
-              }
-              // Wrap-around search
-              for (var j = 0; j < idx; j++) {
-                final candidate = sameDir[j];
-                final key = wordCheck.getWordKey(candidate);
-                if (!foundWords.contains(key)) {
-                  final candidateKey = '${candidate.y},${candidate.x}';
-                  if (lockedCells.contains(candidateKey)) {
-                    continue;
-                  }
-                  _read(selectedCellProvider.notifier).state = SelectedCell(
-                    candidate.y,
-                    candidate.x,
-                  );
-                  return;
-                }
+              // Move to the next numbered entry in the same direction (wrap around).
+              // This ensures that when the last letter of a word is entered,
+              // selection advances to the next word number in the current mode.
+              if (sameDir.length > 1) {
+                final nextIdx = (idx + 1) % sameDir.length;
+                final candidate = sameDir[nextIdx];
+                _read(selectedCellProvider.notifier).state = SelectedCell(
+                  candidate.y,
+                  candidate.x,
+                );
+                return;
               }
 
-              // No available same-direction entries -> try other direction's first non-found
+              // If there's no other same-direction entry, fall back to other
+              // direction's first non-found entry (preserve existing behavior).
               final otherDirString = isAcross ? 'down' : 'across';
               final otherDir =
                   entries.where((e) => e.direction == otherDirString).toList()
@@ -684,12 +507,104 @@ class CrosswordInputController {
     }
   }
 
-  List<int>? _firstSelectable(List<List<bool>> black) {
-    for (var r = 0; r < black.length; r++) {
-      for (var c = 0; c < black[r].length; c++) {
-        if (!black.isDisabled(r, c)) {
-          return [r, c];
+  List<int>? _firstSelectable(List<List<bool>> black) => firstSelectable(black);
+
+  PuzzleEntryData? _findContainingEntry(
+    int row,
+    int col,
+    bool wantAcross, 
+    List<PuzzleEntryData>? entries,
+  ) {
+    if (entries == null || entries.isEmpty) {
+      return null;
+    }
+    for (final e in entries) { 
+      if (wantAcross && e.direction != 'across') {
+        continue;
+      }
+      if (!wantAcross && e.direction != 'down') {
+        continue;
+      }
+      final contains = wantAcross
+          ? (row == e.y && col >= e.x && col < e.x + e.length) 
+          : (col == e.x && row >= e.y && row < e.y + e.length);
+      if (contains) {
+        return e;
+      }
+    }
+    return null;
+  }
+
+  SelectedCell? _firstEmptyInEntry(
+    PuzzleEntryData e,
+    GameBoard board, {
+    bool skipLocked = false,
+  }) {
+    final locked = skipLocked ? _read(lockedCellsProvider) : <String>{};
+    if (e.direction == 'across') {
+      for (var cc = e.x; cc < e.x + e.length; cc++) {
+        final key = '${e.y},$cc';
+        if (skipLocked && locked.contains(key)) {
+          continue;
         }
+        final val = board.grid[e.y][cc];
+        if (val == null || val.isEmpty) {
+          return SelectedCell(e.y, cc);
+        }
+      }
+    } else {
+      for (var rr = e.y; rr < e.y + e.length; rr++) {
+        final key = '$rr,${e.x}';
+        if (skipLocked && locked.contains(key)) {
+          continue;
+        }
+        final val = board.grid[rr][e.x];
+        if (val == null || val.isEmpty) {
+          return SelectedCell(rr, e.x);
+        }
+      }
+    }
+    return null;
+  }
+
+  SelectedCell? _findNextEmptyFromEntry(
+    PuzzleEntryData containing,
+    bool wantAcross,
+    GameBoard board,
+    List<PuzzleEntryData>? entries, {
+    bool skipLocked = true,
+  }) {
+    if (entries == null || entries.isEmpty) {
+      return null;
+    }
+    final dirStr = wantAcross ? 'across' : 'down';
+    final sameDir = entries.where((e) => e.direction == dirStr).toList()
+      ..sort((a, b) => a.number.compareTo(b.number));
+    final idx = sameDir.indexWhere((e) => e.number == containing.number);
+    if (idx != -1) {
+      for (var j = idx + 1; j < sameDir.length; j++) {
+        final candidate = sameDir[j];
+        final ff = _firstEmptyInEntry(candidate, board, skipLocked: skipLocked);
+        if (ff != null) {
+          return ff;
+        }
+      }
+      for (var j = 0; j < idx; j++) {
+        final candidate = sameDir[j];
+        final ff = _firstEmptyInEntry(candidate, board, skipLocked: skipLocked);
+        if (ff != null) {
+          return ff;
+        }
+      }
+    }
+
+    final otherDirStr = wantAcross ? 'down' : 'across';
+    final otherDir = entries.where((e) => e.direction == otherDirStr).toList()
+      ..sort((a, b) => a.number.compareTo(b.number));
+    for (final candidate in otherDir) {
+      final ff = _firstEmptyInEntry(candidate, board, skipLocked: skipLocked);
+      if (ff != null) {
+        return ff;
       }
     }
     return null;
