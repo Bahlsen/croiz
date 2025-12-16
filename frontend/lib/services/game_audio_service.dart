@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flame_audio/flame_audio.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
 class GameAudioService {
@@ -27,6 +28,19 @@ class GameAudioService {
         'victory.wav',
       ]);
 
+      // Additionally load raw bytes from assets to ensure they're available
+      // to the platform asset system early (helps avoid first-play latency).
+      try {
+        await Future.wait([
+          rootBundle.load('assets/audio/typing.wav'),
+          rootBundle.load('assets/audio/delete.wav'),
+          rootBundle.load('assets/audio/success.wav'),
+          rootBundle.load('assets/audio/victory.wav'),
+        ]);
+      } on Object catch (e) {
+        developer.log('rootBundle.load prewarm failed', error: e);
+      }
+
       // Create small pools for quick, possibly overlapping SFX.
       _typePool = await FlameAudio.createPool('typing.wav', maxPlayers: 6);
       _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 4);
@@ -35,6 +49,7 @@ class GameAudioService {
       if (!_ready.isCompleted) {
         _ready.complete();
       }
+      developer.log('GameAudioService initialized', name: 'GameAudioService');
     } on Object catch (e, st) {
       // Initialization failures should not crash the app; log for visibility.
       _initialized = false;
