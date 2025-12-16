@@ -117,29 +117,7 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
       return origins;
     }
   }
-
-  // Backwards-compat: fall back to the legacy origins summary file.
-  final raw = await rootBundle.loadString(
-    'assets/data/puzzles_index_origins.json',
-  );
-  final parsed = jsonDecode(raw);
-  if (parsed is List) {
-    for (final e in parsed) {
-      if (e is Map<String, dynamic>) {
-        final origin = e['origin']?.toString();
-        if (origin != null && origin.isNotEmpty) {
-          origins.add(origin);
-        }
-      } else if (e is String) {
-        if (e.isNotEmpty) {
-          origins.add(e);
-        }
-      }
-    }
-    origins.sort();
-    return origins;
-  }
-  throw StateError('Invalid origins summary format.');
+  throw StateError('Invalid puzzles_index.json: missing or invalid "origins" array.');
 });
 
 /// Provider to load the compact index for a single origin lazily.
@@ -194,17 +172,21 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   final parsed = jsonDecode(raw);
   final out = <PuzzleDescriptor>[];
 
-  // Support two formats:
-  // 1) Legacy: JSON array of entries
-  // 2) Merged: object { items: [ ... ], origins: [...] }
+  // Expect merged index format: object { items: [ ... ] } or items: { value: [...] }
   var entries = <dynamic>[];
-  if (parsed is List) {
-    entries = parsed;
-  } else if (parsed is Map<String, dynamic>) {
+  if (parsed is Map<String, dynamic>) {
     final items = parsed['items'];
     if (items is List) {
       entries = items;
+    } else if (items is Map<String, dynamic>) {
+      final v = items['value'];
+      if (v is List) {
+        entries = v;
+      }
     }
+  }
+  if (entries.isEmpty) {
+    throw StateError('Invalid puzzles_index.json: expected merged object with "items" list.');
   }
 
   for (final e in entries) {
