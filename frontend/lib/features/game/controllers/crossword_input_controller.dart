@@ -57,9 +57,7 @@ class CrosswordInputController {
 
     if (selected == null) {
       final first = _firstSelectable(board.blackCells);
-      if (first == null) {
-        return;
-      }
+      if (first == null) return;
       _read(selectedCellProvider.notifier).value = SelectedCell(
         first[0],
         first[1],
@@ -72,9 +70,6 @@ class CrosswordInputController {
 
     final cellKey = '${selected.row},${selected.col}';
     if (lockedCells.contains(cellKey)) {
-      // Current cell is locked: move to the next editable cell (non-black,
-      // non-locked) and type there. This avoids the UX where the cursor stays
-      // on a locked cell but the letter appears one cell to the right.
       final next = _nextEditableCell(
         board,
         fromRow: selected.row,
@@ -83,9 +78,7 @@ class CrosswordInputController {
         dc: dc,
         wrap: true,
       );
-      if (next == null) {
-        return;
-      }
+      if (next == null) return;
       final nextRow = next[0];
       final nextCol = next[1];
       _read(selectedCellProvider.notifier).value = SelectedCell(
@@ -96,6 +89,106 @@ class CrosswordInputController {
       _checkForCompletedWords();
       _moveToNext(board, startRow: nextRow, startCol: nextCol);
       return;
+    }
+
+    final currentValue = board.grid[selected.row][selected.col];
+    if (currentValue != null && currentValue.isNotEmpty) {
+      final wantAcross = dir == WordDirection.horizontal;
+      final entries = board.entries ?? <PuzzleEntryData>[];
+
+      SelectedCell? _firstEmptyInEntry(PuzzleEntryData e) {
+        if (e.direction == 'across') {
+          for (var cc = e.x; cc < e.x + e.length; cc++) {
+            final key = '${e.y},$cc';
+            if (_read(lockedCellsProvider).contains(key)) continue;
+            final val = board.grid[e.y][cc];
+            if (val == null || val.isEmpty) return SelectedCell(e.y, cc);
+          }
+        } else {
+          for (var rr = e.y; rr < e.y + e.length; rr++) {
+            final key = '$rr,${e.x}';
+            if (_read(lockedCellsProvider).contains(key)) continue;
+            final val = board.grid[rr][e.x];
+            if (val == null || val.isEmpty) return SelectedCell(rr, e.x);
+          }
+        }
+        return null;
+      }
+
+      PuzzleEntryData? containing;
+      for (final e in entries) {
+        if (wantAcross && e.direction != 'across') continue;
+        if (!wantAcross && e.direction != 'down') continue;
+        final contains = wantAcross
+            ? (selected.row == e.y &&
+                  selected.col >= e.x &&
+                  selected.col < e.x + e.length)
+            : (selected.col == e.x &&
+                  selected.row >= e.y &&
+                  selected.row < e.y + e.length);
+        if (contains) {
+          containing = e;
+          break;
+        }
+      }
+
+      if (containing != null) {
+        final f = _firstEmptyInEntry(containing);
+        if (f != null) {
+          _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
+          _checkForCompletedWords();
+          _moveToNext(board, startRow: f.row, startCol: f.col);
+          return;
+        }
+
+        final sameDir =
+            entries
+                .where((e) => e.direction == (wantAcross ? 'across' : 'down'))
+                .toList()
+              ..sort((a, b) => a.number.compareTo(b.number));
+        final idx = sameDir.indexWhere((e) => e.number == containing!.number);
+        if (idx != -1) {
+          for (var j = idx + 1; j < sameDir.length; j++) {
+            final candidate = sameDir[j];
+            final ff = _firstEmptyInEntry(candidate);
+            if (ff != null) {
+              _read(
+                gameBoardProvider.notifier,
+              ).setLetter(ff.row, ff.col, letter);
+              _checkForCompletedWords();
+              _moveToNext(board, startRow: ff.row, startCol: ff.col);
+              return;
+            }
+          }
+          for (var j = 0; j < idx; j++) {
+            final candidate = sameDir[j];
+            final ff = _firstEmptyInEntry(candidate);
+            if (ff != null) {
+              _read(
+                gameBoardProvider.notifier,
+              ).setLetter(ff.row, ff.col, letter);
+              _checkForCompletedWords();
+              _moveToNext(board, startRow: ff.row, startCol: ff.col);
+              return;
+            }
+          }
+        }
+
+        final otherDir =
+            entries
+                .where((e) => e.direction != (wantAcross ? 'across' : 'down'))
+                .toList()
+              ..sort((a, b) => a.number.compareTo(b.number));
+        for (final candidate in otherDir) {
+          final ff = _firstEmptyInEntry(candidate);
+          if (ff != null) {
+            _read(gameBoardProvider.notifier).setLetter(ff.row, ff.col, letter);
+            _checkForCompletedWords();
+            _moveToNext(board, startRow: ff.row, startCol: ff.col);
+            return;
+          }
+        }
+      }
     }
 
     _read(
@@ -283,8 +376,10 @@ class CrosswordInputController {
     final board = _safeReadBoard();
     final black = board.blackCells;
     final entries = board.entries;
-
-    // Try to find next cell that belongs to a valid word
+    // Try to find next cell that belongs to a valid word. When we encounter
+    // a cell that belongs to a word entry, select the first empty cell of
+    // that entry (in the entry's direction). If no empty cell exists,
+    // fall back to selecting the cell encountered.
     final maxAttempts = board.gridSize * board.gridSize;
     var currentRow = row;
     var currentCol = col;
@@ -304,8 +399,123 @@ class CrosswordInputController {
       final nextRow = next[0];
       final nextCol = next[1];
 
-      // Check if this cell belongs to at least one word entry
+      // If this cell belongs to a word entry, try to select the first empty
+      // cell of that entry (scanning from the entry's start). If that entry
+      // is full, advance to the next entry(s) (same direction, then other
+      // direction) and pick their first empty cell. Fallback: select the
+      // encountered cell.
       if (_cellBelongsToWord(nextRow, nextCol, entries)) {
+        try {
+          if (entries != null) {
+            final wantAcross = dc != 0;
+
+            // helper to find first empty in an entry
+            SelectedCell? _firstEmptyInEntry(PuzzleEntryData e) {
+              if (e.direction == 'across') {
+                for (var cc = e.x; cc < e.x + e.length; cc++) {
+                  final val = board.grid[e.y][cc];
+                  if (val == null || val.isEmpty) {
+                    return SelectedCell(e.y, cc);
+                  }
+                }
+              } else {
+                for (var rr = e.y; rr < e.y + e.length; rr++) {
+                  final val = board.grid[rr][e.x];
+                  if (val == null || val.isEmpty) {
+                    return SelectedCell(rr, e.x);
+                  }
+                }
+              }
+              return null;
+            }
+
+            // find the entry that contains this cell
+            PuzzleEntryData? containing;
+            for (final e in entries) {
+              if (wantAcross && e.direction != 'across') continue;
+              if (!wantAcross && e.direction != 'down') continue;
+              final contains = wantAcross
+                  ? (nextRow == e.y &&
+                        nextCol >= e.x &&
+                        nextCol < e.x + e.length)
+                  : (nextCol == e.x &&
+                        nextRow >= e.y &&
+                        nextRow < e.y + e.length);
+              if (contains) {
+                containing = e;
+                break;
+              }
+            }
+
+            if (containing != null) {
+              final found = _firstEmptyInEntry(containing);
+              if (found != null) {
+                // If the first empty in the entry is the cell we started from,
+                // prefer the cell we landed on (advance) so arrow navigation
+                // actually moves the selection forward.
+                if (found.row == row && found.col == col) {
+                  _read(selectedCellProvider.notifier).state = SelectedCell(
+                    nextRow,
+                    nextCol,
+                  );
+                } else {
+                  _read(selectedCellProvider.notifier).state = found;
+                }
+                return;
+              }
+
+              // search forward in same direction entries
+              final sameDir =
+                  entries
+                      .where(
+                        (e) => e.direction == (wantAcross ? 'across' : 'down'),
+                      )
+                      .toList()
+                    ..sort((a, b) => a.number.compareTo(b.number));
+              final idx = sameDir.indexWhere(
+                (e) => e.number == containing!.number,
+              );
+              if (idx != -1) {
+                for (var j = idx + 1; j < sameDir.length; j++) {
+                  final candidate = sameDir[j];
+                  final f = _firstEmptyInEntry(candidate);
+                  if (f != null) {
+                    _read(selectedCellProvider.notifier).state = f;
+                    return;
+                  }
+                }
+                for (var j = 0; j < idx; j++) {
+                  final candidate = sameDir[j];
+                  final f = _firstEmptyInEntry(candidate);
+                  if (f != null) {
+                    _read(selectedCellProvider.notifier).state = f;
+                    return;
+                  }
+                }
+              }
+
+              // try other direction
+              final otherDir =
+                  entries
+                      .where(
+                        (e) => e.direction != (wantAcross ? 'across' : 'down'),
+                      )
+                      .toList()
+                    ..sort((a, b) => a.number.compareTo(b.number));
+              for (final candidate in otherDir) {
+                final f = _firstEmptyInEntry(candidate);
+                if (f != null) {
+                  _read(selectedCellProvider.notifier).state = f;
+                  return;
+                }
+              }
+            }
+          }
+        } on Object {
+          // ignore and fall back to selecting the encountered cell
+        }
+
+        // Fallback: select the cell we landed on
         _read(selectedCellProvider.notifier).state = SelectedCell(
           nextRow,
           nextCol,

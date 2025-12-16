@@ -108,7 +108,9 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
             origins.add(origin);
           }
         } else if (e is String) {
-          if (e.isNotEmpty) origins.add(e);
+          if (e.isNotEmpty) {
+            origins.add(e);
+          }
         }
       }
       origins.sort();
@@ -177,7 +179,9 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   var entries = <dynamic>[];
   if (parsed is Map<String, dynamic>) {
     final items = parsed['items'];
-    if (items is List) entries = items;
+    if (items is List) {
+      entries = items;
+    }
   }
   if (entries.isEmpty) {
     throw StateError(

@@ -300,6 +300,143 @@ void main() {
 
       testContainer.dispose();
     });
+
+    test('typing on a filled cell fills next available cell in the word', () {
+      // Build a board with word "MOT" at row 0 across
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'Fill Next',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['M', 'O', null],
+                  [null, null, null],
+                  [null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+                entries: [
+                  const PuzzleEntryData(
+                    number: 1,
+                    direction: 'across',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+      addTearDown(testContainer.dispose);
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      // Cursor is on the first cell which is already 'M'
+      testContainer.read(selectedCellProvider.notifier).state =
+          const SelectedCell(0, 0);
+
+      // Type 'T' -> should place at next empty cell in the across word (0,2)
+      controller.setLetterAndAdvance('T');
+
+      final board = testContainer.read(gameBoardProvider);
+      expect(board.grid[0][0], 'M');
+      expect(board.grid[0][1], 'O');
+      expect(board.grid[0][2], 'T');
+
+      testContainer.dispose();
+    });
+
+    test(
+      'typing on filled cell skips full next word and goes to following word',
+      () {
+        // Board width 5; create three across words on row 0:
+        // word1 at x=0 length=1 (filled), word2 at x=1 length=2 (filled),
+        // word3 at x=3 length=2 (empty)
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Skip Full',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['M', 'O', 'T', null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: {},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                  entries: [
+                    const PuzzleEntryData(
+                      number: 1,
+                      direction: 'across',
+                      x: 0,
+                      y: 0,
+                      length: 1,
+                    ),
+                    const PuzzleEntryData(
+                      number: 2,
+                      direction: 'across',
+                      x: 1,
+                      y: 0,
+                      length: 2,
+                    ),
+                    const PuzzleEntryData(
+                      number: 3,
+                      direction: 'across',
+                      x: 3,
+                      y: 0,
+                      length: 2,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+
+        addTearDown(testContainer.dispose);
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+        // Cursor on first filled word at (0,0)
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 0);
+
+        // Type 'X' -> should skip word2 (full) and place into word3 first cell (0,3)
+        controller.setLetterAndAdvance('X');
+
+        final board = testContainer.read(gameBoardProvider);
+        expect(board.grid[0][3], 'X');
+
+        testContainer.dispose();
+      },
+    );
     test('locked cells cannot be modified', () {
       // Setup a container with a locked cell
       final testContainer = ProviderContainer(

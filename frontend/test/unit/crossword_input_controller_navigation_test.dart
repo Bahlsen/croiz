@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 import '../test_utils/test_board.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/game_audio_service.dart';
@@ -176,5 +177,57 @@ void main() {
     // Selection should remain at (0,0)
     expect(sel!.row, 0);
     expect(sel.col, 0);
+  });
+
+  test('arrow right moves to next word and selects its first empty cell', () {
+    const size = 5;
+    final grid = List.generate(size, (_) => List<String?>.filled(size, null));
+    final black = List.generate(size, (_) => List<bool>.filled(size, false));
+    final boardWithEntries = GameBoard(
+      id: 'test-entries',
+      title: 'Test Entries',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: grid,
+      clues: const {},
+      blackCells: black,
+      difficulty: 1,
+      entries: const [
+        PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 1),
+        PuzzleEntryData(number: 2, direction: 'across', x: 2, y: 0, length: 3),
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(
+          AsyncValue.data(boardWithEntries),
+        ),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    final boardNotifier = container.read(gameBoardProvider.notifier);
+
+    // Select the single-cell first word at (0,0)
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
+
+    final controller = CrosswordInputController.fromContainer(container);
+    const event = KeyDownEvent(
+      logicalKey: LogicalKeyboardKey.arrowRight,
+      physicalKey: PhysicalKeyboardKey.arrowRight,
+      timeStamp: Duration(milliseconds: 10),
+    );
+    controller.handleKey(event, boardNotifier.state.gridSize);
+
+    final sel = container.read(selectedCellProvider);
+    expect(sel, isNotNull);
+    // Next across word starts at (0,2); its first empty cell should be (0,2)
+    expect(sel!.row, 0);
+    expect(sel.col, 2);
   });
 }
