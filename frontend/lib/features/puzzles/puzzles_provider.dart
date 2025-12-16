@@ -108,16 +108,15 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
             origins.add(origin);
           }
         } else if (e is String) {
-          if (e.isNotEmpty) {
-            origins.add(e);
-          }
+          if (e.isNotEmpty) origins.add(e);
         }
       }
       origins.sort();
       return origins;
     }
   }
-  throw StateError('Invalid puzzles_index.json: missing or invalid "origins" array.');
+
+  throw StateError('Invalid puzzles_index.json: merged index must include a non-empty "origins" array.');
 });
 
 /// Provider to load the compact index for a single origin lazily.
@@ -172,18 +171,11 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   final parsed = jsonDecode(raw);
   final out = <PuzzleDescriptor>[];
 
-  // Expect merged index format: object { items: [ ... ] } or items: { value: [...] }
+  // Expect merged index format: object { items: [ ... ] }
   var entries = <dynamic>[];
   if (parsed is Map<String, dynamic>) {
     final items = parsed['items'];
-    if (items is List) {
-      entries = items;
-    } else if (items is Map<String, dynamic>) {
-      final v = items['value'];
-      if (v is List) {
-        entries = v;
-      }
-    }
+    if (items is List) entries = items;
   }
   if (entries.isEmpty) {
     throw StateError('Invalid puzzles_index.json: expected merged object with "items" list.');
