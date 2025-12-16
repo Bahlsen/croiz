@@ -21,6 +21,7 @@ class CrosswordInputController {
       );
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
+    Timer? _wordCheckTimer;
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
@@ -66,7 +67,7 @@ class CrosswordInputController {
         first[1],
       );
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
-      _checkForCompletedWords();
+      _scheduleCheckForCompletedWords();
       _moveToNext(board, startRow: first[0], startCol: first[1]);
       return;
     }
@@ -91,7 +92,7 @@ class CrosswordInputController {
         nextCol,
       );
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
-      _checkForCompletedWords();
+      _scheduleCheckForCompletedWords();
       _moveToNext(board, startRow: nextRow, startCol: nextCol);
       return;
     }
@@ -111,7 +112,7 @@ class CrosswordInputController {
         final f = _firstEmptyInEntry(containing, board, skipLocked: true);
         if (f != null) {
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
-          _checkForCompletedWords();
+          _scheduleCheckForCompletedWords();
           _moveToNext(board, startRow: f.row, startCol: f.col);
           return;
         }
@@ -126,7 +127,7 @@ class CrosswordInputController {
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
-          _checkForCompletedWords();
+          _scheduleCheckForCompletedWords();
           _moveToNext(board, startRow: nextF.row, startCol: nextF.col);
           return;
         }
@@ -136,7 +137,26 @@ class CrosswordInputController {
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
-    _checkForCompletedWords();
+    _scheduleCheckForCompletedWords();
+  
+  void _scheduleCheckForCompletedWords({Duration delay = const Duration(milliseconds: 50)}) {
+    // Debounce repeated keystrokes so heavy checks (looping entries,
+    // playing sounds, flashing) don't run for every single key when
+    // the user types quickly.
+    try {
+      _wordCheckTimer?.cancel();
+    } on Object {
+      // ignore
+    }
+    _wordCheckTimer = Timer(delay, () {
+      if (_disposed) return;
+      try {
+        _checkForCompletedWords();
+      } on Object catch (e, st) {
+        developer.log('Scheduled _checkForCompletedWords failed', error: e, stackTrace: st);
+      }
+    });
+  }
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
   }
 
@@ -727,6 +747,7 @@ class CrosswordInputController {
     _disposed = true;
     try {
       _flashClearTimer?.cancel();
+      _wordCheckTimer?.cancel();
     } on Object {
       // ignore
     }
