@@ -31,7 +31,7 @@ class CrosswordCell extends ConsumerWidget {
     final isSelected =
         selected != null && selected.row == row && selected.col == col;
     final isFlashing = flashingCells.contains(cellKey);
-    final isClearedFlashing = clearedFlashingCells.contains(cellKey);
+    final isClearedFlashing = clearedFlashingCells.contains('$row,$col');
 
     // Determine if part of selected word
     var isPartOfSelectedWord = false;
