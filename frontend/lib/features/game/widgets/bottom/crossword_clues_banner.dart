@@ -40,12 +40,11 @@ class CrosswordClueBanner extends ConsumerWidget {
       );
     }
 
-    // Ensure we rebuild when a new puzzle is loaded (watch id), but
-    // avoid watching entire board to prevent rebuilds on every letter.
-    ref.watch(gameBoardProvider.select((b) => b.id));
+    // Board must be available to compute the current entry. If the
+    // provider isn't ready, render nothing — the screen shows loading.
     GameBoard board;
     try {
-      board = ref.read(gameBoardProvider);
+      board = ref.watch(gameBoardProvider);
     } on Object catch (_) {
       return const SizedBox.shrink();
     }

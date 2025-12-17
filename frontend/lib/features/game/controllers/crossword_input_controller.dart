@@ -21,13 +21,11 @@ class CrosswordInputController {
       );
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
-  Timer? _wordCheckTimer;
+    Timer? _wordCheckTimer;
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
-  void _scheduleCheckForCompletedWords({
-    Duration delay = const Duration(milliseconds: 50),
-  }) {
+  void _scheduleCheckForCompletedWords({Duration delay = const Duration(milliseconds: 50)}) {
     // Debounce repeated keystrokes so heavy checks (looping entries,
     // playing sounds, flashing) don't run for every single key when
     // the user types quickly.
@@ -43,11 +41,7 @@ class CrosswordInputController {
       try {
         _checkForCompletedWords();
       } on Object catch (e, st) {
-        developer.log(
-          'Scheduled _checkForCompletedWords failed',
-          error: e,
-          stackTrace: st,
-        );
+        developer.log('Scheduled _checkForCompletedWords failed', error: e, stackTrace: st);
       }
     });
   }
@@ -252,7 +246,7 @@ class CrosswordInputController {
   }
 
   void tryAutoSelectFirstAcross(GameBoard board) {
-    if (_didAutoSelectFirstAcross) {
+    if (_didAutoSelectFirstAcross) { 
       return;
     }
     final alreadySelected = _read(selectedCellProvider);
@@ -260,7 +254,7 @@ class CrosswordInputController {
       return;
     }
     final entries = board.entries;
-    if (entries == null || entries.isEmpty) {
+    if (entries == null || entries.isEmpty) { 
       return;
     }
     final firstAcross = entries.where((e) => e.direction == 'across').toList()
@@ -424,8 +418,7 @@ class CrosswordInputController {
     }
   }
 
-  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) =>
-      cellBelongsToWord(row, col, entries);
+  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) => cellBelongsToWord(row, col, entries);
 
   void _moveToNext(
     GameBoard board, {
@@ -541,13 +534,13 @@ class CrosswordInputController {
   PuzzleEntryData? _findContainingEntry(
     int row,
     int col,
-    bool wantAcross,
+    bool wantAcross, 
     List<PuzzleEntryData>? entries,
   ) {
     if (entries == null || entries.isEmpty) {
       return null;
     }
-    for (final e in entries) {
+    for (final e in entries) { 
       if (wantAcross && e.direction != 'across') {
         continue;
       }
@@ -555,7 +548,7 @@ class CrosswordInputController {
         continue;
       }
       final contains = wantAcross
-          ? (row == e.y && col >= e.x && col < e.x + e.length)
+          ? (row == e.y && col >= e.x && col < e.x + e.length) 
           : (col == e.x && row >= e.y && row < e.y + e.length);
       if (contains) {
         return e;
