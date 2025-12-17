@@ -750,4 +750,78 @@ void main() {
       },
     );
   });
+
+  group('CrosswordInputController - Initial Selection', () {
+    test('auto-selects first cell of first across on game start', () {
+      final container = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'init-select',
+                title: 'Init Select',
+                gridSize: 5,
+                createdAt: DateTime.now(),
+                grid: List<List<String?>>.generate(
+                  5,
+                  (_) => List<String?>.filled(5, null),
+                ),
+                clues: const {},
+                blackCells: List<List<bool>>.generate(
+                  5,
+                  (_) => List<bool>.filled(5, false),
+                ),
+                difficulty: 1,
+                entries: const [
+                  // First across (numbered 1) at y=0, x=0, len=3
+                  PuzzleEntryData(
+                    number: 1,
+                    direction: 'across',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                  ),
+                  // Another across later (numbered 2)
+                  PuzzleEntryData(
+                    number: 2,
+                    direction: 'across',
+                    x: 2,
+                    y: 2,
+                    length: 2,
+                  ),
+                  // A down entry should be ignored for initial auto-select
+                  PuzzleEntryData(
+                    number: 3,
+                    direction: 'down',
+                    x: 4,
+                    y: 0,
+                    length: 3,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Sanity: no cell selected before calling auto-select.
+      expect(container.read(selectedCellProvider), isNull);
+
+      final controller = CrosswordInputController.fromContainer(container);
+      final board = container.read(gameBoardProvider);
+
+      controller.tryAutoSelectFirstAcross(board);
+
+      final sel = container.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(sel!.row, 0);
+      expect(sel.col, 0);
+
+      // Direction should be horizontal after auto-select
+      final dir = container.read(wordDirectionProvider);
+      expect(dir, WordDirection.horizontal);
+    });
+  });
 }
