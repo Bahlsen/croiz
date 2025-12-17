@@ -27,6 +27,8 @@ class CrosswordInputController {
 
   void _scheduleCheckForCompletedWords({
     Duration delay = const Duration(milliseconds: 50),
+    int? row,
+    int? col,
   }) {
     // Debounce repeated keystrokes so heavy checks (looping entries,
     // playing sounds, flashing) don't run for every single key when
@@ -41,7 +43,11 @@ class CrosswordInputController {
         return;
       }
       try {
-        _checkForCompletedWords();
+        if (row != null && col != null) {
+          _checkForCompletedWordsForCell(row, col);
+        } else {
+          _checkForCompletedWords();
+        }
       } on Object catch (e, st) {
         developer.log(
           'Scheduled _checkForCompletedWords failed',
@@ -98,8 +104,8 @@ class CrosswordInputController {
           (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
-      _checkForCompletedWords();
-      _scheduleCheckForCompletedWords();
+      _checkForCompletedWordsForCell(first[0], first[1]);
+      _scheduleCheckForCompletedWords(row: first[0], col: first[1]);
       _moveToNext(
         _safeReadBoard(),
         startRow: first[0],
@@ -132,8 +138,8 @@ class CrosswordInputController {
           (board.grid[nextRow][nextCol] == null) ||
           (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
-      _checkForCompletedWords();
-      _scheduleCheckForCompletedWords();
+      _checkForCompletedWordsForCell(nextRow, nextCol);
+      _scheduleCheckForCompletedWords(row: nextRow, col: nextCol);
       _moveToNext(
         _safeReadBoard(),
         startRow: nextRow,
@@ -159,8 +165,8 @@ class CrosswordInputController {
         if (f != null) {
           // f is guaranteed empty by definition
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
-          _checkForCompletedWords();
-          _scheduleCheckForCompletedWords();
+          _checkForCompletedWordsForCell(f.row, f.col);
+          _scheduleCheckForCompletedWords(row: f.row, col: f.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: f.row,
@@ -186,8 +192,11 @@ class CrosswordInputController {
             _read(
               gameBoardProvider.notifier,
             ).setLetter(selected.row, selected.col, letter);
-            _checkForCompletedWords();
-            _scheduleCheckForCompletedWords();
+            _checkForCompletedWordsForCell(selected.row, selected.col);
+            _scheduleCheckForCompletedWords(
+              row: selected.row,
+              col: selected.col,
+            );
             _moveToNext(
               _safeReadBoard(),
               startRow: selected.row,
@@ -210,8 +219,8 @@ class CrosswordInputController {
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
-          _checkForCompletedWords();
-          _scheduleCheckForCompletedWords();
+          _checkForCompletedWordsForCell(nextF.row, nextF.col);
+          _scheduleCheckForCompletedWords(row: nextF.row, col: nextF.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: nextF.row,
@@ -229,8 +238,8 @@ class CrosswordInputController {
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
-    _checkForCompletedWords();
-    _scheduleCheckForCompletedWords();
+    _checkForCompletedWordsForCell(selected.row, selected.col);
+    _scheduleCheckForCompletedWords(row: selected.row, col: selected.col);
     _moveToNext(
       _safeReadBoard(),
       startRow: selected.row,
@@ -885,6 +894,113 @@ class CrosswordInputController {
     } on Object catch (e, st) {
       developer.log(
         'Error checking for completed words',
+        error: e,
+        stackTrace: st,
+      );
+    }
+  }
+
+  void _checkForCompletedWordsForCell(int row, int col) {
+    final board = _safeReadBoard();
+    final entries = board.entries;
+
+    if (entries == null || entries.isEmpty) {
+      return;
+    }
+
+    // Determine entries that include the given cell (across and/or down).
+    List<PuzzleEntryData> impacted;
+    try {
+      final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
+        cellEntriesIndexProvider,
+      );
+      impacted = List<PuzzleEntryData>.from(
+        index[CellKey(row, col)] ?? const [],
+      );
+    } on Object {
+      impacted = <PuzzleEntryData>[];
+      for (final e in entries) {
+        final isAcross = e.directionEnum == EntryDirection.across;
+        final contains = isAcross
+            ? (row == e.y && col >= e.x && col < e.x + e.length)
+            : (col == e.x && row >= e.y && row < e.y + e.length);
+        if (contains) {
+          impacted.add(e);
+        }
+      }
+    }
+
+    if (impacted.isEmpty) {
+      return;
+    }
+
+    final wordCheckService = _read(wordCheckServiceProvider);
+    final foundWords = _read(foundWordsProvider);
+    final newFoundWords = Set<String>.from(foundWords);
+    final lockedCells = _read(lockedCellsProvider);
+    final newLockedCells = Set<CellKey>.from(lockedCells);
+
+    for (final entry in impacted) {
+      final wordKey = wordCheckService.getWordKey(entry);
+      if (foundWords.contains(wordKey)) {
+        continue;
+      }
+      if (wordCheckService.isWordComplete(board, entry)) {
+        newFoundWords.add(wordKey);
+        try {
+          _read(gameAudioServiceProvider).playSuccess();
+        } on Object catch (e, st) {
+          developer.log('playSuccess failed', error: e, stackTrace: st);
+        }
+        final cellKeys = wordCheckService.getCellKeys(entry);
+        _read(flashingCellsProvider.notifier).state = cellKeys.toSet();
+        newLockedCells.addAll(cellKeys);
+
+        final _delay = _read(flashClearDelayProvider);
+        _flashClearTimer?.cancel();
+        _flashClearTimer = Timer(_delay, () {
+          if (_disposed) {
+            return;
+          }
+          try {
+            _read(flashingCellsProvider.notifier).state = <CellKey>{};
+          } on Object catch (e, st) {
+            developer.log(
+              'Clearing flashing cells failed',
+              error: e,
+              stackTrace: st,
+            );
+          }
+        });
+      }
+    }
+
+    if (newFoundWords.length > foundWords.length) {
+      _read(foundWordsProvider.notifier).state = newFoundWords;
+    }
+
+    if (newLockedCells.length > lockedCells.length) {
+      _read(lockedCellsProvider.notifier).state = newLockedCells;
+    }
+
+    // Victory check based on total entries
+    try {
+      final totalEntries = entries.length;
+      if (totalEntries > 0 && newFoundWords.length == totalEntries) {
+        try {
+          _read(gameTimerProvider(board.id)).finalizeSync();
+        } on Object catch (e, st) {
+          developer.log('finalizeSync failed', error: e, stackTrace: st);
+        }
+        try {
+          _read(gameAudioServiceProvider).playVictory();
+        } on Object catch (e, st) {
+          developer.log('playVictory failed', error: e, stackTrace: st);
+        }
+      }
+    } on Object catch (e, st) {
+      developer.log(
+        'Error checking for completed words (per-cell)',
         error: e,
         stackTrace: st,
       );

@@ -78,11 +78,11 @@ void main() {
 
     final animated = tester.widget<AnimatedContainer>(animatedFinder);
     final decoration =
-      (animated.decoration ?? const BoxDecoration()) as BoxDecoration;
+        (animated.decoration ?? const BoxDecoration()) as BoxDecoration;
 
     // Border should be red accent during cleared flash
     final border =
-      (decoration.border ?? Border.all(color: Colors.transparent)) as Border;
+        (decoration.border ?? Border.all(color: Colors.transparent)) as Border;
     expect(border.top.color, equals(Colors.redAccent));
 
     // Background should have a reddish tint (exact value match)
@@ -94,9 +94,10 @@ void main() {
 
     final animatedAfter = tester.widget<AnimatedContainer>(animatedFinder);
     final decorationAfter =
-      (animatedAfter.decoration ?? const BoxDecoration()) as BoxDecoration;
-    final borderAfter = (decorationAfter.border ??
-      Border.all(color: Colors.transparent)) as Border;
+        (animatedAfter.decoration ?? const BoxDecoration()) as BoxDecoration;
+    final borderAfter =
+        (decorationAfter.border ?? Border.all(color: Colors.transparent))
+            as Border;
 
     // No longer red border after flash clears
     expect(borderAfter.top.color, isNot(Colors.redAccent));
