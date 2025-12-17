@@ -529,3 +529,31 @@ final entryFoundProvider = Provider.family<bool, String>(
 final cellLockedProvider = Provider.family<bool, CellKey>(
   (ref, key) => ref.watch(lockedCellsProvider).contains(key),
 );
+
+/// Set of cells belonging to the currently selected word (by selection + direction).
+/// Computed once per selection/direction change to avoid per-cell wordBounds calls.
+final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
+  final selected = ref.watch(selectedCellProvider);
+  final dir = ref.watch(wordDirectionProvider);
+  if (selected == null) {
+    return const <CellKey>{};
+  }
+  final black = ref.watch(gameBoardProvider.select((b) => b.blackCells));
+  final horizontal = dir == WordDirection.horizontal;
+  final bounds = black.wordBounds(
+    selected.row,
+    selected.col,
+    horizontal: horizontal,
+  );
+  final cells = <CellKey>{};
+  if (horizontal) {
+    for (var c = bounds[0]; c <= bounds[1]; c++) {
+      cells.add(CellKey(selected.row, c));
+    }
+  } else {
+    for (var r = bounds[0]; r <= bounds[1]; r++) {
+      cells.add(CellKey(r, selected.col));
+    }
+  }
+  return cells;
+});
