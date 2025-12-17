@@ -141,16 +141,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (state.blackCells.isDisabled(row, col)) {
       return;
     }
-    final newGrid = List<List<String?>>.from(
-      state.grid.map(List<String?>.from),
-    );
-    newGrid[row][col] = letter == null || letter.isEmpty
+    // Optimize updates: copy only the changed row instead of cloning the
+    // entire grid, and reuse blackCells since they are unchanged here.
+    final newGrid = List<List<String?>>.of(state.grid);
+    final rowCopy = List<String?>.of(newGrid[row]);
+    rowCopy[col] = letter == null || letter.isEmpty
         ? null
         : letter.substring(0, 1).toUpperCase();
-    // copy blackCells as-is
-    final newBlack = List<List<bool>>.from(
-      state.blackCells.map(List<bool>.from),
-    );
+    newGrid[row] = rowCopy;
     state = GameBoard(
       id: state.id,
       title: state.title,
@@ -158,7 +156,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       createdAt: state.createdAt,
       grid: newGrid,
       clues: state.clues,
-      blackCells: newBlack,
+      blackCells: state.blackCells,
       difficulty: state.difficulty,
       entries: state.entries,
       solutionGrid: state.solutionGrid,
@@ -477,8 +475,8 @@ final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<CellKey>>(
 final cellEntriesIndexProvider = Provider<Map<CellKey, List<PuzzleEntryData>>>((
   ref,
 ) {
-  final board = ref.watch(gameBoardProvider);
-  final entries = board.entries;
+  // Recompute index only when entries change (grid changes do not matter).
+  final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
   if (entries == null || entries.isEmpty) {
     return const {};
   }
@@ -497,8 +495,10 @@ final cellEntriesIndexProvider = Provider<Map<CellKey, List<PuzzleEntryData>>>((
 
 /// Precomputed clue numbers map for quick per-cell lookup.
 final clueNumbersProvider = Provider<Map<String, int>>((ref) {
-  final board = ref.watch(gameBoardProvider);
-  return ClueNumbering.numbersFromBoard(board);
+  // Only depend on gridSize and entries, which are sufficient for numbering.
+  final size = ref.watch(gameBoardProvider.select((b) => b.gridSize));
+  final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
+  return ClueNumbering.numbersFrom(size, entries);
 });
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
@@ -512,10 +512,10 @@ Set<String> _initialFlashingClearedCells(ref) => <String>{};
 /// `cellValueProvider([r, c])` to rebuild only when that cell's letter
 /// changes, avoiding large grid rebuilds.
 final cellValueProvider = Provider.family<String?, List<int>>((ref, coords) {
-  final board = ref.watch(gameBoardProvider);
   final r = coords[0];
   final c = coords[1];
-  return board.grid[r][c];
+  // Only rebuild when this specific cell value changes.
+  return ref.watch(gameBoardProvider.select((b) => b.grid[r][c]));
 });
 
 /// Provider family exposing whether a word (by wordKey) has been found.

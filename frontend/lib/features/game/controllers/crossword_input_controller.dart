@@ -93,11 +93,19 @@ class CrosswordInputController {
         first[0],
         first[1],
       );
+      final wasEmpty =
+          (board.grid[first[0]][first[1]] == null) ||
+          (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
       _checkForCompletedWords();
       _scheduleCheckForCompletedWords();
-      _moveToNext(board, startRow: first[0], startCol: first[1]);
+      _moveToNext(
+        _safeReadBoard(),
+        startRow: first[0],
+        startCol: first[1],
+        wasEmptyAtStart: wasEmpty,
+      );
       return;
     }
 
@@ -120,10 +128,18 @@ class CrosswordInputController {
         nextRow,
         nextCol,
       );
+      final wasEmpty =
+          (board.grid[nextRow][nextCol] == null) ||
+          (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _checkForCompletedWords();
       _scheduleCheckForCompletedWords();
-      _moveToNext(board, startRow: nextRow, startCol: nextCol);
+      _moveToNext(
+        _safeReadBoard(),
+        startRow: nextRow,
+        startCol: nextCol,
+        wasEmptyAtStart: wasEmpty,
+      );
       return;
     }
 
@@ -141,13 +157,48 @@ class CrosswordInputController {
       if (containing != null) {
         final f = _firstEmptyInEntry(containing, board, skipLocked: true);
         if (f != null) {
+          // f is guaranteed empty by definition
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
           _checkForCompletedWords();
           _scheduleCheckForCompletedWords();
-          _moveToNext(board, startRow: f.row, startCol: f.col);
+          _moveToNext(
+            _safeReadBoard(),
+            startRow: f.row,
+            startCol: f.col,
+            wasEmptyAtStart: true,
+          );
           return;
         }
 
+        // No empty cell within the containing entry. If caret is on the
+        // last cell and replacing it would still leave the word incomplete,
+        // treat this as editing the last letter in-place (no jump).
+        final isLastCellOfContaining = wantAcross
+            ? (selected.col == containing.x + containing.length - 1)
+            : (selected.row == containing.y + containing.length - 1);
+        if (isLastCellOfContaining) {
+          final hasAuthoritative =
+              (board.solutionGrid != null) ||
+              (containing.answer?.isNotEmpty ?? false);
+          if (hasAuthoritative) {
+            // With authoritative answers, treat typing on last cell as editing
+            // in place, then let _moveToNext decide advancement.
+            _read(
+              gameBoardProvider.notifier,
+            ).setLetter(selected.row, selected.col, letter);
+            _checkForCompletedWords();
+            _scheduleCheckForCompletedWords();
+            _moveToNext(
+              _safeReadBoard(),
+              startRow: selected.row,
+              startCol: selected.col,
+              wasEmptyAtStart: false,
+            );
+            return;
+          }
+        }
+
+        // Otherwise, try to advance to the first empty cell of the next entry.
         final nextF = _findNextEmptyFromEntry(
           containing,
           wantAcross,
@@ -155,23 +206,37 @@ class CrosswordInputController {
           entries,
         );
         if (nextF != null) {
+          // nextF is the first empty of the next/other entry
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
           _checkForCompletedWords();
           _scheduleCheckForCompletedWords();
-          _moveToNext(board, startRow: nextF.row, startCol: nextF.col);
+          _moveToNext(
+            _safeReadBoard(),
+            startRow: nextF.row,
+            startCol: nextF.col,
+            wasEmptyAtStart: true,
+          );
           return;
         }
       }
     }
 
+    final wasEmptyHere =
+        (board.grid[selected.row][selected.col] == null) ||
+        (board.grid[selected.row][selected.col]?.isEmpty ?? true);
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
     _checkForCompletedWords();
     _scheduleCheckForCompletedWords();
-    _moveToNext(board, startRow: selected.row, startCol: selected.col);
+    _moveToNext(
+      _safeReadBoard(),
+      startRow: selected.row,
+      startCol: selected.col,
+      wasEmptyAtStart: wasEmptyHere,
+    );
   }
 
   List<int>? _nextEditableCell(
@@ -452,6 +517,7 @@ class CrosswordInputController {
     GameBoard board, {
     required int startRow,
     required int startCol,
+    required bool wasEmptyAtStart,
   }) {
     final dir = _read(wordDirectionProvider);
     final lockedCells = _read(lockedCellsProvider);
@@ -498,10 +564,26 @@ class CrosswordInputController {
               ? (startCol == containing.x + containing.length - 1)
               : (startRow == containing.y + containing.length - 1);
           if (isLast) {
+            // Only auto-advance to the next entry if the current word is
+            // actually complete (or already found), OR if we just filled an
+            // empty last cell (forward typing). When editing the last cell
+            // (was not empty), require completion; otherwise stay put.
+            final canAdvance = (() {
+              if (wasEmptyAtStart) {
+                return true;
+              }
+              final key = wordCheck.getWordKey(containing);
+              if (foundWords.contains(key)) {
+                return true;
+              }
+              return wordCheck.isWordComplete(board, containing);
+            })();
+            if (!canAdvance) {
+              return; // keep selection on the last cell
+            }
             // find index of containing in sameDir
-            final idx = sameDir.indexWhere(
-              (e) => e.number == containing!.number,
-            );
+            final currentNumber = containing.number;
+            final idx = sameDir.indexWhere((e) => e.number == currentNumber);
             if (idx != -1) {
               // Move to the next numbered entry in the same direction (wrap around).
               // This ensures that when the last letter of a word is entered,

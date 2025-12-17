@@ -490,6 +490,81 @@ void main() {
       testContainer.dispose();
     });
 
+    test('typing on last cell does not jump when word incomplete', () {
+      // 3-letter across word with wrong last letter; editing last letter
+      // should not auto-advance to next word unless it becomes complete.
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'No Jump on Incomplete',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['C', 'A', 'X'], // last letter incorrect
+                  [null, null, null],
+                  [null, null, null],
+                ],
+                clues: const {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+                entries: const [
+                  PuzzleEntryData(
+                    number: 1,
+                    direction: 'across',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                    answer: 'CAT',
+                  ),
+                  // add a next across word to the right so jump would be visible
+                  PuzzleEntryData(
+                    number: 2,
+                    direction: 'across',
+                    x: 0,
+                    y: 1,
+                    length: 3,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+      addTearDown(testContainer.dispose);
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+
+      // Place selection on the last cell of the first word (0,2)
+      testContainer.read(selectedCellProvider.notifier).state =
+          const SelectedCell(0, 2);
+
+      // Replace last letter with another incorrect letter; word stays incomplete
+      controller.setLetterAndAdvance('Z');
+
+      // Selection should remain on the same last cell (no jump)
+      final sel = testContainer.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(sel!.row, 0);
+      expect(sel.col, 2);
+
+      // Now type the correct letter to complete the word; this time it may advance
+      controller.setLetterAndAdvance('T');
+
+      // Either the word is complete and we move to next word start, or
+      // selection remains if there is no suitable next word. Assert grid updated.
+      final board = testContainer.read(gameBoardProvider);
+      expect(board.grid[0][2], 'T');
+    });
+
     test('clearCurrent does not clear locked cells', () {
       final testContainer = ProviderContainer(
         overrides: [
