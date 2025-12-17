@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
-import 'package:croiz/features/game/utils/clue_numbering.dart';
 
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
@@ -17,28 +15,21 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Prefer watching the live `gameBoardProvider` so the UI updates when
-    // the board changes. If the provider isn't available (loading/error),
-    // render a fallback empty container — the top-level screen presents
-    // loading/error state to the user.
-    GameBoard board;
-    try {
-      board = ref.watch(gameBoardProvider);
-    } on Object catch (e, st) {
-      developer.log('gameBoardProvider watch failed', error: e, stackTrace: st);
-      return Container(color: Colors.black);
-    }
+    // Narrow watches to only what this cell needs.
     final selected = ref.watch(selectedCellProvider);
     final wordDirection = ref.watch(wordDirectionProvider);
-    final black = board.blackCells;
-
+    final isBlack = ref.watch(
+      gameBoardProvider.select((b) => b.blackCells[row][col]),
+    );
+    if (isBlack) {
+      return Container(color: Colors.black);
+    }
+    final blackGrid = ref.watch(gameBoardProvider.select((b) => b.blackCells));
     final cellKey = CellKey(row, col);
     final flashingCells = ref.watch(flashingCellsProvider);
     final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
-
     final isSelected =
         selected != null && selected.row == row && selected.col == col;
-    final isDisabled = black.isDisabled(row, col);
     final isFlashing = flashingCells.contains(cellKey);
     final isClearedFlashing = clearedFlashingCells.contains(cellKey);
 
@@ -46,7 +37,7 @@ class CrosswordCell extends ConsumerWidget {
     var isPartOfSelectedWord = false;
     if (selected != null) {
       final horizontal = wordDirection == WordDirection.horizontal;
-      final bounds = black.wordBounds(
+      final bounds = blackGrid.wordBounds(
         selected.row,
         selected.col,
         horizontal: horizontal,
@@ -60,13 +51,10 @@ class CrosswordCell extends ConsumerWidget {
       }
     }
 
-    if (isDisabled) {
-      return Container(color: Colors.black);
-    }
-
-    final letter = board.grid[row][col];
-    final numbers = ClueNumbering.numbersFromBoard(board);
-    final cellNumber = numbers['$row,$col'];
+    final letter = ref.watch(cellValueProvider([row, col]));
+    final cellNumber = ref.watch(
+      clueNumbersProvider.select((m) => m['$row,$col']),
+    );
 
     // Visuals: compute decoration pieces
     final boxShadow = isClearedFlashing
@@ -92,9 +80,6 @@ class CrosswordCell extends ConsumerWidget {
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
-          ]
-        : isPartOfSelectedWord
-        ? [
             BoxShadow(
               color: Colors.blue.withValues(alpha: 0.28),
               blurRadius: 8,

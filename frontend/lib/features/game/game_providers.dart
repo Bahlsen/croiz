@@ -10,6 +10,7 @@ import 'package:croiz/core/puzzle_converter.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/game/utils/clue_numbering.dart';
 
 /// Duration used to schedule clearing of flashed cells after animations.
 /// Tests can override this provider to `Duration.zero` to avoid scheduling
@@ -470,6 +471,35 @@ class LockedCellsNotifier extends Notifier<Set<CellKey>> {
 final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<CellKey>>(
   LockedCellsNotifier.new,
 );
+
+/// Index of entries by cell for fast lookups.
+/// Maps a CellKey to the list of entries (across/down) that include it.
+final cellEntriesIndexProvider = Provider<Map<CellKey, List<PuzzleEntryData>>>((
+  ref,
+) {
+  final board = ref.watch(gameBoardProvider);
+  final entries = board.entries;
+  if (entries == null || entries.isEmpty) {
+    return const {};
+  }
+  final map = <CellKey, List<PuzzleEntryData>>{};
+  for (final e in entries) {
+    final isAcross = e.directionEnum == EntryDirection.across;
+    for (var i = 0; i < e.length; i++) {
+      final r = isAcross ? e.y : e.y + i;
+      final c = isAcross ? e.x + i : e.x;
+      final key = CellKey(r, c);
+      map.putIfAbsent(key, () => <PuzzleEntryData>[]).add(e);
+    }
+  }
+  return map;
+});
+
+/// Precomputed clue numbers map for quick per-cell lookup.
+final clueNumbersProvider = Provider<Map<String, int>>((ref) {
+  final board = ref.watch(gameBoardProvider);
+  return ClueNumbering.numbersFromBoard(board);
+});
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
@@ -481,14 +511,12 @@ Set<String> _initialFlashingClearedCells(ref) => <String>{};
 /// Provider family exposing a single cell's value. Widgets should watch
 /// `cellValueProvider([r, c])` to rebuild only when that cell's letter
 /// changes, avoiding large grid rebuilds.
-final cellValueProvider = Provider.family<String?, List<int>>(
-  (ref, coords) {
-    final board = ref.watch(gameBoardProvider);
-    final r = coords[0];
-    final c = coords[1];
-    return board.grid[r][c];
-  },
-);
+final cellValueProvider = Provider.family<String?, List<int>>((ref, coords) {
+  final board = ref.watch(gameBoardProvider);
+  final r = coords[0];
+  final c = coords[1];
+  return board.grid[r][c];
+});
 
 /// Provider family exposing whether a word (by wordKey) has been found.
 /// Widgets showing entry-level UI should watch this to avoid listening to

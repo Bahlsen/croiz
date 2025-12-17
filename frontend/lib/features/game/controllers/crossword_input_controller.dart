@@ -432,7 +432,21 @@ class CrosswordInputController {
   }
 
   bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) =>
-      cellBelongsToWord(row, col, entries);
+      (() {
+        // Prefer fast index when available; fallback to linear check helper.
+        try {
+          final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
+            cellEntriesIndexProvider,
+          );
+          if (index.isEmpty && (entries == null || entries.isEmpty)) {
+            return true;
+          }
+          return (index[CellKey(row, col)]?.isNotEmpty ?? false) ||
+              cellBelongsToWord(row, col, entries);
+        } on Object {
+          return cellBelongsToWord(row, col, entries);
+        }
+      })();
 
   void _moveToNext(
     GameBoard board, {
@@ -574,6 +588,23 @@ class CrosswordInputController {
     bool wantAcross,
     List<PuzzleEntryData>? entries,
   ) {
+    try {
+      final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
+        cellEntriesIndexProvider,
+      );
+      final list = index[CellKey(row, col)];
+      if (list == null || list.isEmpty) {
+        return null;
+      }
+      final dir = wantAcross ? EntryDirection.across : EntryDirection.down;
+      for (final e in list) {
+        if (e.directionEnum == dir) {
+          return e;
+        }
+      }
+    } on Object {
+      // ignore and fallback
+    }
     if (entries == null || entries.isEmpty) {
       return null;
     }
