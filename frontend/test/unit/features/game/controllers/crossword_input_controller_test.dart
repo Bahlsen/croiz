@@ -565,6 +565,82 @@ void main() {
       expect(board.grid[0][2], 'T');
     });
 
+    test('typing on last vertical cell does not jump when word incomplete', () {
+      // 3-letter down word with wrong last letter; editing last letter
+      // should not auto-advance to next word unless it becomes complete.
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'No Jump on Incomplete (Vertical)',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['C', null, null],
+                  ['A', null, null],
+                  ['X', null, null], // last letter incorrect at (2,0)
+                ],
+                clues: const {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+                entries: const [
+                  PuzzleEntryData(
+                    number: 1,
+                    direction: 'down',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                    answer: 'CAT',
+                  ),
+                  // add another vertical word in next column so jump would be visible
+                  PuzzleEntryData(
+                    number: 2,
+                    direction: 'down',
+                    x: 1,
+                    y: 0,
+                    length: 3,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+
+      addTearDown(testContainer.dispose);
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+
+      // Place selection on the last cell of the first vertical word (2,0)
+      testContainer.read(selectedCellProvider.notifier).state =
+          const SelectedCell(2, 0);
+      testContainer.read(wordDirectionProvider.notifier).state =
+          WordDirection.vertical;
+
+      // Replace last letter with another incorrect letter; word stays incomplete
+      controller.setLetterAndAdvance('Z');
+
+      // Selection should remain on the same last cell (no jump)
+      final sel = testContainer.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(sel!.row, 2);
+      expect(sel.col, 0);
+
+      // Now type the correct letter to complete the word; this time it may advance
+      controller.setLetterAndAdvance('T');
+
+      // Assert grid updated
+      final board = testContainer.read(gameBoardProvider);
+      expect(board.grid[2][0], 'T');
+    });
+
     test('clearCurrent does not clear locked cells', () {
       final testContainer = ProviderContainer(
         overrides: [
