@@ -445,6 +445,12 @@ final flashingCellsProvider =
       FlashingCellsNotifier.new,
     );
 
+/// Provider family for whether a specific cell is currently flashing.
+final cellFlashingProvider = Provider.family<bool, CellKey>((ref, key) {
+  final set = ref.watch(flashingCellsProvider);
+  return set.contains(key);
+});
+
 // Holds cells that should flash red because they were cleared by the cleaner.
 class FlashingClearedCellsNotifier extends Notifier<Set<String>> {
   @override
@@ -457,6 +463,12 @@ final flashingClearedCellsProvider =
     NotifierProvider<FlashingClearedCellsNotifier, Set<String>>(
       FlashingClearedCellsNotifier.new,
     );
+
+/// Provider family for whether a specific cell is in the "cleared flash" set.
+final cellClearedFlashingProvider = Provider.family<bool, CellKey>((ref, key) {
+  final set = ref.watch(flashingClearedCellsProvider);
+  return set.contains('${key.row},${key.col}');
+});
 
 // Holds cells that are locked (format: "row,col")
 class LockedCellsNotifier extends Notifier<Set<CellKey>> {
@@ -518,12 +530,25 @@ final cellValueProvider = Provider.family<String?, List<int>>((ref, coords) {
   return ref.watch(gameBoardProvider.select((b) => b.grid[r][c]));
 });
 
-/// Provider family exposing whether a word (by wordKey) has been found.
-/// Widgets showing entry-level UI should watch this to avoid listening to
-/// the whole `foundWordsProvider` set.
-final entryFoundProvider = Provider.family<bool, String>(
-  (ref, wordKey) => ref.watch(foundWordsProvider).contains(wordKey),
-);
+/// Provider family exposing whether a specific entry is considered found/complete.
+/// It first consults the `foundWordsProvider` (authoritative), and if the
+/// entry key is not present, it falls back to a per-entry completeness check
+/// using `wordCheckServiceProvider`. This keeps checks local to the entry
+/// requested and avoids scanning all entries on every keystroke.
+final entryFoundProvider = Provider.family<bool, PuzzleEntryData>((ref, entry) {
+  final key = ref.watch(wordCheckServiceProvider).getWordKey(entry);
+  final found = ref.watch(foundWordsProvider);
+  if (found.contains(key)) {
+    return true;
+  }
+  try {
+    final svc = ref.read(wordCheckServiceProvider);
+    final board = ref.read(gameBoardProvider);
+    return svc.isWordComplete(board, entry);
+  } on Object {
+    return false;
+  }
+});
 
 /// Provider family exposing whether a cell is locked.
 final cellLockedProvider = Provider.family<bool, CellKey>(
@@ -556,4 +581,12 @@ final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
     }
   }
   return cells;
+});
+
+/// Provider family that answers whether a specific cell is part of the
+/// currently selected word. Using a `family` lets Riverpod cache per-cell
+/// results so only cells whose membership changes will rebuild.
+final cellInSelectedWordProvider = Provider.family<bool, CellKey>((ref, key) {
+  final set = ref.watch(selectedWordCellsProvider);
+  return set.contains(key);
 });

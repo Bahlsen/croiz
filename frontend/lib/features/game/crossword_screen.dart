@@ -199,18 +199,23 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
 
       // Also perform an immediate auto-select/start on the current board
       // since `ref.listen` may not fire synchronously in this environment.
-      try {
-        final current = ref.read(gameBoardProvider);
-        _controller.tryAutoSelectFirstAcross(current);
-      } on Object catch (e, st) {
-        debugPrint('Error auto-selecting first across (initial): $e\n$st');
-      }
-      try {
-        final current = ref.read(gameBoardProvider);
-        ref.read(gameTimerProvider(current.id)).start();
-      } on Object catch (e, st) {
-        debugPrint('Error starting game timer (initial): $e\n$st');
-      }
+      // Defer modifications to providers until after build to avoid
+      // Riverpod runtime errors about modifying providers during widget
+      // lifecycle methods.
+      Future.microtask(() {
+        try {
+          final current = ref.read(gameBoardProvider);
+          _controller.tryAutoSelectFirstAcross(current);
+        } on Object catch (e, st) {
+          debugPrint('Error auto-selecting first across (initial): $e\n$st');
+        }
+        try {
+          final current = ref.read(gameBoardProvider);
+          ref.read(gameTimerProvider(current.id)).start();
+        } on Object catch (e, st) {
+          debugPrint('Error starting game timer (initial): $e\n$st');
+        }
+      });
     }
 
     final board = ref.watch(gameBoardProvider);

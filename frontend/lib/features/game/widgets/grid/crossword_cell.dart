@@ -28,14 +28,12 @@ class CrosswordCell extends ConsumerWidget {
       return Container(color: Colors.black);
     }
     final cellKey = CellKey(row, col);
-    final flashingCells = ref.watch(flashingCellsProvider);
-    final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
-    final selectedWordCells = ref.watch(selectedWordCellsProvider);
-    final isFlashing = flashingCells.contains(cellKey);
-    final isClearedFlashing = clearedFlashingCells.contains('$row,$col');
+    final isFlashing = ref.watch(cellFlashingProvider(cellKey));
+    final isClearedFlashing = ref.watch(cellClearedFlashingProvider(cellKey));
 
-    // Determine if part of selected word
-    final isPartOfSelectedWord = selectedWordCells.contains(cellKey);
+    // Determine if part of selected word (family provider so only cells
+    // whose membership changes will rebuild).
+    final isPartOfSelectedWord = ref.watch(cellInSelectedWordProvider(cellKey));
 
     final letter = ref.watch(cellValueProvider([row, col]));
     final cellNumber = ref.watch(

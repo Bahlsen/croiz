@@ -22,10 +22,13 @@ class CrosswordInputController {
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
   Timer? _wordCheckTimer;
+  CellKey? _pendingCheckedCell;
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
   void _scheduleCheckForCompletedWords({
+    int? row,
+    int? col,
     Duration delay = const Duration(milliseconds: 50),
   }) {
     // Debounce repeated keystrokes so heavy checks (looping entries,
@@ -36,12 +39,16 @@ class CrosswordInputController {
     } on Object {
       // ignore
     }
+    if (row != null && col != null) {
+      _pendingCheckedCell = CellKey(row, col);
+    }
     _wordCheckTimer = Timer(delay, () {
       if (_disposed) {
         return;
       }
       try {
-        _checkForCompletedWords();
+        _checkForCompletedWords(_pendingCheckedCell);
+        _pendingCheckedCell = null;
       } on Object catch (e, st) {
         developer.log(
           'Scheduled _checkForCompletedWords failed',
@@ -98,8 +105,8 @@ class CrosswordInputController {
           (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
-      _checkForCompletedWords();
-      _scheduleCheckForCompletedWords();
+      _checkForCompletedWords(CellKey(first[0], first[1]));
+      _scheduleCheckForCompletedWords(row: first[0], col: first[1]);
       _moveToNext(
         _safeReadBoard(),
         startRow: first[0],
@@ -132,8 +139,8 @@ class CrosswordInputController {
           (board.grid[nextRow][nextCol] == null) ||
           (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
-      _checkForCompletedWords();
-      _scheduleCheckForCompletedWords();
+      _checkForCompletedWords(CellKey(nextRow, nextCol));
+      _scheduleCheckForCompletedWords(row: nextRow, col: nextCol);
       _moveToNext(
         _safeReadBoard(),
         startRow: nextRow,
@@ -159,8 +166,8 @@ class CrosswordInputController {
         if (f != null) {
           // f is guaranteed empty by definition
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
-          _checkForCompletedWords();
-          _scheduleCheckForCompletedWords();
+          _checkForCompletedWords(CellKey(f.row, f.col));
+          _scheduleCheckForCompletedWords(row: f.row, col: f.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: f.row,
@@ -186,8 +193,11 @@ class CrosswordInputController {
             _read(
               gameBoardProvider.notifier,
             ).setLetter(selected.row, selected.col, letter);
-            _checkForCompletedWords();
-            _scheduleCheckForCompletedWords();
+            _checkForCompletedWords(CellKey(selected.row, selected.col));
+            _scheduleCheckForCompletedWords(
+              row: selected.row,
+              col: selected.col,
+            );
             _moveToNext(
               _safeReadBoard(),
               startRow: selected.row,
@@ -210,8 +220,8 @@ class CrosswordInputController {
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
-          _checkForCompletedWords();
-          _scheduleCheckForCompletedWords();
+          _checkForCompletedWords(CellKey(nextF.row, nextF.col));
+          _scheduleCheckForCompletedWords(row: nextF.row, col: nextF.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: nextF.row,
@@ -229,8 +239,8 @@ class CrosswordInputController {
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
-    _checkForCompletedWords();
-    _scheduleCheckForCompletedWords();
+    _checkForCompletedWords(CellKey(selected.row, selected.col));
+    _scheduleCheckForCompletedWords(row: selected.row, col: selected.col);
     _moveToNext(
       _safeReadBoard(),
       startRow: selected.row,
@@ -794,7 +804,7 @@ class CrosswordInputController {
     return null;
   }
 
-  void _checkForCompletedWords() {
+  void _checkForCompletedWords([CellKey? changedCell]) {
     final board = _safeReadBoard();
     final entries = board.entries;
 
@@ -808,7 +818,29 @@ class CrosswordInputController {
     final lockedCells = _read(lockedCellsProvider);
     final newLockedCells = Set<CellKey>.from(lockedCells);
 
-    for (final entry in entries) {
+    // If a changed cell is provided, only check entries that include that cell
+    // using the precomputed index for speed. Otherwise check all entries.
+    final entriesToCheck = <PuzzleEntryData>[];
+    if (changedCell != null) {
+      try {
+        final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
+          cellEntriesIndexProvider,
+        );
+        final list = index[changedCell];
+        if (list != null && list.isNotEmpty) {
+          entriesToCheck.addAll(list);
+        } else {
+          // No entries mapped to this cell; nothing to do.
+        }
+      } on Object {
+        // Fallback to checking all entries if index lookup fails.
+        entriesToCheck.addAll(entries);
+      }
+    } else {
+      entriesToCheck.addAll(entries);
+    }
+
+    for (final entry in entriesToCheck) {
       final wordKey = wordCheckService.getWordKey(entry);
 
       // Skip if already found
@@ -835,13 +867,8 @@ class CrosswordInputController {
         newLockedCells.addAll(cellKeys);
 
         // Clear flash after animation (will be handled by UI).
-        // Use configured delay provider: tests can override to Duration.zero
-        // which will schedule a microtask (no Timer), otherwise use a Timer.
         final _delay = _read(flashClearDelayProvider);
-        // Cancel any previously scheduled clear to avoid dangling timers
         _flashClearTimer?.cancel();
-        // Always schedule via Timer (even Duration.zero) so tests using
-        // fakeAsync can control the timing deterministically.
         _flashClearTimer = Timer(_delay, () {
           if (_disposed) {
             return;
