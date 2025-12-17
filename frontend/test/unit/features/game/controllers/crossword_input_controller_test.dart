@@ -272,7 +272,9 @@ void main() {
         ],
       );
       // lock the cell
-      testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
+      testContainer.read(lockedCellsProvider.notifier).value = {
+        const CellKey(0, 0),
+      };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
       testContainer.read(selectedCellProvider.notifier).state =
@@ -469,9 +471,9 @@ void main() {
       );
       // set locked cells for this test container
       testContainer.read(lockedCellsProvider.notifier).value = {
-        '0,0',
-        '0,1',
-        '0,2',
+        const CellKey(0, 0),
+        const CellKey(0, 1),
+        const CellKey(0, 2),
       };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
@@ -517,7 +519,9 @@ void main() {
         ],
       );
       // set locked cells for this test container
-      testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
+      testContainer.read(lockedCellsProvider.notifier).value = {
+        const CellKey(0, 0),
+      };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
       testContainer.read(selectedCellProvider.notifier).state =
@@ -564,7 +568,9 @@ void main() {
         );
 
         // lock the previous filled cell (0,0)
-        testContainer.read(lockedCellsProvider.notifier).value = {'0,0'};
+        testContainer.read(lockedCellsProvider.notifier).value = {
+          const CellKey(0, 0),
+        };
 
         final controller = CrosswordInputController.fromContainer(
           testContainer,

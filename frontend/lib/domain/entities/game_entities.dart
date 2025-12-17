@@ -32,6 +32,42 @@ class PuzzleEntryData {
   final String? answer;
 }
 
+/// Typed direction used internally to avoid stringly-typed comparisons.
+enum EntryDirection { across, down }
+
+extension PuzzleEntryDirectionX on PuzzleEntryData {
+  EntryDirection get directionEnum {
+    switch (direction) {
+      case 'across':
+        return EntryDirection.across;
+      case 'down':
+        return EntryDirection.down;
+      default:
+        // Fallback to across to avoid crashes if unexpected data appears.
+        // Prefer validating inputs in converters to keep this path unreachable.
+        return EntryDirection.across;
+    }
+  }
+}
+
+/// Typed cell identifier (row, col) replacing fragile string keys like "row,col".
+class CellKey {
+  const CellKey(this.row, this.col);
+  final int row;
+  final int col;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CellKey && other.row == row && other.col == col;
+
+  @override
+  int get hashCode => Object.hash(row, col);
+
+  @override
+  String toString() => '$row,$col';
+}
+
 class GameBoard extends GameEntity {
   GameBoard({
     required super.id,

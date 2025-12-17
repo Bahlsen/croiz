@@ -160,7 +160,7 @@ void main() {
       );
 
       final keys = service.getCellKeys(entry);
-      expect(keys, ['2,1', '2,2', '2,3']);
+      expect(keys, equals(const [CellKey(2, 1), CellKey(2, 2), CellKey(2, 3)]));
     });
 
     test('getCellKeys returns correct cell keys for vertical', () {
@@ -173,7 +173,7 @@ void main() {
       );
 
       final keys = service.getCellKeys(entry);
-      expect(keys, ['2,1', '3,1', '4,1']);
+      expect(keys, equals(const [CellKey(2, 1), CellKey(3, 1), CellKey(4, 1)]));
     });
   });
 }

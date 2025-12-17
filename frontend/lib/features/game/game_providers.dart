@@ -111,7 +111,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         try {
           final wordCheck = ref.read(wordCheckServiceProvider);
           final newFound = <String>{};
-          final newLocked = <String>{};
+          final newLocked = <CellKey>{};
           for (final entry in entries) {
             if (wordCheck.isWordComplete(state, entry)) {
               final key = wordCheck.getWordKey(entry);
@@ -434,15 +434,15 @@ final foundWordsProvider = NotifierProvider<FoundWordsNotifier, Set<String>>(
 );
 
 // Holds cells that should flash (format: "row,col")
-class FlashingCellsNotifier extends Notifier<Set<String>> {
+class FlashingCellsNotifier extends Notifier<Set<CellKey>> {
   @override
-  Set<String> build() => _initialFlashingCells(ref);
-  Set<String> get value => state;
-  set value(Set<String> v) => state = v;
+  Set<CellKey> build() => _initialFlashingCells(ref);
+  Set<CellKey> get value => state;
+  set value(Set<CellKey> v) => state = v;
 }
 
 final flashingCellsProvider =
-    NotifierProvider<FlashingCellsNotifier, Set<String>>(
+    NotifierProvider<FlashingCellsNotifier, Set<CellKey>>(
       FlashingCellsNotifier.new,
     );
 
@@ -460,22 +460,22 @@ final flashingClearedCellsProvider =
     );
 
 // Holds cells that are locked (format: "row,col")
-class LockedCellsNotifier extends Notifier<Set<String>> {
+class LockedCellsNotifier extends Notifier<Set<CellKey>> {
   @override
-  Set<String> build() => _initialLockedCells(ref);
-  Set<String> get value => state;
-  set value(Set<String> v) => state = v;
+  Set<CellKey> build() => _initialLockedCells(ref);
+  Set<CellKey> get value => state;
+  set value(Set<CellKey> v) => state = v;
 }
 
-final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<String>>(
+final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<CellKey>>(
   LockedCellsNotifier.new,
 );
 // Provider tear-offs for initial values.
 SelectedCell? _initialSelectedCell(ref) => null;
 WordDirection _initialWordDirection(ref) => WordDirection.horizontal;
 Set<String> _initialFoundWords(ref) => <String>{};
-Set<String> _initialFlashingCells(ref) => <String>{};
-Set<String> _initialLockedCells(ref) => <String>{};
+Set<CellKey> _initialFlashingCells(ref) => <CellKey>{};
+Set<CellKey> _initialLockedCells(ref) => <CellKey>{};
 Set<String> _initialFlashingClearedCells(ref) => <String>{};
 
 /// Provider family exposing a single cell's value. Widgets should watch
@@ -498,6 +498,6 @@ final entryFoundProvider = Provider.family<bool, String>(
 );
 
 /// Provider family exposing whether a cell is locked.
-final cellLockedProvider = Provider.family<bool, String>(
+final cellLockedProvider = Provider.family<bool, CellKey>(
   (ref, key) => ref.watch(lockedCellsProvider).contains(key),
 );

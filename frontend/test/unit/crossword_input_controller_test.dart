@@ -117,7 +117,7 @@ void main() {
     );
 
     // lock the current cell
-    container.read(lockedCellsProvider.notifier).value = <String>{'0,0'};
+    container.read(lockedCellsProvider.notifier).value = {const CellKey(0, 0)};
 
     final controller = CrosswordInputController.fromContainer(container);
 
@@ -238,12 +238,19 @@ void main() {
       expect(updated.grid[0][1], 'A');
 
       final locked = container.read(lockedCellsProvider);
-      expect(locked, containsAll(<String>{'0,0', '0,1', '0,2'}));
+      expect(
+        locked,
+        containsAll({
+          const CellKey(0, 0),
+          const CellKey(0, 1),
+          const CellKey(0, 2),
+        }),
+      );
 
       // Selection should NOT end up in the just-locked word.
       final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(locked.contains('${sel!.row},${sel.col}'), isFalse);
+      expect(locked.contains(CellKey(sel!.row, sel.col)), isFalse);
 
       // With horizontal movement + wrap, next editable cell should be (1,0).
       expect(sel.row, 1);

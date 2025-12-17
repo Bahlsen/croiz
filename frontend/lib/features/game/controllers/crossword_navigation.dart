@@ -9,7 +9,7 @@ List<int>? nextEditableCell(
   required int dr,
   required int dc,
   required bool wrap,
-  required Set<String> lockedCells,
+  required Set<CellKey> lockedCells,
 }) {
   var r = fromRow;
   var c = fromCol;
@@ -21,7 +21,7 @@ List<int>? nextEditableCell(
     }
     final nr = next[0];
     final nc = next[1];
-    if (!lockedCells.contains('$nr,$nc')) {
+    if (!lockedCells.contains(CellKey(nr, nc))) {
       return [nr, nc];
     }
     r = nr;

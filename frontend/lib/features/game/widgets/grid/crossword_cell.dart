@@ -32,7 +32,7 @@ class CrosswordCell extends ConsumerWidget {
     final wordDirection = ref.watch(wordDirectionProvider);
     final black = board.blackCells;
 
-    final cellKey = '$row,$col';
+    final cellKey = CellKey(row, col);
     final flashingCells = ref.watch(flashingCellsProvider);
     final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
 
@@ -66,7 +66,7 @@ class CrosswordCell extends ConsumerWidget {
 
     final letter = board.grid[row][col];
     final numbers = ClueNumbering.numbersFromBoard(board);
-    final cellNumber = numbers[cellKey];
+    final cellNumber = numbers['$row,$col'];
 
     // Visuals: compute decoration pieces
     final boxShadow = isClearedFlashing

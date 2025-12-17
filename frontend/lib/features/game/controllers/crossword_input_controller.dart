@@ -21,11 +21,13 @@ class CrosswordInputController {
       );
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
-    Timer? _wordCheckTimer;
+  Timer? _wordCheckTimer;
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
-  void _scheduleCheckForCompletedWords({Duration delay = const Duration(milliseconds: 50)}) {
+  void _scheduleCheckForCompletedWords({
+    Duration delay = const Duration(milliseconds: 50),
+  }) {
     // Debounce repeated keystrokes so heavy checks (looping entries,
     // playing sounds, flashing) don't run for every single key when
     // the user types quickly.
@@ -41,7 +43,11 @@ class CrosswordInputController {
       try {
         _checkForCompletedWords();
       } on Object catch (e, st) {
-        developer.log('Scheduled _checkForCompletedWords failed', error: e, stackTrace: st);
+        developer.log(
+          'Scheduled _checkForCompletedWords failed',
+          error: e,
+          stackTrace: st,
+        );
       }
     });
   }
@@ -83,17 +89,19 @@ class CrosswordInputController {
       if (first == null) {
         return;
       }
-      _read(selectedCellProvider.notifier).value = SelectedCell(
+      _read(selectedCellProvider.notifier).state = SelectedCell(
         first[0],
         first[1],
       );
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
+      // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
+      _checkForCompletedWords();
       _scheduleCheckForCompletedWords();
       _moveToNext(board, startRow: first[0], startCol: first[1]);
       return;
     }
 
-    final cellKey = '${selected.row},${selected.col}';
+    final cellKey = CellKey(selected.row, selected.col);
     if (lockedCells.contains(cellKey)) {
       final next = _nextEditableCell(
         board,
@@ -108,11 +116,12 @@ class CrosswordInputController {
       }
       final nextRow = next[0];
       final nextCol = next[1];
-      _read(selectedCellProvider.notifier).value = SelectedCell(
+      _read(selectedCellProvider.notifier).state = SelectedCell(
         nextRow,
         nextCol,
       );
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
+      _checkForCompletedWords();
       _scheduleCheckForCompletedWords();
       _moveToNext(board, startRow: nextRow, startCol: nextCol);
       return;
@@ -133,6 +142,7 @@ class CrosswordInputController {
         final f = _firstEmptyInEntry(containing, board, skipLocked: true);
         if (f != null) {
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
+          _checkForCompletedWords();
           _scheduleCheckForCompletedWords();
           _moveToNext(board, startRow: f.row, startCol: f.col);
           return;
@@ -148,6 +158,7 @@ class CrosswordInputController {
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
+          _checkForCompletedWords();
           _scheduleCheckForCompletedWords();
           _moveToNext(board, startRow: nextF.row, startCol: nextF.col);
           return;
@@ -158,6 +169,7 @@ class CrosswordInputController {
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
+    _checkForCompletedWords();
     _scheduleCheckForCompletedWords();
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
   }
@@ -190,7 +202,7 @@ class CrosswordInputController {
 
     // Check if the cell is locked
     final lockedCells = _read(lockedCellsProvider);
-    final cellKey = '${sel.row},${sel.col}';
+    final cellKey = CellKey(sel.row, sel.col);
     if (lockedCells.contains(cellKey)) {
       return; // Cell is locked, cannot modify
     }
@@ -222,18 +234,18 @@ class CrosswordInputController {
         fromC = prev[1];
         final letter = board.grid[fromR][fromC];
         if (letter != null && letter.isNotEmpty) {
-          final prevKey = '$fromR,$fromC';
+          final prevKey = CellKey(fromR, fromC);
           final prevSel = SelectedCell(fromR, fromC);
           // If the previous filled cell is locked, move selection there
           // but do NOT delete its letter. The virtual keyboard already
           // plays the delete sound before calling into this method, so
           // user hears feedback even when deletion is blocked.
           if (lockedCells.contains(prevKey)) {
-            _read(selectedCellProvider.notifier).value = prevSel;
+            _read(selectedCellProvider.notifier).state = prevSel;
             return;
           }
 
-          _read(selectedCellProvider.notifier).value = prevSel;
+          _read(selectedCellProvider.notifier).state = prevSel;
           _read(
             gameBoardProvider.notifier,
           ).setLetter(prevSel.row, prevSel.col, '');
@@ -246,7 +258,7 @@ class CrosswordInputController {
   }
 
   void tryAutoSelectFirstAcross(GameBoard board) {
-    if (_didAutoSelectFirstAcross) { 
+    if (_didAutoSelectFirstAcross) {
       return;
     }
     final alreadySelected = _read(selectedCellProvider);
@@ -254,17 +266,18 @@ class CrosswordInputController {
       return;
     }
     final entries = board.entries;
-    if (entries == null || entries.isEmpty) { 
+    if (entries == null || entries.isEmpty) {
       return;
     }
-    final firstAcross = entries.where((e) => e.direction == 'across').toList()
-      ..sort((a, b) => a.number.compareTo(b.number));
+    final firstAcross =
+        entries.where((e) => e.directionEnum == EntryDirection.across).toList()
+          ..sort((a, b) => a.number.compareTo(b.number));
     if (firstAcross.isEmpty) {
       return;
     }
     final e = firstAcross.first;
-    _read(selectedCellProvider.notifier).value = SelectedCell(e.y, e.x);
-    _read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+    _read(selectedCellProvider.notifier).state = SelectedCell(e.y, e.x);
+    _read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
     _didAutoSelectFirstAcross = true;
   }
 
@@ -418,7 +431,8 @@ class CrosswordInputController {
     }
   }
 
-  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) => cellBelongsToWord(row, col, entries);
+  bool _cellBelongsToWord(int row, int col, List<PuzzleEntryData>? entries) =>
+      cellBelongsToWord(row, col, entries);
 
   void _moveToNext(
     GameBoard board, {
@@ -433,9 +447,15 @@ class CrosswordInputController {
     final entries = board.entries;
     if (entries != null && entries.isNotEmpty) {
       final isAcross = dir == WordDirection.horizontal;
-      final dirString = isAcross ? 'across' : 'down';
-      final sameDir = entries.where((e) => e.direction == dirString).toList()
-        ..sort((a, b) => a.number.compareTo(b.number));
+      final sameDir =
+          entries
+              .where(
+                (e) =>
+                    (isAcross && e.directionEnum == EntryDirection.across) ||
+                    (!isAcross && e.directionEnum == EntryDirection.down),
+              )
+              .toList()
+            ..sort((a, b) => a.number.compareTo(b.number));
       final wordCheck = _read(wordCheckServiceProvider);
       final foundWords = _read(foundWordsProvider);
 
@@ -473,25 +493,42 @@ class CrosswordInputController {
               // This ensures that when the last letter of a word is entered,
               // selection advances to the next word number in the current mode.
               if (sameDir.length > 1) {
-                final nextIdx = (idx + 1) % sameDir.length;
-                final candidate = sameDir[nextIdx];
-                _read(selectedCellProvider.notifier).state = SelectedCell(
-                  candidate.y,
-                  candidate.x,
-                );
-                return;
+                // Advance to the next available entry (skip found/locked).
+                for (var offset = 1; offset <= sameDir.length; offset++) {
+                  final candidate = sameDir[(idx + offset) % sameDir.length];
+                  final key = wordCheck.getWordKey(candidate);
+                  if (foundWords.contains(key)) {
+                    continue;
+                  }
+                  final candidateKey = CellKey(candidate.y, candidate.x);
+                  if (lockedCells.contains(candidateKey)) {
+                    continue;
+                  }
+                  _read(selectedCellProvider.notifier).state = SelectedCell(
+                    candidate.y,
+                    candidate.x,
+                  );
+                  return;
+                }
               }
 
               // If there's no other same-direction entry, fall back to other
               // direction's first non-found entry (preserve existing behavior).
-              final otherDirString = isAcross ? 'down' : 'across';
               final otherDir =
-                  entries.where((e) => e.direction == otherDirString).toList()
+                  entries
+                      .where(
+                        (e) =>
+                            (isAcross &&
+                                e.directionEnum == EntryDirection.down) ||
+                            (!isAcross &&
+                                e.directionEnum == EntryDirection.across),
+                      )
+                      .toList()
                     ..sort((a, b) => a.number.compareTo(b.number));
               for (final candidate in otherDir) {
                 final key = wordCheck.getWordKey(candidate);
                 if (!foundWords.contains(key)) {
-                  final candidateKey = '${candidate.y},${candidate.x}';
+                  final candidateKey = CellKey(candidate.y, candidate.x);
                   if (lockedCells.contains(candidateKey)) {
                     continue;
                   }
@@ -534,21 +571,21 @@ class CrosswordInputController {
   PuzzleEntryData? _findContainingEntry(
     int row,
     int col,
-    bool wantAcross, 
+    bool wantAcross,
     List<PuzzleEntryData>? entries,
   ) {
     if (entries == null || entries.isEmpty) {
       return null;
     }
-    for (final e in entries) { 
-      if (wantAcross && e.direction != 'across') {
+    for (final e in entries) {
+      if (wantAcross && e.directionEnum != EntryDirection.across) {
         continue;
       }
-      if (!wantAcross && e.direction != 'down') {
+      if (!wantAcross && e.directionEnum != EntryDirection.down) {
         continue;
       }
       final contains = wantAcross
-          ? (row == e.y && col >= e.x && col < e.x + e.length) 
+          ? (row == e.y && col >= e.x && col < e.x + e.length)
           : (col == e.x && row >= e.y && row < e.y + e.length);
       if (contains) {
         return e;
@@ -562,10 +599,10 @@ class CrosswordInputController {
     GameBoard board, {
     bool skipLocked = false,
   }) {
-    final locked = skipLocked ? _read(lockedCellsProvider) : <String>{};
-    if (e.direction == 'across') {
+    final locked = skipLocked ? _read(lockedCellsProvider) : <CellKey>{};
+    if (e.directionEnum == EntryDirection.across) {
       for (var cc = e.x; cc < e.x + e.length; cc++) {
-        final key = '${e.y},$cc';
+        final key = CellKey(e.y, cc);
         if (skipLocked && locked.contains(key)) {
           continue;
         }
@@ -576,7 +613,7 @@ class CrosswordInputController {
       }
     } else {
       for (var rr = e.y; rr < e.y + e.length; rr++) {
-        final key = '$rr,${e.x}';
+        final key = CellKey(rr, e.x);
         if (skipLocked && locked.contains(key)) {
           continue;
         }
@@ -599,9 +636,15 @@ class CrosswordInputController {
     if (entries == null || entries.isEmpty) {
       return null;
     }
-    final dirStr = wantAcross ? 'across' : 'down';
-    final sameDir = entries.where((e) => e.direction == dirStr).toList()
-      ..sort((a, b) => a.number.compareTo(b.number));
+    final sameDir =
+        entries
+            .where(
+              (e) =>
+                  (wantAcross && e.directionEnum == EntryDirection.across) ||
+                  (!wantAcross && e.directionEnum == EntryDirection.down),
+            )
+            .toList()
+          ..sort((a, b) => a.number.compareTo(b.number));
     final idx = sameDir.indexWhere((e) => e.number == containing.number);
     if (idx != -1) {
       for (var j = idx + 1; j < sameDir.length; j++) {
@@ -620,9 +663,15 @@ class CrosswordInputController {
       }
     }
 
-    final otherDirStr = wantAcross ? 'down' : 'across';
-    final otherDir = entries.where((e) => e.direction == otherDirStr).toList()
-      ..sort((a, b) => a.number.compareTo(b.number));
+    final otherDir =
+        entries
+            .where(
+              (e) =>
+                  (wantAcross && e.directionEnum == EntryDirection.down) ||
+                  (!wantAcross && e.directionEnum == EntryDirection.across),
+            )
+            .toList()
+          ..sort((a, b) => a.number.compareTo(b.number));
     for (final candidate in otherDir) {
       final ff = _firstEmptyInEntry(candidate, board, skipLocked: skipLocked);
       if (ff != null) {
@@ -644,7 +693,7 @@ class CrosswordInputController {
     final foundWords = _read(foundWordsProvider);
     final newFoundWords = Set<String>.from(foundWords);
     final lockedCells = _read(lockedCellsProvider);
-    final newLockedCells = Set<String>.from(lockedCells);
+    final newLockedCells = Set<CellKey>.from(lockedCells);
 
     for (final entry in entries) {
       final wordKey = wordCheckService.getWordKey(entry);
@@ -658,16 +707,16 @@ class CrosswordInputController {
       if (wordCheckService.isWordComplete(board, entry)) {
         newFoundWords.add(wordKey);
 
-        // Play success sound
+        // Play success sound (synchronously to avoid reading providers after disposal)
         try {
-          Future.microtask(() => _read(gameAudioServiceProvider).playSuccess());
+          _read(gameAudioServiceProvider).playSuccess();
         } on Object catch (e, st) {
           developer.log('playSuccess failed', error: e, stackTrace: st);
         }
 
         // Trigger flash animation on cells
         final cellKeys = wordCheckService.getCellKeys(entry);
-        _read(flashingCellsProvider.notifier).value = cellKeys.toSet();
+        _read(flashingCellsProvider.notifier).state = cellKeys.toSet();
 
         // Lock cells of the found word
         newLockedCells.addAll(cellKeys);
@@ -678,46 +727,31 @@ class CrosswordInputController {
         final _delay = _read(flashClearDelayProvider);
         // Cancel any previously scheduled clear to avoid dangling timers
         _flashClearTimer?.cancel();
-        if (_delay == Duration.zero) {
-          Future.microtask(() {
-            if (_disposed) {
-              return;
-            }
-            try {
-              _read(flashingCellsProvider.notifier).value = <String>{};
-            } on Object catch (e, st) {
-              developer.log(
-                'Clearing flashing cells failed',
-                error: e,
-                stackTrace: st,
-              );
-            }
-          });
-        } else {
-          _flashClearTimer = Timer(_delay, () {
-            if (_disposed) {
-              return;
-            }
-            try {
-              _read(flashingCellsProvider.notifier).value = <String>{};
-            } on Object catch (e, st) {
-              developer.log(
-                'Clearing flashing cells failed',
-                error: e,
-                stackTrace: st,
-              );
-            }
-          });
-        }
+        // Always schedule via Timer (even Duration.zero) so tests using
+        // fakeAsync can control the timing deterministically.
+        _flashClearTimer = Timer(_delay, () {
+          if (_disposed) {
+            return;
+          }
+          try {
+            _read(flashingCellsProvider.notifier).state = <CellKey>{};
+          } on Object catch (e, st) {
+            developer.log(
+              'Clearing flashing cells failed',
+              error: e,
+              stackTrace: st,
+            );
+          }
+        });
       }
     }
 
     if (newFoundWords.length > foundWords.length) {
-      _read(foundWordsProvider.notifier).value = newFoundWords;
+      _read(foundWordsProvider.notifier).state = newFoundWords;
     }
 
     if (newLockedCells.length > lockedCells.length) {
-      _read(lockedCellsProvider.notifier).value = newLockedCells;
+      _read(lockedCellsProvider.notifier).state = newLockedCells;
     }
 
     // If all words found -> finalize timer and play victory sound
@@ -730,7 +764,7 @@ class CrosswordInputController {
           developer.log('finalizeSync failed', error: e, stackTrace: st);
         }
         try {
-          Future.microtask(() => _read(gameAudioServiceProvider).playVictory());
+          _read(gameAudioServiceProvider).playVictory();
         } on Object catch (e, st) {
           developer.log('playVictory failed', error: e, stackTrace: st);
         }

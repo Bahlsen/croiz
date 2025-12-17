@@ -68,7 +68,14 @@ void main() {
       // Immediately after completing, flashingCellsProvider should contain the 3 cell keys
       final flashingNow = container.read(flashingCellsProvider);
       expect(flashingNow.length, 3);
-      expect(flashingNow, containsAll(['0,0', '0,1', '0,2']));
+      expect(
+        flashingNow,
+        containsAll([
+          const CellKey(0, 0),
+          const CellKey(0, 1),
+          const CellKey(0, 2),
+        ]),
+      );
 
       // Advance time by 500ms (the controller clears after 500ms)
       async.elapse(const Duration(milliseconds: 500));
