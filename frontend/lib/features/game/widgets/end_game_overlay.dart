@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:go_router/go_router.dart';
 
 class EndGameOverlay extends ConsumerWidget {
@@ -10,21 +9,15 @@ class EndGameOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GameBoard? board;
-    Set<String>? found;
-    try {
-      board = ref.watch(gameBoardProvider);
-      found = ref.watch(foundWordsProvider);
-    } on Object catch (e, st) {
-      debugPrint('EndGameOverlay provider read failed: $e\n$st');
+    // Watch only counts to avoid rebuilding on every word/key change.
+    final entriesLen = ref.watch(
+      gameBoardProvider.select((b) => b.entries?.length),
+    );
+    final foundLen = ref.watch(foundWordsProvider.select((s) => s.length));
+    if (entriesLen == null || entriesLen == 0) {
       return const SizedBox.shrink();
     }
-
-    final entries = board?.entries;
-    final completed =
-        entries != null &&
-        entries.isNotEmpty &&
-        found!.length == entries.length;
+    final completed = foundLen == entriesLen;
     if (!completed) {
       return const SizedBox.shrink();
     }

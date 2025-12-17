@@ -21,32 +21,33 @@ class CrosswordCell extends ConsumerWidget {
     // the board changes. If the provider isn't available (loading/error),
     // render a fallback empty container — the top-level screen presents
     // loading/error state to the user.
+    // Read board for static information (preferred via read so changes
+    // to unrelated cells don't rebuild this widget). Dynamic cell state
+    // is observed through granular providers below.
     GameBoard board;
     try {
-      board = ref.watch(gameBoardProvider);
+      board = ref.read(gameBoardProvider);
     } on Object catch (e, st) {
-      developer.log('gameBoardProvider watch failed', error: e, stackTrace: st);
+      developer.log('gameBoardProvider read failed', error: e, stackTrace: st);
       return Container(color: Colors.black);
     }
     final selected = ref.watch(selectedCellProvider);
     final wordDirection = ref.watch(wordDirectionProvider);
-    final black = board.blackCells;
 
     final cellKey = '$row,$col';
-    final flashingCells = ref.watch(flashingCellsProvider);
-    final clearedFlashingCells = ref.watch(flashingClearedCellsProvider);
+    final letter = ref.watch(cellValueProvider([row, col]));
+    final isDisabled = ref.watch(cellDisabledProvider([row, col]));
+    final isFlashing = ref.watch(cellFlashingProvider(cellKey));
+    final isClearedFlashing = ref.watch(cellClearedFlashingProvider(cellKey));
 
     final isSelected =
         selected != null && selected.row == row && selected.col == col;
-    final isDisabled = black.isDisabled(row, col);
-    final isFlashing = flashingCells.contains(cellKey);
-    final isClearedFlashing = clearedFlashingCells.contains(cellKey);
 
     // Determine if part of selected word
     var isPartOfSelectedWord = false;
     if (selected != null) {
       final horizontal = wordDirection == WordDirection.horizontal;
-      final bounds = black.wordBounds(
+      final bounds = board.blackCells.wordBounds(
         selected.row,
         selected.col,
         horizontal: horizontal,
@@ -64,7 +65,7 @@ class CrosswordCell extends ConsumerWidget {
       return Container(color: Colors.black);
     }
 
-    final letter = board.grid[row][col];
+    // `letter` is watched via `cellValueProvider([row,col])` above.
     final numbers = ClueNumbering.numbersFromBoard(board);
     final cellNumber = numbers[cellKey];
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 // clue_numbering is used by `CrosswordCell` instead; avoid direct import here.
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
@@ -37,14 +36,12 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     // Read the active board. If the board isn't available (still loading
     // or errored), bail out gracefully by rendering nothing — the
     // top-level screen is responsible for showing loading/error UI.
-    GameBoard board;
-    try {
-      board = ref.watch(gameBoardProvider);
-    } on Object catch (_) {
-      return const SizedBox.shrink();
-    }
-    final size = board.gridSize;
+    // Watch only board size so the grid rebuilds on puzzle change but
+    // not on every letter change. Per-cell widgets subscribe to
+    // granular providers for letter updates.
+    final size = ref.watch(gameBoardProvider.select((b) => b.gridSize));
     final selected = ref.watch(selectedCellProvider);
+    final board = ref.read(gameBoardProvider);
     final black = board.blackCells;
 
     // If selection somehow points to a disabled cell (from older state), clear it.
@@ -60,7 +57,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Keep the editing controller in sync with the selected cell's value.
     if (selected != null) {
-      final current = board.grid[selected.row][selected.col] ?? '';
+      final current =
+          ref.read(gameBoardProvider).grid[selected.row][selected.col] ?? '';
       if (_editingController.text != current) {
         _editingController.text = current;
         _editingController.selection = TextSelection.fromPosition(
