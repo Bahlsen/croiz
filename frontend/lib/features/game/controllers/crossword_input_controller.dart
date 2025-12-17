@@ -25,6 +25,27 @@ class CrosswordInputController {
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
 
+  void _scheduleCheckForCompletedWords({Duration delay = const Duration(milliseconds: 50)}) {
+    // Debounce repeated keystrokes so heavy checks (looping entries,
+    // playing sounds, flashing) don't run for every single key when
+    // the user types quickly.
+    try {
+      _wordCheckTimer?.cancel();
+    } on Object {
+      // ignore
+    }
+    _wordCheckTimer = Timer(delay, () {
+      if (_disposed) {
+        return;
+      }
+      try {
+        _checkForCompletedWords();
+      } on Object catch (e, st) {
+        developer.log('Scheduled _checkForCompletedWords failed', error: e, stackTrace: st);
+      }
+    });
+  }
+
   GameBoard _safeReadBoard() {
     try {
       return _read<GameBoard>(gameBoardProvider);
@@ -138,25 +159,6 @@ class CrosswordInputController {
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
     _scheduleCheckForCompletedWords();
-  
-  void _scheduleCheckForCompletedWords({Duration delay = const Duration(milliseconds: 50)}) {
-    // Debounce repeated keystrokes so heavy checks (looping entries,
-    // playing sounds, flashing) don't run for every single key when
-    // the user types quickly.
-    try {
-      _wordCheckTimer?.cancel();
-    } on Object {
-      // ignore
-    }
-    _wordCheckTimer = Timer(delay, () {
-      if (_disposed) return;
-      try {
-        _checkForCompletedWords();
-      } on Object catch (e, st) {
-        developer.log('Scheduled _checkForCompletedWords failed', error: e, stackTrace: st);
-      }
-    });
-  }
     _moveToNext(board, startRow: selected.row, startCol: selected.col);
   }
 
@@ -658,7 +660,7 @@ class CrosswordInputController {
 
         // Play success sound
         try {
-          _read(gameAudioServiceProvider).playSuccess();
+          Future.microtask(() => _read(gameAudioServiceProvider).playSuccess());
         } on Object catch (e, st) {
           developer.log('playSuccess failed', error: e, stackTrace: st);
         }
@@ -728,7 +730,7 @@ class CrosswordInputController {
           developer.log('finalizeSync failed', error: e, stackTrace: st);
         }
         try {
-          _read(gameAudioServiceProvider).playVictory();
+          Future.microtask(() => _read(gameAudioServiceProvider).playVictory());
         } on Object catch (e, st) {
           developer.log('playVictory failed', error: e, stackTrace: st);
         }

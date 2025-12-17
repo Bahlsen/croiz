@@ -477,3 +477,27 @@ Set<String> _initialFoundWords(ref) => <String>{};
 Set<String> _initialFlashingCells(ref) => <String>{};
 Set<String> _initialLockedCells(ref) => <String>{};
 Set<String> _initialFlashingClearedCells(ref) => <String>{};
+
+/// Provider family exposing a single cell's value. Widgets should watch
+/// `cellValueProvider([r, c])` to rebuild only when that cell's letter
+/// changes, avoiding large grid rebuilds.
+final cellValueProvider = Provider.family<String?, List<int>>(
+  (ref, coords) {
+    final board = ref.watch(gameBoardProvider);
+    final r = coords[0];
+    final c = coords[1];
+    return board.grid[r][c];
+  },
+);
+
+/// Provider family exposing whether a word (by wordKey) has been found.
+/// Widgets showing entry-level UI should watch this to avoid listening to
+/// the whole `foundWordsProvider` set.
+final entryFoundProvider = Provider.family<bool, String>(
+  (ref, wordKey) => ref.watch(foundWordsProvider).contains(wordKey),
+);
+
+/// Provider family exposing whether a cell is locked.
+final cellLockedProvider = Provider.family<bool, String>(
+  (ref, key) => ref.watch(lockedCellsProvider).contains(key),
+);
