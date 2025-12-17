@@ -171,28 +171,8 @@ class VirtualKeyboard extends ConsumerWidget {
                       rowMaxWidth: availableRowWidth,
                       onKey: (k) => onKey?.call(k.toUpperCase()),
                       onBackspace: onBackspace,
-                      onPlayClick: () {
-                        try {
-                          ref.read(gameAudioServiceProvider).playType();
-                        } on Object catch (e, st) {
-                          developer.log(
-                            'GameAudioService.playType failed',
-                            error: e,
-                            stackTrace: st,
-                          );
-                        }
-                      },
-                      onPlayDelete: () {
-                        try {
-                          ref.read(gameAudioServiceProvider).playDelete();
-                        } on Object catch (e, st) {
-                          developer.log(
-                            'GameAudioService.playDelete failed',
-                            error: e,
-                            stackTrace: st,
-                          );
-                        }
-                      },
+                      onPlayClick: () => VirtualKeyboard._maybePlayType(ref),
+                      onPlayDelete: () => VirtualKeyboard._maybePlayDelete(ref),
                       enabledLetters: enabledLetters,
                       enableFeedback: enableFeedback,
                       keyRadius: keyRadius,
@@ -211,6 +191,48 @@ class VirtualKeyboard extends ConsumerWidget {
   }
 
   static String get backspaceToken => _backspaceToken;
+
+  // UI-level coalescing to avoid issuing audio requests too frequently.
+  static DateTime? _lastUiTypeAt;
+  static DateTime? _lastUiDeleteAt;
+  static const _uiMinTypeInterval = Duration(milliseconds: 40);
+  static const _uiMinDeleteInterval = Duration(milliseconds: 40);
+
+  static void _maybePlayType(WidgetRef ref) {
+    final now = DateTime.now();
+    if (_lastUiTypeAt != null &&
+        now.difference(_lastUiTypeAt!) < _uiMinTypeInterval) {
+      return;
+    }
+    _lastUiTypeAt = now;
+    try {
+      ref.read(gameAudioServiceProvider).playType();
+    } on Object catch (e, st) {
+      developer.log(
+        'GameAudioService.playType failed',
+        error: e,
+        stackTrace: st,
+      );
+    }
+  }
+
+  static void _maybePlayDelete(WidgetRef ref) {
+    final now = DateTime.now();
+    if (_lastUiDeleteAt != null &&
+        now.difference(_lastUiDeleteAt!) < _uiMinDeleteInterval) {
+      return;
+    }
+    _lastUiDeleteAt = now;
+    try {
+      ref.read(gameAudioServiceProvider).playDelete();
+    } on Object catch (e, st) {
+      developer.log(
+        'GameAudioService.playDelete failed',
+        error: e,
+        stackTrace: st,
+      );
+    }
+  }
 }
 
 class _ResponsiveKeyboardRow extends StatelessWidget {

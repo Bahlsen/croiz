@@ -55,7 +55,13 @@ void main() {
       );
     }
     entries.add(
-      const PuzzleEntryData(number: 100, direction: 'down', x: 0, y: 0, length: 5),
+      const PuzzleEntryData(
+        number: 100,
+        direction: 'down',
+        x: 0,
+        y: 0,
+        length: 5,
+      ),
     );
 
     const size = 12;

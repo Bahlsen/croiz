@@ -43,31 +43,35 @@ void main() {
       addTearDown(container.dispose);
 
       // Create entries where only two include (0,0)
-      final entries = <PuzzleEntryData>[];
-      for (var r = 0; r < 10; r++) {
-        entries.add(
-          PuzzleEntryData(
-            number: r + 1,
+      final entries = List<PuzzleEntryData>.generate(
+        10,
+        (r) => PuzzleEntryData(
+          number: r + 1,
+          direction: 'across',
+          x: 1,
+          y: r,
+          length: 4,
+        ),
+      )
+        // Two entries include (0,0)
+        ..add(
+          const PuzzleEntryData(
+            number: 100,
             direction: 'across',
-            x: 1,
-            y: r,
-            length: 4,
+            x: 0,
+            y: 0,
+            length: 3,
+          ),
+        )
+        ..add(
+          const PuzzleEntryData(
+            number: 101,
+            direction: 'down',
+            x: 0,
+            y: 0,
+            length: 3,
           ),
         );
-      }
-      // Two entries include (0,0)
-      entries.add(
-        const PuzzleEntryData(
-          number: 100,
-          direction: 'across',
-          x: 0,
-          y: 0,
-          length: 3,
-        ),
-      );
-      entries.add(
-        const PuzzleEntryData(number: 101, direction: 'down', x: 0, y: 0, length: 3),
-      );
 
       const size = 8;
       final board = GameBoard(
@@ -82,13 +86,10 @@ void main() {
         entries: entries,
       );
 
-      container.read(gameBoardProvider.notifier).board = board;
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
-        0,
-        0,
-      );
-      container.read(wordDirectionProvider.notifier).state =
-          WordDirection.horizontal;
+      container
+        ..read(gameBoardProvider.notifier).board = board
+        ..read(selectedCellProvider.notifier).state = const SelectedCell(0, 0)
+        ..read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);
       controller.setLetterAndAdvance('X');

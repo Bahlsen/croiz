@@ -14,6 +14,11 @@ class GameAudioService {
   AudioPool? _deletePool;
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
+  // Throttle spikes: ignore play requests that arrive faster than this.
+  static const _minTypeInterval = Duration(milliseconds: 40);
+  static const _minDeleteInterval = Duration(milliseconds: 40);
+  DateTime? _lastTypeAt;
+  DateTime? _lastDeleteAt;
 
   /// Future that completes when initialization is finished (success or failure).
   Future<void> get ready => _ready.future;
@@ -69,8 +74,16 @@ class GameAudioService {
       if (!_initialized) {
         return;
       }
+      final now = DateTime.now();
+      if (_lastTypeAt != null &&
+          now.difference(_lastTypeAt!) < _minTypeInterval) {
+        // Too frequent: drop this request to avoid backlog/latency.
+        return;
+      }
+      _lastTypeAt = now;
       if (_typePool != null) {
-        await _typePool!.start();
+        // Do not await start() — start is fire-and-forget for low-latency SFX.
+        unawaited(_typePool!.start());
       }
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
@@ -83,8 +96,14 @@ class GameAudioService {
       if (!_initialized) {
         return;
       }
+      final now = DateTime.now();
+      if (_lastDeleteAt != null &&
+          now.difference(_lastDeleteAt!) < _minDeleteInterval) {
+        return;
+      }
+      _lastDeleteAt = now;
       if (_deletePool != null) {
-        await _deletePool!.start();
+        unawaited(_deletePool!.start());
       }
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);

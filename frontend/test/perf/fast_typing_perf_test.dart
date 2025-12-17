@@ -6,7 +6,6 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/services/game_audio_service.dart';
-import 'dart:math';
 
 class NoopWordCheckService extends WordCheckService {
   @override
@@ -32,7 +31,7 @@ void main() {
       overrides: [
         wordCheckServiceProvider.overrideWithValue(NoopWordCheckService()),
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-        flashClearDelayProvider.overrideWithValue(const Duration(seconds: 0)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -77,7 +76,7 @@ void main() {
     final sw = Stopwatch()..start();
     // Simulate fast typing of 200 characters across board cells.
     const iterations = 200;
-    final rand = Random(0);
+    // deterministic random removed; not needed for this test
     for (var i = 0; i < iterations; i++) {
       // Use deterministic letters A-Z
       final ch = String.fromCharCode(65 + (i % 26));
