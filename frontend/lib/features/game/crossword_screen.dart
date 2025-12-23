@@ -228,10 +228,11 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
       });
     }
 
-    final board = ref.watch(gameBoardProvider);
-    // We no longer use gridSize for explicit calculations here; keep
-    // it available for future logic if needed.
-    final gridSize = board.gridSize.clamp(3, 12);
+    // Performance: only watch gridSize, not the entire board which changes
+    // on every keystroke. This prevents unnecessary rebuilds.
+    final gridSize = ref.watch(
+      gameBoardProvider.select((b) => b.gridSize),
+    ).clamp(3, 12);
     if (kDebugMode) {
       debugPrint('CrosswordScreen gridSize=$gridSize');
     }

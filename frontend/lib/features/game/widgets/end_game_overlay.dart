@@ -11,10 +11,12 @@ class EndGameOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    GameBoard? board;
+    List<PuzzleEntryData>? entries;
     Set<String>? found;
     try {
-      board = ref.watch(gameBoardProvider);
+      // Performance: only watch entries (stable), not the entire board
+      // which changes on every keystroke.
+      entries = ref.watch(gameBoardProvider.select((b) => b.entries));
       found = ref.watch(foundWordsProvider);
     } on Object catch (e, st) {
       if (kDebugMode) {
@@ -23,7 +25,6 @@ class EndGameOverlay extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final entries = board?.entries;
     final completed =
         entries != null &&
         entries.isNotEmpty &&

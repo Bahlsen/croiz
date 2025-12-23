@@ -2,8 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/board_helpers.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/helpers/word_navigation.dart';
+
+/// Compute current entry without full GameBoard dependency.
+/// This allows watching only entries+blackCells (stable) instead of grid.
+EntryContext? _computeCurrentEntryFromParts({
+  required List<PuzzleEntryData> entries,
+  required List<List<bool>> blackCells,
+  required SelectedCell selected,
+  required WordDirection dir,
+}) {
+  final horizontal = dir == WordDirection.horizontal;
+  final bounds = blackCells.wordBounds(
+    selected.row,
+    selected.col,
+    horizontal: horizontal,
+  );
+  final startX = horizontal ? bounds[0] : selected.col;
+  final startY = horizontal ? selected.row : bounds[0];
+
+  final dirStr = horizontal ? 'across' : 'down';
+  final entry = entries.firstWhere(
+    (e) => e.x == startX && e.y == startY && e.direction == dirStr,
+    orElse: () => const PuzzleEntryData(
+      number: -1,
+      direction: 'across',
+      x: -1,
+      y: -1,
+      length: 0,
+      clue: null,
+    ),
+  );
+  if (entry.number == -1) {
+    return null;
+  }
+
+  return EntryContext(horizontal: horizontal, entry: entry, entries: entries);
+}
 
 /// Compact banner showing the clue for the currently selected word.
 class CrosswordClueBanner extends ConsumerWidget {
@@ -40,23 +77,28 @@ class CrosswordClueBanner extends ConsumerWidget {
       );
     }
 
-    // Board must be available to compute the current entry. If the
-    // provider isn't ready, render nothing — the screen shows loading.
-    GameBoard board;
-    try {
-      board = ref.watch(gameBoardProvider);
-    } on Object catch (_) {
+    // Performance: watch only entries and blackCells, not the entire board.
+    // The grid changes on every keystroke but entries/blackCells are stable.
+    final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
+    final blackCells = ref.watch(gameBoardProvider.select((b) => b.blackCells));
+    
+    if (entries == null || entries.isEmpty) {
       return const SizedBox.shrink();
     }
 
-    final entryCtx = computeCurrentEntry(board, selected, dir);
+    final entryCtx = _computeCurrentEntryFromParts(
+      entries: entries,
+      blackCells: blackCells,
+      selected: selected,
+      dir: dir,
+    );
     if (entryCtx == null) {
       return const SizedBox.shrink();
     }
 
     final horizontal = entryCtx.horizontal;
     final entry = entryCtx.entry;
-    final entries = entryCtx.entries;
+    final allEntries = entryCtx.entries;
 
     // Make the banner a smaller fixed height so it doesn't dominate
     // the controls area. Use much smaller defaults than before.
@@ -80,7 +122,7 @@ class CrosswordClueBanner extends ConsumerWidget {
                 _buildNavArrow(
                   icon: Icons.chevron_left,
                   onTap: () =>
-                      _navigateToAdjacentEntry(ref, entries, entry, -1),
+                      _navigateToAdjacentEntry(ref, allEntries, entry, -1),
                   compact: isCompact,
                 ),
                 Expanded(
@@ -93,7 +135,7 @@ class CrosswordClueBanner extends ConsumerWidget {
                 ),
                 _buildNavArrow(
                   icon: Icons.chevron_right,
-                  onTap: () => _navigateToAdjacentEntry(ref, entries, entry, 1),
+                  onTap: () => _navigateToAdjacentEntry(ref, allEntries, entry, 1),
                   compact: isCompact,
                 ),
               ],
