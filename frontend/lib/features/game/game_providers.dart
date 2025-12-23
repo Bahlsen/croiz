@@ -22,6 +22,13 @@ final flashClearDelayProvider = Provider<Duration>(
   (ref) => const Duration(milliseconds: 500),
 );
 
+/// Debounce delay for word completion checks during fast typing.
+/// In production: 50ms to batch checks and reduce CPU load.
+/// Tests can override to Duration.zero for synchronous checks.
+final wordCheckDebounceDelayProvider = Provider<Duration>(
+  (ref) => const Duration(milliseconds: 50),
+);
+
 class GameBoardNotifier extends Notifier<GameBoard> {
   // Notifier that mirrors `puzzleLoaderProvider`. Attaches a single listener
   // on first `build()` to react to puzzle load events and update dependent

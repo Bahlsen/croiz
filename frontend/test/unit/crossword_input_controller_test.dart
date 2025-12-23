@@ -151,6 +151,7 @@ void main() {
           gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
           // Avoid real timers in word-complete flashes.
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);

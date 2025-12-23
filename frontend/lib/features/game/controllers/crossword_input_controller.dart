@@ -21,8 +21,14 @@ class CrosswordInputController {
       );
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
+  Timer? _checkDebounceTimer;
+  final Set<CellKey> _pendingChecks = {};
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
+
+  /// Get the configured debounce delay (can be overridden in tests).
+  Duration get _checkDebounceDelay =>
+      _read<Duration>(wordCheckDebounceDelayProvider);
 
   GameBoard _safeReadBoard() {
     try {
@@ -69,8 +75,8 @@ class CrosswordInputController {
           (board.grid[first[0]][first[1]] == null) ||
           (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
-      // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
-      _checkForCompletedWords(CellKey(first[0], first[1]));
+      // Schedule debounced check for word completion.
+      _scheduleCheckForCompletedWords(CellKey(first[0], first[1]));
       // Scheduled check removed - immediate check already handles word completion.
       _moveToNext(
         _safeReadBoard(),
@@ -104,7 +110,7 @@ class CrosswordInputController {
           (board.grid[nextRow][nextCol] == null) ||
           (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
-      _checkForCompletedWords(CellKey(nextRow, nextCol));
+      _scheduleCheckForCompletedWords(CellKey(nextRow, nextCol));
       _moveToNext(
         _safeReadBoard(),
         startRow: nextRow,
@@ -130,7 +136,7 @@ class CrosswordInputController {
         if (f != null) {
           // f is guaranteed empty by definition
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
-          _checkForCompletedWords(CellKey(f.row, f.col));
+          _scheduleCheckForCompletedWords(CellKey(f.row, f.col));
           _moveToNext(
             _safeReadBoard(),
             startRow: f.row,
@@ -156,7 +162,7 @@ class CrosswordInputController {
             _read(
               gameBoardProvider.notifier,
             ).setLetter(selected.row, selected.col, letter);
-            _checkForCompletedWords(CellKey(selected.row, selected.col));
+            _scheduleCheckForCompletedWords(CellKey(selected.row, selected.col));
             _moveToNext(
               _safeReadBoard(),
               startRow: selected.row,
@@ -179,7 +185,7 @@ class CrosswordInputController {
           _read(
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
-          _checkForCompletedWords(CellKey(nextF.row, nextF.col));
+          _scheduleCheckForCompletedWords(CellKey(nextF.row, nextF.col));
           _moveToNext(
             _safeReadBoard(),
             startRow: nextF.row,
@@ -197,7 +203,7 @@ class CrosswordInputController {
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
-    _checkForCompletedWords(CellKey(selected.row, selected.col));
+    _scheduleCheckForCompletedWords(CellKey(selected.row, selected.col));
     _moveToNext(
       _safeReadBoard(),
       startRow: selected.row,
@@ -761,8 +767,46 @@ class CrosswordInputController {
     return null;
   }
 
-  void _checkForCompletedWords([CellKey? changedCell]) {
-    final board = _safeReadBoard();
+  /// Schedule a debounced check for completed words.
+  /// Accumulates changed cells and runs a single batch check after delay.
+  /// If debounce delay is zero (tests), runs synchronously.
+  void _scheduleCheckForCompletedWords(CellKey changedCell) {
+    _pendingChecks.add(changedCell);
+    final delay = _checkDebounceDelay;
+    if (delay == Duration.zero) {
+      // Synchronous mode for tests: run immediately
+      _runBatchCheck();
+      return;
+    }
+    _checkDebounceTimer?.cancel();
+    _checkDebounceTimer = Timer(delay, () {
+      if (_disposed) {
+        return;
+      }
+      _runBatchCheck();
+    });
+  }
+
+  /// Run the actual word check for all pending cells.
+  void _runBatchCheck() {
+    if (_pendingChecks.isEmpty) {
+      return;
+    }
+    final cellsToCheck = Set<CellKey>.from(_pendingChecks);
+    _pendingChecks.clear();
+    _checkForCompletedWordsBatch(cellsToCheck);
+  }
+
+  /// Check words for multiple cells at once (batch mode).
+  void _checkForCompletedWordsBatch(Set<CellKey> changedCells) {
+    GameBoard board;
+    try {
+      board = _safeReadBoard();
+      // ignore: avoid_catching_errors
+    } on StateError {
+      // Board no longer available (disposed or reset) — skip check.
+      return;
+    }
     final entries = board.entries;
 
     if (entries == null || entries.isEmpty) {
@@ -775,25 +819,20 @@ class CrosswordInputController {
     final lockedCells = _read(lockedCellsProvider);
     final newLockedCells = Set<CellKey>.from(lockedCells);
 
-    // If a changed cell is provided, only check entries that include that cell
-    // using the precomputed index for speed. Otherwise check all entries.
-    final entriesToCheck = <PuzzleEntryData>[];
-    if (changedCell != null) {
-      try {
-        final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
-          cellEntriesIndexProvider,
-        );
-        final list = index[changedCell];
-        if (list != null && list.isNotEmpty) {
+    // Collect all entries that contain any of the changed cells
+    final entriesToCheck = <PuzzleEntryData>{};
+    try {
+      final index = _read<Map<CellKey, List<PuzzleEntryData>>>(
+        cellEntriesIndexProvider,
+      );
+      for (final cell in changedCells) {
+        final list = index[cell];
+        if (list != null) {
           entriesToCheck.addAll(list);
-        } else {
-          // No entries mapped to this cell; nothing to do.
         }
-      } on Object {
-        // Fallback to checking all entries if index lookup fails.
-        entriesToCheck.addAll(entries);
       }
-    } else {
+    } on Object {
+      // Fallback to checking all entries if index lookup fails.
       entriesToCheck.addAll(entries);
     }
 
@@ -814,7 +853,7 @@ class CrosswordInputController {
         newFoundWords.add(wordKey);
         wordsCompletedThisCheck++;
 
-        // Collect cells for flash animation (accumulate for all completed words)
+        // Collect cells for flash animation
         final cellKeys = wordCheckService.getCellKeys(entry);
         allFlashingCells.addAll(cellKeys);
 
@@ -834,21 +873,17 @@ class CrosswordInputController {
       // Trigger flash animation on ALL completed words' cells at once
       _read(flashingCellsProvider.notifier).state = allFlashingCells;
 
-      // Clear flash after animation (single timer for all words)
-      final _delay = _read(flashClearDelayProvider);
+      // Clear flash after animation
+      final delay = _read(flashClearDelayProvider);
       _flashClearTimer?.cancel();
-      _flashClearTimer = Timer(_delay, () {
+      _flashClearTimer = Timer(delay, () {
         if (_disposed) {
           return;
         }
         try {
           _read(flashingCellsProvider.notifier).state = <CellKey>{};
         } on Object catch (e, st) {
-          developer.log(
-            'Clearing flashing cells failed',
-            error: e,
-            stackTrace: st,
-          );
+          developer.log('Clearing flashing cells failed', error: e, stackTrace: st);
         }
       });
     }
@@ -877,11 +912,7 @@ class CrosswordInputController {
         }
       }
     } on Object catch (e, st) {
-      developer.log(
-        'Error checking for completed words',
-        error: e,
-        stackTrace: st,
-      );
+      developer.log('Error checking for completed words', error: e, stackTrace: st);
     }
   }
 
@@ -890,6 +921,7 @@ class CrosswordInputController {
     _disposed = true;
     try {
       _flashClearTimer?.cancel();
+      _checkDebounceTimer?.cancel();
     } on Object {
       // ignore
     }

@@ -38,6 +38,7 @@ void main() {
       overrides: [
         wordCheckServiceProvider.overrideWithValue(counting),
         gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);

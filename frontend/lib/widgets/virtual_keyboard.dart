@@ -197,10 +197,11 @@ class VirtualKeyboard extends ConsumerWidget {
   static String get backspaceToken => _backspaceToken;
 
   // UI-level coalescing to avoid issuing audio requests too frequently.
+  // 60ms matches GameAudioService throttle for consistent behavior.
   static DateTime? _lastUiTypeAt;
   static DateTime? _lastUiDeleteAt;
-  static const _uiMinTypeInterval = Duration(milliseconds: 40);
-  static const _uiMinDeleteInterval = Duration(milliseconds: 40);
+  static const _uiMinTypeInterval = Duration(milliseconds: 60);
+  static const _uiMinDeleteInterval = Duration(milliseconds: 60);
 
   static void _maybePlayType(WidgetRef ref) {
     final now = DateTime.now();

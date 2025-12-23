@@ -58,6 +58,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -126,6 +127,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -187,6 +189,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -272,6 +275,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -345,6 +349,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -401,6 +406,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -484,6 +490,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -537,6 +544,7 @@ void main() {
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           // Use actual delay to test clearing
           flashClearDelayProvider.overrideWithValue(const Duration(milliseconds: 500)),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -593,6 +601,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -683,6 +692,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -744,6 +754,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -808,6 +819,7 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudio),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);

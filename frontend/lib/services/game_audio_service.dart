@@ -15,8 +15,9 @@ class GameAudioService {
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
   // Throttle spikes: ignore play requests that arrive faster than this.
-  static const _minTypeInterval = Duration(milliseconds: 40);
-  static const _minDeleteInterval = Duration(milliseconds: 40);
+  // 60ms minimum ensures ~16 sounds/sec max, preventing audio backlog.
+  static const _minTypeInterval = Duration(milliseconds: 60);
+  static const _minDeleteInterval = Duration(milliseconds: 60);
   DateTime? _lastTypeAt;
   DateTime? _lastDeleteAt;
 
@@ -47,8 +48,9 @@ class GameAudioService {
       }
 
       // Create small pools for quick, possibly overlapping SFX.
-      _typePool = await FlameAudio.createPool('typing.wav', maxPlayers: 6);
-      _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 4);
+      // Smaller pools (3/2) prevent audio backlog when typing fast.
+      _typePool = await FlameAudio.createPool('typing.wav', maxPlayers: 3);
+      _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 2);
 
       _initialized = true;
       if (!_ready.isCompleted) {

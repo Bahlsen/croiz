@@ -49,6 +49,7 @@ void main() {
       container = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -113,6 +114,7 @@ void main() {
         final testContainer = ProviderContainer(
           overrides: [
             gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -180,6 +182,7 @@ void main() {
         final testContainer = ProviderContainer(
           overrides: [
             gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(

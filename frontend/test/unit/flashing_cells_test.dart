@@ -7,7 +7,11 @@ import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
   test('flashing cells clear after delay when a word is completed', () {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Build a simple 3x3 board with a single across entry at (0,0) length 3
