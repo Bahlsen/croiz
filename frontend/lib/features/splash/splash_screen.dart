@@ -49,6 +49,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
   late final Animation<double> _scaleAnimation;
+  late final DateTime _startedAt;
 
   @override
   void initState() {
@@ -73,6 +74,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
 
     _controller.forward();
+    _startedAt = DateTime.now();
   }
 
   @override
@@ -89,8 +91,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     ref.listen<AsyncValue<bool>>(appInitializedProvider, (previous, next) {
       final value = next.asData?.value;
       if (value == true) {
-        // Small delay to show the completed animation
-        Future.delayed(const Duration(milliseconds: 300), () {
+        // Ensure the splash remains visible at least until the
+        // intro animation completes. If initialization finishes
+        // faster than the animation, wait the remaining animation
+        // time plus a small buffer before proceeding.
+        final elapsed = DateTime.now().difference(_startedAt);
+        final animationDuration = _controller.duration ?? Duration.zero;
+        final remaining = animationDuration - elapsed;
+        final buffer = const Duration(milliseconds: 300);
+        final wait = remaining > Duration.zero ? remaining + buffer : buffer;
+
+        Future.delayed(wait, () {
           if (mounted) {
             widget.onInitialized();
           }
