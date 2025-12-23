@@ -49,7 +49,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final AnimationController _controller;
   late final Animation<double> _fadeAnimation;
   late final Animation<double> _scaleAnimation;
-  late final DateTime _startedAt;
 
   @override
   void initState() {
@@ -74,7 +73,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
 
     _controller.forward();
-    _startedAt = DateTime.now();
   }
 
   @override
@@ -92,13 +90,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       final value = next.asData?.value;
       if (value == true) {
         // Ensure the splash remains visible at least until the
-        // intro animation completes. If initialization finishes
-        // faster than the animation, wait the remaining animation
-        // time plus a small buffer before proceeding.
-        final elapsed = DateTime.now().difference(_startedAt);
+        // intro animation completes. Use the animation controller's
+        // progress (`value`) to compute elapsed time so tests that
+        // advance time via `tester.pump` remain deterministic.
         final animationDuration = _controller.duration ?? Duration.zero;
-        final remaining = animationDuration - elapsed;
+        final elapsedMs = (animationDuration.inMilliseconds * _controller.value).round();
+        final elapsed = Duration(milliseconds: elapsedMs);
         const buffer = Duration(milliseconds: 300);
+        final remaining = animationDuration - elapsed;
         final wait = remaining > Duration.zero ? remaining + buffer : buffer;
 
         Future.delayed(wait, () {
