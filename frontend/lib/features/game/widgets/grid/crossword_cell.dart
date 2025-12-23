@@ -135,9 +135,6 @@ class CrosswordCell extends ConsumerWidget {
         ? _kSelectedWordBgColor
         : _kDefaultBgColor;
 
-    final shouldAnimate =
-        isSelected || isPartOfSelectedWord || isFlashing || isClearedFlashing;
-
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
       boxShadow: boxShadow,
@@ -179,17 +176,9 @@ class CrosswordCell extends ConsumerWidget {
             ref.read(wordDirectionProvider.notifier).value = newDir;
           }
         },
-        // Performance: only use AnimatedContainer when animation is needed.
-        // Plain Container is much cheaper for cells that don't need animation.
-        // Animation duration reduced to 100ms for faster perceived response.
-        child: shouldAnimate
-            ? AnimatedContainer(
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeOutCubic,
-                decoration: decoration,
-                child: content,
-              )
-            : Container(decoration: decoration, child: content),
+        // Performance: use plain Container for instant visual feedback.
+        // AnimatedContainer causes perceived delay on touch.
+        child: Container(decoration: decoration, child: content),
       ),
     );
   }

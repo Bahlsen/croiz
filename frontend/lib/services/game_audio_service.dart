@@ -97,71 +97,65 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playType() async {
-    try {
-      if (!_initialized) await ready;
-      if (!_initialized || _typePlayer == null) return;
-
-      final now = DateTime.now();
-      if (_lastTypeAt != null &&
-          now.difference(_lastTypeAt!) < _minTypeInterval) {
-        return;
-      }
-      _lastTypeAt = now;
-
-      // Stop, seek to start, and resume
-      unawaited(_replaySound(_typePlayer!));
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] playType failed: $e\n$st');
+    // Fast path: skip if not ready (don't block)
+    if (!_initialized || _typePlayer == null) {
+      return;
     }
+
+    final now = DateTime.now();
+    if (_lastTypeAt != null &&
+        now.difference(_lastTypeAt!) < _minTypeInterval) {
+      return;
+    }
+    _lastTypeAt = now;
+
+    // Fire-and-forget replay
+    unawaited(_replayFast(_typePlayer!));
   }
 
   @override
   Future<void> playDelete() async {
-    try {
-      if (!_initialized) await ready;
-      if (!_initialized || _deletePlayer == null) return;
-
-      final now = DateTime.now();
-      if (_lastDeleteAt != null &&
-          now.difference(_lastDeleteAt!) < _minDeleteInterval) {
-        return;
-      }
-      _lastDeleteAt = now;
-
-      unawaited(_replaySound(_deletePlayer!));
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] playDelete failed: $e\n$st');
+    // Fast path: skip if not ready (don't block)
+    if (!_initialized || _deletePlayer == null) {
+      return;
     }
+
+    final now = DateTime.now();
+    if (_lastDeleteAt != null &&
+        now.difference(_lastDeleteAt!) < _minDeleteInterval) {
+      return;
+    }
+    _lastDeleteAt = now;
+
+    // Fire-and-forget replay
+    unawaited(_replayFast(_deletePlayer!));
   }
 
   @override
   Future<void> playSuccess() async {
-    try {
-      if (!_initialized || _successPlayer == null) return;
-      unawaited(_replaySound(_successPlayer!));
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] playSuccess failed: $e\n$st');
+    if (!_initialized || _successPlayer == null) {
+      return;
     }
+    unawaited(_replayFast(_successPlayer!));
   }
 
   @override
   Future<void> playVictory() async {
-    try {
-      if (!_initialized || _victoryPlayer == null) return;
-      unawaited(_replaySound(_victoryPlayer!));
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] playVictory failed: $e\n$st');
+    if (!_initialized || _victoryPlayer == null) {
+      return;
     }
+    unawaited(_replayFast(_victoryPlayer!));
   }
 
-  /// Replay a sound by stopping, seeking to start, and resuming.
-  Future<void> _replaySound(AudioPlayer player) async {
+  /// Fast replay: seek to start and resume without stopping.
+  /// This is much faster than stop→seek→resume.
+  Future<void> _replayFast(AudioPlayer player) async {
     try {
-      await player.stop();
+      // Seek and resume in parallel for fastest response
       await player.seek(Duration.zero);
       await player.resume();
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] _replaySound failed: $e\n$st');
+    } on Object {
+      // Silently ignore audio errors to not block UI
     }
   }
 

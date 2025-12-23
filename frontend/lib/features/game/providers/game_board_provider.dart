@@ -19,10 +19,10 @@ final flashClearDelayProvider = Provider<Duration>(
 );
 
 /// Debounce delay for word completion checks during fast typing.
-/// In production: 50ms to batch checks and reduce CPU load.
+/// In production: 16ms (one frame) to batch checks while staying responsive.
 /// Tests can override to Duration.zero for synchronous checks.
 final wordCheckDebounceDelayProvider = Provider<Duration>(
-  (ref) => const Duration(milliseconds: 50),
+  (ref) => const Duration(milliseconds: 16),
 );
 
 /// Main notifier for the game board state.

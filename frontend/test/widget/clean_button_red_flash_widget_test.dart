@@ -66,19 +66,22 @@ void main() {
     // Pump a single frame to apply new decoration but avoid clearing by timer
     await tester.pump();
 
-    // Fetch the AnimatedContainer decorating the cell (used when animating)
+    // Fetch the Container decorating the cell
+    // (AnimatedContainer was removed for performance - now uses plain Container)
     final cellFinder = find.byKey(const Key('cell-0-1'));
     expect(cellFinder, findsOneWidget);
 
-    final animatedFinder = find.descendant(
+    final containerFinder = find.descendant(
       of: cellFinder,
-      matching: find.byType(AnimatedContainer),
+      matching: find.byWidgetPredicate(
+        (w) => w is Container && w.decoration is BoxDecoration,
+      ),
     );
-    expect(animatedFinder, findsOneWidget);
+    expect(containerFinder, findsOneWidget);
 
-    final animated = tester.widget<AnimatedContainer>(animatedFinder);
+    final containerWidget = tester.widget<Container>(containerFinder);
     final decoration =
-        (animated.decoration ?? const BoxDecoration()) as BoxDecoration;
+        (containerWidget.decoration ?? const BoxDecoration()) as BoxDecoration;
 
     // Border should be red accent during cleared flash
     final border =
@@ -92,19 +95,19 @@ void main() {
     // After delay, the flash should clear; advance beyond default (500ms)
     await tester.pump(const Duration(milliseconds: 600));
 
-    // After flash clears, the cell switches from AnimatedContainer to Container
-    // for performance (shouldAnimate becomes false).
-    final containerFinder = find.descendant(
+    // Re-fetch Container after flash clears
+    final containerFinderAfter = find.descendant(
       of: cellFinder,
       matching: find.byWidgetPredicate(
         (w) => w is Container && w.decoration is BoxDecoration,
       ),
     );
-    expect(containerFinder, findsOneWidget);
+    expect(containerFinderAfter, findsOneWidget);
 
-    final containerWidget = tester.widget<Container>(containerFinder);
+    final containerWidgetAfter = tester.widget<Container>(containerFinderAfter);
     final decorationAfter =
-        (containerWidget.decoration ?? const BoxDecoration()) as BoxDecoration;
+        (containerWidgetAfter.decoration ?? const BoxDecoration())
+            as BoxDecoration;
     final borderAfter =
         (decorationAfter.border ?? Border.all(color: Colors.transparent))
             as Border;
