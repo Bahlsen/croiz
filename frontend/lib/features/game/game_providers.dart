@@ -9,33 +9,11 @@ export 'providers/cell_providers.dart';
 // Additional providers that haven't been modularized yet
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/services/providers.dart';
 import 'board_helpers.dart';
 
 // Re-import for local use
 import 'providers/game_state_providers.dart';
 import 'providers/game_board_provider.dart';
-
-/// Provider family exposing whether a specific entry is considered found/complete.
-final entryFoundProvider = Provider.family<bool, PuzzleEntryData>((ref, entry) {
-  final key = ref.watch(wordCheckServiceProvider).getWordKey(entry);
-  final found = ref.watch(foundWordsProvider);
-  if (found.contains(key)) {
-    return true;
-  }
-  try {
-    final svc = ref.read(wordCheckServiceProvider);
-    final board = ref.read(gameBoardProvider);
-    return svc.isWordComplete(board, entry);
-  } on Object {
-    return false;
-  }
-});
-
-/// Provider family exposing whether a cell is locked.
-final cellLockedProvider = Provider.family<bool, CellKey>(
-  (ref, key) => ref.watch(lockedCellsProvider).contains(key),
-);
 
 /// Set of cells belonging to the currently selected word.
 /// Optimized: only depends on selection, direction, and blackCells structure.
