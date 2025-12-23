@@ -168,9 +168,10 @@ class CrosswordCell extends ConsumerWidget {
       },
       // Performance: only use AnimatedContainer when animation is needed.
       // Plain Container is much cheaper for cells that don't need animation.
+      // Animation duration reduced to 100ms for faster perceived response.
       child: shouldAnimate
           ? AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
+              duration: const Duration(milliseconds: 100),
               curve: Curves.easeOutCubic,
               decoration: decoration,
               child: content,
@@ -210,25 +211,25 @@ class _CellContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Stack(
-      children: [
-        if (cellNumber != null)
-          Positioned(
-            left: 1,
-            top: 0,
-            child: Text('$cellNumber', style: _numberTextStyle),
-          ),
-        Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: _letterPadding,
-              child: Text(
-                letter ?? '',
-                style: isSelected ? _selectedLetterTextStyle : _letterTextStyle,
-              ),
+    children: [
+      if (cellNumber != null)
+        Positioned(
+          left: 1,
+          top: 0,
+          child: Text('$cellNumber', style: _numberTextStyle),
+        ),
+      Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Padding(
+            padding: _letterPadding,
+            child: Text(
+              letter ?? '',
+              style: isSelected ? _selectedLetterTextStyle : _letterTextStyle,
             ),
           ),
         ),
-      ],
-    );
+      ),
+    ],
+  );
 }
