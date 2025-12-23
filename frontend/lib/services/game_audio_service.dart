@@ -4,6 +4,12 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
+///
+/// Audio performance strategy:
+/// 1. Use AudioPool for frequently played sounds (typing, delete)
+/// 2. Throttle at 60ms minimum interval (~16 sounds/sec max)
+/// 3. Track in-flight sounds to prevent backlog accumulation
+/// 4. Drop sounds when pool is busy rather than queuing
 class GameAudioService {
   GameAudioService() {
     // fire-and-forget initialization
@@ -14,12 +20,20 @@ class GameAudioService {
   AudioPool? _deletePool;
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
+
   // Throttle spikes: ignore play requests that arrive faster than this.
   // 60ms minimum ensures ~16 sounds/sec max, preventing audio backlog.
   static const _minTypeInterval = Duration(milliseconds: 60);
   static const _minDeleteInterval = Duration(milliseconds: 60);
   DateTime? _lastTypeAt;
   DateTime? _lastDeleteAt;
+
+  // Track in-flight sounds to prevent backlog when pool is saturated.
+  // When all pool players are busy, we drop the request instead of queuing.
+  int _typeInFlight = 0;
+  int _deleteInFlight = 0;
+  static const _maxTypeInFlight = 2; // Leave 1 player as buffer
+  static const _maxDeleteInFlight = 1; // Leave 1 player as buffer
 
   /// Future that completes when initialization is finished (success or failure).
   Future<void> get ready => _ready.future;
@@ -76,16 +90,46 @@ class GameAudioService {
       if (!_initialized) {
         return;
       }
+
+      // Throttle by time interval
       final now = DateTime.now();
       if (_lastTypeAt != null &&
           now.difference(_lastTypeAt!) < _minTypeInterval) {
         // Too frequent: drop this request to avoid backlog/latency.
         return;
       }
+
+      // Drop if too many sounds in flight (prevents queue buildup)
+      if (_typeInFlight >= _maxTypeInFlight) {
+        developer.log(
+          'playType dropped: pool saturated ($_typeInFlight in flight)',
+          name: 'GameAudioService',
+        );
+        return;
+      }
+
       _lastTypeAt = now;
       if (_typePool != null) {
-        // Do not await start() — start is fire-and-forget for low-latency SFX.
-        unawaited(_typePool!.start());
+        _typeInFlight++;
+        // Fire-and-forget but track completion to know when pool frees up
+        unawaited(
+          _typePool!
+              .start()
+              .then((_) {
+                // Sound started, will auto-complete
+                // Decrement after estimated sound duration (typing.wav is short)
+                Future<void>.delayed(const Duration(milliseconds: 100), () {
+                  _typeInFlight = (_typeInFlight - 1).clamp(
+                    0,
+                    _maxTypeInFlight,
+                  );
+                });
+              })
+              .catchError((Object e) {
+                _typeInFlight = (_typeInFlight - 1).clamp(0, _maxTypeInFlight);
+                developer.log('playType pool.start failed', error: e);
+              }),
+        );
       }
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
@@ -98,14 +142,48 @@ class GameAudioService {
       if (!_initialized) {
         return;
       }
+
+      // Throttle by time interval
       final now = DateTime.now();
       if (_lastDeleteAt != null &&
           now.difference(_lastDeleteAt!) < _minDeleteInterval) {
         return;
       }
+
+      // Drop if too many sounds in flight (prevents queue buildup)
+      if (_deleteInFlight >= _maxDeleteInFlight) {
+        developer.log(
+          'playDelete dropped: pool saturated ($_deleteInFlight in flight)',
+          name: 'GameAudioService',
+        );
+        return;
+      }
+
       _lastDeleteAt = now;
       if (_deletePool != null) {
-        unawaited(_deletePool!.start());
+        _deleteInFlight++;
+        // Fire-and-forget but track completion to know when pool frees up
+        unawaited(
+          _deletePool!
+              .start()
+              .then((_) {
+                // Sound started, will auto-complete
+                // Decrement after estimated sound duration (delete.wav is short)
+                Future<void>.delayed(const Duration(milliseconds: 100), () {
+                  _deleteInFlight = (_deleteInFlight - 1).clamp(
+                    0,
+                    _maxDeleteInFlight,
+                  );
+                });
+              })
+              .catchError((Object e) {
+                _deleteInFlight = (_deleteInFlight - 1).clamp(
+                  0,
+                  _maxDeleteInFlight,
+                );
+                developer.log('playDelete pool.start failed', error: e);
+              }),
+        );
       }
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);
