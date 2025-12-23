@@ -93,7 +93,7 @@ class CrosswordInputController {
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
 
-    if (selected == null) {
+      if (selected == null) {
       final first = firstSelectable(board.blackCells);
       if (first == null) {
         return;
@@ -102,17 +102,9 @@ class CrosswordInputController {
         first[0],
         first[1],
       );
-      final wasEmpty =
-          (board.grid[first[0]][first[1]] == null) ||
-          (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       _wordCompletionChecker.scheduleCheck(CellKey(first[0], first[1]));
-      _moveToNext(
-        _safeReadBoard(),
-        startRow: first[0],
-        startCol: first[1],
-        wasEmptyAtStart: wasEmpty,
-      );
+      _advanceToNextEmptyFrom(first[0], first[1]);
       return;
     }
 
@@ -135,17 +127,9 @@ class CrosswordInputController {
         nextRow,
         nextCol,
       );
-      final wasEmpty =
-          (board.grid[nextRow][nextCol] == null) ||
-          (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _wordCompletionChecker.scheduleCheck(CellKey(nextRow, nextCol));
-      _moveToNext(
-        _safeReadBoard(),
-        startRow: nextRow,
-        startCol: nextCol,
-        wasEmptyAtStart: wasEmpty,
-      );
+      _advanceToNextEmptyFrom(nextRow, nextCol);
       return;
     }
 
@@ -153,19 +137,11 @@ class CrosswordInputController {
     // This allows users to correct mistakes by tapping on a filled cell
     // and typing the correct letter. The old behavior of jumping to the
     // next empty cell was confusing and prevented corrections.
-    final wasEmptyHere =
-        (board.grid[selected.row][selected.col] == null) ||
-        (board.grid[selected.row][selected.col]?.isEmpty ?? true);
     _read(
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
     _wordCompletionChecker.scheduleCheck(CellKey(selected.row, selected.col));
-    _moveToNext(
-      _safeReadBoard(),
-      startRow: selected.row,
-      startCol: selected.col,
-      wasEmptyAtStart: wasEmptyHere,
-    );
+    _advanceToNextEmptyFrom(selected.row, selected.col);
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -329,6 +305,94 @@ class CrosswordInputController {
     );
   }
 
+  void _advanceToNextEmptyFrom(int startRow, int startCol) {
+    final board = _safeReadBoard();
+    final dir = _read(wordDirectionProvider);
+    final isAcross = dir == WordDirection.horizontal;
+    final entries = board.entries;
+    final lockedCells = _read<Set<CellKey>>(lockedCellsProvider);
+
+    // Try to find containing entry and then the next empty cell after the current
+    // position within the same entry.
+    if (entries != null && entries.isNotEmpty) {
+      final index = _tryReadCellEntriesIndex();
+      final containing = findContainingEntry(
+        row: startRow,
+        col: startCol,
+        wantAcross: isAcross,
+        entries: entries,
+        index: index,
+      );
+      if (containing != null) {
+        // Search within containing entry after the current position
+        if (isAcross) {
+          for (var cc = startCol + 1; cc < containing.x + containing.length; cc++) {
+            final key = CellKey(containing.y, cc);
+            if (lockedCells.contains(key)) {
+              continue;
+            }
+            final val = board.grid[containing.y][cc];
+            if (val == null || val.isEmpty) {
+              _read(selectedCellProvider.notifier).state = SelectedCell(containing.y, cc);
+              return;
+            }
+          }
+        } else {
+          for (var rr = startRow + 1; rr < containing.y + containing.length; rr++) {
+            final key = CellKey(rr, containing.x);
+            if (lockedCells.contains(key)) {
+              continue;
+            }
+            final val = board.grid[rr][containing.x];
+            if (val == null || val.isEmpty) {
+              _read(selectedCellProvider.notifier).state = SelectedCell(rr, containing.x);
+              return;
+            }
+          }
+        }
+
+        // Not found in same entry -> find next empty in other entries
+        final nextEmpty = findNextEmptyFromEntry(
+          containing: containing,
+          wantAcross: isAcross,
+          board: board,
+          entries: entries,
+          lockedCells: lockedCells,
+          skipLocked: true,
+        );
+        if (nextEmpty != null) {
+          _read(selectedCellProvider.notifier).state = nextEmpty;
+          // If the found empty is in the other direction, switch direction
+          final idxList = _tryReadCellEntriesIndex();
+          final list = idxList?[CellKey(nextEmpty.row, nextEmpty.col)];
+          if (list != null && list.isNotEmpty) {
+            final e = list.first;
+            _read(wordDirectionProvider.notifier).state =
+                e.directionEnum == EntryDirection.across
+                    ? WordDirection.horizontal
+                    : WordDirection.vertical;
+          }
+          return;
+        }
+      }
+    }
+
+    // Fallback: select the next editable cell in the current direction
+    final dr = dir == WordDirection.vertical ? 1 : 0;
+    final dc = dir == WordDirection.vertical ? 0 : 1;
+    final next = _nextEditableCell(
+      board,
+      fromRow: startRow,
+      fromCol: startCol,
+      dr: dr,
+      dc: dc,
+      wrap: true,
+    );
+    if (next != null) {
+      _read(selectedCellProvider.notifier).state = SelectedCell(next[0], next[1]);
+    }
+  }
+
   void _moveToDirection(int row, int col, int dr, int dc) {
     final board = _safeReadBoard();
     final black = board.blackCells;
@@ -427,166 +491,6 @@ class CrosswordInputController {
           cellBelongsToWord(row, col, entries);
     } on Object {
       return cellBelongsToWord(row, col, entries);
-    }
-  }
-
-  void _moveToNext(
-    GameBoard board, {
-    required int startRow,
-    required int startCol,
-    required bool wasEmptyAtStart,
-  }) {
-    final dir = _read(wordDirectionProvider);
-    final lockedCells = _read(lockedCellsProvider);
-    final entries = board.entries;
-
-    if (entries != null && entries.isNotEmpty) {
-      final isAcross = dir == WordDirection.horizontal;
-      final sameDir =
-          entries
-              .where(
-                (e) =>
-                    (isAcross && e.directionEnum == EntryDirection.across) ||
-                    (!isAcross && e.directionEnum == EntryDirection.down),
-              )
-              .toList()
-            ..sort((a, b) => a.number.compareTo(b.number));
-      final wordCheck = _read(wordCheckServiceProvider);
-      final foundWords = _read(foundWordsProvider);
-
-      if (sameDir.isNotEmpty) {
-        PuzzleEntryData? containing;
-        for (final e in sameDir) {
-          if (isAcross) {
-            if (startRow == e.y &&
-                startCol >= e.x &&
-                startCol < e.x + e.length) {
-              containing = e;
-              break;
-            }
-          } else {
-            if (startCol == e.x &&
-                startRow >= e.y &&
-                startRow < e.y + e.length) {
-              containing = e;
-              break;
-            }
-          }
-        }
-
-        if (containing != null) {
-          final isLast = isAcross
-              ? (startCol == containing.x + containing.length - 1)
-              : (startRow == containing.y + containing.length - 1);
-          if (isLast) {
-            final canAdvance = (() {
-              if (wasEmptyAtStart) {
-                return true;
-              }
-              final key = wordCheck.getWordKey(containing);
-              if (foundWords.contains(key)) {
-                return true;
-              }
-              return wordCheck.isWordComplete(board, containing);
-            })();
-            if (!canAdvance) {
-              return;
-            }
-            final currentNumber = containing.number;
-            final idx = sameDir.indexWhere((e) => e.number == currentNumber);
-            if (idx != -1) {
-              if (sameDir.length > 1) {
-                for (var offset = 1; offset <= sameDir.length; offset++) {
-                  final candidate = sameDir[(idx + offset) % sameDir.length];
-                  final key = wordCheck.getWordKey(candidate);
-                  if (foundWords.contains(key)) {
-                    continue;
-                  }
-                  final candidateKey = CellKey(candidate.y, candidate.x);
-                  if (lockedCells.contains(candidateKey)) {
-                    continue;
-                  }
-                  // Find the first empty cell in the candidate word
-                  final firstEmpty = firstEmptyInEntry(
-                    candidate,
-                    board,
-                    lockedCells: lockedCells,
-                    skipLocked: true,
-                  );
-                  if (firstEmpty != null) {
-                    _read(selectedCellProvider.notifier).state = firstEmpty;
-                  } else {
-                    // Fallback to first cell if no empty cell found
-                    _read(selectedCellProvider.notifier).state = SelectedCell(
-                      candidate.y,
-                      candidate.x,
-                    );
-                  }
-                  return;
-                }
-              }
-
-              final otherDir =
-                  entries
-                      .where(
-                        (e) =>
-                            (isAcross &&
-                                e.directionEnum == EntryDirection.down) ||
-                            (!isAcross &&
-                                e.directionEnum == EntryDirection.across),
-                      )
-                      .toList()
-                    ..sort((a, b) => a.number.compareTo(b.number));
-              for (final candidate in otherDir) {
-                final key = wordCheck.getWordKey(candidate);
-                if (!foundWords.contains(key)) {
-                  final candidateKey = CellKey(candidate.y, candidate.x);
-                  if (lockedCells.contains(candidateKey)) {
-                    continue;
-                  }
-                  // Find the first empty cell in the candidate word
-                  final firstEmpty = firstEmptyInEntry(
-                    candidate,
-                    board,
-                    lockedCells: lockedCells,
-                    skipLocked: true,
-                  );
-                  if (firstEmpty != null) {
-                    _read(selectedCellProvider.notifier).state = firstEmpty;
-                  } else {
-                    // Fallback to first cell if no empty cell found
-                    _read(selectedCellProvider.notifier).state = SelectedCell(
-                      candidate.y,
-                      candidate.x,
-                    );
-                  }
-                  _read(wordDirectionProvider.notifier).state = isAcross
-                      ? WordDirection.vertical
-                      : WordDirection.horizontal;
-                  return;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-
-    final dr = dir == WordDirection.vertical ? 1 : 0;
-    final dc = dir == WordDirection.vertical ? 0 : 1;
-    final next = _nextEditableCell(
-      board,
-      fromRow: startRow,
-      fromCol: startCol,
-      dr: dr,
-      dc: dc,
-      wrap: true,
-    );
-    if (next != null) {
-      _read(selectedCellProvider.notifier).state = SelectedCell(
-        next[0],
-        next[1],
-      );
     }
   }
 

@@ -72,19 +72,21 @@ void main() {
       await tester.tap(find.text('Z'));
       await tester.pump();
 
-      // Selection should remain at (2,0)
+      // With new behavior: after replacing, selection advances to next empty cell
+      // Since this word is filled, it goes to the next word's first empty (row=0, col=1)
       final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 2);
-      expect(sel.col, 0);
+      expect(sel!.row, 0);
+      expect(sel.col, 1);
 
-      // Now tap the correct letter 'T' to complete the word
+      // Now tap another letter - this goes to the new selected cell (0,1)
       await tester.tap(find.text('T'));
       await tester.pump();
 
-      // Grid should update
+      // Grid should update: Z at (2,0), T at (0,1)
       final updated = container.read(gameBoardProvider);
-      expect(updated.grid[2][0], 'T');
+      expect(updated.grid[2][0], 'Z');
+      expect(updated.grid[0][1], 'T');
     },
   );
 }

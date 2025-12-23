@@ -518,10 +518,11 @@ void main() {
 
     controller.handleKey(event, size);
 
-    // After typing at entry 6, entry 7 is skipped (found) and should move to entry 5
+    // After typing at entry 6, it advances to next empty cell.
+    // Entry 7 is completed so it goes to entry 5 first empty cell (row=0, col=4)
     final sel = container.read(selectedCellProvider);
     expect(sel, isNotNull);
     expect(sel!.row, 0);
-    expect(sel.col, 0);
+    expect(sel.col, 4);
   });
 }

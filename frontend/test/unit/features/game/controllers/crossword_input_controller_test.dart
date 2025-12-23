@@ -556,22 +556,23 @@ void main() {
       testContainer.read(selectedCellProvider.notifier).state =
           const SelectedCell(0, 2);
 
-      // Replace last letter with another incorrect letter; word stays incomplete
+      // Replace last letter with another incorrect letter
       controller.setLetterAndAdvance('Z');
 
-      // Selection should remain on the same last cell (no jump)
+      // With new behavior: after replacing, selection advances to next empty cell
+      // Since this word is filled, it goes to the next word's first empty (row=1, col=0)
       final sel = testContainer.read(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 0);
-      expect(sel.col, 2);
+      expect(sel!.row, 1);
+      expect(sel.col, 0);
 
-      // Now type the correct letter to complete the word; this time it may advance
+      // Now type another letter - this goes to the new selected cell (1,0)
       controller.setLetterAndAdvance('T');
 
-      // Either the word is complete and we move to next word start, or
-      // selection remains if there is no suitable next word. Assert grid updated.
+      // Assert grid updated: Z at (0,2), T at (1,0)
       final board = testContainer.read(gameBoardProvider);
-      expect(board.grid[0][2], 'T');
+      expect(board.grid[0][2], 'Z');
+      expect(board.grid[1][0], 'T');
     });
 
     test('typing on last vertical cell does not jump when word incomplete', () {
@@ -633,21 +634,23 @@ void main() {
       testContainer.read(wordDirectionProvider.notifier).state =
           WordDirection.vertical;
 
-      // Replace last letter with another incorrect letter; word stays incomplete
+      // Replace last letter with another incorrect letter
       controller.setLetterAndAdvance('Z');
 
-      // Selection should remain on the same last cell (no jump)
+      // With new behavior: after replacing, selection advances to next empty cell
+      // Since this word is filled, it goes to the next word's first empty (row=0, col=1)
       final sel = testContainer.read(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 2);
-      expect(sel.col, 0);
+      expect(sel!.row, 0);
+      expect(sel.col, 1);
 
-      // Now type the correct letter to complete the word; this time it may advance
+      // Now type another letter - this goes to the new selected cell (0,1)
       controller.setLetterAndAdvance('T');
 
-      // Assert grid updated
+      // Assert grid updated: Z at (2,0), T at (0,1)
       final board = testContainer.read(gameBoardProvider);
-      expect(board.grid[2][0], 'T');
+      expect(board.grid[2][0], 'Z');
+      expect(board.grid[0][1], 'T');
     });
 
     test('clearCurrent does not clear locked cells', () {
