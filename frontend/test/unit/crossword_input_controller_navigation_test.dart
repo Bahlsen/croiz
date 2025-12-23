@@ -233,4 +233,76 @@ void main() {
     expect(sel!.row, 0);
     expect(sel.col, 2);
   });
+
+  test(
+    'completing a vertical word advances to first EMPTY cell of next vertical word',
+    () {
+      // Bug scenario:
+      // - Vertical word #1 at col 0, rows 0-2 (length 3)
+      // - Vertical word #2 at col 2, rows 0-2 (length 3) with first cell already filled
+      // - When completing word #1, we should land on the SECOND cell of word #2
+      //   (row 1, col 2) because the first cell is already filled.
+      const size = 5;
+      final grid = List.generate(size, (_) => List<String?>.filled(size, null));
+      // Pre-fill first cell of word #2
+      grid[0][2] = 'X';
+
+      final black = List.generate(size, (_) => List<bool>.filled(size, false));
+      final boardWithEntries = GameBoard(
+        id: 'test-vertical-nav',
+        title: 'Test Vertical Navigation',
+        gridSize: size,
+        createdAt: DateTime.now(),
+        grid: grid,
+        clues: const {},
+        blackCells: black,
+        difficulty: 1,
+        entries: const [
+          // Word #1: vertical at col 0
+          PuzzleEntryData(number: 1, direction: 'down', x: 0, y: 0, length: 3),
+          // Word #2: vertical at col 2, first cell will be pre-filled
+          PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 0, length: 3),
+        ],
+      );
+
+      final container = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(boardWithEntries),
+          ),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final boardNotifier = container.read(gameBoardProvider.notifier);
+
+      // Set direction to vertical
+      container.read(wordDirectionProvider.notifier).state =
+          WordDirection.vertical;
+
+      // Fill word #1 cells (0,0), (1,0) first
+      boardNotifier
+        ..setLetter(0, 0, 'A')
+        ..setLetter(1, 0, 'B');
+
+      // Position at last cell of word #1
+      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+        2,
+        0,
+      );
+
+      final controller = CrosswordInputController.fromContainer(container)
+        // Type the last letter of word #1
+        ..setLetterAndAdvance('C');
+
+      final sel = container.read(selectedCellProvider);
+      expect(sel, isNotNull);
+
+      // BUG: Currently goes to (0, 2) which is already filled
+      // EXPECTED: Should go to (1, 2) which is the first EMPTY cell of word #2
+      expect(sel!.row, 1, reason: 'Should skip filled cell and go to row 1');
+      expect(sel.col, 2, reason: 'Should be in column 2 (word #2)');
+    },
+  );
 }

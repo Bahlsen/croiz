@@ -582,10 +582,22 @@ class CrosswordInputController {
                   if (lockedCells.contains(candidateKey)) {
                     continue;
                   }
-                  _read(selectedCellProvider.notifier).state = SelectedCell(
-                    candidate.y,
-                    candidate.x,
+                  // Find the first empty cell in the candidate word
+                  final firstEmpty = firstEmptyInEntry(
+                    candidate,
+                    board,
+                    lockedCells: lockedCells,
+                    skipLocked: true,
                   );
+                  if (firstEmpty != null) {
+                    _read(selectedCellProvider.notifier).state = firstEmpty;
+                  } else {
+                    // Fallback to first cell if no empty cell found
+                    _read(selectedCellProvider.notifier).state = SelectedCell(
+                      candidate.y,
+                      candidate.x,
+                    );
+                  }
                   return;
                 }
               }
@@ -608,10 +620,22 @@ class CrosswordInputController {
                   if (lockedCells.contains(candidateKey)) {
                     continue;
                   }
-                  _read(selectedCellProvider.notifier).state = SelectedCell(
-                    candidate.y,
-                    candidate.x,
+                  // Find the first empty cell in the candidate word
+                  final firstEmpty = firstEmptyInEntry(
+                    candidate,
+                    board,
+                    lockedCells: lockedCells,
+                    skipLocked: true,
                   );
+                  if (firstEmpty != null) {
+                    _read(selectedCellProvider.notifier).state = firstEmpty;
+                  } else {
+                    // Fallback to first cell if no empty cell found
+                    _read(selectedCellProvider.notifier).state = SelectedCell(
+                      candidate.y,
+                      candidate.x,
+                    );
+                  }
                   _read(wordDirectionProvider.notifier).state = isAcross
                       ? WordDirection.vertical
                       : WordDirection.horizontal;
