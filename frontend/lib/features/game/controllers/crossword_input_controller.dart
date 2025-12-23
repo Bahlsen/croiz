@@ -352,6 +352,9 @@ class CrosswordInputController {
         }
 
         // Not found in same entry -> find next empty in other entries
+        // Performance: use pre-sorted entry lists from providers
+        final sortedSame = _trySortedEntries(isAcross);
+        final sortedOther = _trySortedEntries(!isAcross);
         final nextEmpty = findNextEmptyFromEntry(
           containing: containing,
           wantAcross: isAcross,
@@ -359,6 +362,8 @@ class CrosswordInputController {
           entries: entries,
           lockedCells: lockedCells,
           skipLocked: true,
+          sortedSameDir: sortedSame,
+          sortedOtherDir: sortedOther,
         );
         if (nextEmpty != null) {
           _read(selectedCellProvider.notifier).state = nextEmpty;
@@ -499,6 +504,17 @@ class CrosswordInputController {
       return _read<Map<CellKey, List<PuzzleEntryData>>>(
         cellEntriesIndexProvider,
       );
+    } on Object {
+      return null;
+    }
+  }
+
+  /// Get pre-sorted entries for given direction. Returns null on error.
+  List<PuzzleEntryData>? _trySortedEntries(bool wantAcross) {
+    try {
+      return wantAcross
+          ? _read<List<PuzzleEntryData>>(sortedAcrossEntriesProvider)
+          : _read<List<PuzzleEntryData>>(sortedDownEntriesProvider);
     } on Object {
       return null;
     }

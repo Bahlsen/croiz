@@ -27,6 +27,32 @@ final cellEntriesIndexProvider = Provider<Map<CellKey, List<PuzzleEntryData>>>((
   return map;
 });
 
+/// Pre-sorted across entries for fast navigation.
+/// Computed once when entries change, not on every keystroke.
+final sortedAcrossEntriesProvider = Provider<List<PuzzleEntryData>>((ref) {
+  final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
+  if (entries == null || entries.isEmpty) {
+    return const [];
+  }
+  return entries
+      .where((e) => e.directionEnum == EntryDirection.across)
+      .toList()
+    ..sort((a, b) => a.number.compareTo(b.number));
+});
+
+/// Pre-sorted down entries for fast navigation.
+/// Computed once when entries change, not on every keystroke.
+final sortedDownEntriesProvider = Provider<List<PuzzleEntryData>>((ref) {
+  final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
+  if (entries == null || entries.isEmpty) {
+    return const [];
+  }
+  return entries
+      .where((e) => e.directionEnum == EntryDirection.down)
+      .toList()
+    ..sort((a, b) => a.number.compareTo(b.number));
+});
+
 /// Precomputed clue numbers map for quick per-cell lookup.
 /// Uses CellKey for efficient hashability.
 final clueNumbersProvider = Provider<Map<CellKey, int>>((ref) {

@@ -80,6 +80,7 @@ SelectedCell? firstEmptyInEntry(
 
 /// Finds the next empty cell starting from [containing] entry.
 /// Searches same direction first, then opposite direction.
+/// Performance: accepts pre-sorted lists to avoid sorting on every call.
 SelectedCell? findNextEmptyFromEntry({
   required PuzzleEntryData containing,
   required bool wantAcross,
@@ -87,20 +88,23 @@ SelectedCell? findNextEmptyFromEntry({
   required List<PuzzleEntryData>? entries,
   Set<CellKey> lockedCells = const {},
   bool skipLocked = true,
+  List<PuzzleEntryData>? sortedSameDir,
+  List<PuzzleEntryData>? sortedOtherDir,
 }) {
   if (entries == null || entries.isEmpty) {
     return null;
   }
 
-  final sameDir =
-      entries
+  // Use pre-sorted lists if provided, otherwise sort (fallback)
+  final sameDir = sortedSameDir ??
+      (entries
           .where(
             (e) =>
                 (wantAcross && e.directionEnum == EntryDirection.across) ||
                 (!wantAcross && e.directionEnum == EntryDirection.down),
           )
           .toList()
-        ..sort((a, b) => a.number.compareTo(b.number));
+        ..sort((a, b) => a.number.compareTo(b.number)));
 
   final idx = sameDir.indexWhere((e) => e.number == containing.number);
   if (idx != -1) {
@@ -133,15 +137,15 @@ SelectedCell? findNextEmptyFromEntry({
   }
 
   // Try entries in opposite direction
-  final otherDir =
-      entries
+  final otherDir = sortedOtherDir ??
+      (entries
           .where(
             (e) =>
                 (wantAcross && e.directionEnum == EntryDirection.down) ||
                 (!wantAcross && e.directionEnum == EntryDirection.across),
           )
           .toList()
-        ..sort((a, b) => a.number.compareTo(b.number));
+        ..sort((a, b) => a.number.compareTo(b.number)));
 
   for (final candidate in otherDir) {
     final ff = firstEmptyInEntry(
