@@ -65,7 +65,10 @@ class CrosswordCell extends ConsumerWidget {
         (s) => s != null && s.row == row && s.col == col,
       ),
     );
-    final wordDirection = ref.watch(wordDirectionProvider);
+    // Only watch wordDirection if cell is selected (needed for direction toggle).
+    // Other cells get direction from cellInSelectedWordProvider which already
+    // incorporates direction changes.
+    final wordDirection = isSelected ? ref.watch(wordDirectionProvider) : null;
     final isBlack = ref.watch(
       gameBoardProvider.select((b) => b.blackCells[row][col]),
     );
@@ -119,11 +122,21 @@ class CrosswordCell extends ConsumerWidget {
         ? _kSelectedWordBgColor
         : _kDefaultBgColor;
 
-    final animate =
+    final shouldAnimate =
         isSelected || isPartOfSelectedWord || isFlashing || isClearedFlashing;
-    final animDuration = animate
-        ? const Duration(milliseconds: 150)
-        : Duration.zero;
+
+    final decoration = BoxDecoration(
+      borderRadius: BorderRadius.zero,
+      boxShadow: boxShadow,
+      border: Border.all(color: borderColor, width: borderWidth),
+      color: bgColor,
+    );
+
+    final content = _CellContent(
+      cellNumber: cellNumber,
+      letter: letter,
+      isSelected: isSelected,
+    );
 
     return GestureDetector(
       onTap: () {
@@ -132,27 +145,24 @@ class CrosswordCell extends ConsumerWidget {
         // Only toggle direction when the user taps the already-selected cell.
         ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
         if (wasSelected) {
-          final newDir = wordDirection == WordDirection.horizontal
+          // wordDirection is non-null when isSelected is true
+          final currentDir = wordDirection!;
+          final newDir = currentDir == WordDirection.horizontal
               ? WordDirection.vertical
               : WordDirection.horizontal;
           ref.read(wordDirectionProvider.notifier).value = newDir;
         }
       },
-      child: AnimatedContainer(
-        duration: animDuration,
-        curve: Curves.easeOutCubic,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.zero,
-          boxShadow: boxShadow,
-          border: Border.all(color: borderColor, width: borderWidth),
-          color: bgColor,
-        ),
-        child: _CellContent(
-          cellNumber: cellNumber,
-          letter: letter,
-          isSelected: isSelected,
-        ),
-      ),
+      // Performance: only use AnimatedContainer when animation is needed.
+      // Plain Container is much cheaper for cells that don't need animation.
+      child: shouldAnimate
+          ? AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              curve: Curves.easeOutCubic,
+              decoration: decoration,
+              child: content,
+            )
+          : Container(decoration: decoration, child: content),
     );
   }
 }

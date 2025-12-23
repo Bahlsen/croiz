@@ -141,26 +141,21 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (state.blackCells.isDisabled(row, col)) {
       return;
     }
-    // Optimize updates: copy only the changed row instead of cloning the
-    // entire grid, and reuse blackCells since they are unchanged here.
-    final newGrid = List<List<String?>>.of(state.grid);
-    final rowCopy = List<String?>.of(newGrid[row]);
-    rowCopy[col] = letter == null || letter.isEmpty
+    final normalizedLetter = letter == null || letter.isEmpty
         ? null
         : letter.substring(0, 1).toUpperCase();
+    // No-op if value unchanged - avoid unnecessary rebuilds.
+    if (state.grid[row][col] == normalizedLetter) {
+      return;
+    }
+    // Shallow copy the grid list and only copy the affected row.
+    // Reuse all other rows and the blackCells reference (unchanged).
+    final newGrid = List<List<String?>>.of(state.grid);
+    final rowCopy = List<String?>.of(newGrid[row]);
+    rowCopy[col] = normalizedLetter;
     newGrid[row] = rowCopy;
-    state = GameBoard(
-      id: state.id,
-      title: state.title,
-      gridSize: state.gridSize,
-      createdAt: state.createdAt,
-      grid: newGrid,
-      clues: state.clues,
-      blackCells: state.blackCells,
-      difficulty: state.difficulty,
-      entries: state.entries,
-      solutionGrid: state.solutionGrid,
-    );
+    // Use copyWith for cleaner code - it no longer deep-copies.
+    state = state.copyWith(grid: newGrid);
   }
 
   void toggleBlackCell(int row, int col) {

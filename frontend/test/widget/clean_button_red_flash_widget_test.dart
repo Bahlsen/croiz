@@ -66,7 +66,7 @@ void main() {
     // Pump a single frame to apply new decoration but avoid clearing by timer
     await tester.pump();
 
-    // Fetch the AnimatedContainer decorating the cell
+    // Fetch the AnimatedContainer decorating the cell (used when animating)
     final cellFinder = find.byKey(const Key('cell-0-1'));
     expect(cellFinder, findsOneWidget);
 
@@ -92,9 +92,19 @@ void main() {
     // After delay, the flash should clear; advance beyond default (500ms)
     await tester.pump(const Duration(milliseconds: 600));
 
-    final animatedAfter = tester.widget<AnimatedContainer>(animatedFinder);
+    // After flash clears, the cell switches from AnimatedContainer to Container
+    // for performance (shouldAnimate becomes false).
+    final containerFinder = find.descendant(
+      of: cellFinder,
+      matching: find.byWidgetPredicate(
+        (w) => w is Container && w.decoration is BoxDecoration,
+      ),
+    );
+    expect(containerFinder, findsOneWidget);
+
+    final containerWidget = tester.widget<Container>(containerFinder);
     final decorationAfter =
-        (animatedAfter.decoration ?? const BoxDecoration()) as BoxDecoration;
+        (containerWidget.decoration ?? const BoxDecoration()) as BoxDecoration;
     final borderAfter =
         (decorationAfter.border ?? Border.all(color: Colors.transparent))
             as Border;

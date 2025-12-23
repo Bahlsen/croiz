@@ -97,6 +97,8 @@ class GameBoard extends GameEntity {
   /// `PuzzleEntryData.answer` when validating completed words.
   final List<List<String?>>? solutionGrid;
 
+  /// Performance-optimized copyWith: does NOT deep-copy lists when not provided.
+  /// Caller is responsible for providing new list instances if mutation is needed.
   GameBoard copyWith({
     List<List<String?>>? grid,
     Map<String, String>? clues,
@@ -109,19 +111,9 @@ class GameBoard extends GameEntity {
     title: title,
     gridSize: gridSize,
     createdAt: createdAt,
-    grid:
-        grid ??
-        List.generate(
-          this.grid.length,
-          (r) => List<String?>.from(this.grid[r]),
-        ),
-    clues: clues ?? Map<String, String>.from(this.clues),
-    blackCells:
-        blackCells ??
-        List.generate(
-          this.blackCells.length,
-          (r) => List<bool>.from(this.blackCells[r]),
-        ),
+    grid: grid ?? this.grid,
+    clues: clues ?? this.clues,
+    blackCells: blackCells ?? this.blackCells,
     difficulty: difficulty ?? this.difficulty,
     entries: entries ?? this.entries,
     solutionGrid: solutionGrid ?? this.solutionGrid,
