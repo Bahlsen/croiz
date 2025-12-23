@@ -191,7 +191,11 @@ class _CellContent extends StatelessWidget {
   final bool isSelected;
 
   // Performance: cached TextStyles to avoid recreation on each build
-  static const _numberTextStyle = TextStyle(fontSize: 10, color: Colors.white70);
+  static const _numberTextStyle = TextStyle(
+    fontSize: 7,
+    color: Colors.white38,
+    fontWeight: FontWeight.w400,
+  );
   static const _letterTextStyle = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -209,12 +213,9 @@ class _CellContent extends StatelessWidget {
       children: [
         if (cellNumber != null)
           Positioned(
-            left: 2,
-            top: 1,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text('$cellNumber', style: _numberTextStyle),
-            ),
+            left: 1,
+            top: 0,
+            child: Text('$cellNumber', style: _numberTextStyle),
           ),
         Center(
           child: FittedBox(
