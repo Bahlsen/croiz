@@ -309,8 +309,9 @@ void main() {
       testContainer.dispose();
     });
 
-    test('typing on a filled cell fills next available cell in the word', () {
-      // Build a board with word "MOT" at row 0 across
+    test('typing on a filled cell replaces the letter in that cell', () {
+      // Build a board with word "MOT" at row 0 across (partially filled)
+      // New behavior: typing on filled cell replaces letter, NOT jumps to empty
       final testContainer = ProviderContainer(
         overrides: [
           gameAudioServiceProvider.overrideWithValue(mockAudioService),
@@ -318,7 +319,7 @@ void main() {
             AsyncValue.data(
               GameBoard(
                 id: 'test',
-                title: 'Fill Next',
+                title: 'Replace Letter',
                 gridSize: 3,
                 createdAt: DateTime.now(),
                 grid: [
@@ -355,23 +356,24 @@ void main() {
       testContainer.read(selectedCellProvider.notifier).state =
           const SelectedCell(0, 0);
 
-      // Type 'T' -> should place at next empty cell in the across word (0,2)
+      // Type 'T' -> should REPLACE 'M' at (0,0), not go to empty cell
       controller.setLetterAndAdvance('T');
 
       final board = testContainer.read(gameBoardProvider);
-      expect(board.grid[0][0], 'M');
-      expect(board.grid[0][1], 'O');
-      expect(board.grid[0][2], 'T');
+      expect(board.grid[0][0], 'T', reason: 'Letter should replace at selected cell');
+      expect(board.grid[0][1], 'O', reason: 'Other cells unchanged');
+      expect(board.grid[0][2], isNull, reason: 'Empty cell should stay empty');
 
       testContainer.dispose();
     });
 
     test(
-      'typing on filled cell skips full next word and goes to following word',
+      'typing on filled cell replaces letter in place, does not jump to other words',
       () {
         // Board width 5; create three across words on row 0:
         // word1 at x=0 length=1 (filled), word2 at x=1 length=2 (filled),
         // word3 at x=3 length=2 (empty)
+        // New behavior: typing on (0,0) should replace 'M', not jump to word3
         final testContainer = ProviderContainer(
           overrides: [
             gameAudioServiceProvider.overrideWithValue(mockAudioService),
@@ -379,7 +381,7 @@ void main() {
               AsyncValue.data(
                 GameBoard(
                   id: 'test',
-                  title: 'Skip Full',
+                  title: 'Replace In Place',
                   gridSize: 5,
                   createdAt: DateTime.now(),
                   grid: [
@@ -436,11 +438,12 @@ void main() {
         testContainer.read(selectedCellProvider.notifier).state =
             const SelectedCell(0, 0);
 
-        // Type 'X' -> should skip word2 (full) and place into word3 first cell (0,3)
+        // Type 'X' -> should REPLACE 'M' at (0,0), not jump to word3
         controller.setLetterAndAdvance('X');
 
         final board = testContainer.read(gameBoardProvider);
-        expect(board.grid[0][3], 'X');
+        expect(board.grid[0][0], 'X', reason: 'Letter should replace at selected cell');
+        expect(board.grid[0][3], isNull, reason: 'Other word cells should stay empty');
 
         testContainer.dispose();
       },
@@ -829,5 +832,351 @@ void main() {
       final dir = container.read(wordDirectionProvider);
       expect(dir, WordDirection.horizontal);
     });
+  });
+
+  group('Correction Mode - replace letter in selected cell', () {
+    late MockGameAudioService mockAudioService;
+
+    setUp(() {
+      mockAudioService = MockGameAudioService();
+    });
+
+    test(
+      'typing on a filled cell should replace the letter in that cell, not jump to next empty',
+      () {
+        // Scenario: user fills word "CAT" incorrectly as "CAX"
+        // User taps on cell (0,2) containing 'X' to correct it to 'T'
+        // Expected: the letter 'T' should replace 'X' in cell (0,2)
+        // Bug: the letter 'T' goes to the next empty cell instead
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Correction Test',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['C', 'A', 'X', null, null], // word with wrong letter
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: const {'1A': 'A feline pet'},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                  entries: [
+                    const PuzzleEntryData(
+                      number: 1,
+                      direction: 'across',
+                      x: 0,
+                      y: 0,
+                      length: 3,
+                      answer: 'CAT',
+                    ),
+                  ],
+                  solutionGrid: [
+                    ['C', 'A', 'T', null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+
+        addTearDown(testContainer.dispose);
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // User taps on cell (0,2) which contains 'X' - they want to correct it
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 2);
+        testContainer.read(wordDirectionProvider.notifier).state =
+            WordDirection.horizontal;
+
+        // User types 'T' to correct the mistake
+        controller.setLetterAndAdvance('T');
+
+        final board = testContainer.read(gameBoardProvider);
+
+        // The letter 'T' should replace 'X' in cell (0,2)
+        expect(board.grid[0][2], 'T', reason: 'Cell (0,2) should be corrected to T');
+
+        // The other cells should remain unchanged
+        expect(board.grid[0][0], 'C', reason: 'Cell (0,0) should still be C');
+        expect(board.grid[0][1], 'A', reason: 'Cell (0,1) should still be A');
+
+        // Cell (0,3) should still be empty (letter should NOT jump there)
+        expect(board.grid[0][3], isNull, reason: 'Cell (0,3) should still be empty');
+      },
+    );
+
+    test(
+      'BUG: correcting a letter when word still has empty cells should replace selected cell NOT jump to empty',
+      () {
+        // This is the actual bug scenario:
+        // User has partially filled "C_X" (positions 0,1,2 where 1 is empty)
+        // User taps on cell (0,2) containing 'X' to correct it to 'T'
+        // BUG: the letter 'T' goes to empty cell (0,1) instead of (0,2)
+        // EXPECTED: letter 'T' should replace 'X' at position (0,2)
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Bug Reproduction',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['C', null, 'X', null, null], // 'C' at 0, empty at 1, wrong 'X' at 2
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: const {'1A': 'A feline pet'},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                  entries: [
+                    const PuzzleEntryData(
+                      number: 1,
+                      direction: 'across',
+                      x: 0,
+                      y: 0,
+                      length: 3,
+                      answer: 'CAT',
+                    ),
+                  ],
+                  solutionGrid: [
+                    ['C', 'A', 'T', null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+
+        addTearDown(testContainer.dispose);
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // User explicitly taps/selects cell (0,2) which contains 'X'
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 2);
+        testContainer.read(wordDirectionProvider.notifier).state =
+            WordDirection.horizontal;
+
+        // User types 'T' to correct the mistake at position (0,2)
+        controller.setLetterAndAdvance('T');
+
+        final board = testContainer.read(gameBoardProvider);
+
+        // BUG CHECK: Letter should be placed in selected cell (0,2), NOT in empty cell (0,1)
+        expect(
+          board.grid[0][2],
+          'T',
+          reason: 'Cell (0,2) should be corrected to T - user explicitly selected this cell',
+        );
+
+        // Empty cell (0,1) should STILL be empty - the letter should not jump there
+        expect(
+          board.grid[0][1],
+          isNull,
+          reason: 'Cell (0,1) should still be empty - letter should NOT jump to next empty',
+        );
+
+        // First cell unchanged
+        expect(board.grid[0][0], 'C');
+      },
+    );
+
+    test(
+      'typing on a filled cell in the middle of a word should replace that cell letter',
+      () {
+        // Scenario: user has "CXT" but wants to correct middle letter to 'A'
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Middle Correction',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['C', 'X', 'T', null, null], // wrong middle letter
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: const {'1A': 'A feline pet'},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                  entries: [
+                    const PuzzleEntryData(
+                      number: 1,
+                      direction: 'across',
+                      x: 0,
+                      y: 0,
+                      length: 3,
+                      answer: 'CAT',
+                    ),
+                  ],
+                  solutionGrid: [
+                    ['C', 'A', 'T', null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+
+        addTearDown(testContainer.dispose);
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // User taps on cell (0,1) which contains wrong 'X'
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 1);
+        testContainer.read(wordDirectionProvider.notifier).state =
+            WordDirection.horizontal;
+
+        // User types 'A' to correct it
+        controller.setLetterAndAdvance('A');
+
+        final board = testContainer.read(gameBoardProvider);
+
+        // The letter 'A' should replace 'X' in cell (0,1)
+        expect(board.grid[0][1], 'A', reason: 'Cell (0,1) should be corrected to A');
+
+        // Other cells should remain unchanged
+        expect(board.grid[0][0], 'C');
+        expect(board.grid[0][2], 'T');
+      },
+    );
+
+    test(
+      'correcting a letter in a complete word should replace in-place',
+      () {
+        // Word is fully filled with wrong letters, user wants to correct one
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Complete Word Correction',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['D', 'O', 'G', null, null], // completely wrong word
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: const {'1A': 'A feline pet'},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                  entries: [
+                    const PuzzleEntryData(
+                      number: 1,
+                      direction: 'across',
+                      x: 0,
+                      y: 0,
+                      length: 3,
+                      answer: 'CAT',
+                    ),
+                  ],
+                  solutionGrid: [
+                    ['C', 'A', 'T', null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+
+        addTearDown(testContainer.dispose);
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // User taps on cell (0,0) to correct 'D' to 'C'
+        testContainer.read(selectedCellProvider.notifier).state =
+            const SelectedCell(0, 0);
+        testContainer.read(wordDirectionProvider.notifier).state =
+            WordDirection.horizontal;
+
+        controller.setLetterAndAdvance('C');
+
+        final board = testContainer.read(gameBoardProvider);
+
+        // The letter 'C' should replace 'D' in cell (0,0)
+        expect(board.grid[0][0], 'C', reason: 'Cell (0,0) should be corrected to C');
+        // Other cells unchanged
+        expect(board.grid[0][1], 'O');
+        expect(board.grid[0][2], 'G');
+      },
+    );
   });
 }

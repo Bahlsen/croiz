@@ -149,86 +149,10 @@ class CrosswordInputController {
       return;
     }
 
-    final currentValue = board.grid[selected.row][selected.col];
-    if (currentValue != null && currentValue.isNotEmpty) {
-      final wantAcross = dir == WordDirection.horizontal;
-      final entries = board.entries ?? <PuzzleEntryData>[];
-      final index = _tryReadCellEntriesIndex();
-
-      final containing = findContainingEntry(
-        row: selected.row,
-        col: selected.col,
-        wantAcross: wantAcross,
-        entries: entries,
-        index: index,
-      );
-      if (containing != null) {
-        final f = firstEmptyInEntry(
-          containing,
-          board,
-          lockedCells: lockedCells,
-          skipLocked: true,
-        );
-        if (f != null) {
-          _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
-          _wordCompletionChecker.scheduleCheck(CellKey(f.row, f.col));
-          _moveToNext(
-            _safeReadBoard(),
-            startRow: f.row,
-            startCol: f.col,
-            wasEmptyAtStart: true,
-          );
-          return;
-        }
-
-        final isLastCellOfContaining = wantAcross
-            ? (selected.col == containing.x + containing.length - 1)
-            : (selected.row == containing.y + containing.length - 1);
-        if (isLastCellOfContaining) {
-          final hasAuthoritative =
-              (board.solutionGrid != null) ||
-              (containing.answer?.isNotEmpty ?? false);
-          if (hasAuthoritative) {
-            _read(
-              gameBoardProvider.notifier,
-            ).setLetter(selected.row, selected.col, letter);
-            _wordCompletionChecker.scheduleCheck(
-              CellKey(selected.row, selected.col),
-            );
-            _moveToNext(
-              _safeReadBoard(),
-              startRow: selected.row,
-              startCol: selected.col,
-              wasEmptyAtStart: false,
-            );
-            return;
-          }
-        }
-
-        final nextF = findNextEmptyFromEntry(
-          containing: containing,
-          wantAcross: wantAcross,
-          board: board,
-          entries: entries,
-          lockedCells: lockedCells,
-          skipLocked: true,
-        );
-        if (nextF != null) {
-          _read(
-            gameBoardProvider.notifier,
-          ).setLetter(nextF.row, nextF.col, letter);
-          _wordCompletionChecker.scheduleCheck(CellKey(nextF.row, nextF.col));
-          _moveToNext(
-            _safeReadBoard(),
-            startRow: nextF.row,
-            startCol: nextF.col,
-            wasEmptyAtStart: true,
-          );
-          return;
-        }
-      }
-    }
-
+    // When the selected cell already has a letter, REPLACE it in-place.
+    // This allows users to correct mistakes by tapping on a filled cell
+    // and typing the correct letter. The old behavior of jumping to the
+    // next empty cell was confusing and prevented corrections.
     final wasEmptyHere =
         (board.grid[selected.row][selected.col] == null) ||
         (board.grid[selected.row][selected.col]?.isEmpty ?? true);
