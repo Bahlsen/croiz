@@ -52,7 +52,6 @@ flutter:
     - assets/data/slate/
     - assets/data/universal/
     - assets/data/usatoday/
-    - assets/data/wapost/
     - assets/data/wsj/
     - assets/audio/
     # Explicitly include nested year subdirectories for Android packaging
@@ -101,10 +100,6 @@ flutter:
     - assets/data/usatoday/2023/
     - assets/data/usatoday/2024/
     - assets/data/usatoday/2025/
-    # Washington Post
-    - assets/data/wapost/2022/
-    - assets/data/wapost/2023/
-    - assets/data/wapost/2024/
     # WSJ
     - assets/data/wsj/2020/
     - assets/data/wsj/2021/
