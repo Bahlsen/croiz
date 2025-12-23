@@ -59,7 +59,7 @@ void main() {
       expect(result.board.grid[0][0], 'C');
       expect(result.board.grid[0][1], isNull); // was 'X' but expected 'A'
       expect(result.board.grid[0][2], 'T');
-      expect(result.clearedCells, contains('0,1'));
+      expect(result.clearedCells, contains(const CellKey(0, 1)));
     });
 
     test('preserves nulls and only clears mismatches', () {

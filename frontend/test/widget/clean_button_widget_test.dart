@@ -75,9 +75,9 @@ void main() {
     container.read(gameBoardProvider.notifier).clearIncorrectLetters();
     await tester.pumpAndSettle();
 
-    // After action, flashingClearedCellsProvider should contain '0,1'
+    // After action, flashingClearedCellsProvider should contain CellKey(0,1)
     final flashing = container.read(flashingClearedCellsProvider);
-    expect(flashing.contains('0,1'), isTrue);
+    expect(flashing.contains(const CellKey(0, 1)), isTrue);
 
     // The game board should have cleared the incorrect letter at 0,1
     final updated = container.read(gameBoardProvider);

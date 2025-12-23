@@ -102,9 +102,7 @@ class CrosswordCell extends ConsumerWidget {
     final isPartOfSelectedWord = ref.watch(cellInSelectedWordProvider(cellKey));
 
     final letter = ref.watch(cellValueProvider(cellKey));
-    final cellNumber = ref.watch(
-      clueNumbersProvider.select((m) => m['$row,$col']),
-    );
+    final cellNumber = ref.watch(clueNumbersProvider.select((m) => m[cellKey]));
 
     // Performance: use cached static BoxShadows instead of creating new lists
     final boxShadow = isClearedFlashing

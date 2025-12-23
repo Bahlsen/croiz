@@ -165,7 +165,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       if (delay == Duration.zero) {
         Future.microtask(() {
           try {
-            ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
+            ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
           } on Object catch (e, st) {
             developer.log(
               'Clearing flashing cleared cells failed',
@@ -177,7 +177,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       } else {
         Future.delayed(delay, () {
           try {
-            ref.read(flashingClearedCellsProvider.notifier).value = <String>{};
+            ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
           } on Object catch (e, st) {
             developer.log(
               'Clearing flashing cleared cells failed',

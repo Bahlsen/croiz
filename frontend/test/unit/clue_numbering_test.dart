@@ -21,9 +21,9 @@ void main() {
     );
 
     final numbers = ClueNumbering.numbersFromBoard(board);
-    expect(numbers['1,1'], 2);
-    expect(numbers['2,2'], 5);
-    expect(numbers['0,0'], isNull);
+    expect(numbers[const CellKey(1, 1)], 2);
+    expect(numbers[const CellKey(2, 2)], 5);
+    expect(numbers[const CellKey(0, 0)], isNull);
   });
 
   test('numbersFromBoard ignores out-of-bounds entries', () {

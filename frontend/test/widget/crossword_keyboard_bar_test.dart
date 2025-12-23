@@ -78,7 +78,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final flashing = container.read(flashingClearedCellsProvider);
-      expect(flashing.contains('0,1'), isTrue);
+      expect(flashing.contains(const CellKey(0, 1)), isTrue);
       final updated = container.read(gameBoardProvider);
       expect(updated.grid[0][1], isNull);
 

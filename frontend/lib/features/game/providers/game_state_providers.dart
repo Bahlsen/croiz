@@ -63,29 +63,32 @@ final flashingCellsProvider =
     );
 
 /// Provider family for whether a specific cell is currently flashing.
-final cellFlashingProvider = Provider.family<bool, CellKey>((ref, key) {
-  final set = ref.watch(flashingCellsProvider);
-  return set.contains(key);
-});
+/// Optimized: uses select() to only rebuild when this cell's membership changes.
+final cellFlashingProvider = Provider.family<bool, CellKey>(
+  (ref, key) =>
+      ref.watch(flashingCellsProvider.select((set) => set.contains(key))),
+);
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
-class FlashingClearedCellsNotifier extends Notifier<Set<String>> {
+class FlashingClearedCellsNotifier extends Notifier<Set<CellKey>> {
   @override
-  Set<String> build() => <String>{};
-  Set<String> get value => state;
-  set value(Set<String> v) => state = v;
+  Set<CellKey> build() => <CellKey>{};
+  Set<CellKey> get value => state;
+  set value(Set<CellKey> v) => state = v;
 }
 
 final flashingClearedCellsProvider =
-    NotifierProvider<FlashingClearedCellsNotifier, Set<String>>(
+    NotifierProvider<FlashingClearedCellsNotifier, Set<CellKey>>(
       FlashingClearedCellsNotifier.new,
     );
 
 /// Provider family for whether a specific cell is in the "cleared flash" set.
-final cellClearedFlashingProvider = Provider.family<bool, CellKey>((ref, key) {
-  final set = ref.watch(flashingClearedCellsProvider);
-  return set.contains('${key.row},${key.col}');
-});
+/// Optimized: uses select() to only rebuild when this cell's membership changes.
+final cellClearedFlashingProvider = Provider.family<bool, CellKey>(
+  (ref, key) => ref.watch(
+    flashingClearedCellsProvider.select((set) => set.contains(key)),
+  ),
+);
 
 /// Holds cells that are locked (found words cannot be edited).
 class LockedCellsNotifier extends Notifier<Set<CellKey>> {

@@ -28,7 +28,8 @@ final cellEntriesIndexProvider = Provider<Map<CellKey, List<PuzzleEntryData>>>((
 });
 
 /// Precomputed clue numbers map for quick per-cell lookup.
-final clueNumbersProvider = Provider<Map<String, int>>((ref) {
+/// Uses CellKey for efficient hashability.
+final clueNumbersProvider = Provider<Map<CellKey, int>>((ref) {
   // Only depend on gridSize and entries, which are sufficient for numbering.
   final size = ref.watch(gameBoardProvider.select((b) => b.gridSize));
   final entries = ref.watch(gameBoardProvider.select((b) => b.entries));

@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class IncorrectLetterCleanResult {
   IncorrectLetterCleanResult(this.board, this.clearedCells);
   final GameBoard board;
-  final List<String> clearedCells; // format: "row,col"
+  final List<CellKey> clearedCells;
 }
 
 /// Service responsable du nettoyage des lettres incorrectes.
@@ -52,7 +52,7 @@ class IncorrectLetterCleaner {
       (r) => List<String?>.from(board.grid[r]),
     );
 
-    final cleared = <String>[];
+    final cleared = <CellKey>[];
 
     for (var r = 0; r < board.gridSize; r++) {
       for (var c = 0; c < board.gridSize; c++) {
@@ -61,7 +61,7 @@ class IncorrectLetterCleaner {
         if (expectedChar != null && current != null) {
           if (current.toUpperCase() != expectedChar) {
             newGrid[r][c] = null;
-            cleared.add('$r,$c');
+            cleared.add(CellKey(r, c));
           }
         }
       }
