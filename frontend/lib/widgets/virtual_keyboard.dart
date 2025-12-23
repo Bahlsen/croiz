@@ -223,19 +223,9 @@ class VirtualKeyboard extends ConsumerWidget {
     return effectiveHeight;
   }
 
-  // UI-level coalescing to avoid issuing audio requests too frequently.
-  static DateTime? _lastUiTypeAt;
-  static DateTime? _lastUiDeleteAt;
-  static const _uiMinTypeInterval = Duration(milliseconds: 60);
-  static const _uiMinDeleteInterval = Duration(milliseconds: 60);
-
+  // Simplified audio playback - throttling is handled by GameAudioService.
+  // Removed UI-level coalescing to reduce overhead on each key press.
   static void _maybePlayType(WidgetRef ref) {
-    final now = DateTime.now();
-    if (_lastUiTypeAt != null &&
-        now.difference(_lastUiTypeAt!) < _uiMinTypeInterval) {
-      return;
-    }
-    _lastUiTypeAt = now;
     try {
       ref.read(gameAudioServiceProvider).playType();
     } on Object catch (e, st) {
@@ -248,12 +238,6 @@ class VirtualKeyboard extends ConsumerWidget {
   }
 
   static void _maybePlayDelete(WidgetRef ref) {
-    final now = DateTime.now();
-    if (_lastUiDeleteAt != null &&
-        now.difference(_lastUiDeleteAt!) < _uiMinDeleteInterval) {
-      return;
-    }
-    _lastUiDeleteAt = now;
     try {
       ref.read(gameAudioServiceProvider).playDelete();
     } on Object catch (e, st) {

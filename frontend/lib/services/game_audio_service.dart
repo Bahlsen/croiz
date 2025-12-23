@@ -8,9 +8,8 @@ import 'package:croiz/services/audio_service.dart';
 ///
 /// Audio performance strategy:
 /// 1. Use AudioPool for frequently played sounds (typing, delete)
-/// 2. Throttle at 60ms minimum interval (~16 sounds/sec max)
-/// 3. Track in-flight sounds to prevent backlog accumulation
-/// 4. Drop sounds when pool is busy rather than queuing
+/// 2. Aggressive throttling at 100ms (~10 sounds/sec max) to prevent overlap
+/// 3. Simple fire-and-forget - no complex tracking needed
 class GameAudioService implements AudioService {
   GameAudioService() {
     // fire-and-forget initialization
@@ -23,18 +22,13 @@ class GameAudioService implements AudioService {
   final Completer<void> _ready = Completer<void>();
 
   // Throttle spikes: ignore play requests that arrive faster than this.
-  // 60ms minimum ensures ~16 sounds/sec max, preventing audio backlog.
-  static const _minTypeInterval = Duration(milliseconds: 60);
-  static const _minDeleteInterval = Duration(milliseconds: 60);
+  // 100ms minimum ensures ~10 sounds/sec max, preventing audio overlap/backlog.
+  // This is aggressive throttling for fast typing - we sacrifice some audio
+  // feedback for smoother performance.
+  static const _minTypeInterval = Duration(milliseconds: 100);
+  static const _minDeleteInterval = Duration(milliseconds: 100);
   DateTime? _lastTypeAt;
   DateTime? _lastDeleteAt;
-
-  // Track in-flight sounds to prevent backlog when pool is saturated.
-  // When all pool players are busy, we drop the request instead of queuing.
-  int _typeInFlight = 0;
-  int _deleteInFlight = 0;
-  static const _maxTypeInFlight = 2; // Leave 1 player as buffer
-  static const _maxDeleteInFlight = 1; // Leave 1 player as buffer
 
   /// Future that completes when initialization is finished (success or failure).
   @override
@@ -94,50 +88,20 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      // Throttle by time interval
+      // Throttle by time interval - simple and effective
       final now = DateTime.now();
       if (_lastTypeAt != null &&
           now.difference(_lastTypeAt!) < _minTypeInterval) {
-        // Too frequent: drop this request to avoid backlog/latency.
-        return;
-      }
-
-      // Drop if too many sounds in flight (prevents queue buildup)
-      if (_typeInFlight >= _maxTypeInFlight) {
-        developer.log(
-          'playType dropped: pool saturated ($_typeInFlight in flight)',
-          name: 'GameAudioService',
-        );
+        // Too frequent: drop this request to avoid audio overlap
         return;
       }
 
       _lastTypeAt = now;
-      if (_typePool != null) {
-        _typeInFlight++;
-        // Fire-and-forget but track completion to know when pool frees up
-        unawaited(
-          _typePool!
-              .start()
-              .then((_) {
-                // Sound started, will auto-complete
-                // Decrement after estimated sound duration (typing.wav is short)
-                Future<void>.delayed(const Duration(milliseconds: 100), () {
-                  _typeInFlight = (_typeInFlight - 1).clamp(
-                    0,
-                    _maxTypeInFlight,
-                  );
-                });
-              })
-              .catchError((Object e) {
-                _typeInFlight = (_typeInFlight - 1).clamp(0, _maxTypeInFlight);
-                developer.log('playType pool.start failed', error: e);
-              }),
-        );
-      }
+      // Fire-and-forget - no tracking needed, throttling handles the load
+      unawaited(_typePool?.start());
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
     }
-    return;
   }
 
   @override
@@ -147,52 +111,19 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      // Throttle by time interval
+      // Throttle by time interval - simple and effective
       final now = DateTime.now();
       if (_lastDeleteAt != null &&
           now.difference(_lastDeleteAt!) < _minDeleteInterval) {
         return;
       }
 
-      // Drop if too many sounds in flight (prevents queue buildup)
-      if (_deleteInFlight >= _maxDeleteInFlight) {
-        developer.log(
-          'playDelete dropped: pool saturated ($_deleteInFlight in flight)',
-          name: 'GameAudioService',
-        );
-        return;
-      }
-
       _lastDeleteAt = now;
-      if (_deletePool != null) {
-        _deleteInFlight++;
-        // Fire-and-forget but track completion to know when pool frees up
-        unawaited(
-          _deletePool!
-              .start()
-              .then((_) {
-                // Sound started, will auto-complete
-                // Decrement after estimated sound duration (delete.wav is short)
-                Future<void>.delayed(const Duration(milliseconds: 100), () {
-                  _deleteInFlight = (_deleteInFlight - 1).clamp(
-                    0,
-                    _maxDeleteInFlight,
-                  );
-                });
-              })
-              .catchError((Object e) {
-                _deleteInFlight = (_deleteInFlight - 1).clamp(
-                  0,
-                  _maxDeleteInFlight,
-                );
-                developer.log('playDelete pool.start failed', error: e);
-              }),
-        );
-      }
+      // Fire-and-forget - no tracking needed, throttling handles the load
+      unawaited(_deletePool?.start());
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);
     }
-    return;
   }
 
   @override
