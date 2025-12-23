@@ -99,7 +99,9 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
 
   final items = parsedIndex['items'];
   if (items is! List || items.isEmpty) {
-    throw StateError('Invalid puzzles_index.json: "items" array is missing or empty.');
+    throw StateError(
+      'Invalid puzzles_index.json: "items" array is missing or empty.',
+    );
   }
 
   final origins = <String>{};
@@ -113,7 +115,9 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
   }
 
   if (origins.isEmpty) {
-    throw StateError('Invalid puzzles_index.json: no valid origins found in items.');
+    throw StateError(
+      'Invalid puzzles_index.json: no valid origins found in items.',
+    );
   }
 
   return origins.toList()..sort();
@@ -133,7 +137,9 @@ final originIndexProvider =
 
       final items = parsedIndex['items'];
       if (items is! List) {
-        throw StateError('Invalid puzzles_index.json: "items" array is missing.');
+        throw StateError(
+          'Invalid puzzles_index.json: "items" array is missing.',
+        );
       }
 
       final out = <PuzzleDescriptor>[];

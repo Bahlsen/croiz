@@ -140,10 +140,8 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).state = board;
-        container.read(selectedCellProvider.notifier).value = const SelectedCell(
-          0,
-          0,
-        );
+        container.read(selectedCellProvider.notifier).value =
+            const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =
             WordDirection.horizontal;
 
@@ -166,8 +164,7 @@ void main() {
         expect(
           checksAfterDebounce,
           lessThan(20),
-          reason:
-              'Debounced checks should be < 20, got $checksAfterDebounce',
+          reason: 'Debounced checks should be < 20, got $checksAfterDebounce',
         );
 
         // Cleanup after test completes
@@ -183,9 +180,7 @@ void main() {
       final countingAudio = CountingAudioService();
 
       final container = ProviderContainer(
-        overrides: [
-          gameAudioServiceProvider.overrideWithValue(countingAudio),
-        ],
+        overrides: [gameAudioServiceProvider.overrideWithValue(countingAudio)],
       );
       addTearDown(container.dispose);
 

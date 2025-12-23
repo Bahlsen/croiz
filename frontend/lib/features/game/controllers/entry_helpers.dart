@@ -92,14 +92,15 @@ SelectedCell? findNextEmptyFromEntry({
     return null;
   }
 
-  final sameDir = entries
-      .where(
-        (e) =>
-            (wantAcross && e.directionEnum == EntryDirection.across) ||
-            (!wantAcross && e.directionEnum == EntryDirection.down),
-      )
-      .toList()
-    ..sort((a, b) => a.number.compareTo(b.number));
+  final sameDir =
+      entries
+          .where(
+            (e) =>
+                (wantAcross && e.directionEnum == EntryDirection.across) ||
+                (!wantAcross && e.directionEnum == EntryDirection.down),
+          )
+          .toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
 
   final idx = sameDir.indexWhere((e) => e.number == containing.number);
   if (idx != -1) {
@@ -132,14 +133,15 @@ SelectedCell? findNextEmptyFromEntry({
   }
 
   // Try entries in opposite direction
-  final otherDir = entries
-      .where(
-        (e) =>
-            (wantAcross && e.directionEnum == EntryDirection.down) ||
-            (!wantAcross && e.directionEnum == EntryDirection.across),
-      )
-      .toList()
-    ..sort((a, b) => a.number.compareTo(b.number));
+  final otherDir =
+      entries
+          .where(
+            (e) =>
+                (wantAcross && e.directionEnum == EntryDirection.down) ||
+                (!wantAcross && e.directionEnum == EntryDirection.across),
+          )
+          .toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
 
   for (final candidate in otherDir) {
     final ff = firstEmptyInEntry(

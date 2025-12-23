@@ -57,8 +57,8 @@ class _BackspaceKeyState extends State<BackspaceKey> {
       final newInterval = _phase > 8
           ? const Duration(milliseconds: 55)
           : _phase > 3
-              ? const Duration(milliseconds: 110)
-              : const Duration(milliseconds: 260);
+          ? const Duration(milliseconds: 110)
+          : const Duration(milliseconds: 260);
       if (newInterval != t.tick) {
         t.cancel();
         _repeatTimer = Timer.periodic(newInterval, (_) => _trigger());
@@ -79,27 +79,27 @@ class _BackspaceKeyState extends State<BackspaceKey> {
 
   @override
   Widget build(BuildContext context) => Semantics(
-        label: 'Delete',
-        button: true,
-        child: GestureDetector(
-          onTap: _trigger,
-          onLongPressStart: (_) => _startRepeat(),
-          onLongPress: _startRepeat,
-          onLongPressEnd: (_) => _stopRepeat(),
-          onLongPressCancel: _stopRepeat,
-          child: SizedBox(
-            height: widget.height,
-            child: FilledButton(
-              onPressed: _trigger,
-              style: FilledButton.styleFrom(
-                backgroundColor:
-                    widget.keyColor ??
-                    Theme.of(context).colorScheme.surfaceContainerHighest,
-                shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
-              ),
-              child: const Icon(Icons.backspace_outlined, size: 22),
-            ),
+    label: 'Delete',
+    button: true,
+    child: GestureDetector(
+      onTap: _trigger,
+      onLongPressStart: (_) => _startRepeat(),
+      onLongPress: _startRepeat,
+      onLongPressEnd: (_) => _stopRepeat(),
+      onLongPressCancel: _stopRepeat,
+      child: SizedBox(
+        height: widget.height,
+        child: FilledButton(
+          onPressed: _trigger,
+          style: FilledButton.styleFrom(
+            backgroundColor:
+                widget.keyColor ??
+                Theme.of(context).colorScheme.surfaceContainerHighest,
+            shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
           ),
+          child: const Icon(Icons.backspace_outlined, size: 22),
         ),
-      );
+      ),
+    ),
+  );
 }

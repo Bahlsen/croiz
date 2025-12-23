@@ -47,35 +47,36 @@ void main() {
       addTearDown(container.dispose);
 
       // Create entries where only two include (0,0)
-      final entries = List<PuzzleEntryData>.generate(
-        10,
-        (r) => PuzzleEntryData(
-          number: r + 1,
-          direction: 'across',
-          x: 1,
-          y: r,
-          length: 4,
-        ),
-      )
-        // Two entries include (0,0)
-        ..add(
-          const PuzzleEntryData(
-            number: 100,
-            direction: 'across',
-            x: 0,
-            y: 0,
-            length: 3,
-          ),
-        )
-        ..add(
-          const PuzzleEntryData(
-            number: 101,
-            direction: 'down',
-            x: 0,
-            y: 0,
-            length: 3,
-          ),
-        );
+      final entries =
+          List<PuzzleEntryData>.generate(
+              10,
+              (r) => PuzzleEntryData(
+                number: r + 1,
+                direction: 'across',
+                x: 1,
+                y: r,
+                length: 4,
+              ),
+            )
+            // Two entries include (0,0)
+            ..add(
+              const PuzzleEntryData(
+                number: 100,
+                direction: 'across',
+                x: 0,
+                y: 0,
+                length: 3,
+              ),
+            )
+            ..add(
+              const PuzzleEntryData(
+                number: 101,
+                direction: 'down',
+                x: 0,
+                y: 0,
+                length: 3,
+              ),
+            );
 
       const size = 8;
       final board = GameBoard(
@@ -95,7 +96,9 @@ void main() {
         ..read(selectedCellProvider.notifier).state = const SelectedCell(0, 0)
         ..read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
 
-      CrosswordInputController.fromContainer(container).setLetterAndAdvance('X');
+      CrosswordInputController.fromContainer(
+        container,
+      ).setLetterAndAdvance('X');
 
       // Expect only a small number of checks (the two entries that include cell),
       // plus possible small overhead. Assert <= 4.

@@ -52,7 +52,9 @@ class CrosswordIconBar extends StatelessWidget {
             child: IconButton(
               tooltip: isAzerty ? 'QWERTY' : 'AZERTY',
               onPressed: onToggle,
-              icon: Icon(isAzerty ? Icons.keyboard : Icons.keyboard_alt_outlined),
+              icon: Icon(
+                isAzerty ? Icons.keyboard : Icons.keyboard_alt_outlined,
+              ),
             ),
           ),
         ],

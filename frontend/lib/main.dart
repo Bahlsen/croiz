@@ -47,9 +47,9 @@ class _CroizAppState extends State<CroizApp> {
       style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
     ),
     textTheme: ThemeData.dark().textTheme.apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
-        ),
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    ),
   );
 
   @override

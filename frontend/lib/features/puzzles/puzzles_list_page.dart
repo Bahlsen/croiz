@@ -9,9 +9,9 @@ class PuzzlesListPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-        appBar: AppBar(title: const Text('Puzzles')),
-        body: _buildList(context, ref),
-      );
+    appBar: AppBar(title: const Text('Puzzles')),
+    body: _buildList(context, ref),
+  );
 
   Widget _buildList(BuildContext context, WidgetRef ref) {
     final legacyAsync = ref.watch(puzzlesProvider);

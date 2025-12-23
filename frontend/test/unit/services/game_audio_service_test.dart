@@ -69,19 +69,25 @@ void main() {
       expect(audioService.playSuccessCount, 1);
     });
 
-    test('rapid playType calls all go through (no throttling in mock)', () async {
-      for (var i = 0; i < 20; i++) {
-        await audioService.playType();
-      }
-      expect(audioService.playTypeCount, 20);
-    });
+    test(
+      'rapid playType calls all go through (no throttling in mock)',
+      () async {
+        for (var i = 0; i < 20; i++) {
+          await audioService.playType();
+        }
+        expect(audioService.playTypeCount, 20);
+      },
+    );
 
-    test('rapid playDelete calls all go through (no throttling in mock)', () async {
-      for (var i = 0; i < 20; i++) {
-        await audioService.playDelete();
-      }
-      expect(audioService.playDeleteCount, 20);
-    });
+    test(
+      'rapid playDelete calls all go through (no throttling in mock)',
+      () async {
+        for (var i = 0; i < 20; i++) {
+          await audioService.playDelete();
+        }
+        expect(audioService.playDeleteCount, 20);
+      },
+    );
 
     test('mixed rapid calls work correctly', () async {
       for (var i = 0; i < 10; i++) {

@@ -57,10 +57,7 @@ class PuzzleListTile extends ConsumerWidget {
 
 /// A list tile that loads metadata asynchronously before displaying.
 class MetadataLoadingPuzzleTile extends ConsumerWidget {
-  const MetadataLoadingPuzzleTile({
-    required this.descriptor,
-    super.key,
-  });
+  const MetadataLoadingPuzzleTile({required this.descriptor, super.key});
 
   final PuzzleDescriptor descriptor;
 
@@ -140,12 +137,12 @@ class OriginGroupExpansionTile extends ConsumerWidget {
   final Map<String, List<PuzzleDescriptor>> puzzlesByYear;
 
   /// Sort years descending (newest first).
-  static List<String> sortYears(Iterable<String> years) => years.toList()
-    ..sort((a, b) {
-      final ai = int.tryParse(a) ?? -9999;
-      final bi = int.tryParse(b) ?? -9999;
-      return bi.compareTo(ai);
-    });
+  static List<String> sortYears(Iterable<String> years) =>
+      years.toList()..sort((a, b) {
+        final ai = int.tryParse(a) ?? -9999;
+        final bi = int.tryParse(b) ?? -9999;
+        return bi.compareTo(ai);
+      });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -155,10 +152,12 @@ class OriginGroupExpansionTile extends ConsumerWidget {
       title: Text(origin),
       initiallyExpanded: false,
       children: yearKeys
-          .map((year) => YearGroupExpansionTile(
-                year: year,
-                puzzles: puzzlesByYear[year]!,
-              ))
+          .map(
+            (year) => YearGroupExpansionTile(
+              year: year,
+              puzzles: puzzlesByYear[year]!,
+            ),
+          )
           .toList(),
     );
   }
@@ -166,49 +165,49 @@ class OriginGroupExpansionTile extends ConsumerWidget {
 
 /// An origin tile that loads its puzzle index lazily on expansion.
 class LazyOriginExpansionTile extends ConsumerWidget {
-  const LazyOriginExpansionTile({
-    required this.origin,
-    super.key,
-  });
+  const LazyOriginExpansionTile({required this.origin, super.key});
 
   final String origin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ExpansionTile(
-        title: Text(origin),
-        children: [
-          Consumer(
-            builder: (context, ref2, _) {
-              final idx = ref2.watch(originIndexProvider(origin));
-              return idx.when(
-                loading: () => const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-                error: (e, st) => Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Text('Error loading $origin: $e'),
-                ),
-                data: (items) {
-                  final years = _groupByYear(items);
-                  final yearKeys =
-                      OriginGroupExpansionTile.sortYears(years.keys);
-                  return Column(
-                    children: yearKeys
-                        .map((year) => YearGroupExpansionTile(
-                              year: year,
-                              puzzles: years[year]!,
-                            ))
-                        .toList(),
-                  );
-                },
+    title: Text(origin),
+    children: [
+      Consumer(
+        builder: (context, ref2, _) {
+          final idx = ref2.watch(originIndexProvider(origin));
+          return idx.when(
+            loading: () => const Padding(
+              padding: EdgeInsets.all(16),
+              child: Center(child: CircularProgressIndicator()),
+            ),
+            error: (e, st) => Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text('Error loading $origin: $e'),
+            ),
+            data: (items) {
+              final years = _groupByYear(items);
+              final yearKeys = OriginGroupExpansionTile.sortYears(years.keys);
+              return Column(
+                children: yearKeys
+                    .map(
+                      (year) => YearGroupExpansionTile(
+                        year: year,
+                        puzzles: years[year]!,
+                      ),
+                    )
+                    .toList(),
               );
             },
-          ),
-        ],
-      );
+          );
+        },
+      ),
+    ],
+  );
 
-  Map<String, List<PuzzleDescriptor>> _groupByYear(List<PuzzleDescriptor> items) {
+  Map<String, List<PuzzleDescriptor>> _groupByYear(
+    List<PuzzleDescriptor> items,
+  ) {
     final years = <String, List<PuzzleDescriptor>>{};
     for (final p in items) {
       final y = p.year.isNotEmpty ? p.year : 'unknown';

@@ -230,9 +230,9 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
 
     // Performance: only watch gridSize, not the entire board which changes
     // on every keystroke. This prevents unnecessary rebuilds.
-    final gridSize = ref.watch(
-      gameBoardProvider.select((b) => b.gridSize),
-    ).clamp(3, 12);
+    final gridSize = ref
+        .watch(gameBoardProvider.select((b) => b.gridSize))
+        .clamp(3, 12);
     if (kDebugMode) {
       debugPrint('CrosswordScreen gridSize=$gridSize');
     }

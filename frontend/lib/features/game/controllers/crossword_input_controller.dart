@@ -19,7 +19,7 @@ import 'package:croiz/services/providers.dart';
 /// - Auto-selecting first across entry on game start
 class CrosswordInputController {
   CrosswordInputController(WidgetRef ref)
-      : _read = (<T>(provider) => ref.read(provider as dynamic) as T) {
+    : _read = (<T>(provider) => ref.read(provider as dynamic) as T) {
     _wordCompletionChecker = _createWordCompletionChecker();
   }
   CrosswordInputController._(this._read) {
@@ -46,8 +46,9 @@ class CrosswordInputController {
         readFlashingCells: () => _read<Set<CellKey>>(flashingCellsProvider),
         writeFlashingCells: (v) =>
             _read(flashingCellsProvider.notifier).state = v,
-        readCellEntriesIndex: () =>
-            _read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
+        readCellEntriesIndex: () => _read<Map<CellKey, List<PuzzleEntryData>>>(
+          cellEntriesIndexProvider,
+        ),
         readWordCheckService: () => _read(wordCheckServiceProvider),
         readGameAudioService: () => _read(gameAudioServiceProvider),
         readFlashClearDelay: () => _read<Duration>(flashClearDelayProvider),
@@ -101,7 +102,8 @@ class CrosswordInputController {
         first[0],
         first[1],
       );
-      final wasEmpty = (board.grid[first[0]][first[1]] == null) ||
+      final wasEmpty =
+          (board.grid[first[0]][first[1]] == null) ||
           (board.grid[first[0]][first[1]]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       _wordCompletionChecker.scheduleCheck(CellKey(first[0], first[1]));
@@ -133,7 +135,8 @@ class CrosswordInputController {
         nextRow,
         nextCol,
       );
-      final wasEmpty = (board.grid[nextRow][nextCol] == null) ||
+      final wasEmpty =
+          (board.grid[nextRow][nextCol] == null) ||
           (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _wordCompletionChecker.scheduleCheck(CellKey(nextRow, nextCol));
@@ -182,7 +185,8 @@ class CrosswordInputController {
             ? (selected.col == containing.x + containing.length - 1)
             : (selected.row == containing.y + containing.length - 1);
         if (isLastCellOfContaining) {
-          final hasAuthoritative = (board.solutionGrid != null) ||
+          final hasAuthoritative =
+              (board.solutionGrid != null) ||
               (containing.answer?.isNotEmpty ?? false);
           if (hasAuthoritative) {
             _read(
@@ -225,7 +229,8 @@ class CrosswordInputController {
       }
     }
 
-    final wasEmptyHere = (board.grid[selected.row][selected.col] == null) ||
+    final wasEmptyHere =
+        (board.grid[selected.row][selected.col] == null) ||
         (board.grid[selected.row][selected.col]?.isEmpty ?? true);
     _read(
       gameBoardProvider.notifier,
@@ -513,14 +518,15 @@ class CrosswordInputController {
 
     if (entries != null && entries.isNotEmpty) {
       final isAcross = dir == WordDirection.horizontal;
-      final sameDir = entries
-          .where(
-            (e) =>
-                (isAcross && e.directionEnum == EntryDirection.across) ||
-                (!isAcross && e.directionEnum == EntryDirection.down),
-          )
-          .toList()
-        ..sort((a, b) => a.number.compareTo(b.number));
+      final sameDir =
+          entries
+              .where(
+                (e) =>
+                    (isAcross && e.directionEnum == EntryDirection.across) ||
+                    (!isAcross && e.directionEnum == EntryDirection.down),
+              )
+              .toList()
+            ..sort((a, b) => a.number.compareTo(b.number));
       final wordCheck = _read(wordCheckServiceProvider);
       final foundWords = _read(foundWordsProvider);
 
@@ -584,15 +590,17 @@ class CrosswordInputController {
                 }
               }
 
-              final otherDir = entries
-                  .where(
-                    (e) =>
-                        (isAcross && e.directionEnum == EntryDirection.down) ||
-                        (!isAcross &&
-                            e.directionEnum == EntryDirection.across),
-                  )
-                  .toList()
-                ..sort((a, b) => a.number.compareTo(b.number));
+              final otherDir =
+                  entries
+                      .where(
+                        (e) =>
+                            (isAcross &&
+                                e.directionEnum == EntryDirection.down) ||
+                            (!isAcross &&
+                                e.directionEnum == EntryDirection.across),
+                      )
+                      .toList()
+                    ..sort((a, b) => a.number.compareTo(b.number));
               for (final candidate in otherDir) {
                 final key = wordCheck.getWordKey(candidate);
                 if (!foundWords.contains(key)) {

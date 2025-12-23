@@ -81,7 +81,7 @@ class CrosswordClueBanner extends ConsumerWidget {
     // The grid changes on every keystroke but entries/blackCells are stable.
     final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
     final blackCells = ref.watch(gameBoardProvider.select((b) => b.blackCells));
-    
+
     if (entries == null || entries.isEmpty) {
       return const SizedBox.shrink();
     }
@@ -135,7 +135,8 @@ class CrosswordClueBanner extends ConsumerWidget {
                 ),
                 _buildNavArrow(
                   icon: Icons.chevron_right,
-                  onTap: () => _navigateToAdjacentEntry(ref, allEntries, entry, 1),
+                  onTap: () =>
+                      _navigateToAdjacentEntry(ref, allEntries, entry, 1),
                   compact: isCompact,
                 ),
               ],

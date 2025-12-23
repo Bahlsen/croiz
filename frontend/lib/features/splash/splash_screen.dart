@@ -35,10 +35,7 @@ final appInitializedProvider = FutureProvider<bool>((ref) async {
 /// Displays an animated logo and loading indicator while waiting for
 /// critical services (audio, etc.) to initialize.
 class SplashScreen extends ConsumerStatefulWidget {
-  const SplashScreen({
-    required this.onInitialized,
-    super.key,
-  });
+  const SplashScreen({required this.onInitialized, super.key});
 
   /// Callback when initialization is complete.
   final VoidCallback onInitialized;
@@ -108,10 +105,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           animation: _controller,
           builder: (context, child) => FadeTransition(
             opacity: _fadeAnimation,
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: child,
-            ),
+            child: ScaleTransition(scale: _scaleAnimation, child: child),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,

@@ -58,7 +58,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Keep the editing controller in sync with the selected cell's value.
     if (selected != null) {
-      final current = ref.read(gameBoardProvider).grid[selected.row][selected.col] ?? '';
+      final current =
+          ref.read(gameBoardProvider).grid[selected.row][selected.col] ?? '';
       if (_editingController.text != current) {
         _editingController.text = current;
         _editingController.selection = TextSelection.fromPosition(

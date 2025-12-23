@@ -43,28 +43,28 @@ class WordCompletionChecker {
     required void Function(Set<CellKey>) writeLockedCells,
     required Set<CellKey> Function() readFlashingCells,
     required void Function(Set<CellKey>) writeFlashingCells,
-    required Map<CellKey, List<PuzzleEntryData>> Function() readCellEntriesIndex,
+    required Map<CellKey, List<PuzzleEntryData>> Function()
+    readCellEntriesIndex,
     required WordCheckService Function() readWordCheckService,
     required AudioService Function() readGameAudioService,
     required Duration Function() readFlashClearDelay,
     required Duration Function() readCheckDebounceDelay,
     required void Function(String boardId) finalizeTimer,
-  }) =>
-      WordCompletionChecker(
-        readBoard: readBoard,
-        readFoundWords: readFoundWords,
-        writeFoundWords: writeFoundWords,
-        readLockedCells: readLockedCells,
-        writeLockedCells: writeLockedCells,
-        readFlashingCells: readFlashingCells,
-        writeFlashingCells: writeFlashingCells,
-        readCellEntriesIndex: readCellEntriesIndex,
-        readWordCheckService: readWordCheckService,
-        readGameAudioService: readGameAudioService,
-        readFlashClearDelay: readFlashClearDelay,
-        readCheckDebounceDelay: readCheckDebounceDelay,
-        finalizeTimer: finalizeTimer,
-      );
+  }) => WordCompletionChecker(
+    readBoard: readBoard,
+    readFoundWords: readFoundWords,
+    writeFoundWords: writeFoundWords,
+    readLockedCells: readLockedCells,
+    writeLockedCells: writeLockedCells,
+    readFlashingCells: readFlashingCells,
+    writeFlashingCells: writeFlashingCells,
+    readCellEntriesIndex: readCellEntriesIndex,
+    readWordCheckService: readWordCheckService,
+    readGameAudioService: readGameAudioService,
+    readFlashClearDelay: readFlashClearDelay,
+    readCheckDebounceDelay: readCheckDebounceDelay,
+    finalizeTimer: finalizeTimer,
+  );
 
   final GameBoard Function() readBoard;
   final Set<String> Function() readFoundWords;
@@ -199,7 +199,11 @@ class WordCompletionChecker {
         try {
           writeFlashingCells(<CellKey>{});
         } on Object catch (e, st) {
-          developer.log('Clearing flashing cells failed', error: e, stackTrace: st);
+          developer.log(
+            'Clearing flashing cells failed',
+            error: e,
+            stackTrace: st,
+          );
         }
       });
     }
@@ -228,7 +232,11 @@ class WordCompletionChecker {
         }
       }
     } on Object catch (e, st) {
-      developer.log('Error checking for completed words', error: e, stackTrace: st);
+      developer.log(
+        'Error checking for completed words',
+        error: e,
+        stackTrace: st,
+      );
     }
   }
 
@@ -249,41 +257,40 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   WidgetRef ref,
   T Function<T>(Object provider) read,
 ) => WordCompletionChecker.fromReaders(
-    readBoard: () {
+  readBoard: () {
+    try {
+      return read<GameBoard>(gameBoardProvider);
+    } on Object catch (e, st) {
+      developer.log('gameBoardProvider read failed', error: e, stackTrace: st);
+      // Try to obtain the loaded puzzle synchronously from the loader.
       try {
-        return read<GameBoard>(gameBoardProvider);
-      } on Object catch (e, st) {
-        developer.log('gameBoardProvider read failed', error: e, stackTrace: st);
-        // Try to obtain the loaded puzzle synchronously from the loader.
-        try {
-          final pa = read<AsyncValue<GameBoard>>(puzzleLoaderProvider);
-          return pa.when(
-            data: (d) => d,
-            loading: () => throw StateError('No board available'),
-            error: (e2, st2) => throw StateError('No board available'),
-          );
-        } on Object catch (e2, st2) {
-          developer.log(
-            'puzzleLoaderProvider read failed',
-            error: e2,
-            stackTrace: st2,
-          );
-          throw StateError('No board available');
-        }
+        final pa = read<AsyncValue<GameBoard>>(puzzleLoaderProvider);
+        return pa.when(
+          data: (d) => d,
+          loading: () => throw StateError('No board available'),
+          error: (e2, st2) => throw StateError('No board available'),
+        );
+      } on Object catch (e2, st2) {
+        developer.log(
+          'puzzleLoaderProvider read failed',
+          error: e2,
+          stackTrace: st2,
+        );
+        throw StateError('No board available');
       }
-    },
-    readFoundWords: () => read<Set<String>>(foundWordsProvider),
-    writeFoundWords: (v) => read(foundWordsProvider.notifier).state = v,
-    readLockedCells: () => read<Set<CellKey>>(lockedCellsProvider),
-    writeLockedCells: (v) => read(lockedCellsProvider.notifier).state = v,
-    readFlashingCells: () => read<Set<CellKey>>(flashingCellsProvider),
-    writeFlashingCells: (v) => read(flashingCellsProvider.notifier).state = v,
-    readCellEntriesIndex: () =>
-        read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
-    readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
-    readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
-    readFlashClearDelay: () => read<Duration>(flashClearDelayProvider),
-    readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),
-    finalizeTimer: (boardId) =>
-        read(gameTimerProvider(boardId)).finalizeSync(),
-  );
+    }
+  },
+  readFoundWords: () => read<Set<String>>(foundWordsProvider),
+  writeFoundWords: (v) => read(foundWordsProvider.notifier).state = v,
+  readLockedCells: () => read<Set<CellKey>>(lockedCellsProvider),
+  writeLockedCells: (v) => read(lockedCellsProvider.notifier).state = v,
+  readFlashingCells: () => read<Set<CellKey>>(flashingCellsProvider),
+  writeFlashingCells: (v) => read(flashingCellsProvider.notifier).state = v,
+  readCellEntriesIndex: () =>
+      read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
+  readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
+  readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
+  readFlashClearDelay: () => read<Duration>(flashClearDelayProvider),
+  readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),
+  finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),
+);

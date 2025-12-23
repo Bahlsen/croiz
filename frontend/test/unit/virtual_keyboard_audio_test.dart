@@ -14,11 +14,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [gameAudioServiceProvider.overrideWithValue(fake)],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: VirtualKeyboard(),
-          ),
-        ),
+        child: const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
       ),
     );
 
@@ -39,11 +35,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [gameAudioServiceProvider.overrideWithValue(fake)],
-        child: const MaterialApp(
-          home: Scaffold(
-            body: VirtualKeyboard(),
-          ),
-        ),
+        child: const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
       ),
     );
 
