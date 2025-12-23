@@ -113,7 +113,9 @@ class GameAudioService implements AudioService {
       _lastTypeAt = now;
 
       // Fire-and-forget: play the sound
-      unawaited(_playSound(_typePlayer!));
+      // In lowLatency mode, we must use play(source) each time - seek is not supported
+      unawaited(_typePlayer!.stop());
+      unawaited(_typePlayer!.play(AssetSource(_typeAsset)));
     } on Object catch (e, st) {
       debugPrint('[AUDIO] playType failed: $e\n$st');
     }
@@ -138,8 +140,10 @@ class GameAudioService implements AudioService {
       }
       _lastDeleteAt = now;
 
-      // Fire-and-forget
-      unawaited(_playSound(_deletePlayer!));
+      // Fire-and-forget: play the sound
+      // In lowLatency mode, we must use play(source) each time - seek is not supported
+      unawaited(_deletePlayer!.stop());
+      unawaited(_deletePlayer!.play(AssetSource(_deleteAsset)));
     } on Object catch (e, st) {
       debugPrint('[AUDIO] playDelete failed: $e\n$st');
     }
@@ -152,7 +156,9 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      unawaited(_playSound(_successPlayer!));
+      // Success uses mediaPlayer mode - can use seek+resume
+      await _successPlayer!.seek(Duration.zero);
+      await _successPlayer!.resume();
     } on Object catch (e, st) {
       debugPrint('[AUDIO] playSuccess failed: $e\n$st');
     }
@@ -165,19 +171,11 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      unawaited(_playSound(_victoryPlayer!));
+      // Victory uses mediaPlayer mode - can use seek+resume
+      await _victoryPlayer!.seek(Duration.zero);
+      await _victoryPlayer!.resume();
     } on Object catch (e, st) {
       debugPrint('[AUDIO] playVictory failed: $e\n$st');
-    }
-  }
-
-  /// Play a sound using the pre-loaded source.
-  Future<void> _playSound(AudioPlayer player) async {
-    try {
-      // Play the sound from start using the pre-loaded source
-      await player.play(player.source!);
-    } on Object catch (e, st) {
-      debugPrint('[AUDIO] _playSound failed: $e\n$st');
     }
   }
 
