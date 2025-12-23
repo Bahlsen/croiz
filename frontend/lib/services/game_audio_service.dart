@@ -3,13 +3,14 @@ import 'dart:developer' as developer;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croiz/services/audio_service.dart';
 
-/// GameAudioService using single AudioPlayers with stop-before-play strategy.
+/// GameAudioService using single AudioPlayers with fire-and-forget playback.
 ///
 /// Audio performance strategy:
 /// 1. Use single AudioPlayer per sound type (no pool accumulation)
-/// 2. Stop current sound before playing new one (prevents overlap/avalanche)
-/// 3. Throttle at 80ms to prevent excessive stop/start cycles
-/// 4. No queue - if sound is throttled, it's simply skipped
+/// 2. Fire-and-forget play calls (no await blocking)
+/// 3. Configure AudioContext to not request audio focus (prevents interruptions)
+/// 4. Throttle at 80ms to prevent excessive calls
+/// 5. No queue - if sound is throttled, it's simply skipped
 class GameAudioService implements AudioService {
   GameAudioService() {
     // fire-and-forget initialization
@@ -30,8 +31,8 @@ class GameAudioService implements AudioService {
   static const _successAsset = 'audio/success.wav';
   static const _victoryAsset = 'audio/victory.wav';
 
-  // Throttle interval - prevents excessive stop/start cycles.
-  // 80ms allows ~12 sounds/sec which feels responsive but prevents avalanche.
+  // Throttle interval - prevents excessive calls.
+  // 80ms allows ~12 sounds/sec which feels responsive but prevents overload.
   static const _minTypeInterval = Duration(milliseconds: 80);
   static const _minDeleteInterval = Duration(milliseconds: 80);
   DateTime? _lastTypeAt;
@@ -43,15 +44,42 @@ class GameAudioService implements AudioService {
 
   Future<void> _init() async {
     try {
+      // Configure global audio context to avoid audio focus issues.
+      // This prevents the constant "abandonAudioFocus" spam and makes sounds
+      // play more reliably.
+      await AudioPlayer.global.setAudioContext(
+        AudioContext(
+          android: const AudioContextAndroid(
+            // Don't request audio focus - we're just playing short UI sounds
+            audioFocus: AndroidAudioFocus.none,
+            // Use short sound optimized mode
+            usageType: AndroidUsageType.assistanceSonification,
+            contentType: AndroidContentType.sonification,
+          ),
+          iOS: AudioContextIOS(
+            category: AVAudioSessionCategory.ambient,
+            options: const {AVAudioSessionOptions.mixWithOthers},
+          ),
+        ),
+      );
+
       // Create dedicated players for each sound type.
       _typePlayer = AudioPlayer();
       _deletePlayer = AudioPlayer();
       _successPlayer = AudioPlayer();
       _victoryPlayer = AudioPlayer();
 
-      // Set low latency mode for typing sounds (Android) - must be set before play
+      // Set low latency mode for typing sounds (Android)
       await _typePlayer!.setPlayerMode(PlayerMode.lowLatency);
       await _deletePlayer!.setPlayerMode(PlayerMode.lowLatency);
+
+      // Pre-load assets for faster first play
+      await Future.wait([
+        _typePlayer!.setSource(AssetSource(_typeAsset)),
+        _deletePlayer!.setSource(AssetSource(_deleteAsset)),
+        _successPlayer!.setSource(AssetSource(_successAsset)),
+        _victoryPlayer!.setSource(AssetSource(_victoryAsset)),
+      ]);
 
       _initialized = true;
       if (!_ready.isCompleted) {
@@ -78,7 +106,7 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      // Throttle to prevent excessive stop/start cycles
+      // Throttle to prevent excessive calls
       final now = DateTime.now();
       if (_lastTypeAt != null &&
           now.difference(_lastTypeAt!) < _minTypeInterval) {
@@ -86,9 +114,9 @@ class GameAudioService implements AudioService {
       }
       _lastTypeAt = now;
 
-      // Stop any current playback then play fresh
-      await _typePlayer!.stop();
-      await _typePlayer!.play(AssetSource(_typeAsset));
+      // Fire-and-forget: seek to start and resume
+      // Don't await - we want this to be non-blocking
+      unawaited(_playSound(_typePlayer!));
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
     }
@@ -101,7 +129,7 @@ class GameAudioService implements AudioService {
         return;
       }
 
-      // Throttle to prevent excessive stop/start cycles
+      // Throttle to prevent excessive calls
       final now = DateTime.now();
       if (_lastDeleteAt != null &&
           now.difference(_lastDeleteAt!) < _minDeleteInterval) {
@@ -109,9 +137,8 @@ class GameAudioService implements AudioService {
       }
       _lastDeleteAt = now;
 
-      // Stop any current playback then play fresh
-      await _deletePlayer!.stop();
-      await _deletePlayer!.play(AssetSource(_deleteAsset));
+      // Fire-and-forget
+      unawaited(_playSound(_deletePlayer!));
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);
     }
@@ -123,8 +150,7 @@ class GameAudioService implements AudioService {
       if (!_initialized || _successPlayer == null) {
         return;
       }
-      await _successPlayer!.stop();
-      await _successPlayer!.play(AssetSource(_successAsset));
+      unawaited(_playSound(_successPlayer!));
     } on Object catch (e, st) {
       developer.log('playSuccess failed', error: e, stackTrace: st);
     }
@@ -136,10 +162,21 @@ class GameAudioService implements AudioService {
       if (!_initialized || _victoryPlayer == null) {
         return;
       }
-      await _victoryPlayer!.stop();
-      await _victoryPlayer!.play(AssetSource(_victoryAsset));
+      unawaited(_playSound(_victoryPlayer!));
     } on Object catch (e, st) {
       developer.log('playVictory failed', error: e, stackTrace: st);
+    }
+  }
+
+  /// Play a sound by seeking to start and resuming.
+  /// Using seek(0) + resume() is faster than stop() + play() because
+  /// the source is already loaded.
+  Future<void> _playSound(AudioPlayer player) async {
+    try {
+      await player.seek(Duration.zero);
+      await player.resume();
+    } on Object catch (e, st) {
+      developer.log('_playSound failed', error: e, stackTrace: st);
     }
   }
 
