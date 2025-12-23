@@ -41,12 +41,30 @@ const _kClearedFlashingBoxShadow = [
   ),
 ];
 
-// Performance: cached colors
+// Performance: cached colors and borders
 const _kClearedFlashingBgColor = Color.fromRGBO(255, 82, 82, 0.48);
 const _kFlashingBgColor = Color.fromRGBO(105, 240, 174, 0.48);
 const _kSelectedWordBgColor = Color.fromRGBO(33, 150, 243, 0.42);
 const _kDefaultBgColor = Color(0xFF424242); // Colors.grey[800]
 const _kSelectedBorderColor = Color.fromARGB(255, 110, 32, 124);
+const _kDefaultBorderColor = Color(0xFF616161); // Colors.grey.shade700
+
+// Performance: cached border instances
+const _kClearedFlashingBorder = Border.fromBorderSide(
+  BorderSide(color: Colors.redAccent, width: 3),
+);
+const _kFlashingBorder = Border.fromBorderSide(
+  BorderSide(color: Colors.greenAccent, width: 3),
+);
+const _kSelectedBorder = Border.fromBorderSide(
+  BorderSide(color: _kSelectedBorderColor, width: 2.5),
+);
+const _kSelectedWordBorder = Border.fromBorderSide(
+  BorderSide(color: Colors.blueAccent, width: 2),
+);
+const _kDefaultBorder = Border.fromBorderSide(
+  BorderSide(color: _kDefaultBorderColor, width: 1),
+);
 
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
@@ -97,21 +115,16 @@ class CrosswordCell extends ConsumerWidget {
         ? _kSelectedBoxShadow
         : _kDefaultBoxShadow;
 
-    final borderColor = isClearedFlashing
-        ? Colors.redAccent
+    // Performance: use cached static borders instead of Border.all()
+    final border = isClearedFlashing
+        ? _kClearedFlashingBorder
         : isFlashing
-        ? Colors.greenAccent
+        ? _kFlashingBorder
         : isSelected
-        ? _kSelectedBorderColor
+        ? _kSelectedBorder
         : isPartOfSelectedWord
-        ? Colors.blueAccent
-        : Colors.grey.shade700;
-
-    final borderWidth = isClearedFlashing
-        ? 3.0
-        : (isFlashing
-              ? 3.0
-              : (isSelected ? 2.5 : (isPartOfSelectedWord ? 2.0 : 1.0)));
+        ? _kSelectedWordBorder
+        : _kDefaultBorder;
 
     // Performance: use cached static colors
     final bgColor = isClearedFlashing
@@ -128,7 +141,7 @@ class CrosswordCell extends ConsumerWidget {
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
       boxShadow: boxShadow,
-      border: Border.all(color: borderColor, width: borderWidth),
+      border: border,
       color: bgColor,
     );
 
@@ -177,8 +190,20 @@ class _CellContent extends StatelessWidget {
   final String? letter;
   final bool isSelected;
 
-  // Performance: use FractionallySizedBox and FittedBox instead of LayoutBuilder
-  // This avoids per-frame constraint calculations for each cell
+  // Performance: cached TextStyles to avoid recreation on each build
+  static const _numberTextStyle = TextStyle(fontSize: 10, color: Colors.white70);
+  static const _letterTextStyle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+  static const _selectedLetterTextStyle = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+  static const _letterPadding = EdgeInsets.all(2);
+
   @override
   Widget build(BuildContext context) => Stack(
       children: [
@@ -188,24 +213,17 @@ class _CellContent extends StatelessWidget {
             top: 1,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(
-                '$cellNumber',
-                style: const TextStyle(fontSize: 10, color: Colors.white70),
-              ),
+              child: Text('$cellNumber', style: _numberTextStyle),
             ),
           ),
         Center(
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Padding(
-              padding: const EdgeInsets.all(2),
+              padding: _letterPadding,
               child: Text(
                 letter ?? '',
-                style: TextStyle(
-                  fontSize: isSelected ? 24 : 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                style: isSelected ? _selectedLetterTextStyle : _letterTextStyle,
               ),
             ),
           ),

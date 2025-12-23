@@ -476,31 +476,33 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-    onTap: _trigger,
-    onLongPressStart: (_) => _startRepeat(),
-    onLongPress: _startRepeat,
-    onLongPressEnd: (_) => _stopRepeat(),
-    onLongPressCancel: _stopRepeat,
-    child: SizedBox(
-      height: widget.height,
-      child: FilledButton(
-        onPressed: _trigger,
-        style: FilledButton.styleFrom(
-          backgroundColor:
-              widget.keyColor ??
-              Theme.of(
-                context,
-              ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.38),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(widget.radius),
+  Widget build(BuildContext context) {
+    // Performance: cache borderRadius to avoid recreation
+    final borderRadius = BorderRadius.circular(widget.radius);
+    return GestureDetector(
+      onTap: _trigger,
+      onLongPressStart: (_) => _startRepeat(),
+      onLongPress: _startRepeat,
+      onLongPressEnd: (_) => _stopRepeat(),
+      onLongPressCancel: _stopRepeat,
+      child: SizedBox(
+        height: widget.height,
+        child: FilledButton(
+          onPressed: _trigger,
+          style: FilledButton.styleFrom(
+            backgroundColor:
+                widget.keyColor ??
+                Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest.withAlpha(97), // 0.38 * 255
+            shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            padding: EdgeInsets.zero,
           ),
-          padding: EdgeInsets.zero,
+          child: const Icon(Icons.backspace_outlined),
         ),
-        child: const Icon(Icons.backspace_outlined),
       ),
-    ),
-  );
+    );
+  }
 
   // Marker class so we know we already uppercased/cached.
 }

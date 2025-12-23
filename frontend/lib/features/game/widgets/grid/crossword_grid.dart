@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/board_helpers.dart';
 // clue_numbering is used by `CrosswordCell` instead; avoid direct import here.
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
@@ -34,18 +33,17 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
   @override
   Widget build(BuildContext context) {
-    // Read the active board. If the board isn't available (still loading
-    // or errored), bail out gracefully by rendering nothing — the
-    // top-level screen is responsible for showing loading/error UI.
-    GameBoard board;
+    // Performance: only watch gridSize and blackCells structure, not full board.
+    // Individual cells watch their own values via cellValueProvider.
+    int size;
+    List<List<bool>> black;
     try {
-      board = ref.watch(gameBoardProvider);
+      size = ref.watch(gameBoardProvider.select((b) => b.gridSize));
+      black = ref.watch(gameBoardProvider.select((b) => b.blackCells));
     } on Object catch (_) {
       return const SizedBox.shrink();
     }
-    final size = board.gridSize;
     final selected = ref.watch(selectedCellProvider);
-    final black = board.blackCells;
 
     // If selection somehow points to a disabled cell (from older state), clear it.
     if (selected != null && black.isDisabled(selected.row, selected.col)) {
@@ -60,7 +58,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // Keep the editing controller in sync with the selected cell's value.
     if (selected != null) {
-      final current = board.grid[selected.row][selected.col] ?? '';
+      final current = ref.read(gameBoardProvider).grid[selected.row][selected.col] ?? '';
       if (_editingController.text != current) {
         _editingController.text = current;
         _editingController.selection = TextSelection.fromPosition(
@@ -68,6 +66,14 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
         );
       }
     }
+
+    // Performance: cache gridDelegate to avoid recreation
+    final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: size,
+      childAspectRatio: 1,
+      crossAxisSpacing: 4,
+      mainAxisSpacing: 4,
+    );
 
     return KeyboardListener(
       focusNode: _focusNode,
@@ -83,12 +89,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
         cacheExtent: 200,
         // Performance: use addAutomaticKeepAlives for smoother interactions
         addAutomaticKeepAlives: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: size,
-          childAspectRatio: 1,
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
-        ),
+        gridDelegate: gridDelegate,
         itemCount: size * size,
         itemBuilder: (context, index) {
           final row = index ~/ size;
