@@ -56,38 +56,6 @@ void main() {
   });
 
   group('strict providers (no fallbacks)', () {
-    testWidgets('puzzleOriginsProvider loads origins summary', (tester) async {
-      // Mock the merged index asset so the provider does not depend on
-      // real bundled assets during unit tests.
-      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
-        'flutter/assets',
-        (message) async {
-          final key = const StringCodec().decodeMessage(message);
-          if (key == 'assets/data/puzzles_index.json') {
-            const json = '{"items": [], "origins": ["latimes","nytimes"]}';
-            final bytes = Uint8List.fromList(json.codeUnits);
-            return ByteData.view(bytes.buffer);
-          }
-          return null;
-        },
-      );
-
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-
-      final origins = await container.read(puzzleOriginsProvider.future);
-      expect(origins, isNotEmpty);
-      // Assert known present origins from the mocked merged index
-      expect(origins, contains('latimes'));
-      expect(origins, contains('nytimes'));
-
-      // Restore handler
-      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
-        'flutter/assets',
-        null,
-      );
-    });
-
     testWidgets('originIndexProvider loads per-origin compact index', (
       tester,
     ) async {

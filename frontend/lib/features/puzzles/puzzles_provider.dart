@@ -84,56 +84,63 @@ String puzzleTitleFromJson(
 
 /// FutureProvider that enumerates puzzle JSONs and extracts basic metadata (id/title/path).
 ///
-/// Strict behaviour: requires `assets/data/puzzles.json` to exist and contain
-/// a JSON array of asset paths. No fallback to `AssetManifest.json`.
-/// Lightweight index provider: only reads the master index and returns minimal
-/// descriptors (title is initially the token). This avoids loading thousands
-/// of individual puzzle JSONs at app startup.
+/// Strict behaviour: requires `assets/data/puzzles_index.json` to exist and contain
+/// a JSON object with an "items" array. Each item must have an "origin" field.
 /// Provider that returns the list of available origins (for lazy-loading).
 final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
-  // Prefer a merged index file that contains origins (recommended).
   final rawIndex = await rootBundle.loadString(
     'assets/data/puzzles_index.json',
   );
   final parsedIndex = jsonDecode(rawIndex);
-  final origins = <String>[];
 
-  if (parsedIndex is Map<String, dynamic>) {
-    final o = parsedIndex['origins'];
-    if (o is List) {
-      for (final e in o) {
-        if (e is Map<String, dynamic>) {
-          final origin = e['origin']?.toString();
-          if (origin != null && origin.isNotEmpty) {
-            origins.add(origin);
-          }
-        } else if (e is String) {
-          if (e.isNotEmpty) {
-            origins.add(e);
-          }
-        }
+  if (parsedIndex is! Map<String, dynamic>) {
+    throw StateError('Invalid puzzles_index.json: expected JSON object.');
+  }
+
+  final items = parsedIndex['items'];
+  if (items is! List || items.isEmpty) {
+    throw StateError('Invalid puzzles_index.json: "items" array is missing or empty.');
+  }
+
+  final origins = <String>{};
+  for (final e in items) {
+    if (e is Map<String, dynamic>) {
+      final origin = e['origin']?.toString();
+      if (origin != null && origin.isNotEmpty) {
+        origins.add(origin);
       }
-      origins.sort();
-      return origins;
     }
   }
 
-  throw StateError(
-    'Invalid puzzles_index.json: merged index must include a non-empty "origins" array.',
-  );
+  if (origins.isEmpty) {
+    throw StateError('Invalid puzzles_index.json: no valid origins found in items.');
+  }
+
+  return origins.toList()..sort();
 });
 
-/// Provider to load the compact index for a single origin lazily.
+/// Provider to load puzzles for a single origin from the main index.
 final originIndexProvider =
     FutureProvider.family<List<PuzzleDescriptor>, String>((ref, origin) async {
-      // Strict: require per-origin compact index; no fallback.
-      final originPath = 'assets/data/puzzles_index_by_origin/$origin.json';
-      final raw = await rootBundle.loadString(originPath);
-      final parsed = jsonDecode(raw);
-      if (parsed is List) {
-        final out = <PuzzleDescriptor>[];
-        for (final e in parsed) {
-          if (e is Map<String, dynamic>) {
+      final rawIndex = await rootBundle.loadString(
+        'assets/data/puzzles_index.json',
+      );
+      final parsedIndex = jsonDecode(rawIndex);
+
+      if (parsedIndex is! Map<String, dynamic>) {
+        throw StateError('Invalid puzzles_index.json: expected JSON object.');
+      }
+
+      final items = parsedIndex['items'];
+      if (items is! List) {
+        throw StateError('Invalid puzzles_index.json: "items" array is missing.');
+      }
+
+      final out = <PuzzleDescriptor>[];
+      for (final e in items) {
+        if (e is Map<String, dynamic>) {
+          final itemOrigin = e['origin']?.toString() ?? '';
+          if (itemOrigin == origin) {
             final rawPath = e['path']?.toString() ?? '';
             out.add(
               PuzzleDescriptor(
@@ -141,25 +148,27 @@ final originIndexProvider =
                 title: e['title']?.toString() ?? '',
                 path: _normalizeIndexedPath(rawPath),
                 subtitle: e['subtitle']?.toString() ?? '',
-                origin: e['origin']?.toString() ?? origin,
+                origin: itemOrigin,
                 year: e['year']?.toString() ?? '',
               ),
             );
           }
         }
-        out.sort((a, b) {
-          final ai = int.tryParse(a.year) ?? -9999;
-          final bi = int.tryParse(b.year) ?? -9999;
-          final yc = bi.compareTo(ai);
-          if (yc != 0) {
-            return yc;
-          }
-          return a.title.compareTo(b.title);
-        });
-        return out;
       }
-      throw StateError('Invalid origin index format for $origin.');
+
+      out.sort(_sortByYearDescThenTitle);
+      return out;
     });
+
+int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
+  final ai = int.tryParse(a.year) ?? -9999;
+  final bi = int.tryParse(b.year) ?? -9999;
+  final yc = bi.compareTo(ai);
+  if (yc != 0) {
+    return yc;
+  }
+  return a.title.compareTo(b.title);
+}
 
 // Fallback parsing removed: origin indexes must be provided via
 // assets/data/puzzles_index_by_origin/<origin>.json.
