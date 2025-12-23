@@ -69,14 +69,18 @@ class VirtualKeyboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rows = List<List<String>>.from(
-      (layout ?? _defaultAzertyLayout).map(List<String>.from),
-    );
-    if (includeBackspace) {
-      final hasBack = rows.any((r) => r.contains(_backspaceToken));
-      if (!hasBack && rows.isNotEmpty) {
-        rows.last.add(_backspaceToken);
-      }
+    // Performance: avoid deep copying if layout already has backspace.
+    // Layouts from static const already include backspace token.
+    final baseLayout = layout ?? _defaultAzertyLayout;
+    final hasBack = baseLayout.any((r) => r.contains(_backspaceToken));
+    final List<List<String>> rows;
+    if (includeBackspace && !hasBack && baseLayout.isNotEmpty) {
+      // Only copy when we need to add backspace
+      rows = List<List<String>>.from(baseLayout.map(List<String>.from));
+      rows.last.add(_backspaceToken);
+    } else {
+      // Use layout directly - no copy needed
+      rows = baseLayout;
     }
 
     // Wrap the rendered keyboard in a LayoutBuilder so we obtain the
@@ -236,7 +240,7 @@ class VirtualKeyboard extends ConsumerWidget {
 }
 
 class _ResponsiveKeyboardRow extends StatelessWidget {
-  const _ResponsiveKeyboardRow({
+  _ResponsiveKeyboardRow({
     required this.keys,
     required this.keyHeight,
     required this.keySpacing,
@@ -247,10 +251,10 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
     required this.onPlayDelete,
     required this.enabledLetters,
     required this.enableFeedback,
-    required this.keyRadius,
+    required double keyRadius,
     required this.keyColor,
     required this.disabledKeyColor,
-  });
+  }) : borderRadius = BorderRadius.circular(keyRadius);
 
   final List<String> keys;
   final double keyHeight;
@@ -262,42 +266,34 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
   final VoidCallback? onPlayDelete;
   final Set<String>? enabledLetters;
   final bool enableFeedback;
-  final double keyRadius;
+  // Performance: pre-computed BorderRadius to avoid recreation in children
+  final BorderRadius borderRadius;
   final Color? keyColor;
   final Color? disabledKeyColor;
 
   @override
   Widget build(BuildContext context) {
+    // Performance: skip uppercase mapping if enabledLetters is null (common case)
     final enabledSet = enabledLetters?.map((e) => e.toUpperCase()).toSet();
 
     // Use Expanded with flex weights so keys fit the available row width
     // reliably (letters weight=1, backspace weight=2). This avoids manual
     // width math depending on MediaQuery and prevents overflow.
-    final children = <Widget>[];
-    for (var i = 0; i < keys.length; i++) {
-      final k = keys[i];
-      final weight = k == VirtualKeyboard.backspaceToken ? 2 : 1;
-      children.add(
-        Expanded(
-          flex: weight,
-          child: SizedBox(
-            height: keyHeight,
-            child: _buildKey(context, k, keyHeight.toDouble(), enabledSet),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (var i = 0; i < keys.length; i++) ...[
+          Expanded(
+            flex: keys[i] == VirtualKeyboard.backspaceToken ? 2 : 1,
+            child: SizedBox(
+              height: keyHeight,
+              child: _buildKey(context, keys[i], keyHeight.toDouble(), enabledSet),
+            ),
           ),
-        ),
-      );
-      if (i != keys.length - 1) {
-        children.add(SizedBox(width: keySpacing));
-      }
-    }
-
-    if (kDebugMode) {
-      debugPrint(
-        'ResponsiveRow: keys=${keys.length} rowMaxWidth=$rowMaxWidth keyHeight=$keyHeight',
-      );
-    }
-
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: children);
+          if (i != keys.length - 1) SizedBox(width: keySpacing),
+        ],
+      ],
+    );
   }
 
   Widget _buildKey(
@@ -312,7 +308,7 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
         onBackspace: onBackspace,
         onPlayDelete: onPlayDelete,
         enableFeedback: enableFeedback,
-        radius: keyRadius,
+        borderRadius: borderRadius,
         keyColor: keyColor,
       );
     }
@@ -343,7 +339,7 @@ class _ResponsiveKeyboardRow extends StatelessWidget {
                 onKey(label);
               }
             : null,
-        radius: keyRadius,
+        borderRadius: borderRadius,
         keyColor: keyColor,
         disabledKeyColor: disabledKeyColor,
       ),
@@ -357,7 +353,7 @@ class _LetterKey extends StatelessWidget {
     required this.height,
     required this.enabled,
     required this.onPressed,
-    required this.radius,
+    required this.borderRadius,
     required this.keyColor,
     required this.disabledKeyColor,
   });
@@ -366,7 +362,7 @@ class _LetterKey extends StatelessWidget {
   final double height;
   final bool enabled;
   final VoidCallback? onPressed;
-  final double radius;
+  final BorderRadius borderRadius;
   final Color? keyColor;
   final Color? disabledKeyColor;
 
@@ -376,28 +372,35 @@ class _LetterKey extends StatelessWidget {
     fontWeight: FontWeight.w500,
     fontSize: 16,
   );
+  static const _zeroPadding = EdgeInsets.zero;
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    // Performance: cache borderRadius to avoid recreation
-    final borderRadius = BorderRadius.circular(radius);
+    // Performance: avoid recreating ButtonStyle on every build.
+    // Use resolve methods for theme-dependent colors.
+    final style = ButtonStyle(
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return disabledKeyColor ?? scheme.onSurface.withAlpha(20);
+        }
+        return keyColor ?? scheme.surfaceContainerHighest.withAlpha(82);
+      }),
+      foregroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return scheme.onSurface.withAlpha(97);
+        }
+        return scheme.onSurface;
+      }),
+      padding: const WidgetStatePropertyAll(_zeroPadding),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: borderRadius)),
+    );
     
     return SizedBox(
       height: height,
       child: FilledButton(
         onPressed: onPressed,
-        style: FilledButton.styleFrom(
-          backgroundColor:
-              keyColor ??
-              scheme.surfaceContainerHighest.withAlpha(82), // 0.32 * 255
-          foregroundColor: scheme.onSurface,
-          disabledBackgroundColor:
-              disabledKeyColor ?? scheme.onSurface.withAlpha(20), // 0.08 * 255
-          disabledForegroundColor: scheme.onSurface.withAlpha(97), // 0.38 * 255
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(borderRadius: borderRadius),
-        ),
+        style: style,
         child: Text(label, style: _letterTextStyle),
       ),
     );
@@ -410,7 +413,7 @@ class _BackspaceKey extends StatefulWidget {
     required this.onBackspace,
     required this.onPlayDelete,
     required this.enableFeedback,
-    required this.radius,
+    required this.borderRadius,
     required this.keyColor,
   });
 
@@ -418,7 +421,7 @@ class _BackspaceKey extends StatefulWidget {
   final VoidCallback? onBackspace;
   final VoidCallback? onPlayDelete;
   final bool enableFeedback;
-  final double radius;
+  final BorderRadius borderRadius;
   final Color? keyColor;
 
   @override
@@ -476,10 +479,7 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // Performance: cache borderRadius to avoid recreation
-    final borderRadius = BorderRadius.circular(widget.radius);
-    return GestureDetector(
+  Widget build(BuildContext context) => GestureDetector(
       onTap: _trigger,
       onLongPressStart: (_) => _startRepeat(),
       onLongPress: _startRepeat,
@@ -495,14 +495,13 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
                 Theme.of(
                   context,
                 ).colorScheme.surfaceContainerHighest.withAlpha(97), // 0.38 * 255
-            shape: RoundedRectangleBorder(borderRadius: borderRadius),
+            shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
             padding: EdgeInsets.zero,
           ),
           child: const Icon(Icons.backspace_outlined),
         ),
       ),
     );
-  }
 
   // Marker class so we know we already uppercased/cached.
 }

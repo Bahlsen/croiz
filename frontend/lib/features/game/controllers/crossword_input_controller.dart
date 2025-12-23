@@ -21,43 +21,8 @@ class CrosswordInputController {
       );
   final T Function<T>(Object provider) _read;
   Timer? _flashClearTimer;
-  Timer? _wordCheckTimer;
-  CellKey? _pendingCheckedCell;
   bool _disposed = false;
   bool _didAutoSelectFirstAcross = false;
-
-  void _scheduleCheckForCompletedWords({
-    int? row,
-    int? col,
-    Duration delay = const Duration(milliseconds: 50),
-  }) {
-    // Debounce repeated keystrokes so heavy checks (looping entries,
-    // playing sounds, flashing) don't run for every single key when
-    // the user types quickly.
-    try {
-      _wordCheckTimer?.cancel();
-    } on Object {
-      // ignore
-    }
-    if (row != null && col != null) {
-      _pendingCheckedCell = CellKey(row, col);
-    }
-    _wordCheckTimer = Timer(delay, () {
-      if (_disposed) {
-        return;
-      }
-      try {
-        _checkForCompletedWords(_pendingCheckedCell);
-        _pendingCheckedCell = null;
-      } on Object catch (e, st) {
-        developer.log(
-          'Scheduled _checkForCompletedWords failed',
-          error: e,
-          stackTrace: st,
-        );
-      }
-    });
-  }
 
   GameBoard _safeReadBoard() {
     try {
@@ -106,7 +71,7 @@ class CrosswordInputController {
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       // Immediate check ensures effects (audio/flash/locks) trigger deterministically.
       _checkForCompletedWords(CellKey(first[0], first[1]));
-      _scheduleCheckForCompletedWords(row: first[0], col: first[1]);
+      // Scheduled check removed - immediate check already handles word completion.
       _moveToNext(
         _safeReadBoard(),
         startRow: first[0],
@@ -140,7 +105,6 @@ class CrosswordInputController {
           (board.grid[nextRow][nextCol]?.isEmpty ?? true);
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _checkForCompletedWords(CellKey(nextRow, nextCol));
-      _scheduleCheckForCompletedWords(row: nextRow, col: nextCol);
       _moveToNext(
         _safeReadBoard(),
         startRow: nextRow,
@@ -167,7 +131,6 @@ class CrosswordInputController {
           // f is guaranteed empty by definition
           _read(gameBoardProvider.notifier).setLetter(f.row, f.col, letter);
           _checkForCompletedWords(CellKey(f.row, f.col));
-          _scheduleCheckForCompletedWords(row: f.row, col: f.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: f.row,
@@ -194,10 +157,6 @@ class CrosswordInputController {
               gameBoardProvider.notifier,
             ).setLetter(selected.row, selected.col, letter);
             _checkForCompletedWords(CellKey(selected.row, selected.col));
-            _scheduleCheckForCompletedWords(
-              row: selected.row,
-              col: selected.col,
-            );
             _moveToNext(
               _safeReadBoard(),
               startRow: selected.row,
@@ -221,7 +180,6 @@ class CrosswordInputController {
             gameBoardProvider.notifier,
           ).setLetter(nextF.row, nextF.col, letter);
           _checkForCompletedWords(CellKey(nextF.row, nextF.col));
-          _scheduleCheckForCompletedWords(row: nextF.row, col: nextF.col);
           _moveToNext(
             _safeReadBoard(),
             startRow: nextF.row,
@@ -240,7 +198,6 @@ class CrosswordInputController {
       gameBoardProvider.notifier,
     ).setLetter(selected.row, selected.col, letter);
     _checkForCompletedWords(CellKey(selected.row, selected.col));
-    _scheduleCheckForCompletedWords(row: selected.row, col: selected.col);
     _moveToNext(
       _safeReadBoard(),
       startRow: selected.row,
@@ -923,7 +880,6 @@ class CrosswordInputController {
     _disposed = true;
     try {
       _flashClearTimer?.cancel();
-      _wordCheckTimer?.cancel();
     } on Object {
       // ignore
     }
