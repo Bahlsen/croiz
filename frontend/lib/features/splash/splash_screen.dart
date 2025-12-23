@@ -98,7 +98,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         final elapsed = DateTime.now().difference(_startedAt);
         final animationDuration = _controller.duration ?? Duration.zero;
         final remaining = animationDuration - elapsed;
-        final buffer = const Duration(milliseconds: 300);
+        const buffer = Duration(milliseconds: 300);
         final wait = remaining > Duration.zero ? remaining + buffer : buffer;
 
         Future.delayed(wait, () {
