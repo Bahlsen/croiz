@@ -3,41 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/widgets/virtual_keyboard.dart';
-import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/providers.dart';
 
-class FakeAudioService implements AudioService {
-  int typeCount = 0;
-  int deleteCount = 0;
-  int successCount = 0;
-  int victoryCount = 0;
-
-  @override
-  Future<void> dispose() async {}
-
-  @override
-  Future<void> playDelete() async {
-    deleteCount++;
-  }
-
-  @override
-  Future<void> playSuccess() async {
-    successCount++;
-  }
-
-  @override
-  Future<void> playType() async {
-    typeCount++;
-  }
-
-  @override
-  Future<void> playVictory() async {
-    victoryCount++;
-  }
-
-  @override
-  Future<void> get ready async => Future<void>.value();
-}
+import '../test_utils/fake_audio_service.dart';
 
 void main() {
   testWidgets('VirtualKeyboard taps call playType', (tester) async {

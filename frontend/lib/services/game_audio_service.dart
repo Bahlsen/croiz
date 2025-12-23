@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croiz/services/audio_service.dart';
 
@@ -56,7 +56,8 @@ class GameAudioService implements AudioService {
             contentType: AndroidContentType.sonification,
           ),
           iOS: AudioContextIOS(
-            category: AVAudioSessionCategory.ambient,
+            // Use playback category which allows mixWithOthers
+            category: AVAudioSessionCategory.playback,
             options: const {AVAudioSessionOptions.mixWithOthers},
           ),
         ),
@@ -84,14 +85,9 @@ class GameAudioService implements AudioService {
       if (!_ready.isCompleted) {
         _ready.complete();
       }
-      developer.log('GameAudioService initialized', name: 'GameAudioService');
     } on Object catch (e, st) {
       _initialized = false;
-      developer.log(
-        'GameAudioService initialization failed',
-        error: e,
-        stackTrace: st,
-      );
+      debugPrint('[AUDIO] GameAudioService initialization failed: $e\n$st');
       if (!_ready.isCompleted) {
         _ready.complete();
       }
@@ -106,10 +102,6 @@ class GameAudioService implements AudioService {
         await ready;
       }
       if (!_initialized || _typePlayer == null) {
-        developer.log(
-          'playType skipped: initialized=$_initialized, player=${_typePlayer != null}',
-          name: 'GameAudioService',
-        );
         return;
       }
       // Throttle to prevent excessive calls
@@ -120,11 +112,10 @@ class GameAudioService implements AudioService {
       }
       _lastTypeAt = now;
 
-      // Fire-and-forget: seek to start and resume
-      // Don't await - we want this to be non-blocking
+      // Fire-and-forget: play the sound
       unawaited(_playSound(_typePlayer!));
     } on Object catch (e, st) {
-      developer.log('playType failed', error: e, stackTrace: st);
+      debugPrint('[AUDIO] playType failed: $e\n$st');
     }
   }
 
@@ -136,10 +127,6 @@ class GameAudioService implements AudioService {
         await ready;
       }
       if (!_initialized || _deletePlayer == null) {
-        developer.log(
-          'playDelete skipped: initialized=$_initialized, player=${_deletePlayer != null}',
-          name: 'GameAudioService',
-        );
         return;
       }
 
@@ -154,7 +141,7 @@ class GameAudioService implements AudioService {
       // Fire-and-forget
       unawaited(_playSound(_deletePlayer!));
     } on Object catch (e, st) {
-      developer.log('playDelete failed', error: e, stackTrace: st);
+      debugPrint('[AUDIO] playDelete failed: $e\n$st');
     }
   }
 
@@ -167,7 +154,7 @@ class GameAudioService implements AudioService {
 
       unawaited(_playSound(_successPlayer!));
     } on Object catch (e, st) {
-      developer.log('playSuccess failed', error: e, stackTrace: st);
+      debugPrint('[AUDIO] playSuccess failed: $e\n$st');
     }
   }
 
@@ -180,19 +167,17 @@ class GameAudioService implements AudioService {
 
       unawaited(_playSound(_victoryPlayer!));
     } on Object catch (e, st) {
-      developer.log('playVictory failed', error: e, stackTrace: st);
+      debugPrint('[AUDIO] playVictory failed: $e\n$st');
     }
   }
 
-  /// Play a sound by seeking to start and resuming.
-  /// Using seek(0) + resume() is faster than stop() + play() because
-  /// the source is already loaded.
+  /// Play a sound using the pre-loaded source.
   Future<void> _playSound(AudioPlayer player) async {
     try {
-      await player.seek(Duration.zero);
-      await player.resume();
+      // Play the sound from start using the pre-loaded source
+      await player.play(player.source!);
     } on Object catch (e, st) {
-      developer.log('_playSound failed', error: e, stackTrace: st);
+      debugPrint('[AUDIO] _playSound failed: $e\n$st');
     }
   }
 

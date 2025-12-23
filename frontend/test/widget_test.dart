@@ -10,10 +10,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/providers.dart';
+import 'package:croiz/features/puzzles/puzzles_provider.dart';
+
+import 'test_utils/fake_audio_service.dart';
 
 void main() {
-  testWidgets('App renders home screen', (WidgetTester tester) async {
+  testWidgets('App renders puzzles list screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     const size = 5;
     final grid = List.generate(size, (_) => List<String?>.filled(size, null));
@@ -32,24 +37,43 @@ void main() {
         PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 1, length: 4),
       ],
     );
+
+    // Use a fake audio service that completes initialization instantly
+    final fakeAudioService = FakeAudioService();
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(boardWithEntries),
           ),
+          // Override audio service for fast initialization
+          gameAudioServiceProvider.overrideWithValue(fakeAudioService),
+          // Pre-complete initialization
+          appInitializedProvider.overrideWith((ref) async => true),
+          // Provide puzzle list data for the puzzles list screen
+          puzzlesProvider.overrideWithValue(
+            AsyncValue.data([
+              PuzzleDescriptor(
+                id: 'test-puzzle',
+                title: 'Test Puzzle',
+                path: 'assets/data/test.json',
+              ),
+            ]),
+          ),
         ],
         child: const CroizApp(),
       ),
     );
 
-    // Verify that the home screen displays the welcome text
-    expect(find.text('Welcome to Croiz'), findsOneWidget);
-    expect(find.text('Puzzles'), findsOneWidget);
+    // Wait for splash screen to complete and transition to puzzles list
+    // Pump frames at intervals to allow async providers and animations to settle
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
-    // NOTE: navigation to the full `Crossword` screen instantiates many
-    // game providers and widgets that are harder to run in a headless
-    // test environment. For now assert the home UI only.
-    // If desired, a separate integration test can exercise navigation.
+    // Verify that the puzzles list screen is displayed
+    // The app now navigates directly to the puzzles list, skipping the home page
+    expect(find.text('Puzzles'), findsWidgets);
   });
 }
