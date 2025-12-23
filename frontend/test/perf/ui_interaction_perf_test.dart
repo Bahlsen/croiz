@@ -282,21 +282,21 @@ void main() {
       container.read(gameBoardProvider.notifier).board = board;
 
       // Verify initial state
-      expect(container.read(cellValueProvider([0, 0])), isNull);
-      expect(container.read(cellValueProvider([1, 1])), isNull);
+      expect(container.read(cellValueProvider(const CellKey(0, 0))), isNull);
+      expect(container.read(cellValueProvider(const CellKey(1, 1))), isNull);
 
       // Set letter at (0,0) only
       container.read(gameBoardProvider.notifier).setLetter(0, 0, 'A');
 
       // Only cell (0,0) should have the new value
-      expect(container.read(cellValueProvider([0, 0])), 'A');
-      expect(container.read(cellValueProvider([1, 1])), isNull);
+      expect(container.read(cellValueProvider(const CellKey(0, 0))), 'A');
+      expect(container.read(cellValueProvider(const CellKey(1, 1))), isNull);
 
       // Set letter at (1,1) only
       container.read(gameBoardProvider.notifier).setLetter(1, 1, 'B');
 
-      expect(container.read(cellValueProvider([0, 0])), 'A');
-      expect(container.read(cellValueProvider([1, 1])), 'B');
+      expect(container.read(cellValueProvider(const CellKey(0, 0))), 'A');
+      expect(container.read(cellValueProvider(const CellKey(1, 1))), 'B');
 
       container.dispose();
     });
@@ -336,14 +336,14 @@ void main() {
       container.read(gameBoardProvider.notifier).setLetter(1, 1, 'D');
 
       // Verify each cell provider returns the correct value
-      expect(container.read(cellValueProvider([0, 0])), 'A');
-      expect(container.read(cellValueProvider([0, 1])), 'B');
-      expect(container.read(cellValueProvider([1, 0])), 'C');
-      expect(container.read(cellValueProvider([1, 1])), 'D');
+      expect(container.read(cellValueProvider(const CellKey(0, 0))), 'A');
+      expect(container.read(cellValueProvider(const CellKey(0, 1))), 'B');
+      expect(container.read(cellValueProvider(const CellKey(1, 0))), 'C');
+      expect(container.read(cellValueProvider(const CellKey(1, 1))), 'D');
 
       // Other cells should remain null
-      expect(container.read(cellValueProvider([2, 2])), isNull);
-      expect(container.read(cellValueProvider([3, 3])), isNull);
+      expect(container.read(cellValueProvider(const CellKey(2, 2))), isNull);
+      expect(container.read(cellValueProvider(const CellKey(3, 3))), isNull);
 
       container.dispose();
     });

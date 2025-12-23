@@ -101,7 +101,7 @@ class CrosswordCell extends ConsumerWidget {
     // whose membership changes will rebuild).
     final isPartOfSelectedWord = ref.watch(cellInSelectedWordProvider(cellKey));
 
-    final letter = ref.watch(cellValueProvider([row, col]));
+    final letter = ref.watch(cellValueProvider(cellKey));
     final cellNumber = ref.watch(
       clueNumbersProvider.select((m) => m['$row,$col']),
     );

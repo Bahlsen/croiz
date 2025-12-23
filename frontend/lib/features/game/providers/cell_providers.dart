@@ -36,11 +36,10 @@ final clueNumbersProvider = Provider<Map<String, int>>((ref) {
 });
 
 /// Provider family exposing a single cell's value. Widgets should watch
-/// `cellValueProvider([r, c])` to rebuild only when that cell's letter
+/// `cellValueProvider(CellKey(r, c))` to rebuild only when that cell's letter
 /// changes, avoiding large grid rebuilds.
-final cellValueProvider = Provider.family<String?, List<int>>((ref, coords) {
-  final r = coords[0];
-  final c = coords[1];
-  // Only rebuild when this specific cell value changes.
-  return ref.watch(gameBoardProvider.select((b) => b.grid[r][c]));
-});
+/// Uses CellKey for efficient hashability (unlike List<int>).
+final cellValueProvider = Provider.family<String?, CellKey>(
+  (ref, key) =>
+      ref.watch(gameBoardProvider.select((b) => b.grid[key.row][key.col])),
+);

@@ -38,6 +38,7 @@ final cellLockedProvider = Provider.family<bool, CellKey>(
 );
 
 /// Set of cells belonging to the currently selected word.
+/// Optimized: only depends on selection, direction, and blackCells structure.
 final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
   final selected = ref.watch(selectedCellProvider);
   final dir = ref.watch(wordDirectionProvider);
@@ -66,7 +67,8 @@ final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
 
 /// Provider family that answers whether a specific cell is part of the
 /// currently selected word.
-final cellInSelectedWordProvider = Provider.family<bool, CellKey>((ref, key) {
-  final set = ref.watch(selectedWordCellsProvider);
-  return set.contains(key);
-});
+/// Optimized: uses select() to only rebuild when this cell's membership changes.
+final cellInSelectedWordProvider = Provider.family<bool, CellKey>(
+  (ref, key) =>
+      ref.watch(selectedWordCellsProvider.select((set) => set.contains(key))),
+);

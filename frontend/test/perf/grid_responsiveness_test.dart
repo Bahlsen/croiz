@@ -287,16 +287,22 @@ void main() {
 
       container
         ..read(gameBoardProvider.notifier).board = board
-        ..listen(cellValueProvider([0, 0]), (_, __) => cell00Reads++)
-        ..listen(cellValueProvider([1, 1]), (_, __) => cell11Reads++);
+        ..listen(
+          cellValueProvider(const CellKey(0, 0)),
+          (_, __) => cell00Reads++,
+        )
+        ..listen(
+          cellValueProvider(const CellKey(1, 1)),
+          (_, __) => cell11Reads++,
+        );
 
       // Set letter only at (0,0)
       container.read(gameBoardProvider.notifier).setLetter(0, 0, 'X');
 
       // Cell (0,0) should have new value
-      expect(container.read(cellValueProvider([0, 0])), 'X');
+      expect(container.read(cellValueProvider(const CellKey(0, 0))), 'X');
       // Cell (1,1) should remain null
-      expect(container.read(cellValueProvider([1, 1])), isNull);
+      expect(container.read(cellValueProvider(const CellKey(1, 1))), isNull);
 
       container.dispose();
     });
