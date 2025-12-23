@@ -24,6 +24,12 @@ class GameAudioService implements AudioService {
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
 
+  // Asset sources for replay
+  static const _typeAsset = 'audio/typing.wav';
+  static const _deleteAsset = 'audio/delete.wav';
+  static const _successAsset = 'audio/success.wav';
+  static const _victoryAsset = 'audio/victory.wav';
+
   // Throttle interval - prevents excessive stop/start cycles.
   // 80ms allows ~12 sounds/sec which feels responsive but prevents avalanche.
   static const _minTypeInterval = Duration(milliseconds: 80);
@@ -38,21 +44,12 @@ class GameAudioService implements AudioService {
   Future<void> _init() async {
     try {
       // Create dedicated players for each sound type.
-      // Using AssetSource with setSourceAsset for low-latency playback.
       _typePlayer = AudioPlayer();
       _deletePlayer = AudioPlayer();
       _successPlayer = AudioPlayer();
       _victoryPlayer = AudioPlayer();
 
-      // Pre-set sources to reduce first-play latency
-      await Future.wait([
-        _typePlayer!.setSourceAsset('audio/typing.wav'),
-        _deletePlayer!.setSourceAsset('audio/delete.wav'),
-        _successPlayer!.setSourceAsset('audio/success.wav'),
-        _victoryPlayer!.setSourceAsset('audio/victory.wav'),
-      ]);
-
-      // Set low latency mode for typing sounds (Android)
+      // Set low latency mode for typing sounds (Android) - must be set before play
       await _typePlayer!.setPlayerMode(PlayerMode.lowLatency);
       await _deletePlayer!.setPlayerMode(PlayerMode.lowLatency);
 
@@ -89,10 +86,9 @@ class GameAudioService implements AudioService {
       }
       _lastTypeAt = now;
 
-      // Stop-before-play: prevents sound accumulation
-      // Using seek(0) + resume for lower latency than stop + play
-      await _typePlayer!.seek(Duration.zero);
-      await _typePlayer!.resume();
+      // Stop any current playback then play fresh
+      await _typePlayer!.stop();
+      await _typePlayer!.play(AssetSource(_typeAsset));
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
     }
@@ -113,9 +109,9 @@ class GameAudioService implements AudioService {
       }
       _lastDeleteAt = now;
 
-      // Stop-before-play: prevents sound accumulation
-      await _deletePlayer!.seek(Duration.zero);
-      await _deletePlayer!.resume();
+      // Stop any current playback then play fresh
+      await _deletePlayer!.stop();
+      await _deletePlayer!.play(AssetSource(_deleteAsset));
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);
     }
@@ -127,8 +123,8 @@ class GameAudioService implements AudioService {
       if (!_initialized || _successPlayer == null) {
         return;
       }
-      await _successPlayer!.seek(Duration.zero);
-      await _successPlayer!.resume();
+      await _successPlayer!.stop();
+      await _successPlayer!.play(AssetSource(_successAsset));
     } on Object catch (e, st) {
       developer.log('playSuccess failed', error: e, stackTrace: st);
     }
@@ -140,8 +136,8 @@ class GameAudioService implements AudioService {
       if (!_initialized || _victoryPlayer == null) {
         return;
       }
-      await _victoryPlayer!.seek(Duration.zero);
-      await _victoryPlayer!.resume();
+      await _victoryPlayer!.stop();
+      await _victoryPlayer!.play(AssetSource(_victoryAsset));
     } on Object catch (e, st) {
       developer.log('playVictory failed', error: e, stackTrace: st);
     }
