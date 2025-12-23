@@ -11,11 +11,13 @@ Future<void> main() async {
 
   // Create a ProviderContainer so we can eagerly initialize services
   final container = ProviderContainer();
-  // Ensure audio service has a chance to preload assets before first input.
+  
+  // Performance: Start audio initialization but don't await it.
+  // Let the app render while audio loads in the background.
+  // First taps may not play sounds, but the UI will be responsive.
   try {
-    final audioService = container.read(gameAudioServiceProvider);
-    // Wait for initialization to complete (success or failure) so first taps can play.
-    await audioService.ready;
+    container.read(gameAudioServiceProvider);
+    // Don't await ready - let initialization happen in background
   } on Object catch (e, st) {
     developer.log(
       'GameAudioService initialization failed while waiting in main',
@@ -32,31 +34,36 @@ Future<void> main() async {
 class CroizApp extends StatelessWidget {
   const CroizApp({Key? key}) : super(key: key);
 
+  // Performance: cache theme data to avoid recreation on every build
+  static final _lightTheme = ThemeData.from(
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+  );
+  
+  static final _darkTheme = ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: Colors.black,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.dark,
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black,
+      elevation: 0,
+      centerTitle: true,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
+    ),
+    textTheme: ThemeData.dark().textTheme.apply(
+      bodyColor: Colors.white,
+      displayColor: Colors.white,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) => MaterialApp.router(
     title: 'Croiz',
-    theme: ThemeData.from(
-      colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-    ),
-    darkTheme: ThemeData.dark().copyWith(
-      scaffoldBackgroundColor: Colors.black,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.blue,
-        brightness: Brightness.dark,
-      ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-      ),
-      textTheme: ThemeData.dark().textTheme.apply(
-        bodyColor: Colors.white,
-        displayColor: Colors.white,
-      ),
-    ),
+    theme: _lightTheme,
+    darkTheme: _darkTheme,
     themeMode: ThemeMode.dark,
     routerConfig: appRouter,
     debugShowCheckedModeBanner: false,

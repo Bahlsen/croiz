@@ -370,9 +370,19 @@ class _LetterKey extends StatelessWidget {
   final Color? keyColor;
   final Color? disabledKeyColor;
 
+  // Performance: cache style lookup
+  static const _letterTextStyle = TextStyle(
+    letterSpacing: 1.2,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    // Performance: cache borderRadius to avoid recreation
+    final borderRadius = BorderRadius.circular(radius);
+    
     return SizedBox(
       height: height,
       child: FilledButton(
@@ -380,22 +390,15 @@ class _LetterKey extends StatelessWidget {
         style: FilledButton.styleFrom(
           backgroundColor:
               keyColor ??
-              scheme.surfaceContainerHighest.withValues(alpha: 0.32),
+              scheme.surfaceContainerHighest.withAlpha(82), // 0.32 * 255
           foregroundColor: scheme.onSurface,
           disabledBackgroundColor:
-              disabledKeyColor ?? scheme.onSurface.withValues(alpha: 0.08),
-          disabledForegroundColor: scheme.onSurface.withValues(alpha: 0.38),
+              disabledKeyColor ?? scheme.onSurface.withAlpha(20), // 0.08 * 255
+          disabledForegroundColor: scheme.onSurface.withAlpha(97), // 0.38 * 255
           padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: borderRadius),
         ),
-        child: Text(
-          label,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(letterSpacing: 1.2),
-        ),
+        child: Text(label, style: _letterTextStyle),
       ),
     );
   }

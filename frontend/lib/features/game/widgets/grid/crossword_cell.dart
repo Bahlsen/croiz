@@ -3,6 +3,51 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
+// Performance: cached static BoxShadows to avoid recreating objects on each build
+const _kDefaultBoxShadow = [
+  BoxShadow(
+    color: Color.fromRGBO(0, 0, 0, 0.5),
+    blurRadius: 2,
+    offset: Offset(0, 1),
+  ),
+];
+
+const _kSelectedBoxShadow = [
+  BoxShadow(
+    color: Color.fromRGBO(128, 0, 128, 0.32),
+    blurRadius: 10,
+    offset: Offset(0, 2),
+  ),
+  BoxShadow(
+    color: Color.fromRGBO(0, 0, 255, 0.28),
+    blurRadius: 8,
+    offset: Offset(0, 2),
+  ),
+];
+
+const _kFlashingBoxShadow = [
+  BoxShadow(
+    color: Color.fromRGBO(105, 240, 174, 0.85),
+    blurRadius: 15,
+    offset: Offset.zero,
+  ),
+];
+
+const _kClearedFlashingBoxShadow = [
+  BoxShadow(
+    color: Color.fromRGBO(255, 82, 82, 0.9),
+    blurRadius: 16,
+    offset: Offset.zero,
+  ),
+];
+
+// Performance: cached colors
+const _kClearedFlashingBgColor = Color.fromRGBO(255, 82, 82, 0.48);
+const _kFlashingBgColor = Color.fromRGBO(105, 240, 174, 0.48);
+const _kSelectedWordBgColor = Color.fromRGBO(33, 150, 243, 0.42);
+const _kDefaultBgColor = Color(0xFF424242); // Colors.grey[800]
+const _kSelectedBorderColor = Color.fromARGB(255, 110, 32, 124);
+
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
 class CrosswordCell extends ConsumerWidget {
@@ -40,50 +85,21 @@ class CrosswordCell extends ConsumerWidget {
       clueNumbersProvider.select((m) => m['$row,$col']),
     );
 
-    // Visuals: compute decoration pieces
+    // Performance: use cached static BoxShadows instead of creating new lists
     final boxShadow = isClearedFlashing
-        ? [
-            BoxShadow(
-              color: Colors.redAccent.withValues(alpha: 0.9),
-              blurRadius: 16,
-              offset: Offset.zero,
-            ),
-          ]
+        ? _kClearedFlashingBoxShadow
         : isFlashing
-        ? [
-            BoxShadow(
-              color: Colors.greenAccent.withValues(alpha: 0.85),
-              blurRadius: 15,
-              offset: Offset.zero,
-            ),
-          ]
+        ? _kFlashingBoxShadow
         : isSelected
-        ? [
-            BoxShadow(
-              color: Colors.purple.withValues(alpha: 0.32),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-            BoxShadow(
-              color: Colors.blue.withValues(alpha: 0.28),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ]
-        : [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.5),
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ];
+        ? _kSelectedBoxShadow
+        : _kDefaultBoxShadow;
 
     final borderColor = isClearedFlashing
         ? Colors.redAccent
         : isFlashing
         ? Colors.greenAccent
         : isSelected
-        ? const Color.fromARGB(255, 110, 32, 124)
+        ? _kSelectedBorderColor
         : isPartOfSelectedWord
         ? Colors.blueAccent
         : Colors.grey.shade700;
@@ -94,13 +110,14 @@ class CrosswordCell extends ConsumerWidget {
               ? 3.0
               : (isSelected ? 2.5 : (isPartOfSelectedWord ? 2.0 : 1.0)));
 
+    // Performance: use cached static colors
     final bgColor = isClearedFlashing
-        ? Colors.redAccent.withValues(alpha: 0.48)
+        ? _kClearedFlashingBgColor
         : isFlashing
-        ? Colors.greenAccent.withValues(alpha: 0.48)
+        ? _kFlashingBgColor
         : isPartOfSelectedWord
-        ? Colors.blue.withValues(alpha: 0.42)
-        : Colors.grey[800]!;
+        ? _kSelectedWordBgColor
+        : _kDefaultBgColor;
 
     final animate =
         isSelected || isPartOfSelectedWord || isFlashing || isClearedFlashing;
@@ -150,41 +167,39 @@ class _CellContent extends StatelessWidget {
   final String? letter;
   final bool isSelected;
 
+  // Performance: use FractionallySizedBox and FittedBox instead of LayoutBuilder
+  // This avoids per-frame constraint calculations for each cell
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) {
-      final cellW = constraints.maxWidth;
-      final cellH = constraints.maxHeight;
-      final numberFont = (cellW * 0.22).clamp(6.0, 12.0);
-      final numberLeft = (cellW * 0.07).clamp(2.0, 8.0);
-      final numberTop = (cellH * 0.05).clamp(1.0, 6.0);
-      final letterFont = (isSelected ? cellW * 0.6 : cellW * 0.5).clamp(
-        10.0,
-        28.0,
-      );
-      return Stack(
-        children: [
-          if (cellNumber != null)
-            Positioned(
-              left: numberLeft,
-              top: numberTop,
+  Widget build(BuildContext context) => Stack(
+      children: [
+        if (cellNumber != null)
+          Positioned(
+            left: 2,
+            top: 1,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
               child: Text(
                 '$cellNumber',
-                style: TextStyle(fontSize: numberFont, color: Colors.white70),
-              ),
-            ),
-          Center(
-            child: Text(
-              letter ?? '',
-              style: TextStyle(
-                fontSize: letterFont,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+                style: const TextStyle(fontSize: 10, color: Colors.white70),
               ),
             ),
           ),
-        ],
-      );
-    },
-  );
+        Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Text(
+                letter ?? '',
+                style: TextStyle(
+                  fontSize: isSelected ? 24 : 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
 }

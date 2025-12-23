@@ -79,6 +79,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
         // NeverScrollableScrollPhysics so the grid lays out to its
         // parent's constraints instead of enabling scrolling.
         physics: const NeverScrollableScrollPhysics(),
+        // Performance: add cache extent to keep cells alive and reduce rebuilds
+        cacheExtent: 200,
+        // Performance: use addAutomaticKeepAlives for smoother interactions
+        addAutomaticKeepAlives: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: size,
           childAspectRatio: 1,
@@ -89,7 +93,10 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
         itemBuilder: (context, index) {
           final row = index ~/ size;
           final col = index % size;
-          return CrosswordCell(row: row, col: col);
+          // Performance: wrap each cell in RepaintBoundary to isolate repaints
+          return RepaintBoundary(
+            child: CrosswordCell(row: row, col: col),
+          );
         },
       ),
     );

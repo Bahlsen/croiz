@@ -91,8 +91,7 @@ void main() {
         ..read(selectedCellProvider.notifier).state = const SelectedCell(0, 0)
         ..read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
 
-      final controller = CrosswordInputController.fromContainer(container);
-      controller.setLetterAndAdvance('X');
+      CrosswordInputController.fromContainer(container).setLetterAndAdvance('X');
 
       // Expect only a small number of checks (the two entries that include cell),
       // plus possible small overhead. Assert <= 4.
