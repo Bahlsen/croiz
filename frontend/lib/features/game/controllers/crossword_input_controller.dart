@@ -797,6 +797,10 @@ class CrosswordInputController {
       entriesToCheck.addAll(entries);
     }
 
+    // Collect all cells that need to flash for all completed words
+    final allFlashingCells = <CellKey>{};
+    var wordsCompletedThisCheck = 0;
+
     for (final entry in entriesToCheck) {
       final wordKey = wordCheckService.getWordKey(entry);
 
@@ -808,39 +812,45 @@ class CrosswordInputController {
       // Check if word is complete
       if (wordCheckService.isWordComplete(board, entry)) {
         newFoundWords.add(wordKey);
+        wordsCompletedThisCheck++;
 
-        // Play success sound (synchronously to avoid reading providers after disposal)
-        try {
-          _read(gameAudioServiceProvider).playSuccess();
-        } on Object catch (e, st) {
-          developer.log('playSuccess failed', error: e, stackTrace: st);
-        }
-
-        // Trigger flash animation on cells
+        // Collect cells for flash animation (accumulate for all completed words)
         final cellKeys = wordCheckService.getCellKeys(entry);
-        _read(flashingCellsProvider.notifier).state = cellKeys.toSet();
+        allFlashingCells.addAll(cellKeys);
 
         // Lock cells of the found word
         newLockedCells.addAll(cellKeys);
-
-        // Clear flash after animation (will be handled by UI).
-        final _delay = _read(flashClearDelayProvider);
-        _flashClearTimer?.cancel();
-        _flashClearTimer = Timer(_delay, () {
-          if (_disposed) {
-            return;
-          }
-          try {
-            _read(flashingCellsProvider.notifier).state = <CellKey>{};
-          } on Object catch (e, st) {
-            developer.log(
-              'Clearing flashing cells failed',
-              error: e,
-              stackTrace: st,
-            );
-          }
-        });
       }
+    }
+
+    // Play success sound once if any words were completed
+    if (wordsCompletedThisCheck > 0) {
+      try {
+        _read(gameAudioServiceProvider).playSuccess();
+      } on Object catch (e, st) {
+        developer.log('playSuccess failed', error: e, stackTrace: st);
+      }
+
+      // Trigger flash animation on ALL completed words' cells at once
+      _read(flashingCellsProvider.notifier).state = allFlashingCells;
+
+      // Clear flash after animation (single timer for all words)
+      final _delay = _read(flashClearDelayProvider);
+      _flashClearTimer?.cancel();
+      _flashClearTimer = Timer(_delay, () {
+        if (_disposed) {
+          return;
+        }
+        try {
+          _read(flashingCellsProvider.notifier).state = <CellKey>{};
+        } on Object catch (e, st) {
+          developer.log(
+            'Clearing flashing cells failed',
+            error: e,
+            stackTrace: st,
+          );
+        }
+      });
     }
 
     if (newFoundWords.length > foundWords.length) {
