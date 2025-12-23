@@ -17,4 +17,7 @@ abstract class AudioService {
 
   /// Future that completes when the service is fully initialized.
   Future<void> get ready;
+
+  /// Dispose any resources held by the audio service.
+  Future<void> dispose();
 }

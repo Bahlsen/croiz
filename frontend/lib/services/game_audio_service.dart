@@ -1,32 +1,33 @@
 import 'dart:async';
 import 'dart:developer' as developer;
-import 'package:flame_audio/flame_audio.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:audioplayers/audioplayers.dart';
 import 'package:croiz/services/audio_service.dart';
 
-/// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
+/// GameAudioService using single AudioPlayers with stop-before-play strategy.
 ///
 /// Audio performance strategy:
-/// 1. Use AudioPool for frequently played sounds (typing, delete)
-/// 2. Aggressive throttling at 100ms (~10 sounds/sec max) to prevent overlap
-/// 3. Simple fire-and-forget - no complex tracking needed
+/// 1. Use single AudioPlayer per sound type (no pool accumulation)
+/// 2. Stop current sound before playing new one (prevents overlap/avalanche)
+/// 3. Throttle at 80ms to prevent excessive stop/start cycles
+/// 4. No queue - if sound is throttled, it's simply skipped
 class GameAudioService implements AudioService {
   GameAudioService() {
     // fire-and-forget initialization
     // ignore: unawaited_futures
     _init();
   }
-  AudioPool? _typePool;
-  AudioPool? _deletePool;
+
+  AudioPlayer? _typePlayer;
+  AudioPlayer? _deletePlayer;
+  AudioPlayer? _successPlayer;
+  AudioPlayer? _victoryPlayer;
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
 
-  // Throttle spikes: ignore play requests that arrive faster than this.
-  // 100ms minimum ensures ~10 sounds/sec max, preventing audio overlap/backlog.
-  // This is aggressive throttling for fast typing - we sacrifice some audio
-  // feedback for smoother performance.
-  static const _minTypeInterval = Duration(milliseconds: 100);
-  static const _minDeleteInterval = Duration(milliseconds: 100);
+  // Throttle interval - prevents excessive stop/start cycles.
+  // 80ms allows ~12 sounds/sec which feels responsive but prevents avalanche.
+  static const _minTypeInterval = Duration(milliseconds: 80);
+  static const _minDeleteInterval = Duration(milliseconds: 80);
   DateTime? _lastTypeAt;
   DateTime? _lastDeleteAt;
 
@@ -36,31 +37,24 @@ class GameAudioService implements AudioService {
 
   Future<void> _init() async {
     try {
-      // Preload into cache (files placed in assets/audio/)
-      await FlameAudio.audioCache.loadAll([
-        'typing.wav',
-        'delete.wav',
-        'success.wav',
-        'victory.wav',
+      // Create dedicated players for each sound type.
+      // Using AssetSource with setSourceAsset for low-latency playback.
+      _typePlayer = AudioPlayer();
+      _deletePlayer = AudioPlayer();
+      _successPlayer = AudioPlayer();
+      _victoryPlayer = AudioPlayer();
+
+      // Pre-set sources to reduce first-play latency
+      await Future.wait([
+        _typePlayer!.setSourceAsset('audio/typing.wav'),
+        _deletePlayer!.setSourceAsset('audio/delete.wav'),
+        _successPlayer!.setSourceAsset('audio/success.wav'),
+        _victoryPlayer!.setSourceAsset('audio/victory.wav'),
       ]);
 
-      // Additionally load raw bytes from assets to ensure they're available
-      // to the platform asset system early (helps avoid first-play latency).
-      try {
-        await Future.wait([
-          rootBundle.load('assets/audio/typing.wav'),
-          rootBundle.load('assets/audio/delete.wav'),
-          rootBundle.load('assets/audio/success.wav'),
-          rootBundle.load('assets/audio/victory.wav'),
-        ]);
-      } on Object catch (e) {
-        developer.log('rootBundle.load prewarm failed', error: e);
-      }
-
-      // Create small pools for quick, possibly overlapping SFX.
-      // Smaller pools (3/2) prevent audio backlog when typing fast.
-      _typePool = await FlameAudio.createPool('typing.wav', maxPlayers: 3);
-      _deletePool = await FlameAudio.createPool('delete.wav', maxPlayers: 2);
+      // Set low latency mode for typing sounds (Android)
+      await _typePlayer!.setPlayerMode(PlayerMode.lowLatency);
+      await _deletePlayer!.setPlayerMode(PlayerMode.lowLatency);
 
       _initialized = true;
       if (!_ready.isCompleted) {
@@ -68,7 +62,6 @@ class GameAudioService implements AudioService {
       }
       developer.log('GameAudioService initialized', name: 'GameAudioService');
     } on Object catch (e, st) {
-      // Initialization failures should not crash the app; log for visibility.
       _initialized = false;
       developer.log(
         'GameAudioService initialization failed',
@@ -84,21 +77,22 @@ class GameAudioService implements AudioService {
   @override
   Future<void> playType() async {
     try {
-      if (!_initialized) {
+      if (!_initialized || _typePlayer == null) {
         return;
       }
 
-      // Throttle by time interval - simple and effective
+      // Throttle to prevent excessive stop/start cycles
       final now = DateTime.now();
       if (_lastTypeAt != null &&
           now.difference(_lastTypeAt!) < _minTypeInterval) {
-        // Too frequent: drop this request to avoid audio overlap
         return;
       }
-
       _lastTypeAt = now;
-      // Fire-and-forget - no tracking needed, throttling handles the load
-      unawaited(_typePool?.start());
+
+      // Stop-before-play: prevents sound accumulation
+      // Using seek(0) + resume for lower latency than stop + play
+      await _typePlayer!.seek(Duration.zero);
+      await _typePlayer!.resume();
     } on Object catch (e, st) {
       developer.log('playType failed', error: e, stackTrace: st);
     }
@@ -107,20 +101,21 @@ class GameAudioService implements AudioService {
   @override
   Future<void> playDelete() async {
     try {
-      if (!_initialized) {
+      if (!_initialized || _deletePlayer == null) {
         return;
       }
 
-      // Throttle by time interval - simple and effective
+      // Throttle to prevent excessive stop/start cycles
       final now = DateTime.now();
       if (_lastDeleteAt != null &&
           now.difference(_lastDeleteAt!) < _minDeleteInterval) {
         return;
       }
-
       _lastDeleteAt = now;
-      // Fire-and-forget - no tracking needed, throttling handles the load
-      unawaited(_deletePool?.start());
+
+      // Stop-before-play: prevents sound accumulation
+      await _deletePlayer!.seek(Duration.zero);
+      await _deletePlayer!.resume();
     } on Object catch (e, st) {
       developer.log('playDelete failed', error: e, stackTrace: st);
     }
@@ -129,26 +124,35 @@ class GameAudioService implements AudioService {
   @override
   Future<void> playSuccess() async {
     try {
-      if (!_initialized) {
+      if (!_initialized || _successPlayer == null) {
         return;
       }
-      await FlameAudio.play('success.wav');
+      await _successPlayer!.seek(Duration.zero);
+      await _successPlayer!.resume();
     } on Object catch (e, st) {
       developer.log('playSuccess failed', error: e, stackTrace: st);
     }
-    return;
   }
 
   @override
   Future<void> playVictory() async {
     try {
-      if (!_initialized) {
+      if (!_initialized || _victoryPlayer == null) {
         return;
       }
-      await FlameAudio.play('victory.wav');
+      await _victoryPlayer!.seek(Duration.zero);
+      await _victoryPlayer!.resume();
     } on Object catch (e, st) {
       developer.log('playVictory failed', error: e, stackTrace: st);
     }
-    return;
+  }
+
+  /// Dispose all players when the service is no longer needed.
+  @override
+  Future<void> dispose() async {
+    await _typePlayer?.dispose();
+    await _deletePlayer?.dispose();
+    await _successPlayer?.dispose();
+    await _victoryPlayer?.dispose();
   }
 }
