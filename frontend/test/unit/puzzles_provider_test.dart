@@ -60,18 +60,15 @@ void main() {
       tester,
     ) async {
       // Mock assets for this test to avoid relying on full bundle.
+      // originIndexProvider reads from the main puzzles_index.json
       tester.binding.defaultBinaryMessenger.setMockMessageHandler(
         'flutter/assets',
         (message) async {
           final key = const StringCodec().decodeMessage(message);
-          if (key == 'assets/data/puzzles_index_by_origin/crossynergy.json') {
-            const json =
-                '[{"id":"cs2000-04-12","title":"Apr 12, 2000","subtitle":"","path":"crossynergy/2000/cs2000-04-12.json","origin":"crossynergy","year":"2000"}]';
-            final bytes = Uint8List.fromList(json.codeUnits);
-            return ByteData.view(bytes.buffer);
-          }
-          if (key == 'assets/data/puzzles_index_origins.json') {
-            const json = '["crossynergy"]';
+          if (key == 'assets/data/puzzles_index.json') {
+            const json = '''
+{"items":[{"id":"cs2000-04-12","title":"Apr 12, 2000","subtitle":"","path":"crossynergy/2000/cs2000-04-12.json","origin":"crossynergy","year":"2000"}],"origins":["crossynergy"]}
+''';
             final bytes = Uint8List.fromList(json.codeUnits);
             return ByteData.view(bytes.buffer);
           }

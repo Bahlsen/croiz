@@ -14,8 +14,7 @@ import 'package:croiz/services/audio_service.dart';
 class GameAudioService implements AudioService {
   GameAudioService() {
     // fire-and-forget initialization
-    // ignore: unawaited_futures
-    _init();
+    unawaited(_init());
   }
 
   AudioPlayer? _typePlayer;
@@ -102,10 +101,17 @@ class GameAudioService implements AudioService {
   @override
   Future<void> playType() async {
     try {
+      // Wait for initialization on first call to avoid silent skips
+      if (!_initialized) {
+        await ready;
+      }
       if (!_initialized || _typePlayer == null) {
+        developer.log(
+          'playType skipped: initialized=$_initialized, player=${_typePlayer != null}',
+          name: 'GameAudioService',
+        );
         return;
       }
-
       // Throttle to prevent excessive calls
       final now = DateTime.now();
       if (_lastTypeAt != null &&
@@ -125,7 +131,15 @@ class GameAudioService implements AudioService {
   @override
   Future<void> playDelete() async {
     try {
+      // Wait for initialization on first call to avoid silent skips
+      if (!_initialized) {
+        await ready;
+      }
       if (!_initialized || _deletePlayer == null) {
+        developer.log(
+          'playDelete skipped: initialized=$_initialized, player=${_deletePlayer != null}',
+          name: 'GameAudioService',
+        );
         return;
       }
 
@@ -150,6 +164,7 @@ class GameAudioService implements AudioService {
       if (!_initialized || _successPlayer == null) {
         return;
       }
+
       unawaited(_playSound(_successPlayer!));
     } on Object catch (e, st) {
       developer.log('playSuccess failed', error: e, stackTrace: st);
@@ -162,6 +177,7 @@ class GameAudioService implements AudioService {
       if (!_initialized || _victoryPlayer == null) {
         return;
       }
+
       unawaited(_playSound(_victoryPlayer!));
     } on Object catch (e, st) {
       developer.log('playVictory failed', error: e, stackTrace: st);
