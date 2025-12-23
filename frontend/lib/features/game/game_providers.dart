@@ -135,7 +135,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           }
         } on Object catch (e, stack) {
           // Log and continue on errors from detection.
-          debugPrint('Error updating found/locked words: $e\n$stack');
+          if (kDebugMode) {
+            debugPrint('Error updating found/locked words: $e\n$stack');
+          }
         }
       }
     }

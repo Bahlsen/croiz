@@ -22,26 +22,38 @@ class CrosswordIconBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          IconButton(
-            key: const Key('clear_button'),
-            onPressed: () {
-              try {
-                onClear();
-              } on Object catch (e, st) {
-                if (kDebugMode) {
-                  // Keep error logging local to this control
-                  // so tests don't fail on unexpected exceptions.
-                  // The parent is responsible for passing a safe callback.
-                  // ignore: avoid_print
-                  debugPrint('clearIncorrectLetters failed: $e\n$st');
+          Semantics(
+            label: 'Clear incorrect letters',
+            button: true,
+            child: IconButton(
+              key: const Key('clear_button'),
+              tooltip: 'Clear errors',
+              onPressed: () {
+                try {
+                  onClear();
+                } on Object catch (e, st) {
+                  if (kDebugMode) {
+                    // Keep error logging local to this control
+                    // so tests don't fail on unexpected exceptions.
+                    // The parent is responsible for passing a safe callback.
+                    // ignore: avoid_print
+                    debugPrint('clearIncorrectLetters failed: $e\\n$st');
+                  }
                 }
-              }
-            },
-            icon: const Icon(Icons.cleaning_services_outlined),
+              },
+              icon: const Icon(Icons.cleaning_services_outlined),
+            ),
           ),
-          IconButton(
-            onPressed: onToggle,
-            icon: Icon(isAzerty ? Icons.keyboard : Icons.keyboard_alt_outlined),
+          Semantics(
+            label: isAzerty
+                ? 'Switch to QWERTY keyboard'
+                : 'Switch to AZERTY keyboard',
+            button: true,
+            child: IconButton(
+              tooltip: isAzerty ? 'QWERTY' : 'AZERTY',
+              onPressed: onToggle,
+              icon: Icon(isAzerty ? Icons.keyboard : Icons.keyboard_alt_outlined),
+            ),
           ),
         ],
       ),

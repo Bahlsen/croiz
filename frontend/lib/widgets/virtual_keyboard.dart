@@ -480,26 +480,30 @@ class _BackspaceKeyState extends State<_BackspaceKey> {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-      onTap: _trigger,
-      onLongPressStart: (_) => _startRepeat(),
-      onLongPress: _startRepeat,
-      onLongPressEnd: (_) => _stopRepeat(),
-      onLongPressCancel: _stopRepeat,
-      child: SizedBox(
-        height: widget.height,
-        child: FilledButton(
-          onPressed: _trigger,
-          style: FilledButton.styleFrom(
-            backgroundColor:
-                widget.keyColor ??
-                Theme.of(
-                  context,
-                ).colorScheme.surfaceContainerHighest.withAlpha(97), // 0.38 * 255
-            shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
-            padding: EdgeInsets.zero,
+  Widget build(BuildContext context) => Semantics(
+      label: 'Delete',
+      button: true,
+      child: GestureDetector(
+        onTap: _trigger,
+        onLongPressStart: (_) => _startRepeat(),
+        onLongPress: _startRepeat,
+        onLongPressEnd: (_) => _stopRepeat(),
+        onLongPressCancel: _stopRepeat,
+        child: SizedBox(
+          height: widget.height,
+          child: FilledButton(
+            onPressed: _trigger,
+            style: FilledButton.styleFrom(
+              backgroundColor:
+                  widget.keyColor ??
+                  Theme.of(
+                    context,
+                  ).colorScheme.surfaceContainerHighest.withAlpha(97), // 0.38 * 255
+              shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
+              padding: EdgeInsets.zero,
+            ),
+            child: const Icon(Icons.backspace_outlined),
           ),
-          child: const Icon(Icons.backspace_outlined),
         ),
       ),
     );

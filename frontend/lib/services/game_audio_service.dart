@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:croiz/services/audio_service.dart';
 
 /// GameAudioService using FlameAudio and AudioPool for low-latency SFX.
 ///
@@ -10,7 +11,7 @@ import 'package:flutter/services.dart' show rootBundle;
 /// 2. Throttle at 60ms minimum interval (~16 sounds/sec max)
 /// 3. Track in-flight sounds to prevent backlog accumulation
 /// 4. Drop sounds when pool is busy rather than queuing
-class GameAudioService {
+class GameAudioService implements AudioService {
   GameAudioService() {
     // fire-and-forget initialization
     // ignore: unawaited_futures
@@ -36,6 +37,7 @@ class GameAudioService {
   static const _maxDeleteInFlight = 1; // Leave 1 player as buffer
 
   /// Future that completes when initialization is finished (success or failure).
+  @override
   Future<void> get ready => _ready.future;
 
   Future<void> _init() async {
@@ -85,6 +87,7 @@ class GameAudioService {
     }
   }
 
+  @override
   Future<void> playType() async {
     try {
       if (!_initialized) {
@@ -137,6 +140,7 @@ class GameAudioService {
     return;
   }
 
+  @override
   Future<void> playDelete() async {
     try {
       if (!_initialized) {
@@ -191,6 +195,7 @@ class GameAudioService {
     return;
   }
 
+  @override
   Future<void> playSuccess() async {
     try {
       if (!_initialized) {
@@ -203,6 +208,7 @@ class GameAudioService {
     return;
   }
 
+  @override
   Future<void> playVictory() async {
     try {
       if (!_initialized) {

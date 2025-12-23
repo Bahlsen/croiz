@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,9 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
     try {
       ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
     } on Object catch (e, st) {
-      debugPrint('clearIncorrectLetters failed: $e\n$st');
+      if (kDebugMode) {
+        debugPrint('clearIncorrectLetters failed: $e\n$st');
+      }
     }
   }
 

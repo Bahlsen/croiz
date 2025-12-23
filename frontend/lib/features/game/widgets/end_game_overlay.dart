@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
@@ -16,7 +17,9 @@ class EndGameOverlay extends ConsumerWidget {
       board = ref.watch(gameBoardProvider);
       found = ref.watch(foundWordsProvider);
     } on Object catch (e, st) {
-      debugPrint('EndGameOverlay provider read failed: $e\n$st');
+      if (kDebugMode) {
+        debugPrint('EndGameOverlay provider read failed: $e\n$st');
+      }
       return const SizedBox.shrink();
     }
 

@@ -43,7 +43,9 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
             ref.read(selectedPuzzleIdProvider.notifier).value = decoded;
           }
         } on Object catch (e, st) {
-          debugPrint('Failed to set selected puzzle id: $e\n$st');
+          if (kDebugMode) {
+            debugPrint('Failed to set selected puzzle id: $e\n$st');
+          }
         }
       });
     }
@@ -187,13 +189,17 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         try {
           _controller.tryAutoSelectFirstAcross(next);
         } on Object catch (e, st) {
-          debugPrint('Error auto-selecting first across: $e\n$st');
+          if (kDebugMode) {
+            debugPrint('Error auto-selecting first across: $e\n$st');
+          }
         }
 
         try {
           ref.read(gameTimerProvider(next.id)).start();
         } on Object catch (e, st) {
-          debugPrint('Error starting game timer: $e\n$st');
+          if (kDebugMode) {
+            debugPrint('Error starting game timer: $e\n$st');
+          }
         }
       });
 
@@ -207,13 +213,17 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
           final current = ref.read(gameBoardProvider);
           _controller.tryAutoSelectFirstAcross(current);
         } on Object catch (e, st) {
-          debugPrint('Error auto-selecting first across (initial): $e\n$st');
+          if (kDebugMode) {
+            debugPrint('Error auto-selecting first across (initial): $e\n$st');
+          }
         }
         try {
           final current = ref.read(gameBoardProvider);
           ref.read(gameTimerProvider(current.id)).start();
         } on Object catch (e, st) {
-          debugPrint('Error starting game timer (initial): $e\n$st');
+          if (kDebugMode) {
+            debugPrint('Error starting game timer (initial): $e\n$st');
+          }
         }
       });
     }

@@ -151,32 +151,46 @@ class CrosswordCell extends ConsumerWidget {
       isSelected: isSelected,
     );
 
-    return GestureDetector(
-      onTap: () {
-        final wasSelected = isSelected;
-        // Preserve the current word direction when selecting a different cell.
-        // Only toggle direction when the user taps the already-selected cell.
-        ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
-        if (wasSelected) {
-          // wordDirection is non-null when isSelected is true
-          final currentDir = wordDirection!;
-          final newDir = currentDir == WordDirection.horizontal
-              ? WordDirection.vertical
-              : WordDirection.horizontal;
-          ref.read(wordDirectionProvider.notifier).value = newDir;
-        }
-      },
-      // Performance: only use AnimatedContainer when animation is needed.
-      // Plain Container is much cheaper for cells that don't need animation.
-      // Animation duration reduced to 100ms for faster perceived response.
-      child: shouldAnimate
-          ? AnimatedContainer(
-              duration: const Duration(milliseconds: 100),
-              curve: Curves.easeOutCubic,
-              decoration: decoration,
-              child: content,
-            )
-          : Container(decoration: decoration, child: content),
+    // Accessibility: semantic label for screen readers
+    final semanticLabel = _buildSemanticLabel(
+      row: row,
+      col: col,
+      letter: letter,
+      cellNumber: cellNumber,
+      isSelected: isSelected,
+    );
+
+    return Semantics(
+      label: semanticLabel,
+      button: true,
+      selected: isSelected,
+      child: GestureDetector(
+        onTap: () {
+          final wasSelected = isSelected;
+          // Preserve the current word direction when selecting a different cell.
+          // Only toggle direction when the user taps the already-selected cell.
+          ref.read(selectedCellProvider.notifier).value = SelectedCell(row, col);
+          if (wasSelected) {
+            // wordDirection is non-null when isSelected is true
+            final currentDir = wordDirection!;
+            final newDir = currentDir == WordDirection.horizontal
+                ? WordDirection.vertical
+                : WordDirection.horizontal;
+            ref.read(wordDirectionProvider.notifier).value = newDir;
+          }
+        },
+        // Performance: only use AnimatedContainer when animation is needed.
+        // Plain Container is much cheaper for cells that don't need animation.
+        // Animation duration reduced to 100ms for faster perceived response.
+        child: shouldAnimate
+            ? AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeOutCubic,
+                decoration: decoration,
+                child: content,
+              )
+            : Container(decoration: decoration, child: content),
+      ),
     );
   }
 }
@@ -232,4 +246,28 @@ class _CellContent extends StatelessWidget {
       ),
     ],
   );
+}
+
+/// Builds an accessibility label for screen readers.
+String _buildSemanticLabel({
+  required int row,
+  required int col,
+  required String? letter,
+  required int? cellNumber,
+  required bool isSelected,
+}) {
+  final buffer = StringBuffer()
+    ..write('Cell row ${row + 1}, column ${col + 1}');
+  if (cellNumber != null) {
+    buffer.write(', number $cellNumber');
+  }
+  if (letter != null && letter.isNotEmpty) {
+    buffer.write(', letter $letter');
+  } else {
+    buffer.write(', empty');
+  }
+  if (isSelected) {
+    buffer.write(', selected');
+  }
+  return buffer.toString();
 }
