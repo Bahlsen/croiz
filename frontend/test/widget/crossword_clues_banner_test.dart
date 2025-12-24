@@ -1,5 +1,5 @@
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

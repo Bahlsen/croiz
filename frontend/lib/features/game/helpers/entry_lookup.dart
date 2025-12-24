@@ -1,6 +1,6 @@
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/board_helpers.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 
 class EntryContext {
   const EntryContext({

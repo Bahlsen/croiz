@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'virtual_keyboard.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 
 /// In-game text input that uses the in-app [VirtualKeyboard]

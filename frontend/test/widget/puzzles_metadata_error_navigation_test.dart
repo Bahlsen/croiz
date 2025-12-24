@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 

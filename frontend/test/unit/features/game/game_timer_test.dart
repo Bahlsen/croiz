@@ -1,7 +1,7 @@
 // ignore_for_file: always_put_required_named_parameters_first,always_put_control_body_on_new_line,prefer_expression_function_bodies,unnecessary_lambdas
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/game_timer_provider.dart';
+import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/services/providers.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

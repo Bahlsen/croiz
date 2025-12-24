@@ -1,6 +1,6 @@
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

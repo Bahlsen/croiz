@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
-import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/crossword_body.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/screens/crossword_body.dart';
 
 class CrosswordScreen extends ConsumerStatefulWidget {
   final String? puzzleId;

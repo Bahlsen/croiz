@@ -1,9 +1,9 @@
 import 'dart:developer' as developer;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/game_timer_provider.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/providers/game_timer_provider.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/controllers/crossword_navigation.dart';
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/features/game/controllers/word_completion_checker.dart';

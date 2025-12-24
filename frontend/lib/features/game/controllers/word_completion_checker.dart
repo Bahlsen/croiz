@@ -4,8 +4,8 @@ import 'dart:developer' as developer;
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
-import 'package:croiz/features/game/game_timer_provider.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_timer_provider.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

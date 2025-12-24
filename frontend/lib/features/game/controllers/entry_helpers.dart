@@ -1,5 +1,5 @@
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 
 /// Finds the entry containing [row], [col] in the given direction.
 /// Uses [index] for fast lookup, falling back to linear search.

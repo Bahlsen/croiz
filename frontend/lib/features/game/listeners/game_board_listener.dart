@@ -3,9 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
-import 'package:croiz/features/game/game_timer_provider.dart';
+import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 
 class GameBoardListener extends ConsumerStatefulWidget {
   const GameBoardListener({

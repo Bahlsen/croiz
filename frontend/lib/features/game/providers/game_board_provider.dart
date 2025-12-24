@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 import 'package:croiz/services/providers.dart';
 

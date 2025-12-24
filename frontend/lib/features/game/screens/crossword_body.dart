@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
-import 'package:croiz/features/game/game_timer_provider.dart';
+import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/game_providers.dart';
-import 'crossword_app_bar.dart';
-import 'crossword_loader.dart';
-import 'crossword_content.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/widgets/app_bar/crossword_app_bar.dart';
+import 'package:croiz/features/game/widgets/loader/crossword_loader.dart';
+import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 
 class CrosswordBody extends ConsumerStatefulWidget {
   final CrosswordInputController controller;

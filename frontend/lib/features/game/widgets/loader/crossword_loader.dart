@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'crossword_app_bar.dart';
+import 'package:croiz/features/game/widgets/app_bar/crossword_app_bar.dart';
 
 class CrosswordLoadingScaffold extends StatelessWidget {
   const CrosswordLoadingScaffold({Key? key}) : super(key: key);

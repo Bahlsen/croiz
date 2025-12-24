@@ -9,7 +9,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 /// Integration-style widget test that reproduces the selection flow and

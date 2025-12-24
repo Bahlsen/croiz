@@ -6,7 +6,7 @@ import 'dart:math' as math;
 import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 

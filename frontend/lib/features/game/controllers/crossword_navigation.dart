@@ -1,5 +1,5 @@
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 
 /// Returns the next editable cell in the given direction, skipping locked cells.
 List<int>? nextEditableCell(

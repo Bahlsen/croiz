@@ -1,7 +1,7 @@
 // ignore_for_file: cascade_invocations, avoid_single_cascade_in_expression_statements
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 
 void main() {
   group('BoardHelpers', () {

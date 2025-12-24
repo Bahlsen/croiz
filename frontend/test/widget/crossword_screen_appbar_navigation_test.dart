@@ -1,4 +1,4 @@
-import 'package:croiz/features/game/crossword_screen.dart';
+import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
-import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 
 void main() {
   group('PuzzlesListPage', () {

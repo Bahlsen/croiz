@@ -1,19 +1,19 @@
 // This file re-exports all game providers from the modular structure.
-// Backward compatibility layer - prefer importing from providers/ directly.
+// Prefer importing from providers/ directly.
 
-export 'providers/game_state_providers.dart';
-export 'providers/puzzle_loader_provider.dart';
-export 'providers/game_board_provider.dart';
-export 'providers/cell_providers.dart';
+export 'game_state_providers.dart';
+export 'puzzle_loader_provider.dart';
+export 'game_board_provider.dart';
+export 'cell_providers.dart';
 
 // Additional providers that haven't been modularized yet
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'board_helpers.dart';
+import '../helpers/board_helpers.dart';
 
 // Re-import for local use
-import 'providers/game_state_providers.dart';
-import 'providers/game_board_provider.dart';
+import 'game_state_providers.dart';
+import 'game_board_provider.dart';
 
 /// Set of cells belonging to the currently selected word.
 /// Optimized: only depends on selection, direction, and blackCells structure.

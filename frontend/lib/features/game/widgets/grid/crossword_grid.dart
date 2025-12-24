@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/game_providers.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 // clue_numbering is used by `CrosswordCell` instead; avoid direct import here.
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
 

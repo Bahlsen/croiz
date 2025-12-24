@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:croiz/features/game/board_helpers.dart';
+import 'package:croiz/features/game/helpers/board_helpers.dart';
 
 void main() {
   test('wordBounds horizontal and vertical', () {
