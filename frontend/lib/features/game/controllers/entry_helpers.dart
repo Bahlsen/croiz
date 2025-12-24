@@ -96,7 +96,8 @@ SelectedCell? findNextEmptyFromEntry({
   }
 
   // Use pre-sorted lists if provided, otherwise sort (fallback)
-  final sameDir = sortedSameDir ??
+  final sameDir =
+      sortedSameDir ??
       (entries
           .where(
             (e) =>
@@ -137,7 +138,8 @@ SelectedCell? findNextEmptyFromEntry({
   }
 
   // Try entries in opposite direction
-  final otherDir = sortedOtherDir ??
+  final otherDir =
+      sortedOtherDir ??
       (entries
           .where(
             (e) =>

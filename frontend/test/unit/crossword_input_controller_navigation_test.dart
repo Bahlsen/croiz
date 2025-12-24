@@ -293,7 +293,9 @@ void main() {
       );
 
       // Type the last letter of word #1
-      CrosswordInputController.fromContainer(container).setLetterAndAdvance('C');
+      CrosswordInputController.fromContainer(
+        container,
+      ).setLetterAndAdvance('C');
 
       final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);

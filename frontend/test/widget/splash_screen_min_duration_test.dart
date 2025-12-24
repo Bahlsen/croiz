@@ -26,16 +26,24 @@ class _ImmediateAudioService implements AudioService {
 }
 
 void main() {
-  testWidgets('Splash waits at least animation duration before finishing',
-      (WidgetTester tester) async {
+  testWidgets('Splash waits at least animation duration before finishing', (
+    WidgetTester tester,
+  ) async {
     var initialized = false;
 
     await tester.pumpWidget(
-      ProviderScope(overrides: [
-        gameAudioServiceProvider.overrideWithValue(_ImmediateAudioService()),
-      ], child: MaterialApp(home: SplashScreen(onInitialized: () {
-        initialized = true;
-      }))),
+      ProviderScope(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(_ImmediateAudioService()),
+        ],
+        child: MaterialApp(
+          home: SplashScreen(
+            onInitialized: () {
+              initialized = true;
+            },
+          ),
+        ),
+      ),
     );
 
     // initial pump starts animation; onInitialized should NOT be called immediately

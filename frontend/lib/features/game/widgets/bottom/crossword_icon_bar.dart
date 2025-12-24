@@ -6,11 +6,13 @@ class CrosswordIconBar extends StatelessWidget {
     required this.onClear,
     required this.onToggle,
     required this.isAzerty,
+    required this.onMenu,
     Key? key,
   }) : super(key: key);
 
   final VoidCallback onClear;
   final VoidCallback onToggle;
+  final VoidCallback onMenu;
   final bool isAzerty;
 
   @override
@@ -22,6 +24,18 @@ class CrosswordIconBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          // Menu icon (far left)
+          Semantics(
+            label: 'Menu',
+            button: true,
+            child: IconButton(
+              key: const Key('menu_button'),
+              tooltip: 'Menu',
+              onPressed: onMenu,
+              icon: const Icon(Icons.menu),
+            ),
+          ),
+          const Spacer(),
           Semantics(
             label: 'Clear incorrect letters',
             button: true,
@@ -33,11 +47,7 @@ class CrosswordIconBar extends StatelessWidget {
                   onClear();
                 } on Object catch (e, st) {
                   if (kDebugMode) {
-                    // Keep error logging local to this control
-                    // so tests don't fail on unexpected exceptions.
-                    // The parent is responsible for passing a safe callback.
-                    // ignore: avoid_print
-                    debugPrint('clearIncorrectLetters failed: $e\\n$st');
+                    debugPrint('clearIncorrectLetters failed: $e\n$st');
                   }
                 }
               },

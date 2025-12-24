@@ -93,7 +93,7 @@ class CrosswordInputController {
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
 
-      if (selected == null) {
+    if (selected == null) {
       final first = firstSelectable(board.blackCells);
       if (first == null) {
         return;
@@ -326,26 +326,40 @@ class CrosswordInputController {
       if (containing != null) {
         // Search within containing entry after the current position
         if (isAcross) {
-          for (var cc = startCol + 1; cc < containing.x + containing.length; cc++) {
+          for (
+            var cc = startCol + 1;
+            cc < containing.x + containing.length;
+            cc++
+          ) {
             final key = CellKey(containing.y, cc);
             if (lockedCells.contains(key)) {
               continue;
             }
             final val = board.grid[containing.y][cc];
             if (val == null || val.isEmpty) {
-              _read(selectedCellProvider.notifier).state = SelectedCell(containing.y, cc);
+              _read(selectedCellProvider.notifier).state = SelectedCell(
+                containing.y,
+                cc,
+              );
               return;
             }
           }
         } else {
-          for (var rr = startRow + 1; rr < containing.y + containing.length; rr++) {
+          for (
+            var rr = startRow + 1;
+            rr < containing.y + containing.length;
+            rr++
+          ) {
             final key = CellKey(rr, containing.x);
             if (lockedCells.contains(key)) {
               continue;
             }
             final val = board.grid[rr][containing.x];
             if (val == null || val.isEmpty) {
-              _read(selectedCellProvider.notifier).state = SelectedCell(rr, containing.x);
+              _read(selectedCellProvider.notifier).state = SelectedCell(
+                rr,
+                containing.x,
+              );
               return;
             }
           }
@@ -372,10 +386,11 @@ class CrosswordInputController {
           final list = idxList?[CellKey(nextEmpty.row, nextEmpty.col)];
           if (list != null && list.isNotEmpty) {
             final e = list.first;
-            _read(wordDirectionProvider.notifier).state =
-                e.directionEnum == EntryDirection.across
-                    ? WordDirection.horizontal
-                    : WordDirection.vertical;
+            _read(
+              wordDirectionProvider.notifier,
+            ).state = e.directionEnum == EntryDirection.across
+                ? WordDirection.horizontal
+                : WordDirection.vertical;
           }
           return;
         }
@@ -394,7 +409,10 @@ class CrosswordInputController {
       wrap: true,
     );
     if (next != null) {
-      _read(selectedCellProvider.notifier).state = SelectedCell(next[0], next[1]);
+      _read(selectedCellProvider.notifier).state = SelectedCell(
+        next[0],
+        next[1],
+      );
     }
   }
 

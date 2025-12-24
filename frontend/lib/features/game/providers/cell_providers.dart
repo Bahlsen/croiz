@@ -34,9 +34,7 @@ final sortedAcrossEntriesProvider = Provider<List<PuzzleEntryData>>((ref) {
   if (entries == null || entries.isEmpty) {
     return const [];
   }
-  return entries
-      .where((e) => e.directionEnum == EntryDirection.across)
-      .toList()
+  return entries.where((e) => e.directionEnum == EntryDirection.across).toList()
     ..sort((a, b) => a.number.compareTo(b.number));
 });
 
@@ -47,9 +45,7 @@ final sortedDownEntriesProvider = Provider<List<PuzzleEntryData>>((ref) {
   if (entries == null || entries.isEmpty) {
     return const [];
   }
-  return entries
-      .where((e) => e.directionEnum == EntryDirection.down)
-      .toList()
+  return entries.where((e) => e.directionEnum == EntryDirection.down).toList()
     ..sort((a, b) => a.number.compareTo(b.number));
 });
 

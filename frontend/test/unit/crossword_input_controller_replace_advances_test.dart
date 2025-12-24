@@ -44,17 +44,22 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntry)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntry)),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Pre-fill cell (0,1)
     container.read(gameBoardProvider.notifier).setLetter(0, 1, 'X');
 
     // Select the filled cell (0,1)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 1);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      1,
+    );
 
     // Replace with new letter
     CrosswordInputController.fromContainer(container).setLetterAndAdvance('A');

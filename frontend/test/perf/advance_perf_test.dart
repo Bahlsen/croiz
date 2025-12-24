@@ -37,22 +37,26 @@ void main() {
       final entries = <PuzzleEntryData>[];
       var entryNum = 1;
       for (var row = 0; row < size; row += 2) {
-        entries.add(PuzzleEntryData(
-          number: entryNum++,
-          direction: 'across',
-          x: 0,
-          y: row,
-          length: size,
-        ));
+        entries.add(
+          PuzzleEntryData(
+            number: entryNum++,
+            direction: 'across',
+            x: 0,
+            y: row,
+            length: size,
+          ),
+        );
       }
       for (var col = 0; col < size; col += 2) {
-        entries.add(PuzzleEntryData(
-          number: entryNum++,
-          direction: 'down',
-          x: col,
-          y: 0,
-          length: size,
-        ));
+        entries.add(
+          PuzzleEntryData(
+            number: entryNum++,
+            direction: 'down',
+            x: col,
+            y: 0,
+            length: size,
+          ),
+        );
       }
 
       final board = GameBoard(
@@ -96,22 +100,26 @@ void main() {
       final entries = <PuzzleEntryData>[];
       var entryNum = 1;
       for (var row = 0; row < size; row += 2) {
-        entries.add(PuzzleEntryData(
-          number: entryNum++,
-          direction: 'across',
-          x: 0,
-          y: row,
-          length: size,
-        ));
+        entries.add(
+          PuzzleEntryData(
+            number: entryNum++,
+            direction: 'across',
+            x: 0,
+            y: row,
+            length: size,
+          ),
+        );
       }
       for (var col = 0; col < size; col += 2) {
-        entries.add(PuzzleEntryData(
-          number: entryNum++,
-          direction: 'down',
-          x: col,
-          y: 0,
-          length: size,
-        ));
+        entries.add(
+          PuzzleEntryData(
+            number: entryNum++,
+            direction: 'down',
+            x: col,
+            y: 0,
+            length: size,
+          ),
+        );
       }
 
       final board = GameBoard(
@@ -136,8 +144,10 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      container.read(selectedCellProvider.notifier).state =
-          const SelectedCell(0, 0);
+      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+        0,
+        0,
+      );
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -152,7 +162,9 @@ void main() {
       final avgMicros = sw.elapsedMicroseconds / iterations;
       final avgMs = avgMicros / 1000;
       // ignore: avoid_print
-      print('setLetterAndAdvance (large grid) avg: ${avgMicros.toStringAsFixed(2)}µs (${avgMs.toStringAsFixed(3)}ms)');
+      print(
+        'setLetterAndAdvance (large grid) avg: ${avgMicros.toStringAsFixed(2)}µs (${avgMs.toStringAsFixed(3)}ms)',
+      );
       expect(avgMs, lessThan(5)); // Should be < 5ms
     });
   });

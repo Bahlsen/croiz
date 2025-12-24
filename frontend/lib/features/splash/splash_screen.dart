@@ -94,7 +94,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         // progress (`value`) to compute elapsed time so tests that
         // advance time via `tester.pump` remain deterministic.
         final animationDuration = _controller.duration ?? Duration.zero;
-        final elapsedMs = (animationDuration.inMilliseconds * _controller.value).round();
+        final elapsedMs = (animationDuration.inMilliseconds * _controller.value)
+            .round();
         final elapsed = Duration(milliseconds: elapsedMs);
         const buffer = Duration(milliseconds: 300);
         final remaining = animationDuration - elapsed;

@@ -7,6 +7,7 @@ import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 // Simple, robust controls bar: banner, icon row, and keyboard.
 //
@@ -38,6 +39,7 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
 }
 
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
+  bool _showMenu = false;
   bool _isAzerty = true;
 
   @override
@@ -126,56 +128,69 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
           );
         }
 
-        return Column(
-          mainAxisSize: MainAxisSize.max,
+        return Stack(
           children: [
-            // Always include the banner widget in the tree so tests and
-            // consumers can find it. It may have zero height in extremely
-            // tight constraints, but should remain present.
-            SizedBox(
-              height: bannerHeight,
-              child: const CrosswordClueBanner(key: ValueKey('clue-banner')),
-            ),
-            if (bannerHeight > 0) const SizedBox(height: gap),
-
-            SizedBox(
-              height: controlsH,
-              child: CrosswordIconBar(
-                isAzerty: _isAzerty,
-                onClear: () {
-                  try {
-                    ref
-                        .read(gameBoardProvider.notifier)
-                        .clearIncorrectLetters();
-                  } on Object catch (e, st) {
-                    if (kDebugMode) {
-                      developer.log(
-                        'clearIncorrectLetters failed: $e',
-                        stackTrace: st,
-                      );
-                    }
-                  }
-                },
-                onToggle: () {
-                  setState(() {
-                    _isAzerty = !_isAzerty;
-                  });
-                },
-              ),
-            ),
-
-            if (keyboardHeight > 0)
-              SizedBox(
-                height: keyboardHeight,
-                child: VirtualKeyboard(
-                  layout: layout,
-                  onKey: widget.onKey,
-                  onBackspace: widget.onBackspace,
-                  availableHeight: keyboardHeight,
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                // Always include the banner widget in the tree so tests and
+                // consumers can find it. It may have zero height in extremely
+                // tight constraints, but should remain present.
+                SizedBox(
+                  height: bannerHeight,
+                  child: const CrosswordClueBanner(
+                    key: ValueKey('clue-banner'),
+                  ),
                 ),
-              )
-            else
-              const SizedBox.shrink(),
+                if (bannerHeight > 0) const SizedBox(height: gap),
+                SizedBox(
+                  height: controlsH,
+                  child: CrosswordIconBar(
+                    isAzerty: _isAzerty,
+                    onClear: () {
+                      try {
+                        ref
+                            .read(gameBoardProvider.notifier)
+                            .clearIncorrectLetters();
+                      } on Object catch (e, st) {
+                        if (kDebugMode) {
+                          developer.log(
+                            'clearIncorrectLetters failed: $e',
+                            stackTrace: st,
+                          );
+                        }
+                      }
+                    },
+                    onToggle: () {
+                      setState(() {
+                        _isAzerty = !_isAzerty;
+                      });
+                    },
+                    onMenu: () {
+                      setState(() {
+                        _showMenu = true;
+                      });
+                    },
+                  ),
+                ),
+                if (keyboardHeight > 0)
+                  SizedBox(
+                    height: keyboardHeight,
+                    child: VirtualKeyboard(
+                      layout: layout,
+                      onKey: widget.onKey,
+                      onBackspace: widget.onBackspace,
+                      availableHeight: keyboardHeight,
+                    ),
+                  )
+                else
+                  const SizedBox.shrink(),
+              ],
+            ),
+            if (_showMenu)
+              CrosswordControlsMenu(
+                onClose: () => setState(() => _showMenu = false),
+              ),
           ],
         );
       },

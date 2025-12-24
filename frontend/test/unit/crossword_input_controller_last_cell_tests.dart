@@ -27,15 +27,20 @@ void main() {
 
   test('typing on filled cell replaces and advances to next editable', () {
     final board = makeEmptyBoard();
-    final container = ProviderContainer(overrides: [
-      gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Pre-fill (0,0)
     container.read(gameBoardProvider.notifier).setLetter(0, 0, 'X');
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     CrosswordInputController.fromContainer(container).setLetterAndAdvance('A');
 
@@ -49,13 +54,18 @@ void main() {
 
   test('typing on empty cell advances to next editable', () {
     final board = makeEmptyBoard();
-    final container = ProviderContainer(overrides: [
-      gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
     addTearDown(container.dispose);
 
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 0);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      0,
+    );
 
     CrosswordInputController.fromContainer(container).setLetterAndAdvance('A');
 
@@ -85,14 +95,21 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(boardWithEntries)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+        puzzleLoaderProvider.overrideWithValue(
+          AsyncValue.data(boardWithEntries),
+        ),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Select last cell of first word (0,2)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(0, 2);
+    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      0,
+      2,
+    );
 
     final controller = CrosswordInputController.fromContainer(container)
       ..setLetterAndAdvance('A');
