@@ -6,15 +6,15 @@ class CrosswordAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) => AppBar(
-      title: const Text('Crossword'),
-      backgroundColor: Colors.black,
-      elevation: 0,
-      leading: IconButton(
-        tooltip: 'Puzzles',
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () => context.go('/puzzles'),
-      ),
-    );
+    title: const Text('Crossword'),
+    backgroundColor: Colors.black,
+    elevation: 0,
+    leading: IconButton(
+      tooltip: 'Puzzles',
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => context.go('/puzzles'),
+    ),
+  );
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
