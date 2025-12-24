@@ -381,16 +381,37 @@ class CrosswordInputController {
         );
         if (nextEmpty != null) {
           _read(selectedCellProvider.notifier).value = nextEmpty;
-          // If the found empty is in the other direction, switch direction
-          final idxList = _tryReadCellEntriesIndex();
-          final list = idxList?[CellKey(nextEmpty.row, nextEmpty.col)];
-          if (list != null && list.isNotEmpty) {
-            final e = list.first;
-            // Use Notifier API to set direction
-            _read(wordDirectionProvider.notifier).value =
-                (e.directionEnum == EntryDirection.across)
-                    ? WordDirection.horizontal
-                    : WordDirection.vertical;
+          // Prefer keeping the current direction if the found empty belongs
+          // to an entry in the same direction. Only switch if no same-dir
+          // entry exists at that cell.
+          final idxMap = _tryReadCellEntriesIndex();
+          final sameContaining = findContainingEntry(
+            row: nextEmpty.row,
+            col: nextEmpty.col,
+            wantAcross: isAcross,
+            entries: entries,
+            index: idxMap,
+          );
+          if (sameContaining != null) {
+            // keep current direction
+            _read(wordDirectionProvider.notifier).value = dir;
+            return;
+          }
+
+          // No same-direction entry found -> pick the other direction if present
+          final otherContaining = findContainingEntry(
+            row: nextEmpty.row,
+            col: nextEmpty.col,
+            wantAcross: !isAcross,
+            entries: entries,
+            index: idxMap,
+          );
+          if (otherContaining != null) {
+            _read(
+              wordDirectionProvider.notifier,
+            ).value = (otherContaining.directionEnum == EntryDirection.across)
+                ? WordDirection.horizontal
+                : WordDirection.vertical;
           }
           return;
         }
