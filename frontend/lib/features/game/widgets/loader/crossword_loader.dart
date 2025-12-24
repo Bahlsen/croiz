@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:croiz/features/game/widgets/app_bar/crossword_app_bar.dart';
 
 class CrosswordLoadingScaffold extends StatelessWidget {
   const CrosswordLoadingScaffold({Key? key}) : super(key: key);
@@ -7,7 +6,6 @@ class CrosswordLoadingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) => const Scaffold(
     backgroundColor: Colors.black,
-    appBar: CrosswordAppBar(),
     body: SafeArea(
       bottom: true,
       top: false,
@@ -25,7 +23,7 @@ class CrosswordLoadingScaffold extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Chargement du puzzle...',
+              'Loading puzzle...',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -34,7 +32,7 @@ class CrosswordLoadingScaffold extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Patientez un instant',
+              'Please wait',
               style: TextStyle(color: Colors.white70, fontSize: 13),
             ),
           ],
@@ -52,13 +50,12 @@ class CrosswordErrorScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: Colors.black,
-    appBar: const CrosswordAppBar(),
     body: SafeArea(
       bottom: true,
       top: false,
       child: Center(
         child: Text(
-          'Erreur au chargement du puzzle id="$selectedId"',
+          'Error loading puzzle id="$selectedId"',
           style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),

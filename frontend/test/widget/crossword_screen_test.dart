@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
+import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +47,8 @@ void main() {
     // Verify the screen builds without errors
     expect(find.byType(CrosswordScreen), findsOneWidget);
 
-    // Verify AppBar title is present
-    expect(find.text('Crossword'), findsOneWidget);
+    // Verify the main grid is present (visual assertion instead of AppBar)
+    expect(find.byType(CrosswordGrid), findsOneWidget);
 
     // Note: The grid will be empty initially since we don't pre-fill solutions by default.
     // The test validates that the widget tree builds successfully with the JSON-loaded puzzle.

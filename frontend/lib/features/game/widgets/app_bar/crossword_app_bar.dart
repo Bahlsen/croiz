@@ -9,6 +9,8 @@ class CrosswordAppBar extends StatelessWidget implements PreferredSizeWidget {
     title: const Text('Crossword'),
     backgroundColor: Colors.black,
     elevation: 0,
+    // Reduce toolbar height to reclaim vertical space above the grid
+    toolbarHeight: 40,
     leading: IconButton(
       tooltip: 'Puzzles',
       icon: const Icon(Icons.arrow_back),
@@ -17,5 +19,5 @@ class CrosswordAppBar extends StatelessWidget implements PreferredSizeWidget {
   );
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(40);
 }

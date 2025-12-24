@@ -70,7 +70,8 @@ void main() {
     await tester.tap(find.text('Sample'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Crossword'), findsOneWidget);
+    // Verify we navigated to the crossword screen and grid is visible
+    expect(find.byType(CrosswordScreen), findsOneWidget);
     expect(find.text('A'), findsWidgets);
   });
 }

@@ -73,10 +73,8 @@ void main() {
     await tester.tap(find.text('Sample'));
     await tester.pumpAndSettle();
 
-    // AppBar title should be present
-    expect(find.text('Crossword'), findsOneWidget);
-
-    // The grid should render the letter from fakeBoard
+    // The crossword screen should be present and render the letter
+    expect(find.byType(CrosswordScreen), findsOneWidget);
     expect(find.text('A'), findsWidgets);
   });
 }

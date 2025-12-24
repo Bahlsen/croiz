@@ -7,7 +7,6 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/features/game/widgets/app_bar/crossword_app_bar.dart';
 import 'package:croiz/features/game/widgets/loader/crossword_loader.dart';
 import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 
@@ -87,7 +86,6 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: const CrosswordAppBar(),
       body: CrosswordContent(controller: widget.controller),
     );
   }

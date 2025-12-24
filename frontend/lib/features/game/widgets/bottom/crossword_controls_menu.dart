@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:ui' as ui;
 
 class CrosswordControlsMenu extends StatelessWidget {
@@ -90,9 +91,12 @@ class CrosswordControlsMenu extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             children: [
                               ListTile(
-                                leading: const Icon(Icons.info_outline),
-                                title: const Text('About'),
-                                onTap: onClose,
+                                leading: const Icon(Icons.home),
+                                title: const Text('Home'),
+                                onTap: () {
+                                  onClose();
+                                  context.go('/puzzles');
+                                },
                               ),
                               const Divider(),
                               // Keyboard style control moved into the menu
@@ -141,6 +145,12 @@ class CrosswordControlsMenu extends StatelessWidget {
                                 title: const Text('Help'),
                                 onTap: onClose,
                               ),
+                              ListTile(
+                                leading: const Icon(Icons.info_outline),
+                                title: const Text('About'),
+                                onTap: onClose,
+                              ),
+                              const Divider(),
                             ],
                           ),
                         ),

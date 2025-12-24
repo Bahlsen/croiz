@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/routes/app_router.dart';
+import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -75,9 +76,9 @@ void main() {
       await tester.tap(find.text('Sample Puzzle'));
       await tester.pumpAndSettle();
 
-      // Verify navigation occurred to crossword screen.
-      // We expect a CrosswordGrid to be present after navigation.
-      expect(find.text('Crossword'), findsOneWidget);
+      // Verify navigation occurred to crossword screen by checking the
+      // crossword screen widget and that the game board provider loaded.
+      expect(find.byType(CrosswordScreen), findsOneWidget);
 
       // Verify the game board provider loaded our board id.
       final board = container.read(gameBoardProvider);

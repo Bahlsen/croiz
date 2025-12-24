@@ -8,9 +8,6 @@ class CrosswordGridArea extends StatelessWidget {
   Widget build(BuildContext context) => Flexible(
     fit: FlexFit.loose,
     child: Padding(
-      // Minimise top and horizontal spacing here. Keep a very small
-      // horizontal inner padding so the grid doesn't overlap the
-      // controls/banner below on tight layouts.
       padding: EdgeInsets.zero,
       child: Container(
         color: Colors.black,

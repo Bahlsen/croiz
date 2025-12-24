@@ -36,9 +36,13 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.byIcon(Icons.arrow_back), findsOneWidget);
+      // Open the in-screen menu and use the Home action to navigate.
+      expect(find.byKey(const Key('menu_button')), findsOneWidget);
+      await tester.tap(find.byKey(const Key('menu_button')));
+      await tester.pumpAndSettle();
 
-      await tester.tap(find.byIcon(Icons.arrow_back));
+      expect(find.text('Home'), findsOneWidget);
+      await tester.tap(find.text('Home'));
       await tester.pumpAndSettle();
 
       expect(find.text('Puzzles'), findsOneWidget);
