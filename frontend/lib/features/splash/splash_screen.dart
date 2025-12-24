@@ -109,8 +109,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       }
     });
 
+    final scheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -122,12 +124,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               // Logo / App name
-              const Text(
+              Text(
                 'CROIZ',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: scheme.onSurface,
                   letterSpacing: 8,
                 ),
               ),
@@ -136,7 +138,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 'Crossword Puzzles',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white.withAlpha(179),
+                  color: scheme.onSurface.withAlpha((0.7 * 255).round()),
                   letterSpacing: 2,
                 ),
               ),
@@ -144,22 +146,21 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
               // Loading indicator
               initState.when(
-                data: (_) => Icon(
-                  Icons.check_circle,
-                  color: Colors.green.shade400,
-                  size: 32,
-                ),
-                loading: () => const SizedBox(
+                data: (_) =>
+                    Icon(Icons.check_circle, color: scheme.primary, size: 32),
+                loading: () => SizedBox(
                   width: 32,
                   height: 32,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      scheme.onSurface.withAlpha((0.7 * 255).round()),
+                    ),
                   ),
                 ),
                 error: (_, __) => Icon(
                   Icons.warning_amber_rounded,
-                  color: Colors.orange.shade400,
+                  color: scheme.error,
                   size: 32,
                 ),
               ),
@@ -174,7 +175,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
                 style: TextStyle(
                   fontSize: 12,
-                  color: Colors.white.withAlpha(128),
+                  color: scheme.onSurface.withAlpha((0.5 * 255).round()),
                 ),
               ),
             ],

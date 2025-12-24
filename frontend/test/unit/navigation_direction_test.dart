@@ -66,10 +66,7 @@ void main() {
 
     boardNotifier.board = board;
     // Select the last cell of the first vertical word (row 1, col 0)
-    selectedNotifier.value = const SelectedCell(
-      1,
-      0,
-    );
+    selectedNotifier.value = const SelectedCell(1, 0);
     wordDirectionNotifier.value = WordDirection.vertical;
 
     final controller = CrosswordInputController.fromContainer(container);

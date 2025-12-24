@@ -36,7 +36,10 @@ class PuzzleListTile extends ConsumerWidget {
       );
       effectiveSubtitle = 'Loading...';
     } else if (hasError) {
-      effectiveTrailing = const Icon(Icons.error, color: Colors.red);
+      effectiveTrailing = Icon(
+        Icons.error,
+        color: Theme.of(context).colorScheme.error,
+      );
       effectiveSubtitle = 'Error loading metadata';
     }
 

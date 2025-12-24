@@ -2,69 +2,125 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/core/theme.dart';
 
-// Performance: cached static BoxShadows to avoid recreating objects on each build
-const _kDefaultBoxShadow = [
-  BoxShadow(
-    color: Color.fromRGBO(0, 0, 0, 0.5),
-    blurRadius: 2,
-    offset: Offset(0, 1),
-  ),
-];
+// Note: default box shadows are computed from the active theme in
+// `_CrosswordTheme.fromContext` so they can be theme-driven.
 
-const _kSelectedBoxShadow = [
-  BoxShadow(
-    color: Color.fromRGBO(128, 0, 128, 0.32),
-    blurRadius: 10,
-    offset: Offset(0, 2),
-  ),
-  BoxShadow(
-    color: Color.fromRGBO(0, 0, 255, 0.28),
-    blurRadius: 8,
-    offset: Offset(0, 2),
-  ),
-];
+// Colors and borders are provided by theme extension at runtime so the
+// grid follows the active theme (see AppTheme.CrosswordThemeColors).
 
-const _kFlashingBoxShadow = [
-  BoxShadow(
-    color: Color.fromRGBO(105, 240, 174, 0.85),
-    blurRadius: 15,
-    offset: Offset.zero,
-  ),
-];
+// Small helper that centralizes mapping from Theme/extension -> visual
+// primitives used by `CrosswordCell` so the rendering code remains simple.
+class _CrosswordTheme {
+  _CrosswordTheme({
+    required this.defaultBg,
+    required this.selectedWordBg,
+    required this.flashingBg,
+    required this.clearedFlashingBg,
+    required this.defaultBorder,
+    required this.selectedBorder,
+    required this.selectedWordBorder,
+    required this.flashingBorder,
+    required this.clearedFlashingBorder,
+    required this.selectedBoxShadow,
+    required this.flashingBoxShadow,
+    required this.clearedFlashingBoxShadow,
+    required this.defaultBoxShadow,
+  });
 
-const _kClearedFlashingBoxShadow = [
-  BoxShadow(
-    color: Color.fromRGBO(255, 82, 82, 0.9),
-    blurRadius: 16,
-    offset: Offset.zero,
-  ),
-];
+  factory _CrosswordTheme.fromContext(BuildContext context) {
+    final ext =
+        Theme.of(context).extension<CrosswordThemeColors>() ??
+        CrosswordThemeColors.defaults;
 
-// Performance: cached colors and borders
-const _kClearedFlashingBgColor = Color.fromRGBO(255, 82, 82, 0.48);
-const _kFlashingBgColor = Color.fromRGBO(105, 240, 174, 0.48);
-const _kSelectedWordBgColor = Color.fromRGBO(33, 150, 243, 0.42);
-const _kDefaultBgColor = Color(0xFF424242); // Colors.grey[800]
-const _kSelectedBorderColor = Color.fromARGB(255, 110, 32, 124);
-const _kDefaultBorderColor = Color(0xFF616161); // Colors.grey.shade700
+    final defaultBg = ext.defaultBgColor;
+    final selectedWordBg = ext.selectedWordBgColor;
+    final flashingBg = ext.flashingBgColor;
+    final clearedFlashingBg = ext.clearedFlashingBgColor;
 
-// Performance: cached border instances
-const _kClearedFlashingBorder = Border.fromBorderSide(
-  BorderSide(color: Colors.redAccent, width: 3),
-);
-const _kFlashingBorder = Border.fromBorderSide(
-  BorderSide(color: Colors.greenAccent, width: 3),
-);
-const _kSelectedBorder = Border.fromBorderSide(
-  BorderSide(color: _kSelectedBorderColor, width: 2.5),
-);
-const _kSelectedWordBorder = Border.fromBorderSide(
-  BorderSide(color: Colors.blueAccent, width: 2),
-);
-const _kDefaultBorder = Border.fromBorderSide(
-  BorderSide(color: _kDefaultBorderColor, width: 1),
-);
+    final defaultBorder = Border.fromBorderSide(
+      BorderSide(color: ext.defaultBorderColor, width: 1),
+    );
+    final selectedBorder = Border.fromBorderSide(
+      BorderSide(color: ext.selectedBorderColor, width: 2.5),
+    );
+    final selectedWordBorder = Border.fromBorderSide(
+      BorderSide(color: ext.selectedWordBorderColor, width: 2),
+    );
+    final flashingBorder = Border.fromBorderSide(
+      BorderSide(color: ext.flashingBorderColor, width: 3),
+    );
+    final clearedFlashingBorder = Border.fromBorderSide(
+      BorderSide(color: ext.clearedFlashingBorderColor, width: 3),
+    );
+
+    final defaultBoxShadowColor = ext.defaultBoxShadowColor;
+    final defaultBoxShadow = [
+      BoxShadow(
+        color: defaultBoxShadowColor,
+        blurRadius: 2,
+        offset: const Offset(0, 1),
+      ),
+    ];
+    final selectedBoxShadow = [
+      BoxShadow(
+        color: ext.selectedBoxShadowColor1,
+        blurRadius: 10,
+        offset: const Offset(0, 2),
+      ),
+      BoxShadow(
+        color: ext.selectedBoxShadowColor2,
+        blurRadius: 8,
+        offset: const Offset(0, 2),
+      ),
+    ];
+    final flashingBoxShadow = [
+      BoxShadow(
+        color: ext.flashingBoxShadowColor,
+        blurRadius: 15,
+        offset: Offset.zero,
+      ),
+    ];
+    final clearedFlashingBoxShadow = [
+      BoxShadow(
+        color: ext.clearedFlashingBoxShadowColor,
+        blurRadius: 16,
+        offset: Offset.zero,
+      ),
+    ];
+
+    return _CrosswordTheme(
+      defaultBg: defaultBg,
+      selectedWordBg: selectedWordBg,
+      flashingBg: flashingBg,
+      clearedFlashingBg: clearedFlashingBg,
+      defaultBorder: defaultBorder,
+      selectedBorder: selectedBorder,
+      selectedWordBorder: selectedWordBorder,
+      flashingBorder: flashingBorder,
+      clearedFlashingBorder: clearedFlashingBorder,
+      selectedBoxShadow: selectedBoxShadow,
+      flashingBoxShadow: flashingBoxShadow,
+      clearedFlashingBoxShadow: clearedFlashingBoxShadow,
+      defaultBoxShadow: defaultBoxShadow,
+    );
+  }
+
+  final Color defaultBg;
+  final Color selectedWordBg;
+  final Color flashingBg;
+  final Color clearedFlashingBg;
+  final Border defaultBorder;
+  final Border selectedBorder;
+  final Border selectedWordBorder;
+  final Border flashingBorder;
+  final Border clearedFlashingBorder;
+  final List<BoxShadow> selectedBoxShadow;
+  final List<BoxShadow> flashingBoxShadow;
+  final List<BoxShadow> clearedFlashingBoxShadow;
+  final List<BoxShadow> defaultBoxShadow;
+}
 
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
@@ -104,34 +160,34 @@ class CrosswordCell extends ConsumerWidget {
     final letter = ref.watch(cellValueProvider(cellKey));
     final cellNumber = ref.watch(clueNumbersProvider.select((m) => m[cellKey]));
 
-    // Performance: use cached static BoxShadows instead of creating new lists
-    final boxShadow = isClearedFlashing
-        ? _kClearedFlashingBoxShadow
-        : isFlashing
-        ? _kFlashingBoxShadow
-        : isSelected
-        ? _kSelectedBoxShadow
-        : _kDefaultBoxShadow;
+    // Centralized theme mapping
+    final tt = _CrosswordTheme.fromContext(context);
 
-    // Performance: use cached static borders instead of Border.all()
-    final border = isClearedFlashing
-        ? _kClearedFlashingBorder
-        : isFlashing
-        ? _kFlashingBorder
-        : isSelected
-        ? _kSelectedBorder
-        : isPartOfSelectedWord
-        ? _kSelectedWordBorder
-        : _kDefaultBorder;
+    List<BoxShadow> boxShadow;
+    Border border;
+    Color bgColor;
 
-    // Performance: use cached static colors
-    final bgColor = isClearedFlashing
-        ? _kClearedFlashingBgColor
-        : isFlashing
-        ? _kFlashingBgColor
-        : isPartOfSelectedWord
-        ? _kSelectedWordBgColor
-        : _kDefaultBgColor;
+    if (isClearedFlashing) {
+      boxShadow = tt.clearedFlashingBoxShadow;
+      border = tt.clearedFlashingBorder;
+      bgColor = tt.clearedFlashingBg;
+    } else if (isFlashing) {
+      boxShadow = tt.flashingBoxShadow;
+      border = tt.flashingBorder;
+      bgColor = tt.flashingBg;
+    } else if (isSelected) {
+      boxShadow = tt.selectedBoxShadow;
+      border = tt.selectedBorder;
+      bgColor = tt.selectedWordBg; // selection uses a light primary overlay
+    } else if (isPartOfSelectedWord) {
+      boxShadow = tt.defaultBoxShadow;
+      border = tt.selectedWordBorder;
+      bgColor = tt.selectedWordBg;
+    } else {
+      boxShadow = tt.defaultBoxShadow;
+      border = tt.defaultBorder;
+      bgColor = tt.defaultBg;
+    }
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
@@ -195,47 +251,50 @@ class _CellContent extends StatelessWidget {
   final String? letter;
   final bool isSelected;
 
-  // Performance: cached TextStyles to avoid recreation on each build
-  static const _numberTextStyle = TextStyle(
-    fontSize: 7,
-    color: Colors.white38,
-    fontWeight: FontWeight.w400,
-  );
-  static const _letterTextStyle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  );
-  static const _selectedLetterTextStyle = TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-  );
   static const _letterPadding = EdgeInsets.all(2);
 
   @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      if (cellNumber != null)
-        Positioned(
-          left: 1,
-          top: 0,
-          child: Text('$cellNumber', style: _numberTextStyle),
-        ),
-      Center(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Padding(
-            padding: _letterPadding,
-            child: Text(
-              letter ?? '',
-              style: isSelected ? _selectedLetterTextStyle : _letterTextStyle,
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final numberStyle = TextStyle(
+      fontSize: 7,
+      color: scheme.onSurface.withAlpha((0.58 * 255).round()),
+      fontWeight: FontWeight.w400,
+    );
+    final letterStyle = TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      color: scheme.onSurface,
+    );
+    final selectedLetterStyle = TextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+      color: scheme.onSurface,
+    );
+
+    return Stack(
+      children: [
+        if (cellNumber != null)
+          Positioned(
+            left: 1,
+            top: 0,
+            child: Text('$cellNumber', style: numberStyle),
+          ),
+        Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: _letterPadding,
+              child: Text(
+                letter ?? '',
+                style: isSelected ? selectedLetterStyle : letterStyle,
+              ),
             ),
           ),
         ),
-      ),
-    ],
-  );
+      ],
+    );
+  }
 }
 
 /// Builds an accessibility label for screen readers.

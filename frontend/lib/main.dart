@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
+import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
 
 Future<void> main() async {
@@ -28,30 +29,9 @@ class _CroizAppState extends ConsumerState<CroizApp> {
     }
   }
 
-  // Performance: cache theme data to avoid recreation on every build
-  static final _lightTheme = ThemeData.from(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-  );
-
-  static final _darkTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: Colors.black,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.blue,
-      brightness: Brightness.dark,
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.black,
-      elevation: 0,
-      centerTitle: true,
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
-    ),
-    textTheme: ThemeData.dark().textTheme.apply(
-      bodyColor: Colors.white,
-      displayColor: Colors.white,
-    ),
-  );
+  // Use centralized app themes from `AppTheme` to ensure consistency.
+  static final _lightTheme = AppTheme.lightTheme();
+  static final _darkTheme = AppTheme.darkTheme();
 
   @override
   Widget build(BuildContext context) {

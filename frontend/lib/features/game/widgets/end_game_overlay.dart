@@ -33,15 +33,19 @@ class EndGameOverlay extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
+    final scheme = Theme.of(context).colorScheme;
     return Stack(
       children: [
-        const ModalBarrier(dismissible: false, color: Colors.black54),
+        ModalBarrier(
+          dismissible: false,
+          color: scheme.onSurface.withAlpha((0.54 * 255).round()),
+        ),
         Center(
           child: Container(
             width: 300,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: scheme.surface,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(

@@ -65,20 +65,17 @@ void main() {
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
       boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(
-        1,
-        0,
-      );
+      selectedNotifier.value = const SelectedCell(1, 0);
       wordDirectionNotifier.value = WordDirection.vertical;
 
-        final controller = CrosswordInputController.fromContainer(container);
-        controller.setLetterAndAdvance('B');
+      final controller = CrosswordInputController.fromContainer(container);
+      controller.setLetterAndAdvance('B');
 
-        expect(wordDirectionNotifier.value, WordDirection.vertical);
-        final sel = selectedNotifier.value;
-        expect(sel, isNotNull);
-        expect(sel!.col, 2);
-        expect(sel.row, 0);
+      expect(wordDirectionNotifier.value, WordDirection.vertical);
+      final sel = selectedNotifier.value;
+      expect(sel, isNotNull);
+      expect(sel!.col, 2);
+      expect(sel.row, 0);
     });
 
     test('vertical: switch to horizontal when no other vertical exists', () {
@@ -140,21 +137,18 @@ void main() {
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
       boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(
-        1,
-        0,
-      );
+      selectedNotifier.value = const SelectedCell(1, 0);
       wordDirectionNotifier.value = WordDirection.vertical;
 
-        final controller = CrosswordInputController.fromContainer(container);
-        controller.setLetterAndAdvance('B');
+      final controller = CrosswordInputController.fromContainer(container);
+      controller.setLetterAndAdvance('B');
 
-        // Should switch to horizontal because no vertical word remains
-        expect(wordDirectionNotifier.value, WordDirection.horizontal);
-        final sel = selectedNotifier.value;
-        expect(sel, isNotNull);
-        expect(sel!.row, 2);
-        expect(sel.col, 1);
+      // Should switch to horizontal because no vertical word remains
+      expect(wordDirectionNotifier.value, WordDirection.horizontal);
+      final sel = selectedNotifier.value;
+      expect(sel, isNotNull);
+      expect(sel!.row, 2);
+      expect(sel.col, 1);
     });
 
     test('horizontal: preserve direction when next horizontal word exists', () {
@@ -215,10 +209,7 @@ void main() {
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
       boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(
-        0,
-        1,
-      );
+      selectedNotifier.value = const SelectedCell(0, 1);
       wordDirectionNotifier.value = WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);
@@ -290,10 +281,7 @@ void main() {
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
       boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(
-        0,
-        1,
-      );
+      selectedNotifier.value = const SelectedCell(0, 1);
       wordDirectionNotifier.value = WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);

@@ -33,17 +33,19 @@ class LetterKey extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     // Performance: avoid recreating ButtonStyle on every build.
-    // Use resolve methods for theme-dependent colors.
+    // Use resolve methods for theme-dependent colors. Use `surface` as
+    // default background so keys are solid white in the light theme.
     final style = ButtonStyle(
       backgroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return disabledKeyColor ?? scheme.onSurface.withAlpha(20);
+          return disabledKeyColor ??
+              scheme.onSurface.withAlpha((0.12 * 255).round());
         }
-        return keyColor ?? scheme.surfaceContainerHighest.withAlpha(82);
+        return keyColor ?? scheme.surface;
       }),
       foregroundColor: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.disabled)) {
-          return scheme.onSurface.withAlpha(97);
+          return scheme.onSurface.withAlpha((0.6 * 255).round());
         }
         return scheme.onSurface;
       }),
