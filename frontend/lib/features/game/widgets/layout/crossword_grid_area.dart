@@ -8,8 +8,17 @@ class CrosswordGridArea extends StatelessWidget {
   Widget build(BuildContext context) => Flexible(
     fit: FlexFit.loose,
     child: Padding(
-      padding: const EdgeInsets.only(left: 12, right: 12, top: 12, bottom: 0),
-      child: Container(color: Colors.black, child: const CrosswordGrid()),
+      // Minimise top and horizontal spacing here. Keep a very small
+      // horizontal inner padding so the grid doesn't overlap the
+      // controls/banner below on tight layouts.
+      padding: EdgeInsets.zero,
+      child: Container(
+        color: Colors.black,
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4),
+          child: CrosswordGrid(),
+        ),
+      ),
     ),
   );
 }
