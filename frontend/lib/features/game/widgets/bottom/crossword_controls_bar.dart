@@ -79,7 +79,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         // Favor a moderate banner: allocate a smaller portion of the
         // available space so the keyboard gets more room by default.
         final bannerTarget = total * 0.30;
-        final bannerCap = total * 0.60;
+        final bannerCap = total * 0.50;
 
         // Starting banner height: prefer target but cap it. Allow clamp even
         // when bannerCap < desiredMinBanner (we'll rebalance below).
@@ -128,7 +128,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
 
         if (kDebugMode) {
           debugPrint(
-            'CrosswordControlsBar (KISS): total=$total banner=$bannerHeight controls=$controlsH keyboard=$keyboardHeight',
+            'CrosswordControlsBar: total=$total banner=$bannerHeight controls=$controlsH keyboard=$keyboardHeight',
           );
         }
 
