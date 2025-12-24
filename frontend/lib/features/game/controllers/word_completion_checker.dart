@@ -281,11 +281,11 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
     }
   },
   readFoundWords: () => read<Set<String>>(foundWordsProvider),
-  writeFoundWords: (v) => read(foundWordsProvider.notifier).state = v,
+  writeFoundWords: (v) => read(foundWordsProvider.notifier).value = v,
   readLockedCells: () => read<Set<CellKey>>(lockedCellsProvider),
-  writeLockedCells: (v) => read(lockedCellsProvider.notifier).state = v,
+  writeLockedCells: (v) => read(lockedCellsProvider.notifier).value = v,
   readFlashingCells: () => read<Set<CellKey>>(flashingCellsProvider),
-  writeFlashingCells: (v) => read(flashingCellsProvider.notifier).state = v,
+  writeFlashingCells: (v) => read(flashingCellsProvider.notifier).value = v,
   readCellEntriesIndex: () =>
       read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
   readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
