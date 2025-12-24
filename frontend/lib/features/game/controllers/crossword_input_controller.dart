@@ -45,7 +45,7 @@ class CrosswordInputController {
         writeLockedCells: (v) => _read(lockedCellsProvider.notifier).value = v,
         readFlashingCells: () => _read<Set<CellKey>>(flashingCellsProvider),
         writeFlashingCells: (v) =>
-          _read(flashingCellsProvider.notifier).value = v,
+            _read(flashingCellsProvider.notifier).value = v,
         readCellEntriesIndex: () => _read<Map<CellKey, List<PuzzleEntryData>>>(
           cellEntriesIndexProvider,
         ),

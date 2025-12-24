@@ -70,7 +70,7 @@ void main() {
     );
 
     // Inject board into provider state
-    container.read(gameBoardProvider.notifier).state = board;
+    container.read(gameBoardProvider.notifier).board = board;
 
     // select first cell and horizontal direction
     container.read(selectedCellProvider.notifier).value = const SelectedCell(

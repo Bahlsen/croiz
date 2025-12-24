@@ -37,7 +37,7 @@ void main() {
 
     // Pre-fill (0,0)
     container.read(gameBoardProvider.notifier).setLetter(0, 0, 'X');
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -62,7 +62,7 @@ void main() {
     );
     addTearDown(container.dispose);
 
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -106,7 +106,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Select last cell of first word (0,2)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       2,
     );

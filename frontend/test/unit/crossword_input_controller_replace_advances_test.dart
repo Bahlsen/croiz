@@ -56,7 +56,7 @@ void main() {
     container.read(gameBoardProvider.notifier).setLetter(0, 1, 'X');
 
     // Select the filled cell (0,1)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       1,
     );

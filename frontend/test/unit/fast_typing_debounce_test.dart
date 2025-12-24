@@ -139,7 +139,7 @@ void main() {
           ],
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =
@@ -214,7 +214,7 @@ void main() {
         ],
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,

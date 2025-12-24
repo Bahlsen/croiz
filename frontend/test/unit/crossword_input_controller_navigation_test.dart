@@ -45,7 +45,7 @@ void main() {
     for (var c = 1; c < boardNotifier.state.gridSize; c++) {
       boardNotifier.toggleBlackCell(0, c);
     }
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -77,7 +77,7 @@ void main() {
     final boardNotifier = container.read(gameBoardProvider.notifier)
       // Put a black cell at (1,0)
       ..toggleBlackCell(1, 0);
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -115,7 +115,7 @@ void main() {
     }
     // Select bottom cell in column 0
     final lastRow = boardNotifier.state.gridSize - 1;
-    container.read(selectedCellProvider.notifier).state = SelectedCell(
+    container.read(selectedCellProvider.notifier).value = SelectedCell(
       lastRow,
       0,
     );
@@ -145,7 +145,7 @@ void main() {
     );
     addTearDown(container.dispose);
     final boardNotifier = container.read(gameBoardProvider.notifier);
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -162,7 +162,7 @@ void main() {
     expect(afterBoard.grid[0][0], 'B');
 
     // Move selection back to (0,0) for deterministic check (it advanced)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -214,7 +214,7 @@ void main() {
     final boardNotifier = container.read(gameBoardProvider.notifier);
 
     // Select the single-cell first word at (0,0)
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -278,7 +278,7 @@ void main() {
       final boardNotifier = container.read(gameBoardProvider.notifier);
 
       // Set direction to vertical
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.vertical;
 
       // Fill word #1 cells (0,0), (1,0) first
@@ -287,7 +287,7 @@ void main() {
         ..setLetter(1, 0, 'B');
 
       // Position at last cell of word #1
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         2,
         0,
       );

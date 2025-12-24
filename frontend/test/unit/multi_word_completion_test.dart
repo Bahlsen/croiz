@@ -107,7 +107,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =
@@ -200,7 +200,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =
@@ -310,7 +310,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
         container.read(wordDirectionProvider.notifier).value =
@@ -434,7 +434,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
         container.read(wordDirectionProvider.notifier).value =
@@ -520,7 +520,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =
@@ -608,7 +608,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
 
       // Mark first word as already found
       container.read(foundWordsProvider.notifier).value = {'0,0,across'};
@@ -700,7 +700,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
@@ -772,7 +772,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
@@ -874,7 +874,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         1,
         1,
@@ -962,7 +962,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         1,
@@ -1045,7 +1045,7 @@ void main() {
         solutionGrid: solution,
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
       container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
@@ -1132,7 +1132,7 @@ void main() {
           solutionGrid: solution,
         );
 
-        container.read(gameBoardProvider.notifier).state = board;
+        container.read(gameBoardProvider.notifier).board = board;
         container.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
         container.read(wordDirectionProvider.notifier).value =

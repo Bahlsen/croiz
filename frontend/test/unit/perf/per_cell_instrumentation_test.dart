@@ -93,8 +93,8 @@ void main() {
 
       container
         ..read(gameBoardProvider.notifier).board = board
-        ..read(selectedCellProvider.notifier).state = const SelectedCell(0, 0)
-        ..read(wordDirectionProvider.notifier).state = WordDirection.horizontal;
+        ..read(selectedCellProvider.notifier).value = const SelectedCell(0, 0)
+        ..read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
 
       CrosswordInputController.fromContainer(
         container,

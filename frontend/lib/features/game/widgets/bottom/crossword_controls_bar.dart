@@ -188,13 +188,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             if (_showMenu)
               CrosswordControlsMenu(
                 onClose: () => setState(() => _showMenu = false),
-                  onToggleKeyboard: (v) =>
+                onToggleKeyboard: (v) =>
                     ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v,
                 isAzerty: isAzerty,
-                  onToggleMute: (v) =>
+                onToggleMute: (v) =>
                     ref.read(gameAudioMutedProvider.notifier).muted = v,
                 isMuted: isMuted,
-                  onToggleTheme: (v) =>
+                onToggleTheme: (v) =>
                     ref.read(appIsDarkProvider.notifier).isDark = v,
                 isDark: isDark,
               ),

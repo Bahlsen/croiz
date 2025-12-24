@@ -32,10 +32,10 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).state = boardWithEntries;
+    container.read(gameBoardProvider.notifier).board = boardWithEntries;
 
     // Start at cell (0,2) - end of word 1
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       2,
     );
@@ -69,7 +69,7 @@ void main() {
       addTearDown(container.dispose);
 
       // Board with no entries (legacy mode)
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
@@ -109,10 +109,10 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).state = boardWithEntries2;
+    container.read(gameBoardProvider.notifier).board = boardWithEntries2;
 
     // Start at cell (1,2) - end of the only word
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       1,
       2,
     );

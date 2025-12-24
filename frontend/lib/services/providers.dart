@@ -17,9 +17,8 @@ final gameAudioServiceProvider = Provider<AudioService>(
 );
 
 // Keyboard layout: false = QWERTY (default), true = AZERTY
-final gameKeyboardLayoutProvider = NotifierProvider<KeyboardLayoutNotifier, bool>(
-  KeyboardLayoutNotifier.new,
-);
+final gameKeyboardLayoutProvider =
+    NotifierProvider<KeyboardLayoutNotifier, bool>(KeyboardLayoutNotifier.new);
 
 // Global game audio mute flag
 final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(

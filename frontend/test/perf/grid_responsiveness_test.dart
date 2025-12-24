@@ -114,11 +114,11 @@ void main() {
 
     test('letter input with full controller flow should be < 4ms', () {
       container.read(gameBoardProvider.notifier).board = board;
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);
@@ -149,7 +149,7 @@ void main() {
 
     test('direction toggle should be instantaneous (< 0.5ms)', () {
       container.read(gameBoardProvider.notifier).board = board;
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
@@ -344,11 +344,11 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).board = board;
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);

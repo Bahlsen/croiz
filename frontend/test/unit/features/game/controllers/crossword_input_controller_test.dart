@@ -85,7 +85,7 @@ void main() {
 
     test('setLetterAndAdvance sets the letter in the board', () {
       final controller = CrosswordInputController.fromContainer(container);
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
@@ -98,7 +98,7 @@ void main() {
 
     test('clearCurrent clears the current cell', () {
       final controller = CrosswordInputController.fromContainer(container);
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
@@ -156,16 +156,16 @@ void main() {
         final controller = CrosswordInputController.fromContainer(
           testContainer,
         );
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
 
         // Type the word "CAT"
         controller.setLetterAndAdvance('C');
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
         controller.setLetterAndAdvance('A');
 
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 2);
         controller.setLetterAndAdvance('T');
 
@@ -235,7 +235,7 @@ void main() {
           testContainer,
         );
         // select the shared final cell (0,1)
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
 
         // Type 'C' which should complete both words
@@ -283,7 +283,7 @@ void main() {
       };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 0);
 
       // Send Backspace
@@ -353,7 +353,7 @@ void main() {
 
       final controller = CrosswordInputController.fromContainer(testContainer);
       // Cursor is on the first cell which is already 'M'
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 0);
 
       // Type 'T' -> should REPLACE 'M' at (0,0), not go to empty cell
@@ -439,7 +439,7 @@ void main() {
           testContainer,
         );
         // Cursor on first filled word at (0,0)
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 0);
 
         // Type 'X' -> should REPLACE 'M' at (0,0), not jump to word3
@@ -498,7 +498,7 @@ void main() {
       };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 0);
 
       final initialValue = testContainer.read(gameBoardProvider).grid[0][0];
@@ -565,7 +565,7 @@ void main() {
       final controller = CrosswordInputController.fromContainer(testContainer);
 
       // Place selection on the last cell of the first word (0,2)
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 2);
 
       // Replace last letter with another incorrect letter
@@ -641,9 +641,9 @@ void main() {
       final controller = CrosswordInputController.fromContainer(testContainer);
 
       // Place selection on the last cell of the first vertical word (2,0)
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(2, 0);
-      testContainer.read(wordDirectionProvider.notifier).state =
+      testContainer.read(wordDirectionProvider.notifier).value =
           WordDirection.vertical;
 
       // Replace last letter with another incorrect letter
@@ -699,7 +699,7 @@ void main() {
       };
 
       final controller = CrosswordInputController.fromContainer(testContainer);
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 0);
 
       controller.clearCurrent();
@@ -752,7 +752,7 @@ void main() {
         );
 
         // place selection on cell to the right of the locked cell
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
 
         // Ensure previous cell has the letter
@@ -920,9 +920,9 @@ void main() {
         );
 
         // User taps on cell (0,2) which contains 'X' - they want to correct it
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 2);
-        testContainer.read(wordDirectionProvider.notifier).state =
+        testContainer.read(wordDirectionProvider.notifier).value =
             WordDirection.horizontal;
 
         // User types 'T' to correct the mistake
@@ -1021,9 +1021,9 @@ void main() {
         );
 
         // User explicitly taps/selects cell (0,2) which contains 'X'
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 2);
-        testContainer.read(wordDirectionProvider.notifier).state =
+        testContainer.read(wordDirectionProvider.notifier).value =
             WordDirection.horizontal;
 
         // User types 'T' to correct the mistake at position (0,2)
@@ -1113,9 +1113,9 @@ void main() {
         );
 
         // User taps on cell (0,1) which contains wrong 'X'
-        testContainer.read(selectedCellProvider.notifier).state =
+        testContainer.read(selectedCellProvider.notifier).value =
             const SelectedCell(0, 1);
-        testContainer.read(wordDirectionProvider.notifier).state =
+        testContainer.read(wordDirectionProvider.notifier).value =
             WordDirection.horizontal;
 
         // User types 'A' to correct it
@@ -1193,9 +1193,9 @@ void main() {
       final controller = CrosswordInputController.fromContainer(testContainer);
 
       // User taps on cell (0,0) to correct 'D' to 'C'
-      testContainer.read(selectedCellProvider.notifier).state =
+      testContainer.read(selectedCellProvider.notifier).value =
           const SelectedCell(0, 0);
-      testContainer.read(wordDirectionProvider.notifier).state =
+      testContainer.read(wordDirectionProvider.notifier).value =
           WordDirection.horizontal;
 
       controller.setLetterAndAdvance('C');

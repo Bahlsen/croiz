@@ -144,7 +144,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );

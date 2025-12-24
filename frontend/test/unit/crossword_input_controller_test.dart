@@ -57,8 +57,8 @@ void main() {
       blackCells: blacks,
       difficulty: 1,
     );
-    container.read(gameBoardProvider.notifier).state = board;
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(gameBoardProvider.notifier).board = board;
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -112,9 +112,9 @@ void main() {
       blackCells: blacks,
       difficulty: 1,
     );
-    container.read(gameBoardProvider.notifier).state = board;
+    container.read(gameBoardProvider.notifier).board = board;
 
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -218,14 +218,14 @@ void main() {
         entries: entries,
         solutionGrid: solutionGrid,
       );
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
 
       // Select the missing middle letter of the across word.
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         1,
       );
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.horizontal;
 
       final controller = CrosswordInputController.fromContainer(container);
@@ -315,14 +315,14 @@ void main() {
         ),
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
 
       // Select the last cell of entry 5 (row=1,col=0) and set vertical mode
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         1,
         0,
       );
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.vertical;
 
       final controller = CrosswordInputController.fromContainer(container);
@@ -400,14 +400,14 @@ void main() {
         ),
       );
 
-      container.read(gameBoardProvider.notifier).state = board;
+      container.read(gameBoardProvider.notifier).board = board;
 
       // Select the only cell of vertical entry (row=0,col=0) and set vertical mode
-      container.read(selectedCellProvider.notifier).state = const SelectedCell(
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
         0,
         0,
       );
-      container.read(wordDirectionProvider.notifier).state =
+      container.read(wordDirectionProvider.notifier).value =
           WordDirection.vertical;
 
       final controller = CrosswordInputController.fromContainer(container);
@@ -493,7 +493,7 @@ void main() {
       ),
     );
 
-    container.read(gameBoardProvider.notifier).state = board;
+    container.read(gameBoardProvider.notifier).board = board;
 
     // Mark entry 7 as already found
     final wordCheck = container.read(wordCheckServiceProvider);
@@ -501,11 +501,11 @@ void main() {
     container.read(foundWordsProvider.notifier).value = <String>{key7};
 
     // Select last cell of entry 6 (row=0,col=2) and horizontal
-    container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       2,
     );
-    container.read(wordDirectionProvider.notifier).state =
+    container.read(wordDirectionProvider.notifier).value =
         WordDirection.horizontal;
 
     final controller = CrosswordInputController.fromContainer(container);

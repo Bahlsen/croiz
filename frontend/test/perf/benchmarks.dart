@@ -97,11 +97,11 @@ class FastTypingBenchmark extends BenchmarkBase {
     _container = _createContainer();
     final board = _createTestBoard();
     _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
-    _container.read(wordDirectionProvider.notifier).state =
+    _container.read(wordDirectionProvider.notifier).value =
         WordDirection.horizontal;
     _controller = CrosswordInputController.fromContainer(_container);
   }
@@ -116,7 +116,7 @@ class FastTypingBenchmark extends BenchmarkBase {
     // Reset board state for each run.
     final board = _createTestBoard();
     _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
       0,
       0,
     );
@@ -177,11 +177,11 @@ class BoardReadBenchmark extends BenchmarkBase {
     _container = _createContainer();
     final board = _createTestBoard(size: 15);
     _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).state = const SelectedCell(
+    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
       5,
       5,
     );
-    _container.read(wordDirectionProvider.notifier).state =
+    _container.read(wordDirectionProvider.notifier).value =
         WordDirection.horizontal;
   }
 
