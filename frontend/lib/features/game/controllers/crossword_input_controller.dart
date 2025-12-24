@@ -386,11 +386,11 @@ class CrosswordInputController {
           final list = idxList?[CellKey(nextEmpty.row, nextEmpty.col)];
           if (list != null && list.isNotEmpty) {
             final e = list.first;
-            _read(
-              wordDirectionProvider.notifier,
-            ).state = e.directionEnum == EntryDirection.across
-                ? WordDirection.horizontal
-                : WordDirection.vertical;
+            // Use Notifier API to set direction
+            _read(wordDirectionProvider.notifier).value =
+                (e.directionEnum == EntryDirection.across)
+                    ? WordDirection.horizontal
+                    : WordDirection.vertical;
           }
           return;
         }
