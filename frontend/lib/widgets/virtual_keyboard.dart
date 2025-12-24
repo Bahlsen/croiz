@@ -226,6 +226,10 @@ class VirtualKeyboard extends ConsumerWidget {
   // Simplified audio playback - throttling is handled by GameAudioService.
   // Removed UI-level coalescing to reduce overhead on each key press.
   static void _maybePlayType(WidgetRef ref) {
+    // Respect global mute flag
+    if (ref.read(gameAudioMutedProvider)) {
+      return;
+    }
     try {
       ref.read(gameAudioServiceProvider).playType();
     } on Object catch (e, st) {
@@ -238,6 +242,10 @@ class VirtualKeyboard extends ConsumerWidget {
   }
 
   static void _maybePlayDelete(WidgetRef ref) {
+    // Respect global mute flag
+    if (ref.read(gameAudioMutedProvider)) {
+      return;
+    }
     try {
       ref.read(gameAudioServiceProvider).playDelete();
     } on Object catch (e, st) {

@@ -16,6 +16,55 @@ final gameAudioServiceProvider = Provider<AudioService>(
   (ref) => GameAudioService(),
 );
 
+// Keyboard layout: false = QWERTY (default), true = AZERTY
+final gameKeyboardLayoutProvider = NotifierProvider<KeyboardLayoutNotifier, bool>(
+  KeyboardLayoutNotifier.new,
+);
+
+// Global game audio mute flag
+final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
+  AudioMutedNotifier.new,
+);
+
+// App theme dark flag (true = dark)
+final appIsDarkProvider = NotifierProvider<AppIsDarkNotifier, bool>(
+  AppIsDarkNotifier.new,
+);
+
+// --- Notifier implementations (Riverpod 3.0 style) ---
+class KeyboardLayoutNotifier extends Notifier<bool> {
+  @override
+  bool build() => false; // false = QWERTY by default
+
+  // Use a setter to modify the property (satisfies linter)
+  bool get isAzerty => state;
+  set isAzerty(bool value) => state = value;
+
+  void toggle() => state = !state;
+}
+
+class AudioMutedNotifier extends Notifier<bool> {
+  @override
+  bool build() => false; // not muted by default
+
+  // Use a setter to modify the property (satisfies linter)
+  bool get muted => state;
+  set muted(bool value) => state = value;
+
+  void toggle() => state = !state;
+}
+
+class AppIsDarkNotifier extends Notifier<bool> {
+  @override
+  bool build() => false; // light theme by default
+
+  // Use a setter to modify the property (satisfies linter)
+  bool get isDark => state;
+  set isDark(bool value) => state = value;
+
+  void toggle() => state = !state;
+}
+
 // Word Check Service Provider
 final wordCheckServiceProvider = Provider<WordCheckService>(
   (ref) => WordCheckService(),

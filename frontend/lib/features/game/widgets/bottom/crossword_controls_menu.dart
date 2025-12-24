@@ -4,20 +4,35 @@ import 'dart:ui' as ui;
 class CrosswordControlsMenu extends StatelessWidget {
   const CrosswordControlsMenu({
     required this.onClose,
+    this.onToggleKeyboard,
+    this.isAzerty,
+    this.onToggleMute,
+    this.isMuted,
+    this.onToggleTheme,
+    this.isDark,
     this.width = 220,
     this.height = 180,
     Key? key,
   }) : super(key: key);
 
   final VoidCallback onClose;
+  final ValueChanged<bool>? onToggleKeyboard;
+  final bool? isAzerty;
+  final ValueChanged<bool>? onToggleMute;
+  final bool? isMuted;
+  final ValueChanged<bool>? onToggleTheme;
+  final bool? isDark;
   final double width;
   final double height;
 
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context).size;
-    final menuWidth = (mq.width * 0.9).clamp(220.0, mq.width);
-    final menuHeight = (mq.height * 0.7).clamp(180.0, mq.height * 0.95);
+    // Horizontal margins to keep the menu inset from screen edges
+    const horizontalMargin = 24.0;
+    final menuWidth = (mq.width - horizontalMargin * 2).clamp(260.0, mq.width);
+    // Make the menu taller by default so it occupies more vertical space
+    final menuHeight = (mq.height * 0.85).clamp(220.0, mq.height * 0.98);
 
     return Positioned.fill(
       child: GestureDetector(
@@ -27,68 +42,110 @@ class CrosswordControlsMenu extends StatelessWidget {
           child: Container(
             color: Colors.black45,
             child: Center(
-              child: Material(
-                elevation: 12,
-                borderRadius: BorderRadius.circular(16),
-                color: Theme.of(context).cardColor,
-                child: SizedBox(
-                  width: menuWidth,
-                  height: menuHeight,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      // Header
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
-                        child: Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                'Menu',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: horizontalMargin,
+                ),
+                child: Material(
+                  elevation: 12,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Theme.of(context).cardColor,
+                  child: SizedBox(
+                    width: menuWidth,
+                    height: menuHeight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        // Header
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 12,
+                          ),
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Menu',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: onClose,
-                            ),
-                          ],
+                              IconButton(
+                                icon: const Icon(Icons.close),
+                                onPressed: onClose,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Divider(height: 1),
+                        const Divider(height: 1),
 
-                      // Content area (expanded so menu takes more vertical space)
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.all(8),
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.info_outline),
-                              title: const Text('About'),
-                              onTap: onClose,
-                            ),
-                            const Divider(),
-                            ListTile(
-                              leading: const Icon(Icons.settings),
-                              title: const Text('Settings'),
-                              onTap: onClose,
-                            ),
-                            const Divider(),
-                            ListTile(
-                              leading: const Icon(Icons.help_outline),
-                              title: const Text('Help'),
-                              onTap: onClose,
-                            ),
-                          ],
+                        // Content area (expanded so menu takes more vertical space)
+                        Expanded(
+                          child: ListView(
+                            padding: const EdgeInsets.all(8),
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.info_outline),
+                                title: const Text('About'),
+                                onTap: onClose,
+                              ),
+                              const Divider(),
+                              // Keyboard style control moved into the menu
+                              SwitchListTile(
+                                secondary: const Icon(Icons.keyboard),
+                                title: const Text('Keyboard style'),
+                                value: isAzerty ?? false,
+                                onChanged: (v) {
+                                  if (onToggleKeyboard != null) {
+                                    onToggleKeyboard!(v);
+                                  }
+                                },
+                                subtitle: Text(
+                                  (isAzerty ?? false) ? 'AZERTY' : 'QWERTY',
+                                ),
+                              ),
+                              const Divider(),
+
+                              // Mute sounds toggle
+                              SwitchListTile(
+                                secondary: const Icon(Icons.volume_off),
+                                title: const Text('Mute sounds'),
+                                value: isMuted ?? false,
+                                onChanged: (v) {
+                                  if (onToggleMute != null) {
+                                    onToggleMute!(v);
+                                  }
+                                },
+                              ),
+                              const Divider(),
+
+                              // Theme toggle
+                              SwitchListTile(
+                                secondary: const Icon(Icons.brightness_6),
+                                title: const Text('Dark theme'),
+                                value: isDark ?? false,
+                                onChanged: (v) {
+                                  if (onToggleTheme != null) {
+                                    onToggleTheme!(v);
+                                  }
+                                },
+                              ),
+                              const Divider(),
+                              ListTile(
+                                leading: const Icon(Icons.help_outline),
+                                title: const Text('Help'),
+                                onTap: onClose,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

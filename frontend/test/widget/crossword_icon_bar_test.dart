@@ -11,9 +11,7 @@ void main() {
       MaterialApp(
         home: Scaffold(
           body: CrosswordIconBar(
-            isAzerty: false,
             onClear: () {},
-            onToggle: () {},
             onMenu: () {
               menuPressed = true;
             },
@@ -38,17 +36,13 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: CrosswordIconBar(
-            isAzerty: false,
-            onClear: () {},
-            onToggle: () {},
-            onMenu: () {},
-          ),
+          body: CrosswordIconBar(onClear: () {}, onMenu: () {}),
         ),
       ),
     );
     expect(find.byKey(const Key('clear_button')), findsOneWidget);
     expect(find.byIcon(Icons.cleaning_services_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    // Keyboard toggle moved to the menu; verify keyboard icon is not present
+    expect(find.byIcon(Icons.keyboard_alt_outlined), findsNothing);
   });
 }

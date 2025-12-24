@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
+import 'package:croiz/services/providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,14 +12,14 @@ Future<void> main() async {
   runApp(const ProviderScope(child: CroizApp()));
 }
 
-class CroizApp extends StatefulWidget {
+class CroizApp extends ConsumerStatefulWidget {
   const CroizApp({super.key});
 
   @override
-  State<CroizApp> createState() => _CroizAppState();
+  ConsumerState<CroizApp> createState() => _CroizAppState();
 }
 
-class _CroizAppState extends State<CroizApp> {
+class _CroizAppState extends ConsumerState<CroizApp> {
   bool _initialized = false;
 
   void _onInitialized() {
@@ -54,6 +55,8 @@ class _CroizAppState extends State<CroizApp> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = ref.watch(appIsDarkProvider);
+
     if (!_initialized) {
       return MaterialApp(
         title: 'Croiz',
@@ -69,7 +72,7 @@ class _CroizAppState extends State<CroizApp> {
       title: 'Croiz',
       theme: _lightTheme,
       darkTheme: _darkTheme,
-      themeMode: ThemeMode.dark,
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
     );

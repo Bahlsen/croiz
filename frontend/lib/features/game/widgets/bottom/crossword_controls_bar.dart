@@ -7,6 +7,7 @@ import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
 import 'package:croiz/features/game/game_providers.dart';
+import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 // Simple, robust controls bar: banner, icon row, and keyboard.
@@ -40,11 +41,14 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
 
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   bool _showMenu = false;
-  bool _isAzerty = true;
 
   @override
   Widget build(BuildContext context) {
-    final layout = _isAzerty
+    final isAzerty = ref.watch(gameKeyboardLayoutProvider);
+    final isMuted = ref.watch(gameAudioMutedProvider);
+    final isDark = ref.watch(appIsDarkProvider);
+
+    final layout = isAzerty
         ? VirtualKeyboard.azertyLayout
         : VirtualKeyboard.qwertyLayout;
 
@@ -146,7 +150,6 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                 SizedBox(
                   height: controlsH,
                   child: CrosswordIconBar(
-                    isAzerty: _isAzerty,
                     onClear: () {
                       try {
                         ref
@@ -160,11 +163,6 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                           );
                         }
                       }
-                    },
-                    onToggle: () {
-                      setState(() {
-                        _isAzerty = !_isAzerty;
-                      });
                     },
                     onMenu: () {
                       setState(() {
@@ -190,6 +188,15 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             if (_showMenu)
               CrosswordControlsMenu(
                 onClose: () => setState(() => _showMenu = false),
+                  onToggleKeyboard: (v) =>
+                    ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v,
+                isAzerty: isAzerty,
+                  onToggleMute: (v) =>
+                    ref.read(gameAudioMutedProvider.notifier).muted = v,
+                isMuted: isMuted,
+                  onToggleTheme: (v) =>
+                    ref.read(appIsDarkProvider.notifier).isDark = v,
+                isDark: isDark,
               ),
           ],
         );
