@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 
 /// Small reusable action buttons used by the clue header.
 class ClueHeaderMenuButton extends StatelessWidget {
-  const ClueHeaderMenuButton({
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
+  const ClueHeaderMenuButton({required this.onPressed, Key? key})
+    : super(key: key);
 
   final VoidCallback? onPressed;
 
@@ -18,7 +16,7 @@ class ClueHeaderMenuButton extends StatelessWidget {
       tooltip: 'Menu',
       onPressed: onPressed,
       icon: const Icon(Icons.menu, size: 24),
-      visualDensity: VisualDensity.compact,
+      visualDensity: VisualDensity.standard,
       padding: EdgeInsets.zero,
     ),
   );
@@ -39,7 +37,7 @@ class ClueHeaderClearButton extends StatelessWidget {
       tooltip: 'Clear errors',
       onPressed: onPressed,
       icon: const Icon(Icons.cleaning_services_outlined, size: 24),
-      visualDensity: VisualDensity.compact,
+      visualDensity: VisualDensity.standard,
       padding: EdgeInsets.zero,
     ),
   );

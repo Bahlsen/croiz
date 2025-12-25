@@ -8,7 +8,7 @@ import 'package:croiz/features/game/widgets/bottom/clue_banner_arrow.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions.dart';
 
-/// Compact header showing the clue for the currently selected word.
+/// Header showing the clue for the currently selected word.
 class CrosswordClueHeader extends ConsumerWidget {
   const CrosswordClueHeader({super.key, this.onMenu, this.onClear});
 
