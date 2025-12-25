@@ -15,14 +15,10 @@ class CrosswordContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => GameBoardListener(
         controller: controller,
-        child: Stack(
+        child: Column(
           children: [
-            Column(
-              children: [
-                const CrosswordGridArea(),
-                CrosswordControlsArea(controller: controller),
-              ],
-            ),
+            const CrosswordGridArea(),
+            CrosswordControlsArea(controller: controller),
             const EndGameOverlay(),
           ],
         ),
