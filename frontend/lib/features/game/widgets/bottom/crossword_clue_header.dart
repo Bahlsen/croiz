@@ -6,6 +6,7 @@ import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/helpers/word_navigation.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_arrow.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions.dart';
 
 /// Compact header showing the clue for the currently selected word.
 class CrosswordClueHeader extends ConsumerWidget {
@@ -84,17 +85,9 @@ class CrosswordClueHeader extends ConsumerWidget {
                     left: isCompact ? 4 : 6,
                     bottom: isCompact ? 4 : 6,
                   ),
-                  child: Semantics(
-                    label: 'Menu',
-                    button: true,
-                    child: IconButton(
-                      key: const Key('menu_button'),
-                      tooltip: 'Menu',
-                      onPressed: onMenu,
-                      icon: Icon(Icons.menu, size: isCompact ? 20 : 24),
-                      visualDensity: VisualDensity.compact,
-                      padding: EdgeInsets.zero,
-                    ),
+                  child: ClueHeaderMenuButton(
+                    onPressed: onMenu,
+                    isCompact: isCompact,
                   ),
                 ),
               ),
@@ -107,20 +100,9 @@ class CrosswordClueHeader extends ConsumerWidget {
                     right: isCompact ? 4 : 6,
                     bottom: isCompact ? 4 : 6,
                   ),
-                  child: Semantics(
-                    label: 'Clear incorrect letters',
-                    button: true,
-                    child: IconButton(
-                      key: const Key('clear_button'),
-                      tooltip: 'Clear errors',
-                      onPressed: onClear,
-                      icon: Icon(
-                        Icons.cleaning_services_outlined,
-                        size: isCompact ? 20 : 24,
-                      ),
-                      visualDensity: VisualDensity.compact,
-                      padding: EdgeInsets.zero,
-                    ),
+                  child: ClueHeaderClearButton(
+                    onPressed: onClear,
+                    isCompact: isCompact,
                   ),
                 ),
               ),
