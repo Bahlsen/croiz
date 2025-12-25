@@ -4,14 +4,9 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 
 class ClueBannerContainer extends ConsumerWidget {
-  const ClueBannerContainer({
-    required this.entry,
-    required this.compact,
-    Key? key,
-  }) : super(key: key);
+  const ClueBannerContainer({required this.entry, Key? key}) : super(key: key);
 
   final PuzzleEntryData entry;
-  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => GestureDetector(
@@ -23,14 +18,11 @@ class ClueBannerContainer extends ConsumerWidget {
     },
     behavior: HitTestBehavior.opaque,
     child: Container(
-      margin: EdgeInsets.symmetric(horizontal: compact ? 6 : 8),
-      padding: EdgeInsets.symmetric(
-        vertical: compact ? 12 : 16,
-        horizontal: compact ? 8 : 12,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
         color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(compact ? 10 : 12),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.grey[700]!, width: 1),
       ),
       child: Center(
@@ -41,9 +33,9 @@ class ClueBannerContainer extends ConsumerWidget {
           textAlign: TextAlign.center,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: compact ? 14 : 16,
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),

@@ -20,14 +20,10 @@ class CrosswordClueHeader extends ConsumerWidget {
     final selected = ref.watch(selectedCellProvider);
     final dir = ref.watch(wordDirectionProvider);
 
-    final isCompact = MediaQuery.of(context).size.height < 72;
-    final bannerHeight = isCompact ? 56.0 : 88.0;
-
     // Build the main content of the header depending on selection.
     Widget mainContent;
     if (selected == null) {
       mainContent = Container(
-        height: bannerHeight,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -53,61 +49,36 @@ class CrosswordClueHeader extends ConsumerWidget {
               icon: Icons.chevron_left,
               onTap: () =>
                   _navigateToAdjacentEntry(ref, entryCtx.entries, entry, -1),
-              compact: isCompact,
             ),
-            Expanded(
-              child: ClueBannerContainer(entry: entry, compact: isCompact),
-            ),
+            Expanded(child: ClueBannerContainer(entry: entry)),
             ClueBannerArrow(
               icon: Icons.chevron_right,
               onTap: () =>
                   _navigateToAdjacentEntry(ref, entryCtx.entries, entry, 1),
-              compact: isCompact,
             ),
           ],
         );
       }
     }
 
-    return SizedBox(
-      height: bannerHeight,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        child: Stack(
-          children: [
-            mainContent,
-            // Menu icon: bottom-left (aligned under left arrow)
-            if (onMenu != null)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: isCompact ? 4 : 6,
-                    bottom: isCompact ? 4 : 6,
-                  ),
-                  child: ClueHeaderMenuButton(
-                    onPressed: onMenu,
-                    isCompact: isCompact,
-                  ),
-                ),
-              ),
-            // Clear icon: bottom-right (aligned under right arrow)
-            if (onClear != null)
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: isCompact ? 4 : 6,
-                    bottom: isCompact ? 4 : 6,
-                  ),
-                  child: ClueHeaderClearButton(
-                    onPressed: onClear,
-                    isCompact: isCompact,
-                  ),
-                ),
-              ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: Stack(
+        children: [
+          mainContent,
+          // Menu icon: bottom-left (aligned under left arrow)
+          if (onMenu != null)
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: ClueHeaderMenuButton(onPressed: onMenu),
+            ),
+          // Clear icon: bottom-right (aligned under right arrow)
+          if (onClear != null)
+            Align(
+              alignment: Alignment.bottomRight,
+              child: ClueHeaderClearButton(onPressed: onClear),
+            ),
+        ],
       ),
     );
   }

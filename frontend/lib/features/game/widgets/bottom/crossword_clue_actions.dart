@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 class ClueHeaderMenuButton extends StatelessWidget {
   const ClueHeaderMenuButton({
     required this.onPressed,
-    required this.isCompact,
     Key? key,
   }) : super(key: key);
 
   final VoidCallback? onPressed;
-  final bool isCompact;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -19,7 +17,7 @@ class ClueHeaderMenuButton extends StatelessWidget {
       key: const Key('menu_button'),
       tooltip: 'Menu',
       onPressed: onPressed,
-      icon: Icon(Icons.menu, size: isCompact ? 20 : 24),
+      icon: const Icon(Icons.menu, size: 24),
       visualDensity: VisualDensity.compact,
       padding: EdgeInsets.zero,
     ),
@@ -27,14 +25,10 @@ class ClueHeaderMenuButton extends StatelessWidget {
 }
 
 class ClueHeaderClearButton extends StatelessWidget {
-  const ClueHeaderClearButton({
-    required this.onPressed,
-    required this.isCompact,
-    Key? key,
-  }) : super(key: key);
+  const ClueHeaderClearButton({required this.onPressed, Key? key})
+    : super(key: key);
 
   final VoidCallback? onPressed;
-  final bool isCompact;
 
   @override
   Widget build(BuildContext context) => Semantics(
@@ -44,7 +38,7 @@ class ClueHeaderClearButton extends StatelessWidget {
       key: const Key('clear_button'),
       tooltip: 'Clear errors',
       onPressed: onPressed,
-      icon: Icon(Icons.cleaning_services_outlined, size: isCompact ? 20 : 24),
+      icon: const Icon(Icons.cleaning_services_outlined, size: 24),
       visualDensity: VisualDensity.compact,
       padding: EdgeInsets.zero,
     ),
