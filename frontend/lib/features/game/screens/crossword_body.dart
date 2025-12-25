@@ -86,7 +86,11 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: CrosswordContent(controller: widget.controller),
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: CrosswordContent(controller: widget.controller),
+      ),
     );
   }
 }
