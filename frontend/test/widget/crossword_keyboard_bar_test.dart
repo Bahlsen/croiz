@@ -56,7 +56,6 @@ void main() {
               body: CrosswordControlsBar(
                 onKey: (_) {},
                 onBackspace: () {},
-                heightFactor: 0.8,
               ),
             ),
           ),

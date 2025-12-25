@@ -15,7 +15,6 @@ void main() {
             body: SizedBox(
               height: 100,
               child: CrosswordControlsBar(
-                heightFactor: 0.6,
                 onKey: (_) {},
                 onBackspace: () {},
               ),
@@ -50,7 +49,6 @@ void main() {
               body: SizedBox(
                 height: 150,
                 child: CrosswordControlsBar(
-                  heightFactor: 0.6,
                   onKey: (_) {},
                   onBackspace: () {},
                 ),

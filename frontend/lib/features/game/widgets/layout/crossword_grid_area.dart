@@ -7,15 +7,10 @@ class CrosswordGridArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Flexible(
     fit: FlexFit.loose,
-    child: Padding(
-      padding: EdgeInsets.zero,
-      child: Container(
-        color: Colors.black,
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 4),
-          child: CrosswordGrid(),
-        ),
-      ),
+    child: Container(
+      color: Colors.black,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: const CrosswordGrid(),
     ),
   );
 }

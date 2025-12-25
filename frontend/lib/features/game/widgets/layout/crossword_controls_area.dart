@@ -5,20 +5,17 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 class CrosswordControlsArea extends StatelessWidget {
   const CrosswordControlsArea({required this.controller, Key? key})
     : super(key: key);
+
   final CrosswordInputController controller;
 
   @override
   Widget build(BuildContext context) => Expanded(
-    child: Column(
-      children: [
-        Expanded(
-          child: CrosswordControlsBar(
-            onKey: controller.setLetterAndAdvance,
-            onBackspace: controller.clearCurrent,
-          ),
-        ),
-        const SizedBox(height: 8),
-      ],
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: CrosswordControlsBar(
+        onKey: controller.setLetterAndAdvance,
+        onBackspace: controller.clearCurrent,
+      ),
     ),
   );
 }

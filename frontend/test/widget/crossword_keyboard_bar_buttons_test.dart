@@ -19,7 +19,6 @@ void main() {
                   CrosswordControlsBar(
                     onKey: (_) {},
                     onBackspace: () {},
-                    heightFactor: 0.8,
                   ),
                 ],
               ),
