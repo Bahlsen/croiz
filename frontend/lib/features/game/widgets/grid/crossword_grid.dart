@@ -72,8 +72,8 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
     final gridDelegate = SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: size,
       childAspectRatio: 1,
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
+      crossAxisSpacing: 2,
+      mainAxisSpacing: 2,
     );
 
     return KeyboardListener(

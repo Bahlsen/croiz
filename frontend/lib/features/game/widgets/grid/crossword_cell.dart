@@ -272,22 +272,27 @@ class _CellContent extends StatelessWidget {
       color: scheme.onSurface,
     );
 
-    return Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (cellNumber != null)
-          Positioned(
-            left: 1,
-            top: 0,
-            child: Text('$cellNumber', style: numberStyle),
-          ),
-        Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
+          Align(
+            alignment: Alignment.topLeft,
             child: Padding(
-              padding: _letterPadding,
-              child: Text(
-                letter ?? '',
-                style: isSelected ? selectedLetterStyle : letterStyle,
+              padding: const EdgeInsets.only(left: 1, top: 0),
+              child: Text('$cellNumber', style: numberStyle),
+            ),
+          ),
+        Expanded(
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: _letterPadding,
+                child: Text(
+                  letter ?? '',
+                  style: isSelected ? selectedLetterStyle : letterStyle,
+                ),
               ),
             ),
           ),

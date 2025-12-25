@@ -9,7 +9,6 @@ class CrosswordGridArea extends StatelessWidget {
     fit: FlexFit.loose,
     child: Container(
       color: Colors.black,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
       child: const CrosswordGrid(),
     ),
   );
