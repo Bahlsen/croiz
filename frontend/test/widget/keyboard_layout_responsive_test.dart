@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 // Custom test binding that dumps render & semantics trees on drawFrame errors
@@ -63,7 +63,7 @@ void main() {
       expect(tester.takeException(), isNull);
 
       // Banner should be visible and have reasonable size (now larger)
-      final bannerFinder = find.byType(CrosswordClueBanner);
+      final bannerFinder = find.byType(CrosswordClueHeader);
       expect(bannerFinder, findsOneWidget);
       final bannerSize = tester.getSize(bannerFinder);
       // Banner is expected to be noticeable but not overly large on this
@@ -121,7 +121,7 @@ void main() {
         if (kf.evaluate().isNotEmpty) {
           debugPrint('DEBUG: VirtualKeyboard size=${tester.getSize(kf.first)}');
         }
-        final bannerFinder = find.byType(CrosswordClueBanner);
+        final bannerFinder = find.byType(CrosswordClueHeader);
         if (bannerFinder.evaluate().isNotEmpty) {
           debugPrint(
             'DEBUG: Banner size=${tester.getSize(bannerFinder.first)}',
@@ -148,7 +148,7 @@ void main() {
         // Fail the test after dumping useful diagnostics
         fail('Framework reported exception: $_ex');
       }
-      expect(find.byType(CrosswordClueBanner), findsOneWidget);
+      expect(find.byType(CrosswordClueHeader), findsOneWidget);
       expect(find.byType(VirtualKeyboard), findsOneWidget);
     });
 
@@ -178,7 +178,7 @@ void main() {
 
       expect(tester.takeException(), isNull);
 
-      final bannerSize = tester.getSize(find.byType(CrosswordClueBanner));
+      final bannerSize = tester.getSize(find.byType(CrosswordClueHeader));
       final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
       // Both should have reasonable sizes
@@ -212,7 +212,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);
-      expect(find.byType(CrosswordClueBanner), findsOneWidget);
+      expect(find.byType(CrosswordClueHeader), findsOneWidget);
       expect(find.byType(VirtualKeyboard), findsOneWidget);
     });
 
@@ -241,7 +241,7 @@ void main() {
 
       // Should not overflow even in extreme constraint
       expect(tester.takeException(), isNull);
-      expect(find.byType(CrosswordClueBanner), findsOneWidget);
+      expect(find.byType(CrosswordClueHeader), findsOneWidget);
       expect(find.byType(VirtualKeyboard), findsOneWidget);
     });
 
@@ -318,7 +318,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final largeBannerSize = tester.getSize(find.byType(CrosswordClueBanner));
+      final largeBannerSize = tester.getSize(find.byType(CrosswordClueHeader));
 
       // Test with tight space
       await tester.pumpWidget(
@@ -340,7 +340,7 @@ void main() {
       );
 
       await tester.pumpAndSettle();
-      final smallBannerSize = tester.getSize(find.byType(CrosswordClueBanner));
+      final smallBannerSize = tester.getSize(find.byType(CrosswordClueHeader));
 
       // Banner should adapt but maintain minimum size
       expect(smallBannerSize.height, greaterThanOrEqualTo(40));

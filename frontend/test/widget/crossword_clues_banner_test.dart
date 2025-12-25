@@ -1,4 +1,4 @@
-import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  group('CrosswordClueBanner', () {
+  group('CrosswordClueHeader', () {
     testWidgets('tapping banner toggles direction and updates clue', (
       tester,
     ) async {
@@ -55,14 +55,14 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
         ),
       );
 
       expect(find.textContaining('Across clue'), findsOneWidget);
 
       // Tap on banner
-      await tester.tap(find.byType(CrosswordClueBanner));
+      await tester.tap(find.byType(CrosswordClueHeader));
       await tester.pump();
 
       expect(container.read(wordDirectionProvider), WordDirection.vertical);
@@ -108,7 +108,7 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
         ),
       );
 
@@ -147,7 +147,7 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
         ),
       );
 
@@ -210,7 +210,7 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueBanner())),
+          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
         ),
       );
 

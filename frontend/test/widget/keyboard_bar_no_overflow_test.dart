@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 void main() {
@@ -32,7 +32,7 @@ void main() {
     expect(tester.takeException(), isNull);
 
     // Both widgets should still be present.
-    expect(find.byType(CrosswordClueBanner), findsOneWidget);
+    expect(find.byType(CrosswordClueHeader), findsOneWidget);
     expect(find.byType(CrosswordControlsBar), findsOneWidget);
 
     // The bar's height equals the constraint we gave it.
@@ -62,7 +62,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final bannerSize = tester.getSize(find.byType(CrosswordClueBanner));
+      final bannerSize = tester.getSize(find.byType(CrosswordClueHeader));
       final keyboardSize = tester.getSize(find.byType(VirtualKeyboard));
 
       // Each component maintains minimum size

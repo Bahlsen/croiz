@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
 import 'dart:math' as math;
 import 'package:croiz/widgets/virtual_keyboard.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
+// Icons moved into the clue banner; no separate icon bar import needed.
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
@@ -137,19 +137,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                // Always include the banner widget in the tree so tests and
-                // consumers can find it. It may have zero height in extremely
-                // tight constraints, but should remain present.
+                // Single banner that also renders the control icons (menu/clear).
                 SizedBox(
                   height: bannerHeight,
-                  child: const CrosswordClueBanner(
-                    key: ValueKey('clue-banner'),
-                  ),
-                ),
-                if (bannerHeight > 0) const SizedBox(height: gap),
-                SizedBox(
-                  height: controlsH,
-                  child: CrosswordIconBar(
+                  child: CrosswordClueHeader(
+                    key: const ValueKey('clue-banner'),
                     onClear: () {
                       try {
                         ref
@@ -171,6 +163,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                     },
                   ),
                 ),
+                if (bannerHeight > 0) const SizedBox(height: gap),
                 if (keyboardHeight > 0)
                   SizedBox(
                     height: keyboardHeight,

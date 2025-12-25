@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_icon_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 
 void main() {
   testWidgets('Menu icon is present and triggers callback', (
@@ -8,13 +9,15 @@ void main() {
   ) async {
     var menuPressed = false;
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: CrosswordIconBar(
-            onClear: () {},
-            onMenu: () {
-              menuPressed = true;
-            },
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: CrosswordClueHeader(
+              onClear: () {},
+              onMenu: () {
+                menuPressed = true;
+              },
+            ),
           ),
         ),
       ),
@@ -34,9 +37,11 @@ void main() {
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: CrosswordIconBar(onClear: () {}, onMenu: () {}),
+      ProviderScope(
+        child: MaterialApp(
+          home: Scaffold(
+            body: CrosswordClueHeader(onClear: () {}, onMenu: () {}),
+          ),
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_clues_banner.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 void main() {
@@ -24,7 +24,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final bannerFinder = find.byType(CrosswordClueBanner);
+    final bannerFinder = find.byType(CrosswordClueHeader);
     expect(bannerFinder, findsOneWidget);
 
     final bannerSize = tester.getSize(bannerFinder);
@@ -62,7 +62,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final bannerFinder = find.byType(CrosswordClueBanner);
+    final bannerFinder = find.byType(CrosswordClueHeader);
     expect(bannerFinder, findsOneWidget);
     final bannerSize = tester.getSize(bannerFinder);
     // Banner minimum should be respected where possible; in tight constraints
@@ -104,7 +104,7 @@ void main() {
       expect(barSize.height, equals(height));
 
       // All components should be present
-      expect(find.byType(CrosswordClueBanner), findsOneWidget);
+      expect(find.byType(CrosswordClueHeader), findsOneWidget);
       expect(find.byType(VirtualKeyboard), findsOneWidget);
 
       // No overflow

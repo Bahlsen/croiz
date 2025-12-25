@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class ClueBannerArrow extends StatelessWidget {
   const ClueBannerArrow({
-    required this.icon, required this.onTap, Key? key,
+    required this.icon,
+    required this.onTap,
+    Key? key,
     this.compact = false,
   }) : super(key: key);
 

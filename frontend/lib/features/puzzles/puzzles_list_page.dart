@@ -51,7 +51,9 @@ class PuzzlesListPage extends ConsumerWidget {
       // This should not execute in normal operation when items are provided.
       // Keep as debug-only to avoid polluting release logs.
       // ignore: avoid_print
-      debugPrint('PuzzlesListPage: _buildFromItems groups empty for items count=${items.length}');
+      debugPrint(
+        'PuzzlesListPage: _buildFromItems groups empty for items count=${items.length}',
+      );
     }
 
     return ListView.builder(
