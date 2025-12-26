@@ -273,6 +273,34 @@ class CrosswordInputController {
     // Fallback: select the previous editable cell in the current direction
     final dr = dir == WordDirection.vertical ? -1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : -1;
+    // Prefer the immediately-adjacent previous cell (respecting direction).
+    // This allows selecting a locked previous cell rather than skipping it
+    // when there are no entry definitions available (tests and simple boards).
+    final prevRow = sel.row + dr;
+    final prevCol = sel.col + dc;
+    if (prevRow >= 0 &&
+        prevRow < board.gridSize &&
+        prevCol >= 0 &&
+        prevCol < board.grid[prevRow].length) {
+      final prevKey = CellKey(prevRow, prevCol);
+      if (lockedCells.contains(prevKey)) {
+        _read(selectedCellProvider.notifier).value = SelectedCell(
+          prevRow,
+          prevCol,
+        );
+        return;
+      }
+      final prevVal = board.grid[prevRow][prevCol];
+      if (prevVal != null && prevVal.isNotEmpty) {
+        _read(selectedCellProvider.notifier).value = SelectedCell(
+          prevRow,
+          prevCol,
+        );
+        return;
+      }
+    }
+
+    // Fallback: select the previous editable cell in the current direction
     final prev = _nextEditableCell(
       board,
       fromRow: sel.row,
