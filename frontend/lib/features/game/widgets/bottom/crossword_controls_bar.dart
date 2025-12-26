@@ -27,9 +27,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   @override
   Widget build(BuildContext context) {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
+    final isMuted = ref.watch(gameAudioMutedProvider);
+    final isDark = ref.watch(appIsDarkProvider);
     final layout = isAzerty
-        ? VirtualKeyboard.azertyLayout
-        : VirtualKeyboard.qwertyLayout;
+      ? VirtualKeyboard.azertyLayout
+      : VirtualKeyboard.qwertyLayout;
 
     return Stack(
       children: [
@@ -52,6 +54,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         if (_showMenu)
           CrosswordControlsMenu(
             onClose: () => setState(() => _showMenu = false),
+            isAzerty: isAzerty,
+            isMuted: isMuted,
+            isDark: isDark,
             onToggleKeyboard: (v) =>
                 ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v,
             onToggleMute: (v) =>
