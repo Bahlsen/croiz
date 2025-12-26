@@ -18,6 +18,7 @@ class VirtualKeyboard extends ConsumerWidget {
     this.layout,
     this.includeBackspace = true,
     this.keyHeight = 64,
+    this.letterFontSize = 16,
     this.keySpacing = 4,
     this.rowSpacing = 4,
     this.padding = const EdgeInsets.all(2),
@@ -34,6 +35,7 @@ class VirtualKeyboard extends ConsumerWidget {
   final List<List<String>>? layout;
   final bool includeBackspace;
   final double keyHeight;
+  final double letterFontSize;
   final double keySpacing;
   final double rowSpacing;
   final EdgeInsets padding;
@@ -99,7 +101,8 @@ class VirtualKeyboard extends ConsumerWidget {
                     height: metrics.effectiveKeyHeight,
                     child: KeyboardRow(
                       keys: rows[i],
-                      keyHeight: metrics.effectiveKeyHeight,
+                        keyHeight: metrics.effectiveKeyHeight,
+                        letterFontSize: letterFontSize,
                       keySpacing: keySpacing,
                       rowMaxWidth: metrics.availableRowWidth,
                       onKey: (k) => onKey?.call(k.toUpperCase()),

@@ -30,6 +30,24 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     final layout = isAzerty
         ? VirtualKeyboard.azertyLayout
         : VirtualKeyboard.qwertyLayout;
+    final kbSize = ref.watch(gameKeyboardSizeProvider);
+
+    // Map keyboard size to key height and font size used by keys.
+    double keyHeight;
+    double letterFontSize;
+    switch (kbSize) {
+      case KeyboardSize.small:
+        keyHeight = 48;
+        letterFontSize = 14;
+        break;
+      case KeyboardSize.large:
+        keyHeight = 88;
+        letterFontSize = 20;
+        break;
+      case KeyboardSize.medium:
+      keyHeight = 64;
+        letterFontSize = 16;
+    }
 
     return Stack(
       children: [
@@ -50,9 +68,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: VirtualKeyboard(
-                layout: layout,
-                onKey: widget.onKey,
-                onBackspace: widget.onBackspace,
+                  layout: layout,
+                  onKey: widget.onKey,
+                  onBackspace: widget.onBackspace,
+                  keyHeight: keyHeight,
+                  letterFontSize: letterFontSize,
               ),
             ),
           ],

@@ -7,6 +7,7 @@ class LetterKey extends StatelessWidget {
     required this.height,
     required this.enabled,
     required this.onPressed,
+    required this.fontSize,
     required this.borderRadius,
     required this.keyColor,
     required this.disabledKeyColor,
@@ -17,6 +18,7 @@ class LetterKey extends StatelessWidget {
   final double height;
   final bool enabled;
   final VoidCallback? onPressed;
+  final double fontSize;
   final BorderRadius borderRadius;
   final Color? keyColor;
   final Color? disabledKeyColor;
@@ -25,7 +27,6 @@ class LetterKey extends StatelessWidget {
   static const _letterTextStyle = TextStyle(
     letterSpacing: 1.2,
     fontWeight: FontWeight.w500,
-    fontSize: 16,
   );
   static const _zeroPadding = EdgeInsets.zero;
 
@@ -60,7 +61,7 @@ class LetterKey extends StatelessWidget {
       child: FilledButton(
         onPressed: onPressed,
         style: style,
-        child: Text(label, style: _letterTextStyle),
+        child: Text(label, style: _letterTextStyle.copyWith(fontSize: fontSize)),
       ),
     );
   }

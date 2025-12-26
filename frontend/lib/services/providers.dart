@@ -20,6 +20,14 @@ final gameAudioServiceProvider = Provider<AudioService>(
 final gameKeyboardLayoutProvider =
     NotifierProvider<KeyboardLayoutNotifier, bool>(KeyboardLayoutNotifier.new);
 
+// Keyboard size setting for the virtual keyboard
+enum KeyboardSize { small, medium, large }
+
+final gameKeyboardSizeProvider =
+    NotifierProvider<KeyboardSizeNotifier, KeyboardSize>(
+  KeyboardSizeNotifier.new,
+);
+
 // Global game audio mute flag
 final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
   AudioMutedNotifier.new,
@@ -62,6 +70,18 @@ class AppIsDarkNotifier extends Notifier<bool> {
   set isDark(bool value) => state = value;
 
   void toggle() => state = !state;
+}
+
+class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
+  @override
+  KeyboardSize build() => KeyboardSize.medium;
+
+  KeyboardSize get size => state;
+  set size(KeyboardSize v) => state = v;
+
+  void setSmall() => state = KeyboardSize.small;
+  void setMedium() => state = KeyboardSize.medium;
+  void setLarge() => state = KeyboardSize.large;
 }
 
 // Word Check Service Provider

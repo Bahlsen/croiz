@@ -14,6 +14,7 @@ class KeyboardRow extends StatelessWidget {
     required this.keyHeight,
     required this.keySpacing,
     required this.rowMaxWidth,
+    required this.letterFontSize,
     required this.onKey,
     required this.onBackspace,
     required this.onPlayClick,
@@ -28,6 +29,7 @@ class KeyboardRow extends StatelessWidget {
 
   final List<String> keys;
   final double keyHeight;
+  final double letterFontSize;
   final double keySpacing;
   final double rowMaxWidth;
   final ValueChanged<String> onKey;
@@ -96,6 +98,7 @@ class KeyboardRow extends StatelessWidget {
       child: LetterKey(
         label: label,
         height: height,
+        fontSize: letterFontSize,
         enabled: enabled,
         onPressed: enabled
             ? () {

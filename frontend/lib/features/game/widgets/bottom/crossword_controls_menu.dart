@@ -4,6 +4,18 @@ import 'package:go_router/go_router.dart';
 import 'dart:ui' as ui;
 import 'package:croiz/services/providers.dart';
 
+String kbSizeLabel(WidgetRef ref) {
+  final val = ref.watch(gameKeyboardSizeProvider);
+  switch (val) {
+    case KeyboardSize.small:
+      return 'Small';
+    case KeyboardSize.large:
+      return 'Large';
+    case KeyboardSize.medium:
+    return 'Medium';
+  }
+}
+
 class CrosswordControlsMenu extends ConsumerWidget {
   const CrosswordControlsMenu({
     required this.onClose,
@@ -108,6 +120,42 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   onClose();
                                   context.go('/puzzles');
                                 },
+                              ),
+                              const Divider(),
+                              // Compact keyboard size selector using a Dropdown
+                              ListTile(
+                                leading: Icon(
+                                  Icons.zoom_out_map,
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                ),
+                                title: const Text('Keyboard size'),
+                                subtitle: Text(kbSizeLabel(ref)),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: DropdownButton<KeyboardSize>(
+                                    value: ref.watch(gameKeyboardSizeProvider),
+                                    underline: const SizedBox.shrink(),
+                                    items: const [
+                                      DropdownMenuItem(
+                                        value: KeyboardSize.small,
+                                        child: Text('Small'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: KeyboardSize.medium,
+                                        child: Text('Medium'),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: KeyboardSize.large,
+                                        child: Text('Large'),
+                                      ),
+                                    ],
+                                    onChanged: (v) {
+                                      if (v != null) {
+                                        ref.read(gameKeyboardSizeProvider.notifier).size = v;
+                                      }
+                                    },
+                                  ),
+                                ),
                               ),
                               const Divider(),
                               // Keyboard style control moved into the menu
