@@ -162,35 +162,29 @@ class CrosswordCell extends ConsumerWidget {
 
     // Centralized theme mapping
     final tt = _CrosswordTheme.fromContext(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     List<BoxShadow> boxShadow;
-    Border border;
     Color bgColor;
 
     if (isClearedFlashing) {
       boxShadow = tt.clearedFlashingBoxShadow;
-      border = tt.clearedFlashingBorder;
       bgColor = tt.clearedFlashingBg;
     } else if (isFlashing) {
       boxShadow = tt.flashingBoxShadow;
-      border = tt.flashingBorder;
       bgColor = tt.flashingBg;
     } else if (isSelected) {
       boxShadow = tt.selectedBoxShadow;
-      border = tt.selectedBorder;
       bgColor = tt.selectedWordBg; // selection uses a light primary overlay
     } else if (isPartOfSelectedWord) {
       boxShadow = tt.defaultBoxShadow;
-      border = tt.selectedWordBorder;
       bgColor = tt.selectedWordBg;
     } else if (isBlack) {
       boxShadow = tt.defaultBoxShadow;
-      border = tt.defaultBorder;
       bgColor = ext.blackCellColor;
     } else {
       boxShadow = tt.defaultBoxShadow;
-      border = tt.defaultBorder;
-      bgColor = tt.defaultBg;
+      bgColor = isDark ? Colors.grey.shade800 : tt.defaultBg;
     }
 
     final decoration = BoxDecoration(
@@ -264,6 +258,7 @@ class _CellContent extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final ext = Theme.of(context).extension<CrosswordThemeColors>() ??
         CrosswordThemeColors.defaults;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final blackLetterColor =
         ext.blackCellColor.computeLuminance() < 0.5 ? Colors.white : Colors.black;
 
@@ -277,7 +272,9 @@ class _CellContent extends StatelessWidget {
     final letterStyle = TextStyle(
       fontSize: 26,
       fontWeight: FontWeight.bold,
-      color: isBlack ? blackLetterColor : scheme.onSurface,
+      color: isBlack
+          ? blackLetterColor
+          : (isDark ? Colors.white : Colors.black),
     );
     final selectedLetterStyle = TextStyle(
       fontSize: 30,
