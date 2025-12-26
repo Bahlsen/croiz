@@ -22,13 +22,11 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
 }
 
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
-  bool _showMenu = false;
+  bool _dialogOpen = false;
 
   @override
   Widget build(BuildContext context) {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
-    final isMuted = ref.watch(gameAudioMutedProvider);
-    final isDark = ref.watch(appIsDarkProvider);
     final layout = isAzerty
         ? VirtualKeyboard.azertyLayout
         : VirtualKeyboard.qwertyLayout;
@@ -42,9 +40,12 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
           children: [
             CrosswordClueHeader(
               key: const ValueKey('clue-banner'),
-              onClear: () =>
-                  ref.read(gameBoardProvider.notifier).clearIncorrectLetters(),
-              onMenu: () => setState(() => _showMenu = true),
+              onClear: () {
+                ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+              },
+              onMenu: () {
+                _openMenu(context);
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -56,20 +57,48 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             ),
           ],
         ),
-        if (_showMenu)
-          CrosswordControlsMenu(
-            onClose: () => setState(() => _showMenu = false),
-            isAzerty: isAzerty,
-            isMuted: isMuted,
-            isDark: isDark,
-            onToggleKeyboard: (v) =>
-                ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v,
-            onToggleMute: (v) =>
-                ref.read(gameAudioMutedProvider.notifier).muted = v,
-            onToggleTheme: (v) =>
-                ref.read(appIsDarkProvider.notifier).isDark = v,
-          ),
+        // Menu is shown via a dialog so it can occupy more vertical space
+        // than the controls bar area. The dialog contains the same
+        // `CrosswordControlsMenu` widget wrapped in a Stack to satisfy
+        // its Positioned.fill usage.
       ],
     );
+  }
+
+  Future<void> _openMenu(BuildContext ctx) async {
+    if (_dialogOpen) {
+      return;
+    }
+    _dialogOpen = true;
+
+    // local provider reads not needed here (menu reads providers itself)
+
+    await showDialog<void>(
+      context: ctx,
+      barrierDismissible: true,
+      builder: (dialogCtx) => Stack(
+        children: [
+          CrosswordControlsMenu(
+            onClose: () {
+              Navigator.of(dialogCtx).pop();
+            },
+            onToggleKeyboard: (v) {
+              ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v;
+            },
+            onToggleMute: (v) {
+              ref.read(gameAudioMutedProvider.notifier).muted = v;
+            },
+            onToggleTheme: (v) {
+              ref.read(appIsDarkProvider.notifier).isDark = v;
+            },
+          ),
+        ],
+      ),
+    );
+
+    _dialogOpen = false;
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

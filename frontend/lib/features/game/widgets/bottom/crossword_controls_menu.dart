@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui' as ui;
+import 'package:croiz/services/providers.dart';
 
-class CrosswordControlsMenu extends StatelessWidget {
+class CrosswordControlsMenu extends ConsumerWidget {
   const CrosswordControlsMenu({
     required this.onClose,
     this.onToggleKeyboard,
-    this.isAzerty,
     this.onToggleMute,
-    this.isMuted,
     this.onToggleTheme,
-    this.isDark,
     this.width = 220,
     this.height = 180,
     Key? key,
@@ -18,17 +17,17 @@ class CrosswordControlsMenu extends StatelessWidget {
 
   final VoidCallback onClose;
   final ValueChanged<bool>? onToggleKeyboard;
-  final bool? isAzerty;
   final ValueChanged<bool>? onToggleMute;
-  final bool? isMuted;
   final ValueChanged<bool>? onToggleTheme;
-  final bool? isDark;
   final double width;
   final double height;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final mq = MediaQuery.of(context).size;
+    final isAzerty = ref.watch(gameKeyboardLayoutProvider);
+    final isMuted = ref.watch(gameAudioMutedProvider);
+    final isDark = ref.watch(appIsDarkProvider);
     // Horizontal margins to keep the menu inset from screen edges
     const horizontalMargin = 24.0;
     final menuWidth = (mq.width - horizontalMargin * 2).clamp(260.0, mq.width);
@@ -120,15 +119,21 @@ class CrosswordControlsMenu extends StatelessWidget {
                                   ).colorScheme.onSurface,
                                 ),
                                 title: const Text('Keyboard style'),
-                                value: isAzerty ?? false,
+                                value: isAzerty,
                                 onChanged: (v) {
                                   if (onToggleKeyboard != null) {
                                     onToggleKeyboard!(v);
+                                  } else {
+                                    ref
+                                            .read(
+                                              gameKeyboardLayoutProvider
+                                                  .notifier,
+                                            )
+                                            .isAzerty =
+                                        v;
                                   }
                                 },
-                                subtitle: Text(
-                                  (isAzerty ?? false) ? 'AZERTY' : 'QWERTY',
-                                ),
+                                subtitle: Text(isAzerty ? 'AZERTY' : 'QWERTY'),
                               ),
                               const Divider(),
 
@@ -141,10 +146,17 @@ class CrosswordControlsMenu extends StatelessWidget {
                                   ).colorScheme.onSurface,
                                 ),
                                 title: const Text('Mute sounds'),
-                                value: isMuted ?? false,
+                                value: isMuted,
                                 onChanged: (v) {
                                   if (onToggleMute != null) {
                                     onToggleMute!(v);
+                                  } else {
+                                    ref
+                                            .read(
+                                              gameAudioMutedProvider.notifier,
+                                            )
+                                            .muted =
+                                        v;
                                   }
                                 },
                               ),
@@ -159,10 +171,15 @@ class CrosswordControlsMenu extends StatelessWidget {
                                   ).colorScheme.onSurface,
                                 ),
                                 title: const Text('Dark theme'),
-                                value: isDark ?? false,
+                                value: isDark,
                                 onChanged: (v) {
                                   if (onToggleTheme != null) {
                                     onToggleTheme!(v);
+                                  } else {
+                                    ref
+                                            .read(appIsDarkProvider.notifier)
+                                            .isDark =
+                                        v;
                                   }
                                 },
                               ),
