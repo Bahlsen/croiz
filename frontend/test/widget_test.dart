@@ -5,6 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:croiz/main.dart';
@@ -14,8 +15,10 @@ import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 
 import 'test_utils/fake_audio_service.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('App renders puzzles list screen', (WidgetTester tester) async {
@@ -49,8 +52,6 @@ void main() {
           ),
           // Override audio service for fast initialization
           gameAudioServiceProvider.overrideWithValue(fakeAudioService),
-          // Pre-complete initialization
-          appInitializedProvider.overrideWith((ref) async => true),
           // Provide puzzle list data for the puzzles list screen
           puzzlesProvider.overrideWithValue(
             AsyncValue.data([
@@ -62,7 +63,11 @@ void main() {
             ]),
           ),
         ],
-        child: const CroizApp(),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const PuzzlesListPage(),
+        ),
       ),
     );
 

@@ -61,6 +61,13 @@ class _CroizAppState extends ConsumerState<CroizApp> {
         themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         home: SplashScreen(onInitialized: _onInitialized),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
       );
     }
 

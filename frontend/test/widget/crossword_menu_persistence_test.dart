@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('Menu toggles persist across open/close', (
@@ -10,6 +11,8 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
           ),

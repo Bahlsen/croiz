@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 
 void main() {
@@ -20,7 +21,11 @@ void main() {
           overrides: [
             puzzleOriginsProvider.overrideWith((ref) => completer.future),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PuzzlesListPage(),
+          ),
         ),
       );
 
@@ -41,13 +46,21 @@ void main() {
               (ref) async => throw Exception('Network error'),
             ),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PuzzlesListPage(),
+          ),
         ),
       );
 
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Could not load origins'), findsOneWidget);
+      final loc = AppLocalizations.of(tester.element(find.byType(PuzzlesListPage)));
+      expect(
+        find.textContaining(loc?.errorLoading ?? 'Error loading puzzle'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('displays origins as expansion tiles', (tester) async {
@@ -60,7 +73,11 @@ void main() {
               (ref, origin) async => <PuzzleDescriptor>[],
             ),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PuzzlesListPage(),
+          ),
         ),
       );
 
@@ -125,7 +142,11 @@ void main() {
             puzzleOriginsProvider.overrideWith((ref) async => ['nyt']),
             originIndexProvider.overrideWith((ref, origin) => completer.future),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PuzzlesListPage(),
+          ),
         ),
       );
 
@@ -152,7 +173,11 @@ void main() {
               (ref, origin) async => throw Exception('Failed to load'),
             ),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: const PuzzlesListPage(),
+          ),
         ),
       );
 
