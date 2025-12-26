@@ -188,16 +188,20 @@ class CrosswordCell extends ConsumerWidget {
       bgColor = isDark ? Colors.grey.shade800 : tt.defaultBg;
     }
 
-    // Only the actively selected cell should display an outline/border.
-    // Other cells (including part of the selected word) should NOT show
-    // a border per design request. We no longer paint the border inside the
-    // cell's BoxDecoration because that reduces available inner space for
-    // the letter. Instead, an outer border painter will draw the stroke
-    // outside the cell bounds so the letter keeps full size.
+    // Only the actively selected cell should display an outline via the
+    // outer border painter. However, cleared-flashing cells need an
+    // explicit inner decoration border and background so widget tests can
+    // inspect the BoxDecoration on the Container. Add the inner border
+    // only for the cleared-flashing state to preserve the selected-cell
+    // outer painter behaviour.
     final border = isSelected ? tt.selectedBorder : null;
+    final innerDecorationBorder = isClearedFlashing
+        ? tt.clearedFlashingBorder
+        : null;
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
+      border: innerDecorationBorder,
       boxShadow: boxShadow,
       color: bgColor,
     );

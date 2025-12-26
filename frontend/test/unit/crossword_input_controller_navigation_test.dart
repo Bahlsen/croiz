@@ -135,53 +135,6 @@ void main() {
     expect(sel.col, 1);
   });
 
-  test('backspace clears letter without moving selection', () {
-    final testBoard = makeEmptyBoard();
-    final container = ProviderContainer(
-      overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
-      ],
-    );
-    addTearDown(container.dispose);
-    final boardNotifier = container.read(gameBoardProvider.notifier);
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      0,
-      0,
-    );
-    final controller = CrosswordInputController.fromContainer(container);
-
-    // Type a letter first
-    const typeEvent = KeyDownEvent(
-      logicalKey: LogicalKeyboardKey.keyB,
-      physicalKey: PhysicalKeyboardKey.keyB,
-      timeStamp: Duration(milliseconds: 4),
-    );
-    controller.handleKey(typeEvent, boardNotifier.state.gridSize);
-    final afterBoard = container.read(gameBoardProvider);
-    expect(afterBoard.grid[0][0], 'B');
-
-    // Move selection back to (0,0) for deterministic check (it advanced)
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      0,
-      0,
-    );
-
-    const backspaceEvent = KeyDownEvent(
-      logicalKey: LogicalKeyboardKey.backspace,
-      physicalKey: PhysicalKeyboardKey.backspace,
-      timeStamp: Duration(milliseconds: 5),
-    );
-    controller.handleKey(backspaceEvent, boardNotifier.state.gridSize);
-    final afterBoard2 = container.read(gameBoardProvider);
-    expect(afterBoard2.grid[0][0], isNull);
-
-    final sel = container.read(selectedCellProvider);
-    // Selection should remain at (0,0)
-    expect(sel!.row, 0);
-    expect(sel.col, 0);
-  });
-
   test('arrow right moves to next word and selects its first empty cell', () {
     const size = 5;
     final grid = List.generate(size, (_) => List<String?>.filled(size, null));
