@@ -133,6 +133,9 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final extForBlack =
+      Theme.of(context).extension<CrosswordThemeColors>() ??
+        CrosswordThemeColors.defaults;
     // Narrow watches to only what this cell needs.
     final isSelected = ref.watch(
       selectedCellProvider.select(
@@ -147,7 +150,7 @@ class CrosswordCell extends ConsumerWidget {
       gameBoardProvider.select((b) => b.blackCells[row][col]),
     );
     if (isBlack) {
-      return Container(color: Colors.black);
+      return Container(color: extForBlack.blackCellColor);
     }
     final cellKey = CellKey(row, col);
     final isFlashing = ref.watch(cellFlashingProvider(cellKey));

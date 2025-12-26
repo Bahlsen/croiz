@@ -27,55 +27,59 @@ class CrosswordLoadingScaffold extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Colors.black,
-    body: SafeArea(
-      bottom: true,
-      top: false,
-      child: Stack(
-        children: [
-          const Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  width: 96,
-                  height: 96,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 6,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final onBg = scheme.onSurface;
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 96,
+                    height: 96,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 6,
+                      valueColor: AlwaysStoppedAnimation<Color>(scheme.primary),
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Loading puzzle...',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                  const SizedBox(height: 20),
+                  Text(
+                    'Loading puzzle...',
+                    style: TextStyle(
+                      color: onBg,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Please wait',
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Text(
+                    'Please wait',
+                    style: TextStyle(color: onBg.withAlpha((0.7 * 255).round()), fontSize: 13),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            top: 8,
-            left: 8,
-            child: IconButton(
-              key: const Key('menu_button'),
-              icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () => _showMenu(context),
+            Positioned(
+              top: 8,
+              left: 8,
+                child: IconButton(
+                key: const Key('menu_button'),
+                icon: Icon(Icons.menu, color: onBg),
+                onPressed: () => _showMenu(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class CrosswordErrorScaffold extends StatelessWidget {
@@ -106,31 +110,35 @@ class CrosswordErrorScaffold extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: Colors.black,
-    body: SafeArea(
-      bottom: true,
-      top: false,
-      child: Stack(
-        children: [
-          Center(
-            child: Text(
-              'Error loading puzzle id="$selectedId"',
-              style: const TextStyle(color: Colors.white),
-              textAlign: TextAlign.center,
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final onBg = scheme.onSurface;
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        bottom: true,
+        top: false,
+        child: Stack(
+          children: [
+            Center(
+              child: Text(
+                'Error loading puzzle id="$selectedId"',
+                style: TextStyle(color: onBg),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          Positioned(
-            top: 8,
-            left: 8,
-            child: IconButton(
-              key: const Key('menu_button'),
-              icon: const Icon(Icons.menu, color: Colors.white),
-              onPressed: () => _showMenu(context),
+            Positioned(
+              top: 8,
+              left: 8,
+              child: IconButton(
+                key: const Key('menu_button'),
+                icon: Icon(Icons.menu, color: onBg),
+                onPressed: () => _showMenu(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }

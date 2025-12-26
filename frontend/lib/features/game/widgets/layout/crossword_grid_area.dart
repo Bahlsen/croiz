@@ -8,7 +8,7 @@ class CrosswordGridArea extends StatelessWidget {
   Widget build(BuildContext context) => Flexible(
     fit: FlexFit.loose,
     child: Container(
-      color: Colors.black,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: const CrosswordGrid(),
     ),
   );

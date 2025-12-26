@@ -41,7 +41,7 @@ class CrosswordControlsMenu extends StatelessWidget {
         child: BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: 6, sigmaY: 6),
           child: Container(
-            color: Colors.black45,
+            color: Theme.of(context).colorScheme.onSurface.withAlpha((0.45 * 255).round()),
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -77,7 +77,8 @@ class CrosswordControlsMenu extends StatelessWidget {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.close),
+                                icon: Icon(Icons.close,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 onPressed: onClose,
                               ),
                             ],
@@ -91,7 +92,8 @@ class CrosswordControlsMenu extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             children: [
                               ListTile(
-                                leading: const Icon(Icons.home),
+                                leading: Icon(Icons.home,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('Home'),
                                 onTap: () {
                                   onClose();
@@ -101,7 +103,8 @@ class CrosswordControlsMenu extends StatelessWidget {
                               const Divider(),
                               // Keyboard style control moved into the menu
                               SwitchListTile(
-                                secondary: const Icon(Icons.keyboard),
+                                secondary: Icon(Icons.keyboard,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('Keyboard style'),
                                 value: isAzerty ?? false,
                                 onChanged: (v) {
@@ -117,7 +120,8 @@ class CrosswordControlsMenu extends StatelessWidget {
 
                               // Mute sounds toggle
                               SwitchListTile(
-                                secondary: const Icon(Icons.volume_off),
+                                secondary: Icon(Icons.volume_off,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('Mute sounds'),
                                 value: isMuted ?? false,
                                 onChanged: (v) {
@@ -130,7 +134,8 @@ class CrosswordControlsMenu extends StatelessWidget {
 
                               // Theme toggle
                               SwitchListTile(
-                                secondary: const Icon(Icons.brightness_6),
+                                secondary: Icon(Icons.brightness_6,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('Dark theme'),
                                 value: isDark ?? false,
                                 onChanged: (v) {
@@ -141,12 +146,14 @@ class CrosswordControlsMenu extends StatelessWidget {
                               ),
                               const Divider(),
                               ListTile(
-                                leading: const Icon(Icons.help_outline),
+                                leading: Icon(Icons.help_outline,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('Help'),
                                 onTap: onClose,
                               ),
                               ListTile(
-                                leading: const Icon(Icons.info_outline),
+                                leading: Icon(Icons.info_outline,
+                                    color: Theme.of(context).colorScheme.onSurface),
                                 title: const Text('About'),
                                 onTap: onClose,
                               ),

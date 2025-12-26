@@ -17,26 +17,36 @@ class ClueBannerContainer extends ConsumerWidget {
       ref.read(wordDirectionProvider.notifier).value = newDir;
     },
     behavior: HitTestBehavior.opaque,
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey[700]!, width: 1),
-      ),
-      child: Center(
-        child: Text(
-          entry.clue == null || entry.clue!.isEmpty
-              ? '${entry.number}.'
-              : '${entry.number}. ${entry.clue!}',
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
+    child: FractionallySizedBox(
+      widthFactor: 0.9,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 96),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 18),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: Theme.of(context)
+                .colorScheme
+                .onSurface
+                .withAlpha((0.12 * 255).round()),
+              width: 1),
+          ),
+          child: Center(
+            child: Text(
+              entry.clue == null || entry.clue!.isEmpty
+                  ? '${entry.number}.'
+                  : '${entry.number}. ${entry.clue!}',
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ),
       ),

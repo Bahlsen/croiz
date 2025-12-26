@@ -85,7 +85,7 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         bottom: true,
         top: false,

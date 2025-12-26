@@ -27,13 +27,20 @@ class CrosswordClueHeader extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.grey[900],
+          color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[700]!, width: 1),
+            border: Border.all(
+              color: Theme.of(context)
+                .colorScheme
+                .onSurface
+                .withAlpha((0.12 * 255).round()),
+              width: 1),
         ),
-        child: const Text(
+        child: Text(
           'Select a word',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w600),
         ),
       );
     } else {
@@ -43,18 +50,50 @@ class CrosswordClueHeader extends ConsumerWidget {
         mainContent = const SizedBox.shrink();
       } else {
         final entry = entryCtx.entry;
+        // Arrange as three vertical columns: left (arrow + optional menu),
+        // center (banner), right (arrow + optional clear). This makes the
+        // arrows appear higher and the icons sit directly under each arrow
+        // and alongside the banner.
         mainContent = Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClueBannerArrow(
-              icon: Icons.chevron_left,
-              onTap: () =>
-                  _navigateToAdjacentEntry(ref, entryCtx.entries, entry, -1),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClueBannerArrow(
+                  icon: Icons.chevron_left,
+                  onTap: () =>
+                      _navigateToAdjacentEntry(ref, entryCtx.entries, entry, -1),
+                ),
+                const SizedBox(height: 8),
+                if (onMenu != null)
+                  SizedBox(
+                    width: 56,
+                    height: 40,
+                    child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
+                  ),
+              ],
             ),
+            const SizedBox(width: 8),
             Expanded(child: ClueBannerContainer(entry: entry)),
-            ClueBannerArrow(
-              icon: Icons.chevron_right,
-              onTap: () =>
-                  _navigateToAdjacentEntry(ref, entryCtx.entries, entry, 1),
+            const SizedBox(width: 8),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ClueBannerArrow(
+                  icon: Icons.chevron_right,
+                  onTap: () =>
+                      _navigateToAdjacentEntry(ref, entryCtx.entries, entry, 1),
+                ),
+                const SizedBox(height: 8),
+                if (onClear != null)
+                  SizedBox(
+                    width: 56,
+                    height: 40,
+                    child:
+                        Center(child: ClueHeaderClearButton(onPressed: onClear)),
+                  ),
+              ],
             ),
           ],
         );
@@ -63,23 +102,7 @@ class CrosswordClueHeader extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      child: Stack(
-        children: [
-          mainContent,
-          // Menu icon: bottom-left (aligned under left arrow)
-          if (onMenu != null)
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: ClueHeaderMenuButton(onPressed: onMenu),
-            ),
-          // Clear icon: bottom-right (aligned under right arrow)
-          if (onClear != null)
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ClueHeaderClearButton(onPressed: onClear),
-            ),
-        ],
-      ),
+      child: mainContent,
     );
   }
 

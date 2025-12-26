@@ -6,6 +6,8 @@ class AppTheme {
     // Use a seed color but tweak a few container/surface values so
     // small UI elements (keyboard keys, grid cells) have better contrast
     // under the light theme.
+    // Use a standard grey scaffold background for light theme.
+    scaffoldBackgroundColor: Colors.grey,
     colorScheme: (() {
       final base = ColorScheme.fromSeed(
         seedColor: const Color(0xFF2196F3),
@@ -46,6 +48,8 @@ class AppTheme {
 
   static ThemeData darkTheme() => ThemeData(
     useMaterial3: true,
+    // Ensure dark theme uses a true black app background per request
+    scaffoldBackgroundColor: Colors.black,
     colorScheme: ColorScheme.fromSeed(
       seedColor: const Color(0xFF2196F3),
       brightness: Brightness.dark,
@@ -213,7 +217,7 @@ class CrosswordThemeColors extends ThemeExtension<CrosswordThemeColors> {
 
   // Central default used when a Theme does not provide the extension.
   static const CrosswordThemeColors defaults = CrosswordThemeColors(
-    defaultBgColor: Color(0xFF424242),
+    defaultBgColor: Color(0xFF000000),
     selectedWordBgColor: Color.fromRGBO(33, 150, 243, 0.42),
     flashingBgColor: Color.fromRGBO(105, 240, 174, 0.48),
     clearedFlashingBgColor: Color.fromRGBO(255, 82, 82, 0.48),

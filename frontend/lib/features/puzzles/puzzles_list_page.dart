@@ -8,10 +8,14 @@ class PuzzlesListPage extends ConsumerWidget {
   const PuzzlesListPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) => Scaffold(
-    appBar: AppBar(title: const Text('Puzzles')),
-    body: _buildList(context, ref),
-  );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isLight = Theme.of(context).brightness == Brightness.light;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Puzzles')),
+      backgroundColor: isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
+      body: _buildList(context, ref),
+    );
+  }
 
   Widget _buildList(BuildContext context, WidgetRef ref) {
     final legacyAsync = ref.watch(puzzlesProvider);
