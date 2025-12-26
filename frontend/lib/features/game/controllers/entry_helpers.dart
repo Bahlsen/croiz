@@ -44,6 +44,91 @@ PuzzleEntryData? findContainingEntry({
   return null;
 }
 
+/// Finds the last filled (non-empty) cell in an entry.
+/// If [skipLocked] is true, locked cells are skipped.
+SelectedCell? lastFilledInEntry(
+  PuzzleEntryData entry,
+  GameBoard board, {
+  Set<CellKey> lockedCells = const {},
+  bool skipLocked = false,
+}) {
+  if (entry.directionEnum == EntryDirection.across) {
+    for (var cc = entry.x + entry.length - 1; cc >= entry.x; cc--) {
+      final key = CellKey(entry.y, cc);
+      if (skipLocked && lockedCells.contains(key)) {
+        continue;
+      }
+      final val = board.grid[entry.y][cc];
+      if (val != null && val.isNotEmpty) {
+        return SelectedCell(entry.y, cc);
+      }
+    }
+  } else {
+    for (var rr = entry.y + entry.length - 1; rr >= entry.y; rr--) {
+      final key = CellKey(rr, entry.x);
+      if (skipLocked && lockedCells.contains(key)) {
+        continue;
+      }
+      final val = board.grid[rr][entry.x];
+      if (val != null && val.isNotEmpty) {
+        return SelectedCell(rr, entry.x);
+      }
+    }
+  }
+  return null;
+}
+
+/// Finds the previous filled cell starting from [containing] entry.
+/// Searches same direction first (entries before current), then opposite direction.
+SelectedCell? findPreviousFilledFromEntry({
+  required PuzzleEntryData containing,
+  required bool wantAcross,
+  required GameBoard board,
+  required List<PuzzleEntryData>? entries,
+  Set<CellKey> lockedCells = const {},
+  bool skipLocked = true,
+  List<PuzzleEntryData>? sortedSameDir,
+  List<PuzzleEntryData>? sortedOtherDir,
+}) {
+  if (entries == null || entries.isEmpty) {
+    return null;
+  }
+
+  final sameDir =
+      sortedSameDir ??
+      (entries
+          .where(
+            (e) =>
+                (wantAcross && e.directionEnum == EntryDirection.across) ||
+                (!wantAcross && e.directionEnum == EntryDirection.down),
+          )
+          .toList()
+        ..sort((a, b) => a.number.compareTo(b.number)));
+
+  final idx = sameDir.indexWhere((e) => e.number == containing.number);
+  if (idx != -1) {
+    // Search entries before current (reverse)
+    for (var j = idx - 1; j >= 0; j--) {
+      final candidate = sameDir[j];
+      final lf = lastFilledInEntry(
+        candidate,
+        board,
+        lockedCells: lockedCells,
+        skipLocked: skipLocked,
+      );
+      if (lf != null) {
+        return lf;
+      }
+    }
+    // Do NOT wrap across same-direction entries: stop at the first entry before current.
+  }
+
+  // Do not fall back to entries in the opposite direction here. If no
+  // previous filled entry exists in the same direction, return null and
+  // let the caller handle fallback selection logic.
+  return null;
+}
+
 /// Finds the first empty cell in an entry.
 /// If [skipLocked] is true, locked cells are skipped.
 SelectedCell? firstEmptyInEntry(

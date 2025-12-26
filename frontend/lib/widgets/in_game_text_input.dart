@@ -83,8 +83,10 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
           children: [
             FilledButton.icon(
               onPressed: _clearIncorrectLetters,
-              icon: Icon(Icons.delete_sweep_outlined,
-                  color: Theme.of(context).colorScheme.onSurface),
+              icon: Icon(
+                Icons.delete_sweep_outlined,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               label: const Text('Clear'),
             ),
           ],
@@ -123,8 +125,10 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
           IconButton(
             tooltip: 'Clear incorrect letters',
             onPressed: _clearIncorrectLetters,
-            icon: Icon(Icons.delete_sweep_outlined,
-                color: Theme.of(context).colorScheme.onSurface),
+            icon: Icon(
+              Icons.delete_sweep_outlined,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
           ),
           IconButton(
             tooltip: 'Switch keyboard layout',

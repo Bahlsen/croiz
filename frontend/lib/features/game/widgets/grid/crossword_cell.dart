@@ -42,6 +42,8 @@ class _CrosswordTheme {
     final defaultBorder = Border.fromBorderSide(
       BorderSide(color: ext.defaultBorderColor, width: 1),
     );
+    // Use outside stroke alignment so the visual stroke is painted outside
+    // the cell bounds and doesn't reduce inner space used by the letter.
     final selectedBorder = Border.fromBorderSide(
       BorderSide(color: ext.selectedBorderColor, width: 2.5),
     );
@@ -133,7 +135,6 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    
     // Narrow watches to only what this cell needs.
     final isSelected = ref.watch(
       selectedCellProvider.select(
@@ -189,14 +190,16 @@ class CrosswordCell extends ConsumerWidget {
 
     // Only the actively selected cell should display an outline/border.
     // Other cells (including part of the selected word) should NOT show
-    // a border per design request.
+    // a border per design request. We no longer paint the border inside the
+    // cell's BoxDecoration because that reduces available inner space for
+    // the letter. Instead, an outer border painter will draw the stroke
+    // outside the cell bounds so the letter keeps full size.
     final border = isSelected ? tt.selectedBorder : null;
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
       boxShadow: boxShadow,
       color: bgColor,
-      border: border,
     );
 
     final content = _CellContent(
@@ -243,10 +246,82 @@ class CrosswordCell extends ConsumerWidget {
         },
         // Performance: use plain Container for instant visual feedback.
         // AnimatedContainer causes perceived delay on touch.
-        child: Container(decoration: decoration, child: content),
+        child: _OuterBorder(
+          border: border,
+          child: Container(decoration: decoration, child: content),
+        ),
       ),
     );
   }
+}
+
+/// Paints a border outside the child's bounds so the inner content keeps
+/// its full area (border does not shrink the content). Only supports
+/// uniform BorderSides (the code below uses the top side as representative
+/// because the selected border is created via `Border.fromBorderSide`).
+class _OuterBorder extends StatelessWidget {
+  const _OuterBorder({required this.child, this.border});
+
+  final Border? border;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (border == null) {
+      return child;
+    }
+    final side = border!.top;
+    return Stack(
+      fit: StackFit.passthrough,
+      children: [
+        child,
+        Positioned.fill(
+          child: IgnorePointer(
+            child: CustomPaint(
+              painter: _OuterBorderPainter(
+                color: side.color,
+                width: side.width,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _OuterBorderPainter extends CustomPainter {
+  _OuterBorderPainter({required this.color, required this.width});
+
+  final Color color;
+  final double width;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (width <= 0) {
+      return;
+    }
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = width
+      ..isAntiAlias = true;
+
+    // Expand the rect by half the stroke width so the inner edge of the
+    // stroke aligns with the child's original bounds. This effectively
+    // places the stroke outside the child's area.
+    final rect = Rect.fromLTWH(
+      -width / 2,
+      -width / 2,
+      size.width + width,
+      size.height + width,
+    );
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _OuterBorderPainter old) =>
+      old.color != color || old.width != width;
 }
 
 class _CellContent extends StatelessWidget {
@@ -266,11 +341,13 @@ class _CellContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final ext = Theme.of(context).extension<CrosswordThemeColors>() ??
+    final ext =
+        Theme.of(context).extension<CrosswordThemeColors>() ??
         CrosswordThemeColors.defaults;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final blackLetterColor =
-        ext.blackCellColor.computeLuminance() < 0.5 ? Colors.white : Colors.black;
+    final blackLetterColor = ext.blackCellColor.computeLuminance() < 0.5
+        ? Colors.white
+        : Colors.black;
 
     final numberStyle = TextStyle(
       fontSize: 9,

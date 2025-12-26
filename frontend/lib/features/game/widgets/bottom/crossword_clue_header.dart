@@ -35,10 +35,9 @@ class CrosswordClueHeader extends ConsumerWidget {
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: Theme.of(context)
-                .colorScheme
-                .onSurface
-                .withAlpha((0.12 * 255).round()),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurface.withAlpha((0.12 * 255).round()),
             width: 1,
           ),
         ),

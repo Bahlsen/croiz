@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 
 void main() {
-  testWidgets('Menu toggles persist across open/close', (WidgetTester tester) async {
+  testWidgets('Menu toggles persist across open/close', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(

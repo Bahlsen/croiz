@@ -12,7 +12,9 @@ class PuzzlesListPage extends ConsumerWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       appBar: AppBar(title: const Text('Puzzles')),
-      backgroundColor: isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: isLight
+          ? Colors.white
+          : Theme.of(context).scaffoldBackgroundColor,
       body: _buildList(context, ref),
     );
   }

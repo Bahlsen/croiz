@@ -73,44 +73,45 @@ class _AutoSizeClueText extends StatefulWidget {
 }
 
 class _AutoSizeClueTextState extends State<_AutoSizeClueText> {
-
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-      builder: (context, constraints) {
-        final maxWidth = constraints.maxWidth;
-        // Start from provided fontSize or fallback
-        final baseFontSize = widget.style.fontSize ?? 18;
-        var fontSize = baseFontSize;
+    builder: (context, constraints) {
+      final maxWidth = constraints.maxWidth;
+      // Start from provided fontSize or fallback
+      final baseFontSize = widget.style.fontSize ?? 18;
+      var fontSize = baseFontSize;
 
-        // Try decreasing font size until text fits within maxLines.
-        while (fontSize >= widget.minFontSize) {
-          final tp = TextPainter(
-            text: TextSpan(text: widget.text, style: widget.style.copyWith(fontSize: fontSize)),
-            textDirection: TextDirection.ltr,
-            maxLines: widget.maxLines,
-            ellipsis: null,
-          )
-          ..layout(maxWidth: maxWidth);
-          if (tp.didExceedMaxLines) {
-            fontSize -= 1;
-            continue;
-          }
-          break;
-        }
-
-        // Ensure not below minFontSize
-        if (fontSize < widget.minFontSize) {
-          fontSize = widget.minFontSize;
-        }
-
-        // Store for diagnostics/testing
-
-        return Text(
-          widget.text,
-          textAlign: TextAlign.center,
+      // Try decreasing font size until text fits within maxLines.
+      while (fontSize >= widget.minFontSize) {
+        final tp = TextPainter(
+          text: TextSpan(
+            text: widget.text,
+            style: widget.style.copyWith(fontSize: fontSize),
+          ),
+          textDirection: TextDirection.ltr,
           maxLines: widget.maxLines,
-          style: widget.style.copyWith(fontSize: fontSize),
-        );
-      },
-    );
+          ellipsis: null,
+        )..layout(maxWidth: maxWidth);
+        if (tp.didExceedMaxLines) {
+          fontSize -= 1;
+          continue;
+        }
+        break;
+      }
+
+      // Ensure not below minFontSize
+      if (fontSize < widget.minFontSize) {
+        fontSize = widget.minFontSize;
+      }
+
+      // Store for diagnostics/testing
+
+      return Text(
+        widget.text,
+        textAlign: TextAlign.center,
+        maxLines: widget.maxLines,
+        style: widget.style.copyWith(fontSize: fontSize),
+      );
+    },
+  );
 }

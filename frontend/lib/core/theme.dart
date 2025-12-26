@@ -58,7 +58,9 @@ class AppTheme {
     appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
     // Provide crossword-specific colors for the dark theme via a ThemeExtension
     // Use `darkDefaults` so normal cells remain white while scaffold is dark.
-    extensions: const <ThemeExtension<dynamic>>[CrosswordThemeColors.darkDefaults],
+    extensions: const <ThemeExtension<dynamic>>[
+      CrosswordThemeColors.darkDefaults,
+    ],
   );
 }
 

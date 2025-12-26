@@ -14,10 +14,7 @@ void main() {
           home: Scaffold(
             body: SizedBox(
               height: 100,
-              child: CrosswordControlsBar(
-                onKey: (_) {},
-                onBackspace: () {},
-              ),
+              child: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
             ),
           ),
         ),
@@ -48,10 +45,7 @@ void main() {
             home: Scaffold(
               body: SizedBox(
                 height: 150,
-                child: CrosswordControlsBar(
-                  onKey: (_) {},
-                  onBackspace: () {},
-                ),
+                child: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
               ),
             ),
           ),

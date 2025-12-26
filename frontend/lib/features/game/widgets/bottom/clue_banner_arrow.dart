@@ -17,7 +17,9 @@ class ClueBannerArrow extends StatelessWidget {
       child: Center(
         child: Icon(
           icon,
-          color: Theme.of(context).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
+          color: Theme.of(
+            context,
+          ).colorScheme.onSurface.withAlpha((0.7 * 255).round()),
           size: 36,
         ),
       ),

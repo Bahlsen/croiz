@@ -97,8 +97,11 @@ class _BackspaceKeyState extends State<BackspaceKey> {
                 Theme.of(context).colorScheme.surfaceContainerHighest,
             shape: RoundedRectangleBorder(borderRadius: widget.borderRadius),
           ),
-          child: Icon(Icons.backspace_outlined,
-              size: 28, color: Theme.of(context).colorScheme.onSurface),
+          child: Icon(
+            Icons.backspace_outlined,
+            size: 28,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
       ),
     ),

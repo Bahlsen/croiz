@@ -150,57 +150,142 @@ class CrosswordInputController {
 
   void clearCurrent() {
     final sel = _read(selectedCellProvider);
+    // debug logs removed
     if (sel == null) {
+      // no selection
       return;
     }
 
     final lockedCells = _read(lockedCellsProvider);
     final cellKey = CellKey(sel.row, sel.col);
     if (lockedCells.contains(cellKey)) {
+      // cell is locked
       return;
     }
 
     final board = _safeReadBoard();
-    final current = board.grid[sel.row][sel.col];
-    if (current == null || current.isEmpty) {
-      final dir = _read(wordDirectionProvider);
-      final dr = dir == WordDirection.vertical ? -1 : 0;
-      final dc = dir == WordDirection.vertical ? 0 : -1;
 
-      var fromR = sel.row;
-      var fromC = sel.col;
-      final maxSteps = board.gridSize * board.gridSize;
-      for (var i = 0; i < maxSteps; i++) {
-        final prev = board.blackCells.nextSelectableFrom(
-          fromR,
-          fromC,
-          dr,
-          dc,
-          wrap: true,
-        );
-        if (prev == null) {
-          break;
-        }
-        fromR = prev[0];
-        fromC = prev[1];
-        final letter = board.grid[fromR][fromC];
-        if (letter != null && letter.isNotEmpty) {
-          final prevKey = CellKey(fromR, fromC);
-          final prevSel = SelectedCell(fromR, fromC);
-          if (lockedCells.contains(prevKey)) {
-            _read(selectedCellProvider.notifier).value = prevSel;
-            return;
+    // Clear the current cell even if it's already empty (keeps behavior simple)
+    _read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
+    // cleared current cell
+
+    final dir = _read(wordDirectionProvider);
+    final isAcross = dir == WordDirection.horizontal;
+    final entries = board.entries;
+
+    // Try to find containing entry and move backward within it first,
+    // otherwise find the previous filled cell in previous entries.
+    if (entries != null && entries.isNotEmpty) {
+      final index = _tryReadCellEntriesIndex();
+      final containing = findContainingEntry(
+        row: sel.row,
+        col: sel.col,
+        wantAcross: isAcross,
+        entries: entries,
+        index: index,
+      );
+      if (containing != null) {
+        // Search backwards within same entry
+        if (isAcross) {
+          for (var cc = sel.col - 1; cc >= containing.x; cc--) {
+            final key = CellKey(containing.y, cc);
+            if (lockedCells.contains(key)) {
+              _read(selectedCellProvider.notifier).value = SelectedCell(
+                containing.y,
+                cc,
+              );
+              return;
+            }
+            final val = board.grid[containing.y][cc];
+            if (val != null && val.isNotEmpty) {
+              _read(selectedCellProvider.notifier).value = SelectedCell(
+                containing.y,
+                cc,
+              );
+              return;
+            }
           }
+        } else {
+          for (var rr = sel.row - 1; rr >= containing.y; rr--) {
+            final key = CellKey(rr, containing.x);
+            if (lockedCells.contains(key)) {
+              _read(selectedCellProvider.notifier).value = SelectedCell(
+                rr,
+                containing.x,
+              );
+              return;
+            }
+            final val = board.grid[rr][containing.x];
+            if (val != null && val.isNotEmpty) {
+              _read(selectedCellProvider.notifier).value = SelectedCell(
+                rr,
+                containing.x,
+              );
+              return;
+            }
+          }
+        }
 
-          _read(selectedCellProvider.notifier).value = prevSel;
-          _read(
-            gameBoardProvider.notifier,
-          ).setLetter(prevSel.row, prevSel.col, '');
-          break;
+        // Find previous filled cell across previous entries (no wrapping)
+        final sortedSame = _trySortedEntries(isAcross);
+        final prevFilled = findPreviousFilledFromEntry(
+          containing: containing,
+          wantAcross: isAcross,
+          board: board,
+          entries: entries,
+          lockedCells: lockedCells,
+          skipLocked: true,
+          sortedSameDir: sortedSame,
+        );
+        if (prevFilled != null) {
+          _read(selectedCellProvider.notifier).value = prevFilled;
+          final idxMap = _tryReadCellEntriesIndex();
+          final sameContaining = findContainingEntry(
+            row: prevFilled.row,
+            col: prevFilled.col,
+            wantAcross: isAcross,
+            entries: entries,
+            index: idxMap,
+          );
+          if (sameContaining != null) {
+            _read(wordDirectionProvider.notifier).value = dir;
+          } else {
+            final otherContaining = findContainingEntry(
+              row: prevFilled.row,
+              col: prevFilled.col,
+              wantAcross: !isAcross,
+              entries: entries,
+              index: idxMap,
+            );
+            if (otherContaining != null) {
+              final newDir =
+                  (otherContaining.directionEnum == EntryDirection.across)
+                  ? WordDirection.horizontal
+                  : WordDirection.vertical;
+              _read(wordDirectionProvider.notifier).value = newDir;
+            }
+          }
+          return;
         }
       }
-    } else {
-      _read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
+    }
+
+    // Fallback: select the previous editable cell in the current direction
+    final dr = dir == WordDirection.vertical ? -1 : 0;
+    final dc = dir == WordDirection.vertical ? 0 : -1;
+    final prev = _nextEditableCell(
+      board,
+      fromRow: sel.row,
+      fromCol: sel.col,
+      dr: dr,
+      dc: dc,
+      wrap: true,
+    );
+    if (prev != null) {
+      _read(selectedCellProvider.notifier).value = SelectedCell(
+        prev[0],
+        prev[1],
+      );
     }
   }
 
@@ -312,8 +397,6 @@ class CrosswordInputController {
     final entries = board.entries;
     final lockedCells = _read<Set<CellKey>>(lockedCellsProvider);
 
-    // Try to find containing entry and then the next empty cell after the current
-    // position within the same entry.
     if (entries != null && entries.isNotEmpty) {
       final index = _tryReadCellEntriesIndex();
       final containing = findContainingEntry(
@@ -324,7 +407,7 @@ class CrosswordInputController {
         index: index,
       );
       if (containing != null) {
-        // Search within containing entry after the current position
+        // search for next empty within the same entry
         if (isAcross) {
           for (
             var cc = startCol + 1;
@@ -365,25 +448,18 @@ class CrosswordInputController {
           }
         }
 
-        // Not found in same entry -> find next empty in other entries
-        // Performance: use pre-sorted entry lists from providers
+        // no empty in current entry -> search next entries for an empty
         final sortedSame = _trySortedEntries(isAcross);
-        final sortedOther = _trySortedEntries(!isAcross);
         final nextEmpty = findNextEmptyFromEntry(
           containing: containing,
           wantAcross: isAcross,
           board: board,
           entries: entries,
-          lockedCells: lockedCells,
-          skipLocked: true,
+          skipLocked: false,
           sortedSameDir: sortedSame,
-          sortedOtherDir: sortedOther,
         );
         if (nextEmpty != null) {
           _read(selectedCellProvider.notifier).value = nextEmpty;
-          // Prefer keeping the current direction if the found empty belongs
-          // to an entry in the same direction. Only switch if no same-dir
-          // entry exists at that cell.
           final idxMap = _tryReadCellEntriesIndex();
           final sameContaining = findContainingEntry(
             row: nextEmpty.row,
@@ -393,12 +469,10 @@ class CrosswordInputController {
             index: idxMap,
           );
           if (sameContaining != null) {
-            // keep current direction
             _read(wordDirectionProvider.notifier).value = dir;
             return;
           }
 
-          // No same-direction entry found -> pick the other direction if present
           final otherContaining = findContainingEntry(
             row: nextEmpty.row,
             col: nextEmpty.col,
@@ -418,7 +492,7 @@ class CrosswordInputController {
       }
     }
 
-    // Fallback: select the next editable cell in the current direction
+    // fallback: select the next editable cell in the current direction
     final dr = dir == WordDirection.vertical ? 1 : 0;
     final dc = dir == WordDirection.vertical ? 0 : 1;
     final next = _nextEditableCell(

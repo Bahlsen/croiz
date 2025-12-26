@@ -61,7 +61,10 @@ class CrosswordLoadingScaffold extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'Please wait',
-                    style: TextStyle(color: onBg.withAlpha((0.7 * 255).round()), fontSize: 13),
+                    style: TextStyle(
+                      color: onBg.withAlpha((0.7 * 255).round()),
+                      fontSize: 13,
+                    ),
                   ),
                 ],
               ),
@@ -69,7 +72,7 @@ class CrosswordLoadingScaffold extends StatelessWidget {
             Positioned(
               top: 8,
               left: 8,
-                child: IconButton(
+              child: IconButton(
                 key: const Key('menu_button'),
                 icon: Icon(Icons.menu, color: onBg),
                 onPressed: () => _showMenu(context),

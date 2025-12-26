@@ -30,8 +30,8 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     final isMuted = ref.watch(gameAudioMutedProvider);
     final isDark = ref.watch(appIsDarkProvider);
     final layout = isAzerty
-      ? VirtualKeyboard.azertyLayout
-      : VirtualKeyboard.qwertyLayout;
+        ? VirtualKeyboard.azertyLayout
+        : VirtualKeyboard.qwertyLayout;
 
     return Stack(
       children: [

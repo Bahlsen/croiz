@@ -27,15 +27,19 @@ void main() {
       entries: const [],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
         child: const MaterialApp(
-          home: Scaffold(body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1'))),
+          home: Scaffold(
+            body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+          ),
         ),
       ),
     );

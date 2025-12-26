@@ -16,10 +16,7 @@ void main() {
               body: Column(
                 children: [
                   const Expanded(child: Placeholder()),
-                  CrosswordControlsBar(
-                    onKey: (_) {},
-                    onBackspace: () {},
-                  ),
+                  CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
                 ],
               ),
             ),

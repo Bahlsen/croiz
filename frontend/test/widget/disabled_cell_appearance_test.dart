@@ -27,9 +27,11 @@ void main() {
       entries: const [],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -55,6 +57,9 @@ void main() {
     final boxDecoration = containerWidget.decoration as BoxDecoration?;
     expect(boxDecoration, isNotNull);
 
-    expect(boxDecoration!.color, equals(AppTheme.lightTheme().scaffoldBackgroundColor));
+    expect(
+      boxDecoration!.color,
+      equals(AppTheme.lightTheme().scaffoldBackgroundColor),
+    );
   });
 }
