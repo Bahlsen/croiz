@@ -188,9 +188,20 @@ class VirtualKeyboard extends ConsumerWidget {
             : MediaQuery.of(context).size.height,
       );
     }
-    return constraints.maxHeight.isFinite
-        ? constraints.maxHeight
-        : MediaQuery.of(context).size.height;
+    if (constraints.maxHeight.isFinite) {
+      return constraints.maxHeight;
+    }
+
+    // When the keyboard is placed in a parent that gives it unbounded
+    // vertical constraints (for example, a Column with mainAxisSize.min),
+    // avoid sizing to the full screen height. Use a conservative fraction
+    // of the viewport so the keyboard remains reasonable and does not
+    // cause downstream overflow when the outer layout is constrained.
+    const fallbackFraction = 0.25; // 25% of screen height
+    return (MediaQuery.of(context).size.height * fallbackFraction).clamp(
+      0.0,
+      double.infinity,
+    );
   }
 
   double _computeEffectiveKeyHeight(
