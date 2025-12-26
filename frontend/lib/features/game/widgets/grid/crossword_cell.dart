@@ -133,9 +133,7 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ext =
-      Theme.of(context).extension<CrosswordThemeColors>() ??
-        CrosswordThemeColors.defaults;
+    
     // Narrow watches to only what this cell needs.
     final isSelected = ref.watch(
       selectedCellProvider.select(
@@ -180,8 +178,10 @@ class CrosswordCell extends ConsumerWidget {
       boxShadow = tt.defaultBoxShadow;
       bgColor = tt.selectedWordBg;
     } else if (isDisabled) {
-      boxShadow = tt.defaultBoxShadow;
-      bgColor = ext.blackCellColor;
+      // Disabled cells should not stand out — match scaffold background
+      // (grey in light theme, black in dark) and remove shadows/borders.
+      boxShadow = <BoxShadow>[];
+      bgColor = Theme.of(context).scaffoldBackgroundColor;
     } else {
       boxShadow = tt.defaultBoxShadow;
       bgColor = isDark ? Colors.grey.shade800 : tt.defaultBg;
