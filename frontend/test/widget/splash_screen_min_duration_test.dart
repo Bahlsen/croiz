@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 class _ImmediateAudioService implements AudioService {
   @override
@@ -37,6 +38,8 @@ void main() {
           gameAudioServiceProvider.overrideWithValue(_ImmediateAudioService()),
         ],
         child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: SplashScreen(
             onInitialized: () {
               initialized = true;
