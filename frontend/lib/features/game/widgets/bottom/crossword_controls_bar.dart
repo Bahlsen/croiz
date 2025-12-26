@@ -44,10 +44,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                   ref.read(gameBoardProvider.notifier).clearIncorrectLetters(),
               onMenu: () => setState(() => _showMenu = true),
             ),
-            VirtualKeyboard(
-              layout: layout,
-              onKey: widget.onKey,
-              onBackspace: widget.onBackspace,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: VirtualKeyboard(
+                layout: layout,
+                onKey: widget.onKey,
+                onBackspace: widget.onBackspace,
+              ),
             ),
           ],
         ),

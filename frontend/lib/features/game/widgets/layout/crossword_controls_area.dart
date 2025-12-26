@@ -10,8 +10,13 @@ class CrosswordControlsArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => 
-       CrosswordControlsBar(
-          onKey: controller.setLetterAndAdvance,
-          onBackspace: controller.clearCurrent,
-        );
+       Padding(
+         padding: EdgeInsets.only(
+           bottom: MediaQuery.of(context).padding.bottom + 50.0,
+         ),
+         child: CrosswordControlsBar(
+           onKey: controller.setLetterAndAdvance,
+           onBackspace: controller.clearCurrent,
+         ),
+       );
 }
