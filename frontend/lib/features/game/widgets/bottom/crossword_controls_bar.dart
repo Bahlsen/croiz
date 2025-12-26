@@ -36,6 +36,8 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     return Stack(
       children: [
         Column(
+          // Keep the column sized to its content so the controls render
+          // normally in tight layouts. Do not force it to expand.
           mainAxisSize: MainAxisSize.min,
           children: [
             CrosswordClueHeader(
