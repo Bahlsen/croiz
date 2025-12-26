@@ -133,7 +133,7 @@ class CrosswordCell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final extForBlack =
+    final ext =
       Theme.of(context).extension<CrosswordThemeColors>() ??
         CrosswordThemeColors.defaults;
     // Narrow watches to only what this cell needs.
@@ -149,9 +149,6 @@ class CrosswordCell extends ConsumerWidget {
     final isBlack = ref.watch(
       gameBoardProvider.select((b) => b.blackCells[row][col]),
     );
-    if (isBlack) {
-      return Container(color: extForBlack.blackCellColor);
-    }
     final cellKey = CellKey(row, col);
     final isFlashing = ref.watch(cellFlashingProvider(cellKey));
     final isClearedFlashing = ref.watch(cellClearedFlashingProvider(cellKey));
@@ -186,6 +183,10 @@ class CrosswordCell extends ConsumerWidget {
       boxShadow = tt.defaultBoxShadow;
       border = tt.selectedWordBorder;
       bgColor = tt.selectedWordBg;
+    } else if (isBlack) {
+      boxShadow = tt.defaultBoxShadow;
+      border = tt.defaultBorder;
+      bgColor = ext.blackCellColor;
     } else {
       boxShadow = tt.defaultBoxShadow;
       border = tt.defaultBorder;
@@ -203,6 +204,7 @@ class CrosswordCell extends ConsumerWidget {
       cellNumber: cellNumber,
       letter: letter,
       isSelected: isSelected,
+      isBlack: isBlack,
     );
 
     // Accessibility: semantic label for screen readers
@@ -249,30 +251,39 @@ class _CellContent extends StatelessWidget {
     required this.cellNumber,
     required this.letter,
     required this.isSelected,
+    required this.isBlack,
   });
   final int? cellNumber;
   final String? letter;
   final bool isSelected;
+  final bool isBlack;
 
   static const _letterPadding = EdgeInsets.all(2);
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final ext = Theme.of(context).extension<CrosswordThemeColors>() ??
+        CrosswordThemeColors.defaults;
+    final blackLetterColor =
+        ext.blackCellColor.computeLuminance() < 0.5 ? Colors.white : Colors.black;
+
     final numberStyle = TextStyle(
       fontSize: 9,
-      color: scheme.onSurface.withAlpha((0.58 * 255).round()),
+      color: isBlack
+          ? blackLetterColor.withAlpha((0.58 * 255).round())
+          : scheme.onSurface.withAlpha((0.58 * 255).round()),
       fontWeight: FontWeight.w400,
     );
     final letterStyle = TextStyle(
       fontSize: 26,
       fontWeight: FontWeight.bold,
-      color: scheme.onSurface,
+      color: isBlack ? blackLetterColor : scheme.onSurface,
     );
     final selectedLetterStyle = TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold,
-      color: scheme.onSurface,
+      color: isBlack ? blackLetterColor : scheme.onSurface,
     );
 
     return Stack(
