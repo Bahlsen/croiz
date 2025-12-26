@@ -196,7 +196,6 @@ class CrosswordCell extends ConsumerWidget {
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
       boxShadow: boxShadow,
-      border: border,
       color: bgColor,
     );
 
