@@ -102,7 +102,21 @@ try {
   }
 
   Write-Host "Checking connected devices..." -ForegroundColor Cyan
-  $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
+  # Read adb devices output robustly (join & split to ensure lines are strings)
+  $rawOut = (& $adb devices) -join "`n"
+  $lines = $rawOut -split "`r?`n"
+  $devices = @()
+  foreach ($line in $lines) {
+    if ($line -match '^\s*(\S+)\s+device\s*$') { $devices += $matches[1] }
+  }
+  # Filter out any spurious single-character tokens
+  $devices = $devices | Where-Object { $_ -and ($_.Length -gt 2) }
+  if ($Debug) {
+    Write-Host "Raw adb output:" -ForegroundColor DarkCyan
+    $lines | ForEach-Object { Write-Host "RAW> '$_'" }
+    Write-Host "Parsed devices (post-filter):" -ForegroundColor DarkCyan
+    $devices | ForEach-Object { Write-Host ("DEV> '{0}' (len={1})" -f $_, ($_.Length)) }
+  }
 
   # Wireless connect (optional, only if none connected yet)
   if (-not $devices -or $devices.Count -eq 0) {
@@ -110,8 +124,21 @@ try {
     if ($Connect) {
       Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
       $null = & $adb connect $Connect 2>$null
-      # Recheck devices after attempting connection
-      $devices = & $adb devices | Select-String '\tdevice$' | ForEach-Object { ($_ -split '\s+')[0] }
+      # Recheck devices after attempting connection (robustly)
+      $rawOut = (& $adb devices) -join "`n"
+      $lines = $rawOut -split "`r?`n"
+      $devices = @()
+      foreach ($line in $lines) {
+        if ($line -match '^\s*(\S+)\s+device\s*$') { $devices += $matches[1] }
+      }
+      # Filter out spurious single-character tokens after recheck
+      $devices = $devices | Where-Object { $_ -and ($_.Length -gt 2) }
+      if ($Debug) {
+        Write-Host "Raw adb output (after connect):" -ForegroundColor DarkCyan
+        $lines | ForEach-Object { Write-Host "RAW> '$_'" }
+        Write-Host "Parsed devices (post-filter after connect):" -ForegroundColor DarkCyan
+        $devices | ForEach-Object { Write-Host ("DEV> '{0}' (len={1})" -f $_, ($_.Length)) }
+      }
     }
   }
 
@@ -119,8 +146,33 @@ try {
     throw 'No device connected. Use -Connect or -Pair first, or connect via USB.'
   }
 
-  # Install to all connected devices
-  foreach ($d in $devices) {
+  # Prefer Wi‑Fi devices and avoid emulators. Wi‑Fi devices appear as IP:PORT (e.g. 192.168.1.42:5555).
+  $ipPortRegex = '^\d{1,3}(?:\.\d{1,3}){3}:\d+$'
+  # Ensure these are arrays even when there's a single match
+  $nonEmulator = @($devices | Where-Object { -not ($_ -like 'emulator*') })
+  # Recognize Wi‑Fi devices by IP:port, or mDNS/TLS device names from Android wireless debugging
+  $wifiDevices = @($nonEmulator | Where-Object { ($_ -match $ipPortRegex) -or ($_ -match '_adb-tls-connect') -or ($_ -match '\._adb-tls-connect\._tcp') })
+
+  if ($Debug) {
+    Write-Host "Wi‑Fi candidates:" -ForegroundColor DarkCyan
+    $wifiDevices | ForEach-Object { Write-Host ("WIFI> '{0}' (len={1})" -f $_, ($_.Length)) }
+  }
+
+  if ($wifiDevices -and $wifiDevices.Count -gt 0) {
+    $targetDevices = @($wifiDevices[0])
+    Write-Host "Selected Wi‑Fi device: $($targetDevices -join ', ')" -ForegroundColor Cyan
+  } elseif ($nonEmulator -and $nonEmulator.Count -gt 0) {
+    # Fallback to non-emulator device (USB)
+    $targetDevices = @($nonEmulator[0])
+    Write-Host "No Wi‑Fi device found; using non-emulator device: $($targetDevices -join ', ')" -ForegroundColor Yellow
+  } else {
+    # Last resort: include emulators
+    $targetDevices = @($devices[0])
+    Write-Host "No physical devices found; falling back to device: $($targetDevices -join ', ')" -ForegroundColor Yellow
+  }
+
+  # Install to the selected device(s) (usually one)
+  foreach ($d in $targetDevices) {
     Write-Host "Installing APK to $d ..." -ForegroundColor Cyan
     & $adb -s $d install -r $apkPath | Out-Host
     if (-not $NoLaunch) {
