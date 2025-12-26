@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +26,19 @@ class CroizApp extends ConsumerStatefulWidget {
 class _CroizAppState extends ConsumerState<CroizApp> {
   bool _initialized = false;
 
-  void _onInitialized() {
+  // Called by the SplashScreen when core initialization completes.
+  // Load persisted locale here so the app starts with the user's choice.
+  Future<void> _onInitialized() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getString('locale');
+      if (saved != null && saved.isNotEmpty) {
+        ref.read(localeProvider.notifier).setLocale(Locale(saved));
+      }
+    } catch (_) {
+      // ignore and continue with default locale
+    }
+
     if (mounted) {
       setState(() => _initialized = true);
     }
@@ -36,6 +51,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(appIsDarkProvider);
+    final locale = ref.watch(localeProvider);
 
     if (!_initialized) {
       return MaterialApp(
@@ -55,6 +71,18 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      locale: locale,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('fr'),
+        const Locale('uk'),
+      ],
     );
   }
 }

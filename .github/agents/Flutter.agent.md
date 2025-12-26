@@ -1,6 +1,6 @@
 ---
 description: 'Flutter specialist'
-tools: ['edit', 'execute/runNotebookCell', 'read/getNotebookSummary', 'read/readNotebookCellOutput', 'search', 'vscode/getProjectSetupInfo', 'vscode/installExtension', 'vscode/newWorkspace', 'vscode/runCommand', 'execute/getTerminalOutput', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'execute/createAndRunTask', 'execute/getTaskOutput', 'execute/runTask', 'dart-code.dart-code/get_dtd_uri', 'dart-code.dart-code/dart_format', 'dart-code.dart-code/dart_fix', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'search/changes', 'execute/testFailure', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo', 'vscode/extensions', 'todo', 'agent', 'execute/runTests']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'dart-code.dart-code/get_dtd_uri', 'dart-code.dart-code/dart_format', 'dart-code.dart-code/dart_fix', 'todo']
 ---
 # Auto-linting policy for the agent
 # The agent MUST run the following steps automatically before completing any code edits

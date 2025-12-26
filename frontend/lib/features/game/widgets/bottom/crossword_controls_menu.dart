@@ -12,7 +12,7 @@ String kbSizeLabel(WidgetRef ref) {
     case KeyboardSize.large:
       return 'Large';
     case KeyboardSize.medium:
-    return 'Medium';
+      return 'Medium';
   }
 }
 
@@ -126,7 +126,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.zoom_out_map,
-                                  color: Theme.of(context).colorScheme.onSurface,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
                                 ),
                                 title: const Text('Keyboard size'),
                                 subtitle: Text(kbSizeLabel(ref)),
@@ -151,7 +153,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     ],
                                     onChanged: (v) {
                                       if (v != null) {
-                                        ref.read(gameKeyboardSizeProvider.notifier).size = v;
+                                        ref
+                                                .read(
+                                                  gameKeyboardSizeProvider
+                                                      .notifier,
+                                                )
+                                                .size =
+                                            v;
                                       }
                                     },
                                   ),

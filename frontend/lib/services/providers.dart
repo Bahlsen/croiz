@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/game_audio_service.dart';
 import 'package:croiz/services/audio_service.dart';
@@ -25,8 +26,8 @@ enum KeyboardSize { small, medium, large }
 
 final gameKeyboardSizeProvider =
     NotifierProvider<KeyboardSizeNotifier, KeyboardSize>(
-  KeyboardSizeNotifier.new,
-);
+      KeyboardSizeNotifier.new,
+    );
 
 // Global game audio mute flag
 final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
@@ -37,6 +38,18 @@ final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
 final appIsDarkProvider = NotifierProvider<AppIsDarkNotifier, bool>(
   AppIsDarkNotifier.new,
 );
+
+// Locale provider: default English. Persisted to SharedPreferences under key 'locale'.
+final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
+  LocaleNotifier.new,
+);
+
+class LocaleNotifier extends Notifier<Locale> {
+  @override
+  Locale build() => const Locale('en');
+
+  void setLocale(Locale v) => state = v;
+}
 
 // --- Notifier implementations (Riverpod 3.0 style) ---
 class KeyboardLayoutNotifier extends Notifier<bool> {

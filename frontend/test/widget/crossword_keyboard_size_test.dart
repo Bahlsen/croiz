@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/providers.dart';
 
 void main() {
-  testWidgets('Keyboard size default is medium and updates to large', (tester) async {
+  testWidgets('Keyboard size default is medium and updates to large', (
+    tester,
+  ) async {
     final container = ProviderContainer();
     await tester.pumpWidget(
       UncontrolledProviderScope(
@@ -19,7 +21,10 @@ void main() {
                 CrosswordControlsMenu(onClose: () {}),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+                  child: CrosswordControlsBar(
+                    onKey: (_) {},
+                    onBackspace: () {},
+                  ),
                 ),
               ],
             ),

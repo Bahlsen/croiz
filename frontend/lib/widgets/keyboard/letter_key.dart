@@ -61,7 +61,10 @@ class LetterKey extends StatelessWidget {
       child: FilledButton(
         onPressed: onPressed,
         style: style,
-        child: Text(label, style: _letterTextStyle.copyWith(fontSize: fontSize)),
+        child: Text(
+          label,
+          style: _letterTextStyle.copyWith(fontSize: fontSize),
+        ),
       ),
     );
   }

@@ -45,7 +45,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         letterFontSize = 20;
         break;
       case KeyboardSize.medium:
-      keyHeight = 64;
+        keyHeight = 64;
         letterFontSize = 16;
     }
 
@@ -68,11 +68,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
               child: VirtualKeyboard(
-                  layout: layout,
-                  onKey: widget.onKey,
-                  onBackspace: widget.onBackspace,
-                  keyHeight: keyHeight,
-                  letterFontSize: letterFontSize,
+                layout: layout,
+                onKey: widget.onKey,
+                onBackspace: widget.onBackspace,
+                keyHeight: keyHeight,
+                letterFontSize: letterFontSize,
               ),
             ),
           ],

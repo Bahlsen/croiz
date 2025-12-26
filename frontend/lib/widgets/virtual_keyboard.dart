@@ -101,8 +101,8 @@ class VirtualKeyboard extends ConsumerWidget {
                     height: metrics.effectiveKeyHeight,
                     child: KeyboardRow(
                       keys: rows[i],
-                        keyHeight: metrics.effectiveKeyHeight,
-                        letterFontSize: letterFontSize,
+                      keyHeight: metrics.effectiveKeyHeight,
+                      letterFontSize: letterFontSize,
                       keySpacing: keySpacing,
                       rowMaxWidth: metrics.availableRowWidth,
                       onKey: (k) => onKey?.call(k.toUpperCase()),

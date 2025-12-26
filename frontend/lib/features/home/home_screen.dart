@@ -1,25 +1,50 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+// ignore_for_file: unnecessary_lambdas
 
-class HomeScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:croiz/services/providers.dart';
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final loc = AppLocalizations.of(context)!;
+
+    Future<void> _setLocale(String code) async {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('locale', code);
+      ref.read(localeProvider.notifier).setLocale(Locale(code));
+    }
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        title: const Text('Croiz'),
+        title: Text(loc.appTitle),
         centerTitle: true,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (value) => _setLocale(value),
+            icon: Icon(Icons.language, semanticLabel: loc.selectLanguage),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'en', child: Text(loc.languageEnglish)),
+              PopupMenuItem(value: 'fr', child: Text(loc.languageFrench)),
+              PopupMenuItem(value: 'uk', child: Text(loc.languageUkrainian)),
+            ],
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Welcome to Croiz',
+              loc.welcome,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -30,7 +55,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () => context.go('/puzzles'),
-                  child: const Text('Puzzles'),
+                  child: Text(loc.puzzles),
                 ),
               ],
             ),
