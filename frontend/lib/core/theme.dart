@@ -57,7 +57,8 @@ class AppTheme {
     typography: Typography.material2021(platform: TargetPlatform.android),
     appBarTheme: const AppBarTheme(elevation: 0, centerTitle: true),
     // Provide crossword-specific colors for the dark theme via a ThemeExtension
-    extensions: const <ThemeExtension<dynamic>>[CrosswordThemeColors.defaults],
+    // Use `darkDefaults` so normal cells remain white while scaffold is dark.
+    extensions: const <ThemeExtension<dynamic>>[CrosswordThemeColors.darkDefaults],
   );
 }
 
@@ -242,7 +243,8 @@ class CrosswordThemeColors extends ThemeExtension<CrosswordThemeColors> {
     selectedWordBgColor: Color(0xFFFFFFFF),
     flashingBgColor: Color.fromRGBO(105, 240, 174, 0.32),
     clearedFlashingBgColor: Color.fromRGBO(255, 82, 82, 0.32),
-    blackCellColor: Color(0xFF000000),
+    // In light theme use a grey for blocked cells instead of pure black
+    blackCellColor: Color(0xFF9E9E9E),
     defaultBoxShadowColor: Color.fromRGBO(0, 0, 0, 0.12),
     selectedBorderColor: Color(0xFF1976D2),
     defaultBorderColor: Color(0xFFBDBDBD),
@@ -253,5 +255,25 @@ class CrosswordThemeColors extends ThemeExtension<CrosswordThemeColors> {
     clearedFlashingBorderColor: Color(0xFFFF5252),
     flashingBorderColor: Color(0xFF66FF99),
     selectedWordBorderColor: Color(0xFF64B5F6),
+  );
+
+  // Dark-theme overrides: keep normal cells white per user request while
+  // the overall scaffold stays dark. Blocked cells remain dark to contrast.
+  static const CrosswordThemeColors darkDefaults = CrosswordThemeColors(
+    defaultBgColor: Color(0xFFFFFFFF),
+    selectedWordBgColor: Color.fromRGBO(33, 150, 243, 0.42),
+    flashingBgColor: Color.fromRGBO(105, 240, 174, 0.48),
+    clearedFlashingBgColor: Color.fromRGBO(255, 82, 82, 0.48),
+    blackCellColor: Color(0xFF000000),
+    defaultBoxShadowColor: Color.fromRGBO(0, 0, 0, 0.5),
+    selectedBorderColor: Color.fromARGB(255, 110, 32, 124),
+    defaultBorderColor: Color(0xFF616161),
+    selectedBoxShadowColor1: Color.fromRGBO(128, 0, 128, 0.32),
+    selectedBoxShadowColor2: Color.fromRGBO(0, 0, 255, 0.28),
+    flashingBoxShadowColor: Color.fromRGBO(105, 240, 174, 0.85),
+    clearedFlashingBoxShadowColor: Color.fromRGBO(255, 82, 82, 0.9),
+    clearedFlashingBorderColor: Colors.redAccent,
+    flashingBorderColor: Colors.greenAccent,
+    selectedWordBorderColor: Colors.blueAccent,
   );
 }

@@ -260,42 +260,37 @@ class _CellContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final numberStyle = TextStyle(
-      fontSize: 7,
+      fontSize: 9,
       color: scheme.onSurface.withAlpha((0.58 * 255).round()),
       fontWeight: FontWeight.w400,
     );
     final letterStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 26,
       fontWeight: FontWeight.bold,
       color: scheme.onSurface,
     );
     final selectedLetterStyle = TextStyle(
-      fontSize: 24,
+      fontSize: 30,
       fontWeight: FontWeight.bold,
       color: scheme.onSurface,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Stack(
       children: [
         if (cellNumber != null)
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 1, top: 0),
-              child: Text('$cellNumber', style: numberStyle),
-            ),
+          Positioned(
+            left: 1,
+            top: 0,
+            child: Text('$cellNumber', style: numberStyle),
           ),
-        Expanded(
-          child: Center(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Padding(
-                padding: _letterPadding,
-                child: Text(
-                  letter ?? '',
-                  style: isSelected ? selectedLetterStyle : letterStyle,
-                ),
+        Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: _letterPadding,
+              child: Text(
+                letter ?? '',
+                style: isSelected ? selectedLetterStyle : letterStyle,
               ),
             ),
           ),

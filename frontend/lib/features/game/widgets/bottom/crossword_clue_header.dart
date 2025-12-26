@@ -20,85 +20,102 @@ class CrosswordClueHeader extends ConsumerWidget {
     final selected = ref.watch(selectedCellProvider);
     final dir = ref.watch(wordDirectionProvider);
 
-    // Build the main content of the header depending on selection.
-    Widget mainContent;
+    // Build the main content of the header. Always render the left/right
+    // action slots (menu / clear) when callbacks are provided so tests
+    // relying on keys like 'menu_button' and 'clear_button' remain valid.
+    Widget centerWidget;
+    ClueBannerArrow? leftArrow;
+    ClueBannerArrow? rightArrow;
+
     if (selected == null) {
-      mainContent = Container(
+      centerWidget = Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: Theme.of(context)
+          border: Border.all(
+            color: Theme.of(context)
                 .colorScheme
                 .onSurface
                 .withAlpha((0.12 * 255).round()),
-              width: 1),
+            width: 1,
+          ),
         ),
         child: Text(
           'Select a word',
           style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontWeight: FontWeight.w600),
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       );
     } else {
       final board = ref.watch(gameBoardProvider);
       final entryCtx = computeCurrentEntry(board, selected, dir);
       if (entryCtx == null) {
-        mainContent = const SizedBox.shrink();
+        centerWidget = const SizedBox.shrink();
       } else {
-        final entry = entryCtx.entry;
-        // Arrange as three vertical columns: left (arrow + optional menu),
-        // center (banner), right (arrow + optional clear). This makes the
-        // arrows appear higher and the icons sit directly under each arrow
-        // and alongside the banner.
-        mainContent = Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ClueBannerArrow(
-                  icon: Icons.chevron_left,
-                  onTap: () =>
-                      _navigateToAdjacentEntry(ref, entryCtx.entries, entry, -1),
-                ),
-                const SizedBox(height: 8),
-                if (onMenu != null)
-                  SizedBox(
-                    width: 56,
-                    height: 40,
-                    child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
-                  ),
-              ],
-            ),
-            const SizedBox(width: 8),
-            Expanded(child: ClueBannerContainer(entry: entry)),
-            const SizedBox(width: 8),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ClueBannerArrow(
-                  icon: Icons.chevron_right,
-                  onTap: () =>
-                      _navigateToAdjacentEntry(ref, entryCtx.entries, entry, 1),
-                ),
-                const SizedBox(height: 8),
-                if (onClear != null)
-                  SizedBox(
-                    width: 56,
-                    height: 40,
-                    child:
-                        Center(child: ClueHeaderClearButton(onPressed: onClear)),
-                  ),
-              ],
-            ),
-          ],
+        centerWidget = ClueBannerContainer(entry: entryCtx.entry);
+        leftArrow = ClueBannerArrow(
+          icon: Icons.chevron_left,
+          onTap: () => _navigateToAdjacentEntry(
+            ref,
+            entryCtx.entries,
+            entryCtx.entry,
+            -1,
+          ),
+        );
+        rightArrow = ClueBannerArrow(
+          icon: Icons.chevron_right,
+          onTap: () => _navigateToAdjacentEntry(
+            ref,
+            entryCtx.entries,
+            entryCtx.entry,
+            1,
+          ),
         );
       }
     }
+
+    final leftColumn = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (leftArrow != null) leftArrow,
+        const SizedBox(height: 8),
+        if (onMenu != null)
+          SizedBox(
+            width: 56,
+            height: 40,
+            child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
+          ),
+      ],
+    );
+
+    final rightColumn = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (rightArrow != null) rightArrow,
+        const SizedBox(height: 8),
+        if (onClear != null)
+          SizedBox(
+            width: 56,
+            height: 40,
+            child: Center(child: ClueHeaderClearButton(onPressed: onClear)),
+          ),
+      ],
+    );
+
+    final mainContent = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        leftColumn,
+        const SizedBox(width: 8),
+        Expanded(child: centerWidget),
+        const SizedBox(width: 8),
+        rightColumn,
+      ],
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

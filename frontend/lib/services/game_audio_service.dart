@@ -97,8 +97,13 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playType() async {
-    // Fast path: skip if not ready (don't block)
-    if (!_initialized || _typePlayer == null) {
+    // Ensure initialization completes before attempting playback. If the
+    // service is still initializing, await readiness so the first key press
+    // will play once ready rather than be silently dropped.
+    if (!_initialized) {
+      await _ready.future;
+    }
+    if (_typePlayer == null) {
       return;
     }
 
@@ -115,8 +120,10 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playDelete() async {
-    // Fast path: skip if not ready (don't block)
-    if (!_initialized || _deletePlayer == null) {
+    if (!_initialized) {
+      await _ready.future;
+    }
+    if (_deletePlayer == null) {
       return;
     }
 
