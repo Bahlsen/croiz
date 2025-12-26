@@ -146,7 +146,7 @@ class CrosswordCell extends ConsumerWidget {
     // Other cells get direction from cellInSelectedWordProvider which already
     // incorporates direction changes.
     final wordDirection = isSelected ? ref.watch(wordDirectionProvider) : null;
-    final isBlack = ref.watch(
+    final isDisabled = ref.watch(
       gameBoardProvider.select((b) => b.blackCells[row][col]),
     );
     final cellKey = CellKey(row, col);
@@ -179,7 +179,7 @@ class CrosswordCell extends ConsumerWidget {
     } else if (isPartOfSelectedWord) {
       boxShadow = tt.defaultBoxShadow;
       bgColor = tt.selectedWordBg;
-    } else if (isBlack) {
+    } else if (isDisabled) {
       boxShadow = tt.defaultBoxShadow;
       bgColor = ext.blackCellColor;
     } else {
@@ -197,7 +197,7 @@ class CrosswordCell extends ConsumerWidget {
       cellNumber: cellNumber,
       letter: letter,
       isSelected: isSelected,
-      isBlack: isBlack,
+      isBlack: isDisabled,
     );
 
     // Accessibility: semantic label for screen readers
@@ -215,6 +215,10 @@ class CrosswordCell extends ConsumerWidget {
       selected: isSelected,
       child: GestureDetector(
         onTap: () {
+          // Ignore taps on disabled (black/out-of-bounds) cells.
+          if (isDisabled) {
+            return;
+          }
           final wasSelected = isSelected;
           // Preserve the current word direction when selecting a different cell.
           // Only toggle direction when the user taps the already-selected cell.
