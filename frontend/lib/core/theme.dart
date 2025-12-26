@@ -239,17 +239,21 @@ class CrosswordThemeColors extends ThemeExtension<CrosswordThemeColors> {
   // text, subtler shadows).
   static const CrosswordThemeColors lightDefaults = CrosswordThemeColors(
     defaultBgColor: Color(0xFFFFFFFF),
-    // Keep selected cells white in light theme so letters remain readable.
-    selectedWordBgColor: Color(0xFFFFFFFF),
+    // Use a subtle yellow overlay for selected word in light theme so
+    // the selected word is visible against white cells.
+    selectedWordBgColor: Color.fromRGBO(255, 235, 59, 0.42),
     flashingBgColor: Color.fromRGBO(105, 240, 174, 0.32),
     clearedFlashingBgColor: Color.fromRGBO(255, 82, 82, 0.32),
     // In light theme use a grey for blocked cells instead of pure black
     blackCellColor: Color(0xFF9E9E9E),
     defaultBoxShadowColor: Color.fromRGBO(0, 0, 0, 0.12),
-    selectedBorderColor: Color(0xFF1976D2),
+    // In light theme, selected cell border should be orange to contrast
+    // against white cells (orange for light, violet for dark).
+    selectedBorderColor: Color(0xFFFF9800),
     defaultBorderColor: Color(0xFFBDBDBD),
-    selectedBoxShadowColor1: Color.fromRGBO(25, 118, 210, 0.18),
-    selectedBoxShadowColor2: Color.fromRGBO(25, 118, 210, 0.12),
+    // Slight amber shadows for selection on light backgrounds
+    selectedBoxShadowColor1: Color.fromRGBO(255, 193, 7, 0.18),
+    selectedBoxShadowColor2: Color.fromRGBO(255, 193, 7, 0.12),
     flashingBoxShadowColor: Color.fromRGBO(105, 240, 174, 0.45),
     clearedFlashingBoxShadowColor: Color.fromRGBO(255, 82, 82, 0.45),
     clearedFlashingBorderColor: Color(0xFFFF5252),

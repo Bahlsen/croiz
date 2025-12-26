@@ -187,10 +187,16 @@ class CrosswordCell extends ConsumerWidget {
       bgColor = isDark ? Colors.grey.shade800 : tt.defaultBg;
     }
 
+    // Only the actively selected cell should display an outline/border.
+    // Other cells (including part of the selected word) should NOT show
+    // a border per design request.
+    final border = isSelected ? tt.selectedBorder : null;
+
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
       boxShadow: boxShadow,
       color: bgColor,
+      border: border,
     );
 
     final content = _CellContent(
