@@ -33,9 +33,9 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getString('locale');
       if (saved != null && saved.isNotEmpty) {
-        ref.read(localeProvider.notifier).setLocale(Locale(saved));
+        ref.read(localeProvider.notifier).locale = Locale(saved);
       }
-    } catch (_) {
+    } on Exception catch (_) {
       // ignore and continue with default locale
     }
 
@@ -72,17 +72,13 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       locale: locale,
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('fr'),
-        const Locale('uk'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
     );
   }
 }

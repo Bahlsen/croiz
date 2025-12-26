@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 import 'virtual_keyboard.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -87,7 +88,7 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
                 Icons.delete_sweep_outlined,
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              label: const Text('Clear'),
+              label: Text(AppLocalizations.of(context)?.clear ?? 'Clear'),
             ),
           ],
         ),
@@ -123,7 +124,9 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            tooltip: 'Clear incorrect letters',
+            tooltip:
+                AppLocalizations.of(context)?.clearIncorrectLetters ??
+                'Clear incorrect letters',
             onPressed: _clearIncorrectLetters,
             icon: Icon(
               Icons.delete_sweep_outlined,
@@ -131,7 +134,9 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
             ),
           ),
           IconButton(
-            tooltip: 'Switch keyboard layout',
+            tooltip:
+                AppLocalizations.of(context)?.switchKeyboardLayout ??
+                'Switch keyboard layout',
             onPressed: () {
               setState(() {
                 // Toggle between AZERTY and QWERTY layouts

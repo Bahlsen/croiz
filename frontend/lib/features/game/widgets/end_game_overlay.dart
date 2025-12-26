@@ -2,6 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:go_router/go_router.dart';
@@ -51,9 +52,12 @@ class EndGameOverlay extends ConsumerWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Congratulations!',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                Text(
+                  AppLocalizations.of(context)?.congratulations ??
+                      'Congratulations!',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 // No timer displayed — kept intentionally blank/simple
@@ -61,7 +65,7 @@ class EndGameOverlay extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Close'),
+                  child: Text(AppLocalizations.of(context)?.close ?? 'Close'),
                 ),
                 const SizedBox(height: 8),
                 TextButton(
@@ -69,7 +73,9 @@ class EndGameOverlay extends ConsumerWidget {
                     // Navigate to puzzles list
                     context.go('/puzzles');
                   },
-                  child: const Text('View puzzles'),
+                  child: Text(
+                    AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
+                  ),
                 ),
               ],
             ),

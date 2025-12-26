@@ -48,7 +48,8 @@ class LocaleNotifier extends Notifier<Locale> {
   @override
   Locale build() => const Locale('en');
 
-  void setLocale(Locale v) => state = v;
+  set locale(Locale v) => state = v;
+  Locale get locale => state;
 }
 
 // --- Notifier implementations (Riverpod 3.0 style) ---
@@ -91,10 +92,6 @@ class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
 
   KeyboardSize get size => state;
   set size(KeyboardSize v) => state = v;
-
-  void setSmall() => state = KeyboardSize.small;
-  void setMedium() => state = KeyboardSize.medium;
-  void setLarge() => state = KeyboardSize.large;
 }
 
 // Word Check Service Provider

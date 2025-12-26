@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_list_widgets.dart';
 
@@ -11,7 +12,9 @@ class PuzzlesListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
-      appBar: AppBar(title: const Text('Puzzles')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)?.puzzles ?? 'Puzzles'),
+      ),
       backgroundColor: isLight
           ? Colors.white
           : Theme.of(context).scaffoldBackgroundColor,
@@ -29,7 +32,11 @@ class PuzzlesListPage extends ConsumerWidget {
     final originsAsync = ref.watch(puzzleOriginsProvider);
     return originsAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, st) => Center(child: Text('Could not load origins: $e')),
+      error: (e, st) => Center(
+        child: Text(
+          AppLocalizations.of(context)?.errorLoading ?? 'Error loading puzzle',
+        ),
+      ),
       data: (origins) {
         final originKeys = List.of(origins)..sort();
         return ListView.separated(

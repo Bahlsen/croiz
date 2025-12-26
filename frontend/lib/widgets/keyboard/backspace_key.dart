@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 /// A backspace key with long-press repeat acceleration.
 class BackspaceKey extends StatefulWidget {
@@ -79,7 +80,7 @@ class _BackspaceKeyState extends State<BackspaceKey> {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Delete',
+    label: AppLocalizations.of(context)?.delete ?? 'Delete',
     button: true,
     child: GestureDetector(
       onTap: _trigger,

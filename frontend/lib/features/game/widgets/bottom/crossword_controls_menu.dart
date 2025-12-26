@@ -3,16 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:ui' as ui;
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-String kbSizeLabel(WidgetRef ref) {
+String kbSizeLabel(BuildContext context, WidgetRef ref) {
   final val = ref.watch(gameKeyboardSizeProvider);
+  final loc = AppLocalizations.of(context)!;
   switch (val) {
     case KeyboardSize.small:
-      return 'Small';
+      return loc.small;
     case KeyboardSize.large:
-      return 'Large';
+      return loc.large;
     case KeyboardSize.medium:
-      return 'Medium';
+      return loc.medium;
   }
 }
 
@@ -80,13 +83,11 @@ class CrosswordControlsMenu extends ConsumerWidget {
                           ),
                           child: Row(
                             children: [
-                              const Expanded(
+                              Expanded(
                                 child: Text(
-                                  'Menu',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  AppLocalizations.of(context)!.menu,
+                                  style: Theme.of(context).textTheme.titleLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
                               IconButton(
@@ -96,6 +97,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
+                                tooltip: MaterialLocalizations.of(
+                                  context,
+                                ).closeButtonTooltip,
                                 onPressed: onClose,
                               ),
                             ],
@@ -115,7 +119,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Home'),
+                                title: Text(AppLocalizations.of(context)!.home),
                                 onTap: () {
                                   onClose();
                                   context.go('/puzzles');
@@ -130,25 +134,35 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Keyboard size'),
-                                subtitle: Text(kbSizeLabel(ref)),
+                                title: Text(
+                                  AppLocalizations.of(
+                                    context,
+                                  )!.keyboardSizeLabel,
+                                ),
+                                subtitle: Text(kbSizeLabel(context, ref)),
                                 trailing: Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: DropdownButton<KeyboardSize>(
                                     value: ref.watch(gameKeyboardSizeProvider),
                                     underline: const SizedBox.shrink(),
-                                    items: const [
+                                    items: [
                                       DropdownMenuItem(
                                         value: KeyboardSize.small,
-                                        child: Text('Small'),
+                                        child: Text(
+                                          AppLocalizations.of(context)!.small,
+                                        ),
                                       ),
                                       DropdownMenuItem(
                                         value: KeyboardSize.medium,
-                                        child: Text('Medium'),
+                                        child: Text(
+                                          AppLocalizations.of(context)!.medium,
+                                        ),
                                       ),
                                       DropdownMenuItem(
                                         value: KeyboardSize.large,
-                                        child: Text('Large'),
+                                        child: Text(
+                                          AppLocalizations.of(context)!.large,
+                                        ),
                                       ),
                                     ],
                                     onChanged: (v) {
@@ -166,6 +180,65 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 ),
                               ),
                               const Divider(),
+                              // Language selector (persisted)
+                              ListTile(
+                                leading: Icon(
+                                  Icons.language,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurface,
+                                ),
+                                title: Text(
+                                  AppLocalizations.of(context)!.selectLanguage,
+                                ),
+                                trailing: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: DropdownButton<String>(
+                                    value: ref
+                                        .watch(localeProvider)
+                                        .languageCode,
+                                    underline: const SizedBox.shrink(),
+                                    items: [
+                                      DropdownMenuItem(
+                                        value: 'en',
+                                        child: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.languageEnglish,
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'fr',
+                                        child: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.languageFrench,
+                                        ),
+                                      ),
+                                      DropdownMenuItem(
+                                        value: 'uk',
+                                        child: Text(
+                                          AppLocalizations.of(
+                                            context,
+                                          )!.languageUkrainian,
+                                        ),
+                                      ),
+                                    ],
+                                    onChanged: (v) async {
+                                      if (v == null) {
+                                        return;
+                                      }
+
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      await prefs.setString('locale', v);
+                                      ref.read(localeProvider.notifier).locale =
+                                          Locale(v);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              const Divider(),
                               // Keyboard style control moved into the menu
                               SwitchListTile(
                                 secondary: Icon(
@@ -174,7 +247,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Keyboard style'),
+                                title: Text(
+                                  AppLocalizations.of(context)!.keyboardStyle,
+                                ),
                                 value: isAzerty,
                                 onChanged: (v) {
                                   if (onToggleKeyboard != null) {
@@ -189,7 +264,11 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                         v;
                                   }
                                 },
-                                subtitle: Text(isAzerty ? 'AZERTY' : 'QWERTY'),
+                                subtitle: Text(
+                                  isAzerty
+                                      ? AppLocalizations.of(context)!.azerty
+                                      : AppLocalizations.of(context)!.qwerty,
+                                ),
                               ),
                               const Divider(),
 
@@ -201,7 +280,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Mute sounds'),
+                                title: Text(
+                                  AppLocalizations.of(context)!.muteSounds,
+                                ),
                                 value: isMuted,
                                 onChanged: (v) {
                                   if (onToggleMute != null) {
@@ -226,7 +307,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Dark theme'),
+                                title: Text(
+                                  AppLocalizations.of(context)!.darkTheme,
+                                ),
                                 value: isDark,
                                 onChanged: (v) {
                                   if (onToggleTheme != null) {
@@ -247,7 +330,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('Help'),
+                                title: Text(AppLocalizations.of(context)!.help),
                                 onTap: onClose,
                               ),
                               ListTile(
@@ -257,7 +340,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     context,
                                   ).colorScheme.onSurface,
                                 ),
-                                title: const Text('About'),
+                                title: Text(
+                                  AppLocalizations.of(context)!.about,
+                                ),
                                 onTap: onClose,
                               ),
                               const Divider(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -34,13 +35,15 @@ class PuzzleListTile extends ConsumerWidget {
         height: 24,
         child: CircularProgressIndicator(strokeWidth: 2),
       );
-      effectiveSubtitle = 'Loading...';
+      effectiveSubtitle = AppLocalizations.of(context)?.loading ?? 'Loading...';
     } else if (hasError) {
       effectiveTrailing = Icon(
         Icons.error,
         color: Theme.of(context).colorScheme.error,
       );
-      effectiveSubtitle = 'Error loading metadata';
+      effectiveSubtitle =
+          AppLocalizations.of(context)?.errorLoading ??
+          'Error loading metadata';
     }
 
     return ListTile(
@@ -186,7 +189,9 @@ class LazyOriginExpansionTile extends ConsumerWidget {
             ),
             error: (e, st) => Padding(
               padding: const EdgeInsets.all(8),
-              child: Text('Error loading $origin: $e'),
+              child: Text(
+                AppLocalizations.of(context)?.errorLoading ?? 'Error loading',
+              ),
             ),
             data: (items) {
               final years = _groupByYear(items);

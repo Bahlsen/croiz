@@ -141,6 +141,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select language'**
   String get selectLanguage;
+
+  /// No description provided for @menu.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menu;
+
+  /// No description provided for @clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get clear;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @congratulations.
+  ///
+  /// In en, this message translates to:
+  /// **'Congratulations!'**
+  String get congratulations;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
+  String get loading;
+
+  /// No description provided for @clearIncorrectLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear incorrect letters'**
+  String get clearIncorrectLetters;
+
+  /// No description provided for @switchKeyboardLayout.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch keyboard layout'**
+  String get switchKeyboardLayout;
+
+  /// No description provided for @letterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter {letter}'**
+  String letterLabel(Object letter);
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @keyboardSizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard size'**
+  String get keyboardSizeLabel;
+
+  /// No description provided for @keyboardStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keyboard style'**
+  String get keyboardStyle;
+
+  /// No description provided for @muteSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Mute sounds'**
+  String get muteSounds;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark theme'**
+  String get darkTheme;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get help;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @loadingPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading puzzle...'**
+  String get loadingPuzzle;
+
+  /// No description provided for @pleaseWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait'**
+  String get pleaseWait;
+
+  /// No description provided for @errorLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading puzzle'**
+  String get errorLoading;
+
+  /// No description provided for @subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Crossword Puzzles'**
+  String get subtitle;
+
+  /// No description provided for @ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready!'**
+  String get ready;
+
+  /// No description provided for @loadingSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading sounds...'**
+  String get loadingSounds;
+
+  /// No description provided for @starting.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting...'**
+  String get starting;
+
+  /// No description provided for @small.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get small;
+
+  /// No description provided for @medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get medium;
+
+  /// No description provided for @large.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get large;
+
+  /// No description provided for @azerty.
+  ///
+  /// In en, this message translates to:
+  /// **'AZERTY'**
+  String get azerty;
+
+  /// No description provided for @qwerty.
+  ///
+  /// In en, this message translates to:
+  /// **'QWERTY'**
+  String get qwerty;
 }
 
 class _AppLocalizationsDelegate

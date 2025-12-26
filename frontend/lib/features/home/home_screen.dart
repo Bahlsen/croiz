@@ -18,7 +18,7 @@ class HomeScreen extends ConsumerWidget {
     Future<void> _setLocale(String code) async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('locale', code);
-      ref.read(localeProvider.notifier).setLocale(Locale(code));
+      ref.read(localeProvider.notifier).locale = Locale(code);
     }
 
     return Scaffold(

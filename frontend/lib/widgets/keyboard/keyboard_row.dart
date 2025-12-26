@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 
 import 'letter_key.dart';
@@ -93,7 +94,8 @@ class KeyboardRow extends StatelessWidget {
     final label = k.toUpperCase();
     final enabled = enabledSet == null || enabledSet.contains(label);
     return Semantics(
-      label: 'Letter $label',
+      label:
+          AppLocalizations.of(context)?.letterLabel(label) ?? 'Letter $label',
       button: true,
       child: LetterKey(
         label: label,

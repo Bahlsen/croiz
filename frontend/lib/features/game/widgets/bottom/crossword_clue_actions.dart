@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 /// Small reusable action buttons used by the clue header.
 class ClueHeaderMenuButton extends StatelessWidget {
@@ -9,11 +10,11 @@ class ClueHeaderMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Menu',
+    label: AppLocalizations.of(context)?.menu ?? 'Menu',
     button: true,
     child: IconButton(
       key: const Key('menu_button'),
-      tooltip: 'Menu',
+      tooltip: AppLocalizations.of(context)?.menu ?? 'Menu',
       onPressed: onPressed,
       icon: Icon(
         Icons.menu,
@@ -34,11 +35,15 @@ class ClueHeaderClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Semantics(
-    label: 'Clear incorrect letters',
+    label:
+        AppLocalizations.of(context)?.clearIncorrectLetters ??
+        'Clear incorrect letters',
     button: true,
     child: IconButton(
       key: const Key('clear_button'),
-      tooltip: 'Clear errors',
+      tooltip:
+          AppLocalizations.of(context)?.clearIncorrectLetters ??
+          'Clear incorrect letters',
       onPressed: onPressed,
       icon: Icon(
         Icons.cleaning_services_outlined,

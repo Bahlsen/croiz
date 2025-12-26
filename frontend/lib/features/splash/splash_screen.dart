@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 /// Provider that tracks app initialization state.
 /// Returns true when all critical services are ready.
@@ -123,21 +124,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Logo / App name
+              // Logo / App name (localized and using theme)
               Text(
-                'CROIZ',
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: scheme.onSurface,
-                  letterSpacing: 8,
-                ),
+                AppLocalizations.of(context)!.appTitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.displayLarge?.copyWith(letterSpacing: 8),
               ),
               const SizedBox(height: 8),
               Text(
-                'Crossword Puzzles',
-                style: TextStyle(
-                  fontSize: 14,
+                AppLocalizations.of(context)!.subtitle,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurface.withAlpha((0.7 * 255).round()),
                   letterSpacing: 2,
                 ),
@@ -166,15 +163,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               ),
               const SizedBox(height: 16),
 
-              // Status text
+              // Status text (localized)
               Text(
                 initState.when(
-                  data: (_) => 'Ready!',
-                  loading: () => 'Loading sounds...',
-                  error: (_, __) => 'Starting...',
+                  data: (_) => AppLocalizations.of(context)!.ready,
+                  loading: () => AppLocalizations.of(context)!.loadingSounds,
+                  error: (_, __) => AppLocalizations.of(context)!.starting,
                 ),
-                style: TextStyle(
-                  fontSize: 12,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: scheme.onSurface.withAlpha((0.5 * 255).round()),
                 ),
               ),
