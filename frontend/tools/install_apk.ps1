@@ -107,7 +107,7 @@ try {
   $lines = $rawOut -split "`r?`n"
   $devices = @()
   foreach ($line in $lines) {
-    if ($line -match '^\s*(\S+)\s+device\s*$') { $devices += $matches[1] }
+    if ($line -match '^\s*(\S+)\s+(device|offline|unauthorized)\s*$') { $devices += $matches[1] }
   }
   # Filter out any spurious single-character tokens
   $devices = $devices | Where-Object { $_ -and ($_.Length -gt 2) }
@@ -121,7 +121,18 @@ try {
   # Wireless connect (optional). If -Connect is provided, always attempt it
   if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
   if ($Connect) {
-    Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
+    # If the requested device is already visible to adb (including mDNS TLS names), skip connect
+    $alreadyPresent = $false
+    if ($devices -and ($devices -contains $Connect)) { $alreadyPresent = $true }
+    if (-not $alreadyPresent) {
+      foreach ($dev in $devices) {
+        if ($dev -match '_adb-tls-connect') { $alreadyPresent = $true; break }
+      }
+    }
+    if ($alreadyPresent) {
+      Write-Host "Device $Connect already visible to adb; skipping adb connect." -ForegroundColor Yellow
+    } else {
+      Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
     # Capture and show adb connect output for easier debugging
     $connectOut = & $adb connect $Connect 2>&1
     if ($connectOut) { $connectOut | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan } }
@@ -133,7 +144,14 @@ try {
       Write-Warning "adb connect did not report success; restarting adb server and retrying..."
       & $adb kill-server 2>&1 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan }
       Start-Sleep -Seconds 1
-      & $adb start-server 2>&1 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan }
+      $startTmpOut = [System.IO.Path]::GetTempFileName()
+      $startTmpErr = [System.IO.Path]::GetTempFileName()
+      Start-Process -FilePath $adb -ArgumentList 'start-server' -NoNewWindow -Wait -RedirectStandardOutput $startTmpOut -RedirectStandardError $startTmpErr
+      $startOut = ''
+      if (Test-Path $startTmpOut) { $startOut += (Get-Content $startTmpOut -Raw) }
+      if (Test-Path $startTmpErr) { $startOut += "`n" + (Get-Content $startTmpErr -Raw) }
+      if ($startOut) { $startOut -split "`r?`n" | ForEach-Object { if ($_ -ne '') { Write-Host "ADB> $_" -ForegroundColor DarkCyan } } }
+      Remove-Item $startTmpOut,$startTmpErr -ErrorAction SilentlyContinue
       Start-Sleep -Seconds 1
       $connectOut2 = & $adb connect $Connect 2>&1
       if ($connectOut2) { $connectOut2 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan } }
@@ -142,6 +160,7 @@ try {
       if ($connectOut2) { $connectOut = $connectOut2 }
     }
 
+    }
     # Recheck devices after attempting connection (robustly)
     $rawOut = (& $adb devices) -join "`n"
     $lines = $rawOut -split "`r?`n"
