@@ -87,8 +87,7 @@ void main() {
 
       sw.stop();
       final avgMicros = sw.elapsedMicroseconds / iterations;
-      // ignore: avoid_print
-      print('findNextEmptyFromEntry avg: ${avgMicros.toStringAsFixed(2)}µs');
+      // (perf) suppressed noisy output: findNextEmptyFromEntry avg ${avgMicros.toStringAsFixed(2)}µs
       expect(avgMicros, lessThan(500)); // Should be < 0.5ms
     });
 
@@ -161,10 +160,7 @@ void main() {
       sw.stop();
       final avgMicros = sw.elapsedMicroseconds / iterations;
       final avgMs = avgMicros / 1000;
-      // ignore: avoid_print
-      print(
-        'setLetterAndAdvance (large grid) avg: ${avgMicros.toStringAsFixed(2)}µs (${avgMs.toStringAsFixed(3)}ms)',
-      );
+      // (perf) suppressed noisy output: setLetterAndAdvance avg ${avgMicros.toStringAsFixed(2)}µs
       expect(avgMs, lessThan(5)); // Should be < 5ms
     });
   });

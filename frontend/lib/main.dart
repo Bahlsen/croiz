@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -13,6 +14,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  // Initialize Hive for puzzle persistence and open box.
+  await HivePuzzleStorage.init();
+  await HivePuzzleStorage.openBox();
 
   runApp(const ProviderScope(child: CroizApp()));
 }

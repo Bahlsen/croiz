@@ -296,11 +296,7 @@ void main() {
       final result = benchmark.reportAndCapture();
       final threshold = _thresholdsUs[result.name]!;
 
-      // ignore: avoid_print
-      print(
-        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us '
-        '(threshold: ${threshold.toStringAsFixed(0)} us)',
-      );
+      // (perf) suppressed noisy output: ${result.name} ${result.runtimeUs.toStringAsFixed(2)} us
 
       expect(
         result.runtimeUs,
@@ -392,8 +388,7 @@ void main() {
     });
 
     test('all benchmarks summary', () {
-      // ignore: avoid_print
-      print('\n=== Performance Benchmarks Summary ===');
+      // (perf) suppressed noisy output: benchmarks summary
       final results = runBenchmarks(benchmarks);
 
       var allPassed = true;
@@ -401,14 +396,9 @@ void main() {
         final threshold = _thresholdsUs[result.name];
         if (threshold != null && result.runtimeUs > threshold) {
           allPassed = false;
-          // ignore: avoid_print
-          print(
-            '❌ ${result.name}: FAILED '
-            '(${result.runtimeUs.toStringAsFixed(2)} us > $threshold us)',
-          );
+          // (perf) suppressed noisy output: failed benchmark ${result.name}
         } else {
-          // ignore: avoid_print
-          print('✅ ${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us');
+          // (perf) suppressed noisy output: passed benchmark ${result.name}
         }
       }
 

@@ -146,6 +146,25 @@ class GameTimer {
       );
     }
   }
+
+  /// Set elapsed seconds directly (used when restoring persisted state).
+  Future<void> setElapsed(int seconds) async {
+    _startedAt = null;
+    _accumulatedMs = seconds * 1000;
+    try {
+      final storage = ref.read(secureStorageProvider);
+      await storage.write(
+        key: 'puzzle:$gameId:accumulatedMs',
+        value: _accumulatedMs.toString(),
+      );
+    } on Object catch (e, st) {
+      developer.log(
+        'GameTimer.setElapsed: failed to persist',
+        error: e,
+        stackTrace: st,
+      );
+    }
+  }
 }
 
 final gameTimerProvider = Provider.family<GameTimer, String>(GameTimer.new);

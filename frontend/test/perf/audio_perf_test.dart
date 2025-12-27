@@ -399,12 +399,8 @@ void main() {
       expect(results[60], inInclusiveRange(15, 18));
 
       // Print results for analysis (visible in verbose test output)
-      // ignore: avoid_print
-      print('Throttle interval analysis (sounds played over 1s):');
-      results.forEach((interval, count) {
-        // ignore: avoid_print
-        print('  ${interval}ms interval: $count sounds');
-      });
+      // (perf) suppressed noisy output: throttle interval analysis results
+      // results: ${results.toString()}
     });
   });
 

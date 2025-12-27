@@ -56,7 +56,9 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final loc = AppLocalizations.of(tester.element(find.byType(PuzzlesListPage)));
+      final loc = AppLocalizations.of(
+        tester.element(find.byType(PuzzlesListPage)),
+      );
       expect(
         find.textContaining(loc?.errorLoading ?? 'Error loading puzzle'),
         findsOneWidget,

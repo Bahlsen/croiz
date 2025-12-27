@@ -25,7 +25,10 @@ void main() {
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getBool('pref_is_dark'), isTrue);
     expect(prefs.getBool('pref_keyboard_azerty'), isTrue);
-    expect(prefs.getString('pref_keyboard_size'), equals(KeyboardSize.large.name));
+    expect(
+      prefs.getString('pref_keyboard_size'),
+      equals(KeyboardSize.large.name),
+    );
     expect(prefs.getBool('pref_audio_muted'), isTrue);
   });
 }

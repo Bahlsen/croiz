@@ -90,8 +90,7 @@ void main() {
             'setLetter should take < 1ms, got ${avgMs.toStringAsFixed(3)}ms avg',
       );
 
-      // ignore: avoid_print
-      print('setLetter avg: ${avgMicros.toStringAsFixed(1)}µs ($avgMs ms)');
+      // (perf) suppressed noisy output
     });
 
     test('selectedCell update should be < 0.5ms per operation', () {
@@ -117,7 +116,7 @@ void main() {
       );
 
       // ignore: avoid_print
-      print('selectedCell update avg: ${avgMicros.toStringAsFixed(1)}µs');
+      // (perf) suppressed noisy output
     });
 
     test(
@@ -182,9 +181,7 @@ void main() {
         );
 
         // ignore: avoid_print
-        print(
-          'setLetterAndAdvance avg: ${avgMicros.toStringAsFixed(1)}µs ($avgMs ms)',
-        );
+        // (perf) suppressed noisy output
       },
     );
   });

@@ -81,8 +81,7 @@ class CapturingEmitter implements ScoreEmitter {
   void emit(String testName, double value) {
     capturedRuntimeUs = value;
     // Also print to console for immediate feedback.
-    // ignore: avoid_print
-    print('$testName(RunTime): $value us.');
+    // (perf) suppressed noisy output
   }
 }
 
@@ -117,8 +116,7 @@ class BenchmarkStorage {
       'results': results.map((r) => r.toJson()).toList(),
     };
     file.writeAsStringSync(const JsonEncoder.withIndent('  ').convert(json));
-    // ignore: avoid_print
-    print('Results saved to: ${file.path}');
+    // (perf) suppressed noisy output
   }
 
   /// Load results from a JSON file.
@@ -151,8 +149,7 @@ class BenchmarkStorage {
     for (final curr in current) {
       final base = baselineMap[curr.name];
       if (base == null) {
-        // ignore: avoid_print
-        print('Warning: No baseline for "${curr.name}", skipping comparison');
+        // (perf) suppressed noisy output
         continue;
       }
 
@@ -177,18 +174,15 @@ class BenchmarkStorage {
 
   /// Print comparison summary.
   static void printSummary(List<BenchmarkComparison> comparisons) {
-    // ignore: avoid_print
-    print('\n=== Benchmark Comparison Summary ===');
+    // (perf) suppressed noisy output
     // ignore: avoid_print
     comparisons.forEach(print);
 
     final regressions = comparisons.where((c) => c.isRegression).toList();
     if (regressions.isEmpty) {
-      // ignore: avoid_print
-      print('\n✅ All benchmarks within threshold.');
+      // (perf) suppressed noisy output
     } else {
-      // ignore: avoid_print
-      print('\n❌ ${regressions.length} regression(s) detected!');
+      // (perf) suppressed noisy output
     }
   }
 }
@@ -197,8 +191,7 @@ class BenchmarkStorage {
 List<BenchmarkResultExt> runBenchmarks(List<BenchmarkBase> benchmarks) {
   final results = <BenchmarkResultExt>[];
   for (final b in benchmarks) {
-    // ignore: avoid_print
-    print('\nRunning: ${b.name}...');
+    // (perf) suppressed noisy output
     final result = b.reportAndCapture();
     results.add(result);
   }

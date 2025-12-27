@@ -108,8 +108,7 @@ void main() {
             'Selection update must be < 16ms for 60fps, got ${avgMicros / 1000}ms',
       );
 
-      // ignore: avoid_print
-      print('Cell selection avg: ${(avgMicros / 1000).toStringAsFixed(2)}ms');
+      // (perf) suppressed noisy output
     });
 
     test('letter input with full controller flow should be < 4ms', () {
@@ -143,8 +142,7 @@ void main() {
             'Letter input should be < 4ms, got ${avgMs.toStringAsFixed(2)}ms',
       );
 
-      // ignore: avoid_print
-      print('Letter input avg: ${avgMs.toStringAsFixed(2)}ms');
+      // (perf) suppressed noisy output
     });
 
     test('direction toggle should be instantaneous (< 0.5ms)', () {
@@ -177,8 +175,7 @@ void main() {
             'Direction toggle should be < 0.5ms, got ${avgMs.toStringAsFixed(3)}ms',
       );
 
-      // ignore: avoid_print
-      print('Direction toggle avg: ${avgMs.toStringAsFixed(3)}ms');
+      // (perf) suppressed noisy output
     });
 
     testWidgets('grid cell tap updates selection immediately', (tester) async {
@@ -214,8 +211,7 @@ void main() {
       // Selection should be updated after single pump
       expect(container.read(selectedCellProvider), isNotNull);
 
-      // ignore: avoid_print
-      print('Tap-to-selection: ${sw.elapsedMilliseconds}ms (includes pump)');
+      // (perf) suppressed noisy output
     });
 
     testWidgets('rapid cell taps remain responsive', (tester) async {
@@ -257,8 +253,7 @@ void main() {
         reason: 'Rapid taps should stay < 50ms each, got ${avgMs}ms avg',
       );
 
-      // ignore: avoid_print
-      print('Rapid tap avg: ${avgMs.toStringAsFixed(1)}ms per tap');
+      // (perf) suppressed noisy output
     });
   });
 

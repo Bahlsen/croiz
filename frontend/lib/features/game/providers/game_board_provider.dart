@@ -1,10 +1,9 @@
 import 'dart:developer' as developer;
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/helpers/board_helpers.dart';
@@ -13,6 +12,8 @@ import 'package:croiz/services/providers.dart';
 
 import 'puzzle_loader_provider.dart';
 import 'game_state_providers.dart';
+import 'game_timer_provider.dart';
+import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 
 /// Duration used to schedule clearing of flashed cells after animations.
 /// Tests can override this provider to `Duration.zero` to avoid scheduling
@@ -47,7 +48,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       final current = ref.read(puzzleLoaderProvider);
       if (current is AsyncData<GameBoard>) {
         state = current.value;
-        Future.microtask(() => _onPuzzleLoaderChanged(null, current));
+        unawaited(
+          Future.microtask(() => _onPuzzleLoaderChanged(null, current)),
+        );
       }
       // Cancel any pending timers when the notifier is disposed by Riverpod.
       ref.onDispose(() {
@@ -92,16 +95,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       // Attempt to restore persisted progress for this puzzle id.
       () async {
         try {
-          final prefs = await SharedPreferences.getInstance();
-          final key = 'puzzle_progress:${state.id}';
-          final raw = prefs.getString(key);
-          if (raw != null && raw.isNotEmpty) {
-            final parsed = jsonDecode(raw) as Map<String, dynamic>;
-            final gridData = parsed['grid'];
+          final stored = await HivePuzzleStorage.load(state.id);
+          if (stored != null) {
+            final gridData = stored['grid'];
             if (gridData is List) {
-              // Only apply if dimensions match to avoid corrupting board.
               final rows = gridData.length;
-              final cols = rows > 0 && gridData[0] is List ? (gridData[0] as List).length : 0;
+              final cols = rows > 0 && gridData[0] is List
+                  ? (gridData[0] as List).length
+                  : 0;
               if (rows == state.grid.length && cols == state.grid[0].length) {
                 final newGrid = <List<String?>>[];
                 for (final r in gridData) {
@@ -118,10 +119,49 @@ class GameBoardNotifier extends Notifier<GameBoard> {
                 state = state.copyWith(grid: newGrid);
               }
             }
+            // restore found/locked words or timer when present
+            try {
+              final found = stored['foundWords'];
+              if (found is List) {
+                ref.read(foundWordsProvider.notifier).value = found
+                    .cast<String>()
+                    .toSet();
+              }
+              final locked = stored['lockedCells'];
+              if (locked is List) {
+                final set = <CellKey>{};
+                for (final s in locked) {
+                  if (s is String) {
+                    final parts = s.split(',');
+                    if (parts.length == 2) {
+                      final r = int.tryParse(parts[0]);
+                      final c = int.tryParse(parts[1]);
+                      if (r != null && c != null) {
+                        set.add(CellKey(r, c));
+                      }
+                    }
+                  }
+                }
+                ref.read(lockedCellsProvider.notifier).value = set;
+              }
+              final timerVal = stored['elapsedSeconds'];
+              if (timerVal is num) {
+                unawaited(
+                  ref
+                      .read(gameTimerProvider(state.id))
+                      .setElapsed(timerVal.toInt()),
+                );
+              }
+            } on Object catch (_) {
+              // ignore per-field restore errors
+            }
           }
         } on Object catch (e, st) {
           if (kDebugMode) {
-            developer.log('Failed to restore puzzle progress: $e', stackTrace: st);
+            developer.log(
+              'Failed to restore puzzle progress: $e',
+              stackTrace: st,
+            );
           }
         }
       }();
@@ -218,17 +258,20 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           .toSet();
       final delay = ref.read(flashClearDelayProvider);
       if (delay == Duration.zero) {
-        Future.microtask(() {
-          try {
-            ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
-          } on Object catch (e, st) {
-            developer.log(
-              'Clearing flashing cleared cells failed',
-              error: e,
-              stackTrace: st,
-            );
-          }
-        });
+        unawaited(
+          Future.microtask(() {
+            try {
+              ref.read(flashingClearedCellsProvider.notifier).value =
+                  <CellKey>{};
+            } on Object catch (e, st) {
+              developer.log(
+                'Clearing flashing cleared cells failed',
+                error: e,
+                stackTrace: st,
+              );
+            }
+          }),
+        );
       } else {
         Future.delayed(delay, () {
           try {
@@ -260,22 +303,25 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
   Future<void> _persistProgress() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final key = 'puzzle_progress:${state.id}';
-      final payload = jsonEncode({
+      final payload = {
         'schemaVersion': 1,
         'grid': state.grid,
         'savedAt': DateTime.now().toIso8601String(),
-      });
-      await prefs.setString(key, payload);
+        // extended state
+        'foundWords': ref.read(foundWordsProvider).toList(),
+        'lockedCells': ref
+            .read(lockedCellsProvider)
+            .map((c) => '${c.row},${c.col}')
+            .toList(),
+        'elapsedSeconds': ref.read(gameTimerProvider(state.id)).elapsedSeconds,
+      };
+      await HivePuzzleStorage.save(state.id, jsonDecode(jsonEncode(payload)));
     } on Object catch (e, st) {
       if (kDebugMode) {
         developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
       }
     }
   }
-
-  
 }
 
 /// Main game board provider.

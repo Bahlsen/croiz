@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 
 void main() {
-  testWidgets('AppLocalizations renders translations for supported locales', (tester) async {
+  testWidgets('AppLocalizations renders translations for supported locales', (
+    tester,
+  ) async {
     final cases = {
       const Locale('fr'): 'Mots croisés',
       const Locale('uk'): 'Головоломки',
