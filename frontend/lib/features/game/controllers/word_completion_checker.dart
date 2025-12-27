@@ -1,3 +1,4 @@
+
 import 'dart:async';
 import 'dart:developer' as developer;
 
@@ -186,26 +187,13 @@ class WordCompletionChecker {
         developer.log('playSuccess failed', error: e, stackTrace: st);
       }
 
-      // Trigger flash animation on ALL completed words' cells at once
-      writeFlashingCells(allFlashingCells);
-
-      // Clear flash after animation
-      final delay = readFlashClearDelay();
-      _flashClearTimer?.cancel();
-      _flashClearTimer = Timer(delay, () {
-        if (_disposed) {
-          return;
-        }
-        try {
-          writeFlashingCells(<CellKey>{});
-        } on Object catch (e, st) {
-          developer.log(
-            'Clearing flashing cells failed',
-            error: e,
-            stackTrace: st,
-          );
-        }
-      });
+      // Trigger flash animation on ALL completed words' cells at once using
+      // the shared helper so the reveal-path can reuse the same behavior.
+      triggerFlashAndClear(
+        allFlashingCells,
+        writeFlashingCells,
+        readFlashClearDelay,
+      );
     }
 
     if (newFoundWords.length > foundWords.length) {
@@ -294,3 +282,40 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),
   finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),
 );
+
+  /// Helper to set flashing cells and clear them after the configured delay.
+  ///
+  /// This centralizes the common pattern used both when the user completes a
+  /// word via typing and when a word is revealed via the menu.
+  void triggerFlashAndClear(
+    Set<CellKey> cells,
+    void Function(Set<CellKey>) writeFlashingCells,
+    Duration Function() readFlashClearDelay,
+  ) {
+    try {
+      writeFlashingCells(cells);
+      final delay = readFlashClearDelay();
+      if (delay == Duration.zero) {
+        // Synchronous test mode: clear on next microtask
+        unawaited(
+          Future.microtask(() {
+            try {
+              writeFlashingCells(<CellKey>{});
+            } on Object catch (_) {
+              // ignore
+            }
+          }),
+        );
+      } else {
+        Future.delayed(delay, () {
+          try {
+            writeFlashingCells(<CellKey>{});
+          } on Object catch (_) {
+            // ignore
+          }
+        });
+      }
+    } on Object catch (_) {
+      // ignore errors from callers
+    }
+  }

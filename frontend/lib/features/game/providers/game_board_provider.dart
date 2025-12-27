@@ -9,6 +9,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/features/game/utils/flash_utils.dart';
 
 import 'puzzle_loader_provider.dart';
 import 'game_state_providers.dart';
@@ -285,6 +286,179 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           }
         });
       }
+    }
+  }
+
+  /// Reveal the solution letter at the given cell (if available).
+  void revealLetterAt(int row, int col) {
+    final sol = state.solutionGrid;
+    if (sol == null) {
+      return;
+    }
+    if (row < 0 || row >= sol.length) {
+      return;
+    }
+    if (col < 0 || col >= sol[row].length) {
+      return;
+    }
+    final letter = sol[row][col];
+    if (letter == null) {
+      return;
+    }
+    final newGrid = state.grid.map(List<String?>.from).toList();
+    newGrid[row][col] = letter;
+    state = state.copyWith(grid: newGrid);
+    _schedulePersist();
+    // After revealing a letter via the reveal menu, run the same
+    // completion check as when the user types so completed words
+    // are detected and flash as if the user had filled them.
+    try {
+      // Directly detect any entries that became complete due to this reveal
+      // Use the updated local state directly to avoid stale reads.
+      final boardNow = state;
+      final allEntries = state.entries;
+      List<PuzzleEntryData>? entriesForCell;
+      if (allEntries != null && allEntries.isNotEmpty) {
+        entriesForCell = allEntries.where((e) {
+          final isAcross = e.directionEnum == EntryDirection.across;
+          if (isAcross) {
+            return e.y == row && (col >= e.x && col < e.x + e.length);
+          } else {
+            return e.x == col && (row >= e.y && row < e.y + e.length);
+          }
+        }).toList();
+      } else {
+        entriesForCell = null;
+      }
+      if (entriesForCell != null && entriesForCell.isNotEmpty) {
+        final wordCheck = ref.read(wordCheckServiceProvider);
+        final foundWords = ref.read(foundWordsProvider);
+        final locked = ref.read(lockedCellsProvider);
+        final newFound = Set<String>.from(foundWords);
+        final newLocked = Set<CellKey>.from(locked);
+        final allFlashing = <CellKey>{};
+        var completed = 0;
+        for (final entry in entriesForCell) {
+          final key = wordCheck.getWordKey(entry);
+          if (foundWords.contains(key)) {
+            continue;
+          }
+          if (wordCheck.isWordComplete(boardNow, entry)) {
+            completed++;
+            newFound.add(key);
+            final keys = wordCheck.getCellKeys(entry);
+            newLocked.addAll(keys);
+            allFlashing.addAll(keys);
+          }
+        }
+        if (completed > 0) {
+          ref.read(foundWordsProvider.notifier).value = newFound;
+          ref.read(lockedCellsProvider.notifier).value = newLocked;
+          triggerFlashAndClear(
+            allFlashing,
+            (v) => ref.read(flashingCellsProvider.notifier).value = v,
+            () => ref.read(flashClearDelayProvider),
+          );
+        }
+      }
+    } on Object {
+      // ignore
+    }
+  }
+
+  /// Reveal the full entry (word) for the given PuzzleEntryData.
+  void revealEntry(PuzzleEntryData entry) {
+    final sol = state.solutionGrid;
+    if (sol == null) {
+      return;
+    }
+    final newGrid = state.grid.map(List<String?>.from).toList();
+    final cells = <CellKey>{};
+    if (entry.direction == 'across') {
+      final row = entry.y;
+      for (var i = 0; i < entry.length; i++) {
+        final col = entry.x + i;
+        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
+          newGrid[row][col] = sol[row][col];
+          cells.add(CellKey(row, col));
+        }
+      }
+    } else {
+      final col = entry.x;
+      for (var i = 0; i < entry.length; i++) {
+        final row = entry.y + i;
+        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
+          newGrid[row][col] = sol[row][col];
+          cells.add(CellKey(row, col));
+        }
+      }
+    }
+
+    state = state.copyWith(grid: newGrid);
+    // Mark word as found and lock its cells
+    final key = '${entry.y},${entry.x},${entry.direction}';
+    final newFound = Set<String>.from(ref.read(foundWordsProvider))..add(key);
+    ref.read(foundWordsProvider.notifier).value = newFound;
+    final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
+      ..addAll(cells);
+    ref.read(lockedCellsProvider.notifier).value = newLocked;
+    _schedulePersist();
+    // Flash the revealed entry cells using shared helper
+    try {
+      triggerFlashAndClear(
+        cells,
+        (v) => ref.read(flashingCellsProvider.notifier).value = v,
+        () => ref.read(flashClearDelayProvider),
+      );
+    } on Object {
+      // ignore
+    }
+  }
+
+  /// Reveal the entire puzzle (fill all non-black cells from the solution grid).
+  void revealAll() {
+    final sol = state.solutionGrid;
+    if (sol == null) {
+      return;
+    }
+    final newGrid = sol.map(List<String?>.from).toList();
+    state = state.copyWith(grid: newGrid);
+
+    // Mark all entries as found (if entries exist) and lock all non-black cells
+    if (state.entries != null) {
+      final allKeys = <String>{};
+      for (final e in state.entries!) {
+        allKeys.add('${e.y},${e.x},${e.direction}');
+      }
+      ref.read(foundWordsProvider.notifier).value = allKeys;
+    }
+    final locked = <CellKey>{};
+    for (var r = 0; r < state.grid.length; r++) {
+      for (var c = 0; c < state.grid[r].length; c++) {
+        if (!state.blackCells.isDisabled(r, c)) {
+          locked.add(CellKey(r, c));
+        }
+      }
+    }
+    ref.read(lockedCellsProvider.notifier).value = locked;
+    _schedulePersist();
+    // Flash all non-black cells so revealAll is visible
+    try {
+      final all = <CellKey>{};
+      for (var r = 0; r < state.grid.length; r++) {
+        for (var c = 0; c < state.grid[r].length; c++) {
+          if (!state.blackCells.isDisabled(r, c)) {
+            all.add(CellKey(r, c));
+          }
+        }
+      }
+      triggerFlashAndClear(
+        all,
+        (v) => ref.read(flashingCellsProvider.notifier).value = v,
+        () => ref.read(flashClearDelayProvider),
+      );
+    } on Object {
+      // ignore
     }
   }
 

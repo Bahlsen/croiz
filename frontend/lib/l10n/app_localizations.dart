@@ -178,6 +178,30 @@ abstract class AppLocalizations {
   /// **'Clear incorrect letters'**
   String get clearIncorrectLetters;
 
+  /// No description provided for @reveal.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal'**
+  String get reveal;
+
+  /// No description provided for @revealLetterOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter'**
+  String get revealLetterOption;
+
+  /// No description provided for @revealWordOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Word'**
+  String get revealWordOption;
+
+  /// No description provided for @revealAllOption.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get revealAllOption;
+
   /// No description provided for @switchKeyboardLayout.
   ///
   /// In en, this message translates to:

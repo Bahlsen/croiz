@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/helpers/entry_lookup.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 class CrosswordControlsBar extends ConsumerStatefulWidget {
@@ -23,6 +25,7 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
 
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   bool _dialogOpen = false;
+  bool _revealOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
               onMenu: () {
                 _openMenu(context);
               },
+              onReveal: () {
+                setState(() {
+                  _revealOpen = !_revealOpen;
+                });
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -81,6 +89,133 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         // than the controls bar area. The dialog contains the same
         // `CrosswordControlsMenu` widget wrapped in a Stack to satisfy
         // its Positioned.fill usage.
+        // Reveal overlay (renders above the keyboard when toggled)
+        if (_revealOpen) ...[
+          Positioned.fill(
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _revealOpen = false);
+              },
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+          Positioned(
+            left: 12,
+            right: 12,
+            bottom: 0,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.45,
+              ),
+              child: Material(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Theme.of(context).cardColor,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 0,
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.of(context)?.reveal ??
+                                      'Reveal',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              onPressed: () =>
+                                  setState(() => _revealOpen = false),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: Icon(
+                          Icons.tag,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        title: Text(
+                          AppLocalizations.of(context)?.revealLetterOption ??
+                              'Letter',
+                        ),
+                        onTap: () {
+                          setState(() => _revealOpen = false);
+                          final sel = ref.read(selectedCellProvider);
+                          if (sel == null) {
+                            return;
+                          }
+                          ref
+                              .read(gameBoardProvider.notifier)
+                              .revealLetterAt(sel.row, sel.col);
+                        },
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: Icon(
+                          Icons.checklist,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        title: Text(
+                          AppLocalizations.of(context)?.revealWordOption ??
+                              'Word',
+                        ),
+                        onTap: () {
+                          setState(() => _revealOpen = false);
+                          final sel = ref.read(selectedCellProvider);
+                          if (sel == null) {
+                            return;
+                          }
+                          final board = ref.read(gameBoardProvider);
+                          final dir = ref.read(wordDirectionProvider);
+                          final ctx = computeCurrentEntry(board, sel, dir);
+                          if (ctx == null) {
+                            return;
+                          }
+                          ref
+                              .read(gameBoardProvider.notifier)
+                              .revealEntry(ctx.entry);
+                        },
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: Icon(
+                          Icons.grid_on,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        title: Text(
+                          AppLocalizations.of(context)?.revealAllOption ??
+                              'All',
+                        ),
+                        onTap: () {
+                          setState(() => _revealOpen = false);
+                          ref.read(gameBoardProvider.notifier).revealAll();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ],
     );
   }

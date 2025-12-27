@@ -48,6 +48,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get clearIncorrectLetters => 'Очистити неправильні літери';
 
   @override
+  String get reveal => 'Показати';
+
+  @override
+  String get revealLetterOption => 'Літера';
+
+  @override
+  String get revealWordOption => 'Слово';
+
+  @override
+  String get revealAllOption => 'Всі';
+
+  @override
   String get switchKeyboardLayout => 'Змінити розклад клавіатури';
 
   @override

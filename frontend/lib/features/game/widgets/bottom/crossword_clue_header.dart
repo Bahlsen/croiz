@@ -6,14 +6,20 @@ import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/helpers/word_navigation.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_arrow.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
-import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions_row.dart';
 
 /// Header showing the clue for the currently selected word.
 class CrosswordClueHeader extends ConsumerWidget {
-  const CrosswordClueHeader({super.key, this.onMenu, this.onClear});
+  const CrosswordClueHeader({
+    super.key,
+    this.onMenu,
+    this.onClear,
+    this.onReveal,
+  });
 
   final VoidCallback? onMenu;
   final VoidCallback? onClear;
+  final VoidCallback? onReveal;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,48 +83,35 @@ class CrosswordClueHeader extends ConsumerWidget {
       }
     }
 
-    final leftColumn = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (leftArrow != null) leftArrow,
-        const SizedBox(height: 8),
-        if (onMenu != null)
-          SizedBox(
-            width: 56,
-            height: 40,
-            child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
-          ),
-      ],
-    );
-
-    final rightColumn = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (rightArrow != null) rightArrow,
-        const SizedBox(height: 8),
-        if (onClear != null)
-          SizedBox(
-            width: 56,
-            height: 40,
-            child: Center(child: ClueHeaderClearButton(onPressed: onClear)),
-          ),
-      ],
-    );
-
-    final mainContent = Row(
+    // Build row with arrows and center widget (no Stack)
+    final mainRow = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        leftColumn,
-        const SizedBox(width: 8),
+        if (leftArrow != null) leftArrow,
+        if (leftArrow != null) const SizedBox(width: 6),
         Expanded(child: centerWidget),
-        const SizedBox(width: 8),
-        rightColumn,
+        if (rightArrow != null) const SizedBox(width: 6),
+        if (rightArrow != null) rightArrow,
       ],
+    );
+
+    // Actions row placed below the main clue bar
+    final actionsRow = CrosswordClueActionsRow(
+      onMenu: onMenu,
+      onReveal: onReveal,
+      onClear: onClear,
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      child: mainContent,
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          mainRow,
+          const SizedBox(height: 8),
+          actionsRow,
+        ],
+      ),
     );
   }
 

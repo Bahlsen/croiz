@@ -48,6 +48,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get clearIncorrectLetters => 'Effacer les lettres incorrectes';
 
   @override
+  String get reveal => 'Révéler';
+
+  @override
+  String get revealLetterOption => 'Lettre';
+
+  @override
+  String get revealWordOption => 'Mot';
+
+  @override
+  String get revealAllOption => 'Tout';
+
+  @override
   String get switchKeyboardLayout => 'Changer la disposition du clavier';
 
   @override

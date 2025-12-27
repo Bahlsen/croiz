@@ -55,3 +55,28 @@ class ClueHeaderClearButton extends StatelessWidget {
     ),
   );
 }
+
+class ClueHeaderRevealButton extends StatelessWidget {
+  const ClueHeaderRevealButton({required this.onPressed, Key? key})
+    : super(key: key);
+
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    label: AppLocalizations.of(context)?.reveal ?? 'Reveal',
+    button: true,
+    child: IconButton(
+      key: const Key('reveal_button'),
+      tooltip: AppLocalizations.of(context)?.reveal ?? 'Reveal',
+      onPressed: onPressed,
+      icon: Icon(
+        Icons.visibility_outlined,
+        size: 26,
+        color: Theme.of(context).colorScheme.onSurface,
+      ),
+      visualDensity: VisualDensity.standard,
+      padding: EdgeInsets.zero,
+    ),
+  );
+}
