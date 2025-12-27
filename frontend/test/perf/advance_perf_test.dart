@@ -9,6 +9,7 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/game_audio_service.dart';
+import 'perf_logger.dart';
 
 class _MockAudioService implements GameAudioService {
   @override
@@ -87,7 +88,9 @@ void main() {
 
       sw.stop();
       final avgMicros = sw.elapsedMicroseconds / iterations;
-      // (perf) suppressed noisy output: findNextEmptyFromEntry avg ${avgMicros.toStringAsFixed(2)}µs
+      perfPrint(
+        'findNextEmptyFromEntry avg: ${avgMicros.toStringAsFixed(2)}µs',
+      );
       expect(avgMicros, lessThan(500)); // Should be < 0.5ms
     });
 
@@ -160,7 +163,9 @@ void main() {
       sw.stop();
       final avgMicros = sw.elapsedMicroseconds / iterations;
       final avgMs = avgMicros / 1000;
-      // (perf) suppressed noisy output: setLetterAndAdvance avg ${avgMicros.toStringAsFixed(2)}µs
+      perfPrint(
+        'setLetterAndAdvance (large grid) avg: ${avgMicros.toStringAsFixed(2)}µs (${avgMs.toStringAsFixed(3)}ms)',
+      );
       expect(avgMs, lessThan(5)); // Should be < 5ms
     });
   });

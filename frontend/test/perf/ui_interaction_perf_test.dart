@@ -14,6 +14,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/game_audio_service.dart';
+import 'perf_logger.dart';
 
 /// Mock audio service for performance tests
 class _MockAudioService implements GameAudioService {
@@ -90,7 +91,7 @@ void main() {
             'setLetter should take < 1ms, got ${avgMs.toStringAsFixed(3)}ms avg',
       );
 
-      // (perf) suppressed noisy output
+      perfPrint('setLetter avg: ${avgMicros.toStringAsFixed(1)}µs ($avgMs ms)');
     });
 
     test('selectedCell update should be < 0.5ms per operation', () {
@@ -115,8 +116,7 @@ void main() {
             'selectedCell update should be < 0.5ms, got ${avgMs.toStringAsFixed(3)}ms',
       );
 
-      // ignore: avoid_print
-      // (perf) suppressed noisy output
+      perfPrint('selectedCell update avg: ${avgMicros.toStringAsFixed(1)}µs');
     });
 
     test(
@@ -180,8 +180,9 @@ void main() {
               'setLetterAndAdvance should be < 5ms per op, got ${avgMs.toStringAsFixed(3)}ms',
         );
 
-        // ignore: avoid_print
-        // (perf) suppressed noisy output
+        perfPrint(
+          'setLetterAndAdvance avg: ${avgMicros.toStringAsFixed(1)}µs ($avgMs ms)',
+        );
       },
     );
   });
@@ -390,11 +391,10 @@ void main() {
         totalMs,
         lessThan(16),
         reason:
-            '20 state updates should fit in one frame (16ms), got ${totalMs}ms',
+            '20 state updates should fit in one frame (16ms), got $totalMs ms',
       );
 
-      // ignore: avoid_print
-      print('20 setLetter operations took: ${totalMs}ms');
+      perfPrint('20 setLetter operations took: $totalMs ms');
 
       container.dispose();
     });

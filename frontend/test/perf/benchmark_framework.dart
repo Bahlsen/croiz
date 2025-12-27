@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:benchmark_harness/benchmark_harness.dart';
+import 'perf_logger.dart';
 
 export 'package:benchmark_harness/benchmark_harness.dart';
 
@@ -81,7 +82,7 @@ class CapturingEmitter implements ScoreEmitter {
   void emit(String testName, double value) {
     capturedRuntimeUs = value;
     // Also print to console for immediate feedback.
-    // (perf) suppressed noisy output
+    perfPrint('$testName: ${value.toStringAsFixed(2)} us');
   }
 }
 
@@ -116,7 +117,7 @@ class BenchmarkStorage {
       'results': results.map((r) => r.toJson()).toList(),
     };
     file.writeAsStringSync(const JsonEncoder.withIndent('  ').convert(json));
-    // (perf) suppressed noisy output
+    perfPrint('Saved benchmark results to ${file.path}');
   }
 
   /// Load results from a JSON file.
@@ -149,7 +150,7 @@ class BenchmarkStorage {
     for (final curr in current) {
       final base = baselineMap[curr.name];
       if (base == null) {
-        // (perf) suppressed noisy output
+        perfPrint('Missing baseline for ${curr.name}');
         continue;
       }
 
@@ -174,15 +175,16 @@ class BenchmarkStorage {
 
   /// Print comparison summary.
   static void printSummary(List<BenchmarkComparison> comparisons) {
-    // (perf) suppressed noisy output
-    // ignore: avoid_print
-    comparisons.forEach(print);
+    perfPrint('Benchmark comparisons:');
+    for (final c in comparisons) {
+      perfPrint(c.toString());
+    }
 
     final regressions = comparisons.where((c) => c.isRegression).toList();
     if (regressions.isEmpty) {
-      // (perf) suppressed noisy output
+      perfPrint('All benchmarks within threshold');
     } else {
-      // (perf) suppressed noisy output
+      perfPrint('${regressions.length} benchmark regression(s) detected');
     }
   }
 }
@@ -191,7 +193,7 @@ class BenchmarkStorage {
 List<BenchmarkResultExt> runBenchmarks(List<BenchmarkBase> benchmarks) {
   final results = <BenchmarkResultExt>[];
   for (final b in benchmarks) {
-    // (perf) suppressed noisy output
+    perfPrint('Running benchmark: ${b.name}');
     final result = b.reportAndCapture();
     results.add(result);
   }

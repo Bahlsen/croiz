@@ -7,6 +7,7 @@
 library;
 
 import 'package:flutter_test/flutter_test.dart';
+import 'perf_logger.dart';
 
 /// Mock-like test implementation of audio throttling logic
 /// to verify the throttling algorithm works correctly.
@@ -399,8 +400,9 @@ void main() {
       expect(results[60], inInclusiveRange(15, 18));
 
       // Print results for analysis (visible in verbose test output)
-      // (perf) suppressed noisy output: throttle interval analysis results
-      // results: ${results.toString()}
+      perfPrint(
+        'Throttle interval analysis (sounds played over 1s): ${results.toString()}',
+      );
     });
   });
 

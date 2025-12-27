@@ -11,6 +11,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'perf_logger.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/services/game_audio_service.dart';
 
@@ -312,10 +313,8 @@ void main() {
       final result = benchmark.reportAndCapture();
       final threshold = _thresholdsUs[result.name]!;
 
-      // ignore: avoid_print
-      print(
-        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us '
-        '(threshold: ${threshold.toStringAsFixed(0)} us)',
+      perfPrint(
+        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us (threshold: ${threshold.toStringAsFixed(0)} us)',
       );
 
       expect(
@@ -332,10 +331,8 @@ void main() {
       final result = benchmark.reportAndCapture();
       final threshold = _thresholdsUs[result.name]!;
 
-      // ignore: avoid_print
-      print(
-        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us '
-        '(threshold: ${threshold.toStringAsFixed(0)} us)',
+      perfPrint(
+        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us (threshold: ${threshold.toStringAsFixed(0)} us)',
       );
 
       expect(
@@ -352,10 +349,8 @@ void main() {
       final result = benchmark.reportAndCapture();
       final threshold = _thresholdsUs[result.name]!;
 
-      // ignore: avoid_print
-      print(
-        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us '
-        '(threshold: ${threshold.toStringAsFixed(0)} us)',
+      perfPrint(
+        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us (threshold: ${threshold.toStringAsFixed(0)} us)',
       );
 
       expect(
@@ -372,10 +367,8 @@ void main() {
       final result = benchmark.reportAndCapture();
       final threshold = _thresholdsUs[result.name]!;
 
-      // ignore: avoid_print
-      print(
-        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us '
-        '(threshold: ${threshold.toStringAsFixed(0)} us)',
+      perfPrint(
+        '${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us (threshold: ${threshold.toStringAsFixed(0)} us)',
       );
 
       expect(
@@ -388,7 +381,7 @@ void main() {
     });
 
     test('all benchmarks summary', () {
-      // (perf) suppressed noisy output: benchmarks summary
+      perfPrint('Benchmarks summary:');
       final results = runBenchmarks(benchmarks);
 
       var allPassed = true;
@@ -396,9 +389,13 @@ void main() {
         final threshold = _thresholdsUs[result.name];
         if (threshold != null && result.runtimeUs > threshold) {
           allPassed = false;
-          // (perf) suppressed noisy output: failed benchmark ${result.name}
+          perfPrint(
+            '❌ ${result.name}: FAILED (${result.runtimeUs.toStringAsFixed(2)} us > $threshold us)',
+          );
         } else {
-          // (perf) suppressed noisy output: passed benchmark ${result.name}
+          perfPrint(
+            '✅ ${result.name}: ${result.runtimeUs.toStringAsFixed(2)} us',
+          );
         }
       }
 

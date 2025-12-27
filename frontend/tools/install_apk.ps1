@@ -118,27 +118,44 @@ try {
     $devices | ForEach-Object { Write-Host ("DEV> '{0}' (len={1})" -f $_, ($_.Length)) }
   }
 
-  # Wireless connect (optional, only if none connected yet)
-  if (-not $devices -or $devices.Count -eq 0) {
-    if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
-    if ($Connect) {
-      Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
-      $null = & $adb connect $Connect 2>$null
-      # Recheck devices after attempting connection (robustly)
-      $rawOut = (& $adb devices) -join "`n"
-      $lines = $rawOut -split "`r?`n"
-      $devices = @()
-      foreach ($line in $lines) {
-        if ($line -match '^\s*(\S+)\s+device\s*$') { $devices += $matches[1] }
-      }
-      # Filter out spurious single-character tokens after recheck
-      $devices = $devices | Where-Object { $_ -and ($_.Length -gt 2) }
-      if ($Debug) {
-        Write-Host "Raw adb output (after connect):" -ForegroundColor DarkCyan
-        $lines | ForEach-Object { Write-Host "RAW> '$_'" }
-        Write-Host "Parsed devices (post-filter after connect):" -ForegroundColor DarkCyan
-        $devices | ForEach-Object { Write-Host ("DEV> '{0}' (len={1})" -f $_, ($_.Length)) }
-      }
+  # Wireless connect (optional). If -Connect is provided, always attempt it
+  if (-not $Connect -and $env:CROIZ_ADB_CONNECT) { $Connect = $env:CROIZ_ADB_CONNECT }
+  if ($Connect) {
+    Write-Host "Connecting to $Connect ..." -ForegroundColor Cyan
+    # Capture and show adb connect output for easier debugging
+    $connectOut = & $adb connect $Connect 2>&1
+    if ($connectOut) { $connectOut | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan } }
+
+    # If connect failed (common: connection refused), try restarting adb server and retry once
+    $connected = $false
+    if ($connectOut -and ($connectOut -match 'connected to' -or $connectOut -match 'already connected to')) { $connected = $true }
+    if (-not $connected) {
+      Write-Warning "adb connect did not report success; restarting adb server and retrying..."
+      & $adb kill-server 2>&1 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan }
+      Start-Sleep -Seconds 1
+      & $adb start-server 2>&1 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan }
+      Start-Sleep -Seconds 1
+      $connectOut2 = & $adb connect $Connect 2>&1
+      if ($connectOut2) { $connectOut2 | ForEach-Object { Write-Host "ADB> $_" -ForegroundColor DarkCyan } }
+      if ($connectOut2 -and ($connectOut2 -match 'connected to' -or $connectOut2 -match 'already connected to')) { $connected = $true }
+      # Prefer the latest output in logs
+      if ($connectOut2) { $connectOut = $connectOut2 }
+    }
+
+    # Recheck devices after attempting connection (robustly)
+    $rawOut = (& $adb devices) -join "`n"
+    $lines = $rawOut -split "`r?`n"
+    $devices = @()
+    foreach ($line in $lines) {
+      if ($line -match '^\s*(\S+)\s+device\s*$') { $devices += $matches[1] }
+    }
+    # Filter out spurious single-character tokens after recheck
+    $devices = $devices | Where-Object { $_ -and ($_.Length -gt 2) }
+    if ($Debug) {
+      Write-Host "Raw adb output (after connect):" -ForegroundColor DarkCyan
+      $lines | ForEach-Object { Write-Host "RAW> '$_'" }
+      Write-Host "Parsed devices (post-filter after connect):" -ForegroundColor DarkCyan
+      $devices | ForEach-Object { Write-Host ("DEV> '{0}' (len={1})" -f $_, ($_.Length)) }
     }
   }
 

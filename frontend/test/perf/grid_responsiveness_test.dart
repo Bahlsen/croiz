@@ -16,6 +16,7 @@ import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/game_audio_service.dart';
+import 'perf_logger.dart';
 
 class _MockAudioService implements GameAudioService {
   @override
@@ -108,7 +109,9 @@ void main() {
             'Selection update must be < 16ms for 60fps, got ${avgMicros / 1000}ms',
       );
 
-      // (perf) suppressed noisy output
+      perfPrint(
+        'Cell selection avg: ${(avgMicros / 1000).toStringAsFixed(2)}ms',
+      );
     });
 
     test('letter input with full controller flow should be < 4ms', () {
@@ -142,7 +145,7 @@ void main() {
             'Letter input should be < 4ms, got ${avgMs.toStringAsFixed(2)}ms',
       );
 
-      // (perf) suppressed noisy output
+      perfPrint('Letter input avg: ${avgMs.toStringAsFixed(2)}ms');
     });
 
     test('direction toggle should be instantaneous (< 0.5ms)', () {
@@ -175,7 +178,7 @@ void main() {
             'Direction toggle should be < 0.5ms, got ${avgMs.toStringAsFixed(3)}ms',
       );
 
-      // (perf) suppressed noisy output
+      perfPrint('Direction toggle avg: ${avgMs.toStringAsFixed(3)}ms');
     });
 
     testWidgets('grid cell tap updates selection immediately', (tester) async {
@@ -211,7 +214,9 @@ void main() {
       // Selection should be updated after single pump
       expect(container.read(selectedCellProvider), isNotNull);
 
-      // (perf) suppressed noisy output
+      perfPrint(
+        'Tap-to-selection: ${sw.elapsedMilliseconds}ms (includes pump)',
+      );
     });
 
     testWidgets('rapid cell taps remain responsive', (tester) async {
@@ -250,10 +255,10 @@ void main() {
       expect(
         avgMs,
         lessThan(50),
-        reason: 'Rapid taps should stay < 50ms each, got ${avgMs}ms avg',
+        reason: 'Rapid taps should stay < 50ms each, got $avgMs ms avg',
       );
 
-      // (perf) suppressed noisy output
+      perfPrint('Rapid tap avg: ${avgMs.toStringAsFixed(1)}ms per tap');
     });
   });
 
@@ -368,8 +373,7 @@ void main() {
         reason: 'Worst keystroke was ${maxMicros / 1000}ms, must be < 16ms',
       );
 
-      // ignore: avoid_print
-      print(
+      perfPrint(
         'Keystroke timing: avg=${(avgMicros / 1000).toStringAsFixed(2)}ms, '
         'max=${(maxMicros / 1000).toStringAsFixed(2)}ms',
       );

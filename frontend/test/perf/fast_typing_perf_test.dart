@@ -94,7 +94,7 @@ void main() {
     expect(
       elapsedMs < 2000,
       true,
-      reason: 'Typing loop too slow: ${elapsedMs}ms',
+      reason: 'Typing loop too slow: $elapsedMs ms',
     );
   });
 }
