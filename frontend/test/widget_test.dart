@@ -8,10 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:croiz/main.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -63,10 +61,10 @@ void main() {
             ]),
           ),
         ],
-        child: MaterialApp(
+        child: const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: const PuzzlesListPage(),
+          home: PuzzlesListPage(),
         ),
       ),
     );

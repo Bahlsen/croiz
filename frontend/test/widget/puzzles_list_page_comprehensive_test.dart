@@ -21,10 +21,10 @@ void main() {
           overrides: [
             puzzleOriginsProvider.overrideWith((ref) => completer.future),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const PuzzlesListPage(),
+            home: PuzzlesListPage(),
           ),
         ),
       );
@@ -46,10 +46,10 @@ void main() {
               (ref) async => throw Exception('Network error'),
             ),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const PuzzlesListPage(),
+            home: PuzzlesListPage(),
           ),
         ),
       );
@@ -73,10 +73,10 @@ void main() {
               (ref, origin) async => <PuzzleDescriptor>[],
             ),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const PuzzlesListPage(),
+            home: PuzzlesListPage(),
           ),
         ),
       );
@@ -142,10 +142,10 @@ void main() {
             puzzleOriginsProvider.overrideWith((ref) async => ['nyt']),
             originIndexProvider.overrideWith((ref, origin) => completer.future),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const PuzzlesListPage(),
+            home: PuzzlesListPage(),
           ),
         ),
       );
@@ -173,10 +173,10 @@ void main() {
               (ref, origin) async => throw Exception('Failed to load'),
             ),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: const PuzzlesListPage(),
+            home: PuzzlesListPage(),
           ),
         ),
       );

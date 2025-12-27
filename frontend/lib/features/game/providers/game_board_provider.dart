@@ -2,6 +2,8 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/helpers/board_helpers.dart';
@@ -76,6 +78,43 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         state = next.value;
       }
 
+      // Attempt to restore persisted progress for this puzzle id.
+      () async {
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          final key = 'puzzle_progress:${state.id}';
+          final raw = prefs.getString(key);
+          if (raw != null && raw.isNotEmpty) {
+            final parsed = jsonDecode(raw) as Map<String, dynamic>;
+            final gridData = parsed['grid'];
+            if (gridData is List) {
+              // Only apply if dimensions match to avoid corrupting board.
+              final rows = gridData.length;
+              final cols = rows > 0 && gridData[0] is List ? (gridData[0] as List).length : 0;
+              if (rows == state.grid.length && cols == state.grid[0].length) {
+                final newGrid = <List<String?>>[];
+                for (final r in gridData) {
+                  final rowList = <String?>[];
+                  for (final c in (r as List)) {
+                    if (c == null) {
+                      rowList.add(null);
+                    } else {
+                      rowList.add(c.toString());
+                    }
+                  }
+                  newGrid.add(rowList);
+                }
+                state = state.copyWith(grid: newGrid);
+              }
+            }
+          }
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            developer.log('Failed to restore puzzle progress: $e', stackTrace: st);
+          }
+        }
+      }();
+
       final entries = state.entries;
       if (entries != null && entries.isNotEmpty) {
         try {
@@ -119,6 +158,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     rowCopy[col] = normalizedLetter;
     newGrid[row] = rowCopy;
     state = state.copyWith(grid: newGrid);
+    _persistProgress();
   }
 
   void toggleBlackCell(int row, int col) {
@@ -144,10 +184,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       entries: state.entries,
       solutionGrid: state.solutionGrid,
     );
+    _persistProgress();
   }
 
   set board(GameBoard board) {
     state = board;
+    _persistProgress();
   }
 
   GameBoard get board => state;
@@ -156,6 +198,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final cleaner = ref.read(incorrectLetterCleanerProvider);
     final result = cleaner.cleanWithResult(state);
     state = result.board;
+
+    _persistProgress();
 
     if (result.clearedCells.isNotEmpty) {
       ref.read(flashingClearedCellsProvider.notifier).value = result
@@ -186,6 +230,22 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             );
           }
         });
+      }
+    }
+  }
+
+  Future<void> _persistProgress() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'puzzle_progress:${state.id}';
+      final payload = jsonEncode({
+        'grid': state.grid,
+        'savedAt': DateTime.now().toIso8601String(),
+      });
+      await prefs.setString(key, payload);
+    } on Object catch (e, st) {
+      if (kDebugMode) {
+        developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
       }
     }
   }

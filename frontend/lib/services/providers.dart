@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/game_audio_service.dart';
 import 'package:croiz/services/audio_service.dart';
@@ -59,7 +60,19 @@ class KeyboardLayoutNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   bool get isAzerty => state;
-  set isAzerty(bool value) => state = value;
+  set isAzerty(bool value) {
+    state = value;
+    _persistIsAzerty(value);
+  }
+
+  Future<void> _persistIsAzerty(bool v) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('pref_keyboard_azerty', v);
+    } on Object {
+      // ignore persistence errors
+    }
+  }
 
   void toggle() => state = !state;
 }
@@ -70,7 +83,19 @@ class AudioMutedNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   bool get muted => state;
-  set muted(bool value) => state = value;
+  set muted(bool value) {
+    state = value;
+    _persistMuted(value);
+  }
+
+  Future<void> _persistMuted(bool v) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('pref_audio_muted', v);
+    } on Object {
+      // ignore
+    }
+  }
 
   void toggle() => state = !state;
 }
@@ -81,7 +106,19 @@ class AppIsDarkNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   bool get isDark => state;
-  set isDark(bool value) => state = value;
+  set isDark(bool value) {
+    state = value;
+    _persistIsDark(value);
+  }
+
+  Future<void> _persistIsDark(bool v) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('pref_is_dark', v);
+    } on Object {
+      // ignore
+    }
+  }
 
   void toggle() => state = !state;
 }
@@ -91,7 +128,19 @@ class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
   KeyboardSize build() => KeyboardSize.medium;
 
   KeyboardSize get size => state;
-  set size(KeyboardSize v) => state = v;
+  set size(KeyboardSize v) {
+    state = v;
+    _persistSize(v);
+  }
+
+  Future<void> _persistSize(KeyboardSize v) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('pref_keyboard_size', v.name);
+    } on Object {
+      // ignore
+    }
+  }
 }
 
 // Word Check Service Provider

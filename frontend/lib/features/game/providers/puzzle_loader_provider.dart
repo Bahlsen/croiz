@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/data/models/puzzle.dart';
@@ -17,7 +18,23 @@ class SelectedPuzzleIdNotifier extends Notifier<String?> {
   @override
   String? build() => null;
   String? get value => state;
-  set value(String? v) => state = v;
+  set value(String? v) {
+    state = v;
+    _persistSelected(v);
+  }
+
+  Future<void> _persistSelected(String? v) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (v == null) {
+        await prefs.remove('last_selected_puzzle');
+      } else {
+        await prefs.setString('last_selected_puzzle', v);
+      }
+    } on Object {
+      // ignore
+    }
+  }
 }
 
 final selectedPuzzleIdProvider =

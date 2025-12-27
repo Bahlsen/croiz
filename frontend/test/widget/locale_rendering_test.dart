@@ -5,8 +5,8 @@ import 'package:croiz/l10n/app_localizations.dart';
 void main() {
   testWidgets('AppLocalizations renders translations for supported locales', (tester) async {
     final cases = {
-      Locale('fr'): 'Mots croisés',
-      Locale('uk'): 'Головоломки',
+      const Locale('fr'): 'Mots croisés',
+      const Locale('uk'): 'Головоломки',
     };
 
     for (final entry in cases.entries) {

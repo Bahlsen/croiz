@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,6 +35,38 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       final saved = prefs.getString('locale');
       if (saved != null && saved.isNotEmpty) {
         ref.read(localeProvider.notifier).locale = Locale(saved);
+      }
+
+      // Load persisted UI preferences
+      final isDark = prefs.getBool('pref_is_dark');
+      if (isDark != null) {
+        ref.read(appIsDarkProvider.notifier).isDark = isDark;
+      }
+
+      final azerty = prefs.getBool('pref_keyboard_azerty');
+      if (azerty != null) {
+        ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = azerty;
+      }
+
+      final ksize = prefs.getString('pref_keyboard_size');
+      if (ksize != null && ksize.isNotEmpty) {
+        try {
+          final val = KeyboardSize.values.firstWhere((e) => e.name == ksize);
+          ref.read(gameKeyboardSizeProvider.notifier).size = val;
+        } on Object {
+          // ignore if invalid
+        }
+      }
+
+      final muted = prefs.getBool('pref_audio_muted');
+      if (muted != null) {
+        ref.read(gameAudioMutedProvider.notifier).muted = muted;
+      }
+
+      // Optionally restore last selected puzzle so progress restoration runs.
+      final lastSelected = prefs.getString('last_selected_puzzle');
+      if (lastSelected != null && lastSelected.isNotEmpty) {
+        ref.read(selectedPuzzleIdProvider.notifier).value = lastSelected;
       }
     } on Exception catch (_) {
       // ignore and continue with default locale
