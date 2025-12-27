@@ -1,4 +1,5 @@
 import 'dart:developer' as developer;
+import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,8 @@ final wordCheckDebounceDelayProvider = Provider<Duration>(
 /// Main notifier for the game board state.
 class GameBoardNotifier extends Notifier<GameBoard> {
   bool _listenerAttached = false;
+  Timer? _persistTimer;
+  static const Duration _persistDebounce = Duration(milliseconds: 200);
 
   @override
   GameBoard build() {
@@ -46,6 +49,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         state = current.value;
         Future.microtask(() => _onPuzzleLoaderChanged(null, current));
       }
+      // Cancel any pending timers when the notifier is disposed by Riverpod.
+      ref.onDispose(() {
+        try {
+          _persistTimer?.cancel();
+        } on Object {
+          // ignore
+        }
+      });
     }
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
@@ -158,7 +169,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     rowCopy[col] = normalizedLetter;
     newGrid[row] = rowCopy;
     state = state.copyWith(grid: newGrid);
-    _persistProgress();
+    _schedulePersist();
   }
 
   void toggleBlackCell(int row, int col) {
@@ -184,12 +195,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       entries: state.entries,
       solutionGrid: state.solutionGrid,
     );
-    _persistProgress();
+    _schedulePersist();
   }
 
   set board(GameBoard board) {
     state = board;
-    _persistProgress();
+    _schedulePersist();
   }
 
   GameBoard get board => state;
@@ -199,7 +210,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final result = cleaner.cleanWithResult(state);
     state = result.board;
 
-    _persistProgress();
+    _schedulePersist();
 
     if (result.clearedCells.isNotEmpty) {
       ref.read(flashingClearedCellsProvider.notifier).value = result
@@ -234,11 +245,25 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     }
   }
 
+  void _schedulePersist() {
+    try {
+      _persistTimer?.cancel();
+      _persistTimer = Timer(_persistDebounce, () async {
+        await _persistProgress();
+      });
+    } on Object catch (e, st) {
+      if (kDebugMode) {
+        developer.log('Failed scheduling persist: $e', stackTrace: st);
+      }
+    }
+  }
+
   Future<void> _persistProgress() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final key = 'puzzle_progress:${state.id}';
       final payload = jsonEncode({
+        'schemaVersion': 1,
         'grid': state.grid,
         'savedAt': DateTime.now().toIso8601String(),
       });
@@ -249,6 +274,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       }
     }
   }
+
+  
 }
 
 /// Main game board provider.

@@ -55,9 +55,9 @@ void main() {
     expect(current.grid[0][2], equals('C'));
     expect(current.grid[1][1], equals('B'));
 
-    // Modify a cell and ensure persistence happens
+    // Modify a cell and ensure persistence happens (allow debounce)
     container.read(gameBoardProvider.notifier).setLetter(2, 2, 'Z');
-    await Future<void>.delayed(const Duration(milliseconds: 50));
+    await Future<void>.delayed(const Duration(milliseconds: 300));
 
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString('puzzle_progress:$id');
