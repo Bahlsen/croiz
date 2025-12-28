@@ -23,7 +23,11 @@ class EndGameOverlay extends ConsumerWidget {
       if (kDebugMode) {
         debugPrint('EndGameOverlay provider read failed: $e\n$st');
       }
-      return const SizedBox.shrink();
+      // If providers are temporarily unavailable (loading/initial build),
+      // fall through with empty values so the widget can re-evaluate later
+      // instead of permanently returning an empty box.
+      entries = null;
+      found = <String>{};
     }
 
     final completed =

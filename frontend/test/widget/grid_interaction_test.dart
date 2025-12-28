@@ -43,9 +43,9 @@ void main() {
     // Cell at row=2, col=0 (letter 'C') should be one of the tappable cells
     final gridFinder = find.byType(GridView);
     // Tapping the first CrosswordCell is more reliable than counting GestureDetectors
-    final firstCell = find.byType(CrosswordCell).first;
-    expect(firstCell, findsOneWidget);
-    await tester.tap(firstCell);
+    final firstCell = find.byType(CrosswordCell, skipOffstage: false);
+    expect(firstCell, findsWidgets);
+    await tester.tap(firstCell.first);
     await tester.pumpAndSettle();
 
     // Count existing 'Z' occurrences inside the grid (should be 0 initially for empty cell set).

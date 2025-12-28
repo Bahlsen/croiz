@@ -93,8 +93,20 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       return;
     }
 
-    // Ensure local state reflects the loaded puzzle
-    state = next.value;
+    // Ensure local state reflects the loaded puzzle. Only replace the local
+    // state when a different puzzle is loaded to avoid overwriting any
+    // in-memory modifications (e.g. tests that call notifier methods
+    // immediately after provider resolution).
+    final loaded = next.value;
+    try {
+      if (state.id != loaded.id) {
+        state = loaded;
+      }
+    } on Object {
+      // If state is not yet initialised or any error occurs, fall back to
+      // assigning the loaded value.
+      state = loaded;
+    }
 
     // Attempt to restore persisted progress for this puzzle id.
     () async {
@@ -133,6 +145,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             if (found is List) {
               ref.read(foundWordsProvider.notifier).value =
                   found.cast<String>().toSet();
+              try {
+                _triggerEndGameIfSolved();
+              } on Object {
+                // ignore
+              }
             }
             final locked = stored['lockedCells'];
             if (locked is List) {
@@ -191,6 +208,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         if (newLocked.isNotEmpty) {
           ref.read(lockedCellsProvider.notifier).value = newLocked;
         }
+            try {
+              _triggerEndGameIfSolved();
+            } on Object {
+              // ignore
+            }
       } on Object catch (e, stack) {
         if (kDebugMode) {
           debugPrint('Error updating found/locked words: $e\n$stack');

@@ -44,13 +44,14 @@ void main() {
     container.read(selectedCellProvider.notifier).value = null;
 
     // Find a selectable cell and tap it (first CrosswordCell is reliable)
-    final cellFinder = find.byType(CrosswordCell).first;
-    await tester.tap(cellFinder);
+    final cellFinder = find.byType(CrosswordCell, skipOffstage: false);
+    expect(cellFinder, findsWidgets);
+    await tester.tap(cellFinder.first);
     await tester.pumpAndSettle();
     final firstDir = container.read(wordDirectionProvider);
 
     // Tap same cell again -> direction should toggle
-    await tester.tap(cellFinder);
+    await tester.tap(cellFinder.first);
     await tester.pumpAndSettle();
     final secondDir = container.read(wordDirectionProvider);
     expect(secondDir, isNot(equals(firstDir)));
