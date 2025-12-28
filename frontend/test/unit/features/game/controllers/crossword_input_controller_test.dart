@@ -177,71 +177,66 @@ void main() {
       },
     );
 
-    test(
-      'typing the final word triggers victory sound',
-      () async {
-        final testContainer = ProviderContainer(
-          overrides: [
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-            puzzleLoaderProvider.overrideWithValue(
-              AsyncValue.data(
-                GameBoard(
-                  id: 'test',
-                  title: 'Test Board',
-                  gridSize: 3,
-                  createdAt: DateTime.now(),
-                  grid: [
-                    [null, null, null],
-                    [null, null, null],
-                    [null, null, null],
-                  ],
-                  clues: {},
-                  blackCells: [
-                    [false, false, false],
-                    [false, false, false],
-                    [false, false, false],
-                  ],
-                  difficulty: 1,
-                  entries: [
-                    const PuzzleEntryData(
-                      number: 1,
-                      direction: 'across',
-                      x: 0,
-                      y: 0,
-                      length: 3,
-                      answer: 'CAT',
-                    ),
-                  ],
-                ),
+    test('typing the final word triggers victory sound', () async {
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'Test Board',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  [null, null, null],
+                  [null, null, null],
+                  [null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+                entries: [
+                  const PuzzleEntryData(
+                    number: 1,
+                    direction: 'across',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                    answer: 'CAT',
+                  ),
+                ],
               ),
             ),
-          ],
-        );
+          ),
+        ],
+      );
 
-        final controller = CrosswordInputController.fromContainer(
-          testContainer,
-        );
-        testContainer.read(selectedCellProvider.notifier).value =
-            const SelectedCell(0, 0);
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      testContainer.read(selectedCellProvider.notifier).value =
+          const SelectedCell(0, 0);
 
-        // Type the word "CAT"
-        controller.setLetterAndAdvance('C');
-        testContainer.read(selectedCellProvider.notifier).value =
-            const SelectedCell(0, 1);
-        controller.setLetterAndAdvance('A');
+      // Type the word "CAT"
+      controller.setLetterAndAdvance('C');
+      testContainer.read(selectedCellProvider.notifier).value =
+          const SelectedCell(0, 1);
+      controller.setLetterAndAdvance('A');
 
-        testContainer.read(selectedCellProvider.notifier).value =
-            const SelectedCell(0, 2);
-        controller.setLetterAndAdvance('T');
+      testContainer.read(selectedCellProvider.notifier).value =
+          const SelectedCell(0, 2);
+      controller.setLetterAndAdvance('T');
 
-        // Victory sound should have been played (playSuccess/playVictory
-        // both increment successCallCount in the mock).
-        expect(mockAudioService.successCallCount > 0, true);
+      // Victory sound should have been played (playSuccess/playVictory
+      // both increment successCallCount in the mock).
+      expect(mockAudioService.successCallCount > 0, true);
 
-        testContainer.dispose();
-      },
-    );
+      testContainer.dispose();
+    });
 
     test(
       'typing a letter that completes two crossing words marks both found',

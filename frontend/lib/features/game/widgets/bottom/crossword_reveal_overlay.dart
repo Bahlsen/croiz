@@ -12,131 +12,130 @@ class CrosswordRevealOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => SizedBox.expand(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: onClose,
-              child: Container(color: Colors.transparent),
-            ),
+    child: Stack(
+      children: [
+        Positioned.fill(
+          child: GestureDetector(
+            onTap: onClose,
+            child: Container(color: Colors.transparent),
           ),
-          Positioned(
-            // Match the keyboard horizontal padding (4px each side)
-            left: 4,
-            right: 4,
-            bottom: 0,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.45,
+        ),
+        Positioned(
+          // Match the keyboard horizontal padding (4px each side)
+          left: 4,
+          right: 4,
+          bottom: 0,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.45,
+            ),
+            child: Material(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              child: Material(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: Theme.of(context).cardColor,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 0,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.of(context)?.reveal ??
-                                      'Reveal',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
+              color: Theme.of(context).cardColor,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 0,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context)?.reveal ??
+                                    'Reveal',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.titleMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                              onPressed: onClose,
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
-                          ],
-                        ),
+                            onPressed: onClose,
+                          ),
+                        ],
                       ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.tag,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealLetterOption ??
-                              'Letter',
-                        ),
-                        onTap: () {
-                          onClose();
-                          final sel = ref.read(selectedCellProvider);
-                          if (sel == null) {
-                            return;
-                          }
-                          ref
-                              .read(gameBoardProvider.notifier)
-                              .revealLetterAt(sel.row, sel.col);
-                        },
+                    ),
+                    const Divider(height: 1),
+                    ListTile(
+                      leading: Icon(
+                        Icons.tag,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.checklist,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealWordOption ??
-                              'Word',
-                        ),
-                        onTap: () {
-                          onClose();
-                          final sel = ref.read(selectedCellProvider);
-                          if (sel == null) {
-                            return;
-                          }
-                          final board = ref.read(gameBoardProvider);
-                          final dir = ref.read(wordDirectionProvider);
-                          final ctx = computeCurrentEntry(board, sel, dir);
-                          if (ctx == null) {
-                            return;
-                          }
-                          ref
-                              .read(gameBoardProvider.notifier)
-                              .revealEntry(ctx.entry);
-                        },
+                      title: Text(
+                        AppLocalizations.of(context)?.revealLetterOption ??
+                            'Letter',
                       ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.grid_on,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealAllOption ??
-                              'All',
-                        ),
-                        onTap: () {
-                          onClose();
-                          ref.read(gameBoardProvider.notifier).revealAll();
-                        },
+                      onTap: () {
+                        onClose();
+                        final sel = ref.read(selectedCellProvider);
+                        if (sel == null) {
+                          return;
+                        }
+                        ref
+                            .read(gameBoardProvider.notifier)
+                            .revealLetterAt(sel.row, sel.col);
+                      },
+                    ),
+                    const Divider(height: 1),
+                    ListTile(
+                      leading: Icon(
+                        Icons.checklist,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                    ],
-                  ),
+                      title: Text(
+                        AppLocalizations.of(context)?.revealWordOption ??
+                            'Word',
+                      ),
+                      onTap: () {
+                        onClose();
+                        final sel = ref.read(selectedCellProvider);
+                        if (sel == null) {
+                          return;
+                        }
+                        final board = ref.read(gameBoardProvider);
+                        final dir = ref.read(wordDirectionProvider);
+                        final ctx = computeCurrentEntry(board, sel, dir);
+                        if (ctx == null) {
+                          return;
+                        }
+                        ref
+                            .read(gameBoardProvider.notifier)
+                            .revealEntry(ctx.entry);
+                      },
+                    ),
+                    const Divider(height: 1),
+                    ListTile(
+                      leading: Icon(
+                        Icons.grid_on,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      title: Text(
+                        AppLocalizations.of(context)?.revealAllOption ?? 'All',
+                      ),
+                      onTap: () {
+                        onClose();
+                        ref.read(gameBoardProvider.notifier).revealAll();
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
 }

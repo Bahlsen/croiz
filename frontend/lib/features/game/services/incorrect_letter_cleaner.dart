@@ -58,7 +58,7 @@ class IncorrectLetterCleaner {
       for (var c = 0; c < board.gridSize; c++) {
         final expectedChar = expected[r][c];
         final current = newGrid[r][c];
-        
+
         if (expectedChar != null && current != null) {
           if (current.toUpperCase() != expectedChar) {
             newGrid[r][c] = null;

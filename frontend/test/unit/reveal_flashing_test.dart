@@ -40,11 +40,13 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
     addTearDown(container.dispose);
 
     // reveal the final letter to complete the word
@@ -93,11 +95,13 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
     addTearDown(container.dispose);
 
     container.read(gameBoardProvider.notifier).revealEntry(entry);
@@ -136,11 +140,13 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
     addTearDown(container.dispose);
 
     container.read(gameBoardProvider.notifier).revealAll();

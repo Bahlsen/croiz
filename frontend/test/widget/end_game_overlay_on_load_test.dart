@@ -6,7 +6,9 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
-  testWidgets('EndGameOverlay appears when loading a completed puzzle', (tester) async {
+  testWidgets('EndGameOverlay appears when loading a completed puzzle', (
+    tester,
+  ) async {
     final board = GameBoard(
       id: 'completed',
       title: 'Completed',
@@ -36,9 +38,11 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
     addTearDown(container.dispose);
 
     await tester.pumpWidget(
@@ -52,6 +56,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Congratulations!'), findsOneWidget);
-    expect(find.text('Close'), findsOneWidget);
+    expect(find.text('Restart'), findsOneWidget);
   });
 }

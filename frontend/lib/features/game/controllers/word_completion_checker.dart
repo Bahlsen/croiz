@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:developer' as developer;
 
@@ -81,7 +80,7 @@ class WordCompletionChecker {
   final Map<CellKey, List<PuzzleEntryData>> Function() readCellEntriesIndex;
   final WordCheckService Function() readWordCheckService;
   final AudioService Function() readGameAudioService;
-    final EndGameService Function() readEndGameService;
+  final EndGameService Function() readEndGameService;
   final Duration Function() readFlashClearDelay;
   final Duration Function() readCheckDebounceDelay;
   final void Function(String boardId) finalizeTimer;
@@ -292,39 +291,39 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),
 );
 
-  /// Helper to set flashing cells and clear them after the configured delay.
-  ///
-  /// This centralizes the common pattern used both when the user completes a
-  /// word via typing and when a word is revealed via the menu.
-  void triggerFlashAndClear(
-    Set<CellKey> cells,
-    void Function(Set<CellKey>) writeFlashingCells,
-    Duration Function() readFlashClearDelay,
-  ) {
-    try {
-      writeFlashingCells(cells);
-      final delay = readFlashClearDelay();
-      if (delay == Duration.zero) {
-        // Synchronous test mode: clear on next microtask
-        unawaited(
-          Future.microtask(() {
-            try {
-              writeFlashingCells(<CellKey>{});
-            } on Object catch (_) {
-              // ignore
-            }
-          }),
-        );
-      } else {
-        Future.delayed(delay, () {
+/// Helper to set flashing cells and clear them after the configured delay.
+///
+/// This centralizes the common pattern used both when the user completes a
+/// word via typing and when a word is revealed via the menu.
+void triggerFlashAndClear(
+  Set<CellKey> cells,
+  void Function(Set<CellKey>) writeFlashingCells,
+  Duration Function() readFlashClearDelay,
+) {
+  try {
+    writeFlashingCells(cells);
+    final delay = readFlashClearDelay();
+    if (delay == Duration.zero) {
+      // Synchronous test mode: clear on next microtask
+      unawaited(
+        Future.microtask(() {
           try {
             writeFlashingCells(<CellKey>{});
           } on Object catch (_) {
             // ignore
           }
-        });
-      }
-    } on Object catch (_) {
-      // ignore errors from callers
+        }),
+      );
+    } else {
+      Future.delayed(delay, () {
+        try {
+          writeFlashingCells(<CellKey>{});
+        } on Object catch (_) {
+          // ignore
+        }
+      });
     }
+  } on Object catch (_) {
+    // ignore errors from callers
   }
+}

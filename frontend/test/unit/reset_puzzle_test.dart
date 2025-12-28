@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_board_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
-import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -50,22 +49,29 @@ void main() {
         ],
       );
 
-      final container = ProviderContainer(overrides: [
-        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      ]);
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        ],
+      );
       addTearDown(container.dispose);
 
       // Initialize board and simulate some game state
       final boardNotifier = container.read(gameBoardProvider.notifier);
-      
+
       // Set some found words and locked cells manually to simulate game progress
       container.read(foundWordsProvider.notifier).value = {'0,0,across'};
-      container
-          .read(lockedCellsProvider.notifier)
-          .value = {const CellKey(0, 0), const CellKey(0, 1), const CellKey(0, 2)};
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(1, 1);
+      container.read(lockedCellsProvider.notifier).value = {
+        const CellKey(0, 0),
+        const CellKey(0, 1),
+        const CellKey(0, 2),
+      };
+      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+        1,
+        1,
+      );
 
       // Verify initial state has progress
       expect(container.read(foundWordsProvider).length, equals(1));
@@ -89,7 +95,11 @@ void main() {
       final resetGrid = container.read(gameBoardProvider).grid;
       for (var r = 0; r < resetGrid.length; r++) {
         for (var c = 0; c < resetGrid[r].length; c++) {
-          expect(resetGrid[r][c], isNull, reason: 'Cell at ($r,$c) should be null');
+          expect(
+            resetGrid[r][c],
+            isNull,
+            reason: 'Cell at ($r,$c) should be null',
+          );
         }
       }
     });
@@ -121,11 +131,13 @@ void main() {
         ],
       );
 
-      final container = ProviderContainer(overrides: [
-        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      ]);
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        ],
+      );
       addTearDown(container.dispose);
 
       // Act: reset the puzzle
@@ -137,7 +149,7 @@ void main() {
       expect(resetGrid[0][1], isNull); // black cell remains null
       expect(resetGrid[0][2], isNull); // white cell cleared
       expect(resetGrid[2][1], isNull); // black cell remains null
-      
+
       // Black cells structure should be preserved
       final blackCells = container.read(gameBoardProvider).blackCells;
       expect(blackCells[0][1], isTrue);
