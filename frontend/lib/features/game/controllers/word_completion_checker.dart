@@ -6,6 +6,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
+import 'package:croiz/features/game/services/endgame_service.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,6 +31,7 @@ class WordCompletionChecker {
     required this.readCellEntriesIndex,
     required this.readWordCheckService,
     required this.readGameAudioService,
+    required this.readEndGameService,
     required this.readFlashClearDelay,
     required this.readCheckDebounceDelay,
     required this.finalizeTimer,
@@ -48,6 +50,7 @@ class WordCompletionChecker {
     readCellEntriesIndex,
     required WordCheckService Function() readWordCheckService,
     required AudioService Function() readGameAudioService,
+    required EndGameService Function() readEndGameService,
     required Duration Function() readFlashClearDelay,
     required Duration Function() readCheckDebounceDelay,
     required void Function(String boardId) finalizeTimer,
@@ -62,6 +65,7 @@ class WordCompletionChecker {
     readCellEntriesIndex: readCellEntriesIndex,
     readWordCheckService: readWordCheckService,
     readGameAudioService: readGameAudioService,
+    readEndGameService: readEndGameService,
     readFlashClearDelay: readFlashClearDelay,
     readCheckDebounceDelay: readCheckDebounceDelay,
     finalizeTimer: finalizeTimer,
@@ -77,6 +81,7 @@ class WordCompletionChecker {
   final Map<CellKey, List<PuzzleEntryData>> Function() readCellEntriesIndex;
   final WordCheckService Function() readWordCheckService;
   final AudioService Function() readGameAudioService;
+    final EndGameService Function() readEndGameService;
   final Duration Function() readFlashClearDelay;
   final Duration Function() readCheckDebounceDelay;
   final void Function(String boardId) finalizeTimer;
@@ -209,6 +214,9 @@ class WordCompletionChecker {
       final totalEntries = entries.length;
       if (totalEntries > 0 && newFoundWords.length == totalEntries) {
         try {
+          developer.log('All words completed: triggering finalize and victory');
+        } on Object catch (_) {}
+        try {
           finalizeTimer(board.id);
         } on Object catch (e, st) {
           developer.log('finalizeSync failed', error: e, stackTrace: st);
@@ -278,6 +286,7 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
       read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
   readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
   readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
+  readEndGameService: () => read(endGameServiceProvider),
   readFlashClearDelay: () => read<Duration>(flashClearDelayProvider),
   readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),
   finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),

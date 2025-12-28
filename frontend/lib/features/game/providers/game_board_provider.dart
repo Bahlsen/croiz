@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -88,112 +89,115 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (!ref.mounted) {
       return;
     }
-    if (next is AsyncData<GameBoard>) {
-      if (state.id != next.value.id) {
-        state = next.value;
-      }
+    if (next is! AsyncData<GameBoard>) {
+      return;
+    }
 
-      // Attempt to restore persisted progress for this puzzle id.
-      () async {
-        try {
-          final stored = await HivePuzzleStorage.load(state.id);
-          if (stored != null) {
-            final gridData = stored['grid'];
-            if (gridData is List) {
-              final rows = gridData.length;
-              final cols = rows > 0 && gridData[0] is List
-                  ? (gridData[0] as List).length
-                  : 0;
-              if (rows == state.grid.length && cols == state.grid[0].length) {
-                final newGrid = <List<String?>>[];
-                for (final r in gridData) {
-                  final rowList = <String?>[];
-                  for (final c in (r as List)) {
-                    if (c == null) {
-                      rowList.add(null);
-                    } else {
-                      rowList.add(c.toString());
-                    }
-                  }
-                  newGrid.add(rowList);
-                }
-                state = state.copyWith(grid: newGrid);
-              }
-            }
-            // restore found/locked words or timer when present
-            try {
-              final found = stored['foundWords'];
-              if (found is List) {
-                ref.read(foundWordsProvider.notifier).value = found
-                    .cast<String>()
-                    .toSet();
-              }
-              final locked = stored['lockedCells'];
-              if (locked is List) {
-                final set = <CellKey>{};
-                for (final s in locked) {
-                  if (s is String) {
-                    final parts = s.split(',');
-                    if (parts.length == 2) {
-                      final r = int.tryParse(parts[0]);
-                      final c = int.tryParse(parts[1]);
-                      if (r != null && c != null) {
-                        set.add(CellKey(r, c));
-                      }
-                    }
+    // Ensure local state reflects the loaded puzzle
+    state = next.value;
+
+    // Attempt to restore persisted progress for this puzzle id.
+    () async {
+      try {
+        final stored = await HivePuzzleStorage.load(state.id);
+        if (!ref.mounted) {
+          return;
+        }
+        if (stored != null) {
+          final gridData = stored['grid'];
+          if (gridData is List) {
+            final rows = gridData.length;
+            final cols = rows > 0 && gridData[0] is List
+                ? (gridData[0] as List).length
+                : 0;
+            if (rows == state.grid.length && cols == state.grid[0].length) {
+              final newGrid = <List<String?>>[];
+              for (final r in gridData) {
+                final rowList = <String?>[];
+                for (final c in (r as List)) {
+                  if (c == null) {
+                    rowList.add(null);
+                  } else {
+                    rowList.add(c.toString());
                   }
                 }
-                ref.read(lockedCellsProvider.notifier).value = set;
+                newGrid.add(rowList);
               }
-              final timerVal = stored['elapsedSeconds'];
-              if (timerVal is num) {
-                unawaited(
-                  ref
-                      .read(gameTimerProvider(state.id))
-                      .setElapsed(timerVal.toInt()),
-                );
-              }
-            } on Object catch (_) {
-              // ignore per-field restore errors
+              state = state.copyWith(grid: newGrid);
             }
           }
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            developer.log(
-              'Failed to restore puzzle progress: $e',
-              stackTrace: st,
-            );
+
+          // restore found/locked words or timer when present
+          try {
+            final found = stored['foundWords'];
+            if (found is List) {
+              ref.read(foundWordsProvider.notifier).value =
+                  found.cast<String>().toSet();
+            }
+            final locked = stored['lockedCells'];
+            if (locked is List) {
+              final set = <CellKey>{};
+              for (final s in locked) {
+                if (s is String) {
+                  final parts = s.split(',');
+                  if (parts.length == 2) {
+                    final r = int.tryParse(parts[0]);
+                    final c = int.tryParse(parts[1]);
+                    if (r != null && c != null) {
+                      set.add(CellKey(r, c));
+                    }
+                  }
+                }
+              }
+              ref.read(lockedCellsProvider.notifier).value = set;
+            }
+            final timerVal = stored['elapsedSeconds'];
+            if (timerVal is num) {
+              unawaited(
+                ref.read(gameTimerProvider(state.id)).setElapsed(timerVal.toInt()),
+              );
+            }
+          } on Object catch (_) {
+            // ignore per-field restore errors
           }
         }
-      }();
+      } on Object catch (e, st) {
+        if (kDebugMode) {
+          developer.log(
+            'Failed to restore puzzle progress: $e',
+            stackTrace: st,
+          );
+        }
+      }
+    }();
 
-      final entries = state.entries;
-      if (entries != null && entries.isNotEmpty) {
-        try {
-          final wordCheck = ref.read(wordCheckServiceProvider);
-          final newFound = <String>{};
-          final newLocked = <CellKey>{};
-          for (final entry in entries) {
-            if (wordCheck.isWordComplete(state, entry)) {
-              final key = wordCheck.getWordKey(entry);
-              newFound.add(key);
-              newLocked.addAll(wordCheck.getCellKeys(entry));
-            }
+    // Populate initial found/locked sets based on current grid state.
+    final entries = state.entries;
+    if (entries != null && entries.isNotEmpty) {
+      try {
+        final wordCheck = ref.read(wordCheckServiceProvider);
+        final newFound = <String>{};
+        final newLocked = <CellKey>{};
+        for (final entry in entries) {
+          if (wordCheck.isWordComplete(state, entry)) {
+            final key = wordCheck.getWordKey(entry);
+            newFound.add(key);
+            newLocked.addAll(wordCheck.getCellKeys(entry));
           }
-          if (newFound.isNotEmpty) {
-            ref.read(foundWordsProvider.notifier).value = newFound;
-          }
-          if (newLocked.isNotEmpty) {
-            ref.read(lockedCellsProvider.notifier).value = newLocked;
-          }
-        } on Object catch (e, stack) {
-          if (kDebugMode) {
-            debugPrint('Error updating found/locked words: $e\n$stack');
-          }
+        }
+        if (newFound.isNotEmpty) {
+          ref.read(foundWordsProvider.notifier).value = newFound;
+        }
+        if (newLocked.isNotEmpty) {
+          ref.read(lockedCellsProvider.notifier).value = newLocked;
+        }
+      } on Object catch (e, stack) {
+        if (kDebugMode) {
+          debugPrint('Error updating found/locked words: $e\n$stack');
         }
       }
     }
-  }
+    }
 
   void setLetter(int row, int col, String? letter) {
     if (state.blackCells.isDisabled(row, col)) {
@@ -568,6 +572,24 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           ref.read(gameTimerProvider(state.id)).finalizeSync();
         } on Object {
           // ignore
+        }
+        try {
+          // Only attempt to play audio if Flutter bindings are initialized.
+          // Some unit tests run without WidgetsFlutterBinding and calling
+          // into audioplayers' global scope will throw. Guard to avoid
+          // creating the audio service in pure unit tests.
+          try {
+            WidgetsBinding.instance;
+          } on Object {
+            // Binding not initialized (unit test) — skip audio.
+            return;
+          }
+
+          ref.read(gameAudioServiceProvider).playVictory();
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            debugPrint('playVictory from GameBoardNotifier failed: $e\n$st');
+          }
         }
       }
     } on Object {

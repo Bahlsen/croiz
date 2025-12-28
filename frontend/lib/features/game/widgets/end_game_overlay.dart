@@ -30,6 +30,9 @@ class EndGameOverlay extends ConsumerWidget {
         entries != null &&
         entries.isNotEmpty &&
         found!.length == entries.length;
+    if (kDebugMode && completed) {
+      debugPrint('EndGameOverlay: completed=true, entries=${entries.length}, found=${found.length}');
+    }
     if (!completed) {
       return const SizedBox.shrink();
     }

@@ -21,13 +21,13 @@ class ClueBannerContainer extends ConsumerWidget {
       behavior: HitTestBehavior.opaque,
       child: FractionallySizedBox(
         // Increase banner width by ~30% so it appears larger than before.
-        widthFactor: 1.6,
+        widthFactor: 1.3,
         child: ConstrainedBox(
-          // Increase minHeight by ~30% (96 -> 125)
-          constraints: const BoxConstraints(minHeight: 125),
+          // Reduced minHeight to make banner shorter
+          constraints: const BoxConstraints(minHeight: 96),
           child: Container(
-            // Increase internal padding proportionally
-            padding: const EdgeInsets.symmetric(vertical: 26, horizontal: 24),
+            // Reduced internal vertical padding
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
             decoration: BoxDecoration(
               color: colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
@@ -43,7 +43,7 @@ class ClueBannerContainer extends ConsumerWidget {
                     : '${entry.number}. ${entry.clue!}',
                 style: TextStyle(
                   color: colorScheme.onSurface,
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
                 maxLines: 2,

@@ -7,6 +7,7 @@ import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/controllers/crossword_navigation.dart';
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/features/game/controllers/word_completion_checker.dart';
+import 'package:croiz/features/game/services/endgame_service.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 
@@ -51,6 +52,7 @@ class CrosswordInputController {
         ),
         readWordCheckService: () => _read(wordCheckServiceProvider),
         readGameAudioService: () => _read(gameAudioServiceProvider),
+        readEndGameService: () => _read(endGameServiceProvider),
         readFlashClearDelay: () => _read<Duration>(flashClearDelayProvider),
         readCheckDebounceDelay: () =>
             _read<Duration>(wordCheckDebounceDelayProvider),

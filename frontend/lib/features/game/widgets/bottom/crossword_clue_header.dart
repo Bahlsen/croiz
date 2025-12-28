@@ -88,9 +88,9 @@ class CrosswordClueHeader extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (leftArrow != null) leftArrow,
-        if (leftArrow != null) const SizedBox(width: 6),
+        if (leftArrow != null) const SizedBox(width: 20),
         Expanded(child: centerWidget),
-        if (rightArrow != null) const SizedBox(width: 6),
+        if (rightArrow != null) const SizedBox(width: 20),
         if (rightArrow != null) rightArrow,
       ],
     );
@@ -103,14 +103,10 @@ class CrosswordClueHeader extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
-          mainRow,
-          const SizedBox(height: 8),
-          actionsRow,
-        ],
+        children: [mainRow, const SizedBox(height: 8), actionsRow],
       ),
     );
   }
