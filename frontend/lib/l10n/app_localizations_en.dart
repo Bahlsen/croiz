@@ -39,6 +39,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
+  String get restart => 'Restart';
+
+  @override
+  String get reveal => 'Reveal';
+
+  @override
+  String get revealLetterOption => 'Reveal letter';
+
+  @override
+  String get revealWordOption => 'Reveal word';
+
+  @override
+  String get revealAllOption => 'Reveal all';
+
+  @override
   String get congratulations => 'Congratulations!';
 
   @override
@@ -46,18 +61,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearIncorrectLetters => 'Clear incorrect letters';
-
-  @override
-  String get reveal => 'Reveal';
-
-  @override
-  String get revealLetterOption => 'Letter';
-
-  @override
-  String get revealWordOption => 'Word';
-
-  @override
-  String get revealAllOption => 'All';
 
   @override
   String get switchKeyboardLayout => 'Switch keyboard layout';

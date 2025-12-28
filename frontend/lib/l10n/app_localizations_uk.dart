@@ -39,6 +39,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get close => 'Закрити';
 
   @override
+  String get restart => 'Почати спочатку';
+
+  @override
+  String get reveal => 'Розкрити';
+
+  @override
+  String get revealLetterOption => 'Розкрити літеру';
+
+  @override
+  String get revealWordOption => 'Розкрити слово';
+
+  @override
+  String get revealAllOption => 'Розкрити все';
+
+  @override
   String get congratulations => 'Вітаємо!';
 
   @override
@@ -46,18 +61,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get clearIncorrectLetters => 'Очистити неправильні літери';
-
-  @override
-  String get reveal => 'Показати';
-
-  @override
-  String get revealLetterOption => 'Літера';
-
-  @override
-  String get revealWordOption => 'Слово';
-
-  @override
-  String get revealAllOption => 'Всі';
 
   @override
   String get switchKeyboardLayout => 'Змінити розклад клавіатури';

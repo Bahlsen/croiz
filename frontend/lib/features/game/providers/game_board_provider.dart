@@ -143,8 +143,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           try {
             final found = stored['foundWords'];
             if (found is List) {
-              ref.read(foundWordsProvider.notifier).value =
-                  found.cast<String>().toSet();
+              ref.read(foundWordsProvider.notifier).value = found
+                  .cast<String>()
+                  .toSet();
               try {
                 _triggerEndGameIfSolved();
               } on Object {
@@ -171,7 +172,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             final timerVal = stored['elapsedSeconds'];
             if (timerVal is num) {
               unawaited(
-                ref.read(gameTimerProvider(state.id)).setElapsed(timerVal.toInt()),
+                ref
+                    .read(gameTimerProvider(state.id))
+                    .setElapsed(timerVal.toInt()),
               );
             }
           } on Object catch (_) {
@@ -208,18 +211,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         if (newLocked.isNotEmpty) {
           ref.read(lockedCellsProvider.notifier).value = newLocked;
         }
-            try {
-              _triggerEndGameIfSolved();
-            } on Object {
-              // ignore
-            }
+        try {
+          _triggerEndGameIfSolved();
+        } on Object {
+          // ignore
+        }
       } on Object catch (e, stack) {
         if (kDebugMode) {
           debugPrint('Error updating found/locked words: $e\n$stack');
         }
       }
     }
-    }
+  }
 
   void setLetter(int row, int col, String? letter) {
     if (state.blackCells.isDisabled(row, col)) {
@@ -576,6 +579,36 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
       }
     }
+  }
+
+  /// Reset the puzzle to its initial state (clear all user progress).
+  void resetPuzzle() {
+    // Clear the grid
+    final newGrid = List<List<String?>>.generate(
+      state.grid.length,
+      (r) => List<String?>.generate(
+        state.grid[r].length,
+        (c) => state.blackCells.isDisabled(r, c) ? null : null,
+      ),
+    );
+    state = state.copyWith(grid: newGrid);
+
+    // Clear all game state
+    ref.read(foundWordsProvider.notifier).value = <String>{};
+    ref.read(lockedCellsProvider.notifier).value = <CellKey>{};
+    ref.read(selectedCellProvider.notifier).value = null;
+    ref.read(flashingCellsProvider.notifier).value = <CellKey>{};
+    ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
+
+    // Reset timer
+    try {
+      ref.read(gameTimerProvider(state.id)).clear();
+    } on Object {
+      // ignore
+    }
+
+    // Clear persistence
+    _schedulePersist();
   }
 
   /// Centralized end-game check: finalize timer and play victory when all

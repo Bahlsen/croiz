@@ -35,7 +35,9 @@ class EndGameOverlay extends ConsumerWidget {
         entries.isNotEmpty &&
         found!.length == entries.length;
     if (kDebugMode && completed) {
-      debugPrint('EndGameOverlay: completed=true, entries=${entries.length}, found=${found.length}');
+      debugPrint(
+        'EndGameOverlay: completed=true, entries=${entries.length}, found=${found.length}',
+      );
     }
     if (!completed) {
       return const SizedBox.shrink();
@@ -71,8 +73,13 @@ class EndGameOverlay extends ConsumerWidget {
                 const SizedBox(height: 42),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(AppLocalizations.of(context)?.close ?? 'Close'),
+                  onPressed: () {
+                    ref.read(gameBoardProvider.notifier).resetPuzzle();
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)?.restart ?? 'Restart',
+                  ),
                 ),
                 const SizedBox(height: 8),
                 TextButton(

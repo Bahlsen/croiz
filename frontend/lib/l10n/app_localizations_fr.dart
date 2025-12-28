@@ -39,6 +39,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get close => 'Fermer';
 
   @override
+  String get restart => 'Recommencer';
+
+  @override
+  String get reveal => 'Révéler';
+
+  @override
+  String get revealLetterOption => 'Révéler la lettre';
+
+  @override
+  String get revealWordOption => 'Révéler le mot';
+
+  @override
+  String get revealAllOption => 'Tout révéler';
+
+  @override
   String get congratulations => 'Félicitations!';
 
   @override
@@ -46,18 +61,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get clearIncorrectLetters => 'Effacer les lettres incorrectes';
-
-  @override
-  String get reveal => 'Révéler';
-
-  @override
-  String get revealLetterOption => 'Lettre';
-
-  @override
-  String get revealWordOption => 'Mot';
-
-  @override
-  String get revealAllOption => 'Tout';
 
   @override
   String get switchKeyboardLayout => 'Changer la disposition du clavier';
