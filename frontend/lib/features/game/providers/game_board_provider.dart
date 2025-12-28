@@ -211,6 +211,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     newGrid[row] = rowCopy;
     state = state.copyWith(grid: newGrid);
     _schedulePersist();
+    // Check end-game in case foundWords were updated elsewhere synchronously
+    try {
+      _triggerEndGameIfSolved();
+    } on Object {
+      // ignore
+    }
   }
 
   void toggleBlackCell(int row, int col) {
@@ -359,6 +365,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             (v) => ref.read(flashingCellsProvider.notifier).value = v,
             () => ref.read(flashClearDelayProvider),
           );
+          try {
+            _triggerEndGameIfSolved();
+          } on Object {
+            // ignore
+          }
         }
       }
     } on Object {
@@ -414,6 +425,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     } on Object {
       // ignore
     }
+    try {
+      _triggerEndGameIfSolved();
+    } on Object {
+      // ignore
+    }
   }
 
   /// Reveal the entire puzzle (fill all non-black cells from the solution grid).
@@ -449,7 +465,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-          if (newCells.isNotEmpty) {
+          if (newlyFound.isNotEmpty) {
             triggerFlashAndClear(
               newCells,
               (v) => ref.read(flashingCellsProvider.notifier).value = v,
@@ -471,6 +487,13 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     }
     ref.read(lockedCellsProvider.notifier).value = locked;
     _schedulePersist();
+
+    // After revealAll, check end-game once.
+    try {
+      _triggerEndGameIfSolved();
+    } on Object {
+      // ignore
+    }
     // If there were no entries metadata, fall back to flashing all
     // non-black cells so the reveal is still visible.
     if (state.entries == null || state.entries!.isEmpty) {
@@ -526,6 +549,29 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       if (kDebugMode) {
         developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
       }
+    }
+  }
+
+  /// Centralized end-game check: finalize timer and play victory when all
+  /// entries are found. Call this from any code path that may complete the
+  /// puzzle (typing, reveal actions, etc.). This uses `foundWordsProvider`
+  /// which is the authoritative source of found entries.
+  void _triggerEndGameIfSolved() {
+    try {
+      final entriesNow = state.entries;
+      if (entriesNow == null || entriesNow.isEmpty) {
+        return;
+      }
+      final foundCount = ref.read(foundWordsProvider).length;
+      if (foundCount == entriesNow.length) {
+        try {
+          ref.read(gameTimerProvider(state.id)).finalizeSync();
+        } on Object {
+          // ignore
+        }
+      }
+    } on Object {
+      // ignore
     }
   }
 }
