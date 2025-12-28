@@ -396,7 +396,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     state = state.copyWith(grid: newGrid);
     // Mark word as found and lock its cells
-    final key = '${entry.y},${entry.x},${entry.direction}';
+    final wordCheck = ref.read(wordCheckServiceProvider);
+    final key = wordCheck.getWordKey(entry);
     final newFound = Set<String>.from(ref.read(foundWordsProvider))..add(key);
     ref.read(foundWordsProvider.notifier).value = newFound;
     final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
@@ -425,12 +426,40 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     state = state.copyWith(grid: newGrid);
 
     // Mark all entries as found (if entries exist) and lock all non-black cells
+    // Only flash the cells that belong to entries that were *not* already
+    // marked as found so the revealAll animation highlights newly revealed
+    // words instead of flashing the entire board.
     if (state.entries != null) {
+      final wordCheck = ref.read(wordCheckServiceProvider);
+      final oldFound = Set<String>.from(ref.read(foundWordsProvider));
       final allKeys = <String>{};
       for (final e in state.entries!) {
-        allKeys.add('${e.y},${e.x},${e.direction}');
+        allKeys.add(wordCheck.getWordKey(e));
       }
       ref.read(foundWordsProvider.notifier).value = allKeys;
+
+      // Determine which entries are newly found and gather their cells.
+      final newlyFound = allKeys.difference(oldFound);
+      if (newlyFound.isNotEmpty) {
+        try {
+          final newCells = <CellKey>{};
+          for (final e in state.entries!) {
+            final key = wordCheck.getWordKey(e);
+            if (newlyFound.contains(key)) {
+              newCells.addAll(wordCheck.getCellKeys(e));
+            }
+          }
+          if (newCells.isNotEmpty) {
+            triggerFlashAndClear(
+              newCells,
+              (v) => ref.read(flashingCellsProvider.notifier).value = v,
+              () => ref.read(flashClearDelayProvider),
+            );
+          }
+        } on Object {
+          // ignore
+        }
+      }
     }
     final locked = <CellKey>{};
     for (var r = 0; r < state.grid.length; r++) {
@@ -442,23 +471,26 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     }
     ref.read(lockedCellsProvider.notifier).value = locked;
     _schedulePersist();
-    // Flash all non-black cells so revealAll is visible
-    try {
-      final all = <CellKey>{};
-      for (var r = 0; r < state.grid.length; r++) {
-        for (var c = 0; c < state.grid[r].length; c++) {
-          if (!state.blackCells.isDisabled(r, c)) {
-            all.add(CellKey(r, c));
+    // If there were no entries metadata, fall back to flashing all
+    // non-black cells so the reveal is still visible.
+    if (state.entries == null || state.entries!.isEmpty) {
+      try {
+        final all = <CellKey>{};
+        for (var r = 0; r < state.grid.length; r++) {
+          for (var c = 0; c < state.grid[r].length; c++) {
+            if (!state.blackCells.isDisabled(r, c)) {
+              all.add(CellKey(r, c));
+            }
           }
         }
+        triggerFlashAndClear(
+          all,
+          (v) => ref.read(flashingCellsProvider.notifier).value = v,
+          () => ref.read(flashClearDelayProvider),
+        );
+      } on Object {
+        // ignore
       }
-      triggerFlashAndClear(
-        all,
-        (v) => ref.read(flashingCellsProvider.notifier).value = v,
-        () => ref.read(flashClearDelayProvider),
-      );
-    } on Object {
-      // ignore
     }
   }
 

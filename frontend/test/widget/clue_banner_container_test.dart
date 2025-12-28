@@ -26,7 +26,7 @@ void main() {
 
     final text = tester.widget<Text>(find.byType(Text));
     expect(text.data, contains('1. Short clue'));
-    expect(text.style?.fontSize, equals(18));
+    expect(text.style?.fontSize, equals(24));
   });
 
   testWidgets('long clue reduces font size to fit within two lines', (
@@ -57,8 +57,8 @@ void main() {
 
     final text = tester.widget<Text>(find.byType(Text));
     expect(text.data, contains('42.'));
-    // Font size should be reduced from base 18 when needed
-    expect(text.style?.fontSize, lessThan(18));
-    expect(text.style?.fontSize, greaterThanOrEqualTo(12));
+    // Font size should be reduced from base 24 when needed
+    expect(text.style?.fontSize, lessThan(24));
+    expect(text.style?.fontSize, greaterThanOrEqualTo(14));
   });
 }
