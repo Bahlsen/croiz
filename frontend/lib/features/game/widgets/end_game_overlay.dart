@@ -82,7 +82,8 @@ class EndGameOverlay extends ConsumerWidget {
                 OutlinedButton(
                   onPressed: () {
                     ref.read(gameBoardProvider.notifier).resetPuzzle();
-                    Navigator.of(context).pop();
+                    // Don't call Navigator.pop() - the overlay will disappear
+                    // naturally when foundWords becomes empty after reset
                   },
                   child: Text(
                     AppLocalizations.of(context)?.restart ?? 'Restart',

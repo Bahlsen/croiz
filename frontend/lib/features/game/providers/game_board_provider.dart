@@ -147,7 +147,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
                   .cast<String>()
                   .toSet();
               try {
-                _triggerEndGameIfSolved();
+                _triggerEndGameIfSolved(playVictorySound: false);
               } on Object {
                 // ignore
               }
@@ -212,7 +212,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           ref.read(lockedCellsProvider.notifier).value = newLocked;
         }
         try {
-          _triggerEndGameIfSolved();
+          _triggerEndGameIfSolved(playVictorySound: false);
         } on Object {
           // ignore
         }
@@ -615,7 +615,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   /// entries are found. Call this from any code path that may complete the
   /// puzzle (typing, reveal actions, etc.). This uses `foundWordsProvider`
   /// which is the authoritative source of found entries.
-  void _triggerEndGameIfSolved() {
+  ///
+  /// [playVictorySound]: If true, plays the victory sound. Set to false when
+  /// loading an already-completed puzzle to avoid playing the sound.
+  void _triggerEndGameIfSolved({bool playVictorySound = true}) {
     try {
       final entriesNow = state.entries;
       if (entriesNow == null || entriesNow.isEmpty) {
@@ -628,22 +631,24 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         } on Object {
           // ignore
         }
-        try {
-          // Only attempt to play audio if Flutter bindings are initialized.
-          // Some unit tests run without WidgetsFlutterBinding and calling
-          // into audioplayers' global scope will throw. Guard to avoid
-          // creating the audio service in pure unit tests.
+        if (playVictorySound) {
           try {
-            WidgetsBinding.instance;
-          } on Object {
-            // Binding not initialized (unit test) — skip audio.
-            return;
-          }
+            // Only attempt to play audio if Flutter bindings are initialized.
+            // Some unit tests run without WidgetsFlutterBinding and calling
+            // into audioplayers' global scope will throw. Guard to avoid
+            // creating the audio service in pure unit tests.
+            try {
+              WidgetsBinding.instance;
+            } on Object {
+              // Binding not initialized (unit test) — skip audio.
+              return;
+            }
 
-          ref.read(gameAudioServiceProvider).playVictory();
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            debugPrint('playVictory from GameBoardNotifier failed: $e\n$st');
+            ref.read(gameAudioServiceProvider).playVictory();
+          } on Object catch (e, st) {
+            if (kDebugMode) {
+              debugPrint('playVictory from GameBoardNotifier failed: $e\n$st');
+            }
           }
         }
       }
