@@ -72,6 +72,7 @@ void main() {
 
     // Overlay should now be visible
     expect(congratsFinder, findsOneWidget);
+    expect(find.text('View'), findsOneWidget);
     expect(find.text('Restart'), findsOneWidget);
   });
 
@@ -160,5 +161,87 @@ void main() {
         );
       }
     }
+  });
+
+  testWidgets('View button closes overlay without resetting puzzle', (
+    tester,
+  ) async {
+    final board = GameBoard(
+      id: 'test-view',
+      title: 'Test View',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        ['A', 'B', 'C'], // completed word
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: [
+        [false, false, false],
+        [false, false, false],
+        [false, false, false],
+      ],
+      difficulty: 1,
+      entries: [
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 3,
+          answer: 'ABC',
+        ),
+      ],
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // Mark the word as found to show the overlay
+    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+
+    // Build UI
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: const MaterialApp(home: Scaffold(body: EndGameOverlay())),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Verify overlay is showing
+    expect(find.text('Congratulations!'), findsOneWidget);
+    expect(find.text('View'), findsOneWidget);
+
+    // Verify initial state has progress
+    expect(container.read(foundWordsProvider).length, equals(1));
+    expect(container.read(gameBoardProvider).grid[0][0], equals('A'));
+    expect(container.read(gameBoardProvider).grid[0][1], equals('B'));
+    expect(container.read(gameBoardProvider).grid[0][2], equals('C'));
+
+    // Tap the View button
+    await tester.tap(find.text('View'));
+    await tester.pumpAndSettle();
+
+    // Verify state is NOT reset - progress is preserved
+    expect(container.read(foundWordsProvider).length, equals(1));
+    expect(container.read(gameBoardProvider).grid[0][0], equals('A'));
+    expect(container.read(gameBoardProvider).grid[0][1], equals('B'));
+    expect(container.read(gameBoardProvider).grid[0][2], equals('C'));
+
+    // Overlay should be dismissed
+    expect(find.text('Congratulations!'), findsNothing);
   });
 }

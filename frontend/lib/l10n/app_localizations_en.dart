@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get restart => 'Restart';
 
   @override
+  String get view => 'View';
+
+  @override
   String get reveal => 'Reveal';
 
   @override

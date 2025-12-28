@@ -42,6 +42,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get restart => 'Почати спочатку';
 
   @override
+  String get view => 'Переглянути';
+
+  @override
   String get reveal => 'Розкрити';
 
   @override

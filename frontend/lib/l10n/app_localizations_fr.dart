@@ -42,6 +42,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get restart => 'Recommencer';
 
   @override
+  String get view => 'Regarder';
+
+  @override
   String get reveal => 'Révéler';
 
   @override

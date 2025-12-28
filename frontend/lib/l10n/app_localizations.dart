@@ -166,6 +166,12 @@ abstract class AppLocalizations {
   /// **'Restart'**
   String get restart;
 
+  /// No description provided for @view.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get view;
+
   /// No description provided for @reveal.
   ///
   /// In en, this message translates to:

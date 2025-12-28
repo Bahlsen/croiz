@@ -74,6 +74,13 @@ class EndGameOverlay extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(AppLocalizations.of(context)?.view ?? 'View'),
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  onPressed: () {
                     ref.read(gameBoardProvider.notifier).resetPuzzle();
                     Navigator.of(context).pop();
                   },

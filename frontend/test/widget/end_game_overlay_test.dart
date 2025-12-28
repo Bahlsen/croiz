@@ -102,6 +102,7 @@ void main() {
 
     // overlay should appear
     expect(congratsFinder, findsOneWidget);
+    expect(find.text('View'), findsOneWidget);
     expect(find.text('Restart'), findsOneWidget);
   });
 }

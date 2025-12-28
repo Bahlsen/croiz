@@ -56,6 +56,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Congratulations!'), findsOneWidget);
+    expect(find.text('View'), findsOneWidget);
     expect(find.text('Restart'), findsOneWidget);
   });
 }
