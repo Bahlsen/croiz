@@ -33,6 +33,12 @@ class CrosswordInputController {
         <T>(provider) => container.read(provider as dynamic) as T,
       );
 
+  // NOTE: `fromContainer` is provided as a convenience for tests that
+  // create a `ProviderContainer` and need a controller backed by it.
+  // Avoid calling `fromContainer` from production code or storing a
+  // `ProviderContainer` in long-lived services — prefer `fromRef(WidgetRef)`
+  // or inject a `Reader`/`read` function to keep lifecycles predictable.
+
   final T Function<T>(Object provider) _read;
   late final WordCompletionChecker _wordCompletionChecker;
   bool _didAutoSelectFirstAcross = false;

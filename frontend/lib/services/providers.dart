@@ -1,3 +1,13 @@
+// Riverpod provider conventions:
+// - Use `NotifierProvider` / `AsyncNotifierProvider` for stateful providers.
+// - Prefer `ref.watch` only inside widget build methods (or providers).
+// - Use `ref.read` (or `.notifier`) in callbacks, initState, and async code.
+// - Avoid storing `ProviderContainer` or using `ref.watch` in long-lived
+//   non-widget objects; instead inject a `Reader`/`read` function or use
+//   `ProviderContainer` only in tests.
+// - Use `.select` to narrow rebuilds in hot widgets (e.g. grid/cell widgets).
+// These project conventions align with https://riverpod.dev/docs/root/do_dont
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
