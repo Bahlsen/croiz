@@ -45,7 +45,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Ensure the provider starts empty to match expected initial state.
-    container.read(foundWordsProvider.notifier).value = <String>{};
+    container.read(foundWordsProvider.notifier).setFoundWords(<String>{});
 
     // Build minimal UI with the overlay present
     await tester.pumpWidget(
@@ -61,7 +61,7 @@ void main() {
 
     // Simulate the controller having completed the single entry by
     // updating the foundWordsProvider; this should make the overlay appear.
-    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
     // Allow providers and UI to settle
     await tester.pump();
@@ -123,7 +123,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Mark the word as found to show the overlay
-    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
     // Build UI
     await tester.pumpWidget(
@@ -210,7 +210,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Mark the word as found to show the overlay
-    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
     // Build UI
     await tester.pumpWidget(

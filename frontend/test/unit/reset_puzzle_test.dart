@@ -62,16 +62,16 @@ void main() {
       final boardNotifier = container.read(gameBoardProvider.notifier);
 
       // Set some found words and locked cells manually to simulate game progress
-      container.read(foundWordsProvider.notifier).value = {'0,0,across'};
-      container.read(lockedCellsProvider.notifier).value = {
+      container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
+      container.read(lockedCellsProvider.notifier).setLockedCells({
         const CellKey(0, 0),
         const CellKey(0, 1),
         const CellKey(0, 2),
-      };
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      });
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         1,
         1,
-      );
+      ));
 
       // Verify initial state has progress
       expect(container.read(foundWordsProvider).length, equals(1));

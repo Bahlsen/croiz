@@ -45,7 +45,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Mark the only entry as found so the overlay should render
-    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
     final controller = CrosswordInputController.fromContainer(container);
 

@@ -37,6 +37,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   Timer? _persistTimer;
   static const Duration _persistDebounce = Duration(milliseconds: 200);
 
+  // Compatibility helper used by tests and legacy call sites.
+  void setBoard(GameBoard board) => state = board;
+
   @override
   GameBoard build() {
     if (!_listenerAttached) {
@@ -142,10 +145,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           // restore found/locked words or timer when present
           try {
             final found = stored['foundWords'];
-            if (found is List) {
-              ref.read(foundWordsProvider.notifier).value = found
-                  .cast<String>()
-                  .toSet();
+              if (found is List) {
+              ref
+                .read(foundWordsProvider.notifier)
+                .setFoundWords(found.cast<String>().toSet());
               try {
                 _triggerEndGameIfSolved(playVictorySound: false);
               } on Object {
@@ -167,7 +170,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
                   }
                 }
               }
-              ref.read(lockedCellsProvider.notifier).value = set;
+              ref.read(lockedCellsProvider.notifier).setLockedCells(set);
             }
             final timerVal = stored['elapsedSeconds'];
             if (timerVal is num) {
@@ -206,10 +209,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           }
         }
         if (newFound.isNotEmpty) {
-          ref.read(foundWordsProvider.notifier).value = newFound;
+          ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
         }
         if (newLocked.isNotEmpty) {
-          ref.read(lockedCellsProvider.notifier).value = newLocked;
+          ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
         }
         try {
           _triggerEndGameIfSolved(playVictorySound: false);
@@ -274,12 +277,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     _schedulePersist();
   }
 
-  set board(GameBoard board) {
-    state = board;
-    _schedulePersist();
-  }
-
-  GameBoard get board => state;
+  // Deprecated public property accessors removed in favor of explicit API.
+  // Use `setBoard(GameBoard)` to update the board and read the provider
+  // state via `ref.watch(gameBoardProvider)` or `container.read(gameBoardProvider)`.
 
   void clearIncorrectLetters() {
     final cleaner = ref.read(incorrectLetterCleanerProvider);
@@ -288,17 +288,17 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     _schedulePersist();
 
-    if (result.clearedCells.isNotEmpty) {
-      ref.read(flashingClearedCellsProvider.notifier).value = result
-          .clearedCells
-          .toSet();
+        if (result.clearedCells.isNotEmpty) {
+        ref.read(flashingClearedCellsProvider.notifier)
+          .setFlashingClearedCells(result.clearedCells.toSet());
       final delay = ref.read(flashClearDelayProvider);
-      if (delay == Duration.zero) {
+            if (delay == Duration.zero) {
         unawaited(
           Future.microtask(() {
             try {
-              ref.read(flashingClearedCellsProvider.notifier).value =
-                  <CellKey>{};
+              ref
+                  .read(flashingClearedCellsProvider.notifier)
+                  .setFlashingClearedCells(<CellKey>{});
             } on Object catch (e, st) {
               developer.log(
                 'Clearing flashing cleared cells failed',
@@ -311,7 +311,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       } else {
         Future.delayed(delay, () {
           try {
-            ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
+            ref
+                .read(flashingClearedCellsProvider.notifier)
+                .setFlashingClearedCells(<CellKey>{});
           } on Object catch (e, st) {
             developer.log(
               'Clearing flashing cleared cells failed',
@@ -387,11 +389,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           }
         }
         if (completed > 0) {
-          ref.read(foundWordsProvider.notifier).value = newFound;
-          ref.read(lockedCellsProvider.notifier).value = newLocked;
+          ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
+          ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
           triggerFlashAndClear(
             allFlashing,
-            (v) => ref.read(flashingCellsProvider.notifier).value = v,
+            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
             () => ref.read(flashClearDelayProvider),
           );
           try {
@@ -439,18 +441,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final wordCheck = ref.read(wordCheckServiceProvider);
     final key = wordCheck.getWordKey(entry);
     final newFound = Set<String>.from(ref.read(foundWordsProvider))..add(key);
-    ref.read(foundWordsProvider.notifier).value = newFound;
+    ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
     final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
       ..addAll(cells);
-    ref.read(lockedCellsProvider.notifier).value = newLocked;
+    ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
     _schedulePersist();
     // Flash the revealed entry cells using shared helper
-    try {
-      triggerFlashAndClear(
-        cells,
-        (v) => ref.read(flashingCellsProvider.notifier).value = v,
-        () => ref.read(flashClearDelayProvider),
-      );
+      try {
+        triggerFlashAndClear(
+          cells,
+          (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+          () => ref.read(flashClearDelayProvider),
+        );
     } on Object {
       // ignore
     }
@@ -479,7 +481,6 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // words instead of flashing the entire board.
     if (state.entries != null) {
       final wordCheck = ref.read(wordCheckServiceProvider);
-      final oldFound = Set<String>.from(ref.read(foundWordsProvider));
       final allKeys = <String>{};
       final newlyFound = <String>{};
       try {
@@ -495,7 +496,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           }
         }
         // Update authoritative found words to include all entries.
-        ref.read(foundWordsProvider.notifier).value = allKeys;
+        ref.read(foundWordsProvider.notifier).setFoundWords(allKeys);
 
         if (newlyFound.isNotEmpty) {
           final newCells = <CellKey>{};
@@ -505,11 +506,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-          triggerFlashAndClear(
-            newCells,
-            (v) => ref.read(flashingCellsProvider.notifier).value = v,
-            () => ref.read(flashClearDelayProvider),
-          );
+             triggerFlashAndClear(
+               newCells,
+               (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+               () => ref.read(flashClearDelayProvider),
+             );
         }
       } on Object {
         // ignore
@@ -523,7 +524,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         }
       }
     }
-    ref.read(lockedCellsProvider.notifier).value = locked;
+    ref.read(lockedCellsProvider.notifier).setLockedCells(locked);
     _schedulePersist();
 
     // After revealAll, check end-game once.
@@ -544,11 +545,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             }
           }
         }
-        triggerFlashAndClear(
-          all,
-          (v) => ref.read(flashingCellsProvider.notifier).value = v,
-          () => ref.read(flashClearDelayProvider),
-        );
+           triggerFlashAndClear(
+             all,
+             (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+             () => ref.read(flashClearDelayProvider),
+           );
       } on Object {
         // ignore
       }
@@ -603,11 +604,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     state = state.copyWith(grid: newGrid);
 
     // Clear all game state
-    ref.read(foundWordsProvider.notifier).value = <String>{};
-    ref.read(lockedCellsProvider.notifier).value = <CellKey>{};
-    ref.read(selectedCellProvider.notifier).value = null;
-    ref.read(flashingCellsProvider.notifier).value = <CellKey>{};
-    ref.read(flashingClearedCellsProvider.notifier).value = <CellKey>{};
+    ref.read(foundWordsProvider.notifier).setFoundWords(<String>{});
+    ref.read(lockedCellsProvider.notifier).setLockedCells(<CellKey>{});
+    ref.read(selectedCellProvider.notifier).select(null);
+    ref.read(flashingCellsProvider.notifier).setFlashingCells(<CellKey>{});
+    ref.read(flashingClearedCellsProvider.notifier).setFlashingClearedCells(<CellKey>{});
 
     // Reset timer
     try {

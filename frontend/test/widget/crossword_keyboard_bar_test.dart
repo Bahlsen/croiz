@@ -45,7 +45,7 @@ void main() {
         ],
       );
       // Ensure deterministic notifier state
-      container.read(gameBoardProvider.notifier).board = board;
+      container.read(gameBoardProvider.notifier).setBoard(board);
       addTearDown(container.dispose);
 
       await tester.pumpWidget(

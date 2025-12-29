@@ -34,8 +34,8 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
       Future.microtask(() {
         try {
           final current = ref.read(selectedPuzzleIdProvider);
-          if (current != decoded) {
-            ref.read(selectedPuzzleIdProvider.notifier).value = decoded;
+            if (current != decoded) {
+            ref.read(selectedPuzzleIdProvider.notifier).setSelected(decoded);
           }
         } on Object catch (e, st) {
           if (kDebugMode) {

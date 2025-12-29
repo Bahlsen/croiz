@@ -81,13 +81,14 @@ void main() {
       entries: entries,
     );
 
-    container.read(gameBoardProvider.notifier).board = board;
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
+    container.read(gameBoardProvider.notifier).setBoard(board);
+    container.read(selectedCellProvider.notifier).select(const SelectedCell(
       0,
       0,
+    ));
+    container.read(wordDirectionProvider.notifier).setDirection(
+      WordDirection.horizontal,
     );
-    container.read(wordDirectionProvider.notifier).value =
-        WordDirection.horizontal;
 
     final controller = CrosswordInputController.fromContainer(container);
 

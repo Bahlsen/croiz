@@ -235,17 +235,14 @@ class CrosswordCell extends ConsumerWidget {
           final wasSelected = isSelected;
           // Preserve the current word direction when selecting a different cell.
           // Only toggle direction when the user taps the already-selected cell.
-          ref.read(selectedCellProvider.notifier).value = SelectedCell(
-            row,
-            col,
-          );
+          ref.read(selectedCellProvider.notifier).select(SelectedCell(row, col));
           if (wasSelected) {
             // wordDirection is non-null when isSelected is true
             final currentDir = wordDirection!;
             final newDir = currentDir == WordDirection.horizontal
                 ? WordDirection.vertical
                 : WordDirection.horizontal;
-            ref.read(wordDirectionProvider.notifier).value = newDir;
+            ref.read(wordDirectionProvider.notifier).setDirection(newDir);
           }
         },
         // Performance: use plain Container for instant visual feedback.

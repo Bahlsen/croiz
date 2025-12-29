@@ -91,7 +91,7 @@ void main() {
 
         // Pre-fill foundWords to simulate that this puzzle was already completed
         // before loading (e.g., loaded from persistent storage)
-        container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+        container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
         // Initialize the board provider - this will trigger the restoration
         // and detection of completed words
@@ -162,7 +162,7 @@ void main() {
         addTearDown(container.dispose);
 
         // Initialize - one word already found, one incomplete
-        container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+        container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
         container.read(gameBoardProvider);
         await Future.microtask(() {});
 
@@ -171,16 +171,18 @@ void main() {
         expect(mockAudio.victoryCallCount, equals(0));
 
         // Complete the last word by revealing the entry - this completes the puzzle
-        container.read(gameBoardProvider.notifier).revealEntry(
-          const PuzzleEntryData(
-            number: 2,
-            direction: 'across',
-            x: 0,
-            y: 1,
-            length: 3,
-            answer: 'DEF',
-          ),
-        );
+        container
+            .read(gameBoardProvider.notifier)
+            .revealEntry(
+              const PuzzleEntryData(
+                number: 2,
+                direction: 'across',
+                x: 0,
+                y: 1,
+                length: 3,
+                answer: 'DEF',
+              ),
+            );
         await Future.microtask(() {});
 
         // Victory sound SHOULD have been played (completing during gameplay)

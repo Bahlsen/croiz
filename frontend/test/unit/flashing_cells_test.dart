@@ -70,15 +70,11 @@ void main() {
     );
 
     // Inject board into provider state
-    container.read(gameBoardProvider.notifier).board = board;
+    container.read(gameBoardProvider.notifier).setBoard(board);
 
     // select first cell and horizontal direction
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      0,
-      0,
-    );
-    container.read(wordDirectionProvider.notifier).value =
-        WordDirection.horizontal;
+    container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
+    container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
 
     final controller = CrosswordInputController.fromContainer(container);
 

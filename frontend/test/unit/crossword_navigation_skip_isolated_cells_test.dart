@@ -32,13 +32,13 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).board = boardWithEntries;
+    container.read(gameBoardProvider.notifier).setBoard(boardWithEntries);
 
     // Start at cell (0,2) - end of word 1
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
+    container.read(selectedCellProvider.notifier).select(const SelectedCell(
       0,
       2,
-    );
+    ));
 
     final controller = CrosswordInputController.fromContainer(container);
 
@@ -69,10 +69,10 @@ void main() {
       addTearDown(container.dispose);
 
       // Board with no entries (legacy mode)
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         0,
-      );
+      ));
 
       final controller = CrosswordInputController.fromContainer(container);
       const event = KeyDownEvent(
@@ -109,13 +109,13 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).board = boardWithEntries2;
+    container.read(gameBoardProvider.notifier).setBoard(boardWithEntries2);
 
     // Start at cell (1,2) - end of the only word
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
+    container.read(selectedCellProvider.notifier).select(const SelectedCell(
       1,
       2,
-    );
+    ));
 
     final controller = CrosswordInputController.fromContainer(container);
 

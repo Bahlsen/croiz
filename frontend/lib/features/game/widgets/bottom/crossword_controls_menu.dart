@@ -168,12 +168,12 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     onChanged: (v) {
                                       if (v != null) {
                                         ref
-                                                .read(
-                                                  gameKeyboardSizeProvider
-                                                      .notifier,
-                                                )
-                                                .size =
-                                            v;
+                                          .read(
+                                            gameKeyboardSizeProvider
+                                              .notifier,
+                                          )
+                                          .setSize(
+                                        v);
                                       }
                                     },
                                   ),
@@ -232,8 +232,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                       final prefs =
                                           await SharedPreferences.getInstance();
                                       await prefs.setString('locale', v);
-                                      ref.read(localeProvider.notifier).locale =
-                                          Locale(v);
+                                      ref
+                                        .read(localeProvider.notifier)
+                                        .setLocale(Locale(v));
                                     },
                                   ),
                                 ),
@@ -256,12 +257,12 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     onToggleKeyboard!(v);
                                   } else {
                                     ref
-                                            .read(
-                                              gameKeyboardLayoutProvider
-                                                  .notifier,
-                                            )
-                                            .isAzerty =
-                                        v;
+                                      .read(
+                                        gameKeyboardLayoutProvider
+                                          .notifier,
+                                      )
+                                      .setIsAzerty(
+                                    v);
                                   }
                                 },
                                 subtitle: Text(
@@ -289,11 +290,11 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     onToggleMute!(v);
                                   } else {
                                     ref
-                                            .read(
-                                              gameAudioMutedProvider.notifier,
-                                            )
-                                            .muted =
-                                        v;
+                                        .read(
+                                          gameAudioMutedProvider.notifier,
+                                        )
+                                        .setMuted(
+                                    v);
                                   }
                                 },
                               ),
@@ -316,9 +317,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     onToggleTheme!(v);
                                   } else {
                                     ref
-                                            .read(appIsDarkProvider.notifier)
-                                            .isDark =
-                                        v;
+                                      .read(appIsDarkProvider.notifier)
+                                      .setIsDark(
+                                    v);
                                   }
                                 },
                               ),

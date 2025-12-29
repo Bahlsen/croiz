@@ -64,34 +64,39 @@ void main() {
     final controller = CrosswordInputController.fromContainer(container);
 
     // Set vertical direction and select last cell of current entry
-    container.read(wordDirectionProvider.notifier).value =
-        WordDirection.vertical;
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      2,
-      0,
+    container.read(wordDirectionProvider.notifier).setDirection(
+      WordDirection.vertical);
+    container.read(selectedCellProvider.notifier).select(
+      const SelectedCell(
+        2,
+        0,
+      ),
     );
 
     // 1) Clear (2,0) -> expect selection to move to previous filled in same entry (1,0)
     controller.clearCurrent();
-    var sel = container.read(selectedCellProvider.notifier).value;
+    var sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 1);
-    expect(sel.col, 0);
+    final s = sel!;
+    expect(s.row, 1);
+    expect(s.col, 0);
 
     // 2) Clear (1,0) -> expect selection to move to (0,0)
     controller.clearCurrent();
-    sel = container.read(selectedCellProvider.notifier).value;
+    sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 0);
-    expect(sel.col, 0);
+    final s2 = sel!;
+    expect(s2.row, 0);
+    expect(s2.col, 0);
 
     // 3) Clear (0,0) -> now the current entry is empty; expect selection to move
     //    to previous word's last filled cell (0,2)
     controller.clearCurrent();
-    sel = container.read(selectedCellProvider.notifier).value;
+    sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 0);
-    expect(sel.col, 2);
+    final s3 = sel!;
+    expect(s3.row, 0);
+    expect(s3.col, 2);
   });
 
   test(
@@ -154,40 +159,44 @@ void main() {
       final controller = CrosswordInputController.fromContainer(container);
 
       // Select last cell of entry 7 (0,5)
-      container.read(wordDirectionProvider.notifier).value =
-          WordDirection.horizontal;
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(wordDirectionProvider.notifier).setDirection(
+          WordDirection.horizontal);
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         5,
-      );
+      ));
 
       // clear (0,5) -> should move to (0,4)
       controller.clearCurrent();
-      var sel = container.read(selectedCellProvider.notifier).value;
+      var sel = container.read<SelectedCell?>(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 0);
-      expect(sel.col, 4);
+      final s4 = sel!;
+      expect(s4.row, 0);
+      expect(s4.col, 4);
 
       // clear (0,4) -> should move to last letter of previous word (0,3)
       controller.clearCurrent();
-      sel = container.read(selectedCellProvider.notifier).value;
+      sel = container.read<SelectedCell?>(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 0);
-      expect(sel.col, 3);
+      final s5 = sel!;
+      expect(s5.row, 0);
+      expect(s5.col, 3);
 
       // clear (0,3) -> should move to (0,2)
       controller.clearCurrent();
-      sel = container.read(selectedCellProvider.notifier).value;
+      sel = container.read<SelectedCell?>(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 0);
-      expect(sel.col, 2);
+      final s6 = sel!;
+      expect(s6.row, 0);
+      expect(s6.col, 2);
 
       // clear (0,2) -> should move to last letter of previous word (0,1)
       controller.clearCurrent();
-      sel = container.read(selectedCellProvider.notifier).value;
+      sel = container.read<SelectedCell?>(selectedCellProvider);
       expect(sel, isNotNull);
-      expect(sel!.row, 0);
-      expect(sel.col, 1);
+      final s7 = sel!;
+      expect(s7.row, 0);
+      expect(s7.col, 1);
     },
   );
 
@@ -234,39 +243,43 @@ void main() {
     final controller = CrosswordInputController.fromContainer(container);
 
     // Select last cell of entry 7 (row=1,col=4)
-    container.read(wordDirectionProvider.notifier).value =
-        WordDirection.vertical;
-    container.read(selectedCellProvider.notifier).value = const SelectedCell(
+    container.read(wordDirectionProvider.notifier).setDirection(
+        WordDirection.vertical);
+    container.read(selectedCellProvider.notifier).select(const SelectedCell(
       1,
       4,
-    );
+    ));
 
     // clear (1,4) -> should move to (0,4)
     controller.clearCurrent();
-    var sel = container.read(selectedCellProvider.notifier).value;
+    var sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 0);
-    expect(sel.col, 4);
+    final s8 = sel!;
+    expect(s8.row, 0);
+    expect(s8.col, 4);
 
     // clear (0,4) -> should move to last letter of previous vertical word (1,2)
     controller.clearCurrent();
-    sel = container.read(selectedCellProvider.notifier).value;
+    sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 1);
-    expect(sel.col, 2);
+    final s9 = sel!;
+    expect(s9.row, 1);
+    expect(s9.col, 2);
 
     // clear (1,2) -> should move to (0,2)
     controller.clearCurrent();
-    sel = container.read(selectedCellProvider.notifier).value;
+    sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 0);
-    expect(sel.col, 2);
+    final s10 = sel!;
+    expect(s10.row, 0);
+    expect(s10.col, 2);
 
     // clear (0,2) -> should move to last letter of previous vertical word (1,0)
     controller.clearCurrent();
-    sel = container.read(selectedCellProvider.notifier).value;
+    sel = container.read<SelectedCell?>(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.row, 1);
-    expect(sel.col, 0);
+    final s11 = sel!;
+    expect(s11.row, 1);
+    expect(s11.col, 0);
   });
 }

@@ -47,9 +47,9 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
 
     // If selection somehow points to a disabled cell (from older state), clear it.
     if (selected != null && black.isDisabled(selected.row, selected.col)) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          ref.read(selectedCellProvider.notifier).value = null;
+          ref.read(selectedCellProvider.notifier).select(null);
         }
       });
     }

@@ -97,13 +97,9 @@ class FastTypingBenchmark extends BenchmarkBase {
   void setup() {
     _container = _createContainer();
     final board = _createTestBoard();
-    _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      0,
-      0,
-    );
-    _container.read(wordDirectionProvider.notifier).value =
-        WordDirection.horizontal;
+    _container.read(gameBoardProvider.notifier).setBoard(board);
+    _container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
+    _container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
     _controller = CrosswordInputController.fromContainer(_container);
   }
 
@@ -116,11 +112,8 @@ class FastTypingBenchmark extends BenchmarkBase {
   void run() {
     // Reset board state for each run.
     final board = _createTestBoard();
-    _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      0,
-      0,
-    );
+    _container.read(gameBoardProvider.notifier).setBoard(board);
+    _container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
 
     // Simulate typing 200 characters.
     for (var i = 0; i < 200; i++) {
@@ -143,7 +136,7 @@ class SetLetterBenchmark extends BenchmarkBase {
   void setup() {
     _container = _createContainer();
     final board = _createTestBoard(size: 15);
-    _container.read(gameBoardProvider.notifier).board = board;
+    _container.read(gameBoardProvider.notifier).setBoard(board);
   }
 
   @override
@@ -177,13 +170,9 @@ class BoardReadBenchmark extends BenchmarkBase {
   void setup() {
     _container = _createContainer();
     final board = _createTestBoard(size: 15);
-    _container.read(gameBoardProvider.notifier).board = board;
-    _container.read(selectedCellProvider.notifier).value = const SelectedCell(
-      5,
-      5,
-    );
-    _container.read(wordDirectionProvider.notifier).value =
-        WordDirection.horizontal;
+    _container.read(gameBoardProvider.notifier).setBoard(board);
+    _container.read(selectedCellProvider.notifier).select(const SelectedCell(5, 5));
+    _container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
   }
 
   @override

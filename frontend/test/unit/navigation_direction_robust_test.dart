@@ -64,15 +64,15 @@ void main() {
       final selectedNotifier = read(selectedCellProvider.notifier);
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
-      boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(1, 0);
-      wordDirectionNotifier.value = WordDirection.vertical;
+      boardNotifier.setBoard(board);
+      selectedNotifier.select(const SelectedCell(1, 0));
+      wordDirectionNotifier.setDirection(WordDirection.vertical);
 
       final controller = CrosswordInputController.fromContainer(container);
       controller.setLetterAndAdvance('B');
 
-      expect(wordDirectionNotifier.value, WordDirection.vertical);
-      final sel = selectedNotifier.value;
+      expect(container.read(wordDirectionProvider), WordDirection.vertical);
+      final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
       expect(sel!.col, 2);
       expect(sel.row, 0);
@@ -136,16 +136,16 @@ void main() {
       final selectedNotifier = read(selectedCellProvider.notifier);
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
-      boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(1, 0);
-      wordDirectionNotifier.value = WordDirection.vertical;
+      boardNotifier.setBoard(board);
+      selectedNotifier.select(const SelectedCell(1, 0));
+      wordDirectionNotifier.setDirection(WordDirection.vertical);
 
       final controller = CrosswordInputController.fromContainer(container);
       controller.setLetterAndAdvance('B');
 
       // Should switch to horizontal because no vertical word remains
-      expect(wordDirectionNotifier.value, WordDirection.horizontal);
-      final sel = selectedNotifier.value;
+      expect(container.read(wordDirectionProvider), WordDirection.horizontal);
+      final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
       expect(sel!.row, 2);
       expect(sel.col, 1);
@@ -208,15 +208,15 @@ void main() {
       final selectedNotifier = read(selectedCellProvider.notifier);
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
-      boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(0, 1);
-      wordDirectionNotifier.value = WordDirection.horizontal;
+      boardNotifier.setBoard(board);
+      selectedNotifier.select(const SelectedCell(0, 1));
+      wordDirectionNotifier.setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
       controller.setLetterAndAdvance('B');
 
-      expect(wordDirectionNotifier.value, WordDirection.horizontal);
-      final sel = selectedNotifier.value;
+      expect(container.read(wordDirectionProvider), WordDirection.horizontal);
+      final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
       expect(sel!.row, 2);
       expect(sel.col, 0);
@@ -280,15 +280,15 @@ void main() {
       final selectedNotifier = read(selectedCellProvider.notifier);
       final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
-      boardNotifier.board = board;
-      selectedNotifier.value = const SelectedCell(0, 1);
-      wordDirectionNotifier.value = WordDirection.horizontal;
+      boardNotifier.setBoard(board);
+      selectedNotifier.select(const SelectedCell(0, 1));
+      wordDirectionNotifier.setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
       controller.setLetterAndAdvance('B');
 
-      expect(wordDirectionNotifier.value, WordDirection.vertical);
-      final sel = selectedNotifier.value;
+      expect(read(wordDirectionProvider), WordDirection.vertical);
+      final sel = read(selectedCellProvider);
       expect(sel, isNotNull);
       expect(sel!.col, 2);
       expect(sel.row, 1);

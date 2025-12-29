@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/game_audio_service.dart';
 import 'package:croiz/services/audio_service.dart';
@@ -49,8 +50,9 @@ class LocaleNotifier extends Notifier<Locale> {
   @override
   Locale build() => const Locale('en');
 
-  set locale(Locale v) => state = v;
-  Locale get locale => state;
+  void setLocale(Locale v) => state = v;
+  // Read the current locale via `ref.watch(localeProvider)` or
+  // `container.read(localeProvider)`; avoid exposing public getters on Notifier.
 }
 
 // --- Notifier implementations (Riverpod 3.0 style) ---
@@ -59,8 +61,8 @@ class KeyboardLayoutNotifier extends Notifier<bool> {
   bool build() => false; // false = QWERTY by default
 
   // Use a setter to modify the property (satisfies linter)
-  bool get isAzerty => state;
-  set isAzerty(bool value) {
+  // Read keyboard layout via the provider; public getter removed.
+  void setIsAzerty(bool value) {
     state = value;
     _persistIsAzerty(value);
   }
@@ -82,8 +84,8 @@ class AudioMutedNotifier extends Notifier<bool> {
   bool build() => false; // not muted by default
 
   // Use a setter to modify the property (satisfies linter)
-  bool get muted => state;
-  set muted(bool value) {
+  // Read audio muted flag via the provider; public getter removed.
+  void setMuted(bool value) {
     state = value;
     _persistMuted(value);
   }
@@ -105,8 +107,8 @@ class AppIsDarkNotifier extends Notifier<bool> {
   bool build() => false; // light theme by default
 
   // Use a setter to modify the property (satisfies linter)
-  bool get isDark => state;
-  set isDark(bool value) {
+  // Read theme via the provider; public getter removed.
+  void setIsDark(bool value) {
     state = value;
     _persistIsDark(value);
   }
@@ -127,8 +129,8 @@ class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
   @override
   KeyboardSize build() => KeyboardSize.medium;
 
-  KeyboardSize get size => state;
-  set size(KeyboardSize v) {
+  // Read keyboard size via the provider; public getter removed.
+  void setSize(KeyboardSize v) {
     state = v;
     _persistSize(v);
   }

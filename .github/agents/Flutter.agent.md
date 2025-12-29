@@ -67,3 +67,6 @@ Always code following https://dart.dev/tools/linter-rules.
 
 ALWAYS adapt the tests when modifying existing features to ensure they accurately reflect the current behavior of the codebase. NEVER leave tests broken or outdated after making changes to the code.
 NEVER adapt production code to make tests pass; instead, ensure that tests are updated to align with the intended functionality of the application.
+
+NEVER ignore linting or analysis issues. ALWAYS address and resolve them to maintain a high-quality codebase.
+NEVER add ignore comments to suppress linting or analysis warnings. ALWAYS fix the underlying issues instead.

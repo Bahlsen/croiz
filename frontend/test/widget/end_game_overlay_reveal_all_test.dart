@@ -53,7 +53,7 @@ void main() {
     addTearDown(container.dispose);
 
     // Start with no found words
-    container.read(foundWordsProvider.notifier).value = <String>{};
+    container.read(foundWordsProvider.notifier).setFoundWords(<String>{});
 
     await tester.pumpWidget(
       UncontrolledProviderScope(

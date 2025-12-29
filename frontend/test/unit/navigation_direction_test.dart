@@ -64,19 +64,19 @@ void main() {
       solutionGrid: solution,
     );
 
-    boardNotifier.board = board;
+    boardNotifier.setBoard(board);
     // Select the last cell of the first vertical word (row 1, col 0)
-    selectedNotifier.value = const SelectedCell(1, 0);
-    wordDirectionNotifier.value = WordDirection.vertical;
+    selectedNotifier.select(const SelectedCell(1, 0));
+    wordDirectionNotifier.setDirection(WordDirection.vertical);
 
     final controller = CrosswordInputController.fromContainer(container);
     controller.setLetterAndAdvance('B');
 
     // Expect direction to remain vertical
-    expect(wordDirectionNotifier.value, WordDirection.vertical);
+    expect(read(wordDirectionProvider), WordDirection.vertical);
 
     // Expect selection to move to the first empty cell of the next vertical word
-    final sel = selectedNotifier.value;
+    final sel = read(selectedCellProvider);
     expect(sel, isNotNull);
     expect(sel!.col, 2);
     expect(sel.row, 0);

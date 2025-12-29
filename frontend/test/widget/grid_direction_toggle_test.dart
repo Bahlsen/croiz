@@ -41,7 +41,7 @@ void main() {
     final gridContext = tester.element(find.byType(CrosswordGrid));
     final container = ProviderScope.containerOf(gridContext);
     // Ensure no cell is pre-selected
-    container.read(selectedCellProvider.notifier).value = null;
+    container.read(selectedCellProvider.notifier).select(null);
 
     // Find a selectable cell and tap it (first CrosswordCell is reliable)
     final cellFinder = find.byType(CrosswordCell, skipOffstage: false);

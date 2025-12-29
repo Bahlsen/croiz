@@ -15,8 +15,9 @@ enum WordDirection { horizontal, vertical }
 class SelectedCellNotifier extends Notifier<SelectedCell?> {
   @override
   SelectedCell? build() => null;
-  SelectedCell? get value => state;
-  set value(SelectedCell? v) => state = v;
+
+  /// Select or clear the current selected cell.
+  void select(SelectedCell? v) => state = v;
 }
 
 final selectedCellProvider =
@@ -28,8 +29,9 @@ final selectedCellProvider =
 class WordDirectionNotifier extends Notifier<WordDirection> {
   @override
   WordDirection build() => WordDirection.horizontal;
-  WordDirection get value => state;
-  set value(WordDirection v) => state = v;
+
+  /// Update current word direction.
+  void setDirection(WordDirection v) => state = v;
 }
 
 final wordDirectionProvider =
@@ -41,8 +43,15 @@ final wordDirectionProvider =
 class FoundWordsNotifier extends Notifier<Set<String>> {
   @override
   Set<String> build() => <String>{};
-  Set<String> get value => state;
-  set value(Set<String> v) => state = v;
+
+  /// Replace the authoritative set of found words.
+  void setFoundWords(Set<String> v) => state = v;
+
+  /// Add a single found word key.
+  void addFound(String key) => state = {...state, key};
+
+  /// Clear all found words.
+  void clear() => state = <String>{};
 }
 
 final foundWordsProvider = NotifierProvider<FoundWordsNotifier, Set<String>>(
@@ -53,8 +62,9 @@ final foundWordsProvider = NotifierProvider<FoundWordsNotifier, Set<String>>(
 class FlashingCellsNotifier extends Notifier<Set<CellKey>> {
   @override
   Set<CellKey> build() => <CellKey>{};
-  Set<CellKey> get value => state;
-  set value(Set<CellKey> v) => state = v;
+
+  /// Set the flashing cells set.
+  void setFlashingCells(Set<CellKey> v) => state = v;
 }
 
 final flashingCellsProvider =
@@ -73,8 +83,9 @@ final cellFlashingProvider = Provider.family<bool, CellKey>(
 class FlashingClearedCellsNotifier extends Notifier<Set<CellKey>> {
   @override
   Set<CellKey> build() => <CellKey>{};
-  Set<CellKey> get value => state;
-  set value(Set<CellKey> v) => state = v;
+
+  /// Set the cleared flashing cells.
+  void setFlashingClearedCells(Set<CellKey> v) => state = v;
 }
 
 final flashingClearedCellsProvider =
@@ -94,8 +105,9 @@ final cellClearedFlashingProvider = Provider.family<bool, CellKey>(
 class LockedCellsNotifier extends Notifier<Set<CellKey>> {
   @override
   Set<CellKey> build() => <CellKey>{};
-  Set<CellKey> get value => state;
-  set value(Set<CellKey> v) => state = v;
+
+  /// Replace the locked cells set.
+  void setLockedCells(Set<CellKey> v) => state = v;
 }
 
 final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<CellKey>>(

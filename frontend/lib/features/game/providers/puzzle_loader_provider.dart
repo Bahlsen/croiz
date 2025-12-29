@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,8 +18,8 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 class SelectedPuzzleIdNotifier extends Notifier<String?> {
   @override
   String? build() => null;
-  String? get value => state;
-  set value(String? v) {
+  /// Set the selected puzzle id (persisted).
+  void setSelected(String? v) {
     state = v;
     _persistSelected(v);
   }

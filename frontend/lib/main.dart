@@ -39,25 +39,25 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getString('locale');
       if (saved != null && saved.isNotEmpty) {
-        ref.read(localeProvider.notifier).locale = Locale(saved);
+        ref.read(localeProvider.notifier).setLocale(Locale(saved));
       }
 
       // Load persisted UI preferences
       final isDark = prefs.getBool('pref_is_dark');
       if (isDark != null) {
-        ref.read(appIsDarkProvider.notifier).isDark = isDark;
+        ref.read(appIsDarkProvider.notifier).setIsDark(isDark);
       }
 
       final azerty = prefs.getBool('pref_keyboard_azerty');
       if (azerty != null) {
-        ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = azerty;
+        ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(azerty);
       }
 
       final ksize = prefs.getString('pref_keyboard_size');
       if (ksize != null && ksize.isNotEmpty) {
         try {
           final val = KeyboardSize.values.firstWhere((e) => e.name == ksize);
-          ref.read(gameKeyboardSizeProvider.notifier).size = val;
+          ref.read(gameKeyboardSizeProvider.notifier).setSize(val);
         } on Object {
           // ignore if invalid
         }
@@ -65,13 +65,13 @@ class _CroizAppState extends ConsumerState<CroizApp> {
 
       final muted = prefs.getBool('pref_audio_muted');
       if (muted != null) {
-        ref.read(gameAudioMutedProvider.notifier).muted = muted;
+        ref.read(gameAudioMutedProvider.notifier).setMuted(muted);
       }
 
       // Optionally restore last selected puzzle so progress restoration runs.
       final lastSelected = prefs.getString('last_selected_puzzle');
       if (lastSelected != null && lastSelected.isNotEmpty) {
-        ref.read(selectedPuzzleIdProvider.notifier).value = lastSelected;
+        ref.read(selectedPuzzleIdProvider.notifier).setSelected(lastSelected);
       }
     } on Exception catch (_) {
       // ignore and continue with default locale

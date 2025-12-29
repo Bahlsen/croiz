@@ -14,9 +14,9 @@ class ClueBannerContainer extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         final newDir = entry.direction == 'across'
-            ? WordDirection.vertical
-            : WordDirection.horizontal;
-        ref.read(wordDirectionProvider.notifier).value = newDir;
+          ? WordDirection.vertical
+          : WordDirection.horizontal;
+        ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
       child: FractionallySizedBox(

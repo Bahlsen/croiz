@@ -97,7 +97,7 @@ void main() {
     expect(congratsFinder, findsNothing);
 
     // mark words as found
-    container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+    container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
     await tester.pumpAndSettle();
 
     // overlay should appear

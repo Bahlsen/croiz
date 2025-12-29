@@ -146,10 +146,10 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         0,
-      );
+      ));
 
       final controller = CrosswordInputController.fromContainer(container);
 

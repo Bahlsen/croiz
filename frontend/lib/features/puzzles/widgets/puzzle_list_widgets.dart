@@ -53,7 +53,7 @@ class PuzzleListTile extends ConsumerWidget {
           : null,
       trailing: effectiveTrailing,
       onTap: () {
-        ref.read(selectedPuzzleIdProvider.notifier).value = puzzleId;
+        ref.read(selectedPuzzleIdProvider.notifier).setSelected(puzzleId);
         final encodedId = Uri.encodeComponent(puzzleId);
         context.go('/crossword?id=$encodedId');
       },

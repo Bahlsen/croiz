@@ -66,7 +66,7 @@ void main() {
         difficulty: 1,
       );
 
-      container.read(gameBoardProvider.notifier).board = board;
+      container.read(gameBoardProvider.notifier).setBoard(board);
 
       final sw = Stopwatch()..start();
       const iterations = 100;
@@ -99,10 +99,7 @@ void main() {
       final sw = Stopwatch()..start();
 
       for (var i = 0; i < iterations; i++) {
-        container.read(selectedCellProvider.notifier).value = SelectedCell(
-          i % 10,
-          i % 10,
-        );
+        container.read(selectedCellProvider.notifier).select(SelectedCell(i % 10, i % 10));
       }
 
       sw.stop();
@@ -154,11 +151,9 @@ void main() {
           entries: entries,
         );
 
-        container.read(gameBoardProvider.notifier).board = board;
-        container.read(selectedCellProvider.notifier).value =
-            const SelectedCell(0, 0);
-        container.read(wordDirectionProvider.notifier).value =
-            WordDirection.horizontal;
+        container.read(gameBoardProvider.notifier).setBoard(board);
+        container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
+        container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -217,7 +212,7 @@ void main() {
       );
 
       container
-        ..read(gameBoardProvider.notifier).board = board
+        ..read(gameBoardProvider.notifier).setBoard(board)
         // Listen to providers to count notifications (ignoring initial fire)
         ..listen(gameBoardProvider, (_, __) {
           gameBoardNotifyCount++;
@@ -277,7 +272,7 @@ void main() {
         difficulty: 1,
       );
 
-      container.read(gameBoardProvider.notifier).board = board;
+      container.read(gameBoardProvider.notifier).setBoard(board);
 
       // Verify initial state
       expect(container.read(cellValueProvider(const CellKey(0, 0))), isNull);
@@ -325,7 +320,7 @@ void main() {
         difficulty: 1,
       );
 
-      container.read(gameBoardProvider.notifier).board = board;
+      container.read(gameBoardProvider.notifier).setBoard(board);
 
       // Set letters in a 2x2 area
       container.read(gameBoardProvider.notifier).setLetter(0, 0, 'A');
@@ -372,7 +367,7 @@ void main() {
         difficulty: 1,
       );
 
-      container.read(gameBoardProvider.notifier).board = board;
+      container.read(gameBoardProvider.notifier).setBoard(board);
 
       // Simulate a burst of 20 rapid keystrokes (like very fast typing)
       final sw = Stopwatch()..start();

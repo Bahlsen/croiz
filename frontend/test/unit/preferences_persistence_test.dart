@@ -14,10 +14,10 @@ void main() {
     addTearDown(container.dispose);
 
     // Set preferences via notifiers
-    container.read(appIsDarkProvider.notifier).isDark = true;
-    container.read(gameKeyboardLayoutProvider.notifier).isAzerty = true;
-    container.read(gameKeyboardSizeProvider.notifier).size = KeyboardSize.large;
-    container.read(gameAudioMutedProvider.notifier).muted = true;
+    container.read(appIsDarkProvider.notifier).setIsDark(true);
+    container.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(true);
+    container.read(gameKeyboardSizeProvider.notifier).setSize(KeyboardSize.large);
+    container.read(gameAudioMutedProvider.notifier).setMuted(true);
 
     // Wait a short time for async writes to complete
     await Future<void>.delayed(const Duration(milliseconds: 50));

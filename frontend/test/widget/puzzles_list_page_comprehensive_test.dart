@@ -321,9 +321,9 @@ void main() {
           ),
           GoRoute(
             path: '/crossword',
-            builder: (context, state) => Consumer(
+                builder: (context, state) => Consumer(
               builder: (context, ref, _) {
-                selectedId = ref.watch(selectedPuzzleIdProvider.notifier).value;
+                selectedId = ref.watch(selectedPuzzleIdProvider);
                 return const Scaffold(body: Text('Crossword'));
               },
             ),

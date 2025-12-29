@@ -53,7 +53,7 @@ void main() {
       addTearDown(container.dispose);
 
       // Mark the word as found to show the overlay
-      container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+      container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
       // Build UI with a proper navigation context (using MaterialApp)
       // The overlay should be embedded in a page with proper routing
@@ -156,7 +156,7 @@ void main() {
       );
       addTearDown(container.dispose);
 
-      container.read(foundWordsProvider.notifier).value = {'0,0,across'};
+      container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
 
       // Show overlay in a dialog-like context where pop() makes sense
       await tester.pumpWidget(
@@ -165,13 +165,13 @@ void main() {
           child: MaterialApp(
             home: Builder(
               builder: (context) => const Scaffold(
-                  body: Stack(
-                    children: [
-                      Center(child: Text('Game Content')),
-                      EndGameOverlay(),
-                    ],
-                  ),
+                body: Stack(
+                  children: [
+                    Center(child: Text('Game Content')),
+                    EndGameOverlay(),
+                  ],
                 ),
+              ),
             ),
           ),
         ),

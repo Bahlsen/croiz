@@ -240,13 +240,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
               Navigator.of(dialogCtx).pop();
             },
             onToggleKeyboard: (v) {
-              ref.read(gameKeyboardLayoutProvider.notifier).isAzerty = v;
+              ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(v);
             },
             onToggleMute: (v) {
-              ref.read(gameAudioMutedProvider.notifier).muted = v;
+              ref.read(gameAudioMutedProvider.notifier).setMuted(v);
             },
             onToggleTheme: (v) {
-              ref.read(appIsDarkProvider.notifier).isDark = v;
+              ref.read(appIsDarkProvider.notifier).setIsDark(v);
             },
           ),
         ],

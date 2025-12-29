@@ -45,12 +45,12 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         0,
-      );
-      container.read(wordDirectionProvider.notifier).value =
-          WordDirection.horizontal;
+      ));
+      container.read(wordDirectionProvider.notifier).setDirection(
+          WordDirection.horizontal);
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -97,12 +97,12 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         0,
-      );
-      container.read(wordDirectionProvider.notifier).value =
-          WordDirection.horizontal;
+      ));
+      container.read(wordDirectionProvider.notifier).setDirection(
+          WordDirection.horizontal);
 
       // Act
       await tester.pumpWidget(
@@ -142,7 +142,7 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = null;
+      container.read(selectedCellProvider.notifier).select(null);
 
       await tester.pumpWidget(
         UncontrolledProviderScope(
@@ -200,12 +200,12 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
-      container.read(selectedCellProvider.notifier).value = const SelectedCell(
+      container.read(selectedCellProvider.notifier).select(const SelectedCell(
         0,
         0,
-      );
-      container.read(wordDirectionProvider.notifier).value =
-          WordDirection.horizontal;
+      ));
+      container.read(wordDirectionProvider.notifier).setDirection(
+          WordDirection.horizontal);
 
       await tester.pumpWidget(
         UncontrolledProviderScope(

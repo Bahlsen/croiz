@@ -124,10 +124,7 @@ class CrosswordClueHeader extends ConsumerWidget {
     final newDir = next.direction == 'across'
         ? WordDirection.horizontal
         : WordDirection.vertical;
-    ref.read(wordDirectionProvider.notifier).value = newDir;
-    ref.read(selectedCellProvider.notifier).value = SelectedCell(
-      next.y,
-      next.x,
-    );
+    ref.read(wordDirectionProvider.notifier).setDirection(newDir);
+    ref.read(selectedCellProvider.notifier).select(SelectedCell(next.y, next.x));
   }
 }

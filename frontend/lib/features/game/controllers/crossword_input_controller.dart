@@ -41,12 +41,13 @@ class CrosswordInputController {
       WordCompletionChecker.fromReaders(
         readBoard: _safeReadBoard,
         readFoundWords: () => _read<Set<String>>(foundWordsProvider),
-        writeFoundWords: (v) => _read(foundWordsProvider.notifier).value = v,
+        writeFoundWords: (v) => _read(foundWordsProvider.notifier).setFoundWords(v),
         readLockedCells: () => _read<Set<CellKey>>(lockedCellsProvider),
-        writeLockedCells: (v) => _read(lockedCellsProvider.notifier).value = v,
+        writeLockedCells: (v) =>
+          _read(lockedCellsProvider.notifier).setLockedCells(v),
         readFlashingCells: () => _read<Set<CellKey>>(flashingCellsProvider),
         writeFlashingCells: (v) =>
-            _read(flashingCellsProvider.notifier).value = v,
+          _read(flashingCellsProvider.notifier).setFlashingCells(v),
         readCellEntriesIndex: () => _read<Map<CellKey, List<PuzzleEntryData>>>(
           cellEntriesIndexProvider,
         ),
@@ -100,10 +101,9 @@ class CrosswordInputController {
       if (first == null) {
         return;
       }
-      _read(selectedCellProvider.notifier).value = SelectedCell(
-        first[0],
-        first[1],
-      );
+      _read(
+        selectedCellProvider.notifier,
+      ).select(SelectedCell(first[0], first[1]));
       _read(gameBoardProvider.notifier).setLetter(first[0], first[1], letter);
       _wordCompletionChecker.scheduleCheck(CellKey(first[0], first[1]));
       _advanceToNextEmptyFrom(first[0], first[1]);
@@ -125,10 +125,9 @@ class CrosswordInputController {
       }
       final nextRow = next[0];
       final nextCol = next[1];
-      _read(selectedCellProvider.notifier).value = SelectedCell(
-        nextRow,
-        nextCol,
-      );
+      _read(
+        selectedCellProvider.notifier,
+      ).select(SelectedCell(nextRow, nextCol));
       _read(gameBoardProvider.notifier).setLetter(nextRow, nextCol, letter);
       _wordCompletionChecker.scheduleCheck(CellKey(nextRow, nextCol));
       _advanceToNextEmptyFrom(nextRow, nextCol);
@@ -192,18 +191,16 @@ class CrosswordInputController {
           for (var cc = sel.col - 1; cc >= containing.x; cc--) {
             final key = CellKey(containing.y, cc);
             if (lockedCells.contains(key)) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
-                containing.y,
-                cc,
-              );
+              _read(
+                  selectedCellProvider.notifier,
+                ).select(SelectedCell(containing.y, cc));
               return;
             }
             final val = board.grid[containing.y][cc];
             if (val != null && val.isNotEmpty) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
-                containing.y,
-                cc,
-              );
+              _read(
+                selectedCellProvider.notifier,
+              ).select(SelectedCell(containing.y, cc));
               return;
             }
           }
@@ -211,18 +208,16 @@ class CrosswordInputController {
           for (var rr = sel.row - 1; rr >= containing.y; rr--) {
             final key = CellKey(rr, containing.x);
             if (lockedCells.contains(key)) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
-                rr,
-                containing.x,
-              );
+              _read(
+                selectedCellProvider.notifier,
+              ).select(SelectedCell(rr, containing.x));
               return;
             }
             final val = board.grid[rr][containing.x];
             if (val != null && val.isNotEmpty) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
-                rr,
-                containing.x,
-              );
+              _read(
+                selectedCellProvider.notifier,
+              ).select(SelectedCell(rr, containing.x));
               return;
             }
           }
@@ -240,7 +235,7 @@ class CrosswordInputController {
           sortedSameDir: sortedSame,
         );
         if (prevFilled != null) {
-          _read(selectedCellProvider.notifier).value = prevFilled;
+          _read(selectedCellProvider.notifier).select(prevFilled);
           final idxMap = _tryReadCellEntriesIndex();
           final sameContaining = findContainingEntry(
             row: prevFilled.row,
@@ -250,7 +245,7 @@ class CrosswordInputController {
             index: idxMap,
           );
           if (sameContaining != null) {
-            _read(wordDirectionProvider.notifier).value = dir;
+            _read(wordDirectionProvider.notifier).setDirection(dir);
           } else {
             final otherContaining = findContainingEntry(
               row: prevFilled.row,
@@ -264,7 +259,7 @@ class CrosswordInputController {
                   (otherContaining.directionEnum == EntryDirection.across)
                   ? WordDirection.horizontal
                   : WordDirection.vertical;
-              _read(wordDirectionProvider.notifier).value = newDir;
+              _read(wordDirectionProvider.notifier).setDirection(newDir);
             }
           }
           return;
@@ -281,23 +276,23 @@ class CrosswordInputController {
     final prevRow = sel.row + dr;
     final prevCol = sel.col + dc;
     if (prevRow >= 0 &&
-        prevRow < board.gridSize &&
-        prevCol >= 0 &&
-        prevCol < board.grid[prevRow].length) {
+    prevRow < board.gridSize &&
+    prevCol >= 0 &&
+    prevCol < board.grid[prevRow].length) {
       final prevKey = CellKey(prevRow, prevCol);
       if (lockedCells.contains(prevKey)) {
-        _read(selectedCellProvider.notifier).value = SelectedCell(
+        _read(selectedCellProvider.notifier).select(SelectedCell(
           prevRow,
           prevCol,
-        );
+        ));
         return;
       }
       final prevVal = board.grid[prevRow][prevCol];
       if (prevVal != null && prevVal.isNotEmpty) {
-        _read(selectedCellProvider.notifier).value = SelectedCell(
+        _read(selectedCellProvider.notifier).select(SelectedCell(
           prevRow,
           prevCol,
-        );
+        ));
         return;
       }
     }
@@ -312,10 +307,9 @@ class CrosswordInputController {
       wrap: true,
     );
     if (prev != null) {
-      _read(selectedCellProvider.notifier).value = SelectedCell(
-        prev[0],
-        prev[1],
-      );
+      _read(
+        selectedCellProvider.notifier,
+      ).select(SelectedCell(prev[0], prev[1]));
     }
   }
 
@@ -342,8 +336,8 @@ class CrosswordInputController {
       return;
     }
     final e = firstAcross.first;
-    _read(selectedCellProvider.notifier).value = SelectedCell(e.y, e.x);
-    _read(wordDirectionProvider.notifier).value = WordDirection.horizontal;
+    _read(selectedCellProvider.notifier).select(SelectedCell(e.y, e.x));
+    _read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
     _didAutoSelectFirstAcross = true;
   }
 
@@ -450,10 +444,10 @@ class CrosswordInputController {
             }
             final val = board.grid[containing.y][cc];
             if (val == null || val.isEmpty) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
+              _read(selectedCellProvider.notifier).select(SelectedCell(
                 containing.y,
                 cc,
-              );
+              ));
               return;
             }
           }
@@ -469,10 +463,10 @@ class CrosswordInputController {
             }
             final val = board.grid[rr][containing.x];
             if (val == null || val.isEmpty) {
-              _read(selectedCellProvider.notifier).value = SelectedCell(
+              _read(selectedCellProvider.notifier).select(SelectedCell(
                 rr,
                 containing.x,
-              );
+              ));
               return;
             }
           }
@@ -489,7 +483,7 @@ class CrosswordInputController {
           sortedSameDir: sortedSame,
         );
         if (nextEmpty != null) {
-          _read(selectedCellProvider.notifier).value = nextEmpty;
+          _read(selectedCellProvider.notifier).select(nextEmpty);
           final idxMap = _tryReadCellEntriesIndex();
           final sameContaining = findContainingEntry(
             row: nextEmpty.row,
@@ -499,7 +493,7 @@ class CrosswordInputController {
             index: idxMap,
           );
           if (sameContaining != null) {
-            _read(wordDirectionProvider.notifier).value = dir;
+            _read(wordDirectionProvider.notifier).setDirection(dir);
             return;
           }
 
@@ -510,12 +504,12 @@ class CrosswordInputController {
             entries: entries,
             index: idxMap,
           );
-          if (otherContaining != null) {
+            if (otherContaining != null) {
             _read(
               wordDirectionProvider.notifier,
-            ).value = (otherContaining.directionEnum == EntryDirection.across)
+            ).setDirection((otherContaining.directionEnum == EntryDirection.across)
                 ? WordDirection.horizontal
-                : WordDirection.vertical;
+                : WordDirection.vertical);
           }
           return;
         }
@@ -534,10 +528,10 @@ class CrosswordInputController {
       wrap: true,
     );
     if (next != null) {
-      _read(selectedCellProvider.notifier).value = SelectedCell(
+      _read(selectedCellProvider.notifier).select(SelectedCell(
         next[0],
         next[1],
-      );
+      ));
     }
   }
 
@@ -584,12 +578,12 @@ class CrosswordInputController {
               );
               if (found != null) {
                 if (found.row == row && found.col == col) {
-                  _read(selectedCellProvider.notifier).value = SelectedCell(
+                  _read(selectedCellProvider.notifier).select(SelectedCell(
                     nextRow,
                     nextCol,
-                  );
+                  ));
                 } else {
-                  _read(selectedCellProvider.notifier).value = found;
+                  _read(selectedCellProvider.notifier).select(found);
                 }
                 return;
               }
@@ -602,7 +596,7 @@ class CrosswordInputController {
                 skipLocked: false,
               );
               if (nextF != null) {
-                _read(selectedCellProvider.notifier).value = nextF;
+                _read(selectedCellProvider.notifier).select(nextF);
                 return;
               }
             }
@@ -611,10 +605,10 @@ class CrosswordInputController {
           // ignore and fall back to selecting the encountered cell
         }
 
-        _read(selectedCellProvider.notifier).value = SelectedCell(
+        _read(selectedCellProvider.notifier).select(SelectedCell(
           nextRow,
           nextCol,
-        );
+        ));
         return;
       }
 

@@ -43,7 +43,7 @@ void main() {
     expect(aTextBefore.style?.fontSize, 16);
 
     // Simulate changing the provider programmatically (menu updates provider)
-    container.read(gameKeyboardSizeProvider.notifier).size = KeyboardSize.large;
+    container.read(gameKeyboardSizeProvider.notifier).setSize(KeyboardSize.large);
     await tester.pumpAndSettle();
 
     final aTextAfter = tester.widget<Text>(find.text('A').first);
