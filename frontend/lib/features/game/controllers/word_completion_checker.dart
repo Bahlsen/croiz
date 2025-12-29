@@ -8,6 +8,7 @@ import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/features/game/services/endgame_service.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/features/game/utils/flash_utils.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Handles word completion checking and related side effects.
@@ -193,10 +194,11 @@ class WordCompletionChecker {
 
       // Trigger flash animation on ALL completed words' cells at once using
       // the shared helper so the reveal-path can reuse the same behavior.
-      triggerFlashAndClear(
+      triggerFlashAndPlaySuccess(
         allFlashingCells,
         writeFlashingCells,
         readFlashClearDelay,
+        playSuccess: () => readGameAudioService().playSuccess(),
       );
     }
 
@@ -292,39 +294,4 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),
 );
 
-/// Helper to set flashing cells and clear them after the configured delay.
-///
-/// This centralizes the common pattern used both when the user completes a
-/// word via typing and when a word is revealed via the menu.
-void triggerFlashAndClear(
-  Set<CellKey> cells,
-  void Function(Set<CellKey>) writeFlashingCells,
-  Duration Function() readFlashClearDelay,
-) {
-  try {
-    writeFlashingCells(cells);
-    final delay = readFlashClearDelay();
-    if (delay == Duration.zero) {
-      // Synchronous test mode: clear on next microtask
-      unawaited(
-        Future.microtask(() {
-          try {
-            writeFlashingCells(<CellKey>{});
-          } on Object catch (_) {
-            // ignore
-          }
-        }),
-      );
-    } else {
-      Future.delayed(delay, () {
-        try {
-          writeFlashingCells(<CellKey>{});
-        } on Object catch (_) {
-          // ignore
-        }
-      });
-    }
-  } on Object catch (_) {
-    // ignore errors from callers
-  }
-}
+// Uses `triggerFlashAndClear` from utils/flash_utils.dart.

@@ -392,10 +392,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         if (completed > 0) {
           ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
           ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
-          triggerFlashAndClear(
+          triggerFlashAndPlaySuccess(
             allFlashing,
             (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
             () => ref.read(flashClearDelayProvider),
+            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
           );
           try {
             _triggerEndGameIfSolved();
@@ -449,10 +450,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     _schedulePersist();
     // Flash the revealed entry cells using shared helper
     try {
-      triggerFlashAndClear(
+      triggerFlashAndPlaySuccess(
         cells,
         (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
         () => ref.read(flashClearDelayProvider),
+        playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
       );
     } on Object {
       // ignore
@@ -507,10 +509,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-          triggerFlashAndClear(
+          triggerFlashAndPlaySuccess(
             newCells,
             (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
             () => ref.read(flashClearDelayProvider),
+            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
           );
         }
       } on Object {
@@ -546,10 +549,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             }
           }
         }
-        triggerFlashAndClear(
+        triggerFlashAndPlaySuccess(
           all,
           (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
           () => ref.read(flashClearDelayProvider),
+          playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
         );
       } on Object {
         // ignore

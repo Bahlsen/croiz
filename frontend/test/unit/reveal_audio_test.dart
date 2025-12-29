@@ -1,0 +1,125 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/game/providers/game_board_provider.dart';
+import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/providers.dart';
+import 'package:croiz/services/audio_service.dart';
+
+class MockAudio implements AudioService {
+  int success = 0;
+  int victory = 0;
+  @override
+  Future<void> playSuccess() async => success++;
+
+  @override
+  Future<void> playVictory() async => victory++;
+
+  @override
+  Future<void> playDelete() async {}
+
+  @override
+  Future<void> playType() async {}
+
+  @override
+  Future<void> get ready => Future.value();
+
+  @override
+  Future<void> dispose() async {}
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('revealEntry should play success sound', () async {
+    final mock = MockAudio();
+    const entry = PuzzleEntryData(
+      number: 1,
+      direction: 'across',
+      x: 0,
+      y: 0,
+      length: 3,
+      answer: 'ABC',
+    );
+
+    final board = GameBoard(
+      id: 't',
+      title: 't',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: [entry],
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(overrides: [
+      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      flashClearDelayProvider.overrideWithValue(Duration.zero),
+      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      gameAudioServiceProvider.overrideWithValue(mock),
+    ]);
+    addTearDown(container.dispose);
+
+    container.read(gameBoardProvider.notifier).revealEntry(entry);
+    await Future.microtask(() {});
+    expect(mock.success, greaterThan(0));
+  });
+
+  test('revealAll should play success when new words revealed', () async {
+    final mock = MockAudio();
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'ABC',
+      ),
+    ];
+
+    final board = GameBoard(
+      id: 't',
+      title: 't',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: entries,
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(overrides: [
+      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      flashClearDelayProvider.overrideWithValue(Duration.zero),
+      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      gameAudioServiceProvider.overrideWithValue(mock),
+    ]);
+    addTearDown(container.dispose);
+
+    container.read(gameBoardProvider.notifier).revealAll();
+    await Future.microtask(() {});
+    expect(mock.success, greaterThan(0));
+  });
+}
