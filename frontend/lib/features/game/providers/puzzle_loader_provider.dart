@@ -18,6 +18,7 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 class SelectedPuzzleIdNotifier extends Notifier<String?> {
   @override
   String? build() => null;
+
   /// Set the selected puzzle id (persisted).
   void setSelected(String? v) {
     state = v;

@@ -1,4 +1,3 @@
-// ignore_for_file: unused_import
 // NOTE: This test uses the real GameAudioService which requires native plugins.
 // Since audioplayers uses platform channels, we skip these tests in unit test
 // environment and rely on integration tests on device for audio validation.
@@ -6,9 +5,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/services/game_audio_service.dart';
-import 'package:croiz/services/audio_service.dart';
-
-import 'package:flutter/widgets.dart';
 
 /// Mock audio service for unit tests where native plugins are unavailable.
 class MockGameAudioService implements GameAudioService {

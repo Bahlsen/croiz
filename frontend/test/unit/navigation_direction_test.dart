@@ -1,11 +1,18 @@
-// ignore_for_file: cascade_invocations
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
+  void _setupBoard(ProviderContainer container, GameBoard board,
+      SelectedCell selected, WordDirection direction) {
+    final read = container.read;
+    read(gameBoardProvider.notifier).setBoard(board);
+    read(selectedCellProvider.notifier).select(selected);
+    read(wordDirectionProvider.notifier).setDirection(direction);
+  }
+
   test('keeps same direction when advancing to next word if available', () {
     final container = ProviderContainer(
       overrides: [
@@ -15,9 +22,6 @@ void main() {
     );
     addTearDown(container.dispose);
     final read = container.read;
-    final boardNotifier = read(gameBoardProvider.notifier);
-    final selectedNotifier = read(selectedCellProvider.notifier);
-    final wordDirectionNotifier = read(wordDirectionProvider.notifier);
 
     // Build 5x1 columns grid where there are two vertical words at different columns
     const size = 5;
@@ -64,21 +68,20 @@ void main() {
       solutionGrid: solution,
     );
 
-    boardNotifier.setBoard(board);
-    // Select the last cell of the first vertical word (row 1, col 0)
-    selectedNotifier.select(const SelectedCell(1, 0));
-    wordDirectionNotifier.setDirection(WordDirection.vertical);
+    _setupBoard(container, board, const SelectedCell(1, 0),
+      WordDirection.vertical);
 
-    final controller = CrosswordInputController.fromContainer(container);
-    controller.setLetterAndAdvance('B');
+    CrosswordInputController.fromContainer(container).setLetterAndAdvance('B');
+
 
     // Expect direction to remain vertical
-    expect(read(wordDirectionProvider), WordDirection.vertical);
+    final dir = read(wordDirectionProvider), sel = read(selectedCellProvider);
+    expect(dir, WordDirection.vertical);
 
     // Expect selection to move to the first empty cell of the next vertical word
-    final sel = read(selectedCellProvider);
     expect(sel, isNotNull);
-    expect(sel!.col, 2);
-    expect(sel.row, 0);
+    final s = sel!;
+    expect(s.col, 2);
+    expect(s.row, 0);
   });
 }

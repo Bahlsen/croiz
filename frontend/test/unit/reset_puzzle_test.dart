@@ -68,10 +68,9 @@ void main() {
         const CellKey(0, 1),
         const CellKey(0, 2),
       });
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        1,
-        1,
-      ));
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(1, 1));
 
       // Verify initial state has progress
       expect(container.read(foundWordsProvider).length, equals(1));

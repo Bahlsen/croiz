@@ -1,4 +1,3 @@
-// ignore_for_file: sort_constructors_first
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,9 +8,9 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/screens/crossword_body.dart';
 
 class CrosswordScreen extends ConsumerStatefulWidget {
-  final String? puzzleId;
 
   const CrosswordScreen({Key? key, this.puzzleId}) : super(key: key);
+  final String? puzzleId;
 
   @override
   ConsumerState<CrosswordScreen> createState() => _CrosswordScreenState();

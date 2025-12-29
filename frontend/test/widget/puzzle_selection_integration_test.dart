@@ -1,5 +1,3 @@
-// ignore_for_file: always_put_control_body_on_new_line
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -35,7 +33,9 @@ void main() {
     final captured = Completer<String>();
 
     Future<GameBoard> fakeLoader(String assetPath) async {
-      if (!captured.isCompleted) captured.complete(assetPath);
+      if (!captured.isCompleted) {
+        captured.complete(assetPath);
+      }
       return GameBoard(
         id: descriptor.id,
         title: descriptor.title,
@@ -106,7 +106,7 @@ class _CrosswordPlaceholder extends ConsumerWidget {
       body: Center(
         child: async.when(
           data: (_) => const Text('loaded'),
-          loading: () => const CircularProgressIndicator(),
+          loading: CircularProgressIndicator.new,
           error: (e, _) => Text('err:$e'),
         ),
       ),

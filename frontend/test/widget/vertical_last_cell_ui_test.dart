@@ -61,8 +61,12 @@ void main() {
       // Use the controller to set selection (through provider), since tapping exact cell coordinates
       // may vary across layouts. This keeps the test robust.
       final container = ProviderScope.containerOf(tester.element(gridFinder));
-        container.read(selectedCellProvider.notifier).select(const SelectedCell(2, 0));
-        container.read(wordDirectionProvider.notifier).setDirection(WordDirection.vertical);
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(2, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.vertical);
 
       // Tap a wrong letter 'Z' on the virtual keyboard
       await tester.tap(find.text('Z'));

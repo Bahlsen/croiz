@@ -1,4 +1,3 @@
-// ignore_for_file: sort_constructors_first
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +10,9 @@ import 'package:croiz/features/game/widgets/loader/crossword_loader.dart';
 import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 
 class CrosswordBody extends ConsumerStatefulWidget {
-  final CrosswordInputController controller;
 
   const CrosswordBody({required this.controller, Key? key}) : super(key: key);
+  final CrosswordInputController controller;
 
   @override
   ConsumerState<CrosswordBody> createState() => _CrosswordBodyState();

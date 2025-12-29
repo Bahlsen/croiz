@@ -49,7 +49,6 @@ final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
 class LocaleNotifier extends Notifier<Locale> {
   @override
   Locale build() => const Locale('en');
-
   void setLocale(Locale v) => state = v;
   // Read the current locale via `ref.watch(localeProvider)` or
   // `container.read(localeProvider)`; avoid exposing public getters on Notifier.
@@ -62,9 +61,9 @@ class KeyboardLayoutNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   // Read keyboard layout via the provider; public getter removed.
-  void setIsAzerty(bool value) {
-    state = value;
-    _persistIsAzerty(value);
+  void setIsAzerty({required bool isAzerty}) {
+    state = isAzerty;
+    _persistIsAzerty(isAzerty);
   }
 
   Future<void> _persistIsAzerty(bool v) async {
@@ -85,9 +84,9 @@ class AudioMutedNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   // Read audio muted flag via the provider; public getter removed.
-  void setMuted(bool value) {
-    state = value;
-    _persistMuted(value);
+  void setMuted({required bool muted}) {
+    state = muted;
+    _persistMuted(muted);
   }
 
   Future<void> _persistMuted(bool v) async {
@@ -108,9 +107,9 @@ class AppIsDarkNotifier extends Notifier<bool> {
 
   // Use a setter to modify the property (satisfies linter)
   // Read theme via the provider; public getter removed.
-  void setIsDark(bool value) {
-    state = value;
-    _persistIsDark(value);
+  void setIsDark({required bool isDark}) {
+    state = isDark;
+    _persistIsDark(isDark);
   }
 
   Future<void> _persistIsDark(bool v) async {

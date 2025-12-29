@@ -99,7 +99,9 @@ void main() {
       final sw = Stopwatch()..start();
 
       for (var i = 0; i < iterations; i++) {
-        container.read(selectedCellProvider.notifier).select(SelectedCell(i % 10, i % 10));
+        container
+            .read(selectedCellProvider.notifier)
+            .select(SelectedCell(i % 10, i % 10));
       }
 
       sw.stop();
@@ -152,8 +154,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
-        container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 

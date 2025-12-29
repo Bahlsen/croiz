@@ -92,10 +92,9 @@ void main() {
 
       // Simulate rapid cell selection changes (like fast tapping)
       for (var i = 0; i < 20; i++) {
-        container.read(selectedCellProvider.notifier).select(SelectedCell(
-          i % 5,
-          i % 5,
-        ));
+        container
+            .read(selectedCellProvider.notifier)
+            .select(SelectedCell(i % 5, i % 5));
       }
 
       sw.stop();
@@ -116,10 +115,12 @@ void main() {
 
     test('letter input with full controller flow should be < 4ms', () {
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -147,19 +148,23 @@ void main() {
     });
 
     test('direction toggle should be instantaneous (< 0.5ms)', () {
-        container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
+      container.read(gameBoardProvider.notifier).setBoard(board);
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
 
       final sw = Stopwatch()..start();
       const iterations = 50;
 
       for (var i = 0; i < iterations; i++) {
         final current = container.read(wordDirectionProvider);
-        container.read(wordDirectionProvider.notifier).setDirection(
-          current == WordDirection.horizontal
-              ? WordDirection.vertical
-              : WordDirection.horizontal,
-        );
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(
+              current == WordDirection.horizontal
+                  ? WordDirection.vertical
+                  : WordDirection.horizontal,
+            );
       }
 
       sw.stop();
@@ -339,13 +344,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        0,
-        0,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 

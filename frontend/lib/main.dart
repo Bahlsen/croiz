@@ -45,12 +45,12 @@ class _CroizAppState extends ConsumerState<CroizApp> {
       // Load persisted UI preferences
       final isDark = prefs.getBool('pref_is_dark');
       if (isDark != null) {
-        ref.read(appIsDarkProvider.notifier).setIsDark(isDark);
+        ref.read(appIsDarkProvider.notifier).setIsDark(isDark: isDark);
       }
 
       final azerty = prefs.getBool('pref_keyboard_azerty');
       if (azerty != null) {
-        ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(azerty);
+        ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(isAzerty: azerty);
       }
 
       final ksize = prefs.getString('pref_keyboard_size');
@@ -65,7 +65,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
 
       final muted = prefs.getBool('pref_audio_muted');
       if (muted != null) {
-        ref.read(gameAudioMutedProvider.notifier).setMuted(muted);
+        ref.read(gameAudioMutedProvider.notifier).setMuted(muted: muted);
       }
 
       // Optionally restore last selected puzzle so progress restoration runs.

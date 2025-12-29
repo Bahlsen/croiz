@@ -125,6 +125,8 @@ class CrosswordClueHeader extends ConsumerWidget {
         ? WordDirection.horizontal
         : WordDirection.vertical;
     ref.read(wordDirectionProvider.notifier).setDirection(newDir);
-    ref.read(selectedCellProvider.notifier).select(SelectedCell(next.y, next.x));
+    ref
+        .read(selectedCellProvider.notifier)
+        .select(SelectedCell(next.y, next.x));
   }
 }

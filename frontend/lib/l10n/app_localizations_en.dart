@@ -2,7 +2,6 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
-// ignore_for_file: type=lint
 
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
@@ -69,9 +68,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchKeyboardLayout => 'Switch keyboard layout';
 
   @override
-  String letterLabel(Object letter) {
-    return 'Letter $letter';
-  }
+  String letterLabel(Object letter) => 'Letter $letter';
 
   @override
   String get delete => 'Delete';

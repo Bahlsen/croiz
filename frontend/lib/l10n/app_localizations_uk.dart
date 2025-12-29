@@ -2,7 +2,6 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
-// ignore_for_file: type=lint
 
 /// The translations for Ukrainian (`uk`).
 class AppLocalizationsUk extends AppLocalizations {
@@ -69,9 +68,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get switchKeyboardLayout => 'Змінити розклад клавіатури';
 
   @override
-  String letterLabel(Object letter) {
-    return 'Літера $letter';
-  }
+  String letterLabel(Object letter) => 'Літера $letter';
 
   @override
   String get delete => 'Видалити';

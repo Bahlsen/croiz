@@ -67,8 +67,12 @@ void main() {
     );
 
     container.read(gameBoardProvider.notifier).setBoard(board);
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 0));
-    container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.horizontal);
 
     final controller = CrosswordInputController.fromContainer(container);
 

@@ -1,4 +1,3 @@
-// ignore_for_file: always_put_required_named_parameters_first,always_put_control_body_on_new_line,prefer_expression_function_bodies,unnecessary_lambdas
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
@@ -20,7 +19,9 @@ class TestSecureStorage extends FlutterSecureStorage {
     WindowsOptions? wOptions,
     WebOptions? webOptions,
   }) async {
-    if (value != null) _map[key] = value;
+    if (value != null) {
+      _map[key] = value;
+    }
   }
 
   @override
@@ -53,7 +54,7 @@ void main() {
       overrides: [secureStorageProvider.overrideWithValue(storage)],
     );
 
-    addTearDown(() => container.dispose());
+    addTearDown(container.dispose);
 
     final timer = container.read(gameTimerProvider('test-game'));
 

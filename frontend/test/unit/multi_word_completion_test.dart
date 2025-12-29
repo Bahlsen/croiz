@@ -108,10 +108,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 0));
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -201,10 +203,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 0));
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.vertical);
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.vertical);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -311,10 +315,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 1));
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 1));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -435,10 +441,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 1));
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 1));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -521,12 +529,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 0),
-        );
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal,
-        );
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 
@@ -620,12 +628,12 @@ void main() {
         const CellKey(0, 2),
       });
 
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        1,
-        0,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(1, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -703,12 +711,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        0,
-        0,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -775,13 +783,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        0,
-        0,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -878,13 +885,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        1,
-        1,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(1, 1));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -967,13 +973,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        0,
-        1,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 1));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -1051,13 +1056,12 @@ void main() {
       );
 
       container.read(gameBoardProvider.notifier).setBoard(board);
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        0,
-        0,
-      ));
-      container.read(wordDirectionProvider.notifier).setDirection(
-        WordDirection.horizontal,
-      );
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 0));
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container);
 
@@ -1139,12 +1143,12 @@ void main() {
         );
 
         container.read(gameBoardProvider.notifier).setBoard(board);
-        container.read(selectedCellProvider.notifier).select(
-          const SelectedCell(0, 0),
-        );
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal,
-        );
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         final controller = CrosswordInputController.fromContainer(container);
 

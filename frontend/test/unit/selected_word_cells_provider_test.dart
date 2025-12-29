@@ -26,8 +26,12 @@ void main() {
     );
 
     container.read(gameBoardProvider.notifier).setBoard(board);
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(0, 1));
-    container.read(wordDirectionProvider.notifier).setDirection(WordDirection.horizontal);
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 1));
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.horizontal);
 
     final set = container.read(selectedWordCellsProvider);
     expect(set.contains(const CellKey(0, 0)), true);
@@ -58,8 +62,12 @@ void main() {
     );
 
     container.read(gameBoardProvider.notifier).setBoard(board);
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(2, 0));
-    container.read(wordDirectionProvider.notifier).setDirection(WordDirection.vertical);
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(2, 0));
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.vertical);
 
     final set = container.read(selectedWordCellsProvider);
     expect(set.contains(const CellKey(1, 0)), true);

@@ -1,4 +1,3 @@
-// ignore_for_file: cascade_invocations
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -6,6 +5,13 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
+  void _setupBoard(ProviderContainer container, GameBoard board,
+      SelectedCell selected, WordDirection direction) {
+    final read = container.read;
+    read(gameBoardProvider.notifier).setBoard(board);
+    read(selectedCellProvider.notifier).select(selected);
+    read(wordDirectionProvider.notifier).setDirection(direction);
+  }
   group('Navigation direction robustness', () {
     test('vertical: preserve direction when next vertical word exists', () {
       final container = ProviderContainer(
@@ -60,22 +66,18 @@ void main() {
         solutionGrid: solution,
       );
 
-      final boardNotifier = read(gameBoardProvider.notifier);
-      final selectedNotifier = read(selectedCellProvider.notifier);
-      final wordDirectionNotifier = read(wordDirectionProvider.notifier);
+        _setupBoard(container, board, const SelectedCell(1, 0),
+          WordDirection.vertical);
 
-      boardNotifier.setBoard(board);
-      selectedNotifier.select(const SelectedCell(1, 0));
-      wordDirectionNotifier.setDirection(WordDirection.vertical);
+      CrosswordInputController.fromContainer(container)
+      .setLetterAndAdvance('B');
 
-      final controller = CrosswordInputController.fromContainer(container);
-      controller.setLetterAndAdvance('B');
-
-      expect(container.read(wordDirectionProvider), WordDirection.vertical);
-      final sel = container.read(selectedCellProvider);
+      final dir = read(wordDirectionProvider), sel = read(selectedCellProvider);
+      expect(dir, WordDirection.vertical);
       expect(sel, isNotNull);
-      expect(sel!.col, 2);
-      expect(sel.row, 0);
+      final s = sel!;
+      expect(s.col, 2);
+      expect(s.row, 0);
     });
 
     test('vertical: switch to horizontal when no other vertical exists', () {
@@ -132,23 +134,18 @@ void main() {
         solutionGrid: solution,
       );
 
-      final boardNotifier = read(gameBoardProvider.notifier);
-      final selectedNotifier = read(selectedCellProvider.notifier);
-      final wordDirectionNotifier = read(wordDirectionProvider.notifier);
-
-      boardNotifier.setBoard(board);
-      selectedNotifier.select(const SelectedCell(1, 0));
-      wordDirectionNotifier.setDirection(WordDirection.vertical);
-
-      final controller = CrosswordInputController.fromContainer(container);
-      controller.setLetterAndAdvance('B');
+        _setupBoard(container, board, const SelectedCell(1, 0),
+          WordDirection.vertical);
+      CrosswordInputController.fromContainer(container)
+      .setLetterAndAdvance('B');
 
       // Should switch to horizontal because no vertical word remains
-      expect(container.read(wordDirectionProvider), WordDirection.horizontal);
-      final sel = container.read(selectedCellProvider);
+      final dir2 = read(wordDirectionProvider), sel = read(selectedCellProvider);
+      expect(dir2, WordDirection.horizontal);
       expect(sel, isNotNull);
-      expect(sel!.row, 2);
-      expect(sel.col, 1);
+      final s2 = sel!;
+      expect(s2.row, 2);
+      expect(s2.col, 1);
     });
 
     test('horizontal: preserve direction when next horizontal word exists', () {
@@ -204,22 +201,18 @@ void main() {
         solutionGrid: solution,
       );
 
-      final boardNotifier = read(gameBoardProvider.notifier);
-      final selectedNotifier = read(selectedCellProvider.notifier);
-      final wordDirectionNotifier = read(wordDirectionProvider.notifier);
+        _setupBoard(container, board, const SelectedCell(0, 1),
+          WordDirection.horizontal);
 
-      boardNotifier.setBoard(board);
-      selectedNotifier.select(const SelectedCell(0, 1));
-      wordDirectionNotifier.setDirection(WordDirection.horizontal);
+        CrosswordInputController.fromContainer(container)
+          .setLetterAndAdvance('B');
 
-      final controller = CrosswordInputController.fromContainer(container);
-      controller.setLetterAndAdvance('B');
-
-      expect(container.read(wordDirectionProvider), WordDirection.horizontal);
-      final sel = container.read(selectedCellProvider);
+      final dir3 = read(wordDirectionProvider), sel = read(selectedCellProvider);
+      expect(dir3, WordDirection.horizontal);
       expect(sel, isNotNull);
-      expect(sel!.row, 2);
-      expect(sel.col, 0);
+      final s3 = sel!;
+      expect(s3.row, 2);
+      expect(s3.col, 0);
     });
 
     test('horizontal: switch to vertical when no other horizontal exists', () {
@@ -276,22 +269,18 @@ void main() {
         solutionGrid: solution,
       );
 
-      final boardNotifier = read(gameBoardProvider.notifier);
-      final selectedNotifier = read(selectedCellProvider.notifier);
-      final wordDirectionNotifier = read(wordDirectionProvider.notifier);
+        _setupBoard(container, board, const SelectedCell(0, 1),
+          WordDirection.horizontal);
 
-      boardNotifier.setBoard(board);
-      selectedNotifier.select(const SelectedCell(0, 1));
-      wordDirectionNotifier.setDirection(WordDirection.horizontal);
+        CrosswordInputController.fromContainer(container)
+          .setLetterAndAdvance('B');
 
-      final controller = CrosswordInputController.fromContainer(container);
-      controller.setLetterAndAdvance('B');
-
-      expect(read(wordDirectionProvider), WordDirection.vertical);
-      final sel = read(selectedCellProvider);
+      final dir4 = read(wordDirectionProvider), sel = read(selectedCellProvider);
+      expect(dir4, WordDirection.vertical);
       expect(sel, isNotNull);
-      expect(sel!.col, 2);
-      expect(sel.row, 1);
+      final s4 = sel!;
+      expect(s4.col, 2);
+      expect(s4.row, 1);
     });
   });
 }

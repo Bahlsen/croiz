@@ -1,5 +1,3 @@
-// ignore_for_file: eol_at_end_of_file
-
 import 'dart:io';
 
 void main(List<String> args) {

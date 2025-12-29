@@ -235,18 +235,18 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       barrierDismissible: true,
       builder: (dialogCtx) => Stack(
         children: [
-          CrosswordControlsMenu(
+            CrosswordControlsMenu(
             onClose: () {
               Navigator.of(dialogCtx).pop();
             },
             onToggleKeyboard: (v) {
-              ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(v);
+              ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(isAzerty: v);
             },
             onToggleMute: (v) {
-              ref.read(gameAudioMutedProvider.notifier).setMuted(v);
+              ref.read(gameAudioMutedProvider.notifier).setMuted(muted: v);
             },
             onToggleTheme: (v) {
-              ref.read(appIsDarkProvider.notifier).setIsDark(v);
+              ref.read(appIsDarkProvider.notifier).setIsDark(isDark: v);
             },
           ),
         ],

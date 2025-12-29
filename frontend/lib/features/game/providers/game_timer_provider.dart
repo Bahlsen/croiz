@@ -1,4 +1,3 @@
-// ignore_for_file: sort_constructors_first
 import 'dart:developer' as developer;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/providers.dart';
@@ -7,15 +6,15 @@ import 'package:croiz/services/providers.dart';
 ///
 /// KISS: not a Notifier — lightweight class wrapped by a Provider.family.
 class GameTimer {
+
+  GameTimer(this.ref, this.gameId) {
+    _restore();
+  }
   final Ref ref;
   final String gameId;
 
   DateTime? _startedAt;
   int _accumulatedMs = 0;
-
-  GameTimer(this.ref, this.gameId) {
-    _restore();
-  }
 
   Future<void> _restore() async {
     try {

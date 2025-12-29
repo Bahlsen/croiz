@@ -91,7 +91,9 @@ void main() {
 
         // Pre-fill foundWords to simulate that this puzzle was already completed
         // before loading (e.g., loaded from persistent storage)
-        container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
+        container.read(foundWordsProvider.notifier).setFoundWords({
+          '0,0,across',
+        });
 
         // Initialize the board provider - this will trigger the restoration
         // and detection of completed words
@@ -162,7 +164,9 @@ void main() {
         addTearDown(container.dispose);
 
         // Initialize - one word already found, one incomplete
-        container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
+        container.read(foundWordsProvider.notifier).setFoundWords({
+          '0,0,across',
+        });
         container.read(gameBoardProvider);
         await Future.microtask(() {});
 

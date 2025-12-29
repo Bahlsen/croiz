@@ -1,4 +1,3 @@
-// ignore_for_file: sort_constructors_first, sort_unnamed_constructors_first
 
 import 'package:json_annotation/json_annotation.dart';
 
@@ -6,18 +5,6 @@ part 'puzzle_entry.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PuzzleEntry {
-  final String? id;
-  final int number;
-  final String direction; // 'across' or 'down'
-  final int x;
-  final int y;
-  final int length;
-  final String? answer;
-  final String? clue;
-  final String? enumeration;
-  final Map<String, String>? rebusMap;
-  final List<String>? multiSolution;
-  final Map<String, dynamic>? annotations;
 
   PuzzleEntry({
     required this.number,
@@ -36,6 +23,18 @@ class PuzzleEntry {
 
   factory PuzzleEntry.fromJson(Map<String, dynamic> json) =>
       _$PuzzleEntryFromJson(json);
+  final String? id;
+  final int number;
+  final String direction; // 'across' or 'down'
+  final int x;
+  final int y;
+  final int length;
+  final String? answer;
+  final String? clue;
+  final String? enumeration;
+  final Map<String, String>? rebusMap;
+  final List<String>? multiSolution;
+  final Map<String, dynamic>? annotations;
 
   Map<String, dynamic> toJson() => _$PuzzleEntryToJson(this);
 }

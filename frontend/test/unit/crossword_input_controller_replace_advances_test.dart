@@ -56,10 +56,9 @@ void main() {
     container.read(gameBoardProvider.notifier).setLetter(0, 1, 'X');
 
     // Select the filled cell (0,1)
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(
-      0,
-      1,
-    ));
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 1));
 
     // Replace with new letter
     CrosswordInputController.fromContainer(container).setLetterAndAdvance('A');

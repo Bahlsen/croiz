@@ -1,4 +1,3 @@
-// ignore_for_file: unnecessary_lambdas
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +28,7 @@ class HomeScreen extends ConsumerWidget {
         centerTitle: true,
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) => _setLocale(value),
+            onSelected: _setLocale,
             icon: Icon(Icons.language, semanticLabel: loc.selectLanguage),
             itemBuilder: (context) => [
               PopupMenuItem(value: 'en', child: Text(loc.languageEnglish)),

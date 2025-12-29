@@ -45,10 +45,9 @@ void main() {
     for (var c = 1; c < boardNotifier.state.gridSize; c++) {
       boardNotifier.toggleBlackCell(0, c);
     }
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(
-      0,
-      0,
-    ));
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -77,10 +76,9 @@ void main() {
     final boardNotifier = container.read(gameBoardProvider.notifier)
       // Put a black cell at (1,0)
       ..toggleBlackCell(1, 0);
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(
-      0,
-      0,
-    ));
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -115,10 +113,9 @@ void main() {
     }
     // Select bottom cell in column 0
     final lastRow = boardNotifier.state.gridSize - 1;
-    container.read(selectedCellProvider.notifier).select(SelectedCell(
-      lastRow,
-      0,
-    ));
+    container
+        .read(selectedCellProvider.notifier)
+        .select(SelectedCell(lastRow, 0));
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -167,10 +164,9 @@ void main() {
     final boardNotifier = container.read(gameBoardProvider.notifier);
 
     // Select the single-cell first word at (0,0)
-    container.read(selectedCellProvider.notifier).select(const SelectedCell(
-      0,
-      0,
-    ));
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
 
     final controller = CrosswordInputController.fromContainer(container);
     const event = KeyDownEvent(
@@ -230,9 +226,10 @@ void main() {
 
       final boardNotifier = container.read(gameBoardProvider.notifier);
 
-        // Set direction to vertical
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.vertical);
+      // Set direction to vertical
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.vertical);
 
       // Fill word #1 cells (0,0), (1,0) first
       boardNotifier
@@ -240,10 +237,9 @@ void main() {
         ..setLetter(1, 0, 'B');
 
       // Position at last cell of word #1
-      container.read(selectedCellProvider.notifier).select(const SelectedCell(
-        2,
-        0,
-      ));
+      container
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(2, 0));
 
       // Type the last letter of word #1
       CrosswordInputController.fromContainer(
