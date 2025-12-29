@@ -1,6 +1,6 @@
 ---
 description: 'Flutter specialist'
-tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'dart-code.dart-code/get_dtd_uri', 'dart-code.dart-code/dart_format', 'dart-code.dart-code/dart_fix', 'todo']
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'agent', 'dart-sdk-mcp-server/*', 'dart-code.dart-code/get_dtd_uri', 'dart-code.dart-code/dart_format', 'dart-code.dart-code/dart_fix', 'todo']
 ---
 # Auto-linting policy for the agent
 # The agent MUST run the following steps automatically before completing any code edits

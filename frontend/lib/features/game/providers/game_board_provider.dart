@@ -467,6 +467,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (sol == null) {
       return;
     }
+    // Capture the board before applying the reveal to detect which entries
+    // become completed by this action (so we can flash only those).
+    final beforeBoard = state;
     final newGrid = sol.map(List<String?>.from).toList();
     state = state.copyWith(grid: newGrid);
 
@@ -478,15 +481,23 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       final wordCheck = ref.read(wordCheckServiceProvider);
       final oldFound = Set<String>.from(ref.read(foundWordsProvider));
       final allKeys = <String>{};
-      for (final e in state.entries!) {
-        allKeys.add(wordCheck.getWordKey(e));
-      }
-      ref.read(foundWordsProvider.notifier).value = allKeys;
+      final newlyFound = <String>{};
+      try {
+        for (final e in state.entries!) {
+          final key = wordCheck.getWordKey(e);
+          allKeys.add(key);
+          // If this entry was incomplete before but is complete after reveal,
+          // treat it as newly found and include its cells for flashing.
+          final wasComplete = wordCheck.isWordComplete(beforeBoard, e);
+          final isCompleteNow = wordCheck.isWordComplete(state, e);
+          if (!wasComplete && isCompleteNow) {
+            newlyFound.add(key);
+          }
+        }
+        // Update authoritative found words to include all entries.
+        ref.read(foundWordsProvider.notifier).value = allKeys;
 
-      // Determine which entries are newly found and gather their cells.
-      final newlyFound = allKeys.difference(oldFound);
-      if (newlyFound.isNotEmpty) {
-        try {
+        if (newlyFound.isNotEmpty) {
           final newCells = <CellKey>{};
           for (final e in state.entries!) {
             final key = wordCheck.getWordKey(e);
@@ -494,16 +505,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-          if (newlyFound.isNotEmpty) {
-            triggerFlashAndClear(
-              newCells,
-              (v) => ref.read(flashingCellsProvider.notifier).value = v,
-              () => ref.read(flashClearDelayProvider),
-            );
-          }
-        } on Object {
-          // ignore
+          triggerFlashAndClear(
+            newCells,
+            (v) => ref.read(flashingCellsProvider.notifier).value = v,
+            () => ref.read(flashClearDelayProvider),
+          );
         }
+      } on Object {
+        // ignore
       }
     }
     final locked = <CellKey>{};
