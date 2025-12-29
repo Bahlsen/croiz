@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CrosswordLoadingScaffold extends StatelessWidget {
-  const CrosswordLoadingScaffold({Key? key}) : super(key: key);
+  const CrosswordLoadingScaffold({super.key});
 
   void _showMenu(BuildContext context) {
     showDialog<void>(
@@ -87,8 +87,7 @@ class CrosswordLoadingScaffold extends StatelessWidget {
 }
 
 class CrosswordErrorScaffold extends StatelessWidget {
-  const CrosswordErrorScaffold({required this.selectedId, Key? key})
-    : super(key: key);
+  const CrosswordErrorScaffold({required this.selectedId, super.key});
   final String selectedId;
 
   void _showMenu(BuildContext context) {

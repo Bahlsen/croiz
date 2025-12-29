@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
@@ -10,8 +9,7 @@ import 'package:croiz/features/game/widgets/loader/crossword_loader.dart';
 import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 
 class CrosswordBody extends ConsumerStatefulWidget {
-
-  const CrosswordBody({required this.controller, Key? key}) : super(key: key);
+  const CrosswordBody({required this.controller, super.key});
   final CrosswordInputController controller;
 
   @override

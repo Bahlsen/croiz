@@ -7,8 +7,7 @@ import 'package:croiz/features/game/listeners/game_board_observer.dart';
 import 'package:croiz/features/game/widgets/end_game_overlay.dart';
 
 class CrosswordContent extends ConsumerWidget {
-  const CrosswordContent({required this.controller, Key? key})
-    : super(key: key);
+  const CrosswordContent({required this.controller, super.key});
 
   final CrosswordInputController controller;
 

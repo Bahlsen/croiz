@@ -15,8 +15,12 @@ void main() {
 
     // Set preferences via notifiers
     container.read(appIsDarkProvider.notifier).setIsDark(isDark: true);
-    container.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(isAzerty: true);
-    container.read(gameKeyboardSizeProvider.notifier).setSize(KeyboardSize.large);
+    container
+        .read(gameKeyboardLayoutProvider.notifier)
+        .setIsAzerty(isAzerty: true);
+    container
+        .read(gameKeyboardSizeProvider.notifier)
+        .setSize(KeyboardSize.large);
     container.read(gameAudioMutedProvider.notifier).setMuted(muted: true);
 
     // Wait a short time for async writes to complete

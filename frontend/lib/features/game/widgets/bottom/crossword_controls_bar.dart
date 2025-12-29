@@ -12,8 +12,8 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
   const CrosswordControlsBar({
     required this.onKey,
     required this.onBackspace,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final void Function(String) onKey;
   final VoidCallback onBackspace;
@@ -235,12 +235,14 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       barrierDismissible: true,
       builder: (dialogCtx) => Stack(
         children: [
-            CrosswordControlsMenu(
+          CrosswordControlsMenu(
             onClose: () {
               Navigator.of(dialogCtx).pop();
             },
             onToggleKeyboard: (v) {
-              ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(isAzerty: v);
+              ref
+                  .read(gameKeyboardLayoutProvider.notifier)
+                  .setIsAzerty(isAzerty: v);
             },
             onToggleMute: (v) {
               ref.read(gameAudioMutedProvider.notifier).setMuted(muted: v);

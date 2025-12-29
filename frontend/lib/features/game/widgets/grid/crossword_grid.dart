@@ -6,7 +6,7 @@ import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
 
 class CrosswordGrid extends ConsumerStatefulWidget {
-  const CrosswordGrid({Key? key}) : super(key: key);
+  const CrosswordGrid({super.key});
 
   @override
   ConsumerState<CrosswordGrid> createState() => _CrosswordGridState();

@@ -1,11 +1,9 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'puzzle_entry.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PuzzleEntry {
-
   PuzzleEntry({
     required this.number,
     required this.direction,

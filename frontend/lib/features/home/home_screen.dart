@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,14 +6,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:croiz/services/providers.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final loc = AppLocalizations.of(context)!;
 
-    Future<void> _setLocale(String code) async {
+    Future<void> setLocale(String code) async {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('locale', code);
       ref.read(localeProvider.notifier).setLocale(Locale(code));
@@ -28,7 +27,7 @@ class HomeScreen extends ConsumerWidget {
         centerTitle: true,
         actions: [
           PopupMenuButton<String>(
-            onSelected: _setLocale,
+            onSelected: setLocale,
             icon: Icon(Icons.language, semanticLabel: loc.selectLanguage),
             itemBuilder: (context) => [
               PopupMenuItem(value: 'en', child: Text(loc.languageEnglish)),

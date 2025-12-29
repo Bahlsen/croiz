@@ -88,7 +88,7 @@ class MetadataLoadingPuzzleTile extends ConsumerWidget {
         puzzleId: token,
         isLoading: true,
       ),
-      error: (_, __) => PuzzleListTile(
+      error: (_, _) => PuzzleListTile(
         title: descriptor.title,
         puzzleId: token,
         hasError: true,

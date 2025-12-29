@@ -220,10 +220,10 @@ void main() {
       container
         ..read(gameBoardProvider.notifier).setBoard(board)
         // Listen to providers to count notifications (ignoring initial fire)
-        ..listen(gameBoardProvider, (_, __) {
+        ..listen(gameBoardProvider, (_, _) {
           gameBoardNotifyCount++;
         }, fireImmediately: false)
-        ..listen(selectedCellProvider, (_, __) {
+        ..listen(selectedCellProvider, (_, _) {
           selectedCellNotifyCount++;
         }, fireImmediately: false);
 

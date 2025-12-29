@@ -155,7 +155,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                   ),
                 ),
-                error: (_, __) => Icon(
+                error: (_, _) => Icon(
                   Icons.warning_amber_rounded,
                   color: scheme.error,
                   size: 32,
@@ -168,7 +168,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 initState.when(
                   data: (_) => AppLocalizations.of(context)!.ready,
                   loading: () => AppLocalizations.of(context)!.loadingSounds,
-                  error: (_, __) => AppLocalizations.of(context)!.starting,
+                  error: (_, _) => AppLocalizations.of(context)!.starting,
                 ),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: scheme.onSurface.withAlpha((0.5 * 255).round()),

@@ -290,11 +290,11 @@ void main() {
         ..read(gameBoardProvider.notifier).setBoard(board)
         ..listen(
           cellValueProvider(const CellKey(0, 0)),
-          (_, __) => cell00Reads++,
+          (_, _) => cell00Reads++,
         )
         ..listen(
           cellValueProvider(const CellKey(1, 1)),
-          (_, __) => cell11Reads++,
+          (_, _) => cell11Reads++,
         );
 
       // Set letter only at (0,0)

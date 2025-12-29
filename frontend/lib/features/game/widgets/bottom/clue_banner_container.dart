@@ -4,7 +4,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 
 class ClueBannerContainer extends ConsumerWidget {
-  const ClueBannerContainer({required this.entry, Key? key}) : super(key: key);
+  const ClueBannerContainer({required this.entry, super.key});
 
   final PuzzleEntryData entry;
 
@@ -14,8 +14,8 @@ class ClueBannerContainer extends ConsumerWidget {
     return GestureDetector(
       onTap: () {
         final newDir = entry.direction == 'across'
-          ? WordDirection.vertical
-          : WordDirection.horizontal;
+            ? WordDirection.vertical
+            : WordDirection.horizontal;
         ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
@@ -63,8 +63,7 @@ class _AutoSizeClueText extends StatefulWidget {
     required this.style,
     this.maxLines = 2,
     this.minFontSize = 12,
-    Key? key,
-  }) : super(key: key);
+  });
 
   final String text;
   final TextStyle style;

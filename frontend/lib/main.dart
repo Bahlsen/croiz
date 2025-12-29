@@ -50,7 +50,9 @@ class _CroizAppState extends ConsumerState<CroizApp> {
 
       final azerty = prefs.getBool('pref_keyboard_azerty');
       if (azerty != null) {
-        ref.read(gameKeyboardLayoutProvider.notifier).setIsAzerty(isAzerty: azerty);
+        ref
+            .read(gameKeyboardLayoutProvider.notifier)
+            .setIsAzerty(isAzerty: azerty);
       }
 
       final ksize = prefs.getString('pref_keyboard_size');

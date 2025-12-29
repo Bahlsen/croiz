@@ -1,11 +1,9 @@
-
 import 'package:json_annotation/json_annotation.dart';
 
 part 'puzzle_cell.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PuzzleCell {
-
   PuzzleCell({
     required this.x,
     required this.y,

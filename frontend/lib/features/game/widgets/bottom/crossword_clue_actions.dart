@@ -3,8 +3,7 @@ import 'package:croiz/l10n/app_localizations.dart';
 
 /// Small reusable action buttons used by the clue header.
 class ClueHeaderMenuButton extends StatelessWidget {
-  const ClueHeaderMenuButton({required this.onPressed, Key? key})
-    : super(key: key);
+  const ClueHeaderMenuButton({required this.onPressed, super.key});
 
   final VoidCallback? onPressed;
 
@@ -28,8 +27,7 @@ class ClueHeaderMenuButton extends StatelessWidget {
 }
 
 class ClueHeaderClearButton extends StatelessWidget {
-  const ClueHeaderClearButton({required this.onPressed, Key? key})
-    : super(key: key);
+  const ClueHeaderClearButton({required this.onPressed, super.key});
 
   final VoidCallback? onPressed;
 
@@ -57,8 +55,7 @@ class ClueHeaderClearButton extends StatelessWidget {
 }
 
 class ClueHeaderRevealButton extends StatelessWidget {
-  const ClueHeaderRevealButton({required this.onPressed, Key? key})
-    : super(key: key);
+  const ClueHeaderRevealButton({required this.onPressed, super.key});
 
   final VoidCallback? onPressed;
 

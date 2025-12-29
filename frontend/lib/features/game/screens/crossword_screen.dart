@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
@@ -8,8 +7,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/screens/crossword_body.dart';
 
 class CrosswordScreen extends ConsumerStatefulWidget {
-
-  const CrosswordScreen({Key? key, this.puzzleId}) : super(key: key);
+  const CrosswordScreen({super.key, this.puzzleId});
   final String? puzzleId;
 
   @override
@@ -33,7 +31,7 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
       Future.microtask(() {
         try {
           final current = ref.read(selectedPuzzleIdProvider);
-            if (current != decoded) {
+          if (current != decoded) {
             ref.read(selectedPuzzleIdProvider.notifier).setSelected(decoded);
           }
         } on Object catch (e, st) {

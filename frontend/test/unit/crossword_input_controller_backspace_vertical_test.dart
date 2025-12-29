@@ -64,8 +64,9 @@ void main() {
     final controller = CrosswordInputController.fromContainer(container);
 
     // Set vertical direction and select last cell of current entry
-    container.read(wordDirectionProvider.notifier).setDirection(
-      WordDirection.vertical);
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.vertical);
     container
         .read(selectedCellProvider.notifier)
         .select(const SelectedCell(2, 0));
@@ -156,8 +157,9 @@ void main() {
       final controller = CrosswordInputController.fromContainer(container);
 
       // Select last cell of entry 7 (0,5)
-        container.read(wordDirectionProvider.notifier).setDirection(
-          WordDirection.horizontal);
+      container
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
       container
           .read(selectedCellProvider.notifier)
           .select(const SelectedCell(0, 5));
@@ -239,8 +241,9 @@ void main() {
     final controller = CrosswordInputController.fromContainer(container);
 
     // Select last cell of entry 7 (row=1,col=4)
-    container.read(wordDirectionProvider.notifier).setDirection(
-      WordDirection.vertical);
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.vertical);
     container
         .read(selectedCellProvider.notifier)
         .select(const SelectedCell(1, 4));

@@ -6,8 +6,8 @@ class CrosswordClueActionsRow extends StatelessWidget {
     this.onMenu,
     this.onReveal,
     this.onClear,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final VoidCallback? onMenu;
   final VoidCallback? onReveal;

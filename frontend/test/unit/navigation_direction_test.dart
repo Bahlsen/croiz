@@ -5,8 +5,12 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
-  void _setupBoard(ProviderContainer container, GameBoard board,
-      SelectedCell selected, WordDirection direction) {
+  void setupBoard(
+    ProviderContainer container,
+    GameBoard board,
+    SelectedCell selected,
+    WordDirection direction,
+  ) {
     final read = container.read;
     read(gameBoardProvider.notifier).setBoard(board);
     read(selectedCellProvider.notifier).select(selected);
@@ -68,11 +72,14 @@ void main() {
       solutionGrid: solution,
     );
 
-    _setupBoard(container, board, const SelectedCell(1, 0),
-      WordDirection.vertical);
+    setupBoard(
+      container,
+      board,
+      const SelectedCell(1, 0),
+      WordDirection.vertical,
+    );
 
     CrosswordInputController.fromContainer(container).setLetterAndAdvance('B');
-
 
     // Expect direction to remain vertical
     final dir = read(wordDirectionProvider), sel = read(selectedCellProvider);

@@ -2,10 +2,9 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
-
 /// The translations for French (`fr`).
 class AppLocalizationsFr extends AppLocalizations {
-  AppLocalizationsFr([String locale = 'fr']) : super(locale);
+  AppLocalizationsFr([super.locale = 'fr']);
 
   @override
   String get appTitle => 'Croiz';

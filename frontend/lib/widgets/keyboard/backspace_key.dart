@@ -31,6 +31,7 @@ class BackspaceKey extends StatefulWidget {
 class _BackspaceKeyState extends State<BackspaceKey> {
   Timer? _repeatTimer;
   int _phase = 0;
+  int? _repeatIntervalMs;
 
   void _trigger() {
     if (widget.enableFeedback) {
@@ -52,17 +53,22 @@ class _BackspaceKeyState extends State<BackspaceKey> {
     _trigger();
     _phase = 0;
     _repeatTimer?.cancel();
+    _repeatIntervalMs = 260;
     _repeatTimer = Timer.periodic(const Duration(milliseconds: 260), (t) {
       _trigger();
       _phase++;
-      final newInterval = _phase > 8
-          ? const Duration(milliseconds: 55)
+      final newIntervalMs = _phase > 8
+          ? 55
           : _phase > 3
-          ? const Duration(milliseconds: 110)
-          : const Duration(milliseconds: 260);
-      if (newInterval != t.tick) {
+          ? 110
+          : 260;
+      if (newIntervalMs != _repeatIntervalMs) {
         t.cancel();
-        _repeatTimer = Timer.periodic(newInterval, (_) => _trigger());
+        _repeatTimer = Timer.periodic(
+          Duration(milliseconds: newIntervalMs),
+          (_) => _trigger(),
+        );
+        _repeatIntervalMs = newIntervalMs;
       }
     });
   }
@@ -70,6 +76,7 @@ class _BackspaceKeyState extends State<BackspaceKey> {
   void _stopRepeat() {
     _repeatTimer?.cancel();
     _repeatTimer = null;
+    _repeatIntervalMs = null;
   }
 
   @override

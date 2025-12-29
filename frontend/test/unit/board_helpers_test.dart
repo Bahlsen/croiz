@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/features/game/helpers/board_helpers.dart';
 
@@ -6,7 +5,7 @@ void main() {
   group('BoardHelpers', () {
     test('setWordSafe writes within bounds horizontally', () {
       final grid = List.generate(5, (_) => List<String?>.filled(5, null))
-      ..setWordSafe(1, 1, 'AbC', horizontal: true);
+        ..setWordSafe(1, 1, 'AbC', horizontal: true);
       final row1 = grid[1];
       expect(row1.sublist(1, 4), ['A', 'B', 'C']);
     });
@@ -23,10 +22,10 @@ void main() {
     test('setBlackCells marks given coords safely', () {
       final blacks = List.generate(4, (_) => List<bool>.filled(4, false))
         ..setBlackCells([
-        [0, 0],
-        [2, 3],
-        [10, 10],
-      ]); // last out-of-bounds ignored
+          [0, 0],
+          [2, 3],
+          [10, 10],
+        ]); // last out-of-bounds ignored
       final b00 = blacks[0][0];
       final b23 = blacks[2][3];
       expect([b00, b23], [isTrue, isTrue]);

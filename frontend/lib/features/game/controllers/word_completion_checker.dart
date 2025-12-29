@@ -280,7 +280,7 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   readLockedCells: () => read<Set<CellKey>>(lockedCellsProvider),
   writeLockedCells: (v) => read(lockedCellsProvider.notifier).setLockedCells(v),
   readFlashingCells: () => read<Set<CellKey>>(flashingCellsProvider),
-    writeFlashingCells: (v) =>
+  writeFlashingCells: (v) =>
       read(flashingCellsProvider.notifier).setFlashingCells(v),
   readCellEntriesIndex: () =>
       read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),

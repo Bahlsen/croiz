@@ -97,7 +97,7 @@ void main() {
 }
 
 class _CrosswordPlaceholder extends ConsumerWidget {
-  const _CrosswordPlaceholder({Key? key}) : super(key: key);
+  const _CrosswordPlaceholder();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

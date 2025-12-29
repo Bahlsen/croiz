@@ -5,8 +5,7 @@ import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 
 class CrosswordRevealOverlay extends ConsumerWidget {
-  const CrosswordRevealOverlay({required this.onClose, Key? key})
-    : super(key: key);
+  const CrosswordRevealOverlay({required this.onClose, super.key});
 
   final VoidCallback onClose;
 

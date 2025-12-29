@@ -6,7 +6,6 @@ import 'package:croiz/services/providers.dart';
 ///
 /// KISS: not a Notifier — lightweight class wrapped by a Provider.family.
 class GameTimer {
-
   GameTimer(this.ref, this.gameId) {
     _restore();
   }

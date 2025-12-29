@@ -48,13 +48,13 @@ class CrosswordInputController {
         readBoard: _safeReadBoard,
         readFoundWords: () => _read<Set<String>>(foundWordsProvider),
         writeFoundWords: (v) =>
-          _read(foundWordsProvider.notifier).setFoundWords(v),
+            _read(foundWordsProvider.notifier).setFoundWords(v),
         readLockedCells: () => _read<Set<CellKey>>(lockedCellsProvider),
         writeLockedCells: (v) =>
-          _read(lockedCellsProvider.notifier).setLockedCells(v),
+            _read(lockedCellsProvider.notifier).setLockedCells(v),
         readFlashingCells: () => _read<Set<CellKey>>(flashingCellsProvider),
         writeFlashingCells: (v) =>
-          _read(flashingCellsProvider.notifier).setFlashingCells(v),
+            _read(flashingCellsProvider.notifier).setFlashingCells(v),
         readCellEntriesIndex: () => _read<Map<CellKey, List<PuzzleEntryData>>>(
           cellEntriesIndexProvider,
         ),
@@ -261,7 +261,7 @@ class CrosswordInputController {
               entries: entries,
               index: idxMap,
             );
-              if (otherContaining != null) {
+            if (otherContaining != null) {
               final newDir =
                   (otherContaining.directionEnum == EntryDirection.across)
                   ? WordDirection.horizontal
@@ -511,9 +511,10 @@ class CrosswordInputController {
           );
           if (otherContaining != null) {
             _read(wordDirectionProvider.notifier).setDirection(
-                (otherContaining.directionEnum == EntryDirection.across)
-                ? WordDirection.horizontal
-                : WordDirection.vertical);
+              (otherContaining.directionEnum == EntryDirection.across)
+                  ? WordDirection.horizontal
+                  : WordDirection.vertical,
+            );
           }
           return;
         }

@@ -127,8 +127,7 @@ class _CrosswordTheme {
 /// A single crossword cell rendered in the grid.
 /// Extracted for SRP: this widget only concerns rendering one cell.
 class CrosswordCell extends ConsumerWidget {
-  const CrosswordCell({required this.row, required this.col, Key? key})
-    : super(key: key);
+  const CrosswordCell({required this.row, required this.col, super.key});
 
   final int row;
   final int col;

@@ -41,7 +41,7 @@ class PuzzlesListPage extends ConsumerWidget {
         final originKeys = List.of(origins)..sort();
         return ListView.separated(
           itemCount: originKeys.length,
-          separatorBuilder: (_, __) => const Divider(height: 1),
+          separatorBuilder: (_, _) => const Divider(height: 1),
           itemBuilder: (context, oi) =>
               LazyOriginExpansionTile(origin: originKeys[oi]),
         );

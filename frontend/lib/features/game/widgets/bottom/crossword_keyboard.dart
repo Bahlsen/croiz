@@ -10,8 +10,8 @@ class CrosswordKeyboard extends StatelessWidget {
     required this.onKey,
     required this.onBackspace,
     required this.availableHeight,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   // Expose the same named layouts as the underlying VirtualKeyboard so
   // callers can switch between AZERTY/QWERTY without importing
   // `VirtualKeyboard` directly.

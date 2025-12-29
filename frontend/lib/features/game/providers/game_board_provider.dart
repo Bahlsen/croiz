@@ -146,9 +146,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           try {
             final found = stored['foundWords'];
             if (found is List) {
-              ref.read(foundWordsProvider.notifier).setFoundWords(found
-                  .cast<String>()
-                  .toSet());
+              ref
+                  .read(foundWordsProvider.notifier)
+                  .setFoundWords(found.cast<String>().toSet());
               try {
                 _triggerEndGameIfSolved(playVictorySound: false);
               } on Object {
@@ -289,16 +289,17 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     _schedulePersist();
 
     if (result.clearedCells.isNotEmpty) {
-        ref.read(flashingClearedCellsProvider.notifier).setFlashingClearedCells(
-          result.clearedCells.toSet());
+      ref
+          .read(flashingClearedCellsProvider.notifier)
+          .setFlashingClearedCells(result.clearedCells.toSet());
       final delay = ref.read(flashClearDelayProvider);
       if (delay == Duration.zero) {
         unawaited(
           Future.microtask(() {
-                  try {
-                  ref
-                    .read(flashingClearedCellsProvider.notifier)
-                    .setFlashingClearedCells(<CellKey>{});
+            try {
+              ref
+                  .read(flashingClearedCellsProvider.notifier)
+                  .setFlashingClearedCells(<CellKey>{});
             } on Object catch (e, st) {
               developer.log(
                 'Clearing flashing cleared cells failed',
@@ -310,8 +311,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         );
       } else {
         Future.delayed(delay, () {
-              try {
-              ref
+          try {
+            ref
                 .read(flashingClearedCellsProvider.notifier)
                 .setFlashingClearedCells(<CellKey>{});
           } on Object catch (e, st) {
@@ -608,8 +609,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     ref.read(lockedCellsProvider.notifier).setLockedCells(<CellKey>{});
     ref.read(selectedCellProvider.notifier).select(null);
     ref.read(flashingCellsProvider.notifier).setFlashingCells(<CellKey>{});
-    ref.read(flashingClearedCellsProvider.notifier).setFlashingClearedCells(
-      <CellKey>{});
+    ref
+        .read(flashingClearedCellsProvider.notifier)
+        .setFlashingClearedCells(<CellKey>{});
 
     // Reset timer
     try {
