@@ -6,6 +6,7 @@ import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/end_game_overlay_provider.dart';
 
 class EndGameOverlay extends ConsumerWidget {
   const EndGameOverlay({super.key});
@@ -34,12 +35,13 @@ class EndGameOverlay extends ConsumerWidget {
         entries != null &&
         entries.isNotEmpty &&
         found!.length == entries.length;
+    final overlayVisible = ref.watch(endGameOverlayVisibleProvider);
     if (kDebugMode && completed) {
       debugPrint(
         'EndGameOverlay: completed=true, entries=${entries.length}, found=${found.length}',
       );
     }
-    if (!completed) {
+    if (!completed || !overlayVisible) {
       return const SizedBox.shrink();
     }
 
@@ -74,7 +76,11 @@ class EndGameOverlay extends ConsumerWidget {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    if (Navigator.of(context).canPop()) {
+                      Navigator.of(context).pop();
+                    } else {
+                      ref.read(endGameOverlayVisibleProvider.notifier).hide();
+                    }
                   },
                   child: Text(AppLocalizations.of(context)?.view ?? 'View'),
                 ),
