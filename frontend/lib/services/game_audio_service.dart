@@ -11,7 +11,20 @@ import 'package:croiz/services/audio_service.dart';
 /// - Use seek(0) + resume() to replay sounds quickly
 /// - Throttle at 80ms to prevent excessive calls
 class GameAudioService implements AudioService {
-  GameAudioService();
+  GameAudioService() {
+    // If WidgetsBinding is already initialized, start async init.
+    // If not, complete `_ready` so callers (e.g. splash) don't block startup;
+    // audio will be initialized lazily on first play call when the binding
+    // becomes available.
+    try {
+      WidgetsBinding.instance;
+      unawaited(_init());
+    } on Object {
+      if (!_ready.isCompleted) {
+        _ready.complete();
+      }
+    }
+  }
 
   AudioPlayer? _typePlayer;
   AudioPlayer? _deletePlayer;
