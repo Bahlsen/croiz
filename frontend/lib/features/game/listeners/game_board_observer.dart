@@ -21,52 +21,53 @@ class GameBoardObserver extends ConsumerStatefulWidget {
 }
 
 class _GameBoardObserverState extends ConsumerState<GameBoardObserver> {
+  bool _attached = false;
+
   @override
-  void initState() {
-    super.initState();
-
-    // Listen for board changes and start/initialize controller and timer.
-    ref.listen<GameBoard>(gameBoardProvider, (
-      GameBoard? previous,
-      GameBoard next,
-    ) {
-      try {
-        widget.controller.tryAutoSelectFirstAcross(next);
-      } on Object catch (e, st) {
-        if (kDebugMode) {
-          debugPrint('Error auto-selecting first across: $e\n$st');
+  Widget build(BuildContext context) {
+    if (!_attached) {
+      _attached = true;
+      ref.listen<GameBoard>(gameBoardProvider, (
+        GameBoard? previous,
+        GameBoard next,
+      ) {
+        try {
+          widget.controller.tryAutoSelectFirstAcross(next);
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            debugPrint('Error auto-selecting first across: $e\n$st');
+          }
         }
-      }
 
-      try {
-        ref.read(gameTimerProvider(next.id)).start();
-      } on Object catch (e, st) {
-        if (kDebugMode) {
-          debugPrint('Error starting game timer: $e\n$st');
+        try {
+          ref.read(gameTimerProvider(next.id)).start();
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            debugPrint('Error starting game timer: $e\n$st');
+          }
         }
-      }
-    });
+      });
 
-    // Perform initial actions once.
-    try {
-      final current = ref.read(gameBoardProvider);
-      widget.controller.tryAutoSelectFirstAcross(current);
-    } on Object catch (e, st) {
-      if (kDebugMode) {
-        debugPrint('Error auto-selecting first across (initial): $e\n$st');
-      }
+      Future.microtask(() {
+        try {
+          final current = ref.read(gameBoardProvider);
+          widget.controller.tryAutoSelectFirstAcross(current);
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            debugPrint('Error auto-selecting first across (initial): $e\n$st');
+          }
+        }
+        try {
+          final current = ref.read(gameBoardProvider);
+          ref.read(gameTimerProvider(current.id)).start();
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            debugPrint('Error starting game timer (initial): $e\n$st');
+          }
+        }
+      });
     }
 
-    try {
-      final current = ref.read(gameBoardProvider);
-      ref.read(gameTimerProvider(current.id)).start();
-    } on Object catch (e, st) {
-      if (kDebugMode) {
-        debugPrint('Error starting game timer (initial): $e\n$st');
-      }
-    }
+    return widget.child;
   }
-
-  @override
-  Widget build(BuildContext context) => widget.child;
 }
