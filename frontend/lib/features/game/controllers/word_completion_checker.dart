@@ -184,16 +184,9 @@ class WordCompletionChecker {
       }
     }
 
-    // Play success sound once if any words were completed
+    // Trigger flash animation and play success once via the helper when any
+    // words completed in this batch.
     if (wordsCompletedThisCheck > 0) {
-      try {
-        readGameAudioService().playSuccess();
-      } on Object catch (e, st) {
-        developer.log('playSuccess failed', error: e, stackTrace: st);
-      }
-
-      // Trigger flash animation on ALL completed words' cells at once using
-      // the shared helper so the reveal-path can reuse the same behavior.
       triggerFlashAndPlaySuccess(
         allFlashingCells,
         writeFlashingCells,

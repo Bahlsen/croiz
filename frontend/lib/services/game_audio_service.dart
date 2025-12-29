@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:croiz/services/audio_service.dart';
 
@@ -11,9 +11,7 @@ import 'package:croiz/services/audio_service.dart';
 /// - Use seek(0) + resume() to replay sounds quickly
 /// - Throttle at 80ms to prevent excessive calls
 class GameAudioService implements AudioService {
-  GameAudioService() {
-    unawaited(_init());
-  }
+  GameAudioService();
 
   AudioPlayer? _typePlayer;
   AudioPlayer? _deletePlayer;
@@ -97,11 +95,13 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playType() async {
-    // Ensure initialization completes before attempting playback. If the
-    // service is still initializing, await readiness so the first key press
-    // will play once ready rather than be silently dropped.
-    if (!_initialized) {
-      await _ready.future;
+    try {
+      WidgetsBinding.instance;
+      if (!_initialized && !_ready.isCompleted) {
+        unawaited(_init());
+      }
+    } on Object {
+      // Binding not initialized: skip audio
     }
     if (_typePlayer == null) {
       return;
@@ -120,8 +120,13 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playDelete() async {
-    if (!_initialized) {
-      await _ready.future;
+    try {
+      WidgetsBinding.instance;
+      if (!_initialized && !_ready.isCompleted) {
+        unawaited(_init());
+      }
+    } on Object {
+      // Binding not initialized: skip audio
     }
     if (_deletePlayer == null) {
       return;
@@ -140,6 +145,14 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playSuccess() async {
+    try {
+      WidgetsBinding.instance;
+      if (!_initialized && !_ready.isCompleted) {
+        unawaited(_init());
+      }
+    } on Object {
+      return;
+    }
     if (!_initialized || _successPlayer == null) {
       return;
     }
@@ -148,6 +161,14 @@ class GameAudioService implements AudioService {
 
   @override
   Future<void> playVictory() async {
+    try {
+      WidgetsBinding.instance;
+      if (!_initialized && !_ready.isCompleted) {
+        unawaited(_init());
+      }
+    } on Object {
+      return;
+    }
     if (!_initialized || _victoryPlayer == null) {
       return;
     }

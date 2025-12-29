@@ -648,6 +648,13 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         } on Object {
           // ignore
         }
+        // Persist progress immediately so UI and saved payload include the
+        // finalized `elapsedSeconds` value.
+        try {
+          unawaited(_persistProgress());
+        } on Object {
+          // ignore
+        }
         if (playVictorySound) {
           try {
             // Only attempt to play audio if Flutter bindings are initialized.
