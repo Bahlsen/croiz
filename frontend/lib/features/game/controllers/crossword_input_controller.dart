@@ -40,7 +40,7 @@ class CrosswordInputController {
   // or inject a `Reader`/`read` function to keep lifecycles predictable.
 
   final T Function<T>(Object provider) _read;
-  late final WordCompletionChecker _wordCompletionChecker;
+  late WordCompletionChecker _wordCompletionChecker;
   bool _didAutoSelectFirstAcross = false;
 
   WordCompletionChecker _createWordCompletionChecker() =>
@@ -347,6 +347,26 @@ class CrosswordInputController {
       wordDirectionProvider.notifier,
     ).setDirection(WordDirection.horizontal);
     _didAutoSelectFirstAcross = true;
+  }
+
+  /// Reset auto-select state so the controller can auto-select again for a
+  /// newly-loaded puzzle. Call this when the active puzzle changes.
+  void resetAutoSelectFirstAcross() {
+    _didAutoSelectFirstAcross = false;
+  }
+
+  /// Reset internal navigation-related state so the controller behaves as if
+  /// it's attached to a fresh puzzle. This disposes and recreates the
+  /// internal `WordCompletionChecker` (clearing timers) and clears auto-select
+  /// state. Call when the active puzzle changes.
+  void resetNavigationState() {
+    try {
+      _wordCompletionChecker.dispose();
+    } on Object {
+      // ignore
+    }
+    _wordCompletionChecker = _createWordCompletionChecker();
+    _didAutoSelectFirstAcross = false;
   }
 
   // ─────────────────────────────────────────────────────────────────────────

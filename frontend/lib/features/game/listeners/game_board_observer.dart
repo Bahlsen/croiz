@@ -32,6 +32,12 @@ class _GameBoardObserverState extends ConsumerState<GameBoardObserver> {
         GameBoard next,
       ) {
         try {
+          // If the puzzle changed, reset controller navigation state and
+          // allow the controller to auto-select again.
+          if (previous == null || previous.id != next.id) {
+            widget.controller.resetNavigationState();
+            widget.controller.resetAutoSelectFirstAcross();
+          }
           widget.controller.tryAutoSelectFirstAcross(next);
         } on Object catch (e, st) {
           if (kDebugMode) {
@@ -48,9 +54,10 @@ class _GameBoardObserverState extends ConsumerState<GameBoardObserver> {
         }
       });
 
-      Future.microtask(() {
+        Future.microtask(() {
         try {
           final current = ref.read(gameBoardProvider);
+          widget.controller.resetNavigationState();
           widget.controller.tryAutoSelectFirstAcross(current);
         } on Object catch (e, st) {
           if (kDebugMode) {
