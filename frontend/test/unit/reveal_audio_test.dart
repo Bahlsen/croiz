@@ -76,6 +76,54 @@ void main() {
     expect(mock.success, greaterThan(0));
   });
 
+  test('revealEntry should NOT play success sound when muted', () async {
+    final mock = MockAudio();
+    const entry = PuzzleEntryData(
+      number: 1,
+      direction: 'across',
+      x: 0,
+      y: 0,
+      length: 3,
+      answer: 'ABC',
+    );
+
+    final board = GameBoard(
+      id: 't',
+      title: 't',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: [entry],
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(overrides: [
+      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      flashClearDelayProvider.overrideWithValue(Duration.zero),
+      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      gameAudioServiceProvider.overrideWithValue(mock),
+    ]);
+    addTearDown(container.dispose);
+
+    // Set mute via the notifier rather than trying to override the NotifierProvider.
+    container.read(gameAudioMutedProvider.notifier).setMuted(muted: true);
+
+    container.read(gameBoardProvider.notifier).revealEntry(entry);
+    await Future.microtask(() {});
+    expect(mock.success, equals(0));
+  });
+
   test('revealAll should play success when new words revealed', () async {
     final mock = MockAudio();
     final entries = [
@@ -121,5 +169,54 @@ void main() {
     container.read(gameBoardProvider.notifier).revealAll();
     await Future.microtask(() {});
     expect(mock.success, greaterThan(0));
+  });
+
+  test('revealAll should NOT play success when muted', () async {
+    final mock = MockAudio();
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'ABC',
+      ),
+    ];
+
+    final board = GameBoard(
+      id: 't',
+      title: 't',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: entries,
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(overrides: [
+      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      flashClearDelayProvider.overrideWithValue(Duration.zero),
+      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      gameAudioServiceProvider.overrideWithValue(mock),
+    ]);
+    addTearDown(container.dispose);
+
+    container.read(gameAudioMutedProvider.notifier).setMuted(muted: true);
+
+    container.read(gameBoardProvider.notifier).revealAll();
+    await Future.microtask(() {});
+    expect(mock.success, equals(0));
   });
 }

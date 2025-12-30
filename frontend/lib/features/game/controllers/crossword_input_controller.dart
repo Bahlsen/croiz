@@ -60,6 +60,7 @@ class CrosswordInputController {
         ),
         readWordCheckService: () => _read(wordCheckServiceProvider),
         readGameAudioService: () => _read(gameAudioServiceProvider),
+        readAudioMuted: () => _read<bool>(gameAudioMutedProvider),
         readEndGameService: () => _read(endGameServiceProvider),
         readFlashClearDelay: () => _read<Duration>(flashClearDelayProvider),
         readCheckDebounceDelay: () =>

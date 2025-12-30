@@ -31,6 +31,7 @@ class WordCompletionChecker {
     required this.readCellEntriesIndex,
     required this.readWordCheckService,
     required this.readGameAudioService,
+    required this.readAudioMuted,
     required this.readEndGameService,
     required this.readFlashClearDelay,
     required this.readCheckDebounceDelay,
@@ -50,6 +51,7 @@ class WordCompletionChecker {
     readCellEntriesIndex,
     required WordCheckService Function() readWordCheckService,
     required AudioService Function() readGameAudioService,
+    required bool Function() readAudioMuted,
     required EndGameService Function() readEndGameService,
     required Duration Function() readFlashClearDelay,
     required Duration Function() readCheckDebounceDelay,
@@ -65,6 +67,7 @@ class WordCompletionChecker {
     readCellEntriesIndex: readCellEntriesIndex,
     readWordCheckService: readWordCheckService,
     readGameAudioService: readGameAudioService,
+    readAudioMuted: readAudioMuted,
     readEndGameService: readEndGameService,
     readFlashClearDelay: readFlashClearDelay,
     readCheckDebounceDelay: readCheckDebounceDelay,
@@ -81,6 +84,7 @@ class WordCompletionChecker {
   final Map<CellKey, List<PuzzleEntryData>> Function() readCellEntriesIndex;
   final WordCheckService Function() readWordCheckService;
   final AudioService Function() readGameAudioService;
+  final bool Function() readAudioMuted;
   final EndGameService Function() readEndGameService;
   final Duration Function() readFlashClearDelay;
   final Duration Function() readCheckDebounceDelay;
@@ -191,7 +195,12 @@ class WordCompletionChecker {
         allFlashingCells,
         writeFlashingCells,
         readFlashClearDelay,
-        playSuccess: () => readGameAudioService().playSuccess(),
+        playSuccess: () {
+          if (!readAudioMuted()) {
+            return readGameAudioService().playSuccess();
+          }
+          return Future.value();
+        },
       );
     }
 
@@ -216,7 +225,9 @@ class WordCompletionChecker {
           developer.log('finalizeSync failed', error: e, stackTrace: st);
         }
         try {
-          readGameAudioService().playVictory();
+          if (!readAudioMuted()) {
+            readGameAudioService().playVictory();
+          }
         } on Object catch (e, st) {
           developer.log('playVictory failed', error: e, stackTrace: st);
         }
@@ -281,6 +292,7 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
       read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
   readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
   readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
+  readAudioMuted: () => read<bool>(gameAudioMutedProvider),
   readEndGameService: () => read(endGameServiceProvider),
   readFlashClearDelay: () => read<Duration>(flashClearDelayProvider),
   readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),

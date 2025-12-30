@@ -138,6 +138,80 @@ void main() {
     });
   });
 
+  test('revealAll should not flash words whose cells are already locked', () async {
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'ABC',
+      ),
+      const PuzzleEntryData(
+        number: 2,
+        direction: 'down',
+        x: 2,
+        y: 0,
+        length: 3,
+        answer: 'CDE',
+      ),
+    ];
+
+    final board = GameBoard(
+      id: 't',
+      title: 't',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        // across entry 1 already filled and considered locked; down entry incomplete
+        ['A', 'B', 'C'],
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: entries,
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        [null, null, 'D'],
+        [null, null, 'E'],
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // Mark the across entry cells as already locked (simulating previously found and flashed)
+    final wordCheck = container.read(wordCheckServiceProvider);
+    final locked = Set<CellKey>.from(wordCheck.getCellKeys(entries[0]));
+    container.read(lockedCellsProvider.notifier).setLockedCells(locked);
+
+    // Call revealAll
+    container.read(gameBoardProvider.notifier).revealAll();
+
+    final flashing = container.read(flashingCellsProvider);
+    // The down entry cells (col 2) should flash
+    expect(flashing, contains(const CellKey(0, 2)));
+    expect(flashing, contains(const CellKey(1, 2)));
+    expect(flashing, contains(const CellKey(2, 2)));
+    // The across entry cells should NOT flash because they were locked
+    expect(flashing, isNot(contains(const CellKey(0, 0))));
+    expect(flashing, isNot(contains(const CellKey(0, 1))));
+
+    await Future.microtask(() {
+      final after = container.read(flashingCellsProvider);
+      expect(after, isEmpty);
+    });
+  });
+
   test('revealEntry should flash all cells of the entry', () async {
     const entry = PuzzleEntryData(
       number: 1,

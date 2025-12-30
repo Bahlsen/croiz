@@ -393,11 +393,16 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
           ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
           triggerFlashAndPlaySuccess(
-            allFlashing,
-            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-            () => ref.read(flashClearDelayProvider),
-            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
-          );
+        allFlashing,
+        (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+        () => ref.read(flashClearDelayProvider),
+        playSuccess: () {
+          if (!ref.read(gameAudioMutedProvider)) {
+            return ref.read(gameAudioServiceProvider).playSuccess();
+          }
+          return Future.value();
+        },
+      );
           try {
             _triggerEndGameIfSolved();
           } on Object {
@@ -454,7 +459,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         cells,
         (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
         () => ref.read(flashClearDelayProvider),
-        playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+        playSuccess: () {
+          if (!ref.read(gameAudioMutedProvider)) {
+            return ref.read(gameAudioServiceProvider).playSuccess();
+          }
+          return Future.value();
+        },
       );
     } on Object {
       // ignore
@@ -486,6 +496,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       final wordCheck = ref.read(wordCheckServiceProvider);
       final allKeys = <String>{};
       final newlyFound = <String>{};
+      // Capture previously found words and locked cells so we don't flash
+      // words that were already marked as found or whose cells were already
+      // locked (previously flashed) before revealAll was invoked.
+      final priorFound = Set<String>.from(ref.read(foundWordsProvider));
+      final priorLocked = Set<CellKey>.from(ref.read(lockedCellsProvider));
       try {
         for (final e in state.entries!) {
           final key = wordCheck.getWordKey(e);
@@ -494,7 +509,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           // treat it as newly found and include its cells for flashing.
           final wasComplete = wordCheck.isWordComplete(beforeBoard, e);
           final isCompleteNow = wordCheck.isWordComplete(state, e);
-          if (!wasComplete && isCompleteNow) {
+          // Only consider this entry newly found if it was incomplete before,
+          // is complete now, was not previously in the authoritative found
+          // set, and its cells were not already locked (previous flash).
+          final cellKeys = wordCheck.getCellKeys(e);
+          final wasLocked = priorLocked.containsAll(cellKeys);
+          if (!wasComplete && isCompleteNow && !priorFound.contains(key) && !wasLocked) {
             newlyFound.add(key);
           }
         }
@@ -513,7 +533,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             newCells,
             (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
             () => ref.read(flashClearDelayProvider),
-            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+            playSuccess: () {
+              if (!ref.read(gameAudioMutedProvider)) {
+                return ref.read(gameAudioServiceProvider).playSuccess();
+              }
+              return Future.value();
+            },
           );
         }
       } on Object {
@@ -553,7 +578,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           all,
           (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
           () => ref.read(flashClearDelayProvider),
-          playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+          playSuccess: () {
+            if (!ref.read(gameAudioMutedProvider)) {
+              return ref.read(gameAudioServiceProvider).playSuccess();
+            }
+            return Future.value();
+          },
         );
       } on Object {
         // ignore
