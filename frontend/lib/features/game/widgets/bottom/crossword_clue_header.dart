@@ -1,3 +1,4 @@
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -48,7 +49,7 @@ class CrosswordClueHeader extends ConsumerWidget {
           ),
         ),
         child: Text(
-          'Select a word',
+          AppLocalizations.of(context)?.selectAWord ?? 'Select a word',
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w600,

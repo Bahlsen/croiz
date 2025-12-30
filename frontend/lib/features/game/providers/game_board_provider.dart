@@ -219,6 +219,23 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         } on Object {
           // ignore
         }
+        // If nothing is currently selected, select the first cell of the
+        // first entry so the UI focuses the puzzle on load.
+        try {
+          final selected = ref.read(selectedCellProvider);
+          if (selected == null) {
+            final first = entries.first;
+            final firstDir = first.direction == 'across'
+                ? WordDirection.horizontal
+                : WordDirection.vertical;
+            ref.read(wordDirectionProvider.notifier).setDirection(firstDir);
+            ref
+                .read(selectedCellProvider.notifier)
+                .select(SelectedCell(first.y, first.x));
+          }
+        } on Object {
+          // ignore selection failures
+        }
       } on Object catch (e, stack) {
         if (kDebugMode) {
           debugPrint('Error updating found/locked words: $e\n$stack');
@@ -649,7 +666,25 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Clear all game state
     ref.read(foundWordsProvider.notifier).setFoundWords(<String>{});
     ref.read(lockedCellsProvider.notifier).setLockedCells(<CellKey>{});
-    ref.read(selectedCellProvider.notifier).select(null);
+    // Select the first cell of the first entry after reset (if present),
+    // otherwise clear selection.
+    try {
+      final entries = state.entries;
+      if (entries != null && entries.isNotEmpty) {
+        final first = entries.first;
+        final firstDir = first.direction == 'across'
+            ? WordDirection.horizontal
+            : WordDirection.vertical;
+        ref.read(wordDirectionProvider.notifier).setDirection(firstDir);
+        ref
+            .read(selectedCellProvider.notifier)
+            .select(SelectedCell(first.y, first.x));
+      } else {
+        ref.read(selectedCellProvider.notifier).select(null);
+      }
+    } on Object {
+      ref.read(selectedCellProvider.notifier).select(null);
+    }
     ref.read(flashingCellsProvider.notifier).setFlashingCells(<CellKey>{});
     ref
         .read(flashingClearedCellsProvider.notifier)

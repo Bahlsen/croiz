@@ -58,6 +58,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get congratulations => 'Félicitations!';
 
   @override
+  String get selectAWord => 'Sélectionnez un mot';
+
+  @override
   String get loading => 'Chargement...';
 
   @override

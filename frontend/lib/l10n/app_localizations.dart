@@ -199,6 +199,12 @@ abstract class AppLocalizations {
   /// **'Congratulations!'**
   String get congratulations;
 
+  /// No description provided for @selectAWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a word'**
+  String get selectAWord;
+
   /// No description provided for @loading.
   ///
   /// In en, this message translates to:

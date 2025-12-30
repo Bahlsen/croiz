@@ -58,6 +58,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get congratulations => 'Вітаємо!';
 
   @override
+  String get selectAWord => 'Виберіть слово';
+
+  @override
   String get loading => 'Завантаження...';
 
   @override
