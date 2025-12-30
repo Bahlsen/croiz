@@ -6,6 +6,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/end_game_overlay_provider.dart';
+import '../providers/game_timer_provider.dart';
 
 class EndGameOverlay extends ConsumerWidget {
   const EndGameOverlay({super.key});
@@ -70,8 +71,16 @@ class EndGameOverlay extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                // No timer displayed — kept intentionally blank/simple
-                const SizedBox(height: 42),
+                            // Show elapsed time
+                            Builder(builder: (context) {
+                              final boardId = ref.watch(gameBoardProvider.select((b) => b.id));
+                              final formatted =
+                                  ref.read(gameTimerProvider(boardId)).formattedElapsed();
+                              return Text(
+                                formatted,
+                                style: Theme.of(context).textTheme.titleLarge,
+                              );
+                            }),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
