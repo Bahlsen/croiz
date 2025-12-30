@@ -421,6 +421,17 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (sol == null) {
       return;
     }
+    final wordCheck = ref.read(wordCheckServiceProvider);
+    final key = wordCheck.getWordKey(entry);
+    // If this word was already marked found or its cells were already
+    // locked (e.g. previously revealed/flashed), treat reveal as a no-op.
+    final priorFound = ref.read(foundWordsProvider);
+    final priorLocked = ref.read(lockedCellsProvider);
+    final entryCellKeys = wordCheck.getCellKeys(entry);
+    if (priorFound.contains(key) || priorLocked.containsAll(entryCellKeys)) {
+      return;
+    }
+
     final newGrid = state.grid.map(List<String?>.from).toList();
     final cells = <CellKey>{};
     if (entry.direction == 'across') {
@@ -445,8 +456,6 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     state = state.copyWith(grid: newGrid);
     // Mark word as found and lock its cells
-    final wordCheck = ref.read(wordCheckServiceProvider);
-    final key = wordCheck.getWordKey(entry);
     final newFound = Set<String>.from(ref.read(foundWordsProvider))..add(key);
     ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
     final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
