@@ -54,7 +54,7 @@ class _GameBoardObserverState extends ConsumerState<GameBoardObserver> {
         }
       });
 
-        Future.microtask(() {
+      Future.microtask(() {
         try {
           final current = ref.read(gameBoardProvider);
           widget.controller.resetNavigationState();

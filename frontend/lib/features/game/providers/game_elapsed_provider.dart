@@ -5,7 +5,10 @@ import 'game_timer_provider.dart';
 
 /// Stream provider that emits the elapsed seconds for the given `gameId`
 /// every second.
-final elapsedSecondsProvider = StreamProvider.family<int, String>((ref, gameId) {
+final elapsedSecondsProvider = StreamProvider.family<int, String>((
+  ref,
+  gameId,
+) {
   // Use a StreamController + Timer so we can cancel the timer deterministically
   // when the provider is disposed. This avoids leaving pending fake timers in
   // widget tests that use FakeAsync.

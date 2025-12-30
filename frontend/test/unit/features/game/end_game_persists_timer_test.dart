@@ -31,10 +31,7 @@ void main() {
 
     // Create a tiny 2x2 puzzle where entries are already complete
     const size = 2;
-    final grid = List.generate(
-      size,
-      (_) => List<String?>.filled(size, 'A'),
-    );
+    final grid = List.generate(size, (_) => List<String?>.filled(size, 'A'));
     final solution = List.generate(
       size,
       (_) => List<String?>.filled(size, 'A'),
@@ -82,7 +79,10 @@ void main() {
     final raw = boxOut.get(id);
     expect(raw, isNotNull, reason: 'Expected puzzle progress to be saved');
     final parsed = jsonDecode(raw!);
-    expect(parsed.containsKey('elapsedSeconds'), isTrue,
-        reason: 'elapsedSeconds should be persisted at end-game');
+    expect(
+      parsed.containsKey('elapsedSeconds'),
+      isTrue,
+      reason: 'elapsedSeconds should be persisted at end-game',
+    );
   });
 }

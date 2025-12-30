@@ -64,12 +64,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     container.read(gameBoardProvider.notifier).revealEntry(entry);
@@ -109,12 +111,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Set mute via the notifier rather than trying to override the NotifierProvider.
@@ -159,12 +163,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     container.read(gameBoardProvider.notifier).revealAll();
@@ -206,12 +212,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     container.read(gameAudioMutedProvider.notifier).setMuted(muted: true);
@@ -253,12 +261,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     // Mark the entry as already found before calling revealEntry
@@ -307,12 +317,14 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(overrides: [
-      puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-      flashClearDelayProvider.overrideWithValue(Duration.zero),
-      wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-      gameAudioServiceProvider.overrideWithValue(mock),
-    ]);
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+        gameAudioServiceProvider.overrideWithValue(mock),
+      ],
+    );
     addTearDown(container.dispose);
 
     // First reveal: should play

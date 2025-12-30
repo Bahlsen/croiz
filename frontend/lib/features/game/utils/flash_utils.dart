@@ -10,8 +10,10 @@ void triggerFlashAndPlaySuccess(
   Set<CellKey> cells,
   void Function(Set<CellKey>) writeFlashingCells,
   Duration Function() readFlashClearDelay, {
+
   /// Optional async callback to play a success sound when flashing starts.
   Future<void> Function()? playSuccess,
+
   /// Optional predicate to decide whether to play the success sound.
   /// If omitted, the helper will always attempt to play when `playSuccess`
   /// is provided. Callers should pass a function that returns true when

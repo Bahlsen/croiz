@@ -71,16 +71,21 @@ class EndGameOverlay extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                            // Show elapsed time
-                            Builder(builder: (context) {
-                              final boardId = ref.watch(gameBoardProvider.select((b) => b.id));
-                              final formatted =
-                                  ref.read(gameTimerProvider(boardId)).formattedElapsed();
-                              return Text(
-                                formatted,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              );
-                            }),
+                // Show elapsed time
+                Builder(
+                  builder: (context) {
+                    final boardId = ref.watch(
+                      gameBoardProvider.select((b) => b.id),
+                    );
+                    final formatted = ref
+                        .read(gameTimerProvider(boardId))
+                        .formattedElapsed();
+                    return Text(
+                      formatted,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    );
+                  },
+                ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {

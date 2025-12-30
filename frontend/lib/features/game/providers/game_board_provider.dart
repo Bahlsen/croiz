@@ -561,19 +561,25 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-            // Filter out any cells that are already flashing to avoid
-            // re-flashing the same visual elements (helps when revealAll is
-            // invoked while a previous reveal's flash is active). Do NOT
-            // filter locked cells here — entries that are partially locked
-            // but newly completed should still flash their cells.
-            final currentlyFlashing = Set<CellKey>.from(ref.read(flashingCellsProvider));
-            final toFlash = newCells.where((c) => !currentlyFlashing.contains(c)).toSet();
+          // Filter out any cells that are already flashing to avoid
+          // re-flashing the same visual elements (helps when revealAll is
+          // invoked while a previous reveal's flash is active). Do NOT
+          // filter locked cells here — entries that are partially locked
+          // but newly completed should still flash their cells.
+          final currentlyFlashing = Set<CellKey>.from(
+            ref.read(flashingCellsProvider),
+          );
+          final toFlash = newCells
+              .where((c) => !currentlyFlashing.contains(c))
+              .toSet();
           if (toFlash.isNotEmpty) {
             triggerFlashAndPlaySuccess(
               toFlash,
-              (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+              (v) =>
+                  ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
               () => ref.read(flashClearDelayProvider),
-              playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+              playSuccess: () =>
+                  ref.read(gameAudioServiceProvider).playSuccess(),
               shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
             );
           }
