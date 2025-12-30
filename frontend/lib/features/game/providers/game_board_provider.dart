@@ -104,11 +104,23 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     try {
       if (state.id != loaded.id) {
         state = loaded;
+        // Clear any selection from a previous puzzle so the new puzzle can
+        // initialise its own selection (first cell) reliably.
+        try {
+          ref.read(selectedCellProvider.notifier).select(null);
+        } on Object {
+          // ignore
+        }
       }
     } on Object {
       // If state is not yet initialised or any error occurs, fall back to
       // assigning the loaded value.
       state = loaded;
+      try {
+        ref.read(selectedCellProvider.notifier).select(null);
+      } on Object {
+        // ignore
+      }
     }
 
     // Attempt to restore persisted progress for this puzzle id.
@@ -219,23 +231,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         } on Object {
           // ignore
         }
-        // If nothing is currently selected, select the first cell of the
-        // first entry so the UI focuses the puzzle on load.
-        try {
-          final selected = ref.read(selectedCellProvider);
-          if (selected == null) {
-            final first = entries.first;
-            final firstDir = first.direction == 'across'
-                ? WordDirection.horizontal
-                : WordDirection.vertical;
-            ref.read(wordDirectionProvider.notifier).setDirection(firstDir);
-            ref
-                .read(selectedCellProvider.notifier)
-                .select(SelectedCell(first.y, first.x));
-          }
-        } on Object {
-          // ignore selection failures
-        }
+        // Selection is intentionally not set here; UI layers (e.g.
+        // GameBoardObserver/Crossword widgets) handle auto-selection when
+        // they attach. Avoid selecting here to prevent carrying focus
+        // across provider-only contexts or before widgets are ready.
       } on Object catch (e, stack) {
         if (kDebugMode) {
           debugPrint('Error updating found/locked words: $e\n$stack');
@@ -562,13 +561,22 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               newCells.addAll(wordCheck.getCellKeys(e));
             }
           }
-          triggerFlashAndPlaySuccess(
-            newCells,
-            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-            () => ref.read(flashClearDelayProvider),
-            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
-            shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
-          );
+            // Filter out any cells that are already flashing to avoid
+            // re-flashing the same visual elements (helps when revealAll is
+            // invoked while a previous reveal's flash is active). Do NOT
+            // filter locked cells here — entries that are partially locked
+            // but newly completed should still flash their cells.
+            final currentlyFlashing = Set<CellKey>.from(ref.read(flashingCellsProvider));
+            final toFlash = newCells.where((c) => !currentlyFlashing.contains(c)).toSet();
+          if (toFlash.isNotEmpty) {
+            triggerFlashAndPlaySuccess(
+              toFlash,
+              (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+              () => ref.read(flashClearDelayProvider),
+              playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+              shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
+            );
+          }
         }
       } on Object {
         // ignore
@@ -666,24 +674,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Clear all game state
     ref.read(foundWordsProvider.notifier).setFoundWords(<String>{});
     ref.read(lockedCellsProvider.notifier).setLockedCells(<CellKey>{});
-    // Select the first cell of the first entry after reset (if present),
-    // otherwise clear selection.
+    // After a reset we deliberately clear selection so UI doesn't retain
+    // focus on previously-selected cells from the prior game state.
     try {
-      final entries = state.entries;
-      if (entries != null && entries.isNotEmpty) {
-        final first = entries.first;
-        final firstDir = first.direction == 'across'
-            ? WordDirection.horizontal
-            : WordDirection.vertical;
-        ref.read(wordDirectionProvider.notifier).setDirection(firstDir);
-        ref
-            .read(selectedCellProvider.notifier)
-            .select(SelectedCell(first.y, first.x));
-      } else {
-        ref.read(selectedCellProvider.notifier).select(null);
-      }
-    } on Object {
       ref.read(selectedCellProvider.notifier).select(null);
+    } on Object {
+      // ignore
     }
     ref.read(flashingCellsProvider.notifier).setFlashingCells(<CellKey>{});
     ref
