@@ -393,16 +393,16 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
           ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
           triggerFlashAndPlaySuccess(
-        allFlashing,
-        (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-        () => ref.read(flashClearDelayProvider),
-        playSuccess: () {
-          if (!ref.read(gameAudioMutedProvider)) {
-            return ref.read(gameAudioServiceProvider).playSuccess();
-          }
-          return Future.value();
-        },
-      );
+            allFlashing,
+            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+            () => ref.read(flashClearDelayProvider),
+            playSuccess: () {
+              if (!ref.read(gameAudioMutedProvider)) {
+                return ref.read(gameAudioServiceProvider).playSuccess();
+              }
+              return Future.value();
+            },
+          );
           try {
             _triggerEndGameIfSolved();
           } on Object {
@@ -508,22 +508,29 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       // Capture previously found words and locked cells so we don't flash
       // words that were already marked as found or whose cells were already
       // locked (previously flashed) before revealAll was invoked.
-      final priorFound = Set<String>.from(ref.read(foundWordsProvider));
       final priorLocked = Set<CellKey>.from(ref.read(lockedCellsProvider));
+      final priorFound = Set<String>.from(ref.read(foundWordsProvider));
       try {
         for (final e in state.entries!) {
           final key = wordCheck.getWordKey(e);
           allKeys.add(key);
           // If this entry was incomplete before but is complete after reveal,
           // treat it as newly found and include its cells for flashing.
+          // Determine newly found solely from the board before/after state
+          // and whether its cells were previously locked. This avoids
+          // relying on `foundWordsProvider` which may be momentarily out of
+          // sync and could cause already-completed words to be flashed.
           final wasComplete = wordCheck.isWordComplete(beforeBoard, e);
           final isCompleteNow = wordCheck.isWordComplete(state, e);
+          final cellKeys = wordCheck.getCellKeys(e);
+          final wasLocked = priorLocked.containsAll(cellKeys);
           // Only consider this entry newly found if it was incomplete before,
           // is complete now, was not previously in the authoritative found
           // set, and its cells were not already locked (previous flash).
-          final cellKeys = wordCheck.getCellKeys(e);
-          final wasLocked = priorLocked.containsAll(cellKeys);
-          if (!wasComplete && isCompleteNow && !priorFound.contains(key) && !wasLocked) {
+          if (!wasComplete &&
+              isCompleteNow &&
+              !priorFound.contains(key) &&
+              !wasLocked) {
             newlyFound.add(key);
           }
         }
@@ -542,12 +549,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             newCells,
             (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
             () => ref.read(flashClearDelayProvider),
-            playSuccess: () {
-              if (!ref.read(gameAudioMutedProvider)) {
-                return ref.read(gameAudioServiceProvider).playSuccess();
-              }
-              return Future.value();
-            },
+            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+            shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
           );
         }
       } on Object {
@@ -587,12 +590,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           all,
           (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
           () => ref.read(flashClearDelayProvider),
-          playSuccess: () {
-            if (!ref.read(gameAudioMutedProvider)) {
-              return ref.read(gameAudioServiceProvider).playSuccess();
-            }
-            return Future.value();
-          },
+          playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+          shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
         );
       } on Object {
         // ignore
@@ -707,7 +706,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
               return;
             }
 
-            ref.read(gameAudioServiceProvider).playVictory();
+            // Respect global mute: do not play victory when audio is muted.
+            if (!ref.read(gameAudioMutedProvider)) {
+              ref.read(gameAudioServiceProvider).playVictory();
+            }
           } on Object catch (e, st) {
             if (kDebugMode) {
               debugPrint('playVictory from GameBoardNotifier failed: $e\n$st');

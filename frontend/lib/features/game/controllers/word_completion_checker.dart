@@ -195,12 +195,8 @@ class WordCompletionChecker {
         allFlashingCells,
         writeFlashingCells,
         readFlashClearDelay,
-        playSuccess: () {
-          if (!readAudioMuted()) {
-            return readGameAudioService().playSuccess();
-          }
-          return Future.value();
-        },
+        playSuccess: () => readGameAudioService().playSuccess(),
+        shouldPlaySound: () => !readAudioMuted(),
       );
     }
 

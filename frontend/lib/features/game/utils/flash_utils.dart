@@ -10,16 +10,23 @@ void triggerFlashAndPlaySuccess(
   Set<CellKey> cells,
   void Function(Set<CellKey>) writeFlashingCells,
   Duration Function() readFlashClearDelay, {
-
   /// Optional async callback to play a success sound when flashing starts.
   Future<void> Function()? playSuccess,
+  /// Optional predicate to decide whether to play the success sound.
+  /// If omitted, the helper will always attempt to play when `playSuccess`
+  /// is provided. Callers should pass a function that returns true when
+  /// audio is allowed (e.g. `() => !ref.read(gameAudioMutedProvider)`).
+  bool Function()? shouldPlaySound,
 }) {
   try {
     writeFlashingCells(cells);
     if (playSuccess != null) {
       try {
-        // Fire-and-forget: don't await playback to avoid delaying UI logic.
-        unawaited(playSuccess());
+        final canPlay = shouldPlaySound == null || shouldPlaySound();
+        if (canPlay) {
+          // Fire-and-forget: don't await playback to avoid delaying UI logic.
+          unawaited(playSuccess());
+        }
       } on Object {
         // ignore audio failures
       }
