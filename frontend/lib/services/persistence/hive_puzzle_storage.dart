@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 // No SharedPreferences import: migration not required (never deployed).
 
@@ -15,7 +17,21 @@ class HivePuzzleStorage {
 
   static Future<Map<String, dynamic>?> load(String id) async {
     final box = Hive.box<String>(boxName);
+    if (kDebugMode) {
+      try {
+        developer.log('Hive box open=${box.isOpen} keys=${box.keys}', name: 'HivePuzzleStorage');
+      } on Object {
+        /* ignore: best-effort logging */
+      }
+    }
     final raw = box.get(id);
+    if (kDebugMode) {
+      try {
+        developer.log('Hive.box.get($id) -> $raw', name: 'HivePuzzleStorage');
+      } on Object {
+        /* ignore: best-effort logging */
+      }
+    }
     if (raw == null) {
       return null;
     }

@@ -11,6 +11,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 
 /// Holds the currently selected puzzle id.
 ///
@@ -68,7 +69,43 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
   // asset key for `rootBundle` by prefixing `data/`.
   final assetPath = 'assets/data/${match.path}';
   final loader = ref.read(puzzleAssetLoaderProvider);
-  return loader(assetPath);
+  var board = await loader(assetPath);
+
+  // Attempt to restore persisted grid from Hive so callers of
+  // `puzzleLoaderProvider.future` receive a board that already includes
+  // any previously-saved progress. This avoids races where the board
+  // is loaded and UI attaches before async restore completes.
+  try {
+    final stored = await HivePuzzleStorage.load(board.id);
+    if (stored != null) {
+      final gridData = stored['grid'];
+      if (gridData is List) {
+        final rows = gridData.length;
+        final cols = rows > 0 && gridData[0] is List
+            ? (gridData[0] as List).length
+            : 0;
+        if (rows == board.grid.length && cols == board.grid[0].length) {
+          final newGrid = <List<String?>>[];
+          for (final r in gridData) {
+            final rowList = <String?>[];
+            for (final c in (r as List)) {
+              if (c == null) {
+                rowList.add(null);
+              } else {
+                rowList.add(c.toString());
+              }
+            }
+            newGrid.add(rowList);
+          }
+          board = board.copyWith(grid: newGrid);
+        }
+      }
+    }
+  } on Object {
+    // ignore restore errors; fallback to original board
+  }
+
+  return board;
 });
 
 /// Load a puzzle from a JSON asset file and convert to GameBoard.
@@ -115,6 +152,7 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
 
   return board;
 }
+
 
 /// Resolve a puzzle id to a strict asset path under `assets/data/`.
 String assetPathForPuzzleId(String id) => 'assets/data/$id.json';

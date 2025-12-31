@@ -89,6 +89,13 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     AsyncValue<GameBoard>? prev,
     AsyncValue<GameBoard> next,
   ) {
+    if (kDebugMode) {
+      try {
+        developer.log('onPuzzleLoaderChanged called prev=${prev?.toString()} next=${next.toString()}', name: 'GameBoardNotifier');
+      } on Object {
+        /* ignore: best-effort logging */
+      }
+    }
     if (!ref.mounted) {
       return;
     }
@@ -103,7 +110,51 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final loaded = next.value;
     try {
       if (state.id != loaded.id) {
+          if (kDebugMode) {
+          try {
+            developer.log('Switching from ${state.id} to ${loaded.id}', name: 'GameBoardNotifier');
+          } on Object {
+            /* ignore: best-effort logging */
+          }
+        }
+        // Persist any pending progress for the currently-loaded puzzle
+        // before switching to the newly-loaded puzzle. Use an async
+        // closure so we do not block the provider listener but ensure
+        // we attempt an immediate save (cancelling the debounce timer).
+        final prev = state;
+        try {
+          _persistTimer?.cancel();
+        } on Object {
+          // ignore
+        }
+        () async {
+          try {
+            final payload = {
+              'schemaVersion': 1,
+              'grid': prev.grid,
+              'savedAt': DateTime.now().toIso8601String(),
+              'foundWords': ref.read(foundWordsProvider).toList(),
+              'lockedCells': ref
+                  .read(lockedCellsProvider)
+                  .map((c) => '${c.row},${c.col}')
+                  .toList(),
+            };
+            await HivePuzzleStorage.save(prev.id, jsonDecode(jsonEncode(payload)));
+          } on Object catch (e, st) {
+            if (kDebugMode) {
+              developer.log('Failed to persist previous puzzle before switch: $e', stackTrace: st);
+            }
+          }
+        }();
+
         state = loaded;
+        if (kDebugMode) {
+          try {
+            developer.log('State assigned to loaded ${loaded.id}', name: 'GameBoardNotifier');
+          } on Object {
+            /* ignore: best-effort logging */
+          }
+        }
         // Clear any selection from a previous puzzle so the new puzzle can
         // initialise its own selection (first cell) reliably.
         try {
@@ -125,12 +176,33 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     // Attempt to restore persisted progress for this puzzle id.
     () async {
+      if (kDebugMode) {
+        try {
+          developer.log('Starting async restore for ${state.id}', name: 'GameBoardNotifier');
+        } on Object {
+          /* ignore: best-effort logging */
+        }
+      }
       try {
         final stored = await HivePuzzleStorage.load(state.id);
+        if (kDebugMode) {
+          try {
+            developer.log('HivePuzzleStorage.load -> id=${state.id} stored=${stored?.toString()}', name: 'GameBoardNotifier');
+          } on Object {
+            /* ignore: best-effort logging */
+          }
+        }
         if (!ref.mounted) {
           return;
         }
         if (stored != null) {
+          if (kDebugMode) {
+            try {
+              developer.log('Applying stored grid for puzzle ${state.id}', name: 'GameBoardNotifier');
+            } on Object {
+              /* ignore: best-effort logging */
+            }
+          }
           final gridData = stored['grid'];
           if (gridData is List) {
             final rows = gridData.length;
