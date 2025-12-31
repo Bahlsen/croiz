@@ -20,7 +20,7 @@ class ClueBannerArrow extends StatelessWidget {
     behavior: HitTestBehavior.opaque,
     child: SizedBox(
       width: fixedWidth,
-      height: ClueBannerContainer.minHeight,
+      height: ClueBannerContainer.fixedHeight,
       child: Center(
         child: Icon(
           icon,

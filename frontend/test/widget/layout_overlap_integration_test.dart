@@ -254,10 +254,11 @@ void main() {
               'Controls take too much space: ${controlsPercent.toStringAsFixed(1)}%',
         );
 
-        // Grid should have at least 40% of the screen
+        // Grid should have at least 35% of the screen (reduced from 40% to
+        // accommodate larger clue banner)
         expect(
           gridPercent,
-          greaterThan(40),
+          greaterThan(35),
           reason:
               'Grid has too little space: ${gridPercent.toStringAsFixed(1)}%',
         );

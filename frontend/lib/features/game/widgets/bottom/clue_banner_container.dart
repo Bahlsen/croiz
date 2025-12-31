@@ -6,15 +6,15 @@ import 'package:croiz/core/responsive/responsive.dart';
 
 /// Container for displaying the clue text with auto-sizing.
 ///
-/// Has a minimum height to ensure visibility and proper layout.
+/// Has a FIXED height - text adapts to fit (shrinks, wraps to multiple lines).
 /// Text automatically shrinks to fit within the container.
 class ClueBannerContainer extends ConsumerWidget {
   const ClueBannerContainer({required this.entry, super.key});
 
   final PuzzleEntryData entry;
 
-  /// Minimum height for the clue banner.
-  static const double minHeight = 56;
+  /// Fixed height for the clue banner.
+  static const double fixedHeight = 72;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,9 +27,9 @@ class ClueBannerContainer extends ConsumerWidget {
         ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
-      // ConstrainedBox ensures minimum height for banner visibility
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: minHeight),
+      // SizedBox with fixed height - banner size never changes
+      child: SizedBox(
+        height: fixedHeight,
         child: Container(
           padding: EdgeInsets.symmetric(
             vertical: ResponsivePadding.sm,
@@ -50,7 +50,7 @@ class ClueBannerContainer extends ConsumerWidget {
                 : '${entry.number}. ${entry.clue!}',
             style: TextStyle(
               color: colorScheme.onSurface,
-              fontSize: ResponsiveFontSize.bodyLarge,
+              fontSize: ResponsiveFontSize.titleMedium,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -61,6 +61,7 @@ class ClueBannerContainer extends ConsumerWidget {
 }
 
 /// Text widget that automatically shrinks font size to fit constraints.
+/// Text can wrap to multiple lines and shrinks to fit the fixed container.
 class _AutoSizeClueText extends StatelessWidget {
   const _AutoSizeClueText({
     required this.text,
@@ -70,46 +71,47 @@ class _AutoSizeClueText extends StatelessWidget {
   final String text;
   final TextStyle style;
 
-  static const double _minFontSize = 10;
-
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
       final maxWidth = constraints.maxWidth;
       final maxHeight = constraints.maxHeight;
-      final baseFontSize = style.fontSize ?? 16;
-      var fontSize = baseFontSize;
-
-      // Find the largest font size that fits within constraints
-      while (fontSize >= _minFontSize) {
+      final baseFontSize = style.fontSize ?? 18;
+      
+      // Try decreasing font sizes until text fits
+      for (var fontSize = baseFontSize; fontSize >= 10; fontSize -= 1) {
         final testStyle = style.copyWith(fontSize: fontSize, height: 1.2);
-        final tp = TextPainter(
-          text: TextSpan(text: text, style: testStyle),
-          textDirection: TextDirection.ltr,
-          textAlign: TextAlign.center,
-        )..layout(maxWidth: maxWidth);
-
-        if (maxHeight.isFinite && tp.height <= maxHeight) {
-          return Center(
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(text: text, style: testStyle),
-            ),
-          );
-        }
-        fontSize -= 0.5;
-      }
-
-      // At minimum font size - make it scrollable
-      final finalStyle = style.copyWith(fontSize: _minFontSize, height: 1.2);
-      return SingleChildScrollView(
-        child: Center(
-          child: RichText(
+          final tp = TextPainter(
+            text: TextSpan(text: text, style: testStyle),
+            textDirection: TextDirection.ltr,
             textAlign: TextAlign.center,
-            text: TextSpan(text: text, style: finalStyle),
+            maxLines: 3,
+          )..layout(maxWidth: maxWidth);
+
+          if (tp.height <= maxHeight) {
+            return Center(
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: testStyle,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            );
+          }
+        }
+
+        // Fallback: minimum font size with ellipsis
+        final minStyle = style.copyWith(fontSize: 10, height: 1.2);
+        return Center(
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: minStyle,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      );
-    },
-  );
+        );
+      },
+    );
 }

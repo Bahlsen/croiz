@@ -8,8 +8,8 @@ import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 /// all remaining space after controls are measured.
 ///
 /// The grid maintains a square aspect ratio (min of width/height) and is
-/// aligned to the BOTTOM of the available space. This eliminates the gap
-/// between the grid and the divider/controls below.
+/// aligned to the TOP of the available space to eliminate the gap
+/// between the top of the screen and the grid.
 class CrosswordGridArea extends StatelessWidget {
   const CrosswordGridArea({super.key});
 
@@ -30,9 +30,9 @@ class CrosswordGridArea extends StatelessWidget {
         );
       }
 
-      // Align to bottom so grid is adjacent to divider (no gap)
+      // Align to top so grid is adjacent to the top of the screen (no gap)
       return Align(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         child: SizedBox(
           width: size,
           height: size,

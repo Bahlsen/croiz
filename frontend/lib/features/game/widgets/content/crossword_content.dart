@@ -44,12 +44,8 @@ class CrosswordContent extends ConsumerWidget {
             Column(
               children: [
                 // Grid takes ALL remaining space after controls are measured.
-                // Padding at top for visual breathing room.
                 const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: CrosswordGridArea(),
-                  ),
+                  child: CrosswordGridArea(),
                 ),
                 // Spacing between grid and controls
                 const SizedBox(height: 8),
