@@ -19,7 +19,6 @@ import 'package:croiz/features/game/widgets/end_game_overlay.dart';
 /// ```
 /// Column
 /// ├── Expanded (CrosswordGridArea) - takes remaining space, grid centered
-/// ├── Divider - fixed 1px
 /// └── CrosswordControlsArea - intrinsic height (clue + keyboard)
 /// ```
 class CrosswordContent extends ConsumerWidget {
@@ -47,12 +46,6 @@ class CrosswordContent extends ConsumerWidget {
                 const Expanded(
                   child: CrosswordGridArea(),
                 ),
-                // Spacing between grid and controls
-                const SizedBox(height: 8),
-                // Simple divider - fixed height
-                const Divider(height: 1, thickness: 0.5),
-                // Spacing after divider
-                const SizedBox(height: 8),
                 // Controls area with intrinsic height.
                 // This is measured FIRST, then grid gets the rest.
                 CrosswordControlsArea(controller: controller),

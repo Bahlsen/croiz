@@ -45,10 +45,6 @@ class ClueBannerContainer extends ConsumerWidget {
           decoration: BoxDecoration(
             color: colorScheme.surface,
             borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
-            border: Border.all(
-              color: colorScheme.onSurface.withAlpha((0.12 * 255).round()),
-              width: 1,
-            ),
           ),
           alignment: Alignment.center,
           child: _AutoSizeClueText(
