@@ -5,6 +5,7 @@ import 'package:croiz/widgets/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';
+import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -226,7 +227,23 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     if (ctx == null) {
       return;
     }
+    
+    // Reveal the word
     ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
+    
+    // After revealing, find and navigate to the next empty cell
+    final updatedBoard = ref.read(gameBoardProvider);
+    final isAcross = dir == WordDirection.horizontal;
+    final nextEmpty = findNextEmptyFromEntry(
+      containing: ctx.entry,
+      wantAcross: isAcross,
+      board: updatedBoard,
+      entries: updatedBoard.entries,
+      skipLocked: false,
+    );
+    if (nextEmpty != null) {
+      ref.read(selectedCellProvider.notifier).select(nextEmpty);
+    }
   }
 
   void _revealAll() {

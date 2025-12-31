@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_board_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -309,5 +311,91 @@ void main() {
       final after = container.read(flashingCellsProvider);
       expect(after, isEmpty);
     });
+  });
+
+  test('revealEntry should advance selection to next empty cell', () {
+    // Two entries: word 1 at row 0 (ABC), word 2 at row 1 (DEF)
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'ABC',
+      ),
+      const PuzzleEntryData(
+        number: 2,
+        direction: 'across',
+        x: 0,
+        y: 1,
+        length: 3,
+        answer: 'DEF',
+      ),
+    ];
+
+    final board = GameBoard(
+      id: 'reveal-advance',
+      title: 'Reveal Advance Test',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null], // word 1 - empty
+        [null, null, null], // word 2 - empty
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: entries,
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // Select first cell of word 1
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.horizontal);
+
+    // Reveal word 1
+    container.read(gameBoardProvider.notifier).revealEntry(entries[0]);
+
+    // Simulate what _revealWord does: find next empty cell
+    final updatedBoard = container.read(gameBoardProvider);
+    final nextEmpty = findNextEmptyFromEntry(
+      containing: entries[0],
+      wantAcross: true,
+      board: updatedBoard,
+      entries: updatedBoard.entries,
+      skipLocked: false,
+    );
+
+    // Should find first cell of word 2 (row 1, col 0)
+    expect(nextEmpty, isNotNull);
+    expect(nextEmpty!.row, 1);
+    expect(nextEmpty.col, 0);
+
+    // Update selection
+    container.read(selectedCellProvider.notifier).select(nextEmpty);
+
+    final sel = container.read(selectedCellProvider);
+    expect(sel, isNotNull);
+    expect(sel!.row, 1, reason: 'Should advance to next word row');
+    expect(sel.col, 0, reason: 'Should advance to first cell of next word');
   });
 }
