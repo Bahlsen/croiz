@@ -132,7 +132,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   context,
                 ).textTheme.displayLarge?.copyWith(
                   letterSpacing: 8,
-                  fontSize: ResponsiveFontSize.displayLarge,
+                  fontSize: ResponsiveFontSize.headlineLarge,
                 ),
               ),
               SizedBox(height: ResponsiveSpacing.xs),
