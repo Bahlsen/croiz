@@ -848,6 +848,73 @@ void main() {
         testContainer.dispose();
       },
     );
+
+    test(
+      'backspace on empty cell moves to previous cell and clears it',
+      () {
+        final testContainer = ProviderContainer(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            puzzleLoaderProvider.overrideWithValue(
+              AsyncValue.data(
+                GameBoard(
+                  id: 'test',
+                  title: 'Test Board',
+                  gridSize: 5,
+                  createdAt: DateTime.now(),
+                  grid: [
+                    ['C', 'A', 'T', '', ''],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                    [null, null, null, null, null],
+                  ],
+                  clues: {},
+                  blackCells: [
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                    [false, false, false, false, false],
+                  ],
+                  difficulty: 1,
+                ),
+              ),
+            ),
+          ],
+        );
+
+        final controller = CrosswordInputController.fromContainer(
+          testContainer,
+        );
+
+        // Select empty cell at (0, 3)
+        testContainer
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 3));
+
+        // Verify current cell is empty
+        expect(testContainer.read(gameBoardProvider).grid[0][3], '');
+
+        // Verify previous cell has 'T'
+        expect(testContainer.read(gameBoardProvider).grid[0][2], 'T');
+
+        // Simulate backspace on empty cell
+        controller.clearCurrent();
+
+        // Selection should have moved to previous cell (0, 2)
+        final sel = testContainer.read(selectedCellProvider);
+        expect(sel, isNotNull);
+        expect(sel!.row, 0);
+        expect(sel.col, 2);
+
+        // The previous cell should now be cleared (empty string or null)
+        final clearedValue = testContainer.read(gameBoardProvider).grid[0][2];
+        expect(clearedValue == null || clearedValue.isEmpty, isTrue);
+
+        testContainer.dispose();
+      },
+    );
   });
 
   group('CrosswordInputController - Initial Selection', () {

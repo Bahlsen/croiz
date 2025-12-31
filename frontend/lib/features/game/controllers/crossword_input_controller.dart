@@ -157,6 +157,67 @@ class CrosswordInputController {
   // Backspace / Clear
   // ─────────────────────────────────────────────────────────────────────────
 
+  /// Find the previous cell within the same entry (for backspace on empty cell).
+  /// 
+  /// If [allowLocked] is true, returns locked cells too (caller should check
+  /// before clearing). If false, skips locked cells.
+  SelectedCell? _findPreviousCellInEntry(
+    SelectedCell sel,
+    bool isAcross,
+    List<PuzzleEntryData>? entries,
+    GameBoard board,
+    Set<CellKey> lockedCells, {
+    bool allowLocked = false,
+  }) {
+    if (entries == null || entries.isEmpty) {
+      // Fallback: just go to previous cell in direction
+      final prevRow = sel.row + (isAcross ? 0 : -1);
+      final prevCol = sel.col + (isAcross ? -1 : 0);
+      if (prevRow >= 0 &&
+          prevRow < board.gridSize &&
+          prevCol >= 0 &&
+          prevCol < board.grid[prevRow].length) {
+        final key = CellKey(prevRow, prevCol);
+        if (allowLocked || !lockedCells.contains(key)) {
+          return SelectedCell(prevRow, prevCol);
+        }
+      }
+      return null;
+    }
+
+    final index = _tryReadCellEntriesIndex();
+    final containing = findContainingEntry(
+      row: sel.row,
+      col: sel.col,
+      wantAcross: isAcross,
+      entries: entries,
+      index: index,
+    );
+
+    if (containing == null) {
+      return null;
+    }
+
+    // Search backwards within same entry for the previous cell
+    if (isAcross) {
+      for (var cc = sel.col - 1; cc >= containing.x; cc--) {
+        final key = CellKey(containing.y, cc);
+        if (allowLocked || !lockedCells.contains(key)) {
+          return SelectedCell(containing.y, cc);
+        }
+      }
+    } else {
+      for (var rr = sel.row - 1; rr >= containing.y; rr--) {
+        final key = CellKey(rr, containing.x);
+        if (allowLocked || !lockedCells.contains(key)) {
+          return SelectedCell(rr, containing.x);
+        }
+      }
+    }
+
+    return null;
+  }
+
   void clearCurrent() {
     final sel = _read(selectedCellProvider);
     // debug logs removed
@@ -173,14 +234,39 @@ class CrosswordInputController {
     }
 
     final board = _safeReadBoard();
-
-    // Clear the current cell even if it's already empty (keeps behavior simple)
-    _read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
-    // cleared current cell
-
     final dir = _read(wordDirectionProvider);
     final isAcross = dir == WordDirection.horizontal;
     final entries = board.entries;
+
+    // Check if current cell is empty
+    final currentValue = board.grid[sel.row][sel.col];
+    final currentIsEmpty = currentValue == null || currentValue.isEmpty;
+
+    if (currentIsEmpty) {
+      // If current cell is empty, move to previous cell and clear it (if not locked)
+      final prevCell = _findPreviousCellInEntry(
+        sel,
+        isAcross,
+        entries,
+        board,
+        lockedCells,
+        allowLocked: true, // Allow navigating to locked cells
+      );
+      if (prevCell != null) {
+        // Navigate to the previous cell
+        _read(selectedCellProvider.notifier).select(prevCell);
+        // Only clear if not locked
+        final prevKey = CellKey(prevCell.row, prevCell.col);
+        if (!lockedCells.contains(prevKey)) {
+          _read(gameBoardProvider.notifier).setLetter(prevCell.row, prevCell.col, '');
+        }
+      }
+      return;
+    }
+
+    // Clear the current cell (it has content)
+    _read(gameBoardProvider.notifier).setLetter(sel.row, sel.col, '');
+    // cleared current cell
 
     // Try to find containing entry and move backward within it first,
     // otherwise find the previous filled cell in previous entries.
