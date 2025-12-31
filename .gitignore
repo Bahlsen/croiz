@@ -65,6 +65,10 @@ Temporary Items
 secret/
 credentials/
 
-*_pycache_*/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
 frontend/android/.kotlin/*
-tools/__pycache__/**

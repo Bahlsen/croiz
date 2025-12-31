@@ -33,41 +33,36 @@ final wordCheckDebounceDelayProvider = Provider<Duration>(
 
 /// Main notifier for the game board state.
 class GameBoardNotifier extends Notifier<GameBoard> {
-  bool _listenerAttached = false;
   Timer? _persistTimer;
   static const Duration _persistDebounce = Duration(milliseconds: 200);
   // Track the last loaded puzzle ID to detect changes
   String? _lastLoadedPuzzleId;
+  // Track the previous board's grid for persistence on puzzle switch
+  List<List<String?>>? _previousGrid;
 
   // Compatibility helper used by tests and legacy call sites.
   void setBoard(GameBoard board) => state = board;
 
   @override
   GameBoard build() {
-    if (!_listenerAttached) {
-      _listenerAttached = true;
-      ref.listen<AsyncValue<GameBoard>>(
-        puzzleLoaderProvider,
-        _onPuzzleLoaderChanged,
-        fireImmediately: false,
-      );
+    // Listen for changes to puzzleLoaderProvider to restore progress.
+    // Note: Riverpod manages the subscription lifecycle - we don't need
+    // to track _listenerAttached because ref.listen is designed to be
+    // called in build() and is automatically cleaned up on rebuild.
+    ref.listen<AsyncValue<GameBoard>>(
+      puzzleLoaderProvider,
+      _onPuzzleLoaderChanged,
+      fireImmediately: true,  // Fire immediately to handle initial load
+    );
 
-      final current = ref.read(puzzleLoaderProvider);
-      if (current is AsyncData<GameBoard>) {
-        state = current.value;
-        unawaited(
-          Future.microtask(() => _onPuzzleLoaderChanged(null, current)),
-        );
+    // Cancel any pending timers when the notifier is disposed by Riverpod.
+    ref.onDispose(() {
+      try {
+        _persistTimer?.cancel();
+      } on Object {
+        // ignore
       }
-      // Cancel any pending timers when the notifier is disposed by Riverpod.
-      ref.onDispose(() {
-        try {
-          _persistTimer?.cancel();
-        } on Object {
-          // ignore
-        }
-      });
-    }
+    });
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
 
@@ -78,10 +73,33 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         final prevId = _lastLoadedPuzzleId;
         final newId = board.id;
         if (prevId != null && prevId != newId) {
-          // Puzzle actually changed - clear all game state
+          // IMPORTANT: Capture current state BEFORE clearing, so we can persist
+          // the previous puzzle's progress (foundWords, lockedCells) correctly.
+          final prevFoundWords = ref.read(foundWordsProvider).toList();
+          final prevLockedCells = ref
+              .read(lockedCellsProvider)
+              .map((c) => '${c.row},${c.col}')
+              .toList();
+          // Read the current grid from _previousGrid which we update on each
+          // state change (see _schedulePersist)
+          final prevGrid = _previousGrid;
+
+          // Now clear all game state for the new puzzle
           _clearGameStateOnPuzzleChange(board);
+
+          // Persist the previous puzzle's state asynchronously
+          if (prevGrid != null) {
+            _persistPreviousPuzzle(
+              prevId,
+              prevGrid,
+              prevFoundWords,
+              prevLockedCells,
+            );
+          }
         }
         _lastLoadedPuzzleId = newId;
+        // Initialize _previousGrid when loading a new board
+        _previousGrid = board.grid.map((row) => List<String?>.from(row)).toList();
         return board;
       },
       loading: () {
@@ -133,6 +151,44 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     }
   }
 
+  /// Persist the previous puzzle's state asynchronously.
+  /// This is called from build() BEFORE clearing state, so the values
+  /// are captured correctly.
+  void _persistPreviousPuzzle(
+    String puzzleId,
+    List<List<String?>> grid,
+    List<String> foundWords,
+    List<String> lockedCells,
+  ) {
+    try {
+      _persistTimer?.cancel();
+    } on Object {
+      // ignore
+    }
+    () async {
+      try {
+        final payload = {
+          'schemaVersion': 1,
+          'grid': grid,
+          'savedAt': DateTime.now().toIso8601String(),
+          'foundWords': foundWords,
+          'lockedCells': lockedCells,
+        };
+        await HivePuzzleStorage.save(
+          puzzleId,
+          jsonDecode(jsonEncode(payload)),
+        );
+      } on Object catch (e, st) {
+        if (kDebugMode) {
+          developer.log(
+            'Failed to persist previous puzzle before switch: $e',
+            stackTrace: st,
+          );
+        }
+      }
+    }();
+  }
+
   void _onPuzzleLoaderChanged(
     AsyncValue<GameBoard>? prev,
     AsyncValue<GameBoard> next,
@@ -144,63 +200,22 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       return;
     }
 
-    // Note: The clearing of game state on puzzle change is now handled in
-    // build() via _clearGameStateOnPuzzleChange(), which is more reliable
-    // since build() is always called when the puzzle changes.
-    // This listener now only handles persistence and restoration.
+    // Note: The clearing of game state and persistence of the previous puzzle
+    // is now handled in build() which captures state BEFORE clearing.
+    // This listener now only handles restoration.
 
-    final loaded = next.value;
-    
-    // Determine if the puzzle changed by comparing with previous value.
-    // Determine if the puzzle changed by comparing with previous value.
-    final prevBoard = prev is AsyncData<GameBoard> ? prev.value : null;
-    final puzzleChanged = prevBoard != null && prevBoard.id != loaded.id;
-    
-    // Persist progress from the previous puzzle before switching
-    if (prevBoard != null && puzzleChanged) {
-      try {
-        _persistTimer?.cancel();
-      } on Object {
-        // ignore
-      }
-      () async {
-        try {
-          final payload = {
-            'schemaVersion': 1,
-            'grid': prevBoard.grid,
-            'savedAt': DateTime.now().toIso8601String(),
-            'foundWords': ref.read(foundWordsProvider).toList(),
-            'lockedCells': ref
-                .read(lockedCellsProvider)
-                .map((c) => '${c.row},${c.col}')
-                .toList(),
-          };
-          await HivePuzzleStorage.save(
-            prevBoard.id,
-            jsonDecode(jsonEncode(payload)),
-          );
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            developer.log(
-              'Failed to persist previous puzzle before switch: $e',
-              stackTrace: st,
-            );
-          }
-        }
-      }();
-    }
+    // Use the puzzle id from next.value, not state, because state might not
+    // be updated yet when the listener fires.
+    final puzzleId = next.value.id;
 
     // Attempt to restore persisted progress for this puzzle id.
     () async {
-      // debug logging removed
       try {
-        final stored = await HivePuzzleStorage.load(state.id);
-        // debug logging removed
+        final stored = await HivePuzzleStorage.load(puzzleId);
         if (!ref.mounted) {
           return;
         }
         if (stored != null) {
-          // debug logging removed
           final gridData = stored['grid'];
           if (gridData is List) {
             final rows = gridData.length;
@@ -265,6 +280,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           } on Object catch (_) {
             // ignore per-field restore errors
           }
+        } else {
+          // No stored data - populate initial found/locked sets from current grid
+          _populateInitialFoundLockedFromGrid();
         }
       } on Object catch (e, st) {
         if (kDebugMode) {
@@ -273,10 +291,20 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             stackTrace: st,
           );
         }
+        // On restore failure, still try to populate from grid (if still mounted)
+        if (ref.mounted) {
+          _populateInitialFoundLockedFromGrid();
+        }
       }
     }();
+  }
 
-    // Populate initial found/locked sets based on current grid state.
+  /// Populate initial found/locked sets based on current grid state.
+  /// Called only when there's no stored progress to restore.
+  void _populateInitialFoundLockedFromGrid() {
+    if (!ref.mounted) {
+      return;
+    }
     final entries = state.entries;
     if (entries != null && entries.isNotEmpty) {
       try {
@@ -701,6 +729,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   }
 
   void _schedulePersist() {
+    // Update _previousGrid with current state for accurate persistence on puzzle switch
+    try {
+      _previousGrid = state.grid.map((row) => List<String?>.from(row)).toList();
+    } on Object {
+      // ignore if state not ready
+    }
     try {
       _persistTimer?.cancel();
       _persistTimer = Timer(_persistDebounce, () async {
