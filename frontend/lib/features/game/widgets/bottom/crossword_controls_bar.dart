@@ -9,6 +9,11 @@ import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 
+/// Controls bar containing the clue header and virtual keyboard.
+///
+/// Uses [mainAxisSize: MainAxisSize.min] to only take the space needed.
+/// This allows the parent layout to measure it first and give remaining
+/// space to the grid.
 class CrosswordControlsBar extends ConsumerStatefulWidget {
   const CrosswordControlsBar({
     required this.onKey,
@@ -56,24 +61,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     return Stack(
       children: [
         Column(
-          // Keep the column sized to its content so the controls render
-          // normally in tight layouts. Do not force it to expand.
+          // CRITICAL: MainAxisSize.min makes this widget use intrinsic height.
+          // The parent Column measures this first, then Expanded grid gets rest.
           mainAxisSize: MainAxisSize.min,
           children: [
-            CrosswordClueHeader(
-              key: const ValueKey('clue-banner'),
-              onClear: () {
-                ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
-              },
-              onMenu: () {
-                _openMenu(context);
-              },
-              onReveal: () {
-                setState(() {
-                  _revealOpen = !_revealOpen;
-                });
-              },
-            ),
+            // Clue header - intrinsic height
+            _buildClueHeader(),
+            // Keyboard with intrinsic height (SizedBox inside VirtualKeyboard)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: ResponsivePadding.sm),
               child: VirtualKeyboard(
@@ -86,157 +80,158 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             ),
           ],
         ),
-        // Menu is shown via a dialog so it can occupy more vertical space
-        // than the controls bar area. The dialog contains the same
-        // `CrosswordControlsMenu` widget wrapped in a Stack to satisfy
-        // its Positioned.fill usage.
-        // Reveal overlay (renders above the keyboard when toggled)
+        // Reveal overlay
         if (_revealOpen) ...[
           Positioned.fill(
             child: GestureDetector(
-              onTap: () {
-                setState(() => _revealOpen = false);
-              },
+              onTap: () => setState(() => _revealOpen = false),
               child: Container(color: Colors.transparent),
             ),
           ),
           Positioned(
-            // Match the keyboard horizontal padding (responsive)
-            // so the reveal menu is the same width as the keyboard.
             left: ResponsivePadding.sm,
             right: ResponsivePadding.sm,
             bottom: 0,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: 45.h,
-              ),
-              child: Material(
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
-                ),
-                color: Theme.of(context).cardColor,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ResponsivePadding.md,
-                          vertical: 0,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.of(context)?.reveal ??
-                                      'Reveal',
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: ResponsiveFontSize.titleMedium,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                color: Theme.of(context).colorScheme.onSurface,
-                                size: ResponsiveIconSize.md,
-                              ),
-                              onPressed: () =>
-                                  setState(() => _revealOpen = false),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.tag,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: ResponsiveIconSize.md,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealLetterOption ??
-                              'Letter',
-                          style: TextStyle(
-                            fontSize: ResponsiveFontSize.bodyMedium,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() => _revealOpen = false);
-                          final sel = ref.read(selectedCellProvider);
-                          if (sel == null) {
-                            return;
-                          }
-                          ref
-                              .read(gameBoardProvider.notifier)
-                              .revealLetterAt(sel.row, sel.col);
-                        },
-                      ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.checklist,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: ResponsiveIconSize.md,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealWordOption ??
-                              'Word',
-                          style: TextStyle(
-                            fontSize: ResponsiveFontSize.bodyMedium,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() => _revealOpen = false);
-                          final sel = ref.read(selectedCellProvider);
-                          if (sel == null) {
-                            return;
-                          }
-                          final board = ref.read(gameBoardProvider);
-                          final dir = ref.read(wordDirectionProvider);
-                          final ctx = computeCurrentEntry(board, sel, dir);
-                          if (ctx == null) {
-                            return;
-                          }
-                          ref
-                              .read(gameBoardProvider.notifier)
-                              .revealEntry(ctx.entry);
-                        },
-                      ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: Icon(
-                          Icons.grid_on,
-                          color: Theme.of(context).colorScheme.onSurface,
-                          size: ResponsiveIconSize.md,
-                        ),
-                        title: Text(
-                          AppLocalizations.of(context)?.revealAllOption ??
-                              'All',
-                          style: TextStyle(
-                            fontSize: ResponsiveFontSize.bodyMedium,
-                          ),
-                        ),
-                        onTap: () {
-                          setState(() => _revealOpen = false);
-                          ref.read(gameBoardProvider.notifier).revealAll();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            child: _buildRevealMenu(context),
           ),
         ],
       ],
     );
+  }
+
+  Widget _buildClueHeader() => CrosswordClueHeader(
+    key: const ValueKey('clue-banner'),
+    onClear: () {
+      ref.read(gameBoardProvider.notifier).clearIncorrectLetters();
+    },
+    onMenu: () {
+      _openMenu(context);
+    },
+    onReveal: () {
+      setState(() {
+        _revealOpen = !_revealOpen;
+      });
+    },
+  );
+
+  Widget _buildRevealMenu(BuildContext context) => ConstrainedBox(
+    constraints: BoxConstraints(maxHeight: 45.h),
+    child: Material(
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
+      ),
+      color: Theme.of(context).cardColor,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: ResponsivePadding.md,
+                vertical: 0,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        AppLocalizations.of(context)?.reveal ?? 'Reveal',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: ResponsiveFontSize.titleMedium,
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: ResponsiveIconSize.md,
+                    ),
+                    onPressed: () => setState(() => _revealOpen = false),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            _buildRevealOption(
+              context,
+              Icons.tag,
+              AppLocalizations.of(context)?.revealLetterOption ?? 'Letter',
+              _revealLetter,
+            ),
+            const Divider(height: 1),
+            _buildRevealOption(
+              context,
+              Icons.checklist,
+              AppLocalizations.of(context)?.revealWordOption ?? 'Word',
+              _revealWord,
+            ),
+            const Divider(height: 1),
+            _buildRevealOption(
+              context,
+              Icons.grid_on,
+              AppLocalizations.of(context)?.revealAllOption ?? 'All',
+              _revealAll,
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  Widget _buildRevealOption(
+    BuildContext context,
+    IconData icon,
+    String title,
+    VoidCallback onTap,
+  ) =>
+      ListTile(
+        leading: Icon(
+          icon,
+          color: Theme.of(context).colorScheme.onSurface,
+          size: ResponsiveIconSize.md,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+        ),
+        onTap: onTap,
+      );
+
+  void _revealLetter() {
+    setState(() => _revealOpen = false);
+    final sel = ref.read(selectedCellProvider);
+    if (sel == null) {
+      return;
+    }
+    ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
+  }
+
+  void _revealWord() {
+    setState(() => _revealOpen = false);
+    final sel = ref.read(selectedCellProvider);
+    if (sel == null) {
+      return;
+    }
+    final board = ref.read(gameBoardProvider);
+    final dir = ref.read(wordDirectionProvider);
+    final ctx = computeCurrentEntry(board, sel, dir);
+    if (ctx == null) {
+      return;
+    }
+    ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
+  }
+
+  void _revealAll() {
+    setState(() => _revealOpen = false);
+    ref.read(gameBoardProvider.notifier).revealAll();
   }
 
   Future<void> _openMenu(BuildContext ctx) async {
@@ -245,17 +240,13 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     }
     _dialogOpen = true;
 
-    // local provider reads not needed here (menu reads providers itself)
-
     await showDialog<void>(
       context: ctx,
       barrierDismissible: true,
       builder: (dialogCtx) => Stack(
         children: [
           CrosswordControlsMenu(
-            onClose: () {
-              Navigator.of(dialogCtx).pop();
-            },
+            onClose: () => Navigator.of(dialogCtx).pop(),
             onToggleKeyboard: (v) {
               ref
                   .read(gameKeyboardLayoutProvider.notifier)

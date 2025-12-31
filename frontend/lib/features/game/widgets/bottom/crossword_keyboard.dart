@@ -9,9 +9,11 @@ class CrosswordKeyboard extends StatelessWidget {
     required this.layout,
     required this.onKey,
     required this.onBackspace,
-    required this.availableHeight,
+    this.keyHeight = 64,
+    this.letterFontSize = 16,
     super.key,
   });
+
   // Expose the same named layouts as the underlying VirtualKeyboard so
   // callers can switch between AZERTY/QWERTY without importing
   // `VirtualKeyboard` directly.
@@ -21,13 +23,15 @@ class CrosswordKeyboard extends StatelessWidget {
   final List<List<String>> layout;
   final void Function(String) onKey;
   final VoidCallback onBackspace;
-  final double availableHeight;
+  final double keyHeight;
+  final double letterFontSize;
 
   @override
   Widget build(BuildContext context) => VirtualKeyboard(
     layout: layout,
     onKey: onKey,
     onBackspace: onBackspace,
-    availableHeight: availableHeight,
+    keyHeight: keyHeight,
+    letterFontSize: letterFontSize,
   );
 }

@@ -42,7 +42,7 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         bottom: true,
-        top: false,
+        top: true,
         child: GameBoardObserver(
           controller: widget.controller,
           child: CrosswordContent(controller: widget.controller),

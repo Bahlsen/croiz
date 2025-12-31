@@ -35,7 +35,7 @@ void main() {
       expect(textSpan.style?.fontSize, greaterThan(0));
     });
 
-    testWidgets('banner has fixed height', (tester) async {
+    testWidgets('banner expands to fill available space', (tester) async {
       const entry = PuzzleEntryData(
         number: 1,
         direction: 'across',
@@ -49,18 +49,25 @@ void main() {
         Sizer(
           builder: (context, orientation, deviceType) => const MaterialApp(
             home: Scaffold(
-              body: Center(child: ClueBannerContainer(entry: entry)),
+              body: SizedBox(
+                height: 100,
+                width: 300,
+                child: ClueBannerContainer(entry: entry),
+              ),
             ),
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      // Find the SizedBox that sets the fixed height (responsive height)
-      final sizedBoxFinder = find.byWidgetPredicate(
-        (widget) => widget is SizedBox && (widget.height ?? 0) > 0,
-      );
-      expect(sizedBoxFinder, findsAtLeastNWidgets(1));
+      // Banner should expand to fill the available space
+      final container = tester.widget<Container>(find.byType(Container).first);
+      expect(container.decoration, isA<BoxDecoration>());
+      
+      // Container should render at the constrained size
+      final size = tester.getSize(find.byType(Container).first);
+      expect(size.height, equals(100));
+      expect(size.width, equals(300));
     });
 
     testWidgets(
@@ -87,13 +94,14 @@ void main() {
               home: Scaffold(
                 body: SizedBox(
                   width: 400,
+                  height: 100,
                   child: Row(
                     children: [
-                      SizedBox(width: 88), // left arrow space
+                      SizedBox(width: 40), // left arrow space
                       SizedBox(width: 8),
                       Expanded(child: ClueBannerContainer(entry: entry)),
                       SizedBox(width: 8),
-                      SizedBox(width: 88), // right arrow space
+                      SizedBox(width: 40), // right arrow space
                     ],
                   ),
                 ),
@@ -103,11 +111,9 @@ void main() {
         );
         await tester.pumpAndSettle();
 
-        // Banner height should exist
-        final sizedBoxFinder = find.byWidgetPredicate(
-          (widget) => widget is SizedBox && (widget.height ?? 0) > 0,
-        );
-        expect(sizedBoxFinder, findsAtLeastNWidgets(1));
+        // Banner should fill available width in Expanded
+        final bannerSize = tester.getSize(find.byType(ClueBannerContainer));
+        expect(bannerSize.width, greaterThan(200)); // Takes remaining space
 
         // RichText should contain the full clue
         final richText = tester.widget<RichText>(find.byType(RichText).first);

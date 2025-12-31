@@ -154,17 +154,21 @@ class ResponsiveButton {
 }
 
 /// Responsive keyboard dimensions for the virtual keyboard.
+///
+/// Key heights are clamped to reasonable maximums to prevent oversized
+/// keyboards on large screens. A comfortable keyboard is around 180-220px
+/// total height (3 rows × ~50-60px + spacing).
 class ResponsiveKeyboard {
   ResponsiveKeyboard._();
 
-  /// Small key height
-  static double get keyHeightSmall => 5.5.h;
+  /// Small key height (clamped to max 42px)
+  static double get keyHeightSmall => 5.5.h.clamp(32.0, 42.0);
 
-  /// Medium key height
-  static double get keyHeightMedium => 7.h;
+  /// Medium key height (clamped to max 50px)
+  static double get keyHeightMedium => 7.h.clamp(38.0, 50.0);
 
-  /// Large key height
-  static double get keyHeightLarge => 9.h;
+  /// Large key height (clamped to max 60px)
+  static double get keyHeightLarge => 9.h.clamp(44.0, 60.0);
 
   /// Small letter font size
   static double get letterFontSmall => 12.sp;

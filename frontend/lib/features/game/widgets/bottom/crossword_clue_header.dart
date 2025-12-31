@@ -92,13 +92,19 @@ class CrosswordClueHeader extends ConsumerWidget {
     // Build row with arrows and center widget (no Stack)
     final mainRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (leftArrow != null) leftArrow else SizedBox(width: 22.w),
-        SizedBox(width: ResponsivePadding.md),
+        if (leftArrow != null)
+          leftArrow
+        else
+          const SizedBox(width: ClueBannerArrow.fixedWidth),
+        SizedBox(width: ResponsivePadding.sm),
         Expanded(child: centerWidget),
-        SizedBox(width: ResponsivePadding.md),
-        if (rightArrow != null) rightArrow else SizedBox(width: 22.w),
+        SizedBox(width: ResponsivePadding.sm),
+        if (rightArrow != null)
+          rightArrow
+        else
+          const SizedBox(width: ClueBannerArrow.fixedWidth),
       ],
     );
 

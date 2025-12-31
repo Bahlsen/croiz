@@ -1,4 +1,5 @@
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
+import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,8 @@ void main() {
       // Use findRichText: true because ClueBannerContainer uses RichText
       expect(find.text('1. Across clue', findRichText: true), findsOneWidget);
 
-      // Tap on banner
-      await tester.tap(find.byType(CrosswordClueHeader));
+      // Tap on the ClueBannerContainer (which has the GestureDetector)
+      await tester.tap(find.byType(ClueBannerContainer));
       await tester.pump();
 
       expect(container.read(wordDirectionProvider), WordDirection.vertical);

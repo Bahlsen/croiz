@@ -1,14 +1,30 @@
 import 'dart:developer' as developer;
-import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/services/providers.dart';
 import 'keyboard/keyboard_row.dart';
 
 /// A simple in-app virtual keyboard with uppercase A–Z letters and Backspace.
+///
+/// ## Layout Architecture (Flutter Best Practice)
+///
+/// This widget follows Flutter's constraint model: "Constraints go down.
+/// Sizes go up. Parent sets position."
+///
+/// The keyboard has an **intrinsic height** determined by:
+/// - [keyHeight] × number of rows
+/// - [rowSpacing] × (rows - 1)
+/// - [padding] vertical
+///
+/// The parent should NOT try to resize the keyboard. Instead:
+/// 1. Place keyboard in a Column with `mainAxisSize: MainAxisSize.min`
+/// 2. Let the keyboard report its intrinsic size upward
+/// 3. Use `Expanded` on sibling widgets that should take remaining space
+///
+/// Width adapts to parent constraints (fills available width).
 class VirtualKeyboard extends ConsumerWidget {
   const VirtualKeyboard({
     super.key,
@@ -26,7 +42,6 @@ class VirtualKeyboard extends ConsumerWidget {
     this.keyRadius = 4,
     this.keyColor,
     this.disabledKeyColor,
-    this.availableHeight,
   });
 
   final ValueChanged<String>? onKey;
@@ -34,7 +49,11 @@ class VirtualKeyboard extends ConsumerWidget {
   final Set<String>? enabledLetters;
   final List<List<String>>? layout;
   final bool includeBackspace;
+
+  /// Height of each key row. This is the PRIMARY sizing parameter.
+  /// The keyboard's total height = (keyHeight × rows) + spacing + padding.
   final double keyHeight;
+
   final double letterFontSize;
   final double keySpacing;
   final double rowSpacing;
@@ -43,11 +62,6 @@ class VirtualKeyboard extends ConsumerWidget {
   final double keyRadius;
   final Color? keyColor;
   final Color? disabledKeyColor;
-
-  /// When provided, the parent precomputes the vertical space available
-  /// for the keyboard and passes it here. This avoids LayoutBuilder usage
-  /// inside the keyboard and makes tests deterministic.
-  final double? availableHeight;
 
   /// Token used to represent the backspace key in layouts.
   static const String backspaceToken = 'BACKSPACE';
@@ -76,53 +90,55 @@ class VirtualKeyboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rows = _buildRows();
+    final rowCount = rows.length;
+    final totalSpacing = rowCount > 1 ? rowSpacing * (rowCount - 1) : 0.0;
 
-    return LayoutBuilder(
-      builder: (ctx, constraints) {
-        final metrics = _computeLayoutMetrics(context, constraints, rows);
+    // Calculate intrinsic height - this is what we report to the parent
+    final intrinsicHeight =
+        (keyHeight * rowCount) + totalSpacing + padding.vertical;
 
-        if (kDebugMode) {
-          debugPrint(
-            'VirtualKeyboard.layout: rawAvailable=${metrics.rawAvailable} '
-            'parentAvailable=${metrics.parentAvailable} rowCount=${rows.length} '
-            'totalSpacing=${metrics.totalSpacing} effectiveKeyHeight=${metrics.effectiveKeyHeight}',
-          );
-        }
+    if (kDebugMode) {
+      debugPrint(
+        'VirtualKeyboard: keyHeight=$keyHeight rows=$rowCount '
+        'intrinsicHeight=$intrinsicHeight',
+      );
+    }
 
-        return Semantics(
-          container: true,
-          child: Padding(
-            padding: padding,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                for (var i = 0; i < rows.length; i++) ...[
-                  SizedBox(
-                    height: metrics.effectiveKeyHeight,
-                    child: KeyboardRow(
-                      keys: rows[i],
-                      keyHeight: metrics.effectiveKeyHeight,
-                      letterFontSize: letterFontSize,
-                      keySpacing: keySpacing,
-                      rowMaxWidth: metrics.availableRowWidth,
-                      onKey: (k) => onKey?.call(k.toUpperCase()),
-                      onBackspace: onBackspace,
-                      onPlayClick: () => _maybePlayType(ref),
-                      onPlayDelete: () => _maybePlayDelete(ref),
-                      enabledLetters: enabledLetters,
-                      enableFeedback: enableFeedback,
-                      keyRadius: keyRadius,
-                      keyColor: keyColor,
-                      disabledKeyColor: disabledKeyColor,
-                    ),
-                  ),
-                  if (i != rows.length - 1) SizedBox(height: rowSpacing),
-                ],
-              ],
-            ),
-          ),
-        );
-      },
+    // Use SizedBox to declare our intrinsic height to the parent.
+    // Width is unconstrained (will fill parent's width).
+    return SizedBox(
+      height: intrinsicHeight,
+      child: Padding(
+        padding: padding,
+        child: Column(
+          // min ensures we don't try to expand beyond our declared height
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < rows.length; i++) ...[
+              SizedBox(
+                height: keyHeight,
+                child: KeyboardRow(
+                  keys: rows[i],
+                  keyHeight: keyHeight,
+                  letterFontSize: letterFontSize,
+                  keySpacing: keySpacing,
+                  // No rowMaxWidth - let KeyboardRow handle its own width
+                  onKey: (k) => onKey?.call(k.toUpperCase()),
+                  onBackspace: onBackspace,
+                  onPlayClick: () => _maybePlayType(ref),
+                  onPlayDelete: () => _maybePlayDelete(ref),
+                  enabledLetters: enabledLetters,
+                  enableFeedback: enableFeedback,
+                  keyRadius: keyRadius,
+                  keyColor: keyColor,
+                  disabledKeyColor: disabledKeyColor,
+                ),
+              ),
+              if (i != rows.length - 1) SizedBox(height: rowSpacing),
+            ],
+          ],
+        ),
+      ),
     );
   }
 
@@ -142,105 +158,8 @@ class VirtualKeyboard extends ConsumerWidget {
     return baseLayout;
   }
 
-  /// Compute layout metrics for the keyboard.
-  _LayoutMetrics _computeLayoutMetrics(
-    BuildContext context,
-    BoxConstraints constraints,
-    List<List<String>> rows,
-  ) {
-    final rowCount = rows.length;
-    final totalSpacing = rowCount > 0 ? rowSpacing * (rowCount - 1) : 0.0;
-
-    final rawAvailable = _computeRawAvailableHeight(context, constraints);
-    final parentAvailable = (rawAvailable - padding.vertical).clamp(
-      0.0,
-      double.infinity,
-    );
-
-    final effectiveKeyHeight = _computeEffectiveKeyHeight(
-      rowCount,
-      totalSpacing,
-      parentAvailable,
-    );
-
-    final rawMaxWidth = constraints.maxWidth.isFinite
-        ? constraints.maxWidth
-        : MediaQuery.of(context).size.width;
-    final availableRowWidth = rawMaxWidth.isFinite
-        ? (rawMaxWidth - padding.horizontal).clamp(0.0, double.infinity)
-        : double.infinity;
-
-    return _LayoutMetrics(
-      rawAvailable: rawAvailable,
-      parentAvailable: parentAvailable,
-      totalSpacing: totalSpacing,
-      effectiveKeyHeight: effectiveKeyHeight,
-      availableRowWidth: availableRowWidth,
-    );
-  }
-
-  double _computeRawAvailableHeight(
-    BuildContext context,
-    BoxConstraints constraints,
-  ) {
-    if (availableHeight != null) {
-      return math.min<double>(
-        availableHeight!,
-        constraints.maxHeight.isFinite
-            ? constraints.maxHeight
-            : MediaQuery.of(context).size.height,
-      );
-    }
-    if (constraints.maxHeight.isFinite) {
-      return constraints.maxHeight;
-    }
-
-    // When the keyboard is placed in a parent that gives it unbounded
-    // vertical constraints (for example, a Column with mainAxisSize.min),
-    // avoid sizing to the full screen height. Use a conservative fraction
-    // of the viewport so the keyboard remains reasonable and does not
-    // cause downstream overflow when the outer layout is constrained.
-    const fallbackFraction = 0.25; // 25% of screen height
-    return (MediaQuery.of(context).size.height * fallbackFraction).clamp(
-      0.0,
-      double.infinity,
-    );
-  }
-
-  double _computeEffectiveKeyHeight(
-    int rowCount,
-    double totalSpacing,
-    double parentAvailable,
-  ) {
-    if (rowCount <= 0 || !parentAvailable.isFinite) {
-      return keyHeight.clamp(24.0, double.infinity);
-    }
-
-    final maxRow = ((parentAvailable - totalSpacing) / rowCount).clamp(
-      0.0,
-      double.infinity,
-    );
-    var effectiveHeight = keyHeight > 0
-        ? (keyHeight > maxRow ? maxRow : keyHeight)
-        : maxRow;
-
-    if (availableHeight != null) {
-      final requiredTotal =
-          (effectiveHeight * rowCount) + totalSpacing + padding.vertical;
-      if (requiredTotal > availableHeight!) {
-        effectiveHeight =
-            ((availableHeight! - padding.vertical - totalSpacing) / rowCount)
-                .clamp(0.0, double.infinity);
-      }
-    }
-
-    return effectiveHeight;
-  }
-
   // Simplified audio playback - throttling is handled by GameAudioService.
-  // Removed UI-level coalescing to reduce overhead on each key press.
   static void _maybePlayType(WidgetRef ref) {
-    // Respect global mute flag
     if (ref.read(gameAudioMutedProvider)) {
       return;
     }
@@ -256,7 +175,6 @@ class VirtualKeyboard extends ConsumerWidget {
   }
 
   static void _maybePlayDelete(WidgetRef ref) {
-    // Respect global mute flag
     if (ref.read(gameAudioMutedProvider)) {
       return;
     }
@@ -270,21 +188,4 @@ class VirtualKeyboard extends ConsumerWidget {
       );
     }
   }
-}
-
-/// Internal class to hold computed layout metrics.
-class _LayoutMetrics {
-  const _LayoutMetrics({
-    required this.rawAvailable,
-    required this.parentAvailable,
-    required this.totalSpacing,
-    required this.effectiveKeyHeight,
-    required this.availableRowWidth,
-  });
-
-  final double rawAvailable;
-  final double parentAvailable;
-  final double totalSpacing;
-  final double effectiveKeyHeight;
-  final double availableRowWidth;
 }

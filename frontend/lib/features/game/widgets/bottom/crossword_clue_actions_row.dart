@@ -15,9 +15,7 @@ class CrosswordClueActionsRow extends StatelessWidget {
   final VoidCallback? onClear;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: EdgeInsets.only(top: ResponsiveSpacing.xs),
-    child: Row(
+  Widget build(BuildContext context) => Row(
       children: [
         if (onMenu != null)
           SizedBox(
@@ -50,6 +48,5 @@ class CrosswordClueActionsRow extends StatelessWidget {
           ],
         ),
       ],
-    ),
-  );
+    );
 }
