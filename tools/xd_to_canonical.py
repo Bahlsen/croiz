@@ -398,6 +398,10 @@ def parse_xd(text: str) -> Dict[str, Any]:
                     answer = clue_answer
                 entries.append({'id': f'd{number}', 'number': number, 'direction': 'down', 'x': x, 'y': y, 'length': (ly - y), 'answer': answer, 'clue': clue_text})
 
+    # Add default language if not present in metadata
+    if 'language' not in metadata:
+        metadata['language'] = 'en'
+
     puzzle = {
         'id': metadata.get('title', 'xd_import'),
         'version': '1.0',

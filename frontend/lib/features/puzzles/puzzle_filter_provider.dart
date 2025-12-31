@@ -1,0 +1,157 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// State for puzzle filtering.
+class PuzzleFilterState {
+  const PuzzleFilterState({
+    this.selectedDifficulties = const {1, 2, 3, 4, 5},
+    this.selectedLanguages = const {'en'},
+    this.availableLanguages = const {'en'},
+    this.showCompleted = true,
+  });
+
+  /// Selected difficulty levels (1=Easy, 2=Medium, 3=Hard, 4=Expert, 5=Master).
+  final Set<int> selectedDifficulties;
+
+  /// Selected language codes.
+  final Set<String> selectedLanguages;
+
+  /// All available languages in the puzzle index.
+  final Set<String> availableLanguages;
+
+  /// Whether to show completed puzzles.
+  final bool showCompleted;
+
+  /// Whether any filter is active (not default).
+  bool get hasActiveFilters =>
+      selectedDifficulties.length < 5 ||
+      !showCompleted ||
+      (availableLanguages.isNotEmpty &&
+          selectedLanguages.length < availableLanguages.length);
+
+  /// Create a copy with optional field overrides.
+  PuzzleFilterState copyWith({
+    Set<int>? selectedDifficulties,
+    Set<String>? selectedLanguages,
+    Set<String>? availableLanguages,
+    bool? showCompleted,
+  }) =>
+      PuzzleFilterState(
+        selectedDifficulties: selectedDifficulties ?? this.selectedDifficulties,
+        selectedLanguages: selectedLanguages ?? this.selectedLanguages,
+        availableLanguages: availableLanguages ?? this.availableLanguages,
+        showCompleted: showCompleted ?? this.showCompleted,
+      );
+}
+
+/// Provider for puzzle filter state.
+final puzzleFilterProvider =
+    NotifierProvider<PuzzleFilterNotifier, PuzzleFilterState>(
+  PuzzleFilterNotifier.new,
+);
+
+/// Notifier for managing puzzle filter state.
+class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
+  static const _keyDifficulties = 'puzzle_filter_difficulties';
+  static const _keyLanguages = 'puzzle_filter_languages';
+  static const _keyShowCompleted = 'puzzle_filter_show_completed';
+
+  @override
+  PuzzleFilterState build() => const PuzzleFilterState();
+
+  /// Toggle a difficulty level in the filter.
+  void toggleDifficulty(int difficulty) {
+    final current = Set<int>.from(state.selectedDifficulties);
+    if (current.contains(difficulty)) {
+      current.remove(difficulty);
+    } else {
+      current.add(difficulty);
+    }
+    state = state.copyWith(selectedDifficulties: current);
+    _persist();
+  }
+
+  /// Toggle a language in the filter.
+  void toggleLanguage(String language) {
+    final current = Set<String>.from(state.selectedLanguages);
+    if (current.contains(language)) {
+      current.remove(language);
+    } else {
+      current.add(language);
+    }
+    state = state.copyWith(selectedLanguages: current);
+    _persist();
+  }
+
+  /// Set available languages (from puzzle index).
+  void setAvailableLanguages(Set<String> languages) {
+    // When setting available languages, select all by default
+    state = state.copyWith(
+      availableLanguages: languages,
+      selectedLanguages: languages,
+    );
+  }
+
+  /// Set whether to show completed puzzles.
+  void setShowCompleted({required bool showCompleted}) {
+    state = state.copyWith(showCompleted: showCompleted);
+    _persist();
+  }
+
+  /// Reset all filters to defaults.
+  void clearFilters() {
+    state = PuzzleFilterState(
+      availableLanguages: state.availableLanguages,
+      selectedLanguages: state.availableLanguages,
+    );
+    _persist();
+  }
+
+  /// Load filter state from SharedPreferences.
+  Future<void> loadFromPrefs() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      final difficultiesRaw = prefs.getStringList(_keyDifficulties);
+      final languagesRaw = prefs.getStringList(_keyLanguages);
+      final showCompleted = prefs.getBool(_keyShowCompleted);
+
+      Set<int>? difficulties;
+      if (difficultiesRaw != null) {
+        difficulties =
+            difficultiesRaw.map((s) => int.tryParse(s) ?? 2).toSet();
+      }
+
+      Set<String>? languages;
+      if (languagesRaw != null) {
+        languages = languagesRaw.toSet();
+      }
+
+      state = state.copyWith(
+        selectedDifficulties: difficulties,
+        selectedLanguages: languages,
+        showCompleted: showCompleted,
+      );
+    } on Object {
+      // Ignore errors loading preferences
+    }
+  }
+
+  /// Persist filter state to SharedPreferences.
+  Future<void> _persist() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList(
+        _keyDifficulties,
+        state.selectedDifficulties.map((d) => d.toString()).toList(),
+      );
+      await prefs.setStringList(
+        _keyLanguages,
+        state.selectedLanguages.toList(),
+      );
+      await prefs.setBool(_keyShowCompleted, state.showCompleted);
+    } on Object {
+      // Ignore errors persisting preferences
+    }
+  }
+}

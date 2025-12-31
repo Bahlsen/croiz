@@ -76,7 +76,7 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
   // any previously-saved progress. This avoids races where the board
   // is loaded and UI attaches before async restore completes.
   try {
-    final stored = await HivePuzzleStorage.load(board.id);
+    final stored = await HivePuzzleStorage.loadStatic(board.id);
     if (stored != null) {
       final gridData = stored['grid'];
       if (gridData is List) {

@@ -210,7 +210,9 @@ void main() {
         for (var i = 0; i < 20; i++) {
           await Future<void>.delayed(const Duration(milliseconds: 50));
           final locked = container.read(lockedCellsProvider);
-          if (locked.isNotEmpty) break;
+          if (locked.isNotEmpty) {
+            break;
+          }
         }
 
         // Verify that locked cells are restored

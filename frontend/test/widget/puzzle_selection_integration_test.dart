@@ -80,12 +80,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Expand origin and year to reveal the puzzle tile
-    await tester.tap(find.text('aarp'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('1998'));
-    await tester.pumpAndSettle();
-
+    // New UI shows puzzles directly in a flat list (no expansion tiles)
     // Tap the puzzle entry - this should set selected id and navigate.
     await tester.tap(find.text(descriptor.title));
     await tester.pumpAndSettle();

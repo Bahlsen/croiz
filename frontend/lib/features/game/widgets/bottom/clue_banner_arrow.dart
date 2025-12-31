@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
 
 class ClueBannerArrow extends StatelessWidget {

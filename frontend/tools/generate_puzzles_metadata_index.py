@@ -22,6 +22,24 @@ INDEX_OUT = ASSETS / 'puzzles_index.json'
 ORIGINS_OUT = ASSETS / 'puzzles_index_origins.json'
 ORIGINS_DIR = ASSETS / 'puzzles_index_by_origin'
 
+# Origin to language mapping
+ORIGIN_LANGUAGE_MAP = {
+    'atlantic': 'en',
+    'latimes': 'en',
+    'newsday': 'en',
+    'newyorker': 'en',
+    'nytimes': 'en',
+    'slate': 'en',
+    'universal': 'en',
+    'usatoday': 'en',
+    'wsj': 'en',
+    'crossynergy': 'en',
+    # Future:
+    # 'lemonde': 'fr',
+    # 'el_pais': 'es',
+}
+DEFAULT_LANGUAGE = 'en'
+
 
 def token_from_path(path: str) -> str:
     file = Path(path).name
@@ -73,7 +91,8 @@ def main():
         title = token
         subtitle = ''
         difficulty = 2  # Default: medium
-        difficulty_label = 'Moyen'
+        difficulty_label = 'Medium'
+        language = ORIGIN_LANGUAGE_MAP.get(origin, DEFAULT_LANGUAGE)
         if pfile.exists():
             try:
                 # Handle UTF-8 BOM files
@@ -86,6 +105,10 @@ def main():
                 difficulty = result.level
                 difficulty_label = result.label
                 difficulty_stats[difficulty] += 1
+                # Get language from metadata if present, else use origin mapping
+                metadata = j.get('metadata', {})
+                if isinstance(metadata, dict) and metadata.get('language'):
+                    language = metadata['language']
             except Exception as e:
                 if i <= 5:  # Only log first few errors
                     print(f'  Warning: {path}: {e}')
@@ -98,18 +121,26 @@ def main():
             'year': year,
             'difficulty': difficulty,
             'difficulty_label': difficulty_label,
+            'language': language,
         })
         if i % 1000 == 0:
             print(f'  processed {i}/{total}')
-    INDEX_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+
+    # Collect all unique origins for the index wrapper
+    all_origins = sorted({e['origin'] for e in out})
+
+    # Write as object with items and origins
+    index_wrapper = {
+        'items': out,
+        'origins': all_origins,
+    }
+    INDEX_OUT.write_text(json.dumps(index_wrapper, ensure_ascii=False, indent=2), encoding='utf-8')
     print('Wrote', INDEX_OUT)
     print(f'Difficulty distribution:')
     for level, count in sorted(difficulty_stats.items()):
         label = PuzzleDifficulty(level).label
         pct = count / total * 100 if total > 0 else 0
         print(f'  {label} ({level}): {count} ({pct:.1f}%)')
-    INDEX_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
-    print('Wrote', INDEX_OUT)
 
     # Group by origin and write per-origin indexes
     ORIGINS_DIR.mkdir(parents=True, exist_ok=True)

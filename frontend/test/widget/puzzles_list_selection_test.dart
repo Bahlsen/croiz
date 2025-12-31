@@ -64,12 +64,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Expand nested origin/year tiles to reveal the puzzle
-    await tester.tap(find.text('unknown').at(0));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('unknown').at(1));
-    await tester.pumpAndSettle();
-
+    // New UI shows puzzles directly in a flat list (no expansion tiles)
     expect(find.text('Sample'), findsOneWidget);
 
     await tester.tap(find.text('Sample'));

@@ -1,0 +1,335 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
+import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  /// Create a list of test puzzles with various difficulties and languages.
+  List<PuzzleDescriptor> createTestPuzzles() => [
+        PuzzleDescriptor(
+          id: 'easy-en',
+          title: 'Easy English',
+          path: 'test/easy-en.json',
+          difficulty: 1,
+          difficultyLabel: 'Easy',
+          language: 'en',
+        ),
+        PuzzleDescriptor(
+          id: 'medium-en',
+          title: 'Medium English',
+          path: 'test/medium-en.json',
+          difficulty: 2,
+          difficultyLabel: 'Medium',
+          language: 'en',
+        ),
+        PuzzleDescriptor(
+          id: 'hard-en',
+          title: 'Hard English',
+          path: 'test/hard-en.json',
+          difficulty: 3,
+          difficultyLabel: 'Hard',
+          language: 'en',
+        ),
+        PuzzleDescriptor(
+          id: 'easy-fr',
+          title: 'Easy French',
+          path: 'test/easy-fr.json',
+          difficulty: 1,
+          difficultyLabel: 'Easy',
+          language: 'fr',
+        ),
+        PuzzleDescriptor(
+          id: 'medium-fr',
+          title: 'Medium French',
+          path: 'test/medium-fr.json',
+          difficulty: 2,
+          difficultyLabel: 'Medium',
+          language: 'fr',
+        ),
+        PuzzleDescriptor(
+          id: 'expert-en',
+          title: 'Expert English',
+          path: 'test/expert-en.json',
+          difficulty: 4,
+          difficultyLabel: 'Expert',
+          language: 'en',
+        ),
+        PuzzleDescriptor(
+          id: 'master-en',
+          title: 'Master English',
+          path: 'test/master-en.json',
+          difficulty: 5,
+          difficultyLabel: 'Master',
+          language: 'en',
+        ),
+      ];
+
+  group('filteredPuzzlesProvider', () {
+    test('returns all when no filter active', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Set available languages to include both en and fr
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setAvailableLanguages({'en', 'fr'});
+
+      final filtered = container.read(filteredPuzzlesProvider);
+      expect(filtered.length, testPuzzles.length);
+    });
+
+    test('filters by difficulty', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Set available languages first
+      container.read(puzzleFilterProvider.notifier)
+        ..setAvailableLanguages({'en', 'fr'})
+        // Deselect all except Easy (1) and Medium (2)
+        ..toggleDifficulty(3) // Remove Hard
+        ..toggleDifficulty(4) // Remove Expert
+        ..toggleDifficulty(5); // Remove Master
+
+      final filtered = container.read(filteredPuzzlesProvider);
+
+      // Should only have Easy and Medium puzzles
+      expect(filtered.length, 4); // easy-en, medium-en, easy-fr, medium-fr
+      expect(filtered.every((p) => p.difficulty <= 2), isTrue);
+    });
+
+    test('filters by language', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Set available languages and select only French
+      container.read(puzzleFilterProvider.notifier)
+        ..setAvailableLanguages({'en', 'fr'})
+        ..toggleLanguage('en'); // Remove English
+
+      final filtered = container.read(filteredPuzzlesProvider);
+
+      // Should only have French puzzles
+      expect(filtered.length, 2); // easy-fr, medium-fr
+      expect(filtered.every((p) => p.language == 'fr'), isTrue);
+    });
+
+    test('combines difficulty and language filters', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      container.read(puzzleFilterProvider.notifier)
+        // Filter to Easy only
+        ..toggleDifficulty(2)
+        ..toggleDifficulty(3)
+        ..toggleDifficulty(4)
+        ..toggleDifficulty(5)
+        // Filter to English only
+        ..setAvailableLanguages({'en', 'fr'})
+        ..toggleLanguage('fr');
+
+      final filtered = container.read(filteredPuzzlesProvider);
+
+      // Should only have Easy English
+      expect(filtered.length, 1);
+      expect(filtered[0].id, 'easy-en');
+    });
+
+    test('updates reactively on filter change', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // Set available languages first
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setAvailableLanguages({'en', 'fr'});
+
+      // Initially all puzzles
+      expect(container.read(filteredPuzzlesProvider).length, 7);
+
+      // Remove Hard difficulty
+      container.read(puzzleFilterProvider.notifier).toggleDifficulty(3);
+
+      // Should now have 6 puzzles (no hard-en)
+      expect(container.read(filteredPuzzlesProvider).length, 6);
+    });
+
+    test('returns empty when no puzzles match filters', () {
+      final testPuzzles = createTestPuzzles();
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      container.read(puzzleFilterProvider.notifier)
+        // Filter to only Master difficulty
+        ..toggleDifficulty(1)
+        ..toggleDifficulty(2)
+        ..toggleDifficulty(3)
+        ..toggleDifficulty(4)
+        // Filter to only French
+        ..setAvailableLanguages({'en', 'fr'})
+        ..toggleLanguage('en');
+
+      final filtered = container.read(filteredPuzzlesProvider);
+
+      // No French Master puzzle exists
+      expect(filtered.isEmpty, isTrue);
+    });
+
+    group('completion status filtering', () {
+      test('shows all puzzles when showCompleted is true', () {
+        final testPuzzles = createTestPuzzles();
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            // Mark easy-en and medium-en as completed
+            completedPuzzleIdsProvider.overrideWithValue(
+              const AsyncValue.data({'easy-en', 'medium-en'}),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        // Set available languages
+        container
+            .read(puzzleFilterProvider.notifier)
+            .setAvailableLanguages({'en', 'fr'});
+
+        // showCompleted defaults to true
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        // All puzzles should be shown
+        expect(filtered.length, 7);
+      });
+
+      test('hides completed puzzles when showCompleted is false', () {
+        final testPuzzles = createTestPuzzles();
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            // Mark easy-en and medium-en as completed
+            completedPuzzleIdsProvider.overrideWithValue(
+              const AsyncValue.data({'easy-en', 'medium-en'}),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        // Set available languages and hide completed
+        container.read(puzzleFilterProvider.notifier)
+          ..setAvailableLanguages({'en', 'fr'})
+          ..setShowCompleted(showCompleted: false);
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        // Should exclude easy-en and medium-en
+        expect(filtered.length, 5);
+        expect(filtered.any((p) => p.id == 'easy-en'), isFalse);
+        expect(filtered.any((p) => p.id == 'medium-en'), isFalse);
+      });
+
+      test('combines completion filter with difficulty filter', () {
+        final testPuzzles = createTestPuzzles();
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            // Mark easy-en as completed
+            completedPuzzleIdsProvider.overrideWithValue(
+              const AsyncValue.data({'easy-en'}),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        // Filter to Easy only and hide completed
+        container.read(puzzleFilterProvider.notifier)
+          ..setAvailableLanguages({'en', 'fr'})
+          ..toggleDifficulty(2)
+          ..toggleDifficulty(3)
+          ..toggleDifficulty(4)
+          ..toggleDifficulty(5)
+          ..setShowCompleted(showCompleted: false);
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        // Only easy-fr should remain (easy-en is completed)
+        expect(filtered.length, 1);
+        expect(filtered[0].id, 'easy-fr');
+      });
+
+      test('returns all uncompleted when completedPuzzleIds is empty', () {
+        final testPuzzles = createTestPuzzles();
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            completedPuzzleIdsProvider.overrideWithValue(
+              const AsyncValue.data(<String>{}),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(puzzleFilterProvider.notifier)
+          ..setAvailableLanguages({'en', 'fr'})
+          ..setShowCompleted(showCompleted: false);
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        // All puzzles should show since none are completed
+        expect(filtered.length, 7);
+      });
+
+      test('handles loading state for completedPuzzleIds gracefully', () {
+        final testPuzzles = createTestPuzzles();
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            completedPuzzleIdsProvider.overrideWithValue(
+              const AsyncValue.loading(),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(puzzleFilterProvider.notifier)
+          ..setAvailableLanguages({'en', 'fr'})
+          ..setShowCompleted(showCompleted: false);
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        // When loading, show all (don't filter by completion)
+        expect(filtered.length, 7);
+      });
+    });
+  });
+}

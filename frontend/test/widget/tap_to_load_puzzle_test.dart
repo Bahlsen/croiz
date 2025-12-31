@@ -68,13 +68,7 @@ void main() {
       appRouter.go('/puzzles');
       await tester.pumpAndSettle();
 
-      // Expand origin and year groups to reveal the item.
-      expect(find.text('testorigin'), findsOneWidget);
-      await tester.tap(find.text('testorigin'));
-      await tester.pumpAndSettle();
-      expect(find.text('2020'), findsOneWidget);
-      await tester.tap(find.text('2020'));
-      await tester.pumpAndSettle();
+      // New UI shows puzzles directly in a flat list (no expansion tiles)
       // Tap the list tile with our sample title.
       expect(find.text('Sample Puzzle'), findsOneWidget);
       await tester.tap(find.text('Sample Puzzle'));

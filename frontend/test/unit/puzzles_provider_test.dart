@@ -5,6 +5,95 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  group('PuzzleDescriptor', () {
+    test('parses difficulty from JSON', () {
+      final descriptor = PuzzleDescriptor.fromJson({
+        'id': 'test1',
+        'title': 'Test Puzzle',
+        'path': 'test/test1.json',
+        'difficulty': 3,
+        'difficulty_label': 'Hard',
+      });
+      expect(descriptor.difficulty, 3);
+    });
+
+    test('parses difficultyLabel from JSON', () {
+      final descriptor = PuzzleDescriptor.fromJson({
+        'id': 'test1',
+        'title': 'Test Puzzle',
+        'path': 'test/test1.json',
+        'difficulty': 3,
+        'difficulty_label': 'Hard',
+      });
+      expect(descriptor.difficultyLabel, 'Hard');
+    });
+
+    test('defaults difficulty to 2 (Medium) when missing', () {
+      final descriptor = PuzzleDescriptor.fromJson({
+        'id': 'test1',
+        'title': 'Test Puzzle',
+        'path': 'test/test1.json',
+      });
+      expect(descriptor.difficulty, 2);
+      expect(descriptor.difficultyLabel, 'Medium');
+    });
+
+    test('parses language from JSON', () {
+      final descriptor = PuzzleDescriptor.fromJson({
+        'id': 'test1',
+        'title': 'Test Puzzle',
+        'path': 'test/test1.json',
+        'language': 'fr',
+      });
+      expect(descriptor.language, 'fr');
+    });
+
+    test('defaults language to "en" when missing', () {
+      final descriptor = PuzzleDescriptor.fromJson({
+        'id': 'test1',
+        'title': 'Test Puzzle',
+        'path': 'test/test1.json',
+      });
+      expect(descriptor.language, 'en');
+    });
+
+    test('copyWith preserves all fields', () {
+      final original = PuzzleDescriptor(
+        id: 'test1',
+        title: 'Test Puzzle',
+        path: 'test/test1.json',
+        subtitle: 'A subtitle',
+        origin: 'nyt',
+        year: '2024',
+        difficulty: 3,
+        difficultyLabel: 'Hard',
+        language: 'fr',
+      );
+      final copy = original.copyWith(title: 'New Title');
+      expect(copy.id, 'test1');
+      expect(copy.title, 'New Title');
+      expect(copy.path, 'test/test1.json');
+      expect(copy.subtitle, 'A subtitle');
+      expect(copy.origin, 'nyt');
+      expect(copy.year, '2024');
+      expect(copy.difficulty, 3);
+      expect(copy.difficultyLabel, 'Hard');
+      expect(copy.language, 'fr');
+    });
+
+    test('copyWith can update difficulty', () {
+      final original = PuzzleDescriptor(
+        id: 'test1',
+        title: 'Test Puzzle',
+        path: 'test/test1.json',
+      );
+      final copy = original.copyWith(difficulty: 5, difficultyLabel: 'Master');
+      expect(copy.difficulty, 5);
+      expect(copy.difficultyLabel, 'Master');
+    });
+  });
+
   group('puzzleTokenFromAssetPath', () {
     test('uses basename without .json extension', () {
       expect(

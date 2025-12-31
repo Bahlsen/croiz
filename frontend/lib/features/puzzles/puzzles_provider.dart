@@ -13,13 +13,58 @@ class PuzzleDescriptor {
     this.subtitle = '',
     this.origin = 'unknown',
     this.year = '',
+    this.difficulty = 2,
+    this.difficultyLabel = 'Medium',
+    this.language = 'en',
   });
+
+  /// Parse a PuzzleDescriptor from a JSON map (from index).
+  factory PuzzleDescriptor.fromJson(Map<String, dynamic> json) =>
+      PuzzleDescriptor(
+        id: json['id']?.toString() ?? '',
+        title: json['title']?.toString() ?? '',
+        path: json['path']?.toString() ?? '',
+        subtitle: json['subtitle']?.toString() ?? '',
+        origin: json['origin']?.toString() ?? 'unknown',
+        year: json['year']?.toString() ?? '',
+        difficulty: (json['difficulty'] as int?) ?? 2,
+        difficultyLabel: json['difficulty_label']?.toString() ?? 'Medium',
+        language: json['language']?.toString() ?? 'en',
+      );
+
   final String id;
   final String title;
   final String path;
   final String subtitle;
   final String origin;
   final String year;
+  final int difficulty;
+  final String difficultyLabel;
+  final String language;
+
+  /// Create a copy with optional field overrides.
+  PuzzleDescriptor copyWith({
+    String? id,
+    String? title,
+    String? path,
+    String? subtitle,
+    String? origin,
+    String? year,
+    int? difficulty,
+    String? difficultyLabel,
+    String? language,
+  }) =>
+      PuzzleDescriptor(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        path: path ?? this.path,
+        subtitle: subtitle ?? this.subtitle,
+        origin: origin ?? this.origin,
+        year: year ?? this.year,
+        difficulty: difficulty ?? this.difficulty,
+        difficultyLabel: difficultyLabel ?? this.difficultyLabel,
+        language: language ?? this.language,
+      );
 }
 
 /// Extract a stable short token from an asset path.
@@ -148,15 +193,13 @@ final originIndexProvider =
           final itemOrigin = e['origin']?.toString() ?? '';
           if (itemOrigin == origin) {
             final rawPath = e['path']?.toString() ?? '';
+            // Normalize the path before creating descriptor
+            final normalizedPath = _normalizeIndexedPath(rawPath);
             out.add(
-              PuzzleDescriptor(
-                id: e['id']?.toString() ?? '',
-                title: e['title']?.toString() ?? '',
-                path: _normalizeIndexedPath(rawPath),
-                subtitle: e['subtitle']?.toString() ?? '',
-                origin: itemOrigin,
-                year: e['year']?.toString() ?? '',
-              ),
+              PuzzleDescriptor.fromJson({
+                ...e,
+                'path': normalizedPath,
+              }),
             );
           }
         }
@@ -207,15 +250,13 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   for (final e in entries) {
     if (e is Map<String, dynamic>) {
       final rawPath = e['path']?.toString() ?? '';
+      // Normalize the path before creating descriptor
+      final normalizedPath = _normalizeIndexedPath(rawPath);
       out.add(
-        PuzzleDescriptor(
-          id: e['id']?.toString() ?? '',
-          title: e['title']?.toString() ?? '',
-          path: _normalizeIndexedPath(rawPath),
-          subtitle: e['subtitle']?.toString() ?? '',
-          origin: e['origin']?.toString() ?? '',
-          year: e['year']?.toString() ?? '',
-        ),
+        PuzzleDescriptor.fromJson({
+          ...e,
+          'path': normalizedPath,
+        }),
       );
     }
   }

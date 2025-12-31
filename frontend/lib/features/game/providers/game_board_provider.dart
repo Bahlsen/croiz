@@ -49,20 +49,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Note: Riverpod manages the subscription lifecycle - we don't need
     // to track _listenerAttached because ref.listen is designed to be
     // called in build() and is automatically cleaned up on rebuild.
-    ref.listen<AsyncValue<GameBoard>>(
+    ref..listen<AsyncValue<GameBoard>>(
       puzzleLoaderProvider,
       _onPuzzleLoaderChanged,
       fireImmediately: true,  // Fire immediately to handle initial load
-    );
+    )
 
     // Cancel any pending timers when the notifier is disposed by Riverpod.
-    ref.onDispose(() {
-      try {
-        _persistTimer?.cancel();
-      } on Object {
-        // ignore
-      }
-    });
+    ..onDispose(_cancelPersistTimer);
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
 
@@ -99,21 +93,36 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         }
         _lastLoadedPuzzleId = newId;
         // Initialize _previousGrid when loading a new board
-        _previousGrid = board.grid.map((row) => List<String?>.from(row)).toList();
+        _previousGrid = board.grid.map(List<String?>.from).toList();
         return board;
       },
-      loading: () {
-        final selected = ref.read(selectedPuzzleIdProvider);
-        if (selected == null) {
-          throw StateError('No puzzle selected');
-        }
-        throw StateError('Puzzle is loading: $selected');
-      },
-      error: (e, st) {
-        final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
-        throw StateError('Failed to load puzzle id="$selected": $e');
-      },
+      loading: _handleLoading,
+      error: _handleError,
     );
+  }
+
+  /// Handle loading state - throws appropriate error.
+  Never _handleLoading() {
+    final selected = ref.read(selectedPuzzleIdProvider);
+    if (selected == null) {
+      throw StateError('No puzzle selected');
+    }
+    throw StateError('Puzzle is loading: $selected');
+  }
+
+  /// Handle error state - throws with details.
+  Never _handleError(Object e, StackTrace st) {
+    final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
+    throw StateError('Failed to load puzzle id="$selected": $e');
+  }
+
+  /// Cancel the persist timer safely.
+  void _cancelPersistTimer() {
+    try {
+      _persistTimer?.cancel();
+    } on Object {
+      // ignore
+    }
   }
 
   /// Called when puzzle changes - clears selection, foundWords, lockedCells, etc.
@@ -174,7 +183,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           'foundWords': foundWords,
           'lockedCells': lockedCells,
         };
-        await HivePuzzleStorage.save(
+        await HivePuzzleStorage.saveStatic(
           puzzleId,
           jsonDecode(jsonEncode(payload)),
         );
@@ -211,7 +220,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Attempt to restore persisted progress for this puzzle id.
     () async {
       try {
-        final stored = await HivePuzzleStorage.load(puzzleId);
+        final stored = await HivePuzzleStorage.loadStatic(puzzleId);
         if (!ref.mounted) {
           return;
         }
@@ -731,15 +740,13 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   void _schedulePersist() {
     // Update _previousGrid with current state for accurate persistence on puzzle switch
     try {
-      _previousGrid = state.grid.map((row) => List<String?>.from(row)).toList();
+      _previousGrid = state.grid.map(List<String?>.from).toList();
     } on Object {
       // ignore if state not ready
     }
     try {
       _persistTimer?.cancel();
-      _persistTimer = Timer(_persistDebounce, () async {
-        await _persistProgress();
-      });
+      _persistTimer = Timer(_persistDebounce, _persistProgress);
     } on Object catch (e, st) {
       if (kDebugMode) {
         developer.log('Failed scheduling persist: $e', stackTrace: st);
@@ -761,7 +768,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             .toList(),
         'elapsedSeconds': ref.read(gameTimerProvider(state.id)).elapsedSeconds,
       };
-      await HivePuzzleStorage.save(state.id, jsonDecode(jsonEncode(payload)));
+      await HivePuzzleStorage.saveStatic(state.id, jsonDecode(jsonEncode(payload)));
     } on Object catch (e, st) {
       if (kDebugMode) {
         developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
