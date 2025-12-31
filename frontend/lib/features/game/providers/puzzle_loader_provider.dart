@@ -76,7 +76,7 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
   // any previously-saved progress. This avoids races where the board
   // is loaded and UI attaches before async restore completes.
   try {
-    final stored = await HivePuzzleStorage.loadStatic(board.id);
+    final stored = await HivePuzzleStorage().load(board.id);
     if (stored != null) {
       final gridData = stored['grid'];
       if (gridData is List) {
@@ -152,7 +152,6 @@ Future<GameBoard> loadPuzzleFromAsset(String assetPath) async {
 
   return board;
 }
-
 
 /// Resolve a puzzle id to a strict asset path under `assets/data/`.
 String assetPathForPuzzleId(String id) => 'assets/data/$id.json';

@@ -49,14 +49,14 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Note: Riverpod manages the subscription lifecycle - we don't need
     // to track _listenerAttached because ref.listen is designed to be
     // called in build() and is automatically cleaned up on rebuild.
-    ref..listen<AsyncValue<GameBoard>>(
-      puzzleLoaderProvider,
-      _onPuzzleLoaderChanged,
-      fireImmediately: true,  // Fire immediately to handle initial load
-    )
-
-    // Cancel any pending timers when the notifier is disposed by Riverpod.
-    ..onDispose(_cancelPersistTimer);
+    ref
+      ..listen<AsyncValue<GameBoard>>(
+        puzzleLoaderProvider,
+        _onPuzzleLoaderChanged,
+        fireImmediately: true, // Fire immediately to handle initial load
+      )
+      // Cancel any pending timers when the notifier is disposed by Riverpod.
+      ..onDispose(_cancelPersistTimer);
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
 
@@ -183,9 +183,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           'foundWords': foundWords,
           'lockedCells': lockedCells,
         };
-        await HivePuzzleStorage.saveStatic(
+        await HivePuzzleStorage().save(
           puzzleId,
-          jsonDecode(jsonEncode(payload)),
+          jsonDecode(jsonEncode(payload)) as Map<String, dynamic>,
         );
       } on Object catch (e, st) {
         if (kDebugMode) {
@@ -220,7 +220,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     // Attempt to restore persisted progress for this puzzle id.
     () async {
       try {
-        final stored = await HivePuzzleStorage.loadStatic(puzzleId);
+        final stored = await HivePuzzleStorage().load(puzzleId);
         if (!ref.mounted) {
           return;
         }
@@ -768,7 +768,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             .toList(),
         'elapsedSeconds': ref.read(gameTimerProvider(state.id)).elapsedSeconds,
       };
-      await HivePuzzleStorage.saveStatic(state.id, jsonDecode(jsonEncode(payload)));
+      await HivePuzzleStorage().save(
+        state.id,
+        jsonDecode(jsonEncode(payload)) as Map<String, dynamic>,
+      );
     } on Object catch (e, st) {
       if (kDebugMode) {
         developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
