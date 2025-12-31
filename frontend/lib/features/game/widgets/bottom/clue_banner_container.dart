@@ -70,6 +70,8 @@ class ClueBannerContainer extends ConsumerWidget {
 /// 2. Measure text with TextPainter allowing multiple lines
 /// 3. If text doesn't fit, reduce font size by 1 and retry
 /// 4. Stop at minimum font size (9) and use ellipsis if still too long
+///
+/// Supports `<i>text</i>` tags for italic formatting.
 class _AutoSizeClueText extends StatelessWidget {
   const _AutoSizeClueText({
     required this.text,
@@ -83,6 +85,44 @@ class _AutoSizeClueText extends StatelessWidget {
   static const double _minFontSize = 9;
   static const double _lineHeight = 1.25;
 
+  /// Parses text with `<i>text</i>` tags into TextSpans.
+  List<TextSpan> _parseItalicTags(String input, TextStyle baseStyle) {
+    final spans = <TextSpan>[];
+    final regex = RegExp(r'<i>(.*?)</i>');
+    var lastEnd = 0;
+
+    for (final match in regex.allMatches(input)) {
+      // Add text before the match (normal style)
+      if (match.start > lastEnd) {
+        spans.add(TextSpan(
+          text: input.substring(lastEnd, match.start),
+          style: baseStyle,
+        ));
+      }
+      // Add the matched text (italic style)
+      spans.add(TextSpan(
+        text: match.group(1),
+        style: baseStyle.copyWith(fontStyle: FontStyle.italic),
+      ));
+      lastEnd = match.end;
+    }
+
+    // Add remaining text after last match
+    if (lastEnd < input.length) {
+      spans.add(TextSpan(
+        text: input.substring(lastEnd),
+        style: baseStyle,
+      ));
+    }
+
+    // If no matches found, return the whole text as a single span
+    if (spans.isEmpty) {
+      spans.add(TextSpan(text: input, style: baseStyle));
+    }
+
+    return spans;
+  }
+
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
@@ -93,8 +133,9 @@ class _AutoSizeClueText extends StatelessWidget {
       // Try decreasing font sizes until text fits
       for (var fontSize = baseFontSize; fontSize >= _minFontSize; fontSize -= 0.5) {
         final testStyle = style.copyWith(fontSize: fontSize, height: _lineHeight);
+        final spans = _parseItalicTags(text, testStyle);
         final tp = TextPainter(
-          text: TextSpan(text: text, style: testStyle),
+          text: TextSpan(children: spans),
           textDirection: TextDirection.ltr,
           textAlign: TextAlign.center,
           maxLines: _maxLines,
@@ -103,12 +144,11 @@ class _AutoSizeClueText extends StatelessWidget {
         // Check if text fits without overflow
         if (tp.height <= maxHeight && !tp.didExceedMaxLines) {
           return Center(
-            child: Text(
-              text,
+            child: RichText(
               textAlign: TextAlign.center,
-              style: testStyle,
               maxLines: _maxLines,
               overflow: TextOverflow.ellipsis,
+              text: TextSpan(children: spans),
             ),
           );
         }
@@ -116,13 +156,13 @@ class _AutoSizeClueText extends StatelessWidget {
 
       // Fallback: minimum font size with ellipsis
       final minStyle = style.copyWith(fontSize: _minFontSize, height: _lineHeight);
+      final fallbackSpans = _parseItalicTags(text, minStyle);
       return Center(
-        child: Text(
-          text,
+        child: RichText(
           textAlign: TextAlign.center,
-          style: minStyle,
           maxLines: _maxLines,
           overflow: TextOverflow.ellipsis,
+          text: TextSpan(children: fallbackSpans),
         ),
       );
     },
