@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-// providers import not needed here; remove to keep analyzer clean.
 
 void main() {
   testWidgets(
@@ -47,7 +47,10 @@ void main() {
             // Ensure flash timers do not interfere with test timing
             flashClearDelayProvider.overrideWith((ref) => Duration.zero),
           ],
-          child: const MaterialApp(home: CrosswordScreen()),
+          child: Sizer(
+            builder: (context, orientation, deviceType) =>
+                const MaterialApp(home: CrosswordScreen()),
+          ),
         ),
       );
 

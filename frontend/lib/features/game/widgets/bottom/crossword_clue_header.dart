@@ -8,6 +8,7 @@ import 'package:croiz/features/game/helpers/word_navigation.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_arrow.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions_row.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 /// Header showing the clue for the currently selected word.
 class CrosswordClueHeader extends ConsumerWidget {
@@ -36,11 +37,14 @@ class CrosswordClueHeader extends ConsumerWidget {
 
     if (selected == null) {
       centerWidget = Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: ResponsivePadding.lg,
+          vertical: ResponsivePadding.lg,
+        ),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(ResponsiveBorderRadius.lg),
           border: Border.all(
             color: Theme.of(
               context,
@@ -53,6 +57,7 @@ class CrosswordClueHeader extends ConsumerWidget {
           style: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontWeight: FontWeight.w600,
+            fontSize: ResponsiveFontSize.bodyMedium,
           ),
         ),
       );
@@ -89,11 +94,11 @@ class CrosswordClueHeader extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (leftArrow != null) leftArrow else const SizedBox(width: 88),
-        const SizedBox(width: 8),
+        if (leftArrow != null) leftArrow else SizedBox(width: 22.w),
+        SizedBox(width: ResponsivePadding.md),
         Expanded(child: centerWidget),
-        const SizedBox(width: 8),
-        if (rightArrow != null) rightArrow else const SizedBox(width: 88),
+        SizedBox(width: ResponsivePadding.md),
+        if (rightArrow != null) rightArrow else SizedBox(width: 22.w),
       ],
     );
 
@@ -105,10 +110,10 @@ class CrosswordClueHeader extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
+      padding: EdgeInsets.symmetric(vertical: ResponsivePadding.xs),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [mainRow, const SizedBox(height: 8), actionsRow],
+        children: [mainRow, SizedBox(height: ResponsiveSpacing.xs), actionsRow],
       ),
     );
   }

@@ -7,6 +7,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/end_game_overlay_provider.dart';
 import '../providers/game_timer_provider.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class EndGameOverlay extends ConsumerWidget {
   const EndGameOverlay({super.key});
@@ -54,11 +55,11 @@ class EndGameOverlay extends ConsumerWidget {
         ),
         Center(
           child: Container(
-            width: 300,
-            padding: const EdgeInsets.all(20),
+            width: ResponsiveOverlay.dialogWidth,
+            padding: EdgeInsets.all(ResponsiveOverlay.dialogPadding),
             decoration: BoxDecoration(
               color: scheme.surface,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(ResponsiveBorderRadius.lg),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -68,9 +69,10 @@ class EndGameOverlay extends ConsumerWidget {
                       'Congratulations!',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
+                    fontSize: ResponsiveFontSize.headlineSmall,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: ResponsiveSpacing.sm),
                 // Show elapsed time
                 Builder(
                   builder: (context) {
@@ -82,40 +84,56 @@ class EndGameOverlay extends ConsumerWidget {
                         .formattedElapsed();
                     return Text(
                       formatted,
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: ResponsiveFontSize.titleLarge,
+                      ),
                     );
                   },
                 ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    if (Navigator.of(context).canPop()) {
-                      Navigator.of(context).pop();
-                    } else {
-                      ref.read(endGameOverlayVisibleProvider.notifier).hide();
-                    }
-                  },
-                  child: Text(AppLocalizations.of(context)?.view ?? 'View'),
-                ),
-                const SizedBox(height: 8),
-                OutlinedButton(
-                  onPressed: () {
-                    ref.read(gameBoardProvider.notifier).resetPuzzle();
-                    // Don't call Navigator.pop() - the overlay will disappear
-                    // naturally when foundWords becomes empty after reset
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)?.restart ?? 'Restart',
+                SizedBox(height: ResponsiveSpacing.md),
+                SizedBox(
+                  height: ResponsiveButton.heightMedium,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (Navigator.of(context).canPop()) {
+                        Navigator.of(context).pop();
+                      } else {
+                        ref.read(endGameOverlayVisibleProvider.notifier).hide();
+                      }
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)?.view ?? 'View',
+                      style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    // Navigate to puzzles list
-                    context.go('/puzzles');
-                  },
-                  child: Text(
-                    AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
+                SizedBox(height: ResponsiveSpacing.xs),
+                SizedBox(
+                  height: ResponsiveButton.heightMedium,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      ref.read(gameBoardProvider.notifier).resetPuzzle();
+                      // Don't call Navigator.pop() - the overlay will disappear
+                      // naturally when foundWords becomes empty after reset
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)?.restart ?? 'Restart',
+                      style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+                    ),
+                  ),
+                ),
+                SizedBox(height: ResponsiveSpacing.xs),
+                SizedBox(
+                  height: ResponsiveButton.heightMedium,
+                  child: TextButton(
+                    onPressed: () {
+                      // Navigate to puzzles list
+                      context.go('/puzzles');
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
+                      style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+                    ),
                   ),
                 ),
               ],

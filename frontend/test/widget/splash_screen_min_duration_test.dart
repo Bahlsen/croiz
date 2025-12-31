@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/providers.dart';
@@ -30,6 +31,9 @@ void main() {
   testWidgets('Splash waits at least animation duration before finishing', (
     WidgetTester tester,
   ) async {
+    // Set a larger surface size to accommodate responsive dimensions
+    await tester.binding.setSurfaceSize(const Size(400, 800));
+
     var initialized = false;
 
     await tester.pumpWidget(
@@ -37,13 +41,15 @@ void main() {
         overrides: [
           gameAudioServiceProvider.overrideWithValue(_ImmediateAudioService()),
         ],
-        child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: SplashScreen(
-            onInitialized: () {
-              initialized = true;
-            },
+        child: Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: SplashScreen(
+              onInitialized: () {
+                initialized = true;
+              },
+            ),
           ),
         ),
       ),

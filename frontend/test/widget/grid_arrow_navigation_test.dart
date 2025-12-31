@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
@@ -34,7 +35,11 @@ void main() {
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
         ],
-        child: const MaterialApp(home: CrosswordScreen()),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => const MaterialApp(
+            home: CrosswordScreen(),
+          ),
+        ),
       ),
     );
     await tester.pumpAndSettle();

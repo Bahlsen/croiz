@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 
@@ -16,7 +17,11 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [puzzlesProvider.overrideWithValue(AsyncValue.data(sample))],
-        child: const MaterialApp(home: PuzzlesListPage()),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => const MaterialApp(
+            home: PuzzlesListPage(),
+          ),
+        ),
       ),
     );
 

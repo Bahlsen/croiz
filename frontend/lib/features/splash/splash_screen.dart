@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 /// Provider that tracks app initialization state.
 /// Returns true when all critical services are ready.
@@ -129,25 +130,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 AppLocalizations.of(context)!.appTitle,
                 style: Theme.of(
                   context,
-                ).textTheme.displayLarge?.copyWith(letterSpacing: 8),
+                ).textTheme.displayLarge?.copyWith(
+                  letterSpacing: 8,
+                  fontSize: ResponsiveFontSize.displayLarge,
+                ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: ResponsiveSpacing.xs),
               Text(
                 AppLocalizations.of(context)!.subtitle,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurface.withAlpha((0.7 * 255).round()),
                   letterSpacing: 2,
+                  fontSize: ResponsiveFontSize.bodyMedium,
                 ),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: ResponsiveSpacing.xxl),
 
               // Loading indicator
               initState.when(
-                data: (_) =>
-                    Icon(Icons.check_circle, color: scheme.primary, size: 32),
+                data: (_) => Icon(
+                  Icons.check_circle,
+                  color: scheme.primary,
+                  size: ResponsiveIconSize.lg,
+                ),
                 loading: () => SizedBox(
-                  width: 32,
-                  height: 32,
+                  width: ResponsiveIconSize.lg,
+                  height: ResponsiveIconSize.lg,
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(
@@ -158,10 +166,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 error: (_, _) => Icon(
                   Icons.warning_amber_rounded,
                   color: scheme.error,
-                  size: 32,
+                  size: ResponsiveIconSize.lg,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveSpacing.md),
 
               // Status text (localized)
               Text(
@@ -172,6 +180,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                 ),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: scheme.onSurface.withAlpha((0.5 * 255).round()),
+                  fontSize: ResponsiveFontSize.bodySmall,
                 ),
               ),
             ],

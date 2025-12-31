@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/screens/crossword_body.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -78,13 +79,15 @@ void main() {
             flashClearDelayProvider.overrideWithValue(Duration.zero),
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
-          child: MaterialApp(
-            home: Builder(
-              builder: (context) => Consumer(
-                builder: (context, ref, _) {
-                  final controller = CrosswordInputController(ref);
-                  return CrosswordBody(controller: controller);
-                },
+          child: Sizer(
+            builder: (context, orientation, deviceType) => MaterialApp(
+              home: Builder(
+                builder: (context) => Consumer(
+                  builder: (context, ref, _) {
+                    final controller = CrosswordInputController(ref);
+                    return CrosswordBody(controller: controller);
+                  },
+                ),
               ),
             ),
           ),
@@ -202,13 +205,15 @@ void main() {
             flashClearDelayProvider.overrideWithValue(Duration.zero),
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
-          child: MaterialApp(
-            home: Builder(
-              builder: (context) => Consumer(
-                builder: (context, ref, _) {
-                  final controller = CrosswordInputController(ref);
-                  return CrosswordBody(controller: controller);
-                },
+          child: Sizer(
+            builder: (context, orientation, deviceType) => MaterialApp(
+              home: Builder(
+                builder: (context) => Consumer(
+                  builder: (context, ref, _) {
+                    final controller = CrosswordInputController(ref);
+                    return CrosswordBody(controller: controller);
+                  },
+                ),
               ),
             ),
           ),

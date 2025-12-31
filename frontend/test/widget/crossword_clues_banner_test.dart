@@ -4,6 +4,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   group('CrosswordClueHeader', () {
@@ -58,7 +59,11 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: CrosswordClueHeader()),
+            ),
+          ),
         ),
       );
 
@@ -115,7 +120,11 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: CrosswordClueHeader()),
+            ),
+          ),
         ),
       );
 
@@ -149,7 +158,11 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: CrosswordClueHeader()),
+            ),
+          ),
         ),
       );
 
@@ -212,7 +225,11 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(home: Scaffold(body: CrosswordClueHeader())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: CrosswordClueHeader()),
+            ),
+          ),
         ),
       );
 

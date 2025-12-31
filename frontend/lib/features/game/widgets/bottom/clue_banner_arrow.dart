@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class ClueBannerArrow extends StatelessWidget {
   const ClueBannerArrow({required this.icon, required this.onTap, super.key});
@@ -11,15 +12,15 @@ class ClueBannerArrow extends StatelessWidget {
     onTap: onTap,
     behavior: HitTestBehavior.opaque,
     child: SizedBox(
-      width: 88,
-      height: 100,
+      width: 22.w,
+      height: 12.h,
       child: Center(
         child: Icon(
           icon,
           color: Theme.of(
             context,
           ).colorScheme.onSurface.withAlpha((0.9 * 255).round()),
-          size: 90,
+          size: 20.w,
         ),
       ),
     ),

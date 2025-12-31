@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -36,9 +37,11 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const MaterialApp(
-          home: Scaffold(
-            body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => const MaterialApp(
+            home: Scaffold(
+              body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+            ),
           ),
         ),
       ),

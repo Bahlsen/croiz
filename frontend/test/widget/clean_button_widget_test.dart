@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/widgets/in_game_text_input.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -52,10 +53,12 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: InGameTextInput(controller: TextEditingController()),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            home: Scaffold(
+              body: Center(
+                child: InGameTextInput(controller: TextEditingController()),
+              ),
             ),
           ),
         ),

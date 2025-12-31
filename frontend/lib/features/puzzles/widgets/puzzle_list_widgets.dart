@@ -4,6 +4,7 @@ import 'package:croiz/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 /// A single puzzle list item that handles navigation to the crossword screen.
 class PuzzleListTile extends ConsumerWidget {
@@ -30,16 +31,17 @@ class PuzzleListTile extends ConsumerWidget {
     var effectiveSubtitle = subtitle;
 
     if (isLoading) {
-      effectiveTrailing = const SizedBox(
-        width: 24,
-        height: 24,
-        child: CircularProgressIndicator(strokeWidth: 2),
+      effectiveTrailing = SizedBox(
+        width: ResponsiveIconSize.md,
+        height: ResponsiveIconSize.md,
+        child: const CircularProgressIndicator(strokeWidth: 2),
       );
       effectiveSubtitle = AppLocalizations.of(context)?.loading ?? 'Loading...';
     } else if (hasError) {
       effectiveTrailing = Icon(
         Icons.error,
         color: Theme.of(context).colorScheme.error,
+        size: ResponsiveIconSize.md,
       );
       effectiveSubtitle =
           AppLocalizations.of(context)?.errorLoading ??
@@ -47,9 +49,15 @@ class PuzzleListTile extends ConsumerWidget {
     }
 
     return ListTile(
-      title: Text(title),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+      ),
       subtitle: effectiveSubtitle != null && effectiveSubtitle.isNotEmpty
-          ? Text(effectiveSubtitle)
+          ? Text(
+              effectiveSubtitle,
+              style: TextStyle(fontSize: ResponsiveFontSize.bodySmall),
+            )
           : null,
       trailing: effectiveTrailing,
       onTap: () {
@@ -120,8 +128,13 @@ class YearGroupExpansionTile extends StatelessWidget {
 
     return ExpansionTile(
       title: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Text(year, style: Theme.of(context).textTheme.bodySmall),
+        padding: EdgeInsets.symmetric(vertical: ResponsivePadding.xs),
+        child: Text(
+          year,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontSize: ResponsiveFontSize.bodySmall,
+          ),
+        ),
       ),
       initiallyExpanded: false,
       children: sortedPuzzles
@@ -155,7 +168,10 @@ class OriginGroupExpansionTile extends ConsumerWidget {
     final yearKeys = sortYears(puzzlesByYear.keys);
 
     return ExpansionTile(
-      title: Text(origin),
+      title: Text(
+        origin,
+        style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+      ),
       initiallyExpanded: false,
       children: yearKeys
           .map(
@@ -177,20 +193,24 @@ class LazyOriginExpansionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => ExpansionTile(
-    title: Text(origin),
+    title: Text(
+      origin,
+      style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
+    ),
     children: [
       Consumer(
         builder: (context, ref2, _) {
           final idx = ref2.watch(originIndexProvider(origin));
           return idx.when(
-            loading: () => const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
+            loading: () => Padding(
+              padding: EdgeInsets.all(ResponsivePadding.xl),
+              child: const Center(child: CircularProgressIndicator()),
             ),
             error: (e, st) => Padding(
-              padding: const EdgeInsets.all(8),
+              padding: EdgeInsets.all(ResponsivePadding.md),
               child: Text(
                 AppLocalizations.of(context)?.errorLoading ?? 'Error loading',
+                style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
               ),
             ),
             data: (items) {

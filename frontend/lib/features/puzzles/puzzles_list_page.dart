@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_list_widgets.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 /// Displays all packaged puzzles and navigates with a short `id` token.
 class PuzzlesListPage extends ConsumerWidget {
@@ -13,7 +14,10 @@ class PuzzlesListPage extends ConsumerWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)?.puzzles ?? 'Puzzles'),
+        title: Text(
+          AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
+          style: TextStyle(fontSize: ResponsiveFontSize.titleMedium),
+        ),
       ),
       backgroundColor: isLight
           ? Colors.white

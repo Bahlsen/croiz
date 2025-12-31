@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_actions.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class CrosswordClueActionsRow extends StatelessWidget {
   const CrosswordClueActionsRow({
@@ -15,34 +16,35 @@ class CrosswordClueActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 6),
+    padding: EdgeInsets.only(top: ResponsiveSpacing.xs),
     child: Row(
       children: [
         if (onMenu != null)
           SizedBox(
-            width: 48,
-            height: 40,
+            width: 12.w,
+            height: 5.h,
             child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
           )
         else
-          const SizedBox(width: 48),
+          SizedBox(width: 12.w),
         const Spacer(),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (onReveal != null)
               SizedBox(
-                width: 40,
-                height: 36,
+                width: 10.w,
+                height: 4.5.h,
                 child: Center(
                   child: ClueHeaderRevealButton(onPressed: onReveal),
                 ),
               ),
-            if (onReveal != null && onClear != null) const SizedBox(width: 6),
+            if (onReveal != null && onClear != null)
+              SizedBox(width: ResponsivePadding.sm),
             if (onClear != null)
               SizedBox(
-                width: 40,
-                height: 36,
+                width: 10.w,
+                height: 4.5.h,
                 child: Center(child: ClueHeaderClearButton(onPressed: onClear)),
               ),
           ],

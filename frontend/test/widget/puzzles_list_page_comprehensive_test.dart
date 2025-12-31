@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -21,10 +22,12 @@ void main() {
           overrides: [
             puzzleOriginsProvider.overrideWith((ref) => completer.future),
           ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: PuzzlesListPage(),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: PuzzlesListPage(),
+            ),
           ),
         ),
       );
@@ -46,10 +49,12 @@ void main() {
               (ref) async => throw Exception('Network error'),
             ),
           ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: PuzzlesListPage(),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: PuzzlesListPage(),
+            ),
           ),
         ),
       );
@@ -75,10 +80,12 @@ void main() {
               (ref, origin) async => <PuzzleDescriptor>[],
             ),
           ],
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: PuzzlesListPage(),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: PuzzlesListPage(),
+            ),
           ),
         ),
       );
@@ -112,7 +119,11 @@ void main() {
           overrides: [
             puzzlesProvider.overrideWithValue(AsyncValue.data(puzzles)),
           ],
-          child: const MaterialApp(home: PuzzlesListPage()),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: PuzzlesListPage(),
+            ),
+          ),
         ),
       );
 

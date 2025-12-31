@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/widgets/virtual_keyboard.dart';
 
 void main() {
@@ -12,14 +13,16 @@ void main() {
     // widgets the test has to deal with.
     await tester.pumpWidget(
       ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(
-            body: SizedBox(
-              height: 240,
-              child: VirtualKeyboard(
-                layout: VirtualKeyboard.azertyLayout,
-                onKey: (_) {},
-                onBackspace: () {},
+        child: Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            home: Scaffold(
+              body: SizedBox(
+                height: 240,
+                child: VirtualKeyboard(
+                  layout: VirtualKeyboard.azertyLayout,
+                  onKey: (_) {},
+                  onBackspace: () {},
+                ),
               ),
             ),
           ),

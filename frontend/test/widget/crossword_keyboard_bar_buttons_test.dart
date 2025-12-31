@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 
 void main() {
@@ -11,13 +12,15 @@ void main() {
 
       await tester.pumpWidget(
         ProviderScope(
-          child: MaterialApp(
-            home: Scaffold(
-              body: Column(
-                children: [
-                  const Expanded(child: Placeholder()),
-                  CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
-                ],
+          child: Sizer(
+            builder: (context, orientation, deviceType) => MaterialApp(
+              home: Scaffold(
+                body: Column(
+                  children: [
+                    const Expanded(child: Placeholder()),
+                    CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+                  ],
+                ),
               ),
             ),
           ),

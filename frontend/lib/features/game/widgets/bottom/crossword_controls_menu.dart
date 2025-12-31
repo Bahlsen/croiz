@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 String kbSizeLabel(BuildContext context, WidgetRef ref) {
   final val = ref.watch(gameKeyboardSizeProvider);
@@ -43,11 +44,11 @@ class CrosswordControlsMenu extends ConsumerWidget {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
     final isMuted = ref.watch(gameAudioMutedProvider);
     final isDark = ref.watch(appIsDarkProvider);
-    // Horizontal margins to keep the menu inset from screen edges
-    const horizontalMargin = 24.0;
+    // Responsive horizontal margins
+    final horizontalMargin = ResponsivePadding.xl;
     final menuWidth = (mq.width - horizontalMargin * 2).clamp(260.0, mq.width);
     // Make the menu taller by default so it occupies more vertical space
-    final menuHeight = (mq.height * 0.85).clamp(220.0, mq.height * 0.98);
+    final menuHeight = 85.h.clamp(220.0, mq.height * 0.98);
 
     return Positioned.fill(
       child: GestureDetector(
@@ -60,13 +61,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
             ).colorScheme.onSurface.withAlpha((0.45 * 255).round()),
             child: Center(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: horizontalMargin,
                 ),
                 child: Material(
                   elevation: 12,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(ResponsiveBorderRadius.xl),
                   ),
                   color: Theme.of(context).cardColor,
                   child: SizedBox(
@@ -77,9 +78,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                       children: [
                         // Header
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 12,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ResponsivePadding.lg,
+                            vertical: ResponsivePadding.lg,
                           ),
                           child: Row(
                             children: [
@@ -87,7 +88,10 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 child: Text(
                                   AppLocalizations.of(context)!.menu,
                                   style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                      ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ResponsiveFontSize.titleLarge,
+                                  ),
                                 ),
                               ),
                               IconButton(
@@ -96,6 +100,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 tooltip: MaterialLocalizations.of(
                                   context,
@@ -110,7 +115,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
                         // Content area (expanded so menu takes more vertical space)
                         Expanded(
                           child: ListView(
-                            padding: const EdgeInsets.all(8),
+                            padding: EdgeInsets.all(ResponsivePadding.md),
                             children: [
                               ListTile(
                                 leading: Icon(
@@ -118,8 +123,14 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
-                                title: Text(AppLocalizations.of(context)!.home),
+                                title: Text(
+                                  AppLocalizations.of(context)!.home,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
+                                ),
                                 onTap: () {
                                   onClose();
                                   context.go('/puzzles');
@@ -133,15 +144,26 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(
                                     context,
                                   )!.keyboardSizeLabel,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
-                                subtitle: Text(kbSizeLabel(context, ref)),
+                                subtitle: Text(
+                                  kbSizeLabel(context, ref),
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodySmall,
+                                  ),
+                                ),
                                 trailing: Padding(
-                                  padding: const EdgeInsets.only(left: 8),
+                                  padding: EdgeInsets.only(
+                                    left: ResponsivePadding.md,
+                                  ),
                                   child: DropdownButton<KeyboardSize>(
                                     value: ref.watch(gameKeyboardSizeProvider),
                                     underline: const SizedBox.shrink(),
@@ -185,12 +207,18 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(context)!.selectLanguage,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
                                 trailing: Padding(
-                                  padding: const EdgeInsets.only(left: 8),
+                                  padding: EdgeInsets.only(
+                                    left: ResponsivePadding.md,
+                                  ),
                                   child: DropdownButton<String>(
                                     value: ref
                                         .watch(localeProvider)
@@ -245,9 +273,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(context)!.keyboardStyle,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
                                 value: isAzerty,
                                 onChanged: (v) {
@@ -265,6 +297,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   isAzerty
                                       ? AppLocalizations.of(context)!.azerty
                                       : AppLocalizations.of(context)!.qwerty,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodySmall,
+                                  ),
                                 ),
                               ),
                               const Divider(),
@@ -276,9 +311,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(context)!.muteSounds,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
                                 value: isMuted,
                                 onChanged: (v) {
@@ -300,9 +339,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(context)!.darkTheme,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
                                 value: isDark,
                                 onChanged: (v) {
@@ -322,8 +365,14 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
-                                title: Text(AppLocalizations.of(context)!.help),
+                                title: Text(
+                                  AppLocalizations.of(context)!.help,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
+                                ),
                                 onTap: onClose,
                               ),
                               ListTile(
@@ -332,9 +381,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   color: Theme.of(
                                     context,
                                   ).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
                                   AppLocalizations.of(context)!.about,
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
                                 ),
                                 onTap: onClose,
                               ),

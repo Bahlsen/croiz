@@ -10,6 +10,7 @@ import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -94,13 +95,34 @@ class _CroizAppState extends ConsumerState<CroizApp> {
     final locale = ref.watch(localeProvider);
 
     if (!_initialized) {
-      return MaterialApp(
+      return Sizer(
+        builder: (context, orientation, screenType) => MaterialApp(
+          title: 'Croiz',
+          theme: _darkTheme,
+          darkTheme: _darkTheme,
+          themeMode: ThemeMode.dark,
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(onInitialized: _onInitialized),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
+        ),
+      );
+    }
+
+    return Sizer(
+      builder: (context, orientation, screenType) => MaterialApp.router(
         title: 'Croiz',
-        theme: _darkTheme,
+        theme: _lightTheme,
         darkTheme: _darkTheme,
-        themeMode: ThemeMode.dark,
+        themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+        routerConfig: appRouter,
         debugShowCheckedModeBanner: false,
-        home: SplashScreen(onInitialized: _onInitialized),
+        locale: locale,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -108,24 +130,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
-      );
-    }
-
-    return MaterialApp.router(
-      title: 'Croiz',
-      theme: _lightTheme,
-      darkTheme: _darkTheme,
-      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-      routerConfig: appRouter,
-      debugShowCheckedModeBanner: false,
-      locale: locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
+      ),
     );
   }
 }

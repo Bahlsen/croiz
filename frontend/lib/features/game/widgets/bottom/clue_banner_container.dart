@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class ClueBannerContainer extends ConsumerWidget {
   const ClueBannerContainer({required this.entry, super.key});
@@ -20,13 +21,16 @@ class ClueBannerContainer extends ConsumerWidget {
       },
       behavior: HitTestBehavior.opaque,
       child: SizedBox(
-        // Fixed height - text will shrink to fit, banner won't grow
-        height: 96,
+        // Responsive height - text will shrink to fit, banner won't grow
+        height: 12.h,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          padding: EdgeInsets.symmetric(
+            vertical: ResponsivePadding.lg,
+            horizontal: ResponsivePadding.xl,
+          ),
           decoration: BoxDecoration(
             color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(ResponsiveBorderRadius.lg),
             border: Border.all(
               color: colorScheme.onSurface.withAlpha((0.12 * 255).round()),
               width: 1,
@@ -38,7 +42,7 @@ class ClueBannerContainer extends ConsumerWidget {
                 : '${entry.number}. ${entry.clue!}',
             style: TextStyle(
               color: colorScheme.onSurface,
-              fontSize: 20,
+              fontSize: ResponsiveFontSize.titleMedium,
               fontWeight: FontWeight.w600,
             ),
           ),

@@ -7,6 +7,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class CrosswordControlsBar extends ConsumerStatefulWidget {
   const CrosswordControlsBar({
@@ -35,21 +36,21 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         : VirtualKeyboard.qwertyLayout;
     final kbSize = ref.watch(gameKeyboardSizeProvider);
 
-    // Map keyboard size to key height and font size used by keys.
+    // Map keyboard size to responsive key height and font size.
     double keyHeight;
     double letterFontSize;
     switch (kbSize) {
       case KeyboardSize.small:
-        keyHeight = 48;
-        letterFontSize = 14;
+        keyHeight = ResponsiveKeyboard.keyHeightSmall;
+        letterFontSize = ResponsiveKeyboard.letterFontSmall;
         break;
       case KeyboardSize.large:
-        keyHeight = 88;
-        letterFontSize = 20;
+        keyHeight = ResponsiveKeyboard.keyHeightLarge;
+        letterFontSize = ResponsiveKeyboard.letterFontLarge;
         break;
       case KeyboardSize.medium:
-        keyHeight = 64;
-        letterFontSize = 16;
+        keyHeight = ResponsiveKeyboard.keyHeightMedium;
+        letterFontSize = ResponsiveKeyboard.letterFontMedium;
     }
 
     return Stack(
@@ -74,7 +75,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
+              padding: EdgeInsets.symmetric(horizontal: ResponsivePadding.sm),
               child: VirtualKeyboard(
                 layout: layout,
                 onKey: widget.onKey,
@@ -100,19 +101,19 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
             ),
           ),
           Positioned(
-            // Match the keyboard horizontal padding (4px each side)
+            // Match the keyboard horizontal padding (responsive)
             // so the reveal menu is the same width as the keyboard.
-            left: 4,
-            right: 4,
+            left: ResponsivePadding.sm,
+            right: ResponsivePadding.sm,
             bottom: 0,
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.45,
+                maxHeight: 45.h,
               ),
               child: Material(
                 elevation: 10,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
                 ),
                 color: Theme.of(context).cardColor,
                 child: SingleChildScrollView(
@@ -120,8 +121,8 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ResponsivePadding.md,
                           vertical: 0,
                         ),
                         child: Row(
@@ -133,7 +134,10 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                                       'Reveal',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context).textTheme.titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                      ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ResponsiveFontSize.titleMedium,
+                                  ),
                                 ),
                               ),
                             ),
@@ -141,6 +145,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                               icon: Icon(
                                 Icons.close,
                                 color: Theme.of(context).colorScheme.onSurface,
+                                size: ResponsiveIconSize.md,
                               ),
                               onPressed: () =>
                                   setState(() => _revealOpen = false),
@@ -153,10 +158,14 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                         leading: Icon(
                           Icons.tag,
                           color: Theme.of(context).colorScheme.onSurface,
+                          size: ResponsiveIconSize.md,
                         ),
                         title: Text(
                           AppLocalizations.of(context)?.revealLetterOption ??
                               'Letter',
+                          style: TextStyle(
+                            fontSize: ResponsiveFontSize.bodyMedium,
+                          ),
                         ),
                         onTap: () {
                           setState(() => _revealOpen = false);
@@ -174,10 +183,14 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                         leading: Icon(
                           Icons.checklist,
                           color: Theme.of(context).colorScheme.onSurface,
+                          size: ResponsiveIconSize.md,
                         ),
                         title: Text(
                           AppLocalizations.of(context)?.revealWordOption ??
                               'Word',
+                          style: TextStyle(
+                            fontSize: ResponsiveFontSize.bodyMedium,
+                          ),
                         ),
                         onTap: () {
                           setState(() => _revealOpen = false);
@@ -201,10 +214,14 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                         leading: Icon(
                           Icons.grid_on,
                           color: Theme.of(context).colorScheme.onSurface,
+                          size: ResponsiveIconSize.md,
                         ),
                         title: Text(
                           AppLocalizations.of(context)?.revealAllOption ??
                               'All',
+                          style: TextStyle(
+                            fontSize: ResponsiveFontSize.bodyMedium,
+                          ),
                         ),
                         onTap: () {
                           setState(() => _revealOpen = false);

@@ -2,6 +2,7 @@ import 'package:croiz/services/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_board_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
@@ -69,8 +70,10 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(body: Center(child: SizedBox())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: Center(child: SizedBox())),
+            ),
           ),
         ),
       );
@@ -168,8 +171,10 @@ void main() {
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
-          child: const MaterialApp(
-            home: Scaffold(body: Center(child: SizedBox())),
+          child: Sizer(
+            builder: (context, orientation, deviceType) => const MaterialApp(
+              home: Scaffold(body: Center(child: SizedBox())),
+            ),
           ),
         ),
       );

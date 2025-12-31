@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
@@ -52,8 +53,10 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: const MaterialApp(
-          home: Scaffold(body: SafeArea(child: SizedBox.expand())),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => const MaterialApp(
+            home: Scaffold(body: SafeArea(child: SizedBox.expand())),
+          ),
         ),
       ),
     );
@@ -62,9 +65,11 @@ void main() {
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: MaterialApp(
-          home: Scaffold(
-            body: SafeArea(child: CrosswordContent(controller: controller)),
+        child: Sizer(
+          builder: (context, orientation, deviceType) => MaterialApp(
+            home: Scaffold(
+              body: SafeArea(child: CrosswordContent(controller: controller)),
+            ),
           ),
         ),
       ),

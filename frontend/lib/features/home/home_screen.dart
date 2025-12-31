@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -23,16 +24,41 @@ class HomeScreen extends ConsumerWidget {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         elevation: 0,
-        title: Text(loc.appTitle),
+        title: Text(
+          loc.appTitle,
+          style: TextStyle(fontSize: ResponsiveFontSize.titleMedium),
+        ),
         centerTitle: true,
         actions: [
           PopupMenuButton<String>(
             onSelected: setLocale,
-            icon: Icon(Icons.language, semanticLabel: loc.selectLanguage),
+            icon: Icon(
+              Icons.language,
+              semanticLabel: loc.selectLanguage,
+              size: ResponsiveIconSize.md,
+            ),
             itemBuilder: (context) => [
-              PopupMenuItem(value: 'en', child: Text(loc.languageEnglish)),
-              PopupMenuItem(value: 'fr', child: Text(loc.languageFrench)),
-              PopupMenuItem(value: 'uk', child: Text(loc.languageUkrainian)),
+              PopupMenuItem(
+                value: 'en',
+                child: Text(
+                  loc.languageEnglish,
+                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'fr',
+                child: Text(
+                  loc.languageFrench,
+                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+                ),
+              ),
+              PopupMenuItem(
+                value: 'uk',
+                child: Text(
+                  loc.languageUkrainian,
+                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+                ),
+              ),
             ],
           ),
         ],
@@ -45,15 +71,29 @@ class HomeScreen extends ConsumerWidget {
               loc.welcome,
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
+                fontSize: ResponsiveFontSize.headlineSmall,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: ResponsiveSpacing.md),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () => context.go('/puzzles'),
-                  child: Text(loc.puzzles),
+                SizedBox(
+                  height: ResponsiveButton.heightMedium,
+                  child: ElevatedButton(
+                    onPressed: () => context.go('/puzzles'),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ResponsivePadding.lg,
+                      ),
+                      child: Text(
+                        loc.puzzles,
+                        style: TextStyle(
+                          fontSize: ResponsiveFontSize.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

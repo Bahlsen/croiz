@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/core/responsive/responsive.dart';
 
 /// Small reusable action buttons used by the clue header.
 class ClueHeaderMenuButton extends StatelessWidget {
@@ -17,7 +18,7 @@ class ClueHeaderMenuButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         Icons.menu,
-        size: 32,
+        size: ResponsiveIconSize.lg,
         color: Theme.of(context).colorScheme.onSurface,
       ),
       visualDensity: VisualDensity.standard,
@@ -45,7 +46,7 @@ class ClueHeaderClearButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         Icons.cleaning_services_outlined,
-        size: 32,
+        size: ResponsiveIconSize.lg,
         color: Theme.of(context).colorScheme.onSurface,
       ),
       visualDensity: VisualDensity.standard,
@@ -69,7 +70,7 @@ class ClueHeaderRevealButton extends StatelessWidget {
       onPressed: onPressed,
       icon: Icon(
         Icons.visibility_outlined,
-        size: 26,
+        size: ResponsiveIconSize.md,
         color: Theme.of(context).colorScheme.onSurface,
       ),
       visualDensity: VisualDensity.standard,
