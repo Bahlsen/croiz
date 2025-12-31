@@ -24,8 +24,27 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
     _controller = CrosswordInputController(ref);
     // If a puzzle id is provided (via route query), attempt to load it and
     // set the selected puzzle id so the loader provider will load it.
-    if (widget.puzzleId != null) {
-      final decoded = Uri.decodeComponent(widget.puzzleId!);
+    _setSelectedPuzzleId(widget.puzzleId);
+    // Hide system UI (navigation buttons) for full-screen gameplay.
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
+
+  @override
+  void didUpdateWidget(CrosswordScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Handle case where GoRouter reuses the widget with a different puzzleId
+    if (widget.puzzleId != oldWidget.puzzleId) {
+      _setSelectedPuzzleId(widget.puzzleId);
+      // Reset controller navigation state for the new puzzle
+      _controller
+        ..resetNavigationState()
+        ..resetAutoSelectFirstAcross();
+    }
+  }
+
+  void _setSelectedPuzzleId(String? puzzleId) {
+    if (puzzleId != null) {
+      final decoded = Uri.decodeComponent(puzzleId);
       // Delay setting the provider until after the widget tree has
       // finished building to avoid Riverpod runtime errors.
       Future.microtask(() {
@@ -41,8 +60,6 @@ class _CrosswordScreenState extends ConsumerState<CrosswordScreen> {
         }
       });
     }
-    // Hide system UI (navigation buttons) for full-screen gameplay.
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
   }
 
   // Note: loading is handled by `puzzleLoaderProvider` which watches
