@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
-import 'package:croiz/features/game/providers/game_timer_provider.dart';
-import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/widgets/loader/crossword_loader.dart';
 import 'package:croiz/features/game/widgets/content/crossword_content.dart';
+import 'package:croiz/features/game/listeners/game_board_observer.dart';
 
 class CrosswordBody extends ConsumerStatefulWidget {
   const CrosswordBody({required this.controller, super.key});
@@ -17,8 +16,6 @@ class CrosswordBody extends ConsumerStatefulWidget {
 }
 
 class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
-  bool _boardListenerAttached = false;
-
   @override
   Widget build(BuildContext context) {
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
@@ -31,48 +28,6 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
       final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
       return CrosswordErrorScaffold(selectedId: selected);
     }
-    if (!_boardListenerAttached) {
-      _boardListenerAttached = true;
-      ref.listen<GameBoard>(gameBoardProvider, (
-        GameBoard? previous,
-        GameBoard next,
-      ) {
-        try {
-          widget.controller.tryAutoSelectFirstAcross(next);
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            debugPrint('Error auto-selecting first across: $e\n$st');
-          }
-        }
-
-        try {
-          ref.read(gameTimerProvider(next.id)).start();
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            debugPrint('Error starting game timer: $e\n$st');
-          }
-        }
-      });
-
-      Future.microtask(() {
-        try {
-          final current = ref.read(gameBoardProvider);
-          widget.controller.tryAutoSelectFirstAcross(current);
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            debugPrint('Error auto-selecting first across (initial): $e\n$st');
-          }
-        }
-        try {
-          final current = ref.read(gameBoardProvider);
-          ref.read(gameTimerProvider(current.id)).start();
-        } on Object catch (e, st) {
-          if (kDebugMode) {
-            debugPrint('Error starting game timer (initial): $e\n$st');
-          }
-        }
-      });
-    }
 
     final gridSize = ref
         .watch(gameBoardProvider.select((b) => b.gridSize))
@@ -81,12 +36,17 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
       debugPrint('CrosswordBody gridSize=$gridSize');
     }
 
+    // Use GameBoardObserver which properly resets the controller when the
+    // active puzzle changes (ensures auto-select runs each load).
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         bottom: true,
         top: false,
-        child: CrosswordContent(controller: widget.controller),
+        child: GameBoardObserver(
+          controller: widget.controller,
+          child: CrosswordContent(controller: widget.controller),
+        ),
       ),
     );
   }

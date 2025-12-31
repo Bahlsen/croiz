@@ -89,13 +89,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     AsyncValue<GameBoard>? prev,
     AsyncValue<GameBoard> next,
   ) {
-    if (kDebugMode) {
-      try {
-        developer.log('onPuzzleLoaderChanged called prev=${prev?.toString()} next=${next.toString()}', name: 'GameBoardNotifier');
-      } on Object {
-        /* ignore: best-effort logging */
-      }
-    }
+    // debug logging removed
     if (!ref.mounted) {
       return;
     }
@@ -110,13 +104,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final loaded = next.value;
     try {
       if (state.id != loaded.id) {
-          if (kDebugMode) {
-          try {
-            developer.log('Switching from ${state.id} to ${loaded.id}', name: 'GameBoardNotifier');
-          } on Object {
-            /* ignore: best-effort logging */
-          }
-        }
+          // debug logging removed
         // Persist any pending progress for the currently-loaded puzzle
         // before switching to the newly-loaded puzzle. Use an async
         // closure so we do not block the provider listener but ensure
@@ -148,13 +136,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         }();
 
         state = loaded;
-        if (kDebugMode) {
-          try {
-            developer.log('State assigned to loaded ${loaded.id}', name: 'GameBoardNotifier');
-          } on Object {
-            /* ignore: best-effort logging */
-          }
-        }
+        // debug logging removed
         // Clear any selection from a previous puzzle so the new puzzle can
         // initialise its own selection (first cell) reliably.
         try {
@@ -176,33 +158,15 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
     // Attempt to restore persisted progress for this puzzle id.
     () async {
-      if (kDebugMode) {
-        try {
-          developer.log('Starting async restore for ${state.id}', name: 'GameBoardNotifier');
-        } on Object {
-          /* ignore: best-effort logging */
-        }
-      }
+      // debug logging removed
       try {
         final stored = await HivePuzzleStorage.load(state.id);
-        if (kDebugMode) {
-          try {
-            developer.log('HivePuzzleStorage.load -> id=${state.id} stored=${stored?.toString()}', name: 'GameBoardNotifier');
-          } on Object {
-            /* ignore: best-effort logging */
-          }
-        }
+        // debug logging removed
         if (!ref.mounted) {
           return;
         }
         if (stored != null) {
-          if (kDebugMode) {
-            try {
-              developer.log('Applying stored grid for puzzle ${state.id}', name: 'GameBoardNotifier');
-            } on Object {
-              /* ignore: best-effort logging */
-            }
-          }
+          // debug logging removed
           final gridData = stored['grid'];
           if (gridData is List) {
             final rows = gridData.length;
