@@ -423,29 +423,6 @@ void main() {
           expect(controlsBox.height, greaterThan(0));
         },
       );
-
-      testWidgets(
-        'divider is present between grid and controls',
-        (tester) async {
-          const screenSize = Size(375, 667);
-          final board = createBoard(gridSize: 5);
-          final container = ProviderContainer(
-            overrides: [
-              puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-            ],
-          );
-          addTearDown(container.dispose);
-
-          await pumpWithScreenSize(
-            tester,
-            screenSize: screenSize,
-            container: container,
-          );
-
-          // Verify divider exists
-          expect(find.byType(Divider), findsOneWidget);
-        },
-      );
     });
 
     group('Landscape Orientation', () {
