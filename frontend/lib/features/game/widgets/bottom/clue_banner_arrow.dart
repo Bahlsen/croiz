@@ -12,7 +12,7 @@ class ClueBannerArrow extends StatelessWidget {
   ///
   /// This is a constant to ensure the Row in CrosswordClueHeader
   /// can calculate space correctly without overflow issues.
-  static const double fixedWidth = 44;
+  static const double fixedWidth = 56;
 
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -27,7 +27,7 @@ class ClueBannerArrow extends StatelessWidget {
           color: Theme.of(
             context,
           ).colorScheme.onSurface.withAlpha((0.9 * 255).round()),
-          size: ResponsiveIconSize.md,
+          size: 40,
         ),
       ),
     ),
