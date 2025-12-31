@@ -212,7 +212,64 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     if (sel == null) {
       return;
     }
+    
+    // Reveal the letter
     ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
+    
+    // After revealing, find and navigate to the next empty cell
+    final updatedBoard = ref.read(gameBoardProvider);
+    final dir = ref.read(wordDirectionProvider);
+    final isAcross = dir == WordDirection.horizontal;
+    
+    // Find containing entry
+    final containing = findContainingEntry(
+      row: sel.row,
+      col: sel.col,
+      wantAcross: isAcross,
+      entries: updatedBoard.entries,
+      index: ref.read(cellEntriesIndexProvider),
+    );
+    
+    if (containing != null) {
+      // Search for next empty cell AFTER current position within same entry
+      SelectedCell? nextInEntry;
+      if (isAcross) {
+        // Search columns after current
+        for (var cc = sel.col + 1; cc < containing.x + containing.length; cc++) {
+          final val = updatedBoard.grid[containing.y][cc];
+          if (val == null || val.isEmpty) {
+            nextInEntry = SelectedCell(containing.y, cc);
+            break;
+          }
+        }
+      } else {
+        // Search rows after current
+        for (var rr = sel.row + 1; rr < containing.y + containing.length; rr++) {
+          final val = updatedBoard.grid[rr][containing.x];
+          if (val == null || val.isEmpty) {
+            nextInEntry = SelectedCell(rr, containing.x);
+            break;
+          }
+        }
+      }
+      
+      if (nextInEntry != null) {
+        ref.read(selectedCellProvider.notifier).select(nextInEntry);
+        return;
+      }
+      
+      // If no empty after current position, find next empty from other entries
+      final nextEmpty = findNextEmptyFromEntry(
+        containing: containing,
+        wantAcross: isAcross,
+        board: updatedBoard,
+        entries: updatedBoard.entries,
+        skipLocked: false,
+      );
+      if (nextEmpty != null) {
+        ref.read(selectedCellProvider.notifier).select(nextEmpty);
+      }
+    }
   }
 
   void _revealWord() {

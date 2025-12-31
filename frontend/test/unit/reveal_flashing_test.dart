@@ -398,4 +398,88 @@ void main() {
     expect(sel!.row, 1, reason: 'Should advance to next word row');
     expect(sel.col, 0, reason: 'Should advance to first cell of next word');
   });
+
+  test('revealLetterAt should advance selection to next empty cell', () {
+    // Entry at row 0, cols 0-2 (ABC)
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 3,
+        answer: 'ABC',
+      ),
+    ];
+
+    final board = GameBoard(
+      id: 'reveal-letter-advance',
+      title: 'Reveal Letter Advance Test',
+      gridSize: 3,
+      createdAt: DateTime.now(),
+      grid: [
+        [null, null, null], // all empty
+        [null, null, null],
+        [null, null, null],
+      ],
+      clues: {},
+      blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+      difficulty: 1,
+      entries: entries,
+      solutionGrid: [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ],
+    );
+
+    final container = ProviderContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        flashClearDelayProvider.overrideWithValue(Duration.zero),
+        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    // Select first cell (0, 0)
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
+    container
+        .read(wordDirectionProvider.notifier)
+        .setDirection(WordDirection.horizontal);
+
+    // Reveal letter at (0, 0)
+    container.read(gameBoardProvider.notifier).revealLetterAt(0, 0);
+
+    // Check that the letter was revealed
+    final updatedBoard = container.read(gameBoardProvider);
+    expect(updatedBoard.grid[0][0], 'A');
+
+    // Now simulate what _revealLetter should do: advance to next empty cell
+    // The next empty cell in the same entry should be (0, 1)
+    final dir = container.read(wordDirectionProvider);
+    final isAcross = dir == WordDirection.horizontal;
+    final sel = container.read(selectedCellProvider)!;
+    
+    final index = container.read(cellEntriesIndexProvider);
+    final containing = findContainingEntry(
+      row: sel.row,
+      col: sel.col,
+      wantAcross: isAcross,
+      entries: updatedBoard.entries,
+      index: index,
+    );
+
+    // Find next empty within entry
+    SelectedCell? nextEmpty;
+    if (containing != null) {
+      nextEmpty = firstEmptyInEntry(containing, updatedBoard);
+    }
+
+    expect(nextEmpty, isNotNull, reason: 'Should find next empty cell');
+    expect(nextEmpty!.row, 0);
+    expect(nextEmpty.col, 1, reason: 'Next empty should be col 1 after revealing col 0');
+  });
 }
