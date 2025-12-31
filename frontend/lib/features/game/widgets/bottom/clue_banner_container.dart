@@ -112,6 +112,7 @@ class _AutoSizeClueTextState extends State<_AutoSizeClueText> {
         widget.text,
         textAlign: TextAlign.center,
         maxLines: widget.maxLines,
+        overflow: TextOverflow.ellipsis,
         style: widget.style.copyWith(fontSize: fontSize),
       );
     },
