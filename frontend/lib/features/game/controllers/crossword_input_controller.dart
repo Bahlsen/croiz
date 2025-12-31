@@ -161,6 +161,9 @@ class CrosswordInputController {
   /// 
   /// If [allowLocked] is true, returns locked cells too (caller should check
   /// before clearing). If false, skips locked cells.
+  /// 
+  /// If we're at the first cell of an entry, this returns the last cell of
+  /// the previous entry in the same direction (skipping black cells).
   SelectedCell? _findPreviousCellInEntry(
     SelectedCell sel,
     bool isAcross,
@@ -212,6 +215,82 @@ class CrosswordInputController {
         if (allowLocked || !lockedCells.contains(key)) {
           return SelectedCell(rr, containing.x);
         }
+      }
+    }
+
+    // We're at the first cell of the entry - find the previous entry
+    // in the same direction and go to its last cell
+    return _findLastCellOfPreviousEntry(
+      containing,
+      isAcross,
+      entries,
+      board,
+      lockedCells,
+      allowLocked: allowLocked,
+    );
+  }
+
+  /// Find the last cell of the previous entry in the same direction.
+  /// 
+  /// This is used when we're at the first cell of an entry and need to
+  /// jump to the previous word (skipping black cells).
+  SelectedCell? _findLastCellOfPreviousEntry(
+    PuzzleEntryData currentEntry,
+    bool isAcross,
+    List<PuzzleEntryData> entries,
+    GameBoard board,
+    Set<CellKey> lockedCells, {
+    bool allowLocked = false,
+  }) {
+    final direction = isAcross ? 'across' : 'down';
+    
+    // Get all entries in the same direction, sorted by position
+    final sameDirectionEntries = entries
+        .where((e) => e.direction == direction)
+        .toList();
+    
+    // Sort by position: for across, sort by (y, x); for down, sort by (x, y)
+    if (isAcross) {
+      sameDirectionEntries.sort((a, b) {
+        final yCompare = a.y.compareTo(b.y);
+        return yCompare != 0 ? yCompare : a.x.compareTo(b.x);
+      });
+    } else {
+      sameDirectionEntries.sort((a, b) {
+        final xCompare = a.x.compareTo(b.x);
+        return xCompare != 0 ? xCompare : a.y.compareTo(b.y);
+      });
+    }
+
+    // Find current entry's index
+    final currentIndex = sameDirectionEntries.indexWhere(
+      (e) => e.x == currentEntry.x && e.y == currentEntry.y && e.direction == currentEntry.direction,
+    );
+
+    if (currentIndex <= 0) {
+      // No previous entry exists
+      return null;
+    }
+
+    // Get the previous entry
+    final prevEntry = sameDirectionEntries[currentIndex - 1];
+    
+    // Calculate the last cell of the previous entry
+    final lastRow = isAcross ? prevEntry.y : prevEntry.y + prevEntry.length - 1;
+    final lastCol = isAcross ? prevEntry.x + prevEntry.length - 1 : prevEntry.x;
+
+    // Verify it's within bounds and not a black cell
+    if (lastRow >= 0 &&
+        lastRow < board.gridSize &&
+        lastCol >= 0 &&
+        lastCol < board.grid[lastRow].length) {
+      // Check if it's not a black cell
+      if (board.blackCells[lastRow][lastCol]) {
+        return null;
+      }
+      final key = CellKey(lastRow, lastCol);
+      if (allowLocked || !lockedCells.contains(key)) {
+        return SelectedCell(lastRow, lastCol);
       }
     }
 

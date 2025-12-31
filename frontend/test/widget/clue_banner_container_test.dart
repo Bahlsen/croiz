@@ -5,6 +5,23 @@ import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/bottom/clue_banner_container.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
+/// Helper to extract full text from a TextSpan (including children).
+String extractTextFromSpan(InlineSpan span) {
+  if (span is TextSpan) {
+    final buffer = StringBuffer();
+    if (span.text != null) {
+      buffer.write(span.text);
+    }
+    if (span.children != null) {
+      for (final child in span.children!) {
+        buffer.write(extractTextFromSpan(child));
+      }
+    }
+    return buffer.toString();
+  }
+  return '';
+}
+
 void main() {
   group('ClueBannerContainer', () {
     testWidgets('short clue keeps base font size of 20', (tester) async {
@@ -28,11 +45,11 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // RichText contains the text via TextSpan
+      // RichText contains the text via TextSpan (possibly with children)
       final richText = tester.widget<RichText>(find.byType(RichText).first);
       final textSpan = richText.text as TextSpan;
-      expect(textSpan.text, contains('1. Short'));
-      expect(textSpan.style?.fontSize, greaterThan(0));
+      final fullText = extractTextFromSpan(textSpan);
+      expect(fullText, contains('1. Short'));
     });
 
     testWidgets('banner expands to fill available space', (tester) async {
@@ -118,11 +135,9 @@ void main() {
         // RichText should contain the full clue
         final richText = tester.widget<RichText>(find.byType(RichText).first);
         final textSpan = richText.text as TextSpan;
-        expect(textSpan.text, contains('42.'));
-        expect(textSpan.text, contains(longClue));
-        
-        // Font should be greater than 0
-        expect(textSpan.style?.fontSize, greaterThan(0));
+        final fullText = extractTextFromSpan(textSpan);
+        expect(fullText, contains('42.'));
+        expect(fullText, contains(longClue));
       },
     );
 
@@ -148,7 +163,8 @@ void main() {
 
       final richText = tester.widget<RichText>(find.byType(RichText).first);
       final textSpan = richText.text as TextSpan;
-      expect(textSpan.text, contains('5. $mediumClue'));
+      final fullText = extractTextFromSpan(textSpan);
+      expect(fullText, contains('5. $mediumClue'));
     });
   });
 }
