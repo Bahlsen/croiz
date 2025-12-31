@@ -36,6 +36,8 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   bool _listenerAttached = false;
   Timer? _persistTimer;
   static const Duration _persistDebounce = Duration(milliseconds: 200);
+  // Track the last loaded puzzle ID to detect changes
+  String? _lastLoadedPuzzleId;
 
   // Compatibility helper used by tests and legacy call sites.
   void setBoard(GameBoard board) => state = board;
@@ -70,7 +72,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
 
     return puzzleAsync.when(
-      data: (d) => d,
+      data: (board) {
+        // Detect puzzle change: if we had a previous puzzle and the ID changed,
+        // clear all game state (selection, foundWords, lockedCells, etc.)
+        final prevId = _lastLoadedPuzzleId;
+        final newId = board.id;
+        if (prevId != null && prevId != newId) {
+          // Puzzle actually changed - clear all game state
+          _clearGameStateOnPuzzleChange(board);
+        }
+        _lastLoadedPuzzleId = newId;
+        return board;
+      },
       loading: () {
         final selected = ref.read(selectedPuzzleIdProvider);
         if (selected == null) {
@@ -85,11 +98,45 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     );
   }
 
+  /// Called when puzzle changes - clears selection, foundWords, lockedCells, etc.
+  void _clearGameStateOnPuzzleChange(GameBoard newBoard) {
+    // Clear selection from previous puzzle
+    try {
+      ref.read(selectedCellProvider.notifier).select(null);
+    } on Object {
+      // ignore
+    }
+    // Clear foundWords from previous puzzle
+    try {
+      ref.read(foundWordsProvider.notifier).setFoundWords(<String>{});
+    } on Object {
+      // ignore
+    }
+    // Clear lockedCells from previous puzzle
+    try {
+      ref.read(lockedCellsProvider.notifier).setLockedCells(<CellKey>{});
+    } on Object {
+      // ignore
+    }
+    // Clear flashing cells
+    try {
+      ref.read(flashingCellsProvider.notifier).setFlashingCells(<CellKey>{});
+    } on Object {
+      // ignore
+    }
+    try {
+      ref
+          .read(flashingClearedCellsProvider.notifier)
+          .setFlashingClearedCells(<CellKey>{});
+    } on Object {
+      // ignore
+    }
+  }
+
   void _onPuzzleLoaderChanged(
     AsyncValue<GameBoard>? prev,
     AsyncValue<GameBoard> next,
   ) {
-    // debug logging removed
     if (!ref.mounted) {
       return;
     }
@@ -97,63 +144,50 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       return;
     }
 
-    // Ensure local state reflects the loaded puzzle. Only replace the local
-    // state when a different puzzle is loaded to avoid overwriting any
-    // in-memory modifications (e.g. tests that call notifier methods
-    // immediately after provider resolution).
-    final loaded = next.value;
-    try {
-      if (state.id != loaded.id) {
-          // debug logging removed
-        // Persist any pending progress for the currently-loaded puzzle
-        // before switching to the newly-loaded puzzle. Use an async
-        // closure so we do not block the provider listener but ensure
-        // we attempt an immediate save (cancelling the debounce timer).
-        final prev = state;
-        try {
-          _persistTimer?.cancel();
-        } on Object {
-          // ignore
-        }
-        () async {
-          try {
-            final payload = {
-              'schemaVersion': 1,
-              'grid': prev.grid,
-              'savedAt': DateTime.now().toIso8601String(),
-              'foundWords': ref.read(foundWordsProvider).toList(),
-              'lockedCells': ref
-                  .read(lockedCellsProvider)
-                  .map((c) => '${c.row},${c.col}')
-                  .toList(),
-            };
-            await HivePuzzleStorage.save(prev.id, jsonDecode(jsonEncode(payload)));
-          } on Object catch (e, st) {
-            if (kDebugMode) {
-              developer.log('Failed to persist previous puzzle before switch: $e', stackTrace: st);
-            }
-          }
-        }();
+    // Note: The clearing of game state on puzzle change is now handled in
+    // build() via _clearGameStateOnPuzzleChange(), which is more reliable
+    // since build() is always called when the puzzle changes.
+    // This listener now only handles persistence and restoration.
 
-        state = loaded;
-        // debug logging removed
-        // Clear any selection from a previous puzzle so the new puzzle can
-        // initialise its own selection (first cell) reliably.
-        try {
-          ref.read(selectedCellProvider.notifier).select(null);
-        } on Object {
-          // ignore
-        }
-      }
-    } on Object {
-      // If state is not yet initialised or any error occurs, fall back to
-      // assigning the loaded value.
-      state = loaded;
+    final loaded = next.value;
+    
+    // Determine if the puzzle changed by comparing with previous value.
+    // Determine if the puzzle changed by comparing with previous value.
+    final prevBoard = prev is AsyncData<GameBoard> ? prev.value : null;
+    final puzzleChanged = prevBoard != null && prevBoard.id != loaded.id;
+    
+    // Persist progress from the previous puzzle before switching
+    if (prevBoard != null && puzzleChanged) {
       try {
-        ref.read(selectedCellProvider.notifier).select(null);
+        _persistTimer?.cancel();
       } on Object {
         // ignore
       }
+      () async {
+        try {
+          final payload = {
+            'schemaVersion': 1,
+            'grid': prevBoard.grid,
+            'savedAt': DateTime.now().toIso8601String(),
+            'foundWords': ref.read(foundWordsProvider).toList(),
+            'lockedCells': ref
+                .read(lockedCellsProvider)
+                .map((c) => '${c.row},${c.col}')
+                .toList(),
+          };
+          await HivePuzzleStorage.save(
+            prevBoard.id,
+            jsonDecode(jsonEncode(payload)),
+          );
+        } on Object catch (e, st) {
+          if (kDebugMode) {
+            developer.log(
+              'Failed to persist previous puzzle before switch: $e',
+              stackTrace: st,
+            );
+          }
+        }
+      }();
     }
 
     // Attempt to restore persisted progress for this puzzle id.

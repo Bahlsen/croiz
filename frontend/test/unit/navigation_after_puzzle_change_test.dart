@@ -361,6 +361,14 @@ void main() {
         final newBoard = container.read(gameBoardProvider);
         expect(newBoard.id, equals('word-cells-2'));
 
+        // Re-select (0,0) horizontal after puzzle change (selection is cleared)
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
+
         // Keep same selection (0,0) horizontal - word should now be 2 cells
         // because (0,2) is black
         final wordCells2 = container.read(selectedWordCellsProvider);

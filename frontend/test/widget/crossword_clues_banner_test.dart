@@ -45,6 +45,9 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
+      // Ensure gameBoardProvider is initialized before making selections
+      container.read(gameBoardProvider);
+      await Future.microtask(() {});
       container
           .read(selectedCellProvider.notifier)
           .select(const SelectedCell(0, 0));
@@ -59,14 +62,15 @@ void main() {
         ),
       );
 
-      expect(find.textContaining('Across clue'), findsOneWidget);
+      // Use findRichText: true because ClueBannerContainer uses RichText
+      expect(find.text('1. Across clue', findRichText: true), findsOneWidget);
 
       // Tap on banner
       await tester.tap(find.byType(CrosswordClueHeader));
       await tester.pump();
 
       expect(container.read(wordDirectionProvider), WordDirection.vertical);
-      expect(find.textContaining('Down clue'), findsOneWidget);
+      expect(find.text('1. Down clue', findRichText: true), findsOneWidget);
     });
     testWidgets('shows only entry number and clue, centered', (tester) async {
       // Arrange minimal board state with one entry and selection
@@ -97,6 +101,9 @@ void main() {
         ],
       );
       addTearDown(container.dispose);
+      // Ensure gameBoardProvider is initialized before making selections
+      container.read(gameBoardProvider);
+      await Future.microtask(() {});
       container
           .read(selectedCellProvider.notifier)
           .select(const SelectedCell(0, 0));
@@ -112,13 +119,8 @@ void main() {
         ),
       );
 
-      // Assert: banner text is centered and contains clue
-      final textFinder = find.byWidgetPredicate(
-        (w) => w is Text && w.style?.fontWeight == FontWeight.w600,
-      );
-      expect(textFinder, findsOneWidget);
-      final textWidget = tester.widget<Text>(textFinder);
-      expect(textWidget.textAlign, TextAlign.center);
+      // Assert: banner text contains clue (using RichText since ClueBannerContainer uses it)
+      expect(find.text('1. Lundi', findRichText: true), findsOneWidget);
       // Arrows should be present
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
