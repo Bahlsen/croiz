@@ -2,12 +2,18 @@
 """Generate a compact puzzles metadata index for web builds.
 
 Writes frontend/assets/data/puzzles_index.json with entries containing:
-  id, title, subtitle, path, origin, year
+  id, title, subtitle, path, origin, year, difficulty, difficulty_label
 
 Usage: python frontend/tools/generate_puzzles_metadata_index.py
 """
 from pathlib import Path
 import json
+import sys
+
+# Add tools directory to path for difficulty_calculator import
+TOOLS_DIR = Path(__file__).resolve().parents[2] / 'tools'
+sys.path.insert(0, str(TOOLS_DIR))
+from difficulty_calculator import DifficultyCalculator, PuzzleDifficulty
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / 'assets' / 'data'
@@ -49,7 +55,9 @@ def main():
     paths = [p for p in raw if isinstance(p, str)]
     out = []
     total = len(paths)
-    print(f'Indexing {total} puzzle paths...')
+    calculator = DifficultyCalculator()
+    print(f'Indexing {total} puzzle paths with difficulty calculation...')
+    difficulty_stats = {d.value: 0 for d in PuzzleDifficulty}
     for i, path in enumerate(paths, 1):
         # paths in puzzles.json are relative to assets/data
         pfile = ASSETS / Path(path)
@@ -64,13 +72,23 @@ def main():
             year = parts[1]
         title = token
         subtitle = ''
+        difficulty = 2  # Default: medium
+        difficulty_label = 'Moyen'
         if pfile.exists():
             try:
-                j = json.loads(pfile.read_text(encoding='utf-8'))
+                # Handle UTF-8 BOM files
+                content = pfile.read_text(encoding='utf-8-sig')
+                j = json.loads(content)
                 title = title_from_json(j, fallback=token)
                 subtitle = str(j.get('subtitle') or '')
-            except Exception:
-                pass
+                # Calculate difficulty
+                result = calculator.calculate_from_puzzle(j)
+                difficulty = result.level
+                difficulty_label = result.label
+                difficulty_stats[difficulty] += 1
+            except Exception as e:
+                if i <= 5:  # Only log first few errors
+                    print(f'  Warning: {path}: {e}')
         out.append({
             'id': token,
             'title': title,
@@ -78,9 +96,18 @@ def main():
             'path': path,
             'origin': origin,
             'year': year,
+            'difficulty': difficulty,
+            'difficulty_label': difficulty_label,
         })
         if i % 1000 == 0:
             print(f'  processed {i}/{total}')
+    INDEX_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
+    print('Wrote', INDEX_OUT)
+    print(f'Difficulty distribution:')
+    for level, count in sorted(difficulty_stats.items()):
+        label = PuzzleDifficulty(level).label
+        pct = count / total * 100 if total > 0 else 0
+        print(f'  {label} ({level}): {count} ({pct:.1f}%)')
     INDEX_OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding='utf-8')
     print('Wrote', INDEX_OUT)
 
@@ -92,10 +119,18 @@ def main():
 
     summary = []
     for origin, items in origins.items():
+        # Calculate difficulty distribution per origin
+        origin_diff = {d.value: 0 for d in PuzzleDifficulty}
+        for item in items:
+            origin_diff[item['difficulty']] += 1
         # write file name safe origin
         fname = ORIGINS_DIR / f"{origin}.json"
         fname.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding='utf-8')
-        summary.append({'origin': origin, 'count': len(items)})
+        summary.append({
+            'origin': origin,
+            'count': len(items),
+            'difficulty_distribution': origin_diff,
+        })
     ORIGINS_OUT.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding='utf-8')
     print('Wrote', ORIGINS_OUT, 'and per-origin indexes under', ORIGINS_DIR)
 

@@ -7,6 +7,7 @@ Utilise pleinement les capacités de pycrossword :
 - Génération d'indices via OpenAI (optionnel)
 - Support de thèmes et difficultés
 - Préparation automatique des mots (normalisation)
+- Calcul automatique de la difficulté du puzzle
 
 Usage:
     python generate_puzzle.py --words WORD1 WORD2 WORD3 --output puzzle.json
@@ -28,6 +29,7 @@ from pycrossword import (
     ClueGenerator,
     ClueDifficulty
 )
+from difficulty_calculator import DifficultyCalculator, calculate_difficulty, calculate_difficulty_label
 
 
 def pycrossword_to_canonical(
@@ -209,6 +211,13 @@ def generate_puzzle_from_words(
     puzzle["metadata"]["total_words_attempted"] = len(prepared_words)
     puzzle["metadata"]["words_placed"] = len(placed_words)
     
+    # Calculate and add difficulty
+    calculator = DifficultyCalculator()
+    difficulty_result = calculator.calculate_from_puzzle(puzzle)
+    puzzle["metadata"]["difficulty"] = difficulty_result.level
+    puzzle["metadata"]["difficulty_label"] = difficulty_result.label
+    puzzle["metadata"]["difficulty_score"] = difficulty_result.raw_score
+    
     return puzzle
 
 
@@ -372,6 +381,7 @@ def main():
     
     print(f"✓ Puzzle généré: {puzzle['cols']}x{puzzle['rows']}")
     print(f"✓ {puzzle['metadata']['words_placed']}/{puzzle['metadata']['total_words_attempted']} mots placés ({puzzle['metadata']['generation_efficiency']}%)")
+    print(f"✓ Difficulté: {puzzle['metadata']['difficulty_label']} (niveau {puzzle['metadata']['difficulty']}, score {puzzle['metadata']['difficulty_score']}/10)")
     print(f"✓ Sauvegardé dans: {args.output}")
 
 
