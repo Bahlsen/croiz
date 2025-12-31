@@ -12,14 +12,14 @@ class ClueBannerArrow extends StatelessWidget {
     behavior: HitTestBehavior.opaque,
     child: SizedBox(
       width: 88,
-      height: 88,
+      height: 100,
       child: Center(
         child: Icon(
           icon,
           color: Theme.of(
             context,
           ).colorScheme.onSurface.withAlpha((0.9 * 255).round()),
-          size: 52,
+          size: 90,
         ),
       ),
     ),

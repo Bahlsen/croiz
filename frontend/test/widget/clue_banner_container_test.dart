@@ -6,7 +6,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
   group('ClueBannerContainer', () {
-    testWidgets('short clue keeps base font size', (tester) async {
+    testWidgets('short clue keeps base font size of 20', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
@@ -17,7 +17,7 @@ void main() {
                 x: 0,
                 y: 0,
                 length: 3,
-                clue: 'Short clue',
+                clue: 'Short',
               ),
             ),
           ),
@@ -25,89 +25,96 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final text = tester.widget<Text>(find.byType(Text));
-      expect(text.data, contains('1. Short clue'));
-      expect(text.style?.fontSize, equals(20));
+      // RichText contains the text via TextSpan
+      final richText = tester.widget<RichText>(find.byType(RichText).first);
+      final textSpan = richText.text as TextSpan;
+      expect(textSpan.text, contains('1. Short'));
+      expect(textSpan.style?.fontSize, equals(20));
     });
 
-    testWidgets('long clue reduces font size to fit within two lines', (
-      tester,
-    ) async {
-      const long =
-          'This is a very long clue that would normally overflow the banner and therefore needs to shrink to fit within two lines without ellipsis';
+    testWidgets('banner has fixed height of 96 pixels', (tester) async {
       const entry = PuzzleEntryData(
-        number: 42,
+        number: 1,
         direction: 'across',
         x: 0,
         y: 0,
-        length: 10,
-        clue: long,
+        length: 3,
+        clue: 'Short',
       );
 
       await tester.pumpWidget(
-        MaterialApp(
+        const MaterialApp(
           home: Scaffold(
-            body: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 200),
-              child: const ClueBannerContainer(entry: entry),
-            ),
+            body: Center(child: ClueBannerContainer(entry: entry)),
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      final text = tester.widget<Text>(find.byType(Text));
-      expect(text.data, contains('42.'));
-      // Font size should be reduced from base 20 when needed
-      expect(text.style?.fontSize, lessThan(20));
-      expect(text.style?.fontSize, greaterThanOrEqualTo(14));
+      // Find the SizedBox that sets the fixed height
+      final sizedBoxFinder = find.byWidgetPredicate(
+        (widget) => widget is SizedBox && widget.height == 96,
+      );
+      expect(sizedBoxFinder, findsOneWidget);
     });
 
     testWidgets(
-      'extremely long clue shows ellipsis when it cannot fit at minFontSize',
+      'long clue scales down font and shows all text',
       (tester) async {
-        // An extremely long clue that cannot fit even at minFontSize of 14
-        const extremelyLong =
-            'This is an extremely long clue that absolutely cannot fit within '
-            'two lines even at the smallest allowed font size of fourteen '
-            'pixels because it just goes on and on and on forever with so many '
-            'words that it must eventually be truncated with an ellipsis '
-            'indicator so the user knows there is more text available';
+        // A very long clue that needs scaling
+        const longClue =
+            'This is an extremely long clue with many many many many words '
+            'that definitely cannot possibly fit at font size 20 in the fixed '
+            'height banner of only 96 pixels so it must be scaled down';
         const entry = PuzzleEntryData(
-          number: 99,
+          number: 42,
           direction: 'across',
           x: 0,
           y: 0,
-          length: 15,
-          clue: extremelyLong,
+          length: 10,
+          clue: longClue,
         );
 
+        // Simulate the real layout: Row with Expanded wrapping the banner
         await tester.pumpWidget(
-          MaterialApp(
+          const MaterialApp(
             home: Scaffold(
-              body: ConstrainedBox(
-                // Very narrow constraint to force truncation
-                constraints: const BoxConstraints(maxWidth: 150),
-                child: const ClueBannerContainer(entry: entry),
+              body: SizedBox(
+                width: 400,
+                child: Row(
+                  children: [
+                    SizedBox(width: 88), // left arrow space
+                    SizedBox(width: 8),
+                    Expanded(child: ClueBannerContainer(entry: entry)),
+                    SizedBox(width: 8),
+                    SizedBox(width: 88), // right arrow space
+                  ],
+                ),
               ),
             ),
           ),
         );
         await tester.pumpAndSettle();
 
-        final text = tester.widget<Text>(find.byType(Text));
-        // Should have ellipsis overflow to indicate truncation
-        expect(text.overflow, equals(TextOverflow.ellipsis));
-        // Font size should be at minFontSize since text is too long
-        expect(text.style?.fontSize, equals(14));
+        // Banner height should still be 96
+        final sizedBoxFinder = find.byWidgetPredicate(
+          (widget) => widget is SizedBox && widget.height == 96,
+        );
+        expect(sizedBoxFinder, findsOneWidget);
+
+        // RichText should contain the full clue
+        final richText = tester.widget<RichText>(find.byType(RichText).first);
+        final textSpan = richText.text as TextSpan;
+        expect(textSpan.text, contains('42.'));
+        expect(textSpan.text, contains(longClue));
+        
+        // Font should be smaller than base 20
+        expect(textSpan.style?.fontSize, lessThan(20));
       },
     );
 
-    testWidgets('text is not truncated without ellipsis when clue fits', (
-      tester,
-    ) async {
-      // A clue that fits at reduced font size
-      const mediumClue = 'A medium length clue that fits';
+    testWidgets('text shows full content without truncation', (tester) async {
+      const mediumClue = 'A medium length clue that fits nicely in the banner';
       const entry = PuzzleEntryData(
         number: 5,
         direction: 'down',
@@ -124,11 +131,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      final text = tester.widget<Text>(find.byType(Text));
-      // Full text should be visible
-      expect(text.data, contains('5. $mediumClue'));
-      // Overflow should be ellipsis (for consistency, even if text fits)
-      expect(text.overflow, equals(TextOverflow.ellipsis));
+      final richText = tester.widget<RichText>(find.byType(RichText).first);
+      final textSpan = richText.text as TextSpan;
+      expect(textSpan.text, contains('5. $mediumClue'));
     });
   });
 }

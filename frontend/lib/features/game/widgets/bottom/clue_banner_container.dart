@@ -19,36 +19,27 @@ class ClueBannerContainer extends ConsumerWidget {
         ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
-      child: FractionallySizedBox(
-        // Increase banner width by ~30% so it appears larger than before.
-        widthFactor: 1.3,
-        child: ConstrainedBox(
-          // Reduced minHeight to make banner shorter
-          constraints: const BoxConstraints(minHeight: 96),
-          child: Container(
-            // Reduced internal vertical padding
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-            decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: colorScheme.onSurface.withAlpha((0.12 * 255).round()),
-                width: 1,
-              ),
+      child: SizedBox(
+        // Fixed height - text will shrink to fit, banner won't grow
+        height: 96,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          decoration: BoxDecoration(
+            color: colorScheme.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: colorScheme.onSurface.withAlpha((0.12 * 255).round()),
+              width: 1,
             ),
-            child: Center(
-              child: _AutoSizeClueText(
-                text: entry.clue == null || entry.clue!.isEmpty
-                    ? '${entry.number}.'
-                    : '${entry.number}. ${entry.clue!}',
-                style: TextStyle(
-                  color: colorScheme.onSurface,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-                maxLines: 2,
-                minFontSize: 14,
-              ),
+          ),
+          child: _AutoSizeClueText(
+            text: entry.clue == null || entry.clue!.isEmpty
+                ? '${entry.number}.'
+                : '${entry.number}. ${entry.clue!}',
+            style: TextStyle(
+              color: colorScheme.onSurface,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -57,63 +48,56 @@ class ClueBannerContainer extends ConsumerWidget {
   }
 }
 
-class _AutoSizeClueText extends StatefulWidget {
+class _AutoSizeClueText extends StatelessWidget {
   const _AutoSizeClueText({
     required this.text,
     required this.style,
-    this.maxLines = 2,
-    this.minFontSize = 12,
   });
 
   final String text;
   final TextStyle style;
-  final int maxLines;
-  final double minFontSize;
+  
+  static const double _minFontSize = 10;
 
-  @override
-  State<_AutoSizeClueText> createState() => _AutoSizeClueTextState();
-}
-
-class _AutoSizeClueTextState extends State<_AutoSizeClueText> {
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
       final maxWidth = constraints.maxWidth;
-      // Start from provided fontSize or fallback
-      final baseFontSize = widget.style.fontSize ?? 18;
+      final maxHeight = constraints.maxHeight;
+      final baseFontSize = style.fontSize ?? 18;
       var fontSize = baseFontSize;
 
-      // Try decreasing font size until text fits within maxLines.
-      while (fontSize >= widget.minFontSize) {
+      // Find the largest font size that fits within constraints
+      while (fontSize >= _minFontSize) {
+        final testStyle = style.copyWith(fontSize: fontSize, height: 1.2);
         final tp = TextPainter(
-          text: TextSpan(
-            text: widget.text,
-            style: widget.style.copyWith(fontSize: fontSize),
-          ),
+          text: TextSpan(text: text, style: testStyle),
           textDirection: TextDirection.ltr,
-          maxLines: widget.maxLines,
-          ellipsis: null,
+          textAlign: TextAlign.center,
         )..layout(maxWidth: maxWidth);
-        if (tp.didExceedMaxLines) {
-          fontSize -= 1;
-          continue;
+
+        if (maxHeight.isFinite && tp.height <= maxHeight) {
+          // Text fits at this font size - use RichText with same TextSpan
+          // to guarantee identical rendering
+          return Center(
+            child: RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(text: text, style: testStyle),
+            ),
+          );
         }
-        break;
+        fontSize -= 0.5;
       }
 
-      // Ensure not below minFontSize
-      if (fontSize < widget.minFontSize) {
-        fontSize = widget.minFontSize;
-      }
-
-      // Store for diagnostics/testing
-
-      return Text(
-        widget.text,
-        textAlign: TextAlign.center,
-        maxLines: widget.maxLines,
-        overflow: TextOverflow.ellipsis,
-        style: widget.style.copyWith(fontSize: fontSize),
+      // At minimum font size but still doesn't fit - make it scrollable
+      final finalStyle = style.copyWith(fontSize: _minFontSize, height: 1.2);
+      return SingleChildScrollView(
+        child: Center(
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(text: text, style: finalStyle),
+          ),
+        ),
       );
     },
   );
