@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
-import 'package:croiz/features/game/providers/game_board_provider.dart';
+import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/audio_service.dart';

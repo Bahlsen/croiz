@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/providers/game_board_provider.dart';
+import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/services/providers.dart';

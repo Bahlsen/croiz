@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
-import 'package:croiz/features/game/providers/game_board_provider.dart';
+import 'package:croiz/features/game/providers/game_board_notifier.dart';
 // import removed: not needed in this unit test
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -20,12 +20,27 @@ void main() {
         title: 'A',
         gridSize: 1,
         createdAt: DateTime.now(),
-        grid: [ [null] ],
+        grid: [
+          [null],
+        ],
         clues: {},
-        blackCells: [ [false] ],
+        blackCells: [
+          [false],
+        ],
         difficulty: 1,
-        entries: const [ PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 1, answer: 'A') ],
-        solutionGrid: [ ['A'] ],
+        entries: const [
+          PuzzleEntryData(
+            number: 1,
+            direction: 'across',
+            x: 0,
+            y: 0,
+            length: 1,
+            answer: 'A',
+          ),
+        ],
+        solutionGrid: [
+          ['A'],
+        ],
       );
 
       final boardB = GameBoard(
@@ -33,12 +48,18 @@ void main() {
         title: 'B',
         gridSize: 1,
         createdAt: DateTime.now(),
-        grid: [ [null] ],
+        grid: [
+          [null],
+        ],
         clues: {},
-        blackCells: [ [false] ],
+        blackCells: [
+          [false],
+        ],
         difficulty: 1,
         entries: const [],
-        solutionGrid: [ [null] ],
+        solutionGrid: [
+          [null],
+        ],
       );
 
       final tempDir = Directory.systemTemp.createTempSync('hive_test');
@@ -92,7 +113,11 @@ void main() {
       // Verify Hive stored board A progress
       // (no prints in tests)
       final raw = box.get(boardA.id);
-      expect(raw, isNotNull, reason: 'Expected debounce-driven persist to save progress');
+      expect(
+        raw,
+        isNotNull,
+        reason: 'Expected debounce-driven persist to save progress',
+      );
       final stored = jsonDecode(raw!) as Map<String, dynamic>;
       expect(stored['grid'][0][0], equals('X'));
 
@@ -104,7 +129,11 @@ void main() {
       await container.read(puzzleLoaderProvider.future);
       // ensure stored payload still present
       final raw2 = box.get(boardA.id);
-      expect(raw2, isNotNull, reason: 'stored payload should still exist after switching back');
+      expect(
+        raw2,
+        isNotNull,
+        reason: 'stored payload should still exist after switching back',
+      );
 
       // wait up to 2s for async restore to apply
       var restored = false;

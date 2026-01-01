@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
-import 'package:croiz/features/game/providers/game_board_provider.dart';
+import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -79,16 +79,16 @@ void main() {
           gridSize: 1,
           createdAt: DateTime.now(),
           grid: [
-            [null]
+            [null],
           ],
           clues: {},
           blackCells: [
-            [false]
+            [false],
           ],
           difficulty: 1,
           entries: const [],
           solutionGrid: [
-            [null]
+            [null],
           ],
         );
 
@@ -152,7 +152,8 @@ void main() {
             const CellKey(0, 1),
             const CellKey(0, 2),
           ]),
-          reason: 'Cells (0,0), (0,1), (0,2) should be locked after finding word',
+          reason:
+              'Cells (0,0), (0,1), (0,2) should be locked after finding word',
         );
 
         // Wait for debounced persist to complete

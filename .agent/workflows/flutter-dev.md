@@ -89,7 +89,14 @@ Get-ChildItem -Recurse -Filter *.dart | Select-String -Pattern "TODO", "FIXME"
 Get-Content -Path "frontend/flutter_01.log" -Wait -Tail 10 | Select-String -Pattern "Error", "Exception"
 ```
 
-### 14. Construire l'APK de release
+### 14. Sauvegarder tous les flux de sortie des tests (PowerShell)
+```powershell
+# Utilisation du joker '*' pour rediriger TOUS les flux (standard, erreur, warning, etc.)
+# Idéal pour capturer les erreurs intermittentes de Flutter
+flutter test --no-pub *>&1 > test_output_split.txt
+```
+
+### 15. Construire l'APK de release
 ```bash
 cd frontend
 flutter build apk --release

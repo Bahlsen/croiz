@@ -3,5 +3,5 @@
 
 export 'game_state_providers.dart';
 export 'puzzle_loader_provider.dart';
-export 'game_board_provider.dart';
+export 'game_board_notifier.dart';
 export 'cell_providers.dart';

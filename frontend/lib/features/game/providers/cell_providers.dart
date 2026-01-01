@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/utils/clue_numbering.dart';
-import 'game_board_provider.dart';
+import 'game_board_notifier.dart';
 
 /// Index of entries by cell for fast lookups.
 /// Maps a CellKey to the list of entries (across/down) that include it.

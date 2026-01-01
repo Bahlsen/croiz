@@ -3,7 +3,7 @@
 
 export 'game_state_providers.dart';
 export 'puzzle_loader_provider.dart';
-export 'game_board_provider.dart';
+export 'game_board_notifier.dart';
 export 'cell_providers.dart';
 
 // Additional providers that haven't been modularized yet
@@ -13,7 +13,7 @@ import '../helpers/board_helpers.dart';
 
 // Re-import for local use
 import 'game_state_providers.dart';
-import 'game_board_provider.dart';
+import 'game_board_notifier.dart';
 
 /// Set of cells belonging to the currently selected word.
 /// Optimized: only depends on selection, direction, and blackCells structure.
