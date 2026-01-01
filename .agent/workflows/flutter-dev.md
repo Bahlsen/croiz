@@ -40,37 +40,43 @@ cd frontend
 flutter test --coverage --no-pub
 ```
 
-### 6. Nettoyer le projet
+### 6. Filtrer les erreurs de tests (PowerShell)
+```powershell
+cd frontend
+flutter test --no-pub 2>&1 | Select-String -Pattern "FAIL", "Error", "Exception" -Context 2, 5 | Select-Object -First 100
+```
+
+### 7. Nettoyer le projet
 ```bash
 cd frontend
 flutter clean
 ```
 
-### 7. Récupérer les dépendances
+### 8. Récupérer les dépendances
 ```bash
 cd frontend
 flutter pub get
 ```
 
-### 8. Mettre à jour les dépendances
+### 9. Mettre à jour les dépendances
 ```bash
 cd frontend
 flutter pub upgrade
 ```
 
-### 9. Vérifier les dépendances obsolètes
+### 10. Vérifier les dépendances obsolètes
 ```bash
 cd frontend
 flutter pub outdated
 ```
 
-### 10. Construire l'APK de debug
+### 11. Construire l'APK de debug
 ```bash
 cd frontend
 flutter build apk --debug
 ```
 
-### 11. Construire l'APK de release
+### 12. Construire l'APK de release
 ```bash
 cd frontend
 flutter build apk --release
