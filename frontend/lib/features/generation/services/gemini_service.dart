@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:croiz/features/generation/models/generated_word.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
 
 class GeminiPuzzleService {
-  GeminiPuzzleService({String? apiKey}) : _apiKey = apiKey;
+  GeminiPuzzleService();
 
-  final String? _apiKey;
   // Default to Flash as it's free and fast
   static const _modelName = 'gemini-1.5-flash';
 
@@ -17,14 +16,8 @@ class GeminiPuzzleService {
     int count = 25,
     int difficultyLevel = 2, // 1-5
   }) async {
-    if (_apiKey == null || _apiKey.isEmpty) {
-      throw Exception(
-        'API Key is missing. Please configure your Gemini API Key in settings.',
-      );
-    }
-
-    final model = GenerativeModel(model: _modelName, apiKey: _apiKey);
-
+    // FirebaseAI automatically uses the Firebase app credentials
+    final model = FirebaseAI.vertexAI().generativeModel(model: _modelName);
     final prompt = _buildPrompt(topic, language, count, difficultyLevel);
 
     try {
@@ -73,7 +66,7 @@ Each word must be:
 3. No spaces, no hyphens, just A-Z letters.
 4. Normalized (remove accents: É->E, Ê->E).
 
-Provide a clue for each word. The clue should be definition-style (crossword style).
+5. Provide a clue for each word. The clue should be definition-style (crossword style).
 
 Output MUST be a valid JSON array. Do not include markdown formatting like ```json ... ```. 
 Just the raw JSON array.
@@ -104,24 +97,7 @@ $jsonFormat
   }
 }
 
-// Provider needs API key.
-// For now, we'll assume it's provided via a settings provider or environment.
-// Since we don't have settings UI for it yet, we'll try to read from --dart-define or use a placeholder.
-// Ideally, this provider should read from SecureStorage.
-// Provider needs API key.
-// For now, we'll assume it's provided via a settings provider or environment.
-// Since we don't have settings UI for it yet, we'll try to read from --dart-define or use a placeholder.
-// Ideally, this provider should read from SecureStorage.
-final geminiApiKeyProvider = Provider<String?>((ref) {
-  // Try to get from environment first
-  const envKey = String.fromEnvironment('GEMINI_API_KEY');
-  if (envKey.isNotEmpty) {
-    return envKey;
-  }
-  return null;
-});
-
-final geminiPuzzleServiceProvider = Provider<GeminiPuzzleService>((ref) {
-  final apiKey = ref.watch(geminiApiKeyProvider);
-  return GeminiPuzzleService(apiKey: apiKey);
-});
+// Simplified provider - no more API key needed!
+final geminiPuzzleServiceProvider = Provider<GeminiPuzzleService>(
+  (ref) => GeminiPuzzleService(),
+);
