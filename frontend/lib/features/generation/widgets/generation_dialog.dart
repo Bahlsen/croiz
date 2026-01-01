@@ -1,5 +1,6 @@
 import 'package:croiz/core/config/app_difficulty.dart';
 import 'package:croiz/core/config/app_languages.dart';
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/services/generation_orchestrator.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -71,10 +72,18 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
           ),
         );
       }
-    } on Exception catch (e) {
+    } on UserFriendlyException catch (e) {
+      // Display user-friendly message
       if (mounted) {
         setState(() {
-          _error = e.toString();
+          _error = e.userMessage;
+        });
+      }
+    } on Exception {
+      // Fallback for any unexpected errors
+      if (mounted) {
+        setState(() {
+          _error = 'An unexpected error occurred. Please try again.';
         });
       }
     } finally {

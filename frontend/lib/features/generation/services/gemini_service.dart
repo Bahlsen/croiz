@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/models/generated_word.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,13 +28,45 @@ class GeminiPuzzleService {
 
       final text = response.text;
       if (text == null) {
-        throw Exception('Empty response from Gemini');
+        developer.log(
+          'Empty response from Gemini API',
+          name: 'GeminiService',
+          level: 900,
+        );
+        throw UserFriendlyException(
+          'Unable to generate puzzle. Please try again.',
+          technicalDetails: 'Empty response from Gemini API',
+        );
       }
 
       return _parseResponse(text);
-    } catch (e) {
-      developer.log('Gemini generation error: $e', name: 'GeminiService');
+    } on UserFriendlyException {
+      // Re-throw user-friendly exceptions as-is
       rethrow;
+    } catch (e) {
+      developer.log(
+        'Gemini generation error: $e',
+        name: 'GeminiService',
+        level: 1000,
+      );
+
+      // Convert technical errors to user-friendly messages
+      final errorMessage = e.toString().toLowerCase();
+
+      if (errorMessage.contains('firebase') ||
+          errorMessage.contains('api') ||
+          errorMessage.contains('permission') ||
+          errorMessage.contains('disabled')) {
+        throw UserFriendlyException(
+          'Service temporarily unavailable. Please try again later.',
+          technicalDetails: e.toString(),
+        );
+      }
+
+      throw UserFriendlyException(
+        'Unable to generate puzzle. Please try again.',
+        technicalDetails: e.toString(),
+      );
     }
   }
 
@@ -94,7 +127,15 @@ $jsonFormat
           .where((w) => w.answer.length >= 2) // Filter out garbage
           .toList();
     } catch (e) {
-      throw Exception('Failed to parse JSON from AI: $cleaner. Error: $e');
+      developer.log(
+        'Failed to parse JSON from AI: $cleaner. Error: $e',
+        name: 'GeminiService',
+        level: 1000,
+      );
+      throw UserFriendlyException(
+        'An error occurred during generation. Please try again.',
+        technicalDetails: 'Failed to parse JSON from AI: $e',
+      );
     }
   }
 }

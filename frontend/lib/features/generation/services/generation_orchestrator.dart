@@ -1,3 +1,4 @@
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
 import 'package:croiz/features/generation/services/grid_generator.dart';
@@ -31,7 +32,11 @@ class PuzzleGenerationOrchestrator {
     );
 
     if (words.length < 5) {
-      throw Exception('The AI did not generate enough valid words.');
+      throw UserFriendlyException(
+        'Unable to generate enough words for this topic. Please try a different topic.',
+        technicalDetails:
+            'Only ${words.length} words generated, minimum 5 required',
+      );
     }
 
     // 2. Build Grid
@@ -40,7 +45,10 @@ class PuzzleGenerationOrchestrator {
     final placedWords = generator.generate(words);
 
     if (placedWords.isEmpty) {
-      throw Exception('Impossible to build a grid with these words.');
+      throw UserFriendlyException(
+        'Unable to create a puzzle grid. Please try again or choose a different difficulty.',
+        technicalDetails: 'Grid generator returned 0 placed words',
+      );
     }
 
     // 3. Convert to Puzzle format

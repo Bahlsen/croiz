@@ -1,3 +1,4 @@
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/models/generated_word.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
@@ -126,10 +127,10 @@ void main() {
         expect(
           () => orchestrator.generateAndSave(topic: 'Test', language: 'en'),
           throwsA(
-            isA<Exception>().having(
-              (e) => e.toString(),
-              'message',
-              contains('not generate enough valid words'),
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('Unable to generate enough words'),
             ),
           ),
         );
