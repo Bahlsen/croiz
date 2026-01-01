@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -26,6 +27,8 @@ class ClueBannerContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return GestureDetector(
       onTap: () {
         final newDir =
@@ -35,32 +38,102 @@ class ClueBannerContainer extends ConsumerWidget {
         ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
-      // SizedBox enforces FIXED height - banner size never changes
-      child: SizedBox(
+      child: Container(
         height: fixedHeight,
-        child: Container(
+        margin: EdgeInsets.symmetric(horizontal: ResponsivePadding.sm),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(ResponsiveBorderRadius.lg),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors:
+                isDark
+                    ? [
+                      colorScheme.surfaceBright,
+                      colorScheme.surfaceContainerHigh,
+                    ]
+                    : [
+                      Colors.white,
+                      colorScheme.surfaceContainerHighest.withAlpha(128),
+                    ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(isDark ? 50 : 20),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(
+            color: colorScheme.outlineVariant.withAlpha(isDark ? 40 : 100),
+            width: 1,
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Padding(
+          key: ValueKey('${entry.number}-${entry.direction}-${entry.clue}'),
           padding: EdgeInsets.symmetric(
             vertical: ResponsivePadding.sm,
             horizontal: ResponsivePadding.md,
           ),
-          decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
-          ),
-          alignment: Alignment.center,
-          child: _AutoSizeClueText(
-            text:
-                entry.clue == null || entry.clue!.isEmpty
-                    ? '${entry.number}.'
-                    : '${entry.number}. ${entry.clue!}',
-            style: TextStyle(
-              color: colorScheme.onSurface,
-              fontSize: ResponsiveFontSize.bodyLarge,
-              fontWeight: FontWeight.w600,
-            ),
+          child: Row(
+            children: [
+              _buildNumberBadge(context),
+              SizedBox(width: ResponsivePadding.sm),
+              Expanded(
+                child: _AutoSizeClueText(
+                  key: const Key('clue_text'),
+                  text: entry.clue ?? '',
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
+                    fontSize: ResponsiveFontSize.bodyLarge,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.2,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildNumberBadge(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final isAcross = entry.direction == 'across';
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.all(ResponsivePadding.xs),
+          decoration: BoxDecoration(
+            color: colorScheme.primary.withAlpha(40),
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            '${entry.number}',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.bold,
+              fontSize: ResponsiveFontSize.bodySmall,
+            ),
+          ),
+        ),
+        SizedBox(height: ResponsivePadding.xxs),
+        Text(
+          isAcross
+              ? (AppLocalizations.of(context)?.across.toUpperCase() ?? 'ACROSS')
+              : (AppLocalizations.of(context)?.down.toUpperCase() ?? 'DOWN'),
+          style: TextStyle(
+            color: colorScheme.primary.withAlpha(180),
+            fontWeight: FontWeight.w800,
+            fontSize: 8,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -75,7 +148,7 @@ class ClueBannerContainer extends ConsumerWidget {
 ///
 /// Supports `<i>text</i>` tags for italic formatting.
 class _AutoSizeClueText extends StatelessWidget {
-  const _AutoSizeClueText({required this.text, required this.style});
+  const _AutoSizeClueText({required this.text, required this.style, super.key});
 
   final String text;
   final TextStyle style;

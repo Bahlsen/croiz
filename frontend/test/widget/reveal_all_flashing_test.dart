@@ -55,7 +55,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          flashClearDelayProvider.overrideWithValue(const Duration(seconds: 5)),
+          flashClearDelayProvider.overrideWithValue(const Duration(seconds: 1)),
         ],
       );
       addTearDown(container.dispose);
@@ -107,7 +107,8 @@ void main() {
         expect(flashing.contains(c), isFalse);
       }
 
-      await tester.pump(const Duration(seconds: 6));
+      await tester.pump(const Duration(milliseconds: 1100));
+      await tester.pumpAndSettle();
     },
   );
 
@@ -157,7 +158,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          flashClearDelayProvider.overrideWithValue(const Duration(seconds: 5)),
+          flashClearDelayProvider.overrideWithValue(const Duration(seconds: 1)),
         ],
       );
       addTearDown(container.dispose);
@@ -209,7 +210,8 @@ void main() {
         expect(flashing.contains(c), isFalse);
       }
 
-      await tester.pump(const Duration(seconds: 6));
+      await tester.pump(const Duration(milliseconds: 1100));
+      await tester.pumpAndSettle();
     },
   );
 }

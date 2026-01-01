@@ -42,7 +42,8 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        // Keep default flash delay (> 0) so red flash persists for inspection
+        // Override flash delay to a longer known duration to reliably test before/after
+        flashClearDelayProvider.overrideWithValue(const Duration(seconds: 2)),
       ],
     );
     addTearDown(container.dispose);
@@ -51,14 +52,15 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: Scaffold(
-              body: Center(
-                // Directly render the cell that should flash red after cleaning
-                child: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+          builder:
+              (context, orientation, deviceType) => const MaterialApp(
+                home: Scaffold(
+                  body: Center(
+                    // Directly render the cell that should flash red after cleaning
+                    child: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+                  ),
+                ),
               ),
-            ),
-          ),
         ),
       ),
     );
@@ -66,8 +68,9 @@ void main() {
     // Trigger cleaning which should clear (0,1) and set flashing-cleared state
     container.read(gameBoardProvider.notifier).clearIncorrectLetters();
 
-    // Pump a single frame to apply new decoration but avoid clearing by timer
-    await tester.pump();
+    // Pump and settle to let the initial state (red flash) apply and animations finish.
+    // Since we set delay to 2 seconds, this will settle animations (~200ms) but NOT expire the flash.
+    await tester.pumpAndSettle();
 
     // Fetch the Container decorating the cell
     // (AnimatedContainer was removed for performance - now uses plain Container)
@@ -89,14 +92,17 @@ void main() {
     // Border should be red accent during cleared flash
     final border =
         (decoration.border ?? Border.all(color: Colors.transparent)) as Border;
+    // CrosswordThemeColors.defaults uses Colors.redAccent for clearedFlashingBorderColor
     expect(border.top.color, equals(Colors.redAccent));
 
-    // Background should have a reddish tint (exact value match)
+    // Background should have a reddish tint (matches CrosswordThemeColors.defaults.clearedFlashingBgColor)
     expect(decoration.color, isNotNull);
-    expect(decoration.color, equals(Colors.redAccent.withValues(alpha: 0.48)));
+    expect(decoration.color, equals(const Color.fromRGBO(255, 82, 82, 0.48)));
 
-    // After delay, the flash should clear; advance beyond default (500ms)
-    await tester.pump(const Duration(milliseconds: 600));
+    // Advance time past the 2-second delay to clear the flash
+    await tester.pump(const Duration(milliseconds: 2100));
+    // Pump and settle to let the "fade out" animation finish (AnimatedContainer takes ~200ms)
+    await tester.pumpAndSettle();
 
     // Re-fetch Container after flash clears
     final containerFinderAfter = find.descendant(

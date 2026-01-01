@@ -5,7 +5,9 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'package:sizer/sizer.dart';
+import 'clue_banner_container_test.dart'; // for extractTextFromSpan
 
 void main() {
   group('CrosswordClueHeader', () {
@@ -61,22 +63,40 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => const MaterialApp(
-              home: Scaffold(body: CrosswordClueHeader()),
-            ),
+            builder:
+                (context, orientation, deviceType) => const MaterialApp(
+                  home: Scaffold(body: CrosswordClueHeader()),
+                ),
           ),
         ),
       );
 
-      // Use findRichText: true because ClueBannerContainer uses RichText
-      expect(find.text('1. Across clue', findRichText: true), findsOneWidget);
+      // Separate expectations for number/direction and clue
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('ACROSS'), findsOneWidget);
+
+      final clueTextFinder = find.byKey(const Key('clue_text'));
+      final richTextFinder = find.descendant(
+        of: clueTextFinder,
+        matching: find.byType(RichText),
+      );
+      final richText = tester.widget<RichText>(richTextFinder);
+      expect(extractTextFromSpan(richText.text), equals('Across clue'));
 
       // Tap on the ClueBannerContainer (which has the GestureDetector)
       await tester.tap(find.byType(ClueBannerContainer));
       await tester.pump();
 
       expect(container.read(wordDirectionProvider), WordDirection.vertical);
-      expect(find.text('1. Down clue', findRichText: true), findsOneWidget);
+      expect(find.text('1'), findsOneWidget);
+      expect(find.text('DOWN'), findsOneWidget);
+
+      final richText2Finder = find.descendant(
+        of: find.byKey(const Key('clue_text')),
+        matching: find.byType(RichText),
+      );
+      final richText2 = tester.widget<RichText>(richText2Finder);
+      expect(extractTextFromSpan(richText2.text), equals('Down clue'));
     });
     testWidgets('shows only entry number and clue, centered', (tester) async {
       // Arrange minimal board state with one entry and selection
@@ -122,15 +142,22 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => const MaterialApp(
-              home: Scaffold(body: CrosswordClueHeader()),
-            ),
+            builder:
+                (context, orientation, deviceType) => const MaterialApp(
+                  home: Scaffold(body: CrosswordClueHeader()),
+                ),
           ),
         ),
       );
 
-      // Assert: banner text contains clue (using RichText since ClueBannerContainer uses it)
-      expect(find.text('1. Lundi', findRichText: true), findsOneWidget);
+      // Assert: banner text contains clue
+      expect(find.text('1'), findsOneWidget);
+      final richTextFinder = find.descendant(
+        of: find.byKey(const Key('clue_text')),
+        matching: find.byType(RichText),
+      );
+      final richText = tester.widget<RichText>(richTextFinder);
+      expect(extractTextFromSpan(richText.text), equals('Lundi'));
       // Arrows should be present
       expect(find.byIcon(Icons.chevron_left), findsOneWidget);
       expect(find.byIcon(Icons.chevron_right), findsOneWidget);
@@ -160,9 +187,10 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => const MaterialApp(
-              home: Scaffold(body: CrosswordClueHeader()),
-            ),
+            builder:
+                (context, orientation, deviceType) => const MaterialApp(
+                  home: Scaffold(body: CrosswordClueHeader()),
+                ),
           ),
         ),
       );
@@ -227,9 +255,10 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => const MaterialApp(
-              home: Scaffold(body: CrosswordClueHeader()),
-            ),
+            builder:
+                (context, orientation, deviceType) => const MaterialApp(
+                  home: Scaffold(body: CrosswordClueHeader()),
+                ),
           ),
         ),
       );

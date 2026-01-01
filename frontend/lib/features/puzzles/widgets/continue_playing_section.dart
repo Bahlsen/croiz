@@ -301,13 +301,38 @@ class _InProgressCard extends ConsumerWidget {
                     ),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(
-                    puzzle.descriptor.difficultyLabel.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.w800,
-                    ),
+                  child: Builder(
+                    builder: (context) {
+                      final l10n = AppLocalizations.of(context);
+                      String label;
+                      switch (puzzle.descriptor.difficulty) {
+                        case 1:
+                          label = l10n?.easy ?? 'Easy';
+                          break;
+                        case 2:
+                          label = l10n?.medium ?? 'Medium';
+                          break;
+                        case 3:
+                          label = l10n?.hard ?? 'Hard';
+                          break;
+                        case 4:
+                          label = l10n?.expert ?? 'Expert';
+                          break;
+                        case 5:
+                          label = l10n?.pro ?? 'Pro';
+                          break;
+                        default:
+                          label = puzzle.descriptor.difficultyLabel;
+                      }
+                      return Text(
+                        label.toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      );
+                    },
                   ),
                 ),
                 const Spacer(),

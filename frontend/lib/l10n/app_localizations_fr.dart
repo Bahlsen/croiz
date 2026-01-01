@@ -180,4 +180,22 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get noPuzzlesInProgress => 'Aucun puzzle en cours';
+
+  @override
+  String get across => 'Horizontal';
+
+  @override
+  String get down => 'Vertical';
+
+  @override
+  String get easy => 'Facile';
+
+  @override
+  String get hard => 'Difficile';
+
+  @override
+  String get expert => 'Expert';
+
+  @override
+  String get pro => 'Pro';
 }

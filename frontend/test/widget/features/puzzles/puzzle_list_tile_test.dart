@@ -6,15 +6,13 @@ import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
-  Widget buildTestWidget(Widget child) {
-    return ProviderScope(
-      child: Sizer(
-        builder:
-            (context, orientation, deviceType) =>
-                MaterialApp(home: Scaffold(body: child)),
-      ),
-    );
-  }
+  Widget buildTestWidget(Widget child) => ProviderScope(
+    child: Sizer(
+      builder:
+          (context, orientation, deviceType) =>
+              MaterialApp(home: Scaffold(body: child)),
+    ),
+  );
 
   testWidgets('shows difficulty badge properly', (tester) async {
     await tester.pumpWidget(

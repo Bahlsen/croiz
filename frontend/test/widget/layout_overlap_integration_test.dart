@@ -17,31 +17,31 @@ import 'package:croiz/domain/entities/game_entities.dart';
 void main() {
   group('Layout Overlap Integration Tests', () {
     GameBoard createBoard({required int gridSize}) => GameBoard(
-          id: 'test',
-          title: 'Test Board $gridSize x $gridSize',
-          gridSize: gridSize,
-          createdAt: DateTime(2025, 1, 1),
-          grid: List.generate(
-            gridSize,
-            (_) => List.generate(gridSize, (_) => null),
-          ),
-          clues: const {'1-across': 'Test clue for testing layout'},
-          blackCells: List.generate(
-            gridSize,
-            (_) => List.generate(gridSize, (_) => false),
-          ),
-          difficulty: 1,
-          entries: [
-            PuzzleEntryData(
-              number: 1,
-              direction: 'across',
-              x: 0,
-              y: 0,
-              length: gridSize,
-              clue: 'Test clue for testing layout',
-            ),
-          ],
-        );
+      id: 'test',
+      title: 'Test Board $gridSize x $gridSize',
+      gridSize: gridSize,
+      createdAt: DateTime(2025, 1, 1),
+      grid: List.generate(
+        gridSize,
+        (_) => List.generate(gridSize, (_) => null),
+      ),
+      clues: const {'1-across': 'Test clue for testing layout'},
+      blackCells: List.generate(
+        gridSize,
+        (_) => List.generate(gridSize, (_) => false),
+      ),
+      difficulty: 1,
+      entries: [
+        PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: gridSize,
+          clue: 'Test clue for testing layout',
+        ),
+      ],
+    );
 
     Future<void> pumpLayout(
       WidgetTester tester, {
@@ -62,119 +62,126 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: MediaQuery(
-                data: MediaQueryData(
-                  size: screenSize,
-                  padding: EdgeInsets.only(
-                    top: topPadding,
-                    bottom: bottomPadding,
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: MediaQuery(
+                    data: MediaQueryData(
+                      size: screenSize,
+                      padding: EdgeInsets.only(
+                        top: topPadding,
+                        bottom: bottomPadding,
+                      ),
+                    ),
+                    // Use the ACTUAL CrosswordBody as in production
+                    child: CrosswordBody(controller: controller),
                   ),
                 ),
-                // Use the ACTUAL CrosswordBody as in production
-                child: CrosswordBody(controller: controller),
-              ),
-            ),
           ),
         ),
       );
       await tester.pumpAndSettle();
     }
 
-    testWidgets(
-      'CRITICAL: Grid and controls do NOT overlap on real phone size',
-      (tester) async {
-        // Use a realistic phone size (iPhone 8)
-        const screenSize = Size(375, 667);
-        final board = createBoard(gridSize: 7);
-        final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
-        );
-        addTearDown(container.dispose);
+    testWidgets('CRITICAL: Grid and controls do NOT overlap on real phone size', (
+      tester,
+    ) async {
+      // Use a realistic phone size (iPhone 8)
+      const screenSize = Size(375, 667);
+      final board = createBoard(gridSize: 7);
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
-        await pumpLayout(tester, screenSize: screenSize, container: container);
+      await pumpLayout(tester, screenSize: screenSize, container: container);
 
-        // Get actual pixel positions
-        final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
-        final controlsAreaRect =
-            tester.getRect(find.byType(CrosswordControlsArea));
+      // Get actual pixel positions
+      final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
+      final controlsAreaRect = tester.getRect(
+        find.byType(CrosswordControlsArea),
+      );
 
-        // Debug output
-        debugPrint('Screen size: $screenSize');
-        debugPrint('Grid area: $gridAreaRect');
-        debugPrint('Controls area: $controlsAreaRect');
-        debugPrint('Grid bottom: ${gridAreaRect.bottom}');
-        debugPrint('Controls top: ${controlsAreaRect.top}');
-        debugPrint(
-            'Overlap: ${gridAreaRect.bottom - controlsAreaRect.top} pixels');
+      // Debug output
+      debugPrint('Screen size: $screenSize');
+      debugPrint('Grid area: $gridAreaRect');
+      debugPrint('Controls area: $controlsAreaRect');
+      debugPrint('Grid bottom: ${gridAreaRect.bottom}');
+      debugPrint('Controls top: ${controlsAreaRect.top}');
+      debugPrint(
+        'Overlap: ${gridAreaRect.bottom - controlsAreaRect.top} pixels',
+      );
 
-        // CRITICAL ASSERTION: Grid bottom must be <= controls top
-        expect(
-          gridAreaRect.bottom,
-          lessThanOrEqualTo(controlsAreaRect.top + 1), // +1 for divider
-          reason:
-              'Grid bottom (${gridAreaRect.bottom}) overlaps controls top (${controlsAreaRect.top})',
-        );
+      // CRITICAL ASSERTION: Grid bottom must be <= controls top
+      expect(
+        gridAreaRect.bottom,
+        lessThanOrEqualTo(controlsAreaRect.top + 1), // +1 for divider
+        reason:
+            'Grid bottom (${gridAreaRect.bottom}) overlaps controls top (${controlsAreaRect.top})',
+      );
 
-        // Verify both are visible (positive dimensions)
-        expect(gridAreaRect.height, greaterThan(50),
-            reason: 'Grid must have visible height');
-        expect(controlsAreaRect.height, greaterThan(50),
-            reason: 'Controls must have visible height');
+      // Verify both are visible (positive dimensions)
+      expect(
+        gridAreaRect.height,
+        greaterThan(50),
+        reason: 'Grid must have visible height',
+      );
+      expect(
+        controlsAreaRect.height,
+        greaterThan(50),
+        reason: 'Controls must have visible height',
+      );
 
-        // Verify grid is within screen bounds
-        expect(gridAreaRect.left, greaterThanOrEqualTo(0));
-        expect(gridAreaRect.top, greaterThanOrEqualTo(0));
-        expect(gridAreaRect.right, lessThanOrEqualTo(screenSize.width));
-        expect(gridAreaRect.bottom, lessThanOrEqualTo(screenSize.height));
-      },
-    );
+      // Verify grid is within screen bounds
+      expect(gridAreaRect.left, greaterThanOrEqualTo(0));
+      expect(gridAreaRect.top, greaterThanOrEqualTo(0));
+      expect(gridAreaRect.right, lessThanOrEqualTo(screenSize.width));
+      expect(gridAreaRect.bottom, lessThanOrEqualTo(screenSize.height));
+    });
 
-    testWidgets(
-      'CRITICAL: CrosswordGrid fits within CrosswordGridArea',
-      (tester) async {
-        const screenSize = Size(375, 667);
-        final board = createBoard(gridSize: 7);
-        final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
-        );
-        addTearDown(container.dispose);
+    testWidgets('CRITICAL: CrosswordGrid fits within CrosswordGridArea', (
+      tester,
+    ) async {
+      const screenSize = Size(375, 667);
+      final board = createBoard(gridSize: 7);
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
-        await pumpLayout(tester, screenSize: screenSize, container: container);
+      await pumpLayout(tester, screenSize: screenSize, container: container);
 
-        final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
-        final gridRect = tester.getRect(find.byType(CrosswordGrid));
+      final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
+      final gridRect = tester.getRect(find.byType(CrosswordGrid));
 
-        debugPrint('GridArea: $gridAreaRect');
-        debugPrint('Grid: $gridRect');
+      debugPrint('GridArea: $gridAreaRect');
+      debugPrint('Grid: $gridRect');
 
-        // Grid must be completely within GridArea
-        expect(
-          gridRect.left,
-          greaterThanOrEqualTo(gridAreaRect.left - 1),
-          reason: 'Grid left edge outside GridArea',
-        );
-        expect(
-          gridRect.top,
-          greaterThanOrEqualTo(gridAreaRect.top - 1),
-          reason: 'Grid top edge outside GridArea',
-        );
-        expect(
-          gridRect.right,
-          lessThanOrEqualTo(gridAreaRect.right + 1),
-          reason: 'Grid right edge outside GridArea',
-        );
-        expect(
-          gridRect.bottom,
-          lessThanOrEqualTo(gridAreaRect.bottom + 1),
-          reason: 'Grid bottom edge outside GridArea',
-        );
-      },
-    );
+      // Grid must be completely within GridArea
+      expect(
+        gridRect.left,
+        greaterThanOrEqualTo(gridAreaRect.left - 1),
+        reason: 'Grid left edge outside GridArea',
+      );
+      expect(
+        gridRect.top,
+        greaterThanOrEqualTo(gridAreaRect.top - 1),
+        reason: 'Grid top edge outside GridArea',
+      );
+      expect(
+        gridRect.right,
+        lessThanOrEqualTo(gridAreaRect.right + 1),
+        reason: 'Grid right edge outside GridArea',
+      );
+      expect(
+        gridRect.bottom,
+        lessThanOrEqualTo(gridAreaRect.bottom + 1),
+        reason: 'Grid bottom edge outside GridArea',
+      );
+    });
 
     testWidgets(
       'CRITICAL: No overflow errors on small screen with large grid',
@@ -193,8 +200,9 @@ void main() {
         await pumpLayout(tester, screenSize: screenSize, container: container);
 
         final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
-        final controlsAreaRect =
-            tester.getRect(find.byType(CrosswordControlsArea));
+        final controlsAreaRect = tester.getRect(
+          find.byType(CrosswordControlsArea),
+        );
         final gridRect = tester.getRect(find.byType(CrosswordGrid));
 
         debugPrint('=== Small screen + large grid ===');
@@ -219,50 +227,46 @@ void main() {
       },
     );
 
-    testWidgets(
-      'Layout percentages are reasonable',
-      (tester) async {
-        const screenSize = Size(375, 667);
-        final board = createBoard(gridSize: 7);
-        final container = ProviderContainer(
-          overrides: [
-            puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          ],
-        );
-        addTearDown(container.dispose);
+    testWidgets('Layout percentages are reasonable', (tester) async {
+      const screenSize = Size(375, 667);
+      final board = createBoard(gridSize: 7);
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
-        await pumpLayout(tester, screenSize: screenSize, container: container);
+      await pumpLayout(tester, screenSize: screenSize, container: container);
 
-        final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
-        final controlsAreaRect =
-            tester.getRect(find.byType(CrosswordControlsArea));
+      final gridAreaRect = tester.getRect(find.byType(CrosswordGridArea));
+      final controlsAreaRect = tester.getRect(
+        find.byType(CrosswordControlsArea),
+      );
 
-        final gridPercent = gridAreaRect.height / screenSize.height * 100;
-        final controlsPercent =
-            controlsAreaRect.height / screenSize.height * 100;
-        final totalPercent = gridPercent + controlsPercent;
+      final gridPercent = gridAreaRect.height / screenSize.height * 100;
+      final controlsPercent = controlsAreaRect.height / screenSize.height * 100;
+      final totalPercent = gridPercent + controlsPercent;
 
-        debugPrint('Grid: ${gridPercent.toStringAsFixed(1)}% of screen');
-        debugPrint('Controls: ${controlsPercent.toStringAsFixed(1)}% of screen');
-        debugPrint('Total: ${totalPercent.toStringAsFixed(1)}%');
+      debugPrint('Grid: ${gridPercent.toStringAsFixed(1)}% of screen');
+      debugPrint('Controls: ${controlsPercent.toStringAsFixed(1)}% of screen');
+      debugPrint('Total: ${totalPercent.toStringAsFixed(1)}%');
 
-        // Controls should not take more than 50% of the screen
-        expect(
-          controlsPercent,
-          lessThan(50),
-          reason:
-              'Controls take too much space: ${controlsPercent.toStringAsFixed(1)}%',
-        );
+      // Controls should not take more than 55% of the screen
+      expect(
+        controlsPercent,
+        lessThan(55),
+        reason:
+            'Controls take too much space: ${controlsPercent.toStringAsFixed(1)}%',
+      );
 
-        // Grid should have at least 35% of the screen (reduced from 40% to
-        // accommodate larger clue banner)
-        expect(
-          gridPercent,
-          greaterThan(35),
-          reason:
-              'Grid has too little space: ${gridPercent.toStringAsFixed(1)}%',
-        );
-      },
-    );
+      // Grid should have at least 30% of the screen (reduced from 35/40% to
+      // accommodate larger premium clue banner)
+      expect(
+        gridPercent,
+        greaterThan(30),
+        reason: 'Grid has too little space: ${gridPercent.toStringAsFixed(1)}%',
+      );
+    });
   });
 }

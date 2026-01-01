@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('Menu icon is present and triggers callback', (
@@ -12,16 +13,19 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            home: Scaffold(
-              body: CrosswordClueHeader(
-                onClear: () {},
-                onMenu: () {
-                  menuPressed = true;
-                },
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: CrosswordClueHeader(
+                    onClear: () {},
+                    onMenu: () {
+                      menuPressed = true;
+                    },
+                  ),
+                ),
               ),
-            ),
-          ),
         ),
       ),
     );
@@ -42,16 +46,19 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            home: Scaffold(
-              body: CrosswordClueHeader(onClear: () {}, onMenu: () {}),
-            ),
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: CrosswordClueHeader(onClear: () {}, onMenu: () {}),
+                ),
+              ),
         ),
       ),
     );
     expect(find.byKey(const Key('clear_button')), findsOneWidget);
-    expect(find.byIcon(Icons.cleaning_services_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.cleaning_services_rounded), findsOneWidget);
     // Keyboard toggle moved to the menu; verify keyboard icon is not present
     expect(find.byIcon(Icons.keyboard_alt_outlined), findsNothing);
   });

@@ -13,6 +13,9 @@ import 'package:sizer/sizer.dart';
 class ResponsiveSpacing {
   ResponsiveSpacing._();
 
+  /// Extra extra small spacing (0.25% of screen height)
+  static double get xxs => 0.25.h;
+
   /// Extra small spacing (0.5% of screen height)
   static double get xs => 0.5.h;
 
@@ -100,6 +103,9 @@ class ResponsiveIconSize {
 class ResponsivePadding {
   ResponsivePadding._();
 
+  /// Extra extra small padding (0.25% of screen width)
+  static double get xxs => 0.25.w;
+
   /// Extra small padding (0.5% of screen width)
   static double get xs => 0.5.w;
 
@@ -119,6 +125,9 @@ class ResponsivePadding {
 /// Responsive border radius values.
 class ResponsiveBorderRadius {
   ResponsiveBorderRadius._();
+
+  /// Extra extra small radius (0.25% of screen width)
+  static double get xxs => 0.25.w;
 
   /// Extra small radius (0.5% of screen width)
   static double get xs => 0.5.w;

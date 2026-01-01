@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -54,7 +56,7 @@ class PuzzleCard extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildDifficultyTag(theme),
+                      _buildDifficultyTag(theme, context),
                       SizedBox(height: 1.h),
                       Text(
                         descriptor.title,
@@ -87,8 +89,30 @@ class PuzzleCard extends ConsumerWidget {
     context.go('/crossword?id=$encodedId');
   }
 
-  Widget _buildDifficultyTag(ThemeData theme) {
+  Widget _buildDifficultyTag(ThemeData theme, BuildContext context) {
     final colors = _getDifficultyColors(descriptor.difficulty);
+    final l10n = AppLocalizations.of(context);
+    String label;
+    switch (descriptor.difficulty) {
+      case 1:
+        label = l10n?.easy ?? 'Easy';
+        break;
+      case 2:
+        label = l10n?.medium ?? 'Medium';
+        break;
+      case 3:
+        label = l10n?.hard ?? 'Hard';
+        break;
+      case 4:
+        label = l10n?.expert ?? 'Expert';
+        break;
+      case 5:
+        label = l10n?.pro ?? 'Pro';
+        break;
+      default:
+        label = descriptor.difficultyLabel;
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -101,7 +125,7 @@ class PuzzleCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        descriptor.difficultyLabel.toUpperCase(),
+        label.toUpperCase(),
         style: const TextStyle(
           color: Colors.white,
           fontSize: 10,
@@ -141,7 +165,9 @@ class PuzzleCard extends ConsumerWidget {
     }
 
     final percent = completionPercent ?? 0;
-    if (percent == 0) return const SizedBox.shrink();
+    if (percent == 0) {
+      return const SizedBox.shrink();
+    }
 
     return Stack(
       alignment: Alignment.center,

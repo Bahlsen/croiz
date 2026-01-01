@@ -8,19 +8,17 @@ import 'package:croiz/l10n/app_localizations.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
-  Widget buildTestWidget({required overrides}) {
-    return ProviderScope(
-      overrides: overrides,
-      child: Sizer(
-        builder:
-            (context, orientation, deviceType) => MaterialApp(
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              home: const Scaffold(body: ContinuePlayingSection()),
-            ),
-      ),
-    );
-  }
+  Widget buildTestWidget({required overrides}) => ProviderScope(
+    overrides: overrides,
+    child: Sizer(
+      builder:
+          (context, orientation, deviceType) => const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: ContinuePlayingSection()),
+          ),
+    ),
+  );
 
   testWidgets('shows placeholder when no puzzles in progress', (tester) async {
     await tester.pumpWidget(

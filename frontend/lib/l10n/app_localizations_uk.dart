@@ -125,7 +125,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get small => 'Малий';
 
   @override
-  String get medium => 'Середній';
+  String get medium => 'Середньо';
 
   @override
   String get large => 'Великий';
@@ -173,11 +173,29 @@ class AppLocalizationsUk extends AppLocalizations {
   String get quick => 'Quick';
 
   @override
-  String get standard => 'Стандарт';
+  String get standard => 'Standard';
 
   @override
-  String get continuePlaying => 'Продовжити гру';
+  String get continuePlaying => 'Продовжити';
 
   @override
-  String get noPuzzlesInProgress => 'Немає розпочатих кросвордів';
+  String get noPuzzlesInProgress => 'Немає розпочатих головоломок';
+
+  @override
+  String get across => 'По горизонталі';
+
+  @override
+  String get down => 'По вертикалі';
+
+  @override
+  String get easy => 'Легко';
+
+  @override
+  String get hard => 'Складно';
+
+  @override
+  String get expert => 'Експерт';
+
+  @override
+  String get pro => 'Професійно';
 }

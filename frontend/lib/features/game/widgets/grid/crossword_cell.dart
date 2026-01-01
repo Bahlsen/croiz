@@ -250,11 +250,18 @@ class CrosswordCell extends ConsumerWidget {
             ref.read(wordDirectionProvider.notifier).setDirection(newDir);
           }
         },
-        // Performance: use plain Container for instant visual feedback.
-        // AnimatedContainer causes perceived delay on touch.
-        child: _OuterBorder(
-          border: border,
-          child: Container(decoration: decoration, child: content),
+        child: AnimatedScale(
+          scale: isSelected ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutBack,
+          child: _OuterBorder(
+            border: border,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: decoration,
+              child: content,
+            ),
+          ),
         ),
       ),
     );
@@ -358,41 +365,47 @@ class _CellContent extends StatelessWidget {
             : Colors.black;
 
     final numberStyle = TextStyle(
-      fontSize: 9,
+      fontSize: 8,
       color:
           isBlack
               ? blackLetterColor.withAlpha((0.58 * 255).round())
               : scheme.onSurface.withAlpha((0.58 * 255).round()),
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     );
-    final letterStyle = TextStyle(
-      fontSize: 26,
+
+    final baseLetterStyle = TextStyle(
+      fontSize: isSelected ? 30 : 24,
       fontWeight: FontWeight.bold,
       color:
-          isBlack ? blackLetterColor : (isDark ? Colors.white : Colors.black),
-    );
-    final selectedLetterStyle = TextStyle(
-      fontSize: 30,
-      fontWeight: FontWeight.bold,
-      color: isBlack ? blackLetterColor : scheme.onSurface,
+          isBlack
+              ? blackLetterColor
+              : (isSelected
+                  ? scheme.onSurface
+                  : (isDark ? Colors.white70 : Colors.black87)),
+      letterSpacing: -0.5,
     );
 
     return Stack(
       children: [
         if (cellNumber != null)
           Positioned(
-            left: 1,
-            top: 0,
-            child: Text('$cellNumber', style: numberStyle),
+            left: 2,
+            top: 1,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              opacity: isBlack ? 0.3 : 0.8,
+              child: Text('$cellNumber', style: numberStyle),
+            ),
           ),
         Center(
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Padding(
               padding: _letterPadding,
-              child: Text(
-                letter ?? '',
-                style: isSelected ? selectedLetterStyle : letterStyle,
+              child: AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 200),
+                style: baseLetterStyle,
+                child: Text(letter ?? ''),
               ),
             ),
           ),
