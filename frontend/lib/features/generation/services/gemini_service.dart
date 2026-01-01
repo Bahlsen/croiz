@@ -5,10 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
 
 class GeminiPuzzleService {
-  GeminiPuzzleService();
+  GeminiPuzzleService({GenerativeModel? model})
+    : _model =
+          model ?? FirebaseAI.vertexAI().generativeModel(model: _modelName);
 
   // Default to Flash as it's free and fast
   static const _modelName = 'gemini-1.5-flash';
+  final GenerativeModel _model;
 
   Future<List<GeneratedWord>> generateWords({
     required String topic,
@@ -17,11 +20,10 @@ class GeminiPuzzleService {
     int difficultyLevel = 2, // 1-5
   }) async {
     // FirebaseAI automatically uses the Firebase app credentials
-    final model = FirebaseAI.vertexAI().generativeModel(model: _modelName);
     final prompt = _buildPrompt(topic, language, count, difficultyLevel);
 
     try {
-      final response = await model.generateContent([Content.text(prompt)]);
+      final response = await _model.generateContent([Content.text(prompt)]);
 
       final text = response.text;
       if (text == null) {
