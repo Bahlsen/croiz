@@ -157,6 +157,74 @@ class GameProgressService {
 
     return InitialStateResult(foundWords: newFound, lockedCells: newLocked);
   }
+
+  /// Checks for word completion at a specific cell position.
+  /// returns a result containing newly found words and cells to flash/lock.
+  WordCompletionResult checkCompletionAtPos({
+    required GameBoard board,
+    required CellKey pos,
+    required Set<String> currentFoundWords,
+    required bool Function(GameBoard, PuzzleEntryData) isWordComplete,
+    required String Function(PuzzleEntryData) getWordKey,
+    required List<CellKey> Function(PuzzleEntryData) getCellKeys,
+  }) {
+    final allEntries = board.entries;
+    if (allEntries == null) {
+      return WordCompletionResult.empty;
+    }
+
+    final entriesForCell =
+        allEntries.where((e) {
+          final isAcross = e.directionEnum == EntryDirection.across;
+          if (isAcross) {
+            return e.y == pos.row &&
+                (pos.col >= e.x && pos.col < e.x + e.length);
+          } else {
+            return e.x == pos.col &&
+                (pos.row >= e.y && pos.row < e.y + e.length);
+          }
+        }).toList();
+
+    if (entriesForCell.isEmpty) {
+      return WordCompletionResult.empty;
+    }
+
+    final newlyFound = <String>{};
+    final cellsToFlash = <CellKey>{};
+
+    for (final e in entriesForCell) {
+      if (isWordComplete(board, e)) {
+        final key = getWordKey(e);
+        if (!currentFoundWords.contains(key)) {
+          newlyFound.add(key);
+          cellsToFlash.addAll(getCellKeys(e));
+        }
+      }
+    }
+
+    return WordCompletionResult(
+      newlyFoundWords: newlyFound,
+      cellsToFlash: cellsToFlash,
+    );
+  }
+}
+
+/// Result of checking word completion.
+class WordCompletionResult {
+  const WordCompletionResult({
+    required this.newlyFoundWords,
+    required this.cellsToFlash,
+  });
+
+  static const empty = WordCompletionResult(
+    newlyFoundWords: <String>{},
+    cellsToFlash: <CellKey>{},
+  );
+
+  final Set<String> newlyFoundWords;
+  final Set<CellKey> cellsToFlash;
+
+  bool get hasChanges => newlyFoundWords.isNotEmpty;
 }
 
 /// Result of computing initial state from grid.

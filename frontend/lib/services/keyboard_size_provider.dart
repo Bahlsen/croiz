@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:croiz/services/preference_persistence_service.dart';
 
 /// Available sizes for the virtual keyboard.
 enum KeyboardSize { small, medium, large }
@@ -14,17 +14,10 @@ class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
   @override
   KeyboardSize build() => KeyboardSize.medium;
 
-  void setSize(KeyboardSize v) {
-    state = v;
-    _persistSize(v);
-  }
-
-  Future<void> _persistSize(KeyboardSize v) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('pref_keyboard_size', v.name);
-    } on Object {
-      // ignore
-    }
+  void setSize(KeyboardSize size) {
+    state = size;
+    ref
+        .read(preferencePersistenceServiceProvider)
+        .setString('pref_keyboard_size', size.name);
   }
 }

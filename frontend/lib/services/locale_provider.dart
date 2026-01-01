@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/services/preference_persistence_service.dart';
 
-/// Provider for application locale.
+/// Provider for the application locale.
 final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
   LocaleNotifier.new,
 );
 
-/// Notifier for managing application locale state.
 class LocaleNotifier extends Notifier<Locale> {
   @override
   Locale build() => const Locale('en');
 
-  /// Sets the application locale.
-  void setLocale(Locale v) => state = v;
+  void setLocale(Locale locale) {
+    state = locale;
+    ref
+        .read(preferencePersistenceServiceProvider)
+        .setString('pref_locale', locale.languageCode);
+  }
 }

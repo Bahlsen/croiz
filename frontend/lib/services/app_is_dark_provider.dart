@@ -1,28 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:croiz/services/preference_persistence_service.dart';
 
-/// Provider for application theme mode.
+/// Provider for global dark mode state.
 final appIsDarkProvider = NotifierProvider<AppIsDarkNotifier, bool>(
   AppIsDarkNotifier.new,
 );
 
 class AppIsDarkNotifier extends Notifier<bool> {
   @override
-  bool build() => false; // light theme by default
+  bool build() => false; // light by default
 
   void setIsDark({required bool isDark}) {
     state = isDark;
-    _persistIsDark(isDark);
+    ref
+        .read(preferencePersistenceServiceProvider)
+        .setBool('pref_is_dark', value: isDark);
   }
 
-  Future<void> _persistIsDark(bool v) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('pref_is_dark', v);
-    } on Object {
-      // ignore
-    }
-  }
-
-  void toggle() => state = !state;
+  void toggle() => setIsDark(isDark: !state);
 }

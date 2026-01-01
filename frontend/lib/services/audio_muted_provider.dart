@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:croiz/services/preference_persistence_service.dart';
 
 /// Provider for global audio mute state.
 final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
@@ -12,16 +12,9 @@ class AudioMutedNotifier extends Notifier<bool> {
 
   void setMuted({required bool muted}) {
     state = muted;
-    _persistMuted(muted);
-  }
-
-  Future<void> _persistMuted(bool v) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('pref_audio_muted', v);
-    } on Object {
-      // ignore
-    }
+    ref
+        .read(preferencePersistenceServiceProvider)
+        .setBool('pref_audio_muted', value: muted);
   }
 
   void toggle() => state = !state;

@@ -13,3 +13,4 @@ export 'locale_provider.dart';
 export 'word_check_provider.dart';
 export 'dio_provider.dart';
 export 'auth_provider.dart';
+export 'preference_persistence_service.dart';

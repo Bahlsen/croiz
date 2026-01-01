@@ -12,6 +12,7 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/game_persistence_service.dart';
 import 'package:croiz/features/game/services/game_progress_service.dart';
 import 'package:croiz/features/game/services/game_reveal_service.dart';
+import 'package:croiz/features/game/services/game_endgame_service.dart';
 
 import 'puzzle_loader_provider.dart';
 import 'game_state_providers.dart';
@@ -47,6 +48,9 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   );
   late final GameRevealService _revealService = ref.read(
     gameRevealServiceProvider,
+  );
+  late final GameEndgameService _endgameService = ref.read(
+    gameEndgameServiceProvider,
   );
 
   // Compatibility helper used by tests and legacy call sites.
@@ -398,57 +402,35 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   /// Helper to check for word completion after a single cell reveal.
   void _checkWordCompletionAfterReveal(CellKey pos) {
     try {
-      final boardNow = state;
-      final allEntries = state.entries;
-      List<PuzzleEntryData>? entriesForCell;
-      if (allEntries != null) {
-        entriesForCell =
-            allEntries.where((e) {
-              final isAcross = e.directionEnum == EntryDirection.across;
-              if (isAcross) {
-                return e.y == pos.row &&
-                    (pos.col >= e.x && pos.col < e.x + e.length);
-              } else {
-                return e.x == pos.col &&
-                    (pos.row >= e.y && pos.row < e.y + e.length);
-              }
-            }).toList();
-      }
-      if (entriesForCell != null && entriesForCell.isNotEmpty) {
-        final wordCheck = ref.read(wordCheckServiceProvider);
-        var completed = 0;
-        final newFound = Set<String>.from(ref.read(foundWordsProvider));
-        final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider));
-        final allFlashing = <CellKey>{};
+      final wordCheck = ref.read(wordCheckServiceProvider);
+      final result = _progressService.checkCompletionAtPos(
+        board: state,
+        pos: pos,
+        currentFoundWords: ref.read(foundWordsProvider),
+        isWordComplete: wordCheck.isWordComplete,
+        getWordKey: wordCheck.getWordKey,
+        getCellKeys: wordCheck.getCellKeys,
+      );
 
-        for (final e in entriesForCell) {
-          if (wordCheck.isWordComplete(boardNow, e)) {
-            final key = wordCheck.getWordKey(e);
-            if (!newFound.contains(key)) {
-              newFound.add(key);
-              final keys = wordCheck.getCellKeys(e);
-              newLocked.addAll(keys);
-              allFlashing.addAll(keys);
-              completed++;
-            }
-          }
-        }
+      if (result.hasChanges) {
+        final newFound = Set<String>.from(ref.read(foundWordsProvider))
+          ..addAll(result.newlyFoundWords);
+        final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
+          ..addAll(result.cellsToFlash);
 
-        if (completed > 0) {
-          ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
-          ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
-          _revealService.triggerFlash(
-            cells: allFlashing.toSet(),
-            setFlashingCells:
-                (v) => ref
-                    .read(flashingCellsProvider.notifier)
-                    .setFlashingCells(v),
-            getFlashDelay: () => ref.read(flashClearDelayProvider),
-            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
-            shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
-          );
-          _triggerEndGameIfSolved();
-        }
+        ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
+        ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
+
+        _revealService.triggerFlash(
+          cells: result.cellsToFlash,
+          setFlashingCells:
+              (v) =>
+                  ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+          getFlashDelay: () => ref.read(flashClearDelayProvider),
+          playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+          shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
+        );
+        _triggerEndGameIfSolved();
       }
     } on Object {
       // ignore
@@ -648,16 +630,6 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     );
   }
 
-  Future<void> _persistProgress() async {
-    await _persistenceService.persistNow(
-      puzzleId: state.id,
-      grid: state.grid,
-      foundWords: ref.read(foundWordsProvider),
-      lockedCells: ref.read(lockedCellsProvider),
-      elapsedSeconds: ref.read(gameTimerProvider(state.id)).elapsedSeconds,
-    );
-  }
-
   /// Reset the puzzle to its initial state (clear all user progress).
   void resetPuzzle() {
     // Clear the grid
@@ -704,51 +676,20 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   /// [playVictorySound]: If true, plays the victory sound. Set to false when
   /// loading an already-completed puzzle to avoid playing the sound.
   void _triggerEndGameIfSolved({bool playVictorySound = true}) {
-    try {
-      final entriesNow = state.entries;
-      if (entriesNow == null || entriesNow.isEmpty) {
-        return;
-      }
-      final foundCount = ref.read(foundWordsProvider).length;
-      if (foundCount == entriesNow.length) {
-        try {
-          ref.read(gameTimerProvider(state.id)).finalizeSync();
-        } on Object {
-          // ignore
-        }
-        // Persist progress immediately so UI and saved payload include the
-        // finalized `elapsedSeconds` value.
-        try {
-          unawaited(_persistProgress());
-        } on Object {
-          // ignore
-        }
-        if (playVictorySound) {
-          try {
-            // Only attempt to play audio if Flutter bindings are initialized.
-            // Some unit tests run without WidgetsFlutterBinding and calling
-            // into audioplayers' global scope will throw. Guard to avoid
-            // creating the audio service in pure unit tests.
-            try {
-              WidgetsBinding.instance;
-            } on Object {
-              // Binding not initialized (unit test) — skip audio.
-              return;
-            }
+    final solved = _endgameService.checkAndTriggerEndGame(
+      board: state,
+      foundWords: ref.read(foundWordsProvider),
+      lastLoadedPuzzleId: _lastLoadedPuzzleId,
+      timer: ref.read(gameTimerProvider(state.id)),
+      persistenceService: _persistenceService,
+      lockedCells: ref.read(lockedCellsProvider),
+      isMuted: ref.read(gameAudioMutedProvider),
+      audioService: ref.read(gameAudioServiceProvider),
+      playVictorySound: playVictorySound,
+    );
 
-            // Respect global mute: do not play victory when audio is muted.
-            if (!ref.read(gameAudioMutedProvider)) {
-              ref.read(gameAudioServiceProvider).playVictory();
-            }
-          } on Object catch (e, st) {
-            if (kDebugMode) {
-              debugPrint('playVictory from GameBoardNotifier failed: $e\n$st');
-            }
-          }
-        }
-      }
-    } on Object {
-      // ignore
+    if (solved) {
+      // Any additional local cleanup if needed
     }
   }
 }
