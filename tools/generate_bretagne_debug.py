@@ -14,12 +14,79 @@ except ImportError:
     sys.path.append(os.path.join(os.getcwd(), 'tools'))
     from tools.generate_puzzle import generate_puzzle_from_words
 
-words = [
-    'BRETAGNE', 'RENNES', 'BREST', 'VANNES', 'ARMOR', 'ARGOAT', 
-    'CREPE', 'CIDRE', 'GALETTE', 'PHARE', 'MENHIR', 'DOLMEN',
-    'GRANIT', 'GOELAND', 'MOUETTE', 'MARINS', 'TEMPETE', 'FALAISE',
-    'QUIMPER', 'LORIENT', 'BIGOUDEN', 'KOUIGN'
-]
+# Liste étendue de mots sur la Bretagne
+WORDS_DATA = {
+    'BRETAGNE': 'Région du Grand Ouest français',
+    'RENNES': 'Capitale administrative régionale',
+    'BREST': 'Port du Ponant',
+    'VANNES': 'Préfecture du Morbihan',
+    'QUIMPER': 'Capitale de la Cornouaille',
+    'LORIENT': 'Ville aux 5 ports',
+    'STMALO': 'La cité corsaire',
+    'DINAN': 'Cité médiévale des Côtes-d\'Armor',
+    'AURAY': 'Port de Saint-Goustan',
+    'CARNAC': 'Site mégalithique mondialement connu',
+    'REDON': 'Au carrefour des voies navigables',
+    
+    'ARMOR': 'La mer en breton',
+    'ARGOAT': 'La terre/forêt en breton',
+    'MORBIHAN': 'La petite mer',
+    'FINISTERE': 'La fin de la terre',
+    
+    'CREPE': 'Fine et sucrée',
+    'GALETTE': 'Au blé noir',
+    'KIGHAARZ': 'Pot-au-feu breton',
+    'FAR': 'Gâteau aux pruneaux',
+    'KOUIGN': 'Gâteau (avec Amann = au beurre)',
+    'BEURRE': 'Toujours salé ici !',
+    'CIDRE': 'À boire dans une bolée',
+    'CHOUCHEN': 'Hydromel breton',
+    'HUITRES': 'Perles de Cancale ou Belon',
+    
+    'PHARE': 'Guide les marins',
+    'BALISE': 'Marque le danger en mer',
+    'AMER': 'Repère visuel sur la côte',
+    'MENHIR': 'Pierre longue dressée',
+    'DOLMEN': 'Table de pierre antique',
+    
+    'BINIOU': 'Cornemuse bretonne',
+    'BOMBARDE': 'Hautbois breton puissant',
+    'BAGAD': 'Ensemble musical breton',
+    'FESTNOZ': 'Fête de nuit dansante',
+    'CELTE': 'Origine culturelle',
+    'DRAPEAU': 'Le Gwenn ha Du',
+    'HERMINE': 'Symbole ducal',
+    'TRISKELL': 'Symbole à trois branches',
+    
+    'ILE': 'Terre entourée d\'eau',
+    'GROIX': 'L\'île aux grenats',
+    'OUESSANT': 'L\'île la plus à l\'ouest',
+    'BREHAT': 'L\'île aux fleurs',
+    'BELLEILE': 'La bien nommée',
+    
+    'GRANIT': 'Roche rose de Ploumanac\'h',
+    'ARDOISE': 'Couvre les toits bleutés',
+    'AJONCS': 'Fleurs jaunes des landes',
+    'BRUYERE': 'Fleur violette des landes',
+    'HORTENSIA': 'Buisson fleuri emblématique',
+    
+    'PLUIE': 'Le crachin breton',
+    'VENT': 'Souffle fort sur la côte',
+    'MARFE': 'Cycle des eaux',
+    'OCEAN': 'Borde la péninsule',
+    'ABERS': 'Fjords bretons',
+    
+    'KORRIGAN': 'Lutin farceur',
+    'ANKOU': 'Serviteur de la mort',
+    'MERLIN': 'Enchanteur de Brocéliande',
+    'VIVIANE': 'Fée du lac',
+    
+    'MARIN': 'Navigateur',
+    'PECHEUR': 'Ramène le poisson',
+    'VOILE': 'Sport nautique roi'
+}
+
+words = list(WORDS_DATA.keys())
 
 metadata = {
     'title': 'La Bretagne',
@@ -27,71 +94,85 @@ metadata = {
     'language': 'fr',
     'source_format': 'pycrossword',
     'theme': 'Bretagne',
-    'difficulty': 2,
-    'difficultyLabel': 'Moyen'
+    'difficulty': 3,
+    'difficultyLabel': 'Moyen',
 }
 
+print(f"Generating optimized puzzle with {len(words)} words...")
 
-# Dictionnaire des indices
-CLUES = {
-    'BRETAGNE': 'Région du Grand Ouest français',
-    'RENNES': 'Préfecture de la région',
-    'BREST': 'Grand port militaire du Finistère',
-    'VANNES': 'Préfecture du Morbihan aux remparts célèbres',
-    'ARMOR': 'Le pays de la mer en breton',
-    'ARGOAT': 'La Bretagne intérieure (terre/forêt)',
-    'CREPE': 'Spécialité sucrée fine et ronde',
-    'CIDRE': 'Boisson pétillante à base de pommes',
-    'GALETTE': 'Spécialité au sarrasin (blé noir)',
-    'PHARE': 'Sentinelle des côtes guidant les navires',
-    'MENHIR': 'Pierre longue dressée par les peuples anciens',
-    'DOLMEN': 'Table de pierre néolithique',
-    'GRANIT': 'Roche rose ou grise emblématique de la côte',
-    'GOELAND': 'Grand oiseau marin au cri caractéristique',
-    'MOUETTE': 'Oiseau blanc du bord de mer, plus petit que le goéland',
-    'MARINS': 'Ceux qui travaillent sur les flots',
-    'TEMPETE': 'Grosse colère de l\'océan',
-    'FALAISE': 'Mur de roche tombant dans la mer',
-    'QUIMPER': 'Capitale de la Cornouaille connue pour sa faïence',
-    'LORIENT': 'Ville du festival Interceltique',
-    'BIGOUDEN': 'Pays célèbre pour la haute coiffe de ses femmes',
-    'KOUIGN': 'Gâteau en breton (souvent suivi de "Amann")'
-}
+# Try multiple generations to find the best density
+best_puzzle = None
+best_score = -1
 
-print(f"Generating puzzle with {len(words)} words...")
+# Configuration: smaller grid for higher density
+TARGET_WIDTH = 13
+TARGET_HEIGHT = 13
 
-try:
-    puzzle = generate_puzzle_from_words(
-        words=words,
-        puzzle_id='bretagne-2024',
-        metadata=metadata,
-        max_width=15,
-        max_height=15
-    )
-    
-    # Inject clues into entries
-    words_placed = 0
-    if 'entries' in puzzle:
-        for entry in puzzle['entries']:
-            word = entry.get('answer', '')
-            if word in CLUES:
-                entry['clue'] = CLUES[word]
-            else:
-                entry['clue'] = f"Définition manquante pour {word}"
-            words_placed += 1
+for i in range(10):  # Try 10 iterations
+    try:
+        # Vary seed implicitly or explicitly if supported
+        puzzle = generate_puzzle_from_words(
+            words=words,
+            puzzle_id='bretagne-2024',
+            metadata=metadata,
+            max_width=TARGET_WIDTH,
+            max_height=TARGET_HEIGHT,
+            seed=i*100  # Try different seeds
+        )
+        
+        # Calculate a "density score"
+        # Score = number of placed words - (number of black cells / 10)
+        # We want MORE words and FEWER black cells
+        placed_words = len(puzzle.get('entries', []))
+        
+        # Count black cells
+        black_cells = sum(1 for c in puzzle['cells'] if c.get('is_black'))
+        total_cells = len(puzzle['cells'])
+        
+        score = placed_words * 10 - (black_cells / total_cells * 100)
+        
+        print(f"Gen {i}: {placed_words} words, {black_cells} black cells. Score: {score:.2f}")
+        
+        if score > best_score:
+            best_score = score
+            best_puzzle = puzzle
             
-    print(f"Generated: {puzzle.get('cols')}x{puzzle.get('rows')} grid with {words_placed} words")
+    except Exception as e:
+        print(f"Gen {i} failed: {e}")
+
+if best_puzzle:
+    print(f"BEST RESULT: {len(best_puzzle.get('entries', []))} words")
+    
+    # Inject clues
+    words_placed = 0
+    missing_clues = []
+    
+    for entry in best_puzzle['entries']:
+        word = entry.get('answer', '')
+        if word in WORDS_DATA:
+            entry['clue'] = WORDS_DATA[word]
+        else:
+            entry['clue'] = f"Définition manquante pour {word}"
+            missing_clues.append(word)
+        # Ensure ID format
+        if 'id' not in entry:
+            direction = entry['direction']
+            number = entry['number']
+            entry['id'] = f"{direction[0]}{number}"
+            
+        words_placed += 1
+            
+    if missing_clues:
+        print(f"Missing clues for: {missing_clues}")
 
     output_dir = Path('../frontend/assets/data/generated')
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / 'bretagne-2024.json'
 
     with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(puzzle, f, indent=2, ensure_ascii=False)
+        json.dump(best_puzzle, f, indent=2, ensure_ascii=False)
 
     print(f"Saved to {output_path}")
-    
-except Exception as e:
-    import traceback
-    traceback.print_exc()
-    print(f"Error: {e}")
+
+else:
+    print("Failed to generate any valid puzzle")

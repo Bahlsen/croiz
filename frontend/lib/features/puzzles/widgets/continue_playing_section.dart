@@ -218,7 +218,14 @@ class _InProgressCard extends ConsumerWidget {
     ref
         .read(selectedPuzzleIdProvider.notifier)
         .setSelected(puzzle.descriptor.id);
-    context.go('/game');
+
+    // Explicitly pass ID in query param as required by app router
+    context.go(
+      Uri(
+        path: '/crossword',
+        queryParameters: {'id': puzzle.descriptor.id},
+      ).toString(),
+    );
   }
 
   /// Get the color for a difficulty level.
