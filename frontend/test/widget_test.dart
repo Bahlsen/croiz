@@ -15,6 +15,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
+import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 
 import 'test_utils/fake_audio_service.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -61,13 +62,15 @@ void main() {
               ),
             ]),
           ),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: PuzzlesListPage(),
-          ),
+          builder:
+              (context, orientation, deviceType) => const MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: PuzzlesListPage(),
+              ),
         ),
       ),
     );
