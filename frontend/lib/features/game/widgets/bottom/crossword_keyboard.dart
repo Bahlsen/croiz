@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 
 /// Simple wrapper around `VirtualKeyboard` to give the game feature a
 /// named, single-responsibility widget. This makes it easier to mock or

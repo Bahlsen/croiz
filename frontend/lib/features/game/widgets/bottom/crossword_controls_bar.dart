@@ -1,7 +1,7 @@
 import 'package:croiz/services/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_clue_header.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';

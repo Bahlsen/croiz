@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 
 void main() {
   group('VirtualKeyboard simplified (no extra letters)', () {

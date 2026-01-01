@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:croiz/services/preference_persistence_service.dart';
+import 'package:croiz/services/persistence/preference_persistence_service.dart';
 
 part 'locale_provider.g.dart';
 

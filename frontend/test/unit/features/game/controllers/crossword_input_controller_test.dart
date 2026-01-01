@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 // Mock pour le service audio (n'hérite pas pour éviter les appels au constructeur)
@@ -849,175 +849,184 @@ void main() {
       },
     );
 
-    test(
-      'backspace on empty cell moves to previous cell and clears it',
-      () {
-        final testContainer = ProviderContainer(
-          overrides: [
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            puzzleLoaderProvider.overrideWithValue(
-              AsyncValue.data(
-                GameBoard(
-                  id: 'test',
-                  title: 'Test Board',
-                  gridSize: 5,
-                  createdAt: DateTime.now(),
-                  grid: [
-                    ['C', 'A', 'T', '', ''],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                    [null, null, null, null, null],
-                  ],
-                  clues: {},
-                  blackCells: [
-                    [false, false, false, false, false],
-                    [false, false, false, false, false],
-                    [false, false, false, false, false],
-                    [false, false, false, false, false],
-                    [false, false, false, false, false],
-                  ],
-                  difficulty: 1,
-                ),
+    test('backspace on empty cell moves to previous cell and clears it', () {
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'Test Board',
+                gridSize: 5,
+                createdAt: DateTime.now(),
+                grid: [
+                  ['C', 'A', 'T', '', ''],
+                  [null, null, null, null, null],
+                  [null, null, null, null, null],
+                  [null, null, null, null, null],
+                  [null, null, null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false, false, false],
+                  [false, false, false, false, false],
+                  [false, false, false, false, false],
+                  [false, false, false, false, false],
+                  [false, false, false, false, false],
+                ],
+                difficulty: 1,
               ),
             ),
-          ],
-        );
+          ),
+        ],
+      );
 
-        final controller = CrosswordInputController.fromContainer(
-          testContainer,
-        );
+      final controller = CrosswordInputController.fromContainer(testContainer);
 
-        // Select empty cell at (0, 3)
-        testContainer
-            .read(selectedCellProvider.notifier)
-            .select(const SelectedCell(0, 3));
+      // Select empty cell at (0, 3)
+      testContainer
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 3));
 
-        // Verify current cell is empty
-        expect(testContainer.read(gameBoardProvider).grid[0][3], '');
+      // Verify current cell is empty
+      expect(testContainer.read(gameBoardProvider).grid[0][3], '');
 
-        // Verify previous cell has 'T'
-        expect(testContainer.read(gameBoardProvider).grid[0][2], 'T');
+      // Verify previous cell has 'T'
+      expect(testContainer.read(gameBoardProvider).grid[0][2], 'T');
 
-        // Simulate backspace on empty cell
-        controller.clearCurrent();
+      // Simulate backspace on empty cell
+      controller.clearCurrent();
 
-        // Selection should have moved to previous cell (0, 2)
-        final sel = testContainer.read(selectedCellProvider);
-        expect(sel, isNotNull);
-        expect(sel!.row, 0);
-        expect(sel.col, 2);
+      // Selection should have moved to previous cell (0, 2)
+      final sel = testContainer.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(sel!.row, 0);
+      expect(sel.col, 2);
 
-        // The previous cell should now be cleared (empty string or null)
-        final clearedValue = testContainer.read(gameBoardProvider).grid[0][2];
-        expect(clearedValue == null || clearedValue.isEmpty, isTrue);
+      // The previous cell should now be cleared (empty string or null)
+      final clearedValue = testContainer.read(gameBoardProvider).grid[0][2];
+      expect(clearedValue == null || clearedValue.isEmpty, isTrue);
 
-        testContainer.dispose();
-      },
-    );
+      testContainer.dispose();
+    });
 
-    test(
-      'backspace on first empty cell of word jumps to previous word last cell '
-      '(even with black cell between)',
-      () {
-        // Grid layout (5x5):
-        // Row 0: [C][A][T][BLACK][D]  <- "CAT" is entry a1 (0-2), "DOG" is entry a2 (4,0)-(4,2)
-        // Row 1: [ ][ ][ ][BLACK][ ]     but let's use horizontal entries on row 0:
-        // ...                            Entry 1: "CAT" at x=0, y=0, length=3
-        //                                Entry 2: "DOG" at x=4, y=0, length=1 (just D for simplicity)
-        // Actually let's make it clearer with two separate words on row 0:
-        // Row 0: [C][A][T][BLACK][ ][ ]  <- Entry1: CAT (x=0,y=0,len=3), Entry2: starts at x=4
-        // We want: select first cell of entry2 (empty), backspace should go to last cell of entry1
-        final testContainer = ProviderContainer(
-          overrides: [
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            puzzleLoaderProvider.overrideWithValue(
-              AsyncValue.data(
-                GameBoard(
-                  id: 'test-black-cell-jump',
-                  title: 'Test Black Cell Jump',
-                  gridSize: 6,
-                  createdAt: DateTime.now(),
-                  grid: [
-                    ['C', 'A', 'T', null, '', 'G'], // cell 3 is black, cell 4 is empty (first of second word)
-                    [null, null, null, null, null, null],
-                    [null, null, null, null, null, null],
-                    [null, null, null, null, null, null],
-                    [null, null, null, null, null, null],
-                    [null, null, null, null, null, null],
-                  ],
-                  clues: {},
-                  blackCells: [
-                    [false, false, false, true, false, false], // cell (0,3) is black
-                    [false, false, false, false, false, false],
-                    [false, false, false, false, false, false],
-                    [false, false, false, false, false, false],
-                    [false, false, false, false, false, false],
-                    [false, false, false, false, false, false],
-                  ],
-                  difficulty: 1,
-                  entries: const [
-                    PuzzleEntryData(
-                      number: 1,
-                      direction: 'across',
-                      x: 0,
-                      y: 0,
-                      length: 3,
-                      answer: 'CAT',
-                      clue: 'Feline pet',
-                    ),
-                    PuzzleEntryData(
-                      number: 2,
-                      direction: 'across',
-                      x: 4,
-                      y: 0,
-                      length: 2,
-                      answer: 'GO',
-                      clue: 'Move',
-                    ),
-                  ],
-                ),
+    test('backspace on first empty cell of word jumps to previous word last cell '
+        '(even with black cell between)', () {
+      // Grid layout (5x5):
+      // Row 0: [C][A][T][BLACK][D]  <- "CAT" is entry a1 (0-2), "DOG" is entry a2 (4,0)-(4,2)
+      // Row 1: [ ][ ][ ][BLACK][ ]     but let's use horizontal entries on row 0:
+      // ...                            Entry 1: "CAT" at x=0, y=0, length=3
+      //                                Entry 2: "DOG" at x=4, y=0, length=1 (just D for simplicity)
+      // Actually let's make it clearer with two separate words on row 0:
+      // Row 0: [C][A][T][BLACK][ ][ ]  <- Entry1: CAT (x=0,y=0,len=3), Entry2: starts at x=4
+      // We want: select first cell of entry2 (empty), backspace should go to last cell of entry1
+      final testContainer = ProviderContainer(
+        overrides: [
+          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test-black-cell-jump',
+                title: 'Test Black Cell Jump',
+                gridSize: 6,
+                createdAt: DateTime.now(),
+                grid: [
+                  [
+                    'C',
+                    'A',
+                    'T',
+                    null,
+                    '',
+                    'G',
+                  ], // cell 3 is black, cell 4 is empty (first of second word)
+                  [null, null, null, null, null, null],
+                  [null, null, null, null, null, null],
+                  [null, null, null, null, null, null],
+                  [null, null, null, null, null, null],
+                  [null, null, null, null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                  ], // cell (0,3) is black
+                  [false, false, false, false, false, false],
+                  [false, false, false, false, false, false],
+                  [false, false, false, false, false, false],
+                  [false, false, false, false, false, false],
+                  [false, false, false, false, false, false],
+                ],
+                difficulty: 1,
+                entries: const [
+                  PuzzleEntryData(
+                    number: 1,
+                    direction: 'across',
+                    x: 0,
+                    y: 0,
+                    length: 3,
+                    answer: 'CAT',
+                    clue: 'Feline pet',
+                  ),
+                  PuzzleEntryData(
+                    number: 2,
+                    direction: 'across',
+                    x: 4,
+                    y: 0,
+                    length: 2,
+                    answer: 'GO',
+                    clue: 'Move',
+                  ),
+                ],
               ),
             ),
-          ],
-        );
+          ),
+        ],
+      );
 
-        final controller = CrosswordInputController.fromContainer(
-          testContainer,
-        );
+      final controller = CrosswordInputController.fromContainer(testContainer);
 
-        // Set direction to horizontal (across)
-        testContainer
-            .read(wordDirectionProvider.notifier)
-            .setDirection(WordDirection.horizontal);
+      // Set direction to horizontal (across)
+      testContainer
+          .read(wordDirectionProvider.notifier)
+          .setDirection(WordDirection.horizontal);
 
-        // Select empty cell at (0, 4) - first cell of entry a2
-        testContainer
-            .read(selectedCellProvider.notifier)
-            .select(const SelectedCell(0, 4));
+      // Select empty cell at (0, 4) - first cell of entry a2
+      testContainer
+          .read(selectedCellProvider.notifier)
+          .select(const SelectedCell(0, 4));
 
-        // Verify current cell is empty
-        expect(testContainer.read(gameBoardProvider).grid[0][4], '');
+      // Verify current cell is empty
+      expect(testContainer.read(gameBoardProvider).grid[0][4], '');
 
-        // Verify previous non-black cell (0, 2) has 'T' (last cell of entry a1)
-        expect(testContainer.read(gameBoardProvider).grid[0][2], 'T');
+      // Verify previous non-black cell (0, 2) has 'T' (last cell of entry a1)
+      expect(testContainer.read(gameBoardProvider).grid[0][2], 'T');
 
-        // Simulate backspace on empty cell (first cell of entry a2)
-        controller.clearCurrent();
+      // Simulate backspace on empty cell (first cell of entry a2)
+      controller.clearCurrent();
 
-        // Selection should have moved to last cell of previous entry (0, 2)
-        final sel = testContainer.read(selectedCellProvider);
-        expect(sel, isNotNull);
-        expect(sel!.row, 0);
-        expect(sel.col, 2, reason: 'Should jump to last cell of previous word (0,2), skipping black cell at (0,3)');
+      // Selection should have moved to last cell of previous entry (0, 2)
+      final sel = testContainer.read(selectedCellProvider);
+      expect(sel, isNotNull);
+      expect(sel!.row, 0);
+      expect(
+        sel.col,
+        2,
+        reason:
+            'Should jump to last cell of previous word (0,2), skipping black cell at (0,3)',
+      );
 
-        // The previous cell should now be cleared
-        final clearedValue = testContainer.read(gameBoardProvider).grid[0][2];
-        expect(clearedValue == null || clearedValue.isEmpty, isTrue);
+      // The previous cell should now be cleared
+      final clearedValue = testContainer.read(gameBoardProvider).grid[0][2];
+      expect(clearedValue == null || clearedValue.isEmpty, isTrue);
 
-        testContainer.dispose();
-      },
-    );
+      testContainer.dispose();
+    });
   });
 
   group('CrosswordInputController - Initial Selection', () {

@@ -8,7 +8,7 @@ import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
-import 'package:croiz/services/word_check_provider.dart';
+import 'package:croiz/features/game/providers/word_check_provider.dart';
 
 /// Result of loading puzzle progress from storage.
 class ProgressLoadResult {

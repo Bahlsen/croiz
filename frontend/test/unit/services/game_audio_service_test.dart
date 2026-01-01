@@ -4,7 +4,7 @@
 // The throttling behavior is tested indirectly through mocks in other tests.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 
 /// Mock audio service for unit tests where native plugins are unavailable.
 class MockGameAudioService implements GameAudioService {

@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:croiz/services/preference_persistence_service.dart';
+import 'package:croiz/services/persistence/preference_persistence_service.dart';
 
 part 'app_is_dark_provider.g.dart';
 

@@ -13,7 +13,7 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'perf_logger.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 
 import 'benchmark_framework.dart';
 

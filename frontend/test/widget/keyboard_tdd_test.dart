@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
-import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 
 void main() {
   testWidgets('TDD: keyboard and keys are larger by default', (tester) async {
@@ -14,18 +14,19 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            home: Scaffold(
-              body: SizedBox(
-                height: 240,
-                child: VirtualKeyboard(
-                  layout: VirtualKeyboard.azertyLayout,
-                  onKey: (_) {},
-                  onBackspace: () {},
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                home: Scaffold(
+                  body: SizedBox(
+                    height: 240,
+                    child: VirtualKeyboard(
+                      layout: VirtualKeyboard.azertyLayout,
+                      onKey: (_) {},
+                      onBackspace: () {},
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
         ),
       ),
     );

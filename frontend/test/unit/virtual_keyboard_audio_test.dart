@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:croiz/widgets/virtual_keyboard.dart';
+import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 import 'package:croiz/services/providers.dart';
 
 import '../test_utils/fake_audio_service.dart';

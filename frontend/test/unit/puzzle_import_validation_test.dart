@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/data/models/puzzle_cell.dart';
 import 'package:croiz/data/models/puzzle_entry.dart';
-import 'package:croiz/core/puzzle_converter.dart';
+import 'package:croiz/features/generation/utils/puzzle_converter.dart';
 
 void main() {
   test('valid puzzle with all rows and cols has no exception', () {

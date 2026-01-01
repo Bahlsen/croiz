@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:croiz/core/puzzle_converter.dart';
+import 'package:croiz/features/generation/utils/puzzle_converter.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 import 'package:flutter/foundation.dart';

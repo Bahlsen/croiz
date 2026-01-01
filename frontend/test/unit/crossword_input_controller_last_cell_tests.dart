@@ -5,7 +5,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import '../test_utils/test_board.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 
 class MockGameAudioService implements GameAudioService {
   @override

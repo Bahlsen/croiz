@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:croiz/services/secure_storage_provider.dart';
+import 'package:croiz/services/persistence/secure_storage_provider.dart';
 
 part 'auth_provider.g.dart';
 

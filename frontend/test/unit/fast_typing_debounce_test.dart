@@ -6,7 +6,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 
 /// Counts how many times word completion is checked.
 class CountingWordCheckService extends WordCheckService {
@@ -224,13 +224,14 @@ void main() {
           .read(wordDirectionProvider.notifier)
           .setDirection(WordDirection.horizontal);
 
-      final controller = CrosswordInputController.fromContainer(container)
-        // Type first word correctly: T-E-S-T-S
-        ..setLetterAndAdvance('T')
-        ..setLetterAndAdvance('E')
-        ..setLetterAndAdvance('S')
-        ..setLetterAndAdvance('T')
-        ..setLetterAndAdvance('S');
+      final controller =
+          CrosswordInputController.fromContainer(container)
+            // Type first word correctly: T-E-S-T-S
+            ..setLetterAndAdvance('T')
+            ..setLetterAndAdvance('E')
+            ..setLetterAndAdvance('S')
+            ..setLetterAndAdvance('T')
+            ..setLetterAndAdvance('S');
 
       // Verify grid has the letters
       final updatedBoard = container.read(gameBoardProvider);

@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/data/models/puzzle.dart';
-import 'package:croiz/core/puzzle_converter.dart';
+import 'package:croiz/features/generation/utils/puzzle_converter.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'letter_key.dart';
 import 'backspace_key.dart';
-import '../virtual_keyboard.dart';
+import 'virtual_keyboard.dart';
 
 /// A single row of keyboard keys with responsive layout.
 class KeyboardRow extends StatelessWidget {
@@ -100,23 +100,24 @@ class KeyboardRow extends StatelessWidget {
         height: height,
         fontSize: letterFontSize,
         enabled: enabled,
-        onPressed: enabled
-            ? () {
-                if (enableFeedback) {
-                  HapticFeedback.selectionClick();
+        onPressed:
+            enabled
+                ? () {
+                  if (enableFeedback) {
+                    HapticFeedback.selectionClick();
+                  }
+                  try {
+                    onPlayClick?.call();
+                  } on Object catch (e, st) {
+                    developer.log(
+                      'GameAudioService.playType failed',
+                      error: e,
+                      stackTrace: st,
+                    );
+                  }
+                  onKey(label);
                 }
-                try {
-                  onPlayClick?.call();
-                } on Object catch (e, st) {
-                  developer.log(
-                    'GameAudioService.playType failed',
-                    error: e,
-                    stackTrace: st,
-                  );
-                }
-                onKey(label);
-              }
-            : null,
+                : null,
         borderRadius: borderRadius,
         keyColor: keyColor,
         disabledKeyColor: disabledKeyColor,

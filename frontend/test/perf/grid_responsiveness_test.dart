@@ -15,7 +15,7 @@ import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 import 'perf_logger.dart';
 
 class _MockAudioService implements GameAudioService {

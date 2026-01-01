@@ -3,14 +3,14 @@
 /// This file exports all granular provider files from the services directory.
 library;
 
-export 'secure_storage_provider.dart';
-export 'game_audio_provider.dart';
+export 'persistence/secure_storage_provider.dart';
+export 'package:croiz/features/game/providers/game_audio_provider.dart';
 export 'audio_muted_provider.dart';
-export 'app_is_dark_provider.dart';
-export 'keyboard_layout_provider.dart';
-export 'keyboard_size_provider.dart';
-export 'locale_provider.dart';
-export 'word_check_provider.dart';
-export 'dio_provider.dart';
-export 'auth_provider.dart';
-export 'preference_persistence_service.dart';
+export 'theme/app_is_dark_provider.dart';
+export 'package:croiz/features/game/providers/settings/keyboard_layout_provider.dart';
+export 'package:croiz/features/game/providers/settings/keyboard_size_provider.dart';
+export 'localization/locale_provider.dart';
+export 'package:croiz/features/game/providers/word_check_provider.dart';
+export 'network/dio_provider.dart';
+export 'auth/auth_provider.dart';
+export 'persistence/preference_persistence_service.dart';

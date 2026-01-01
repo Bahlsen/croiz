@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/utils/flash_utils.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
-import 'package:croiz/services/word_check_provider.dart';
+import 'package:croiz/features/game/providers/word_check_provider.dart';
 
 /// Result of a reveal operation containing updated state.
 class RevealResult {

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/services/providers.dart';
-import 'keyboard/keyboard_row.dart';
+import 'keyboard_row.dart';
 
 /// A simple in-app virtual keyboard with uppercase A–Z letters and Backspace.
 ///

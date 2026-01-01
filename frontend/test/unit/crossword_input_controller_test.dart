@@ -5,7 +5,7 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/game_audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
 
 // Mock pour le service audio
 class MockGameAudioService implements GameAudioService {

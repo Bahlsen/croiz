@@ -428,31 +428,60 @@ String _buildSemanticLabel(
   required bool isSelected,
   required List<PuzzleEntryData>? entries,
 }) {
-  final l10n = AppLocalizations.of(context)!;
-  final buffer =
-      StringBuffer()..write(l10n.semanticCellRowColumn(row + 1, col + 1));
+  final l10n = AppLocalizations.of(context);
+  final buffer = StringBuffer();
+
+  if (l10n != null) {
+    buffer.write(l10n.semanticCellRowColumn(row + 1, col + 1));
+  } else {
+    buffer.write('Row ${row + 1}, column ${col + 1}');
+  }
 
   if (cellNumber != null) {
-    buffer.write(', ${l10n.semanticCellNumber(cellNumber)}');
+    if (l10n != null) {
+      buffer.write(', ${l10n.semanticCellNumber(cellNumber)}');
+    } else {
+      buffer.write(', Number $cellNumber');
+    }
   }
 
   if (letter != null && letter.isNotEmpty) {
-    buffer.write(', ${l10n.semanticCellLetter(letter)}');
+    if (l10n != null) {
+      buffer.write(', ${l10n.semanticCellLetter(letter)}');
+    } else {
+      buffer.write(', Letter $letter');
+    }
   } else {
-    buffer.write(', ${l10n.semanticCellEmpty}');
+    if (l10n != null) {
+      buffer.write(', ${l10n.semanticCellEmpty}');
+    } else {
+      buffer.write(', Empty');
+    }
   }
 
   if (isSelected) {
-    buffer.write(', ${l10n.semanticCellSelected}');
+    if (l10n != null) {
+      buffer.write(', ${l10n.semanticCellSelected}');
+    } else {
+      buffer.write(', Selected');
+    }
   }
 
   if (entries != null && entries.isNotEmpty) {
     for (final e in entries) {
       final clue = e.clue ?? '';
-      if (e.directionEnum == EntryDirection.across) {
-        buffer.write(', ${l10n.semanticClueAcross(clue)}');
+      if (l10n != null) {
+        if (e.directionEnum == EntryDirection.across) {
+          buffer.write(', ${l10n.semanticClueAcross(clue)}');
+        } else {
+          buffer.write(', ${l10n.semanticClueDown(clue)}');
+        }
       } else {
-        buffer.write(', ${l10n.semanticClueDown(clue)}');
+        if (e.directionEnum == EntryDirection.across) {
+          buffer.write(', Across: $clue');
+        } else {
+          buffer.write(', Down: $clue');
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 
-import 'virtual_keyboard.dart';
+import '../keyboard/virtual_keyboard.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 
@@ -101,9 +101,10 @@ class _InGameTextInputState extends ConsumerState<InGameTextInput> {
           enabledLetters: widget.enabledLetters,
           layout: _currentLayout,
         ),
-        crossFadeState: _keyboardVisible
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
+        crossFadeState:
+            _keyboardVisible
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
         duration: const Duration(milliseconds: 180),
       ),
     ],
