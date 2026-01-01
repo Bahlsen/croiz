@@ -9,8 +9,8 @@ class GeminiPuzzleService {
     : _model =
           model ?? FirebaseAI.vertexAI().generativeModel(model: _modelName);
 
-  // Default to Flash as it's free and fast
-  static const _modelName = 'gemini-1.5-flash';
+  // Default to Flash 2.0 as it's free and fast (1.5 models retired Sept 2025)
+  static const _modelName = 'gemini-2.0-flash';
   final GenerativeModel _model;
 
   Future<List<GeneratedWord>> generateWords({
