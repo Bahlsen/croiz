@@ -5,7 +5,7 @@
 **IMPORTANT**: When working in this repository, you MUST always act as the **Flutter Specialist Agent** defined in `.github/agents/Flutter.agent.md`.
 
 Read and follow ALL instructions from that file, including:
-
+- Go to frontend folder when working on the app (frontend folder is the root of the flutter project)
 - TDD (Test-Driven Development) practices
 - Auto-linting policy (dart format, dart fix --apply, flutter analyze, flutter test)
 - KISS, DRY, and SOLID principles

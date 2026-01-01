@@ -8,6 +8,8 @@ class PuzzleFilterState {
     this.selectedLanguages = const {},
     this.availableLanguages = const {'en'},
     this.showCompleted = true,
+    this.showGeneratedOnly = false,
+    this.searchQuery = '',
   });
 
   /// Selected difficulty levels (1=Easy, 2=Medium, 3=Hard, 4=Expert, 5=Master).
@@ -24,11 +26,19 @@ class PuzzleFilterState {
   /// Whether to show completed puzzles.
   final bool showCompleted;
 
+  /// Whether to show only generated puzzles.
+  final bool showGeneratedOnly;
+
+  /// Search query for puzzle title.
+  final String searchQuery;
+
   /// Whether any filter is active (not default).
   bool get hasActiveFilters =>
       selectedDifficulties.length < 5 ||
       !showCompleted ||
-      selectedLanguages.isNotEmpty;
+      selectedLanguages.isNotEmpty ||
+      showGeneratedOnly ||
+      searchQuery.isNotEmpty;
 
   /// Create a copy with optional field overrides.
   PuzzleFilterState copyWith({
@@ -36,11 +46,15 @@ class PuzzleFilterState {
     Set<String>? selectedLanguages,
     Set<String>? availableLanguages,
     bool? showCompleted,
+    bool? showGeneratedOnly,
+    String? searchQuery,
   }) => PuzzleFilterState(
     selectedDifficulties: selectedDifficulties ?? this.selectedDifficulties,
     selectedLanguages: selectedLanguages ?? this.selectedLanguages,
     availableLanguages: availableLanguages ?? this.availableLanguages,
     showCompleted: showCompleted ?? this.showCompleted,
+    showGeneratedOnly: showGeneratedOnly ?? this.showGeneratedOnly,
+    searchQuery: searchQuery ?? this.searchQuery,
   );
 }
 
@@ -55,6 +69,7 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
   static const _keyDifficulties = 'puzzle_filter_difficulties';
   static const _keyLanguages = 'puzzle_filter_languages';
   static const _keyShowCompleted = 'puzzle_filter_show_completed';
+  static const _keyShowGeneratedOnly = 'puzzle_filter_show_generated_only';
 
   @override
   PuzzleFilterState build() => const PuzzleFilterState();
@@ -72,27 +87,22 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
   }
 
   /// Toggle a language in the filter.
-  void toggleLanguage(String language) {
+  ///
+  /// [availableLanguages] must be passed from the UI to ensure we are toggling
+  /// against the correct set of actually available languages.
+  void toggleLanguage(String language, Set<String> availableLanguages) {
     var current = Set<String>.from(state.selectedLanguages);
 
-    // If empty (All), and we are toggling one OFF (assuming UI shows checks),
-    // wait. The UI will likely call this when a user UNCHECKS something that was implicitly checked.
-    // Or CHECKS something that was unchecked.
-
     // Logic:
-    // If empty, it means ALL are selected.
-    // If we call toggleLanguage('fr'):
-    // Does it mean "Deselect FR" or "Select FR"?
-    // Standard Toggle:
-    // If 'fr' is IN the set -> Remove it.
-    // If 'fr' is NOT in the set -> Add it.
-
-    // BUT 'empty' means ALL. So 'fr' is effectively IN the set.
-    // So we should Remove it. To remove it from "All", we must materialize "All - {fr}".
+    // If empty, it means ALL available languages are effectively selected.
+    // If we are toggling 'fr':
+    // - If we were in "All" mode, we must first materialize the set of all languages,
+    //   then remove 'fr' (effectively UNCHECKING 'fr').
+    // - If we were in "Specific" mode (current is not empty), we just add/remove.
 
     if (current.isEmpty) {
       // Materialize all
-      current = Set<String>.from(state.availableLanguages);
+      current = Set<String>.from(availableLanguages);
     }
 
     if (current.contains(language)) {
@@ -101,10 +111,13 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
       current.add(language);
     }
 
-    // Optimization: If we selected everything, go back to empty (implicit All)
-    if (current.length == state.availableLanguages.length &&
-        state.availableLanguages.isNotEmpty) {
-      current = {};
+    // Optimization: If the new set contains ALL available languages,
+    // revert to empty set (implicit All).
+    if (current.length == availableLanguages.length &&
+        availableLanguages.isNotEmpty) {
+      if (current.containsAll(availableLanguages)) {
+        current = {};
+      }
     }
 
     state = state.copyWith(selectedLanguages: current);
@@ -122,6 +135,24 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
   void setShowCompleted({required bool showCompleted}) {
     state = state.copyWith(showCompleted: showCompleted);
     _persist();
+  }
+
+  /// Set whether to show only generated puzzles.
+  void setShowGeneratedOnly({required bool showGeneratedOnly}) {
+    state = state.copyWith(showGeneratedOnly: showGeneratedOnly);
+    _persist();
+  }
+
+  /// Toggle generated puzzles filter.
+  void toggleShowGeneratedOnly() {
+    state = state.copyWith(showGeneratedOnly: !state.showGeneratedOnly);
+    _persist();
+  }
+
+  /// Set the search query.
+  void setSearchQuery(String query) {
+    state = state.copyWith(searchQuery: query);
+    // Do not persist search query
   }
 
   /// Reset language filter to select all (empty set).
@@ -147,6 +178,7 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
       final difficultiesRaw = prefs.getStringList(_keyDifficulties);
       final languagesRaw = prefs.getStringList(_keyLanguages);
       final showCompleted = prefs.getBool(_keyShowCompleted);
+      final showGeneratedOnly = prefs.getBool(_keyShowGeneratedOnly);
 
       Set<int>? difficulties;
       if (difficultiesRaw != null) {
@@ -162,6 +194,7 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
         selectedDifficulties: difficulties,
         selectedLanguages: languages,
         showCompleted: showCompleted,
+        showGeneratedOnly: showGeneratedOnly,
       );
     } on Object {
       // Ignore errors loading preferences
@@ -181,6 +214,7 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
         state.selectedLanguages.toList(),
       );
       await prefs.setBool(_keyShowCompleted, state.showCompleted);
+      await prefs.setBool(_keyShowGeneratedOnly, state.showGeneratedOnly);
     } on Object {
       // Ignore errors persisting preferences
     }

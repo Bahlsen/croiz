@@ -83,9 +83,9 @@ class LanguageFilterSelector extends ConsumerWidget {
 }
 
 class _LanguageSelectionSheet extends ConsumerWidget {
-  final List<String> availableLanguages;
 
   const _LanguageSelectionSheet({required this.availableLanguages});
+  final List<String> availableLanguages;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -98,7 +98,7 @@ class _LanguageSelectionSheet extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Text(
             'Select Languages',
             style: Theme.of(context).textTheme.titleLarge,
@@ -135,14 +135,17 @@ class _LanguageSelectionSheet extends ConsumerWidget {
                 onChanged: (_) {
                   ref
                       .read(puzzleFilterProvider.notifier)
-                      .toggleLanguage(languageCode);
+                      .toggleLanguage(
+                        languageCode,
+                        Set<String>.from(availableLanguages),
+                      );
                 },
               );
             },
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

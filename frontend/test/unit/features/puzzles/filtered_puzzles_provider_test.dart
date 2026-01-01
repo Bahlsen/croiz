@@ -123,7 +123,7 @@ void main() {
       // Set available languages and select only French
       container.read(puzzleFilterProvider.notifier)
         ..setAvailableLanguages({'en', 'fr'})
-        ..toggleLanguage('en'); // Remove English
+        ..toggleLanguage('en', {'en', 'fr'}); // Remove English
 
       final filtered = container.read(filteredPuzzlesProvider);
 
@@ -149,7 +149,7 @@ void main() {
         ..toggleDifficulty(5)
         // Filter to English only
         ..setAvailableLanguages({'en', 'fr'})
-        ..toggleLanguage('fr');
+        ..toggleLanguage('fr', {'en', 'fr'});
 
       final filtered = container.read(filteredPuzzlesProvider);
 
@@ -200,7 +200,7 @@ void main() {
         ..toggleDifficulty(4)
         // Filter to only French
         ..setAvailableLanguages({'en', 'fr'})
-        ..toggleLanguage('en');
+        ..toggleLanguage('en', {'en', 'fr'});
 
       final filtered = container.read(filteredPuzzlesProvider);
 
@@ -332,6 +332,96 @@ void main() {
 
         // When loading, show all (don't filter by completion)
         expect(filtered.length, 7);
+      });
+    });
+    group('generated and search filtering', () {
+      test('filters generated puzzles only', () {
+        final testPuzzles = [
+          PuzzleDescriptor(
+            id: 'gen-1',
+            title: 'Generated 1',
+            path: 'test/gen1.json',
+            difficulty: 1,
+            difficultyLabel: 'Easy',
+            language: 'en',
+            origin: 'generated',
+          ),
+          PuzzleDescriptor(
+            id: 'ai-1',
+            title: 'AI 1',
+            path: 'test/ai1.json',
+            difficulty: 1,
+            difficultyLabel: 'Easy',
+            language: 'en',
+            origin: 'ai',
+          ),
+          PuzzleDescriptor(
+            id: 'human-1',
+            title: 'Human 1',
+            path: 'test/human1.json',
+            difficulty: 1,
+            difficultyLabel: 'Easy',
+            language: 'en',
+            origin: 'human',
+          ),
+        ];
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
+          'en',
+        });
+        container
+            .read(puzzleFilterProvider.notifier)
+            .setShowGeneratedOnly(showGeneratedOnly: true);
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        expect(filtered.length, 2);
+        expect(filtered.any((p) => p.id == 'gen-1'), isTrue);
+        expect(filtered.any((p) => p.id == 'ai-1'), isTrue);
+        expect(filtered.any((p) => p.id == 'human-1'), isFalse);
+      });
+
+      test('filters by search query', () {
+        final testPuzzles = [
+          PuzzleDescriptor(
+            id: 'p1',
+            title: 'Crossword Apple',
+            path: 'test/p1.json',
+            difficulty: 1,
+            difficultyLabel: 'Easy',
+            language: 'en',
+          ),
+          PuzzleDescriptor(
+            id: 'p2',
+            title: 'Crossword Banana',
+            path: 'test/p2.json',
+            difficulty: 1,
+            difficultyLabel: 'Easy',
+            language: 'en',
+          ),
+        ];
+        final container = ProviderContainer(
+          overrides: [
+            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
+          'en',
+        });
+        container.read(puzzleFilterProvider.notifier).setSearchQuery('apple');
+
+        final filtered = container.read(filteredPuzzlesProvider);
+
+        expect(filtered.length, 1);
+        expect(filtered.first.id, 'p1');
       });
     });
   });

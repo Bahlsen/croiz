@@ -95,6 +95,31 @@ List<PuzzleDescriptor> _filterPuzzles(
     return false;
   }
 
+  // Filter by generated status
+  if (filterState.showGeneratedOnly) {
+    // Assuming 'generated' or 'ai' identifies generated puzzles.
+    // Also matching 'test' as user context showed 'test' origin.
+    // Ideally this should be more robust.
+    final isGenerated =
+        puzzle.origin.toLowerCase().contains('generated') ||
+        puzzle.origin.toLowerCase() == 'ai' ||
+        puzzle.origin.toLowerCase() ==
+            'test'; // temporary: include 'test' for user context
+    if (!isGenerated) {
+      return false;
+    }
+  }
+
+  // Filter by search query
+  if (filterState.searchQuery.isNotEmpty) {
+    final query = filterState.searchQuery.toLowerCase();
+    final matchesTitle = puzzle.title.toLowerCase().contains(query);
+    final matchesSubtitle = puzzle.subtitle.toLowerCase().contains(query);
+    if (!matchesTitle && !matchesSubtitle) {
+      return false;
+    }
+  }
+
   // Filter by completion status
   if (!filterState.showCompleted && completedIds.contains(puzzle.id)) {
     return false;

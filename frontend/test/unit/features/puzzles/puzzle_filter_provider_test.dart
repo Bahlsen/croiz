@@ -20,13 +20,13 @@ void main() {
       expect(state.selectedDifficulties, {1, 2, 3, 4, 5});
     });
 
-    test('has all languages selected by default', () {
+    test('has all languages selected (empty set) by default', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
       final state = container.read(puzzleFilterProvider);
-      // Default languages when none specified
-      expect(state.selectedLanguages, contains('en'));
+      // Default languages is empty (implies all)
+      expect(state.selectedLanguages, isEmpty);
     });
 
     test('showCompleted is true by default', () {
@@ -84,50 +84,56 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      // Ensure 'en' is in selected languages
-      expect(
-        container.read(puzzleFilterProvider).selectedLanguages,
-        contains('en'),
-      );
+      // We need to set initial state to have 'en' selected first
+      // But default is {}, which means "All".
+      // To test 'removing' (unchecking), we rely on toggle logic:
+      // If we pass {'en'} as available, and current is {}, it materializes {'en'}.
+      // Then it removes 'en', so result should be empty... wait.
+      // If result is empty, it means "All" again.
+      // So if available is {'en'}, toggling 'en' off -> empty -> all -> 'en' checked?
+      // Wait. If I have {'en'} only. "All" means {'en'}.
+      // If I uncheck 'en', selected becomes {}. "All".
+      // So effectively, if only 1 language available, filters don't do much visually except if we allowed 0 selection.
+      // But UI LanguageFilterSelector hides itself if <= 1 language.
 
-      // Toggle 'en'
-      container.read(puzzleFilterProvider.notifier).toggleLanguage('en');
+      // Let's test with 2 languages: en, fr.
+      final available = {'en', 'fr'};
 
-      // Should no longer contain 'en'
-      expect(
-        container.read(puzzleFilterProvider).selectedLanguages,
-        isNot(contains('en')),
-      );
+      // Initial: {} (All).
+
+      // Toggle 'en' (user unchecks 'en').
+      // Logic: Materialize -> {en, fr}. Remove 'en' -> {fr}.
+      container
+          .read(puzzleFilterProvider.notifier)
+          .toggleLanguage('en', available);
+
+      expect(container.read(puzzleFilterProvider).selectedLanguages, {'fr'});
+
+      // Toggle 'en' again (user checks 'en').
+      // Current: {fr}. Add 'en' -> {en, fr}.
+      // Optimization: {en, fr} == available -> {} (All).
+      container
+          .read(puzzleFilterProvider.notifier)
+          .toggleLanguage('en', available);
+      expect(container.read(puzzleFilterProvider).selectedLanguages, isEmpty);
     });
+  });
 
-    test('adds language when absent', () {
+  group('resetLanguages', () {
+    test('resets logic to "All"', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
+      final available = {'en', 'fr'};
 
-      // Toggle 'fr' which may not be in default
-      container.read(puzzleFilterProvider.notifier).toggleLanguage('fr');
+      // Select just 'fr'
+      container
+          .read(puzzleFilterProvider.notifier)
+          .toggleLanguage('en', available);
+      expect(container.read(puzzleFilterProvider).selectedLanguages, {'fr'});
 
-      // Should contain 'fr' (either was added or was already there)
-      // For this test, we first remove it then add
-      container.read(puzzleFilterProvider.notifier).toggleLanguage('fr');
-
-      // Toggle twice: if it was there, now it's gone; if not, now it's there
-      // Let's be more explicit: add 'fr' to available and toggle
-      container.read(puzzleFilterProvider.notifier)
-        ..setAvailableLanguages({'en', 'fr'})
-        // Now toggle 'fr' to remove it (it should be selected by default)
-        ..toggleLanguage('fr');
-      expect(
-        container.read(puzzleFilterProvider).selectedLanguages,
-        isNot(contains('fr')),
-      );
-
-      // Toggle again to add
-      container.read(puzzleFilterProvider.notifier).toggleLanguage('fr');
-      expect(
-        container.read(puzzleFilterProvider).selectedLanguages,
-        contains('fr'),
-      );
+      // Reset
+      container.read(puzzleFilterProvider.notifier).resetLanguages();
+      expect(container.read(puzzleFilterProvider).selectedLanguages, isEmpty);
     });
   });
 
@@ -136,9 +142,9 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      container.read(puzzleFilterProvider.notifier).setShowCompleted(
-        showCompleted: false,
-      );
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setShowCompleted(showCompleted: false);
 
       expect(container.read(puzzleFilterProvider).showCompleted, isFalse);
     });
@@ -148,15 +154,15 @@ void main() {
       addTearDown(container.dispose);
 
       // First set to false
-      container.read(puzzleFilterProvider.notifier).setShowCompleted(
-        showCompleted: false,
-      );
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setShowCompleted(showCompleted: false);
       expect(container.read(puzzleFilterProvider).showCompleted, isFalse);
 
       // Then set back to true
-      container.read(puzzleFilterProvider.notifier).setShowCompleted(
-        showCompleted: true,
-      );
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setShowCompleted(showCompleted: true);
       expect(container.read(puzzleFilterProvider).showCompleted, isTrue);
     });
   });
@@ -183,10 +189,13 @@ void main() {
       container.read(puzzleFilterProvider.notifier).clearFilters();
 
       // Should be back to defaults
-      expect(
-        container.read(puzzleFilterProvider).selectedDifficulties,
-        {1, 2, 3, 4, 5},
-      );
+      expect(container.read(puzzleFilterProvider).selectedDifficulties, {
+        1,
+        2,
+        3,
+        4,
+        5,
+      });
       expect(container.read(puzzleFilterProvider).showCompleted, isTrue);
     });
   });
@@ -205,7 +214,9 @@ void main() {
 
       // Check SharedPreferences
       final prefs = await SharedPreferences.getInstance();
-      final savedDifficulties = prefs.getStringList('puzzle_filter_difficulties');
+      final savedDifficulties = prefs.getStringList(
+        'puzzle_filter_difficulties',
+      );
       expect(savedDifficulties, isNotNull);
       expect(savedDifficulties, isNot(contains('3')));
     });
@@ -252,9 +263,9 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      container.read(puzzleFilterProvider.notifier).setShowCompleted(
-        showCompleted: false,
-      );
+      container
+          .read(puzzleFilterProvider.notifier)
+          .setShowCompleted(showCompleted: false);
 
       expect(container.read(puzzleFilterProvider).hasActiveFilters, isTrue);
     });

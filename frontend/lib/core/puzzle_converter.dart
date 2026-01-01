@@ -1,5 +1,6 @@
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:flutter/foundation.dart';
 
 /// Converts a Puzzle model (from JSON) to a GameBoard entity (used by the UI).
 class PuzzleConverter {
@@ -169,7 +170,7 @@ class PuzzleConverter {
         // Relaxed validation: Just log a warning for generated puzzles or sparse grids
         // instead of preventing the game from loading.
         // throw FormatException('Invalid puzzle: ${parts.join('; ')}');
-        print('Warning: Sparse puzzle detected: ${parts.join('; ')}');
+        debugPrint('Warning: Sparse puzzle detected: ${parts.join('; ')}');
       }
     }
 

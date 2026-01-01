@@ -6,6 +6,8 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 void main() {
   final testPuzzles = [
@@ -211,5 +213,33 @@ void main() {
     final listTiles = find.byType(ListTile);
     // Not all 100 tiles should be in the tree at once
     expect(listTiles.evaluate().length, lessThan(100));
+  });
+  testWidgets('settings icon opens settings menu', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Sizer(
+            builder: (context, orientation, deviceType) =>
+                const PuzzlesListPage(),
+          ),
+        ),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Verify settings icon exists
+    final settingsIcon = find.byKey(const Key('settings_icon'));
+    expect(settingsIcon, findsOneWidget);
+
+    // Tap it
+    await tester.tap(settingsIcon);
+    await tester.pumpAndSettle();
+
+    // Verify menu is shown
+    expect(find.byType(CrosswordControlsMenu), findsOneWidget);
   });
 }

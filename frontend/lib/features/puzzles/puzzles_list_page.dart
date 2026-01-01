@@ -8,7 +8,10 @@ import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/language_filter_selector.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_list_tile_enhanced.dart';
+import 'package:croiz/features/puzzles/widgets/generated_filter_chip.dart';
+import 'package:croiz/features/puzzles/widgets/puzzle_search_bar.dart';
 import 'package:croiz/core/responsive/responsive.dart';
+import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 /// Puzzle selection page with filters, continue playing section, and performance.
 class PuzzlesListPage extends ConsumerWidget {
@@ -22,10 +25,9 @@ class PuzzlesListPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          key: const Key('settings_icon'),
           icon: const Icon(Icons.settings),
-          onPressed: () {
-            // TODO: Open settings
-          },
+          onPressed: () => _openSettings(context),
         ),
         title: Text(
           AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
@@ -51,6 +53,18 @@ class PuzzlesListPage extends ConsumerWidget {
           ? Colors.white
           : Theme.of(context).scaffoldBackgroundColor,
       body: _buildBody(context, ref, puzzlesAsync),
+    );
+  }
+
+  Future<void> _openSettings(BuildContext context) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Stack(
+        children: [
+          CrosswordControlsMenu(onClose: () => Navigator.of(context).pop()),
+        ],
+      ),
     );
   }
 
@@ -80,6 +94,9 @@ class PuzzlesListPage extends ConsumerWidget {
         // Continue Playing Section at top
         const ContinuePlayingSection(),
 
+        // Search Bar
+        const PuzzleSearchBar(),
+
         // Filter chips section
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -88,7 +105,13 @@ class PuzzlesListPage extends ConsumerWidget {
             children: [
               DifficultyFilterChips(),
               SizedBox(height: 8),
-              LanguageFilterSelector(),
+              Row(
+                children: [
+                  LanguageFilterSelector(),
+                  SizedBox(width: 8),
+                  GeneratedFilterChip(),
+                ],
+              ),
             ],
           ),
         ),
