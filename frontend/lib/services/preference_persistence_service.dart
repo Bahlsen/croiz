@@ -1,5 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+part 'preference_persistence_service.g.dart';
 
 /// Service responsible for persisting application preferences.
 ///
@@ -39,7 +41,6 @@ class PreferencePersistenceService {
 }
 
 /// Provider for PreferencePersistenceService.
-final preferencePersistenceServiceProvider =
-    Provider<PreferencePersistenceService>(
-      (ref) => PreferencePersistenceService(),
-    );
+@Riverpod(keepAlive: true)
+PreferencePersistenceService preferencePersistenceService(Ref ref) =>
+    PreferencePersistenceService();

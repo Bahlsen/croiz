@@ -5,6 +5,8 @@ export 'game_state_providers.dart';
 export 'puzzle_loader_provider.dart';
 export 'game_board_notifier.dart';
 export 'cell_providers.dart';
+export 'game_progress_providers.dart';
+export 'game_selection_providers.dart';
 
 // Additional providers that haven't been modularized yet
 import 'package:flutter_riverpod/flutter_riverpod.dart';

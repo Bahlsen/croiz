@@ -1,7 +1,8 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 
+part 'word_check_provider.g.dart';
+
 /// Provider for answer validation service.
-final wordCheckServiceProvider = Provider<WordCheckService>(
-  (ref) => WordCheckService(),
-);
+@Riverpod(keepAlive: true)
+WordCheckService wordCheckService(Ref ref) => WordCheckService();

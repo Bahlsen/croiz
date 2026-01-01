@@ -1,6 +1,8 @@
 import 'dart:developer' as developer;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/providers.dart';
+
+part 'game_timer_provider.g.dart';
 
 /// Simple persistent game timer per puzzle/gameId.
 ///
@@ -165,4 +167,5 @@ class GameTimer {
   }
 }
 
-final gameTimerProvider = Provider.family<GameTimer, String>(GameTimer.new);
+@Riverpod(keepAlive: true)
+GameTimer gameTimer(Ref ref, String gameId) => GameTimer(ref, gameId);

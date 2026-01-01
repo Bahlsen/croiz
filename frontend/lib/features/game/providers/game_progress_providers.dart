@@ -1,8 +1,12 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
+part 'game_progress_providers.g.dart';
+
 /// Holds the set of found word keys (format: "row,col,direction").
-class FoundWordsNotifier extends Notifier<Set<String>> {
+@Riverpod(keepAlive: true)
+class FoundWordsNotifier extends _$FoundWordsNotifier {
   @override
   Set<String> build() => <String>{};
 
@@ -16,12 +20,9 @@ class FoundWordsNotifier extends Notifier<Set<String>> {
   void clear() => state = <String>{};
 }
 
-final foundWordsProvider = NotifierProvider<FoundWordsNotifier, Set<String>>(
-  FoundWordsNotifier.new,
-);
-
 /// Holds cells that should flash (for word completion animation).
-class FlashingCellsNotifier extends Notifier<Set<CellKey>> {
+@Riverpod(keepAlive: true)
+class FlashingCellsNotifier extends _$FlashingCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
 
@@ -29,20 +30,15 @@ class FlashingCellsNotifier extends Notifier<Set<CellKey>> {
   void setFlashingCells(Set<CellKey> v) => state = v;
 }
 
-final flashingCellsProvider =
-    NotifierProvider<FlashingCellsNotifier, Set<CellKey>>(
-      FlashingCellsNotifier.new,
-    );
-
 /// Provider family for whether a specific cell is currently flashing.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
-final cellFlashingProvider = Provider.family<bool, CellKey>(
-  (ref, key) =>
-      ref.watch(flashingCellsProvider.select((set) => set.contains(key))),
-);
+@Riverpod(keepAlive: true)
+bool cellFlashing(Ref ref, CellKey key) =>
+    ref.watch(flashingCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
-class FlashingClearedCellsNotifier extends Notifier<Set<CellKey>> {
+@Riverpod(keepAlive: true)
+class FlashingClearedCellsNotifier extends _$FlashingClearedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
 
@@ -50,28 +46,18 @@ class FlashingClearedCellsNotifier extends Notifier<Set<CellKey>> {
   void setFlashingClearedCells(Set<CellKey> v) => state = v;
 }
 
-final flashingClearedCellsProvider =
-    NotifierProvider<FlashingClearedCellsNotifier, Set<CellKey>>(
-      FlashingClearedCellsNotifier.new,
-    );
-
 /// Provider family for whether a specific cell is in the "cleared flash" set.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
-final cellClearedFlashingProvider = Provider.family<bool, CellKey>(
-  (ref, key) => ref.watch(
-    flashingClearedCellsProvider.select((set) => set.contains(key)),
-  ),
-);
+@Riverpod(keepAlive: true)
+bool cellClearedFlashing(Ref ref, CellKey key) =>
+    ref.watch(flashingClearedCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that are locked (found words cannot be edited).
-class LockedCellsNotifier extends Notifier<Set<CellKey>> {
+@Riverpod(keepAlive: true)
+class LockedCellsNotifier extends _$LockedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
 
   /// Replace the locked cells set.
   void setLockedCells(Set<CellKey> v) => state = v;
 }
-
-final lockedCellsProvider = NotifierProvider<LockedCellsNotifier, Set<CellKey>>(
-  LockedCellsNotifier.new,
-);

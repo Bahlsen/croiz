@@ -1,11 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/preference_persistence_service.dart';
 
-/// Provider for keyboard layout preference.
-final gameKeyboardLayoutProvider =
-    NotifierProvider<KeyboardLayoutNotifier, bool>(KeyboardLayoutNotifier.new);
+part 'keyboard_layout_provider.g.dart';
 
-class KeyboardLayoutNotifier extends Notifier<bool> {
+/// Provider for keyboard layout preference.
+@Riverpod(keepAlive: true)
+class KeyboardLayoutNotifier extends _$KeyboardLayoutNotifier {
   @override
   bool build() => false; // false = QWERTY by default
 
@@ -18,3 +18,6 @@ class KeyboardLayoutNotifier extends Notifier<bool> {
 
   void toggle() => setIsAzerty(isAzerty: !state);
 }
+
+// Compatibility alias
+final gameKeyboardLayoutProvider = keyboardLayoutProvider;

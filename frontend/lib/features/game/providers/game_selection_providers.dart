@@ -1,4 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'game_selection_providers.g.dart';
 
 /// Represents a selected cell in the grid.
 class SelectedCell {
@@ -11,7 +13,8 @@ class SelectedCell {
 enum WordDirection { horizontal, vertical }
 
 /// Holds the currently selected cell (or null if none).
-class SelectedCellNotifier extends Notifier<SelectedCell?> {
+@Riverpod(keepAlive: true)
+class SelectedCellNotifier extends _$SelectedCellNotifier {
   @override
   SelectedCell? build() => null;
 
@@ -19,21 +22,12 @@ class SelectedCellNotifier extends Notifier<SelectedCell?> {
   void select(SelectedCell? v) => state = v;
 }
 
-final selectedCellProvider =
-    NotifierProvider<SelectedCellNotifier, SelectedCell?>(
-      SelectedCellNotifier.new,
-    );
-
 /// Holds the current word direction (horizontal or vertical).
-class WordDirectionNotifier extends Notifier<WordDirection> {
+@Riverpod(keepAlive: true)
+class WordDirectionNotifier extends _$WordDirectionNotifier {
   @override
   WordDirection build() => WordDirection.horizontal;
 
   /// Update current word direction.
   void setDirection(WordDirection v) => state = v;
 }
-
-final wordDirectionProvider =
-    NotifierProvider<WordDirectionNotifier, WordDirection>(
-      WordDirectionNotifier.new,
-    );

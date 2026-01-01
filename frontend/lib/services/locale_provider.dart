@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/preference_persistence_service.dart';
 
-/// Provider for the application locale.
-final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
-  LocaleNotifier.new,
-);
+part 'locale_provider.g.dart';
 
-class LocaleNotifier extends Notifier<Locale> {
+/// Provider for the application locale.
+@Riverpod(keepAlive: true)
+class LocaleNotifier extends _$LocaleNotifier {
   @override
   Locale build() => const Locale('en');
 

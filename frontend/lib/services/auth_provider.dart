@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/secure_storage_provider.dart';
 
-/// Authentication Provider
-final authProvider = AsyncNotifierProvider<AuthNotifier, AuthState>(
-  AuthNotifier.new,
-);
+part 'auth_provider.g.dart';
 
-class AuthNotifier extends AsyncNotifier<AuthState> {
+/// Authentication Provider
+@Riverpod(keepAlive: true)
+class AuthNotifier extends _$AuthNotifier {
   @override
   FutureOr<AuthState> build() => AuthState.initial();
 

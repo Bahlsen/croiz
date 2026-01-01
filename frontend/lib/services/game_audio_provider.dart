@@ -1,8 +1,9 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/game_audio_service.dart';
 
+part 'game_audio_provider.g.dart';
+
 /// Provider for the game audio service.
-final gameAudioServiceProvider = Provider<AudioService>(
-  (ref) => GameAudioService(),
-);
+@Riverpod(keepAlive: true)
+AudioService gameAudioService(Ref ref) => GameAudioService();

@@ -1,16 +1,14 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/preference_persistence_service.dart';
+
+part 'keyboard_size_provider.g.dart';
 
 /// Available sizes for the virtual keyboard.
 enum KeyboardSize { small, medium, large }
 
 /// Provider for keyboard size preference.
-final gameKeyboardSizeProvider =
-    NotifierProvider<KeyboardSizeNotifier, KeyboardSize>(
-      KeyboardSizeNotifier.new,
-    );
-
-class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
+@Riverpod(keepAlive: true)
+class KeyboardSizeNotifier extends _$KeyboardSizeNotifier {
   @override
   KeyboardSize build() => KeyboardSize.medium;
 
@@ -21,3 +19,6 @@ class KeyboardSizeNotifier extends Notifier<KeyboardSize> {
         .setString('pref_keyboard_size', size.name);
   }
 }
+
+// Compatibility alias
+final gameKeyboardSizeProvider = keyboardSizeProvider;

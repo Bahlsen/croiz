@@ -1,12 +1,11 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/preference_persistence_service.dart';
 
-/// Provider for global audio mute state.
-final gameAudioMutedProvider = NotifierProvider<AudioMutedNotifier, bool>(
-  AudioMutedNotifier.new,
-);
+part 'audio_muted_provider.g.dart';
 
-class AudioMutedNotifier extends Notifier<bool> {
+/// Provider for global audio mute state.
+@Riverpod(keepAlive: true)
+class AudioMutedNotifier extends _$AudioMutedNotifier {
   @override
   bool build() => false; // not muted by default
 
@@ -19,3 +18,6 @@ class AudioMutedNotifier extends Notifier<bool> {
 
   void toggle() => state = !state;
 }
+
+// Compatibility alias
+final gameAudioMutedProvider = audioMutedProvider;

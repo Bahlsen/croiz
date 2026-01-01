@@ -37,27 +37,23 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   @override
   Widget build(BuildContext context) {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
-    final layout = isAzerty
-        ? VirtualKeyboard.azertyLayout
-        : VirtualKeyboard.qwertyLayout;
+    final layout =
+        isAzerty ? VirtualKeyboard.azertyLayout : VirtualKeyboard.qwertyLayout;
     final kbSize = ref.watch(gameKeyboardSizeProvider);
 
     // Map keyboard size to responsive key height and font size.
-    double keyHeight;
-    double letterFontSize;
-    switch (kbSize) {
-      case KeyboardSize.small:
-        keyHeight = ResponsiveKeyboard.keyHeightSmall;
-        letterFontSize = ResponsiveKeyboard.letterFontSmall;
-        break;
-      case KeyboardSize.large:
-        keyHeight = ResponsiveKeyboard.keyHeightLarge;
-        letterFontSize = ResponsiveKeyboard.letterFontLarge;
-        break;
-      case KeyboardSize.medium:
-        keyHeight = ResponsiveKeyboard.keyHeightMedium;
-        letterFontSize = ResponsiveKeyboard.letterFontMedium;
-    }
+    // Map keyboard size to responsive key height and font size.
+    final keyHeight = switch (kbSize) {
+      KeyboardSize.small => ResponsiveKeyboard.keyHeightSmall,
+      KeyboardSize.large => ResponsiveKeyboard.keyHeightLarge,
+      KeyboardSize.medium => ResponsiveKeyboard.keyHeightMedium,
+    };
+
+    final letterFontSize = switch (kbSize) {
+      KeyboardSize.small => ResponsiveKeyboard.letterFontSmall,
+      KeyboardSize.large => ResponsiveKeyboard.letterFontLarge,
+      KeyboardSize.medium => ResponsiveKeyboard.letterFontMedium,
+    };
 
     return Stack(
       children: [
@@ -139,10 +135,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                       child: Text(
                         AppLocalizations.of(context)?.reveal ?? 'Reveal',
                         textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: ResponsiveFontSize.titleMedium,
                         ),
@@ -192,19 +187,18 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     IconData icon,
     String title,
     VoidCallback onTap,
-  ) =>
-      ListTile(
-        leading: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.onSurface,
-          size: ResponsiveIconSize.md,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
-        ),
-        onTap: onTap,
-      );
+  ) => ListTile(
+    leading: Icon(
+      icon,
+      color: Theme.of(context).colorScheme.onSurface,
+      size: ResponsiveIconSize.md,
+    ),
+    title: Text(
+      title,
+      style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+    ),
+    onTap: onTap,
+  );
 
   void _revealLetter() {
     setState(() => _revealOpen = false);
@@ -212,15 +206,15 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     if (sel == null) {
       return;
     }
-    
+
     // Reveal the letter
     ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
-    
+
     // After revealing, find and navigate to the next empty cell
     final updatedBoard = ref.read(gameBoardProvider);
     final dir = ref.read(wordDirectionProvider);
     final isAcross = dir == WordDirection.horizontal;
-    
+
     // Find containing entry
     final containing = findContainingEntry(
       row: sel.row,
@@ -229,13 +223,17 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       entries: updatedBoard.entries,
       index: ref.read(cellEntriesIndexProvider),
     );
-    
+
     if (containing != null) {
       // Search for next empty cell AFTER current position within same entry
       SelectedCell? nextInEntry;
       if (isAcross) {
         // Search columns after current
-        for (var cc = sel.col + 1; cc < containing.x + containing.length; cc++) {
+        for (
+          var cc = sel.col + 1;
+          cc < containing.x + containing.length;
+          cc++
+        ) {
           final val = updatedBoard.grid[containing.y][cc];
           if (val == null || val.isEmpty) {
             nextInEntry = SelectedCell(containing.y, cc);
@@ -244,7 +242,11 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
         }
       } else {
         // Search rows after current
-        for (var rr = sel.row + 1; rr < containing.y + containing.length; rr++) {
+        for (
+          var rr = sel.row + 1;
+          rr < containing.y + containing.length;
+          rr++
+        ) {
           final val = updatedBoard.grid[rr][containing.x];
           if (val == null || val.isEmpty) {
             nextInEntry = SelectedCell(rr, containing.x);
@@ -252,12 +254,12 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
           }
         }
       }
-      
+
       if (nextInEntry != null) {
         ref.read(selectedCellProvider.notifier).select(nextInEntry);
         return;
       }
-      
+
       // If no empty after current position, find next empty from other entries
       final nextEmpty = findNextEmptyFromEntry(
         containing: containing,
@@ -284,10 +286,10 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     if (ctx == null) {
       return;
     }
-    
+
     // Reveal the word
     ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
-    
+
     // After revealing, find and navigate to the next empty cell
     final updatedBoard = ref.read(gameBoardProvider);
     final isAcross = dir == WordDirection.horizontal;
@@ -317,24 +319,25 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     await showDialog<void>(
       context: ctx,
       barrierDismissible: true,
-      builder: (dialogCtx) => Stack(
-        children: [
-          CrosswordControlsMenu(
-            onClose: () => Navigator.of(dialogCtx).pop(),
-            onToggleKeyboard: (v) {
-              ref
-                  .read(gameKeyboardLayoutProvider.notifier)
-                  .setIsAzerty(isAzerty: v);
-            },
-            onToggleMute: (v) {
-              ref.read(gameAudioMutedProvider.notifier).setMuted(muted: v);
-            },
-            onToggleTheme: (v) {
-              ref.read(appIsDarkProvider.notifier).setIsDark(isDark: v);
-            },
+      builder:
+          (dialogCtx) => Stack(
+            children: [
+              CrosswordControlsMenu(
+                onClose: () => Navigator.of(dialogCtx).pop(),
+                onToggleKeyboard: (v) {
+                  ref
+                      .read(gameKeyboardLayoutProvider.notifier)
+                      .setIsAzerty(isAzerty: v);
+                },
+                onToggleMute: (v) {
+                  ref.read(gameAudioMutedProvider.notifier).setMuted(muted: v);
+                },
+                onToggleTheme: (v) {
+                  ref.read(appIsDarkProvider.notifier).setIsDark(isDark: v);
+                },
+              ),
+            ],
           ),
-        ],
-      ),
     );
 
     _dialogOpen = false;

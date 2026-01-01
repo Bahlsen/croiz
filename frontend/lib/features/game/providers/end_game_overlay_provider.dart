@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Listen to puzzle selection changes so the overlay is reset when a new
 // puzzle is selected (fixes case where user hid the overlay and then
@@ -6,7 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // reappearing).
 import 'puzzle_loader_provider.dart';
 
-class EndGameOverlayVisibleNotifier extends Notifier<bool> {
+part 'end_game_overlay_provider.g.dart';
+
+@Riverpod(keepAlive: true)
+class EndGameOverlayVisibleNotifier extends _$EndGameOverlayVisibleNotifier {
   @override
   bool build() {
     // Default to visible on creation.
@@ -24,8 +27,3 @@ class EndGameOverlayVisibleNotifier extends Notifier<bool> {
   void hide() => state = false;
   void toggle() => state = !state;
 }
-
-final endGameOverlayVisibleProvider =
-    NotifierProvider<EndGameOverlayVisibleNotifier, bool>(
-      EndGameOverlayVisibleNotifier.new,
-    );

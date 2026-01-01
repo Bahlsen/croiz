@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/secure_storage_provider.dart';
 
+part 'dio_provider.g.dart';
+
 /// Dio HTTP Client Provider with auth interceptors.
-final dioProvider = Provider<Dio>((ref) {
+@Riverpod(keepAlive: true)
+Dio dio(Ref ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: 'http://localhost:8080/api/v1',
@@ -36,4 +39,4 @@ final dioProvider = Provider<Dio>((ref) {
   );
 
   return dio;
-});
+}

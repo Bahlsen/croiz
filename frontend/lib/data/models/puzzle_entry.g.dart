@@ -19,9 +19,10 @@ PuzzleEntry _$PuzzleEntryFromJson(Map<String, dynamic> json) => PuzzleEntry(
   rebusMap: (json['rebusMap'] as Map<String, dynamic>?)?.map(
     (k, e) => MapEntry(k, e as String),
   ),
-  multiSolution: (json['multiSolution'] as List<dynamic>?)
-      ?.map((e) => e as String)
-      .toList(),
+  multiSolution:
+      (json['multiSolution'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
   annotations: json['annotations'] as Map<String, dynamic>?,
 );
 
