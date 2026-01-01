@@ -7,6 +7,13 @@ import 'package:croiz/services/persistence/puzzle_progress_service.dart';
 /// Hive-based implementation of puzzle storage.
 ///
 /// Implements [PuzzleStorageInterface] for use with [PuzzleProgressService].
+///
+/// **DEPRECATION WARNING (Jan 2026):**
+/// Hive's original author has stepped back from active maintenance. The
+/// package is now community-maintained but future is uncertain. Consider
+/// migrating to **Isar** (same creator, NoSQL) or **Drift** (SQL with
+/// type-safety) when stability becomes a concern. Monitor pub.dev for updates.
+/// See: https://pub.dev/packages/hive
 class HivePuzzleStorage implements PuzzleStorageInterface {
   static const String boxName = 'puzzle_progress';
 
