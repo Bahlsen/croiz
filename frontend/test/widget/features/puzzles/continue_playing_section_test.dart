@@ -9,9 +9,7 @@ void main() {
   testWidgets('shows placeholder when no puzzles in progress', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          inProgressPuzzlesProvider.overrideWith((ref) async => []),
-        ],
+        overrides: [inProgressPuzzlesProvider.overrideWith((ref) async => [])],
         child: const MaterialApp(
           home: Scaffold(body: ContinuePlayingSection()),
         ),
@@ -23,8 +21,9 @@ void main() {
     expect(find.text('No puzzles in progress'), findsOneWidget);
   });
 
-  testWidgets('renders horizontal ListView of in-progress puzzles',
-      (tester) async {
+  testWidgets('renders horizontal ListView of in-progress puzzles', (
+    tester,
+  ) async {
     final inProgressPuzzles = [
       InProgressPuzzleInfo(
         descriptor: PuzzleDescriptor(
@@ -184,8 +183,9 @@ void main() {
     expect(find.text('12:34'), findsOneWidget);
   });
 
-  testWidgets('puzzles sorted by savedAt descending (newest first)',
-      (tester) async {
+  testWidgets('puzzles sorted by savedAt descending (newest first)', (
+    tester,
+  ) async {
     final now = DateTime.now();
     final inProgressPuzzles = [
       InProgressPuzzleInfo(

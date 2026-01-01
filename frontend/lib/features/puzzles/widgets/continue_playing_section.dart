@@ -24,76 +24,77 @@ class InProgressPuzzleInfo {
 /// Fetches all puzzles with saved progress, calculates completion percent,
 /// and returns them sorted by most recently played.
 final inProgressPuzzlesProvider =
-    FutureProvider<List<InProgressPuzzleInfo>>((ref) async {
-  final storage = HivePuzzleStorage();
-  final service = PuzzleProgressService(
-    storage: storage,
-    assetLoader: defaultPuzzleJsonLoader,
-  );
+    FutureProvider.autoDispose<List<InProgressPuzzleInfo>>((ref) async {
+      final storage = HivePuzzleStorage();
+      final service = PuzzleProgressService(
+        storage: storage,
+        assetLoader: defaultPuzzleJsonLoader,
+      );
 
-  // Get all puzzles with saved progress
-  final progressList = await service.getInProgressPuzzlesSortedByRecency();
-  if (progressList.isEmpty) {
-    return [];
-  }
+      // Get all puzzles with saved progress
+      final progressList = await service.getInProgressPuzzlesSortedByRecency();
+      if (progressList.isEmpty) {
+        return [];
+      }
 
-  // Get the puzzle descriptors to match progress with metadata
-  final puzzlesAsync = ref.watch(puzzlesProvider);
-  final puzzles = puzzlesAsync.maybeWhen(
-    data: (p) => p,
-    orElse: () => <PuzzleDescriptor>[],
-  );
+      // Get the puzzle descriptors to match progress with metadata.
+      // IMPORTANT: We must await the .future to properly wait for puzzlesProvider
+      // to load. Using maybeWhen with orElse would return empty list before
+      // the puzzles are loaded, causing the in-progress section to appear empty.
+      final puzzles = await ref.watch(puzzlesProvider.future);
 
-  if (puzzles.isEmpty) {
-    return [];
-  }
+      if (puzzles.isEmpty) {
+        return [];
+      }
 
-  // Create a map for quick lookup
-  final puzzleMap = {for (final p in puzzles) p.id: p};
+      // Create a map for quick lookup
+      final puzzleMap = {for (final p in puzzles) p.id: p};
 
-  final inProgressList = <InProgressPuzzleInfo>[];
-  for (final progress in progressList) {
-    final descriptor = puzzleMap[progress.puzzleId];
-    if (descriptor == null) {
-      continue;
-    }
+      final inProgressList = <InProgressPuzzleInfo>[];
+      for (final progress in progressList) {
+        final descriptor = puzzleMap[progress.puzzleId];
+        if (descriptor == null) {
+          continue;
+        }
 
-    // Load saved data to calculate completion percent
-    final data = await storage.load(progress.puzzleId);
-    if (data == null) {
-      continue;
-    }
+        // Load saved data to calculate completion percent
+        final data = await storage.load(progress.puzzleId);
+        if (data == null) {
+          continue;
+        }
 
-    // Skip completed puzzles
-    final isCompleted = data['isCompleted'] as bool? ?? false;
-    if (isCompleted) {
-      continue;
-    }
+        // Skip completed puzzles
+        final isCompleted = data['isCompleted'] as bool? ?? false;
+        if (isCompleted) {
+          continue;
+        }
 
-    // Calculate completion percent from saved grid
-    final savedGrid = _extractGrid(data);
-    if (savedGrid == null) {
-      continue;
-    }
+        // Calculate completion percent from saved grid
+        final savedGrid = _extractGrid(data);
+        if (savedGrid == null) {
+          continue;
+        }
 
-    // Load solution to calculate percent
-    final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
-    final solution = _extractSolutionGrid(puzzleJson);
+        // Load solution to calculate percent
+        final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
+        final solution = _extractSolutionGrid(puzzleJson);
 
-    final percent = service.calculateCompletionPercent(savedGrid, solution);
+        final percent = service.calculateCompletionPercent(savedGrid, solution);
 
-    // Only show puzzles that are actually in progress (not 0% or 100%)
-    if (percent > 0 && percent < 100) {
-      inProgressList.add(InProgressPuzzleInfo(
-        descriptor: descriptor,
-        progress: progress,
-        completionPercent: percent.round(),
-      ));
-    }
-  }
+        // Only show puzzles that are actually in progress (not 0% or 100%)
+        if (percent > 0 && percent < 100) {
+          inProgressList.add(
+            InProgressPuzzleInfo(
+              descriptor: descriptor,
+              progress: progress,
+              completionPercent: percent.round(),
+            ),
+          );
+        }
+      }
 
-  return inProgressList;
-});
+      return inProgressList;
+    });
 
 /// Extract grid from saved puzzle data.
 List<List<String?>>? _extractGrid(Map<String, dynamic> data) {
@@ -204,7 +205,9 @@ class _InProgressCard extends ConsumerWidget {
   /// Navigate to the puzzle game screen.
   void _navigateToPuzzle(BuildContext context, WidgetRef ref) {
     // Select the puzzle and navigate to the game
-    ref.read(selectedPuzzleIdProvider.notifier).setSelected(puzzle.descriptor.id);
+    ref
+        .read(selectedPuzzleIdProvider.notifier)
+        .setSelected(puzzle.descriptor.id);
     context.go('/game');
   }
 
@@ -220,7 +223,7 @@ class _InProgressCard extends ConsumerWidget {
       case 4:
         return Colors.purple;
       case 5:
-        return Colors.black;
+        return Colors.brown;
       default:
         return Colors.grey;
     }

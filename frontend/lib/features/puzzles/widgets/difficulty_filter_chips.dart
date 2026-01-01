@@ -23,8 +23,9 @@ class DifficultyFilterChips extends ConsumerWidget {
       spacing: 8,
       runSpacing: 4,
       children: _difficulties.map((difficulty) {
-        final isSelected =
-            filterState.selectedDifficulties.contains(difficulty.level);
+        final isSelected = filterState.selectedDifficulties.contains(
+          difficulty.level,
+        );
 
         return FilterChip(
           label: Text(difficulty.label),

@@ -6,8 +6,9 @@ import 'package:croiz/features/puzzles/widgets/puzzle_list_tile_enhanced.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
 
 void main() {
-  testWidgets('shows difficulty badge with correct color for Hard',
-      (tester) async {
+  testWidgets('shows difficulty badge with correct color for Hard', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
@@ -59,8 +60,9 @@ void main() {
     expect(find.text('Medium'), findsOneWidget);
   });
 
-  testWidgets('shows progress indicator when puzzle is in progress',
-      (tester) async {
+  testWidgets('shows progress indicator when puzzle is in progress', (
+    tester,
+  ) async {
     final progress = PuzzleProgress(
       puzzleId: 'test-puzzle',
       savedAt: DateTime.now(),

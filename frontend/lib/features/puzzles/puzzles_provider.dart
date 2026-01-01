@@ -53,18 +53,17 @@ class PuzzleDescriptor {
     int? difficulty,
     String? difficultyLabel,
     String? language,
-  }) =>
-      PuzzleDescriptor(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        path: path ?? this.path,
-        subtitle: subtitle ?? this.subtitle,
-        origin: origin ?? this.origin,
-        year: year ?? this.year,
-        difficulty: difficulty ?? this.difficulty,
-        difficultyLabel: difficultyLabel ?? this.difficultyLabel,
-        language: language ?? this.language,
-      );
+  }) => PuzzleDescriptor(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    path: path ?? this.path,
+    subtitle: subtitle ?? this.subtitle,
+    origin: origin ?? this.origin,
+    year: year ?? this.year,
+    difficulty: difficulty ?? this.difficulty,
+    difficultyLabel: difficultyLabel ?? this.difficultyLabel,
+    language: language ?? this.language,
+  );
 }
 
 /// Extract a stable short token from an asset path.
@@ -195,12 +194,7 @@ final originIndexProvider =
             final rawPath = e['path']?.toString() ?? '';
             // Normalize the path before creating descriptor
             final normalizedPath = _normalizeIndexedPath(rawPath);
-            out.add(
-              PuzzleDescriptor.fromJson({
-                ...e,
-                'path': normalizedPath,
-              }),
-            );
+            out.add(PuzzleDescriptor.fromJson({...e, 'path': normalizedPath}));
           }
         }
       }
@@ -252,12 +246,7 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
       final rawPath = e['path']?.toString() ?? '';
       // Normalize the path before creating descriptor
       final normalizedPath = _normalizeIndexedPath(rawPath);
-      out.add(
-        PuzzleDescriptor.fromJson({
-          ...e,
-          'path': normalizedPath,
-        }),
-      );
+      out.add(PuzzleDescriptor.fromJson({...e, 'path': normalizedPath}));
     }
   }
   out.sort((a, b) {

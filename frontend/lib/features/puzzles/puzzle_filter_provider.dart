@@ -35,20 +35,19 @@ class PuzzleFilterState {
     Set<String>? selectedLanguages,
     Set<String>? availableLanguages,
     bool? showCompleted,
-  }) =>
-      PuzzleFilterState(
-        selectedDifficulties: selectedDifficulties ?? this.selectedDifficulties,
-        selectedLanguages: selectedLanguages ?? this.selectedLanguages,
-        availableLanguages: availableLanguages ?? this.availableLanguages,
-        showCompleted: showCompleted ?? this.showCompleted,
-      );
+  }) => PuzzleFilterState(
+    selectedDifficulties: selectedDifficulties ?? this.selectedDifficulties,
+    selectedLanguages: selectedLanguages ?? this.selectedLanguages,
+    availableLanguages: availableLanguages ?? this.availableLanguages,
+    showCompleted: showCompleted ?? this.showCompleted,
+  );
 }
 
 /// Provider for puzzle filter state.
 final puzzleFilterProvider =
     NotifierProvider<PuzzleFilterNotifier, PuzzleFilterState>(
-  PuzzleFilterNotifier.new,
-);
+      PuzzleFilterNotifier.new,
+    );
 
 /// Notifier for managing puzzle filter state.
 class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
@@ -118,8 +117,7 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
 
       Set<int>? difficulties;
       if (difficultiesRaw != null) {
-        difficulties =
-            difficultiesRaw.map((s) => int.tryParse(s) ?? 2).toSet();
+        difficulties = difficultiesRaw.map((s) => int.tryParse(s) ?? 2).toSet();
       }
 
       Set<String>? languages;

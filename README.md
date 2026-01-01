@@ -177,9 +177,11 @@ The builds will be automatically uploaded to Firebase App Distribution and made 
 
 ## Project Resources
 
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Quick Reference](QUICK_REFERENCE.md)
-- [Initialization Guide](INITIALIZATION.md)
+- [Documentation Map](DOCS_MAP.md) - Complete overview of all documentation
+- [Changelog](CHANGELOG.md) - Version history and release notes
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to the project
+- [Quick Reference](QUICK_REFERENCE.md) - Common commands and shortcuts
+- [Initialization Guide](INITIALIZATION.md) - First-time setup guide
 
 ## License
 

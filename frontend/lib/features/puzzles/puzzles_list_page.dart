@@ -5,6 +5,7 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
+import 'package:croiz/features/puzzles/widgets/language_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_list_tile_enhanced.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -51,17 +52,15 @@ class PuzzlesListPage extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     AsyncValue<List<PuzzleDescriptor>> puzzlesAsync,
-  ) =>
-      puzzlesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(
-          child: Text(
-            AppLocalizations.of(context)?.errorLoading ??
-                'Error loading puzzles',
-          ),
-        ),
-        data: (allPuzzles) => _buildContent(context, ref, allPuzzles),
-      );
+  ) => puzzlesAsync.when(
+    loading: () => const Center(child: CircularProgressIndicator()),
+    error: (e, st) => Center(
+      child: Text(
+        AppLocalizations.of(context)?.errorLoading ?? 'Error loading puzzles',
+      ),
+    ),
+    data: (allPuzzles) => _buildContent(context, ref, allPuzzles),
+  );
 
   Widget _buildContent(
     BuildContext context,
@@ -75,10 +74,17 @@ class PuzzlesListPage extends ConsumerWidget {
         // Continue Playing Section at top
         const ContinuePlayingSection(),
 
-        // Difficulty filter chips
+        // Filter chips section
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: DifficultyFilterChips(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DifficultyFilterChips(),
+              SizedBox(height: 8),
+              LanguageFilterChips(),
+            ],
+          ),
         ),
 
         // Divider
@@ -92,8 +98,8 @@ class PuzzlesListPage extends ConsumerWidget {
               Text(
                 '${filteredPuzzles.length} puzzles',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
               const Spacer(),
               if (filteredPuzzles.length < allPuzzles.length)
@@ -115,9 +121,7 @@ class PuzzlesListPage extends ConsumerWidget {
             itemCount: filteredPuzzles.length,
             itemBuilder: (context, index) {
               final puzzle = filteredPuzzles[index];
-              return PuzzleListTileEnhanced(
-                descriptor: puzzle,
-              );
+              return PuzzleListTileEnhanced(descriptor: puzzle);
             },
           ),
         ),

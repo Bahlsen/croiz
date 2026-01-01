@@ -108,36 +108,32 @@ class PuzzleListTileEnhanced extends ConsumerWidget {
   }
 
   Widget _buildTrailing(ThemeData theme) => Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Language indicator
-        if (descriptor.language.isNotEmpty && descriptor.language != 'en')
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              descriptor.language.toUpperCase(),
-              style: theme.textTheme.labelSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      // Language indicator
+      if (descriptor.language.isNotEmpty && descriptor.language != 'en')
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            descriptor.language.toUpperCase(),
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
           ),
-        // Status indicator: completed, in progress, or nothing
-        _buildStatusIndicator(theme),
-      ],
-    );
+        ),
+      // Status indicator: completed, in progress, or nothing
+      _buildStatusIndicator(theme),
+    ],
+  );
 
   Widget _buildStatusIndicator(ThemeData theme) {
     if (isCompleted) {
-      return const Icon(
-        Icons.check_circle,
-        color: Colors.green,
-        size: 24,
-      );
+      return const Icon(Icons.check_circle, color: Colors.green, size: 24);
     }
 
     if (completionPercent != null && completionPercent! > 0) {

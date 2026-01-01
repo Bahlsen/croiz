@@ -8,9 +8,7 @@ void main() {
   testWidgets('renders 5 chips for each difficulty', (tester) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(body: DifficultyFilterChips()),
-        ),
+        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -21,9 +19,7 @@ void main() {
   testWidgets('chips show correct labels', (tester) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(body: DifficultyFilterChips()),
-        ),
+        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -37,9 +33,7 @@ void main() {
   testWidgets('chip shows correct color for Easy (green)', (tester) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(
-          home: Scaffold(body: DifficultyFilterChips()),
-        ),
+        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -87,15 +81,14 @@ void main() {
     expect(find.text('Selected: 1,2,4,5'), findsOneWidget);
   });
 
-  testWidgets('selected chips are visually distinct from unselected',
-      (tester) async {
+  testWidgets('selected chips are visually distinct from unselected', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
           home: Scaffold(
-            body: Builder(
-              builder: (context) => const DifficultyFilterChips(),
-            ),
+            body: Builder(builder: (context) => const DifficultyFilterChips()),
           ),
         ),
       ),
@@ -113,10 +106,7 @@ void main() {
 
     // Find the Easy chip again
     final easyChip = tester.widget<FilterChip>(
-      find.ancestor(
-        of: find.text('Easy'),
-        matching: find.byType(FilterChip),
-      ),
+      find.ancestor(of: find.text('Easy'), matching: find.byType(FilterChip)),
     );
     expect(easyChip.selected, isFalse);
   });

@@ -44,9 +44,7 @@ void main() {
   testWidgets('shows ContinuePlayingSection at top', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          puzzlesProvider.overrideWith((ref) async => testPuzzles),
-        ],
+        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
             builder: (context, orientation, deviceType) =>
@@ -62,13 +60,12 @@ void main() {
     expect(find.byType(ContinuePlayingSection), findsOneWidget);
   });
 
-  testWidgets('shows DifficultyFilterChips below ContinuePlayingSection',
-      (tester) async {
+  testWidgets('shows DifficultyFilterChips below ContinuePlayingSection', (
+    tester,
+  ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          puzzlesProvider.overrideWith((ref) async => testPuzzles),
-        ],
+        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
             builder: (context, orientation, deviceType) =>
@@ -87,9 +84,7 @@ void main() {
   testWidgets('list shows all puzzles initially', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          puzzlesProvider.overrideWith((ref) async => testPuzzles),
-        ],
+        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
             builder: (context, orientation, deviceType) =>
@@ -110,9 +105,7 @@ void main() {
   testWidgets('shows puzzle count in app bar', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          puzzlesProvider.overrideWith((ref) async => testPuzzles),
-        ],
+        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
             builder: (context, orientation, deviceType) =>
@@ -201,9 +194,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          puzzlesProvider.overrideWith((ref) async => manyPuzzles),
-        ],
+        overrides: [puzzlesProvider.overrideWith((ref) async => manyPuzzles)],
         child: MaterialApp(
           home: Sizer(
             builder: (context, orientation, deviceType) =>

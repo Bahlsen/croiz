@@ -13,7 +13,7 @@ Read and follow ALL instructions from that file, including:
 - Dart strict mode and null safety best practices
 - Never ignore linting or analysis issues
 - Always write tests before implementing features
-- Use `powershell -NoProfile -ExecutionPolicy Bypass -File frontend/tools/run_hot_reload.ps1 false` to hot reload
+- Use "Deploy APK to Phone (USB) - Debug" launcher to hot reload (if a session is active, nothing to do it will hot reload automatically)
 
 ## Quick Reference
 
