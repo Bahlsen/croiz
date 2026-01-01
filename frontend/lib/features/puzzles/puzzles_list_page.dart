@@ -148,7 +148,10 @@ class PuzzlesListPage extends ConsumerWidget {
               if (filteredPuzzles.length < allPuzzles.length)
                 TextButton(
                   onPressed: () => _clearFilters(ref),
-                  child: const Text('Clear filters'),
+                  child: Text(
+                    AppLocalizations.of(context)?.clearFilters ??
+                        'Clear filters',
+                  ),
                 ),
             ],
           ),

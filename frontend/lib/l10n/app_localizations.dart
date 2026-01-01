@@ -474,6 +474,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pro'**
   String get pro;
+
+  /// No description provided for @semanticCellRowColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Cell row {row}, column {col}'**
+  String semanticCellRowColumn(Object col, Object row);
+
+  /// No description provided for @semanticCellNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'number {number}'**
+  String semanticCellNumber(Object number);
+
+  /// No description provided for @semanticCellLetter.
+  ///
+  /// In en, this message translates to:
+  /// **'letter {letter}'**
+  String semanticCellLetter(Object letter);
+
+  /// No description provided for @semanticCellEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'empty'**
+  String get semanticCellEmpty;
+
+  /// No description provided for @semanticCellSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'selected'**
+  String get semanticCellSelected;
+
+  /// No description provided for @semanticClueAcross.
+  ///
+  /// In en, this message translates to:
+  /// **'Across: {clue}'**
+  String semanticClueAcross(Object clue);
+
+  /// No description provided for @semanticClueDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down: {clue}'**
+  String semanticClueDown(Object clue);
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFilters;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

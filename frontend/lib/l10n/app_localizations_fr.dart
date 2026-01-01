@@ -198,4 +198,38 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pro => 'Pro';
+
+  @override
+  String semanticCellRowColumn(Object col, Object row) {
+    return 'Case ligne $row, colonne $col';
+  }
+
+  @override
+  String semanticCellNumber(Object number) {
+    return 'numéro $number';
+  }
+
+  @override
+  String semanticCellLetter(Object letter) {
+    return 'lettre $letter';
+  }
+
+  @override
+  String get semanticCellEmpty => 'vide';
+
+  @override
+  String get semanticCellSelected => 'sélectionnée';
+
+  @override
+  String semanticClueAcross(Object clue) {
+    return 'Horizontal : $clue';
+  }
+
+  @override
+  String semanticClueDown(Object clue) {
+    return 'Vertical : $clue';
+  }
+
+  @override
+  String get clearFilters => 'Effacer les filtres';
 }

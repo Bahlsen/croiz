@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/core/crossword_theme_colors.dart';
@@ -216,6 +218,7 @@ class CrosswordCell extends ConsumerWidget {
       cellEntriesIndexProvider.select((m) => m[cellKey]),
     );
     final semanticLabel = _buildSemanticLabel(
+      context,
       row: row,
       col: col,
       letter: letter,
@@ -416,7 +419,8 @@ class _CellContent extends StatelessWidget {
 }
 
 /// Builds an accessibility label for screen readers.
-String _buildSemanticLabel({
+String _buildSemanticLabel(
+  BuildContext context, {
   required int row,
   required int col,
   required String? letter,
@@ -424,24 +428,32 @@ String _buildSemanticLabel({
   required bool isSelected,
   required List<PuzzleEntryData>? entries,
 }) {
+  final l10n = AppLocalizations.of(context)!;
   final buffer =
-      StringBuffer()..write('Cell row ${row + 1}, column ${col + 1}');
+      StringBuffer()..write(l10n.semanticCellRowColumn(row + 1, col + 1));
+
   if (cellNumber != null) {
-    buffer.write(', number $cellNumber');
+    buffer.write(', ${l10n.semanticCellNumber(cellNumber)}');
   }
+
   if (letter != null && letter.isNotEmpty) {
-    buffer.write(', letter $letter');
+    buffer.write(', ${l10n.semanticCellLetter(letter)}');
   } else {
-    buffer.write(', empty');
+    buffer.write(', ${l10n.semanticCellEmpty}');
   }
+
   if (isSelected) {
-    buffer.write(', selected');
+    buffer.write(', ${l10n.semanticCellSelected}');
   }
 
   if (entries != null && entries.isNotEmpty) {
     for (final e in entries) {
-      final dir = e.directionEnum == EntryDirection.across ? 'Across' : 'Down';
-      buffer.write(', $dir: ${e.clue}');
+      final clue = e.clue ?? '';
+      if (e.directionEnum == EntryDirection.across) {
+        buffer.write(', ${l10n.semanticClueAcross(clue)}');
+      } else {
+        buffer.write(', ${l10n.semanticClueDown(clue)}');
+      }
     }
   }
 

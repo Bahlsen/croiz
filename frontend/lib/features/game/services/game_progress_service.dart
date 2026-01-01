@@ -4,9 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
+import 'package:croiz/services/word_check_provider.dart';
 
 /// Result of loading puzzle progress from storage.
 class ProgressLoadResult {
@@ -42,10 +44,11 @@ class ProgressLoadResult {
 /// Extracted from GameBoardNotifier to follow Single Responsibility Principle.
 /// Handles loading persisted progress and computing initial state from grid.
 class GameProgressService {
-  GameProgressService({PuzzleStorageInterface? storage})
+  GameProgressService(this._wordCheck, {PuzzleStorageInterface? storage})
     : _storage = storage ?? HivePuzzleStorage();
 
   final PuzzleStorageInterface _storage;
+  final WordCheckService _wordCheck;
 
   /// Load persisted progress for a puzzle.
   Future<ProgressLoadResult> loadProgress(
@@ -133,12 +136,7 @@ class GameProgressService {
 
   /// Compute initial found/locked words from current grid state.
   /// Used when no stored progress exists.
-  InitialStateResult computeInitialState({
-    required GameBoard board,
-    required bool Function(GameBoard, PuzzleEntryData) isWordComplete,
-    required String Function(PuzzleEntryData) getWordKey,
-    required List<CellKey> Function(PuzzleEntryData) getCellKeys,
-  }) {
+  InitialStateResult computeInitialState({required GameBoard board}) {
     final entries = board.entries;
     if (entries == null || entries.isEmpty) {
       return InitialStateResult.empty;
@@ -148,10 +146,10 @@ class GameProgressService {
     final newLocked = <CellKey>{};
 
     for (final entry in entries) {
-      if (isWordComplete(board, entry)) {
-        final key = getWordKey(entry);
+      if (_wordCheck.isWordComplete(board, entry)) {
+        final key = _wordCheck.getWordKey(entry);
         newFound.add(key);
-        newLocked.addAll(getCellKeys(entry));
+        newLocked.addAll(_wordCheck.getCellKeys(entry));
       }
     }
 
@@ -159,14 +157,11 @@ class GameProgressService {
   }
 
   /// Checks for word completion at a specific cell position.
-  /// returns a result containing newly found words and cells to flash/lock.
+  /// Returns a result containing newly found words and cells to flash/lock.
   WordCompletionResult checkCompletionAtPos({
     required GameBoard board,
     required CellKey pos,
     required Set<String> currentFoundWords,
-    required bool Function(GameBoard, PuzzleEntryData) isWordComplete,
-    required String Function(PuzzleEntryData) getWordKey,
-    required List<CellKey> Function(PuzzleEntryData) getCellKeys,
   }) {
     final allEntries = board.entries;
     if (allEntries == null) {
@@ -193,11 +188,11 @@ class GameProgressService {
     final cellsToFlash = <CellKey>{};
 
     for (final e in entriesForCell) {
-      if (isWordComplete(board, e)) {
-        final key = getWordKey(e);
+      if (_wordCheck.isWordComplete(board, e)) {
+        final key = _wordCheck.getWordKey(e);
         if (!currentFoundWords.contains(key)) {
           newlyFound.add(key);
-          cellsToFlash.addAll(getCellKeys(e));
+          cellsToFlash.addAll(_wordCheck.getCellKeys(e));
         }
       }
     }
@@ -246,6 +241,7 @@ class InitialStateResult {
 }
 
 /// Provider for the progress service.
-final gameProgressServiceProvider = Provider<GameProgressService>(
-  (ref) => GameProgressService(),
-);
+final gameProgressServiceProvider = Provider<GameProgressService>((ref) {
+  final wordCheck = ref.read(wordCheckServiceProvider);
+  return GameProgressService(wordCheck);
+});

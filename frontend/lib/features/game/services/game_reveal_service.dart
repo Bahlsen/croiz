@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/utils/flash_utils.dart';
+import 'package:croiz/features/game/services/word_check_service.dart';
+import 'package:croiz/services/word_check_provider.dart';
 
 /// Result of a reveal operation containing updated state.
 class RevealResult {
@@ -33,8 +35,11 @@ class RevealResult {
 ///
 /// Extracted from GameBoardNotifier to follow Single Responsibility Principle.
 /// Handles reveal letter, reveal entry, and reveal all operations.
+
 class GameRevealService {
-  const GameRevealService();
+  const GameRevealService(this._wordCheck);
+
+  final WordCheckService _wordCheck;
 
   /// Reveal a single letter at the given cell.
   /// Returns the revealed letter or null if no reveal was possible.
@@ -63,16 +68,14 @@ class GameRevealService {
     required PuzzleEntryData entry,
     required Set<String> currentFoundWords,
     required Set<CellKey> currentLockedCells,
-    required String Function(PuzzleEntryData) getWordKey,
-    required List<CellKey> Function(PuzzleEntryData) getCellKeys,
   }) {
     final sol = board.solutionGrid;
     if (sol == null) {
       return RevealResult.noOp(board);
     }
 
-    final key = getWordKey(entry);
-    final entryCellKeys = getCellKeys(entry);
+    final key = _wordCheck.getWordKey(entry);
+    final entryCellKeys = _wordCheck.getCellKeys(entry);
 
     // If already found or locked, treat as no-op
     if (currentFoundWords.contains(key) ||
@@ -122,9 +125,6 @@ class GameRevealService {
     required Set<String> currentFoundWords,
     required Set<CellKey> currentLockedCells,
     required Set<CellKey> currentlyFlashing,
-    required bool Function(GameBoard, PuzzleEntryData) isWordComplete,
-    required String Function(PuzzleEntryData) getWordKey,
-    required List<CellKey> Function(PuzzleEntryData) getCellKeys,
   }) {
     final sol = board.solutionGrid;
     if (sol == null) {
@@ -151,12 +151,12 @@ class GameRevealService {
 
     if (entries != null) {
       for (final e in entries) {
-        final key = getWordKey(e);
+        final key = _wordCheck.getWordKey(e);
         allKeys.add(key);
 
-        final wasComplete = isWordComplete(beforeBoard, e);
-        final isCompleteNow = isWordComplete(afterBoard, e);
-        final cellKeys = getCellKeys(e);
+        final wasComplete = _wordCheck.isWordComplete(beforeBoard, e);
+        final isCompleteNow = _wordCheck.isWordComplete(afterBoard, e);
+        final cellKeys = _wordCheck.getCellKeys(e);
         final wasLocked = currentLockedCells.containsAll(cellKeys);
 
         if (!wasComplete &&
@@ -225,6 +225,7 @@ class GameRevealService {
 }
 
 /// Provider for the reveal service.
-final gameRevealServiceProvider = Provider<GameRevealService>(
-  (ref) => const GameRevealService(),
-);
+final gameRevealServiceProvider = Provider<GameRevealService>((ref) {
+  final wordCheck = ref.read(wordCheckServiceProvider);
+  return GameRevealService(wordCheck);
+});

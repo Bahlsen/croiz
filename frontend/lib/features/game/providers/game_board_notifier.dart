@@ -257,13 +257,7 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     final entries = board.entries;
     if (entries != null && entries.isNotEmpty) {
       try {
-        final wordCheck = ref.read(wordCheckServiceProvider);
-        final result = _progressService.computeInitialState(
-          board: board,
-          isWordComplete: wordCheck.isWordComplete,
-          getWordKey: wordCheck.getWordKey,
-          getCellKeys: wordCheck.getCellKeys,
-        );
+        final result = _progressService.computeInitialState(board: board);
         if (!result.isEmpty) {
           ref
               .read(foundWordsProvider.notifier)
@@ -406,14 +400,10 @@ class GameBoardNotifier extends _$GameBoardNotifier {
   /// Helper to check for word completion after a single cell reveal.
   void _checkWordCompletionAfterReveal(CellKey pos) {
     try {
-      final wordCheck = ref.read(wordCheckServiceProvider);
       final result = _progressService.checkCompletionAtPos(
         board: state,
         pos: pos,
         currentFoundWords: ref.read(foundWordsProvider),
-        isWordComplete: wordCheck.isWordComplete,
-        getWordKey: wordCheck.getWordKey,
-        getCellKeys: wordCheck.getCellKeys,
       );
 
       if (result.hasChanges) {
@@ -443,14 +433,11 @@ class GameBoardNotifier extends _$GameBoardNotifier {
 
   /// Reveal the full entry (word) for the given PuzzleEntryData.
   void revealEntry(PuzzleEntryData entry) {
-    final wordCheck = ref.read(wordCheckServiceProvider);
     final result = _revealService.revealEntry(
       board: state,
       entry: entry,
       currentFoundWords: ref.read(foundWordsProvider),
       currentLockedCells: ref.read(lockedCellsProvider),
-      getWordKey: wordCheck.getWordKey,
-      getCellKeys: wordCheck.getCellKeys,
     );
 
     if (!result.hasChanges) {
@@ -494,128 +481,36 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       }
     }
 
-    // Capture the board before applying the reveal to detect which entries
-    // become completed by this action (so we can flash only those).
-    final beforeBoard = state;
-    final newGrid = sol.map(List<String?>.from).toList();
-    state = state.copyWith(grid: newGrid);
+    final result = _revealService.revealAll(
+      board: state,
+      currentFoundWords: ref.read(foundWordsProvider),
+      currentLockedCells: ref.read(lockedCellsProvider),
+      currentlyFlashing: ref.read(flashingCellsProvider),
+    );
 
-    // Mark all entries as found (if entries exist) and lock all non-black cells
-    // Only flash the cells that belong to entries that were *not* already
-    // marked as found so the revealAll animation highlights newly revealed
-    // words instead of flashing the entire board.
-    if (state.entries != null) {
-      final wordCheck = ref.read(wordCheckServiceProvider);
-      final allKeys = <String>{};
-      final newlyFound = <String>{};
-      // Capture previously found words and locked cells so we don't flash
-      // words that were already marked as found or whose cells were already
-      // locked (previously flashed) before revealAll was invoked.
-      final priorLocked = Set<CellKey>.from(ref.read(lockedCellsProvider));
-      final priorFound = Set<String>.from(ref.read(foundWordsProvider));
-      try {
-        for (final e in state.entries!) {
-          final key = wordCheck.getWordKey(e);
-          allKeys.add(key);
-          // If this entry was incomplete before but is complete after reveal,
-          // treat it as newly found and include its cells for flashing.
-          // Determine newly found solely from the board before/after state
-          // and whether its cells were previously locked. This avoids
-          // relying on `foundWordsProvider` which may be momentarily out of
-          // sync and could cause already-completed words to be flashed.
-          final wasComplete = wordCheck.isWordComplete(beforeBoard, e);
-          final isCompleteNow = wordCheck.isWordComplete(state, e);
-          final cellKeys = wordCheck.getCellKeys(e);
-          final wasLocked = priorLocked.containsAll(cellKeys);
-          // Only consider this entry newly found if it was incomplete before,
-          // is complete now, and its cells were not already locked (previous flash).
-          if (!wasComplete &&
-              isCompleteNow &&
-              !priorFound.contains(key) &&
-              !wasLocked) {
-            newlyFound.add(key);
-          }
-        }
-        // Update authoritative found words to include all entries.
-        ref.read(foundWordsProvider.notifier).setFoundWords(allKeys);
-
-        if (newlyFound.isNotEmpty) {
-          final newCells = <CellKey>{};
-          for (final e in state.entries!) {
-            final key = wordCheck.getWordKey(e);
-            if (newlyFound.contains(key)) {
-              newCells.addAll(wordCheck.getCellKeys(e));
-            }
-          }
-          // Filter out any cells that are already flashing to avoid
-          // re-flashing the same visual elements (helps when revealAll is
-          // invoked while a previous reveal's flash is active). Do NOT
-          // filter locked cells here — entries that are partially locked
-          // but newly completed should still flash their cells.
-          final currentlyFlashing = Set<CellKey>.from(
-            ref.read(flashingCellsProvider),
-          );
-          final toFlash =
-              newCells.where((c) => !currentlyFlashing.contains(c)).toSet();
-          if (toFlash.isNotEmpty) {
-            _revealService.triggerFlash(
-              cells: toFlash,
-              setFlashingCells:
-                  (v) => ref
-                      .read(flashingCellsProvider.notifier)
-                      .setFlashingCells(v),
-              getFlashDelay: () => ref.read(flashClearDelayProvider),
-              playSuccess:
-                  () => ref.read(gameAudioServiceProvider).playSuccess(),
-              shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
-            );
-          }
-        }
-      } on Object {
-        // ignore
-      }
-    }
-    final locked = <CellKey>{};
-    for (var r = 0; r < state.grid.length; r++) {
-      for (var c = 0; c < state.grid[r].length; c++) {
-        if (!state.blackCells.isDisabled(r, c)) {
-          locked.add(CellKey(r, c));
-        }
-      }
-    }
-    ref.read(lockedCellsProvider.notifier).setLockedCells(locked);
+    state = state.copyWith(grid: result.newGrid);
+    ref.read(foundWordsProvider.notifier).setFoundWords(result.newFoundWords);
+    ref
+        .read(lockedCellsProvider.notifier)
+        .setLockedCells(result.newLockedCells);
     _schedulePersist();
+
+    if (result.hasChanges) {
+      _revealService.triggerFlash(
+        cells: result.cellsToFlash,
+        setFlashingCells:
+            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+        getFlashDelay: () => ref.read(flashClearDelayProvider),
+        playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+        shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
+      );
+    }
 
     // After revealAll, check end-game once.
     try {
       _triggerEndGameIfSolved();
     } on Object {
       // ignore
-    }
-    // If there were no entries metadata, fall back to flashing all
-    // non-black cells so the reveal is still visible.
-    if (state.entries == null || state.entries!.isEmpty) {
-      try {
-        final all = <CellKey>{};
-        for (var r = 0; r < state.grid.length; r++) {
-          for (var c = 0; c < state.grid[r].length; c++) {
-            if (!state.blackCells.isDisabled(r, c)) {
-              all.add(CellKey(r, c));
-            }
-          }
-        }
-        _revealService.triggerFlash(
-          cells: all,
-          setFlashingCells:
-              (v) =>
-                  ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-          getFlashDelay: () => ref.read(flashClearDelayProvider),
-          playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
-          shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
-        );
-      } on Object {
-        // ignore
-      }
     }
   }
 
