@@ -338,4 +338,62 @@ void main() {
     await Future.microtask(() {});
     expect(mock.success, equals(before));
   });
+
+  test(
+    'revealAll should NOT play victory sound when puzzle already completed',
+    () async {
+      final mock = MockAudio();
+      final entries = [
+        const PuzzleEntryData(
+          number: 1,
+          direction: 'across',
+          x: 0,
+          y: 0,
+          length: 3,
+          answer: 'ABC',
+        ),
+      ];
+
+      final board = GameBoard(
+        id: 't',
+        title: 't',
+        gridSize: 3,
+        createdAt: DateTime.now(),
+        grid: [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null],
+        ],
+        clues: {},
+        blackCells: List.generate(3, (_) => List<bool>.filled(3, false)),
+        difficulty: 1,
+        entries: entries,
+        solutionGrid: [
+          ['A', 'B', 'C'],
+          ['D', 'E', 'F'],
+          ['G', 'H', 'I'],
+        ],
+      );
+
+      final container = ProviderContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          flashClearDelayProvider.overrideWithValue(Duration.zero),
+          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          gameAudioServiceProvider.overrideWithValue(mock),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      // First revealAll: should play victory sound (puzzle completed)
+      container.read(gameBoardProvider.notifier).revealAll();
+      await Future.microtask(() {});
+      expect(mock.victory, equals(1));
+
+      // Second revealAll on already completed puzzle: should NOT play victory sound
+      container.read(gameBoardProvider.notifier).revealAll();
+      await Future.microtask(() {});
+      expect(mock.victory, equals(1)); // Should still be 1, not 2
+    },
+  );
 }

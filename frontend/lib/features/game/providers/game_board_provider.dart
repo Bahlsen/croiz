@@ -614,6 +614,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (sol == null) {
       return;
     }
+
+    // Early return if puzzle is already fully revealed
+    // Check if all entries are already marked as found
+    final entries = state.entries;
+    if (entries != null && entries.isNotEmpty) {
+      final foundCount = ref.read(foundWordsProvider).length;
+      if (foundCount == entries.length) {
+        // Puzzle is already complete, nothing to reveal
+        return;
+      }
+    }
+
     // Capture the board before applying the reveal to detect which entries
     // become completed by this action (so we can flash only those).
     final beforeBoard = state;
