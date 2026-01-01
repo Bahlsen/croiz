@@ -10,7 +10,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+          availableDifficultiesProvider.overrideWithValue({1, 2, 3, 4, 5}),
         ],
         child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
@@ -24,7 +24,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+          availableDifficultiesProvider.overrideWithValue({1, 2, 3, 4, 5}),
         ],
         child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
@@ -41,7 +41,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+          availableDifficultiesProvider.overrideWithValue({1, 2, 3, 4, 5}),
         ],
         child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
@@ -63,7 +63,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+          availableDifficultiesProvider.overrideWithValue({1, 2, 3, 4, 5}),
         ],
         child: MaterialApp(
           home: Scaffold(
@@ -100,7 +100,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+          availableDifficultiesProvider.overrideWithValue({1, 2, 3, 4, 5}),
         ],
         child: MaterialApp(
           home: Scaffold(
