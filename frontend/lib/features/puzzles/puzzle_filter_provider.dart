@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PuzzleFilterState {
   const PuzzleFilterState({
     this.selectedDifficulties = const {1, 2, 3, 4, 5},
-    this.selectedLanguages = const {'en'},
+    this.selectedLanguages = const {},
     this.availableLanguages = const {'en'},
     this.showCompleted = true,
   });
@@ -14,6 +14,8 @@ class PuzzleFilterState {
   final Set<int> selectedDifficulties;
 
   /// Selected language codes.
+  ///
+  /// If empty, implies ALL available languages are selected.
   final Set<String> selectedLanguages;
 
   /// All available languages in the puzzle index.
@@ -26,8 +28,7 @@ class PuzzleFilterState {
   bool get hasActiveFilters =>
       selectedDifficulties.length < 5 ||
       !showCompleted ||
-      (availableLanguages.isNotEmpty &&
-          selectedLanguages.length < availableLanguages.length);
+      selectedLanguages.isNotEmpty;
 
   /// Create a copy with optional field overrides.
   PuzzleFilterState copyWith({
@@ -72,23 +73,49 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
 
   /// Toggle a language in the filter.
   void toggleLanguage(String language) {
-    final current = Set<String>.from(state.selectedLanguages);
+    var current = Set<String>.from(state.selectedLanguages);
+
+    // If empty (All), and we are toggling one OFF (assuming UI shows checks),
+    // wait. The UI will likely call this when a user UNCHECKS something that was implicitly checked.
+    // Or CHECKS something that was unchecked.
+
+    // Logic:
+    // If empty, it means ALL are selected.
+    // If we call toggleLanguage('fr'):
+    // Does it mean "Deselect FR" or "Select FR"?
+    // Standard Toggle:
+    // If 'fr' is IN the set -> Remove it.
+    // If 'fr' is NOT in the set -> Add it.
+
+    // BUT 'empty' means ALL. So 'fr' is effectively IN the set.
+    // So we should Remove it. To remove it from "All", we must materialize "All - {fr}".
+
+    if (current.isEmpty) {
+      // Materialize all
+      current = Set<String>.from(state.availableLanguages);
+    }
+
     if (current.contains(language)) {
       current.remove(language);
     } else {
       current.add(language);
     }
+
+    // Optimization: If we selected everything, go back to empty (implicit All)
+    if (current.length == state.availableLanguages.length &&
+        state.availableLanguages.isNotEmpty) {
+      current = {};
+    }
+
     state = state.copyWith(selectedLanguages: current);
     _persist();
   }
 
   /// Set available languages (from puzzle index).
   void setAvailableLanguages(Set<String> languages) {
-    // When setting available languages, select all by default
-    state = state.copyWith(
-      availableLanguages: languages,
-      selectedLanguages: languages,
-    );
+    // Just update available languages.
+    // If selectedLanguages is empty, it implicitly includes the new languages.
+    state = state.copyWith(availableLanguages: languages);
   }
 
   /// Set whether to show completed puzzles.
@@ -97,11 +124,17 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
     _persist();
   }
 
+  /// Reset language filter to select all (empty set).
+  void resetLanguages() {
+    state = state.copyWith(selectedLanguages: const {});
+    _persist();
+  }
+
   /// Reset all filters to defaults.
   void clearFilters() {
     state = PuzzleFilterState(
       availableLanguages: state.availableLanguages,
-      selectedLanguages: state.availableLanguages,
+      selectedLanguages: const {},
     );
     _persist();
   }

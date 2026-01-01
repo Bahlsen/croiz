@@ -21,7 +21,7 @@ puzzles/
 ├── filtered_puzzles_provider.dart # Applied filter logic
 └── widgets/
     ├── continue_playing_section.dart  # In-progress puzzles
-    ├── language_filter_chips.dart     # Language filter UI
+    ├── language_filter_selector.dart  # Language filter UI
     ├── origin_card.dart               # Source card display
     ├── origin_section.dart            # Grouping by origin
     └── puzzle_list_item.dart          # Individual puzzle entry
@@ -124,11 +124,12 @@ Horizontal scroll showing puzzles with saved progress:
 - Tap to resume playing
 - Swipe to dismiss/clear progress
 
-### `LanguageFilterChips`
-Interactive chip row for language filtering:
-- Toggle FR/EN/UK filters
-- Multiple selection supported
-- Immediately updates puzzle list
+### `LanguageFilterSelector`
+Button opening a bottom sheet for language filtering:
+- Shows current selection status (e.g. "All Languages")
+- Bottom sheet with checkbox list
+- "Select All" functionality
+- Uses clean "empty set = all" logic
 
 ### `OriginCard` / `OriginSection`
 Groups puzzles by their source:

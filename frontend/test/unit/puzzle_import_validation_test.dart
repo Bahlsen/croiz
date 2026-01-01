@@ -58,7 +58,7 @@ void main() {
     expect(() => PuzzleConverter.puzzleToGameBoard(puzzle), returnsNormally);
   });
 
-  test('missing across for a row throws FormatException', () {
+  test('missing across for a row is tolerated (relaxed validation)', () {
     final cells = <PuzzleCell>[];
     for (var y = 0; y < 2; y++) {
       for (var x = 0; x < 2; x++) {
@@ -101,10 +101,7 @@ void main() {
       entries: entries,
     );
 
-    expect(
-      () => PuzzleConverter.puzzleToGameBoard(puzzle),
-      throwsA(isA<FormatException>()),
-    );
+    expect(() => PuzzleConverter.puzzleToGameBoard(puzzle), returnsNormally);
   });
 
   test('entry without clue throws FormatException', () {

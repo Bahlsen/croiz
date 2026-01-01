@@ -39,6 +39,18 @@ final availableLanguagesProvider = Provider<Set<String>>((ref) {
   );
 });
 
+/// Provider that returns all available difficulties from the puzzle index.
+///
+/// Derives the set of unique difficulty levels from all puzzles.
+final availableDifficultiesProvider = Provider<Set<int>>((ref) {
+  final puzzlesAsync = ref.watch(puzzlesProvider);
+  return puzzlesAsync.when(
+    data: (puzzles) => puzzles.map((p) => p.difficulty).toSet(),
+    loading: () => const {},
+    error: (e, s) => const {},
+  );
+});
+
 /// Provider that returns puzzles filtered by the current filter state.
 ///
 /// Watches both [puzzlesProvider] and [puzzleFilterProvider] and returns
@@ -77,14 +89,9 @@ List<PuzzleDescriptor> _filterPuzzles(
   }
 
   // Filter by language
-  // If selectedLanguages is the default {'en'} but more languages exist,
-  // show all puzzles regardless of language (no filter applied yet)
-  final effectiveSelectedLanguages =
-      filterState.selectedLanguages == const {'en'} &&
-          availableLanguages.length > 1
-      ? availableLanguages
-      : filterState.selectedLanguages;
-  if (!effectiveSelectedLanguages.contains(puzzle.language)) {
+  // If selectedLanguages is empty, show all puzzles (multilingual default)
+  if (filterState.selectedLanguages.isNotEmpty &&
+      !filterState.selectedLanguages.contains(puzzle.language)) {
     return false;
   }
 

@@ -5,7 +5,7 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
-import 'package:croiz/features/puzzles/widgets/language_filter_chips.dart';
+import 'package:croiz/features/puzzles/widgets/language_filter_selector.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_list_tile_enhanced.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -21,6 +21,12 @@ class PuzzlesListPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () {
+            // TODO: Open settings
+          },
+        ),
         title: Text(
           AppLocalizations.of(context)?.puzzles ?? 'Puzzles',
           style: TextStyle(fontSize: ResponsiveFontSize.titleMedium),
@@ -82,7 +88,7 @@ class PuzzlesListPage extends ConsumerWidget {
             children: [
               DifficultyFilterChips(),
               SizedBox(height: 8),
-              LanguageFilterChips(),
+              LanguageFilterSelector(),
             ],
           ),
         ),

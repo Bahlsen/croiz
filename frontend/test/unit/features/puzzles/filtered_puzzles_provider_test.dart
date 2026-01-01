@@ -9,63 +9,63 @@ void main() {
 
   /// Create a list of test puzzles with various difficulties and languages.
   List<PuzzleDescriptor> createTestPuzzles() => [
-        PuzzleDescriptor(
-          id: 'easy-en',
-          title: 'Easy English',
-          path: 'test/easy-en.json',
-          difficulty: 1,
-          difficultyLabel: 'Easy',
-          language: 'en',
-        ),
-        PuzzleDescriptor(
-          id: 'medium-en',
-          title: 'Medium English',
-          path: 'test/medium-en.json',
-          difficulty: 2,
-          difficultyLabel: 'Medium',
-          language: 'en',
-        ),
-        PuzzleDescriptor(
-          id: 'hard-en',
-          title: 'Hard English',
-          path: 'test/hard-en.json',
-          difficulty: 3,
-          difficultyLabel: 'Hard',
-          language: 'en',
-        ),
-        PuzzleDescriptor(
-          id: 'easy-fr',
-          title: 'Easy French',
-          path: 'test/easy-fr.json',
-          difficulty: 1,
-          difficultyLabel: 'Easy',
-          language: 'fr',
-        ),
-        PuzzleDescriptor(
-          id: 'medium-fr',
-          title: 'Medium French',
-          path: 'test/medium-fr.json',
-          difficulty: 2,
-          difficultyLabel: 'Medium',
-          language: 'fr',
-        ),
-        PuzzleDescriptor(
-          id: 'expert-en',
-          title: 'Expert English',
-          path: 'test/expert-en.json',
-          difficulty: 4,
-          difficultyLabel: 'Expert',
-          language: 'en',
-        ),
-        PuzzleDescriptor(
-          id: 'master-en',
-          title: 'Master English',
-          path: 'test/master-en.json',
-          difficulty: 5,
-          difficultyLabel: 'Master',
-          language: 'en',
-        ),
-      ];
+    PuzzleDescriptor(
+      id: 'easy-en',
+      title: 'Easy English',
+      path: 'test/easy-en.json',
+      difficulty: 1,
+      difficultyLabel: 'Easy',
+      language: 'en',
+    ),
+    PuzzleDescriptor(
+      id: 'medium-en',
+      title: 'Medium English',
+      path: 'test/medium-en.json',
+      difficulty: 2,
+      difficultyLabel: 'Medium',
+      language: 'en',
+    ),
+    PuzzleDescriptor(
+      id: 'hard-en',
+      title: 'Hard English',
+      path: 'test/hard-en.json',
+      difficulty: 3,
+      difficultyLabel: 'Hard',
+      language: 'en',
+    ),
+    PuzzleDescriptor(
+      id: 'easy-fr',
+      title: 'Easy French',
+      path: 'test/easy-fr.json',
+      difficulty: 1,
+      difficultyLabel: 'Easy',
+      language: 'fr',
+    ),
+    PuzzleDescriptor(
+      id: 'medium-fr',
+      title: 'Medium French',
+      path: 'test/medium-fr.json',
+      difficulty: 2,
+      difficultyLabel: 'Medium',
+      language: 'fr',
+    ),
+    PuzzleDescriptor(
+      id: 'expert-en',
+      title: 'Expert English',
+      path: 'test/expert-en.json',
+      difficulty: 4,
+      difficultyLabel: 'Expert',
+      language: 'en',
+    ),
+    PuzzleDescriptor(
+      id: 'master-en',
+      title: 'Master English',
+      path: 'test/master-en.json',
+      difficulty: 5,
+      difficultyLabel: 'Master',
+      language: 'en',
+    ),
+  ];
 
   group('filteredPuzzlesProvider', () {
     test('returns all when no filter active', () {
@@ -78,9 +78,10 @@ void main() {
       addTearDown(container.dispose);
 
       // Set available languages to include both en and fr
-      container
-          .read(puzzleFilterProvider.notifier)
-          .setAvailableLanguages({'en', 'fr'});
+      container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
+        'en',
+        'fr',
+      });
 
       final filtered = container.read(filteredPuzzlesProvider);
       expect(filtered.length, testPuzzles.length);
@@ -167,9 +168,10 @@ void main() {
       addTearDown(container.dispose);
 
       // Set available languages first
-      container
-          .read(puzzleFilterProvider.notifier)
-          .setAvailableLanguages({'en', 'fr'});
+      container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
+        'en',
+        'fr',
+      });
 
       // Initially all puzzles
       expect(container.read(filteredPuzzlesProvider).length, 7);
@@ -221,9 +223,10 @@ void main() {
         addTearDown(container.dispose);
 
         // Set available languages
-        container
-            .read(puzzleFilterProvider.notifier)
-            .setAvailableLanguages({'en', 'fr'});
+        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
+          'en',
+          'fr',
+        });
 
         // showCompleted defaults to true
         final filtered = container.read(filteredPuzzlesProvider);
@@ -330,6 +333,64 @@ void main() {
         // When loading, show all (don't filter by completion)
         expect(filtered.length, 7);
       });
+    });
+  });
+
+  group('availableDifficultiesProvider', () {
+    test('returns all difficulties present in puzzles', () {
+      final testPuzzles = createTestPuzzles();
+      // testPuzzles has difficulties: 1, 2, 3, 4, 5
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final difficulties = container.read(availableDifficultiesProvider);
+      expect(difficulties, {1, 2, 3, 4, 5});
+    });
+
+    test('returns subset of difficulties when not all are present', () {
+      final testPuzzles = [
+        PuzzleDescriptor(
+          id: 'easy-en',
+          title: 'Easy English',
+          path: 'test/easy-en.json',
+          difficulty: 1,
+          difficultyLabel: 'Easy',
+          language: 'en',
+        ),
+        PuzzleDescriptor(
+          id: 'hard-fr',
+          title: 'Hard French',
+          path: 'test/hard-fr.json',
+          difficulty: 3,
+          difficultyLabel: 'Hard',
+          language: 'fr',
+        ),
+      ];
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final difficulties = container.read(availableDifficultiesProvider);
+      expect(difficulties, {1, 3});
+    });
+
+    test('returns empty set when loading', () {
+      final container = ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(const AsyncValue.loading()),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final difficulties = container.read(availableDifficultiesProvider);
+      expect(difficulties, isEmpty);
     });
   });
 }
