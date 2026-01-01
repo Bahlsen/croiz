@@ -9,6 +9,8 @@ import 'app_localizations_en.dart';
 import 'app_localizations_fr.dart';
 import 'app_localizations_uk.dart';
 
+// ignore_for_file: type=lint
+
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
 ///
@@ -61,16 +63,15 @@ import 'app_localizations_uk.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) =>
-      Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,19 +83,18 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('fr'),
-    Locale('uk'),
+    Locale('uk')
   ];
 
   /// No description provided for @appTitle.
@@ -138,6 +138,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select language'**
   String get selectLanguage;
+
+  /// No description provided for @selectAWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a word'**
+  String get selectAWord;
 
   /// No description provided for @menu.
   ///
@@ -198,12 +204,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Congratulations!'**
   String get congratulations;
-
-  /// No description provided for @selectAWord.
-  ///
-  /// In en, this message translates to:
-  /// **'Select a word'**
-  String get selectAWord;
 
   /// No description provided for @loading.
   ///
@@ -348,39 +348,115 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'QWERTY'**
   String get qwerty;
+
+  /// No description provided for @generatorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle Generator'**
+  String get generatorTitle;
+
+  /// No description provided for @topicLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic (e.g. Science, Travel...)'**
+  String get topicLabel;
+
+  /// No description provided for @topicHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a topic'**
+  String get topicHint;
+
+  /// No description provided for @languageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get languageLabel;
+
+  /// No description provided for @difficultyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get difficultyLabel;
+
+  /// No description provided for @sizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid Size'**
+  String get sizeLabel;
+
+  /// No description provided for @generateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'GENERATE'**
+  String get generateButton;
+
+  /// No description provided for @generating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating...'**
+  String get generating;
+
+  /// No description provided for @successMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle generated successfully!'**
+  String get successMessage;
+
+  /// No description provided for @playButton.
+  ///
+  /// In en, this message translates to:
+  /// **'PLAY'**
+  String get playButton;
+
+  /// No description provided for @errorTopicMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a topic'**
+  String get errorTopicMissing;
+
+  /// No description provided for @quick.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick'**
+  String get quick;
+
+  /// No description provided for @standard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get standard;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
-  Future<AppLocalizations> load(Locale locale) =>
-      SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
+  }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['en', 'fr', 'uk'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'fr', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en':
-      return AppLocalizationsEn();
-    case 'fr':
-      return AppLocalizationsFr();
-    case 'uk':
-      return AppLocalizationsUk();
+    case 'en': return AppLocalizationsEn();
+    case 'fr': return AppLocalizationsFr();
+    case 'uk': return AppLocalizationsUk();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

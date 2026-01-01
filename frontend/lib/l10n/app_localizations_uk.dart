@@ -2,9 +2,11 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Ukrainian (`uk`).
 class AppLocalizationsUk extends AppLocalizations {
-  AppLocalizationsUk([super.locale = 'uk']);
+  AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
   String get appTitle => 'Кроіз';
@@ -26,6 +28,9 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Виберіть мову';
+
+  @override
+  String get selectAWord => 'Select a word';
 
   @override
   String get menu => 'Меню';
@@ -58,9 +63,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get congratulations => 'Вітаємо!';
 
   @override
-  String get selectAWord => 'Виберіть слово';
-
-  @override
   String get loading => 'Завантаження...';
 
   @override
@@ -70,7 +72,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get switchKeyboardLayout => 'Змінити розклад клавіатури';
 
   @override
-  String letterLabel(Object letter) => 'Літера $letter';
+  String letterLabel(Object letter) {
+    return 'Літера $letter';
+  }
 
   @override
   String get delete => 'Видалити';
@@ -131,4 +135,43 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get qwerty => 'QWERTY';
+
+  @override
+  String get generatorTitle => 'Puzzle Generator';
+
+  @override
+  String get topicLabel => 'Topic (e.g. Science, Travel...)';
+
+  @override
+  String get topicHint => 'Enter a topic';
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get difficultyLabel => 'Difficulty';
+
+  @override
+  String get sizeLabel => 'Grid Size';
+
+  @override
+  String get generateButton => 'GENERATE';
+
+  @override
+  String get generating => 'Generating...';
+
+  @override
+  String get successMessage => 'Puzzle generated successfully!';
+
+  @override
+  String get playButton => 'PLAY';
+
+  @override
+  String get errorTopicMissing => 'Please enter a topic';
+
+  @override
+  String get quick => 'Quick';
+
+  @override
+  String get standard => 'Standard';
 }

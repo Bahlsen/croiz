@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/core/config/app_difficulty.dart';
 import '../puzzle_filter_provider.dart';
 import '../filtered_puzzles_provider.dart';
 
 /// A row of filter chips for selecting puzzle difficulties.
 class DifficultyFilterChips extends ConsumerWidget {
   const DifficultyFilterChips({super.key});
-
-  /// Difficulty configuration: level, label, and color.
-  static const List<({int level, String label, Color color})> _difficulties = [
-    (level: 1, label: 'Easy', color: Colors.green),
-    (level: 2, label: 'Medium', color: Colors.amber),
-    (level: 3, label: 'Hard', color: Colors.red),
-    (level: 4, label: 'Expert', color: Colors.purple),
-    (level: 5, label: 'Master', color: Colors.black),
-  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,7 +17,7 @@ class DifficultyFilterChips extends ConsumerWidget {
         ref.watch(availableDifficultiesProvider).toList()..sort();
 
     // Filter difficulties to only those that exist in the puzzles
-    final visibleDifficulties = _difficulties
+    final visibleDifficulties = AppDifficulty.levels
         .where((d) => availableDifficulties.contains(d.level))
         .toList();
 

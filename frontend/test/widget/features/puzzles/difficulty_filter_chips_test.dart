@@ -3,12 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
+import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
 
 void main() {
   testWidgets('renders 5 chips for each difficulty', (tester) async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
+      ProviderScope(
+        overrides: [
+          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+        ],
+        child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -18,8 +22,11 @@ void main() {
 
   testWidgets('chips show correct labels', (tester) async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
+      ProviderScope(
+        overrides: [
+          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+        ],
+        child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -32,8 +39,11 @@ void main() {
 
   testWidgets('chip shows correct color for Easy (green)', (tester) async {
     await tester.pumpWidget(
-      const ProviderScope(
-        child: MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
+      ProviderScope(
+        overrides: [
+          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+        ],
+        child: const MaterialApp(home: Scaffold(body: DifficultyFilterChips())),
       ),
     );
 
@@ -52,6 +62,9 @@ void main() {
   testWidgets('tapping chip toggles selection', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+        ],
         child: MaterialApp(
           home: Scaffold(
             body: Consumer(
@@ -86,6 +99,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          availableDifficultiesProvider.overrideWith((ref) => {1, 2, 3, 4, 5}),
+        ],
         child: MaterialApp(
           home: Scaffold(
             body: Builder(builder: (context) => const DifficultyFilterChips()),

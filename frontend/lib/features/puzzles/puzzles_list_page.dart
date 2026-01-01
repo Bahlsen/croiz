@@ -12,6 +12,7 @@ import 'package:croiz/features/puzzles/widgets/generated_filter_chip.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_search_bar.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
+import 'package:croiz/features/generation/widgets/generation_dialog.dart';
 
 /// Puzzle selection page with filters, continue playing section, and performance.
 class PuzzlesListPage extends ConsumerWidget {
@@ -53,6 +54,16 @@ class PuzzlesListPage extends ConsumerWidget {
           ? Colors.white
           : Theme.of(context).scaffoldBackgroundColor,
       body: _buildBody(context, ref, puzzlesAsync),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.auto_awesome),
+        label: const Text('Générer'),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => const GenerationDialog(),
+          );
+        },
+      ),
     );
   }
 

@@ -3,6 +3,15 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
+import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
+
+enum PuzzleSource {
+  asset,
+  local;
+
+  bool get isLocal => this == PuzzleSource.local;
+  bool get isAsset => this == PuzzleSource.asset;
+}
 
 /// A simple descriptor for a puzzle packaged in assets.
 class PuzzleDescriptor {
@@ -16,6 +25,7 @@ class PuzzleDescriptor {
     this.difficulty = 2,
     this.difficultyLabel = 'Medium',
     this.language = 'en',
+    this.source = PuzzleSource.asset,
   });
 
   /// Parse a PuzzleDescriptor from a JSON map (from index).
@@ -30,6 +40,9 @@ class PuzzleDescriptor {
         difficulty: (json['difficulty'] as int?) ?? 2,
         difficultyLabel: json['difficulty_label']?.toString() ?? 'Medium',
         language: json['language']?.toString() ?? 'en',
+        source: json['source'] == 'local'
+            ? PuzzleSource.local
+            : PuzzleSource.asset,
       );
 
   final String id;
@@ -41,6 +54,7 @@ class PuzzleDescriptor {
   final int difficulty;
   final String difficultyLabel;
   final String language;
+  final PuzzleSource source;
 
   /// Create a copy with optional field overrides.
   PuzzleDescriptor copyWith({
@@ -53,6 +67,7 @@ class PuzzleDescriptor {
     int? difficulty,
     String? difficultyLabel,
     String? language,
+    PuzzleSource? source,
   }) => PuzzleDescriptor(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -63,6 +78,7 @@ class PuzzleDescriptor {
     difficulty: difficulty ?? this.difficulty,
     difficultyLabel: difficultyLabel ?? this.difficultyLabel,
     language: language ?? this.language,
+    source: source ?? this.source,
   );
 }
 
@@ -218,9 +234,19 @@ int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
 
 /// Backwards-compatible provider returning all puzzles (parses off UI thread).
 final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
+  // 1. Load from assets
   final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
-  final list = await compute(_parseAllFromIndex, raw);
-  return list;
+  final assetPuzzles = await compute(_parseAllFromIndex, raw);
+
+  // 2. Load from local generation repository
+  final repo = ref.read(generatedPuzzlesRepositoryProvider);
+  final localPuzzles = await repo.getAllDescriptors();
+
+  // 3. Merge
+  final all = [...assetPuzzles, ...localPuzzles]
+    ..sort(_sortByYearDescThenTitle);
+
+  return all;
 });
 
 List<PuzzleDescriptor> _parseAllFromIndex(String raw) {

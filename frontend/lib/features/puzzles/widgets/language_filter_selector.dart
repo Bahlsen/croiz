@@ -1,28 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:croiz/core/config/app_languages.dart';
 import '../puzzle_filter_provider.dart';
 import '../filtered_puzzles_provider.dart';
 
 /// A button that opens a bottom sheet for selecting puzzle languages.
 class LanguageFilterSelector extends ConsumerWidget {
   const LanguageFilterSelector({super.key});
-
-  /// Language configuration: code, native name, and flag emoji.
-  static const Map<String, ({String name, String flag})> _languages = {
-    'en': (name: 'English', flag: '🇬🇧'),
-    'fr': (name: 'Français', flag: '🇫🇷'),
-    'uk': (name: 'Українська', flag: '🇺🇦'),
-    'es': (name: 'Español', flag: '🇪🇸'),
-    'de': (name: 'Deutsch', flag: '🇩🇪'),
-    'it': (name: 'Italiano', flag: '🇮🇹'),
-    'pt': (name: 'Português', flag: '🇵🇹'),
-    'ru': (name: 'Русский', flag: '🇷🇺'),
-  };
-
-  static String _getLanguageName(String code) =>
-      _languages[code]?.name ?? code.toUpperCase();
-
-  static String _getLanguageFlag(String code) => _languages[code]?.flag ?? '🌐';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -83,7 +67,6 @@ class LanguageFilterSelector extends ConsumerWidget {
 }
 
 class _LanguageSelectionSheet extends ConsumerWidget {
-
   const _LanguageSelectionSheet({required this.availableLanguages});
   final List<String> availableLanguages;
 
@@ -112,12 +95,8 @@ class _LanguageSelectionSheet extends ConsumerWidget {
             itemCount: availableLanguages.length,
             itemBuilder: (context, index) {
               final languageCode = availableLanguages[index];
-              final languageName = LanguageFilterSelector._getLanguageName(
-                languageCode,
-              );
-              final languageFlag = LanguageFilterSelector._getLanguageFlag(
-                languageCode,
-              );
+              final languageName = AppLanguages.getName(languageCode);
+              final languageFlag = AppLanguages.getFlag(languageCode);
 
               // Determine if this row is checked
               // If isAllSelected (empty set), then everything is effectively checked.

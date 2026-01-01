@@ -2,9 +2,11 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for French (`fr`).
 class AppLocalizationsFr extends AppLocalizations {
-  AppLocalizationsFr([super.locale = 'fr']);
+  AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
   String get appTitle => 'Croiz';
@@ -26,6 +28,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Sélectionner la langue';
+
+  @override
+  String get selectAWord => 'Sélectionnez un mot';
 
   @override
   String get menu => 'Menu';
@@ -58,9 +63,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get congratulations => 'Félicitations!';
 
   @override
-  String get selectAWord => 'Sélectionnez un mot';
-
-  @override
   String get loading => 'Chargement...';
 
   @override
@@ -70,7 +72,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get switchKeyboardLayout => 'Changer la disposition du clavier';
 
   @override
-  String letterLabel(Object letter) => 'Lettre $letter';
+  String letterLabel(Object letter) {
+    return 'Lettre $letter';
+  }
 
   @override
   String get delete => 'Supprimer';
@@ -131,4 +135,43 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get qwerty => 'QWERTY';
+
+  @override
+  String get generatorTitle => 'Générateur de Puzzle';
+
+  @override
+  String get topicLabel => 'Thème (ex: Bretagne, Cuisine...)';
+
+  @override
+  String get topicHint => 'Entrez un thème';
+
+  @override
+  String get languageLabel => 'Langue';
+
+  @override
+  String get difficultyLabel => 'Difficulté';
+
+  @override
+  String get sizeLabel => 'Taille de la grille';
+
+  @override
+  String get generateButton => 'GÉNÉRER';
+
+  @override
+  String get generating => 'Génération...';
+
+  @override
+  String get successMessage => 'Puzzle généré avec succès !';
+
+  @override
+  String get playButton => 'JOUER';
+
+  @override
+  String get errorTopicMissing => 'Veuillez entrer un thème';
+
+  @override
+  String get quick => 'Rapide';
+
+  @override
+  String get standard => 'Standard';
 }

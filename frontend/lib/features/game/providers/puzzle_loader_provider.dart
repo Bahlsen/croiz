@@ -12,6 +12,7 @@ import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/core/puzzle_converter.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
+import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 
 /// Holds the currently selected puzzle id.
 ///
@@ -65,11 +66,25 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
     orElse: () =>
         throw StateError('Selected puzzle id not found in index: $selected'),
   );
-  // Use the indexed path (normalized by providers) and build a proper
-  // asset key for `rootBundle` by prefixing `data/`.
-  final assetPath = 'assets/data/${match.path}';
-  final loader = ref.read(puzzleAssetLoaderProvider);
-  var board = await loader(assetPath);
+
+  GameBoard board;
+  if (match.source.isLocal) {
+    // Load from local generated repository
+    final repo = ref.read(generatedPuzzlesRepositoryProvider);
+    final json = await repo.getPuzzle(match.id);
+    if (json == null) {
+      throw StateError('Local puzzle not found in repository: ${match.id}');
+    }
+    final puzzle = Puzzle.fromJson(json);
+    board = PuzzleConverter.puzzleToGameBoard(puzzle);
+  } else {
+    // Load from assets
+    // Use the indexed path (normalized by providers) and build a proper
+    // asset key for `rootBundle` by prefixing `data/`.
+    final assetPath = 'assets/data/${match.path}';
+    final loader = ref.read(puzzleAssetLoaderProvider);
+    board = await loader(assetPath);
+  }
 
   // FIX: Ensure board uses the canonical ID from the index (e.g. "wsj2021...")
   // instead of the internal ID from the JSON file (e.g. "Rising Costs").

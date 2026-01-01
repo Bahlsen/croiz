@@ -2,9 +2,11 @@
 import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for English (`en`).
 class AppLocalizationsEn extends AppLocalizations {
-  AppLocalizationsEn([super.locale = 'en']);
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
   String get appTitle => 'Croiz';
@@ -26,6 +28,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Select language';
+
+  @override
+  String get selectAWord => 'Select a word';
 
   @override
   String get menu => 'Menu';
@@ -58,9 +63,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get congratulations => 'Congratulations!';
 
   @override
-  String get selectAWord => 'Select a word';
-
-  @override
   String get loading => 'Loading...';
 
   @override
@@ -70,7 +72,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get switchKeyboardLayout => 'Switch keyboard layout';
 
   @override
-  String letterLabel(Object letter) => 'Letter $letter';
+  String letterLabel(Object letter) {
+    return 'Letter $letter';
+  }
 
   @override
   String get delete => 'Delete';
@@ -131,4 +135,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qwerty => 'QWERTY';
+
+  @override
+  String get generatorTitle => 'Puzzle Generator';
+
+  @override
+  String get topicLabel => 'Topic (e.g. Science, Travel...)';
+
+  @override
+  String get topicHint => 'Enter a topic';
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get difficultyLabel => 'Difficulty';
+
+  @override
+  String get sizeLabel => 'Grid Size';
+
+  @override
+  String get generateButton => 'GENERATE';
+
+  @override
+  String get generating => 'Generating...';
+
+  @override
+  String get successMessage => 'Puzzle generated successfully!';
+
+  @override
+  String get playButton => 'PLAY';
+
+  @override
+  String get errorTopicMissing => 'Please enter a topic';
+
+  @override
+  String get quick => 'Quick';
+
+  @override
+  String get standard => 'Standard';
 }

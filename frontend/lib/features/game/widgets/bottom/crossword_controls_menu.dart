@@ -61,13 +61,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
             ).colorScheme.onSurface.withAlpha((0.45 * 255).round()),
             child: Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: horizontalMargin,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: horizontalMargin),
                 child: Material(
                   elevation: 12,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(ResponsiveBorderRadius.xl),
+                    borderRadius: BorderRadius.circular(
+                      ResponsiveBorderRadius.xl,
+                    ),
                   ),
                   color: Theme.of(context).cardColor,
                   child: SizedBox(
@@ -89,9 +89,9 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                   AppLocalizations.of(context)!.menu,
                                   style: Theme.of(context).textTheme.titleLarge
                                       ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: ResponsiveFontSize.titleLarge,
-                                  ),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: ResponsiveFontSize.titleLarge,
+                                      ),
                                 ),
                               ),
                               IconButton(
