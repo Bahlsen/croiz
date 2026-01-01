@@ -39,4 +39,10 @@ class HivePuzzleStorage implements PuzzleStorageInterface {
     final box = Hive.box<String>(boxName);
     return box.keys.cast<String>().toList();
   }
+
+  @override
+  Stream<void> get onDataChanged {
+    final box = Hive.box<String>(boxName);
+    return box.watch();
+  }
 }

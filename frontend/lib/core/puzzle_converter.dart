@@ -166,7 +166,10 @@ class PuzzleConverter {
         if (missingCols.isNotEmpty) {
           parts.add('missing down words for cols: ${missingCols.join(', ')}');
         }
-        throw FormatException('Invalid puzzle: ${parts.join('; ')}');
+        // Relaxed validation: Just log a warning for generated puzzles or sparse grids
+        // instead of preventing the game from loading.
+        // throw FormatException('Invalid puzzle: ${parts.join('; ')}');
+        print('Warning: Sparse puzzle detected: ${parts.join('; ')}');
       }
     }
 

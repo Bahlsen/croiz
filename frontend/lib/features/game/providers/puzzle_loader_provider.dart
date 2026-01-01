@@ -71,6 +71,14 @@ final puzzleLoaderProvider = FutureProvider<GameBoard>((ref) async {
   final loader = ref.read(puzzleAssetLoaderProvider);
   var board = await loader(assetPath);
 
+  // FIX: Ensure board uses the canonical ID from the index (e.g. "wsj2021...")
+  // instead of the internal ID from the JSON file (e.g. "Rising Costs").
+  // This ensures persistence and "continue playing" features work correctly
+  // by using a consistent ID everywhere.
+  if (board.id != match.id) {
+    board = board.copyWith(id: match.id);
+  }
+
   // Attempt to restore persisted grid from Hive so callers of
   // `puzzleLoaderProvider.future` receive a board that already includes
   // any previously-saved progress. This avoids races where the board

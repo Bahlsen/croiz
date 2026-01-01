@@ -100,6 +100,7 @@ class GameBoard extends GameEntity {
   /// Performance-optimized copyWith: does NOT deep-copy lists when not provided.
   /// Caller is responsible for providing new list instances if mutation is needed.
   GameBoard copyWith({
+    String? id,
     List<List<String?>>? grid,
     Map<String, String>? clues,
     List<List<bool>>? blackCells,
@@ -107,7 +108,7 @@ class GameBoard extends GameEntity {
     List<PuzzleEntryData>? entries,
     List<List<String?>>? solutionGrid,
   }) => GameBoard(
-    id: id,
+    id: id ?? this.id,
     title: title,
     gridSize: gridSize,
     createdAt: createdAt,

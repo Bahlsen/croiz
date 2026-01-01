@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -7,12 +8,19 @@ import 'package:croiz/services/persistence/puzzle_progress_service.dart';
 class MockPuzzleStorage implements PuzzleStorageInterface {
   final Map<String, Map<String, dynamic>> _data = {};
 
+  final _controller = StreamController<void>.broadcast();
+
+  @override
+  Stream<void> get onDataChanged => _controller.stream;
+
   void setData(String id, Map<String, dynamic> payload) {
     _data[id] = payload;
+    _controller.add(null);
   }
 
   void clear() {
     _data.clear();
+    _controller.add(null);
   }
 
   @override
@@ -21,6 +29,7 @@ class MockPuzzleStorage implements PuzzleStorageInterface {
   @override
   Future<void> save(String id, Map<String, dynamic> payload) async {
     _data[id] = payload;
+    _controller.add(null);
   }
 
   @override

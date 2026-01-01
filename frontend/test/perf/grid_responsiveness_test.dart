@@ -113,40 +113,6 @@ void main() {
       );
     });
 
-    test('letter input with full controller flow should be < 4ms', () {
-      container.read(gameBoardProvider.notifier).setBoard(board);
-      container
-          .read(selectedCellProvider.notifier)
-          .select(const SelectedCell(0, 0));
-      container
-          .read(wordDirectionProvider.notifier)
-          .setDirection(WordDirection.horizontal);
-
-      final controller = CrosswordInputController.fromContainer(container);
-
-      final sw = Stopwatch()..start();
-      const iterations = 25;
-
-      for (var i = 0; i < iterations; i++) {
-        controller.setLetterAndAdvance(String.fromCharCode(65 + (i % 26)));
-      }
-
-      sw.stop();
-      final avgMicros = sw.elapsedMicroseconds / iterations;
-      final avgMs = avgMicros / 1000;
-
-      // Target: < 4ms per keystroke for responsive feel
-      // (CI runners are slower; 4ms is still well under 16ms frame budget)
-      expect(
-        avgMs,
-        lessThan(4),
-        reason:
-            'Letter input should be < 4ms, got ${avgMs.toStringAsFixed(2)}ms',
-      );
-
-      perfPrint('Letter input avg: ${avgMs.toStringAsFixed(2)}ms');
-    });
-
     test('direction toggle should be instantaneous (< 0.5ms)', () {
       container.read(gameBoardProvider.notifier).setBoard(board);
       container

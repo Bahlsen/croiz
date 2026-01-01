@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 /// Interface for puzzle storage operations.
-/// 
+///
 /// This abstraction allows for testing with mock implementations.
 abstract class PuzzleStorageInterface {
   /// Load saved puzzle data by ID.
@@ -14,10 +14,13 @@ abstract class PuzzleStorageInterface {
 
   /// Get all saved puzzle IDs.
   Future<List<String>> getAllKeys();
+
+  /// Stream of changes to the storage.
+  Stream<void> get onDataChanged;
 }
 
 /// Function signature for loading puzzle assets.
-/// 
+///
 /// This abstraction allows for testing with mock implementations.
 typedef PuzzleJsonLoader = Future<Map<String, dynamic>> Function(String path);
 
@@ -43,7 +46,7 @@ class PuzzleProgress {
 }
 
 /// Service for tracking puzzle progress.
-/// 
+///
 /// Provides methods to:
 /// - Get all in-progress puzzles
 /// - Calculate completion percentage
@@ -53,8 +56,8 @@ class PuzzleProgressService {
   PuzzleProgressService({
     required PuzzleStorageInterface storage,
     required PuzzleJsonLoader assetLoader,
-  })  : _storage = storage,
-        _assetLoader = assetLoader;
+  }) : _storage = storage,
+       _assetLoader = assetLoader;
 
   final PuzzleStorageInterface _storage;
   final PuzzleJsonLoader _assetLoader;
@@ -67,7 +70,7 @@ class PuzzleProgressService {
       _storage.getAllKeys();
 
   /// Get progress information for a specific puzzle.
-  /// 
+  ///
   /// Returns null if the puzzle has no saved progress.
   Future<PuzzleProgress?> getProgress(String puzzleId) async {
     final data = await _storage.load(puzzleId);
@@ -76,8 +79,9 @@ class PuzzleProgressService {
     }
 
     final savedAtStr = data['savedAt'] as String?;
-    final savedAt =
-        savedAtStr != null ? DateTime.parse(savedAtStr) : DateTime.now();
+    final savedAt = savedAtStr != null
+        ? DateTime.parse(savedAtStr)
+        : DateTime.now();
     final elapsedSeconds = (data['elapsedSeconds'] as int?) ?? 0;
 
     return PuzzleProgress(
@@ -144,7 +148,7 @@ class PuzzleProgressService {
   }
 
   /// Check if a puzzle is completed (all cells match solution).
-  /// 
+  ///
   /// - [grid] is the user's current grid
   /// - [puzzlePath] is the path to load the puzzle solution
   /// - Uses caching to avoid redundant asset loads
@@ -168,7 +172,8 @@ class PuzzleProgressService {
         }
 
         final userCell = grid[row][col];
-        if (userCell == null || userCell.toUpperCase() != solutionCell.toUpperCase()) {
+        if (userCell == null ||
+            userCell.toUpperCase() != solutionCell.toUpperCase()) {
           return false;
         }
       }
@@ -194,7 +199,7 @@ class PuzzleProgressService {
   }
 
   /// Extract solution grid from puzzle JSON.
-  /// 
+  ///
   /// Puzzle JSON has cells as a flat list with 'solution' field.
   /// We convert to 2D grid based on rows/cols.
   List<List<String?>> _extractSolutionGrid(Map<String, dynamic> puzzleJson) {

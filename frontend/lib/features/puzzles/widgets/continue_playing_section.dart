@@ -26,6 +26,15 @@ class InProgressPuzzleInfo {
 final inProgressPuzzlesProvider =
     FutureProvider.autoDispose<List<InProgressPuzzleInfo>>((ref) async {
       final storage = HivePuzzleStorage();
+
+      // Listen to storage changes to automatically refresh the list
+      // whenever a puzzle is saved (e.g. from the game screen).
+      final subscription = storage.onDataChanged.listen((_) {
+        // Debounce slightly if needed, but simple invalidation works fine
+        ref.invalidateSelf();
+      });
+      ref.onDispose(subscription.cancel);
+
       final service = PuzzleProgressService(
         storage: storage,
         assetLoader: defaultPuzzleJsonLoader,
@@ -51,6 +60,7 @@ final inProgressPuzzlesProvider =
       final puzzleMap = {for (final p in puzzles) p.id: p};
 
       final inProgressList = <InProgressPuzzleInfo>[];
+
       for (final progress in progressList) {
         final descriptor = puzzleMap[progress.puzzleId];
         if (descriptor == null) {

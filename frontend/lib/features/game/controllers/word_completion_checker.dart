@@ -143,9 +143,11 @@ class WordCompletionChecker {
 
     final wordCheckService = readWordCheckService();
     final foundWords = readFoundWords();
-    final newFoundWords = Set<String>.from(foundWords);
     final lockedCells = readLockedCells();
-    final newLockedCells = Set<CellKey>.from(lockedCells);
+
+    // Lazy copy: only create mutable sets if we actually find a completed word
+    Set<String>? newFoundWords;
+    Set<CellKey>? newLockedCells;
 
     // Collect all entries that contain any of the changed cells
     final entriesToCheck = <PuzzleEntryData>{};
@@ -176,6 +178,10 @@ class WordCompletionChecker {
 
       // Check if word is complete
       if (wordCheckService.isWordComplete(board, entry)) {
+        // Initialize mutable sets on first write
+        newFoundWords ??= Set<String>.from(foundWords);
+        newLockedCells ??= Set<CellKey>.from(lockedCells);
+
         newFoundWords.add(wordKey);
         wordsCompletedThisCheck++;
 
@@ -200,18 +206,22 @@ class WordCompletionChecker {
       );
     }
 
-    if (newFoundWords.length > foundWords.length) {
+    if (newFoundWords != null) {
       writeFoundWords(newFoundWords);
     }
 
-    if (newLockedCells.length > lockedCells.length) {
+    if (newLockedCells != null) {
       writeLockedCells(newLockedCells);
     }
 
     // If all words found -> finalize timer and play victory sound
     try {
       final totalEntries = entries.length;
-      if (totalEntries > 0 && newFoundWords.length == totalEntries) {
+      final currentFoundCount = newFoundWords != null
+          ? newFoundWords.length
+          : foundWords.length;
+
+      if (totalEntries > 0 && currentFoundCount == totalEntries) {
         try {
           developer.log('All words completed: triggering finalize and victory');
         } on Object catch (_) {}
