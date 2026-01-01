@@ -119,6 +119,16 @@ class GameBoard extends GameEntity {
     entries: entries ?? this.entries,
     solutionGrid: solutionGrid ?? this.solutionGrid,
   );
+
+  /// Helper to create a new GameBoard with a single cell updated.
+  GameBoard updateCell(int row, int col, String? value) {
+    if (row < 0 || row >= grid.length || col < 0 || col >= grid[row].length) {
+      return this;
+    }
+    final newGrid = grid.map(List<String?>.from).toList();
+    newGrid[row][col] = value;
+    return copyWith(grid: newGrid);
+  }
 }
 
 class GameScore {

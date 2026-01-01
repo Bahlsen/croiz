@@ -40,10 +40,11 @@ cd frontend
 flutter test --coverage --no-pub
 ```
 
-### 6. Filtrer les erreurs de tests (PowerShell)
+### 6. Filtrer les erreurs de tests (PowerShell - Patterns larges)
 ```powershell
 cd frontend
-flutter test --no-pub 2>&1 | Select-String -Pattern "FAIL", "Error", "Exception" -Context 2, 5 | Select-Object -First 100
+# Utilise des jokers et regex pour capturer FAIL, Error, Exception, failed, etc.
+flutter test --no-pub 2>&1 | Select-String -Pattern "FAIL.*", ".*Error.*", ".*Exception.*", ".*failed.*", ".*timeout.*" -Context 2, 5 | Select-Object -First 100
 ```
 
 ### 7. Nettoyer le projet
@@ -76,7 +77,19 @@ cd frontend
 flutter build apk --debug
 ```
 
-### 12. Construire l'APK de release
+### 12. Rechercher un texte dans le code (PowerShell)
+```powershell
+# Recherche récursivement "TODO" ou un autre motif dans les fichiers .dart
+Get-ChildItem -Recurse -Filter *.dart | Select-String -Pattern "TODO", "FIXME"
+```
+
+### 13. Lire les dernières lignes d'un fichier (PowerShell)
+```powershell
+# Similaire à 'tail -f' pour un fichier de log
+Get-Content -Path "frontend/flutter_01.log" -Wait -Tail 10 | Select-String -Pattern "Error", "Exception"
+```
+
+### 14. Construire l'APK de release
 ```bash
 cd frontend
 flutter build apk --release

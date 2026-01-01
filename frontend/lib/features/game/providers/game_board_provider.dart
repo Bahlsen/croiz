@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
@@ -10,12 +9,13 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/helpers/board_helpers.dart';
 import 'package:croiz/features/game/services/incorrect_letter_cleaner.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/features/game/utils/flash_utils.dart';
+import 'package:croiz/features/game/services/game_persistence_service.dart';
+import 'package:croiz/features/game/services/game_progress_service.dart';
+import 'package:croiz/features/game/services/game_reveal_service.dart';
 
 import 'puzzle_loader_provider.dart';
 import 'game_state_providers.dart';
 import 'game_timer_provider.dart';
-import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 
 /// Duration used to schedule clearing of flashed cells after animations.
 /// Tests can override this provider to `Duration.zero` to avoid scheduling
@@ -33,12 +33,21 @@ final wordCheckDebounceDelayProvider = Provider<Duration>(
 
 /// Main notifier for the game board state.
 class GameBoardNotifier extends Notifier<GameBoard> {
-  Timer? _persistTimer;
-  static const Duration _persistDebounce = Duration(milliseconds: 200);
   // Track the last loaded puzzle ID to detect changes
   String? _lastLoadedPuzzleId;
   // Track the previous board's grid for persistence on puzzle switch
   List<List<String?>>? _previousGrid;
+
+  // Use the service via provider if available, otherwise fallback to local instance
+  late final GamePersistenceService _persistenceService = ref.read(
+    gamePersistenceServiceProvider,
+  );
+  late final GameProgressService _progressService = ref.read(
+    gameProgressServiceProvider,
+  );
+  late final GameRevealService _revealService = ref.read(
+    gameRevealServiceProvider,
+  );
 
   // Compatibility helper used by tests and legacy call sites.
   void setBoard(GameBoard board) => state = board;
@@ -56,7 +65,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
         fireImmediately: true, // Fire immediately to handle initial load
       )
       // Cancel any pending timers when the notifier is disposed by Riverpod.
-      ..onDispose(_cancelPersistTimer);
+      ..onDispose(_persistenceService.dispose);
 
     final puzzleAsync = ref.watch(puzzleLoaderProvider);
 
@@ -70,10 +79,11 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           // IMPORTANT: Capture current state BEFORE clearing, so we can persist
           // the previous puzzle's progress (foundWords, lockedCells) correctly.
           final prevFoundWords = ref.read(foundWordsProvider).toList();
-          final prevLockedCells = ref
-              .read(lockedCellsProvider)
-              .map((c) => '${c.row},${c.col}')
-              .toList();
+          final prevLockedCells =
+              ref
+                  .read(lockedCellsProvider)
+                  .map((c) => '${c.row},${c.col}')
+                  .toList();
           // Read the current grid from _previousGrid which we update on each
           // state change (see _schedulePersist)
           final prevGrid = _previousGrid;
@@ -114,15 +124,6 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   Never _handleError(Object e, StackTrace st) {
     final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
     throw StateError('Failed to load puzzle id="$selected": $e');
-  }
-
-  /// Cancel the persist timer safely.
-  void _cancelPersistTimer() {
-    try {
-      _persistTimer?.cancel();
-    } on Object {
-      // ignore
-    }
   }
 
   /// Called when puzzle changes - clears selection, foundWords, lockedCells, etc.
@@ -169,33 +170,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     List<String> foundWords,
     List<String> lockedCells,
   ) {
-    try {
-      _persistTimer?.cancel();
-    } on Object {
-      // ignore
-    }
-    () async {
-      try {
-        final payload = {
-          'schemaVersion': 1,
-          'grid': grid,
-          'savedAt': DateTime.now().toIso8601String(),
-          'foundWords': foundWords,
-          'lockedCells': lockedCells,
-        };
-        await HivePuzzleStorage().save(
-          puzzleId,
-          jsonDecode(jsonEncode(payload)) as Map<String, dynamic>,
-        );
-      } on Object catch (e, st) {
-        if (kDebugMode) {
-          developer.log(
-            'Failed to persist previous puzzle before switch: $e',
-            stackTrace: st,
-          );
-        }
-      }
-    }();
+    _persistenceService.persistPreviousPuzzle(
+      puzzleId: puzzleId,
+      grid: grid,
+      foundWords: foundWords,
+      lockedCells: lockedCells,
+    );
   }
 
   void _onPuzzleLoaderChanged(
@@ -209,139 +189,82 @@ class GameBoardNotifier extends Notifier<GameBoard> {
       return;
     }
 
-    // Note: The clearing of game state and persistence of the previous puzzle
-    // is now handled in build() which captures state BEFORE clearing.
-    // This listener now only handles restoration.
-
-    // Use the puzzle id from next.value, not state, because state might not
-    // be updated yet when the listener fires.
     final puzzleId = next.value.id;
+    _restoreProgress(puzzleId, next.value);
+  }
 
-    // Attempt to restore persisted progress for this puzzle id.
-    () async {
-      try {
-        final stored = await HivePuzzleStorage().load(puzzleId);
-        if (!ref.mounted) {
-          return;
-        }
-        if (stored != null) {
-          final gridData = stored['grid'];
-          if (gridData is List) {
-            final rows = gridData.length;
-            final cols = rows > 0 && gridData[0] is List
-                ? (gridData[0] as List).length
-                : 0;
-            if (rows == state.grid.length && cols == state.grid[0].length) {
-              final newGrid = <List<String?>>[];
-              for (final r in gridData) {
-                final rowList = <String?>[];
-                for (final c in (r as List)) {
-                  if (c == null) {
-                    rowList.add(null);
-                  } else {
-                    rowList.add(c.toString());
-                  }
-                }
-                newGrid.add(rowList);
-              }
-              state = state.copyWith(grid: newGrid);
-            }
-          }
+  Future<void> _restoreProgress(String puzzleId, GameBoard board) async {
+    try {
+      final result = await _progressService.loadProgress(
+        puzzleId,
+        expectedRows: board.grid.length,
+        expectedCols: board.grid.isNotEmpty ? board.grid[0].length : 0,
+      );
 
-          // restore found/locked words or timer when present
-          try {
-            final found = stored['foundWords'];
-            if (found is List) {
-              ref
-                  .read(foundWordsProvider.notifier)
-                  .setFoundWords(found.cast<String>().toSet());
-              try {
-                _triggerEndGameIfSolved(playVictorySound: false);
-              } on Object {
-                // ignore
-              }
-            }
-            final locked = stored['lockedCells'];
-            if (locked is List) {
-              final set = <CellKey>{};
-              for (final s in locked) {
-                if (s is String) {
-                  final parts = s.split(',');
-                  if (parts.length == 2) {
-                    final r = int.tryParse(parts[0]);
-                    final c = int.tryParse(parts[1]);
-                    if (r != null && c != null) {
-                      set.add(CellKey(r, c));
-                    }
-                  }
-                }
-              }
-              ref.read(lockedCellsProvider.notifier).setLockedCells(set);
-            }
-            final timerVal = stored['elapsedSeconds'];
-            if (timerVal is num) {
-              unawaited(
-                ref
-                    .read(gameTimerProvider(state.id))
-                    .setElapsed(timerVal.toInt()),
-              );
-            }
-          } on Object catch (_) {
-            // ignore per-field restore errors
-          }
-        } else {
-          // No stored data - populate initial found/locked sets from current grid
-          _populateInitialFoundLockedFromGrid();
+      if (!ref.mounted) {
+        return;
+      }
+
+      if (result.hasData) {
+        if (result.grid != null) {
+          state = state.copyWith(grid: result.grid);
         }
-      } on Object catch (e, st) {
-        if (kDebugMode) {
-          developer.log(
-            'Failed to restore puzzle progress: $e',
-            stackTrace: st,
+        if (result.foundWords != null) {
+          ref
+              .read(foundWordsProvider.notifier)
+              .setFoundWords(result.foundWords!);
+          _triggerEndGameIfSolved(playVictorySound: false);
+        }
+        if (result.lockedCells != null) {
+          ref
+              .read(lockedCellsProvider.notifier)
+              .setLockedCells(result.lockedCells!);
+        }
+        if (result.elapsedSeconds != null) {
+          unawaited(
+            ref
+                .read(gameTimerProvider(board.id))
+                .setElapsed(result.elapsedSeconds!),
           );
         }
-        // On restore failure, still try to populate from grid (if still mounted)
-        if (ref.mounted) {
-          _populateInitialFoundLockedFromGrid();
-        }
+      } else {
+        _populateInitialFoundLockedFromGrid(board);
       }
-    }();
+    } on Object catch (e, st) {
+      if (kDebugMode) {
+        developer.log('Failed to restore puzzle progress: $e', stackTrace: st);
+      }
+      if (ref.mounted) {
+        _populateInitialFoundLockedFromGrid(board);
+      }
+    }
   }
 
   /// Populate initial found/locked sets based on current grid state.
   /// Called only when there's no stored progress to restore.
-  void _populateInitialFoundLockedFromGrid() {
+  void _populateInitialFoundLockedFromGrid(GameBoard board) {
     if (!ref.mounted) {
       return;
     }
-    final entries = state.entries;
+    final entries = board.entries;
     if (entries != null && entries.isNotEmpty) {
       try {
         final wordCheck = ref.read(wordCheckServiceProvider);
-        final newFound = <String>{};
-        final newLocked = <CellKey>{};
-        for (final entry in entries) {
-          if (wordCheck.isWordComplete(state, entry)) {
-            final key = wordCheck.getWordKey(entry);
-            newFound.add(key);
-            newLocked.addAll(wordCheck.getCellKeys(entry));
-          }
-        }
-        if (newFound.isNotEmpty) {
-          ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
-        }
-        if (newLocked.isNotEmpty) {
-          ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
-        }
-        try {
+        final result = _progressService.computeInitialState(
+          board: board,
+          isWordComplete: wordCheck.isWordComplete,
+          getWordKey: wordCheck.getWordKey,
+          getCellKeys: wordCheck.getCellKeys,
+        );
+        if (!result.isEmpty) {
+          ref
+              .read(foundWordsProvider.notifier)
+              .setFoundWords(result.foundWords);
+          ref
+              .read(lockedCellsProvider.notifier)
+              .setLockedCells(result.lockedCells);
           _triggerEndGameIfSolved(playVictorySound: false);
-        } on Object {
-          // ignore
         }
-        // Selection is intentionally not set here; UI layers (e.g.
-        // GameBoardObserver/Crossword widgets) handle auto-selection when
-        // they attach. Avoid selecting here to prevent carrying focus
-        // across provider-only contexts or before widgets are ready.
       } on Object catch (e, stack) {
         if (kDebugMode) {
           debugPrint('Error updating found/locked words: $e\n$stack');
@@ -354,9 +277,10 @@ class GameBoardNotifier extends Notifier<GameBoard> {
     if (state.blackCells.isDisabled(row, col)) {
       return;
     }
-    final normalizedLetter = letter == null || letter.isEmpty
-        ? null
-        : letter.substring(0, 1).toUpperCase();
+    final normalizedLetter =
+        letter == null || letter.isEmpty
+            ? null
+            : letter.substring(0, 1).toUpperCase();
     if (state.grid[row][col] == normalizedLetter) {
       return;
     }
@@ -452,85 +376,78 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
   /// Reveal the solution letter at the given cell (if available).
   void revealLetterAt(int row, int col) {
-    final sol = state.solutionGrid;
-    if (sol == null) {
+    if (state.grid[row][col] != null) {
       return;
     }
-    if (row < 0 || row >= sol.length) {
-      return;
-    }
-    if (col < 0 || col >= sol[row].length) {
-      return;
-    }
-    final letter = sol[row][col];
+
+    final letter = _revealService.revealLetterAt(
+      board: state,
+      row: row,
+      col: col,
+    );
+
     if (letter == null) {
       return;
     }
-    final newGrid = state.grid.map(List<String?>.from).toList();
-    newGrid[row][col] = letter;
-    state = state.copyWith(grid: newGrid);
+
+    state = state.updateCell(row, col, letter);
+    _checkWordCompletionAfterReveal(CellKey(row, col));
     _schedulePersist();
-    // After revealing a letter via the reveal menu, run the same
-    // completion check as when the user types so completed words
-    // are detected and flash as if the user had filled them.
+  }
+
+  /// Helper to check for word completion after a single cell reveal.
+  void _checkWordCompletionAfterReveal(CellKey pos) {
     try {
-      // Directly detect any entries that became complete due to this reveal
-      // Use the updated local state directly to avoid stale reads.
       final boardNow = state;
       final allEntries = state.entries;
       List<PuzzleEntryData>? entriesForCell;
-      if (allEntries != null && allEntries.isNotEmpty) {
-        entriesForCell = allEntries.where((e) {
-          final isAcross = e.directionEnum == EntryDirection.across;
-          if (isAcross) {
-            return e.y == row && (col >= e.x && col < e.x + e.length);
-          } else {
-            return e.x == col && (row >= e.y && row < e.y + e.length);
-          }
-        }).toList();
-      } else {
-        entriesForCell = null;
+      if (allEntries != null) {
+        entriesForCell =
+            allEntries.where((e) {
+              final isAcross = e.directionEnum == EntryDirection.across;
+              if (isAcross) {
+                return e.y == pos.row &&
+                    (pos.col >= e.x && pos.col < e.x + e.length);
+              } else {
+                return e.x == pos.col &&
+                    (pos.row >= e.y && pos.row < e.y + e.length);
+              }
+            }).toList();
       }
       if (entriesForCell != null && entriesForCell.isNotEmpty) {
         final wordCheck = ref.read(wordCheckServiceProvider);
-        final foundWords = ref.read(foundWordsProvider);
-        final locked = ref.read(lockedCellsProvider);
-        final newFound = Set<String>.from(foundWords);
-        final newLocked = Set<CellKey>.from(locked);
-        final allFlashing = <CellKey>{};
         var completed = 0;
-        for (final entry in entriesForCell) {
-          final key = wordCheck.getWordKey(entry);
-          if (foundWords.contains(key)) {
-            continue;
-          }
-          if (wordCheck.isWordComplete(boardNow, entry)) {
-            completed++;
-            newFound.add(key);
-            final keys = wordCheck.getCellKeys(entry);
-            newLocked.addAll(keys);
-            allFlashing.addAll(keys);
+        final newFound = Set<String>.from(ref.read(foundWordsProvider));
+        final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider));
+        final allFlashing = <CellKey>{};
+
+        for (final e in entriesForCell) {
+          if (wordCheck.isWordComplete(boardNow, e)) {
+            final key = wordCheck.getWordKey(e);
+            if (!newFound.contains(key)) {
+              newFound.add(key);
+              final keys = wordCheck.getCellKeys(e);
+              newLocked.addAll(keys);
+              allFlashing.addAll(keys);
+              completed++;
+            }
           }
         }
+
         if (completed > 0) {
           ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
           ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
-          triggerFlashAndPlaySuccess(
-            allFlashing,
-            (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-            () => ref.read(flashClearDelayProvider),
-            playSuccess: () {
-              if (!ref.read(gameAudioMutedProvider)) {
-                return ref.read(gameAudioServiceProvider).playSuccess();
-              }
-              return Future.value();
-            },
+          _revealService.triggerFlash(
+            cells: allFlashing.toSet(),
+            setFlashingCells:
+                (v) => ref
+                    .read(flashingCellsProvider.notifier)
+                    .setFlashingCells(v),
+            getFlashDelay: () => ref.read(flashClearDelayProvider),
+            playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+            shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
           );
-          try {
-            _triggerEndGameIfSolved();
-          } on Object {
-            // ignore
-          }
+          _triggerEndGameIfSolved();
         }
       }
     } on Object {
@@ -540,72 +457,37 @@ class GameBoardNotifier extends Notifier<GameBoard> {
 
   /// Reveal the full entry (word) for the given PuzzleEntryData.
   void revealEntry(PuzzleEntryData entry) {
-    final sol = state.solutionGrid;
-    if (sol == null) {
-      return;
-    }
     final wordCheck = ref.read(wordCheckServiceProvider);
-    final key = wordCheck.getWordKey(entry);
-    // If this word was already marked found or its cells were already
-    // locked (e.g. previously revealed/flashed), treat reveal as a no-op.
-    final priorFound = ref.read(foundWordsProvider);
-    final priorLocked = ref.read(lockedCellsProvider);
-    final entryCellKeys = wordCheck.getCellKeys(entry);
-    if (priorFound.contains(key) || priorLocked.containsAll(entryCellKeys)) {
+    final result = _revealService.revealEntry(
+      board: state,
+      entry: entry,
+      currentFoundWords: ref.read(foundWordsProvider),
+      currentLockedCells: ref.read(lockedCellsProvider),
+      getWordKey: wordCheck.getWordKey,
+      getCellKeys: wordCheck.getCellKeys,
+    );
+
+    if (!result.hasChanges) {
       return;
     }
 
-    final newGrid = state.grid.map(List<String?>.from).toList();
-    final cells = <CellKey>{};
-    if (entry.direction == 'across') {
-      final row = entry.y;
-      for (var i = 0; i < entry.length; i++) {
-        final col = entry.x + i;
-        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
-          newGrid[row][col] = sol[row][col];
-          cells.add(CellKey(row, col));
-        }
-      }
-    } else {
-      final col = entry.x;
-      for (var i = 0; i < entry.length; i++) {
-        final row = entry.y + i;
-        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
-          newGrid[row][col] = sol[row][col];
-          cells.add(CellKey(row, col));
-        }
-      }
-    }
-
-    state = state.copyWith(grid: newGrid);
-    // Mark word as found and lock its cells
-    final newFound = Set<String>.from(ref.read(foundWordsProvider))..add(key);
-    ref.read(foundWordsProvider.notifier).setFoundWords(newFound);
-    final newLocked = Set<CellKey>.from(ref.read(lockedCellsProvider))
-      ..addAll(cells);
-    ref.read(lockedCellsProvider.notifier).setLockedCells(newLocked);
+    state = state.copyWith(grid: result.newGrid);
+    ref.read(foundWordsProvider.notifier).setFoundWords(result.newFoundWords);
+    ref
+        .read(lockedCellsProvider.notifier)
+        .setLockedCells(result.newLockedCells);
     _schedulePersist();
-    // Flash the revealed entry cells using shared helper
-    try {
-      triggerFlashAndPlaySuccess(
-        cells,
-        (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-        () => ref.read(flashClearDelayProvider),
-        playSuccess: () {
-          if (!ref.read(gameAudioMutedProvider)) {
-            return ref.read(gameAudioServiceProvider).playSuccess();
-          }
-          return Future.value();
-        },
-      );
-    } on Object {
-      // ignore
-    }
-    try {
-      _triggerEndGameIfSolved();
-    } on Object {
-      // ignore
-    }
+
+    _revealService.triggerFlash(
+      cells: result.cellsToFlash,
+      setFlashingCells:
+          (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+      getFlashDelay: () => ref.read(flashClearDelayProvider),
+      playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
+      shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
+    );
+
+    _triggerEndGameIfSolved();
   }
 
   /// Reveal the entire puzzle (fill all non-black cells from the solution grid).
@@ -660,8 +542,7 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           final cellKeys = wordCheck.getCellKeys(e);
           final wasLocked = priorLocked.containsAll(cellKeys);
           // Only consider this entry newly found if it was incomplete before,
-          // is complete now, was not previously in the authoritative found
-          // set, and its cells were not already locked (previous flash).
+          // is complete now, and its cells were not already locked (previous flash).
           if (!wasComplete &&
               isCompleteNow &&
               !priorFound.contains(key) &&
@@ -688,17 +569,18 @@ class GameBoardNotifier extends Notifier<GameBoard> {
           final currentlyFlashing = Set<CellKey>.from(
             ref.read(flashingCellsProvider),
           );
-          final toFlash = newCells
-              .where((c) => !currentlyFlashing.contains(c))
-              .toSet();
+          final toFlash =
+              newCells.where((c) => !currentlyFlashing.contains(c)).toSet();
           if (toFlash.isNotEmpty) {
-            triggerFlashAndPlaySuccess(
-              toFlash,
-              (v) =>
-                  ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-              () => ref.read(flashClearDelayProvider),
-              playSuccess: () =>
-                  ref.read(gameAudioServiceProvider).playSuccess(),
+            _revealService.triggerFlash(
+              cells: toFlash,
+              setFlashingCells:
+                  (v) => ref
+                      .read(flashingCellsProvider.notifier)
+                      .setFlashingCells(v),
+              getFlashDelay: () => ref.read(flashClearDelayProvider),
+              playSuccess:
+                  () => ref.read(gameAudioServiceProvider).playSuccess(),
               shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
             );
           }
@@ -736,10 +618,12 @@ class GameBoardNotifier extends Notifier<GameBoard> {
             }
           }
         }
-        triggerFlashAndPlaySuccess(
-          all,
-          (v) => ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
-          () => ref.read(flashClearDelayProvider),
+        _revealService.triggerFlash(
+          cells: all,
+          setFlashingCells:
+              (v) =>
+                  ref.read(flashingCellsProvider.notifier).setFlashingCells(v),
+          getFlashDelay: () => ref.read(flashClearDelayProvider),
           playSuccess: () => ref.read(gameAudioServiceProvider).playSuccess(),
           shouldPlaySound: () => !ref.read(gameAudioMutedProvider),
         );
@@ -750,45 +634,28 @@ class GameBoardNotifier extends Notifier<GameBoard> {
   }
 
   void _schedulePersist() {
-    // Update _previousGrid with current state for accurate persistence on puzzle switch
     try {
       _previousGrid = state.grid.map(List<String?>.from).toList();
     } on Object {
       // ignore if state not ready
     }
-    try {
-      _persistTimer?.cancel();
-      _persistTimer = Timer(_persistDebounce, _persistProgress);
-    } on Object catch (e, st) {
-      if (kDebugMode) {
-        developer.log('Failed scheduling persist: $e', stackTrace: st);
-      }
-    }
+    _persistenceService.schedulePersist(
+      puzzleId: state.id,
+      grid: state.grid,
+      foundWords: ref.read(foundWordsProvider),
+      lockedCells: ref.read(lockedCellsProvider),
+      elapsedSeconds: ref.read(gameTimerProvider(state.id)).elapsedSeconds,
+    );
   }
 
   Future<void> _persistProgress() async {
-    try {
-      final payload = {
-        'schemaVersion': 1,
-        'grid': state.grid,
-        'savedAt': DateTime.now().toIso8601String(),
-        // extended state
-        'foundWords': ref.read(foundWordsProvider).toList(),
-        'lockedCells': ref
-            .read(lockedCellsProvider)
-            .map((c) => '${c.row},${c.col}')
-            .toList(),
-        'elapsedSeconds': ref.read(gameTimerProvider(state.id)).elapsedSeconds,
-      };
-      await HivePuzzleStorage().save(
-        state.id,
-        jsonDecode(jsonEncode(payload)) as Map<String, dynamic>,
-      );
-    } on Object catch (e, st) {
-      if (kDebugMode) {
-        developer.log('Failed to persist puzzle progress: $e', stackTrace: st);
-      }
-    }
+    await _persistenceService.persistNow(
+      puzzleId: state.id,
+      grid: state.grid,
+      foundWords: ref.read(foundWordsProvider),
+      lockedCells: ref.read(lockedCellsProvider),
+      elapsedSeconds: ref.read(gameTimerProvider(state.id)).elapsedSeconds,
+    );
   }
 
   /// Reset the puzzle to its initial state (clear all user progress).

@@ -17,9 +17,11 @@ import 'package:croiz/services/persistence/puzzle_progress_service.dart'
 /// locked cells, and elapsed time.
 class GamePersistenceService {
   GamePersistenceService({PuzzleStorageInterface? storage})
-    : _storage = storage ?? HivePuzzleStorage();
+    : _storageFallback = storage;
 
-  final PuzzleStorageInterface _storage;
+  final PuzzleStorageInterface? _storageFallback;
+  PuzzleStorageInterface get _storage =>
+      _storageFallback ?? HivePuzzleStorage();
   Timer? _persistTimer;
   static const Duration _persistDebounce = Duration(milliseconds: 200);
 
