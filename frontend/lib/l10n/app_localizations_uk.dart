@@ -173,5 +173,11 @@ class AppLocalizationsUk extends AppLocalizations {
   String get quick => 'Quick';
 
   @override
-  String get standard => 'Standard';
+  String get standard => 'Стандарт';
+
+  @override
+  String get continuePlaying => 'Продовжити гру';
+
+  @override
+  String get noPuzzlesInProgress => 'Немає розпочатих кросвордів';
 }

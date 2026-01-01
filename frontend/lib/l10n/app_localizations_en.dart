@@ -174,4 +174,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get standard => 'Standard';
+
+  @override
+  String get continuePlaying => 'Continue Playing';
+
+  @override
+  String get noPuzzlesInProgress => 'No puzzles in progress';
 }

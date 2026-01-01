@@ -6,6 +6,7 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
+import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
@@ -49,8 +50,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -70,8 +71,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -89,8 +90,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -110,8 +111,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -137,8 +138,8 @@ void main() {
         ],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -165,8 +166,8 @@ void main() {
         ],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -199,8 +200,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => manyPuzzles)],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),
@@ -210,7 +211,7 @@ void main() {
 
     // Should not render all items at once (lazy loading)
     // Only visible items + cache should be built
-    final listTiles = find.byType(ListTile);
+    final listTiles = find.byType(PuzzleCard);
     // Not all 100 tiles should be in the tree at once
     expect(listTiles.evaluate().length, lessThan(100));
   });
@@ -222,8 +223,8 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),

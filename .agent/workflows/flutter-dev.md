@@ -77,10 +77,13 @@ cd frontend
 flutter build apk --debug
 ```
 
-### 12. Rechercher un texte dans le code (PowerShell)
+### 12. Rechercher un texte dans le code (PowerShell sls / grep)
 ```powershell
-# Recherche récursivement "TODO" ou un autre motif dans les fichiers .dart
-Get-ChildItem -Recurse -Filter *.dart | Select-String -Pattern "TODO", "FIXME"
+# Recherche récursivement "TODO" ou un autre motif (alias sls = Select-String, équivalent grep)
+sls -Path "frontend\lib\**\*.dart" -Pattern "TODO"
+
+# Recherche simple comme grep
+# "texte" | sls -Pattern "motif"
 ```
 
 ### 13. Lire les dernières lignes d'un fichier (PowerShell)

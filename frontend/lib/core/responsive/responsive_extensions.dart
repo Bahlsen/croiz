@@ -161,23 +161,23 @@ class ResponsiveButton {
 class ResponsiveKeyboard {
   ResponsiveKeyboard._();
 
-  /// Small key height (clamped to max 42px)
-  static double get keyHeightSmall => 5.5.h.clamp(32.0, 42.0);
+  /// Small key height (clamped to max 48px)
+  static double get keyHeightSmall => 6.h.clamp(34.0, 48.0);
 
-  /// Medium key height (clamped to max 50px)
-  static double get keyHeightMedium => 7.h.clamp(38.0, 50.0);
+  /// Medium key height (clamped to max 58px)
+  static double get keyHeightMedium => 8.h.clamp(40.0, 58.0);
 
-  /// Large key height (clamped to max 60px)
-  static double get keyHeightLarge => 9.h.clamp(44.0, 60.0);
+  /// Large key height (clamped to max 70px)
+  static double get keyHeightLarge => 10.h.clamp(48.0, 70.0);
 
   /// Small letter font size
-  static double get letterFontSmall => 12.sp;
+  static double get letterFontSmall => 13.sp;
 
   /// Medium letter font size
-  static double get letterFontMedium => 14.sp;
+  static double get letterFontMedium => 16.sp;
 
   /// Large letter font size
-  static double get letterFontLarge => 17.sp;
+  static double get letterFontLarge => 18.sp;
 }
 
 /// Responsive grid dimensions for the crossword grid.

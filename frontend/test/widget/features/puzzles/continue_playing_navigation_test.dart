@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
+import 'package:croiz/l10n/app_localizations.dart';
+import 'package:sizer/sizer.dart';
 
 void main() {
   testWidgets('tapping puzzle navigates to /crossword with correct id', (
@@ -26,16 +28,14 @@ void main() {
       ),
     ];
 
-    // Router configuration that mimics the app's real router structure.
-    // Using this router, navigating to '/game' will fail because it doesn't exist.
-    // Navigating to '/crossword?id=test-puzzle' will succeed.
     final router = GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) =>
-              const Scaffold(body: ContinuePlayingSection()),
+          builder:
+              (context, state) =>
+                  const Scaffold(body: ContinuePlayingSection()),
         ),
         GoRoute(
           path: '/crossword',
@@ -54,7 +54,14 @@ void main() {
             (ref) async => inProgressPuzzles,
           ),
         ],
-        child: MaterialApp.router(routerConfig: router),
+        child: Sizer(
+          builder:
+              (context, orientation, deviceType) => MaterialApp.router(
+                routerConfig: router,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+              ),
+        ),
       ),
     );
     await tester.pumpAndSettle();

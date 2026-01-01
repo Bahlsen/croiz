@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/core/theme.dart';
+import 'package:croiz/core/crossword_theme_colors.dart';
 
 // Note: default box shadows are computed from the active theme in
 // `_CrosswordTheme.fromContext` so they can be theme-driven.
@@ -194,9 +194,8 @@ class CrosswordCell extends ConsumerWidget {
     // only for the cleared-flashing state to preserve the selected-cell
     // outer painter behaviour.
     final border = isSelected ? tt.selectedBorder : null;
-    final innerDecorationBorder = isClearedFlashing
-        ? tt.clearedFlashingBorder
-        : null;
+    final innerDecorationBorder =
+        isClearedFlashing ? tt.clearedFlashingBorder : null;
 
     final decoration = BoxDecoration(
       borderRadius: BorderRadius.zero,
@@ -213,12 +212,16 @@ class CrosswordCell extends ConsumerWidget {
     );
 
     // Accessibility: semantic label for screen readers
+    final entries = ref.watch(
+      cellEntriesIndexProvider.select((m) => m[cellKey]),
+    );
     final semanticLabel = _buildSemanticLabel(
       row: row,
       col: col,
       letter: letter,
       cellNumber: cellNumber,
       isSelected: isSelected,
+      entries: entries,
     );
 
     return Semantics(
@@ -240,9 +243,10 @@ class CrosswordCell extends ConsumerWidget {
           if (wasSelected) {
             // wordDirection is non-null when isSelected is true
             final currentDir = wordDirection!;
-            final newDir = currentDir == WordDirection.horizontal
-                ? WordDirection.vertical
-                : WordDirection.horizontal;
+            final newDir =
+                currentDir == WordDirection.horizontal
+                    ? WordDirection.vertical
+                    : WordDirection.horizontal;
             ref.read(wordDirectionProvider.notifier).setDirection(newDir);
           }
         },
@@ -303,11 +307,12 @@ class _OuterBorderPainter extends CustomPainter {
     if (width <= 0) {
       return;
     }
-    final paint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = width
-      ..isAntiAlias = true;
+    final paint =
+        Paint()
+          ..color = color
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = width
+          ..isAntiAlias = true;
 
     // Expand the rect by half the stroke width so the inner edge of the
     // stroke aligns with the child's original bounds. This effectively
@@ -347,23 +352,24 @@ class _CellContent extends StatelessWidget {
         Theme.of(context).extension<CrosswordThemeColors>() ??
         CrosswordThemeColors.defaults;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final blackLetterColor = ext.blackCellColor.computeLuminance() < 0.5
-        ? Colors.white
-        : Colors.black;
+    final blackLetterColor =
+        ext.blackCellColor.computeLuminance() < 0.5
+            ? Colors.white
+            : Colors.black;
 
     final numberStyle = TextStyle(
       fontSize: 9,
-      color: isBlack
-          ? blackLetterColor.withAlpha((0.58 * 255).round())
-          : scheme.onSurface.withAlpha((0.58 * 255).round()),
+      color:
+          isBlack
+              ? blackLetterColor.withAlpha((0.58 * 255).round())
+              : scheme.onSurface.withAlpha((0.58 * 255).round()),
       fontWeight: FontWeight.w400,
     );
     final letterStyle = TextStyle(
       fontSize: 26,
       fontWeight: FontWeight.bold,
-      color: isBlack
-          ? blackLetterColor
-          : (isDark ? Colors.white : Colors.black),
+      color:
+          isBlack ? blackLetterColor : (isDark ? Colors.white : Colors.black),
     );
     final selectedLetterStyle = TextStyle(
       fontSize: 30,
@@ -403,9 +409,10 @@ String _buildSemanticLabel({
   required String? letter,
   required int? cellNumber,
   required bool isSelected,
+  required List<PuzzleEntryData>? entries,
 }) {
-  final buffer = StringBuffer()
-    ..write('Cell row ${row + 1}, column ${col + 1}');
+  final buffer =
+      StringBuffer()..write('Cell row ${row + 1}, column ${col + 1}');
   if (cellNumber != null) {
     buffer.write(', number $cellNumber');
   }
@@ -417,5 +424,13 @@ String _buildSemanticLabel({
   if (isSelected) {
     buffer.write(', selected');
   }
+
+  if (entries != null && entries.isNotEmpty) {
+    for (final e in entries) {
+      final dir = e.directionEnum == EntryDirection.across ? 'Across' : 'Down';
+      buffer.write(', $dir: ${e.clue}');
+    }
+  }
+
   return buffer.toString();
 }

@@ -21,16 +21,17 @@ class ClueBannerContainer extends ConsumerWidget {
 
   /// Fixed height for the clue banner - MUST NOT CHANGE.
   /// Text adapts to fit within this fixed space.
-  static const double fixedHeight = 80;
+  static const double fixedHeight = 96;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
-        final newDir = entry.direction == 'across'
-            ? WordDirection.vertical
-            : WordDirection.horizontal;
+        final newDir =
+            entry.direction == 'across'
+                ? WordDirection.vertical
+                : WordDirection.horizontal;
         ref.read(wordDirectionProvider.notifier).setDirection(newDir);
       },
       behavior: HitTestBehavior.opaque,
@@ -48,9 +49,10 @@ class ClueBannerContainer extends ConsumerWidget {
           ),
           alignment: Alignment.center,
           child: _AutoSizeClueText(
-            text: entry.clue == null || entry.clue!.isEmpty
-                ? '${entry.number}.'
-                : '${entry.number}. ${entry.clue!}',
+            text:
+                entry.clue == null || entry.clue!.isEmpty
+                    ? '${entry.number}.'
+                    : '${entry.number}. ${entry.clue!}',
             style: TextStyle(
               color: colorScheme.onSurface,
               fontSize: ResponsiveFontSize.bodyLarge,
@@ -73,10 +75,7 @@ class ClueBannerContainer extends ConsumerWidget {
 ///
 /// Supports `<i>text</i>` tags for italic formatting.
 class _AutoSizeClueText extends StatelessWidget {
-  const _AutoSizeClueText({
-    required this.text,
-    required this.style,
-  });
+  const _AutoSizeClueText({required this.text, required this.style});
 
   final String text;
   final TextStyle style;
@@ -94,25 +93,26 @@ class _AutoSizeClueText extends StatelessWidget {
     for (final match in regex.allMatches(input)) {
       // Add text before the match (normal style)
       if (match.start > lastEnd) {
-        spans.add(TextSpan(
-          text: input.substring(lastEnd, match.start),
-          style: baseStyle,
-        ));
+        spans.add(
+          TextSpan(
+            text: input.substring(lastEnd, match.start),
+            style: baseStyle,
+          ),
+        );
       }
       // Add the matched text (italic style)
-      spans.add(TextSpan(
-        text: match.group(1),
-        style: baseStyle.copyWith(fontStyle: FontStyle.italic),
-      ));
+      spans.add(
+        TextSpan(
+          text: match.group(1),
+          style: baseStyle.copyWith(fontStyle: FontStyle.italic),
+        ),
+      );
       lastEnd = match.end;
     }
 
     // Add remaining text after last match
     if (lastEnd < input.length) {
-      spans.add(TextSpan(
-        text: input.substring(lastEnd),
-        style: baseStyle,
-      ));
+      spans.add(TextSpan(text: input.substring(lastEnd), style: baseStyle));
     }
 
     // If no matches found, return the whole text as a single span
@@ -129,10 +129,17 @@ class _AutoSizeClueText extends StatelessWidget {
       final maxWidth = constraints.maxWidth;
       final maxHeight = constraints.maxHeight;
       final baseFontSize = style.fontSize ?? 16;
-      
+
       // Try decreasing font sizes until text fits
-      for (var fontSize = baseFontSize; fontSize >= _minFontSize; fontSize -= 0.5) {
-        final testStyle = style.copyWith(fontSize: fontSize, height: _lineHeight);
+      for (
+        var fontSize = baseFontSize;
+        fontSize >= _minFontSize;
+        fontSize -= 0.5
+      ) {
+        final testStyle = style.copyWith(
+          fontSize: fontSize,
+          height: _lineHeight,
+        );
         final spans = _parseItalicTags(text, testStyle);
         final tp = TextPainter(
           text: TextSpan(children: spans),
@@ -155,7 +162,10 @@ class _AutoSizeClueText extends StatelessWidget {
       }
 
       // Fallback: minimum font size with ellipsis
-      final minStyle = style.copyWith(fontSize: _minFontSize, height: _lineHeight);
+      final minStyle = style.copyWith(
+        fontSize: _minFontSize,
+        height: _lineHeight,
+      );
       final fallbackSpans = _parseItalicTags(text, minStyle);
       return Center(
         child: RichText(

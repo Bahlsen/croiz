@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/core/theme.dart';
+import 'package:croiz/core/crossword_theme_colors.dart';
 
 void main() {
   testWidgets(

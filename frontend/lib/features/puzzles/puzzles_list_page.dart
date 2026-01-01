@@ -7,7 +7,7 @@ import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/language_filter_selector.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
-import 'package:croiz/features/puzzles/widgets/puzzle_list_tile_enhanced.dart';
+import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:croiz/features/puzzles/widgets/generated_filter_chip.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_search_bar.dart';
 import 'package:croiz/core/responsive/responsive.dart';
@@ -37,26 +37,26 @@ class PuzzlesListPage extends ConsumerWidget {
         actions: [
           // Show puzzle count
           puzzlesAsync.whenOrNull(
-                data: (puzzles) => Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Center(
-                    child: Text(
-                      '${puzzles.length}',
-                      style: Theme.of(context).textTheme.bodyMedium,
+                data:
+                    (puzzles) => Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: Center(
+                        child: Text(
+                          '${puzzles.length}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ) ??
               const SizedBox.shrink(),
         ],
       ),
-      backgroundColor: isLight
-          ? Colors.white
-          : Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor:
+          isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
       body: _buildBody(context, ref, puzzlesAsync),
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.auto_awesome),
-        label: const Text('Générer'),
+        label: Text(AppLocalizations.of(context)?.generateButton ?? 'GENERATE'),
         onPressed: () {
           showDialog(
             context: context,
@@ -71,11 +71,12 @@ class PuzzlesListPage extends ConsumerWidget {
     await showDialog<void>(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Stack(
-        children: [
-          CrosswordControlsMenu(onClose: () => Navigator.of(context).pop()),
-        ],
-      ),
+      builder:
+          (context) => Stack(
+            children: [
+              CrosswordControlsMenu(onClose: () => Navigator.of(context).pop()),
+            ],
+          ),
     );
   }
 
@@ -85,11 +86,13 @@ class PuzzlesListPage extends ConsumerWidget {
     AsyncValue<List<PuzzleDescriptor>> puzzlesAsync,
   ) => puzzlesAsync.when(
     loading: () => const Center(child: CircularProgressIndicator()),
-    error: (e, st) => Center(
-      child: Text(
-        AppLocalizations.of(context)?.errorLoading ?? 'Error loading puzzles',
-      ),
-    ),
+    error:
+        (e, st) => Center(
+          child: Text(
+            AppLocalizations.of(context)?.errorLoading ??
+                'Error loading puzzles',
+          ),
+        ),
     data: (allPuzzles) => _buildContent(context, ref, allPuzzles),
   );
 
@@ -136,7 +139,7 @@ class PuzzlesListPage extends ConsumerWidget {
           child: Row(
             children: [
               Text(
-                '${filteredPuzzles.length} puzzles',
+                '${filteredPuzzles.length} ${AppLocalizations.of(context)?.puzzles ?? 'puzzles'}',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -154,14 +157,12 @@ class PuzzlesListPage extends ConsumerWidget {
         // Puzzle list with performance optimizations
         Expanded(
           child: ListView.builder(
-            // Fixed height for O(1) scroll calculation
-            itemExtent: 72,
             // Pre-render for smooth scrolling
             cacheExtent: 500,
             itemCount: filteredPuzzles.length,
             itemBuilder: (context, index) {
               final puzzle = filteredPuzzles[index];
-              return PuzzleListTileEnhanced(descriptor: puzzle);
+              return PuzzleCard(descriptor: puzzle);
             },
           ),
         ),
