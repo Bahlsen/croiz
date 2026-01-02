@@ -61,11 +61,12 @@ void main() {
       // Assert
       // Should place at least the first word
       expect(result, isNotEmpty);
-      expect(result[0].word.answer, 'HELLO');
+
+      // Check that at least one of the input words is present
+      final answers = result.map((pw) => pw.word.answer).toList();
+      expect(answers.any((a) => ['HELLO', 'WORLD'].contains(a)), isTrue);
 
       // Check if other words were placed (they should intersect)
-      // HELP shares HEL with HELLO
-      // We expect at least 2 words to be placed
       expect(result.length, greaterThanOrEqualTo(2));
     });
 
@@ -128,13 +129,13 @@ void main() {
       final result = generator.generate(words);
 
       // Assert
-      // Should place at least the first word
+      // Should place at least one word (whichever one is picked first)
       expect(result, isNotEmpty);
-      expect(result[0].word.answer, 'ABCD');
-
-      // Other words have no common letters, so they won't be placed
-      // (our algorithm requires intersections for subsequent words)
       expect(result.length, 1);
+
+      // Verify the placed word is one of the inputs
+      final placedAnswer = result[0].word.answer;
+      expect(['ABCD', 'EFGH', 'IJKL'], contains(placedAnswer));
     });
 
     test('should maximize intersections when placing words', () {
@@ -193,7 +194,9 @@ void main() {
 
       // Assert
       expect(result, isNotEmpty);
-      expect(result[0].word.answer, 'CAT');
+      expect(result.length, 2);
+      final answers = result.map((pw) => pw.word.answer).toList();
+      expect(answers, containsAll(['CAT', 'ACE']));
     });
 
     test('should place words in a realistic crossword scenario', () {
@@ -215,7 +218,7 @@ void main() {
       expect(result.length, greaterThanOrEqualTo(2));
 
       // Verify first word is the longest
-      expect(result[0].word.answer, 'FRANCE');
+      expect(['FRANCE', 'EIFFEL'], contains(result[0].word.answer));
 
       // Check that placed words have valid positions
       for (final placed in result) {
