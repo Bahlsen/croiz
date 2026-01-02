@@ -130,10 +130,12 @@ class WordCompletionChecker {
     GameBoard board;
     try {
       board = readBoard();
-      // ignore: avoid_catching_errors
-    } on StateError {
-      // Board no longer available (disposed or reset) — skip check.
-      return;
+    } on Object catch (e) {
+      if (e is StateError) {
+        // Board no longer available (disposed or reset) — skip check.
+        return;
+      }
+      rethrow;
     }
     final entries = board.entries;
 
@@ -217,9 +219,8 @@ class WordCompletionChecker {
     // If all words found -> finalize timer and play victory sound
     try {
       final totalEntries = entries.length;
-      final currentFoundCount = newFoundWords != null
-          ? newFoundWords.length
-          : foundWords.length;
+      final currentFoundCount =
+          newFoundWords != null ? newFoundWords.length : foundWords.length;
 
       if (totalEntries > 0 && currentFoundCount == totalEntries) {
         try {
@@ -292,10 +293,10 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   readLockedCells: () => read<Set<CellKey>>(lockedCellsProvider),
   writeLockedCells: (v) => read(lockedCellsProvider.notifier).setLockedCells(v),
   readFlashingCells: () => read<Set<CellKey>>(flashingCellsProvider),
-  writeFlashingCells: (v) =>
-      read(flashingCellsProvider.notifier).setFlashingCells(v),
-  readCellEntriesIndex: () =>
-      read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
+  writeFlashingCells:
+      (v) => read(flashingCellsProvider.notifier).setFlashingCells(v),
+  readCellEntriesIndex:
+      () => read<Map<CellKey, List<PuzzleEntryData>>>(cellEntriesIndexProvider),
   readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
   readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
   readAudioMuted: () => read<bool>(gameAudioMutedProvider),

@@ -77,8 +77,8 @@ class PuzzleConverter {
       // Crop provided answer if present to match effectiveLength
       final croppedAnswer =
           entry.answer != null && entry.answer!.length >= effectiveLength
-          ? entry.answer!.substring(0, effectiveLength)
-          : entry.answer;
+              ? entry.answer!.substring(0, effectiveLength)
+              : entry.answer;
 
       entries.add(
         PuzzleEntryData(
@@ -176,6 +176,7 @@ class PuzzleConverter {
 
     final metadata = puzzle.metadata ?? {};
     final title = metadata['title']?.toString() ?? 'Puzzle ${puzzle.id}';
+    final language = metadata['language']?.toString() ?? 'en';
 
     return GameBoard(
       id: puzzle.id,
@@ -188,6 +189,7 @@ class PuzzleConverter {
       difficulty: 1, // Can be extracted from metadata if present
       entries: entries,
       solutionGrid: solutionGrid,
+      language: language,
     );
   }
 }

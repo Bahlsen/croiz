@@ -22,7 +22,6 @@ void main() {
     try {
       tmp.deleteSync(recursive: true);
     } on Object catch (_) {
-      // ignore: avoid_catching_errors
       // ignore cleanup errors in test teardown
     }
   });

@@ -179,7 +179,6 @@ $jsonFormat
   }
 }
 
-// Simplified provider - no more API key needed!
 final geminiPuzzleServiceProvider = Provider<GeminiPuzzleService>(
   (ref) => GeminiPuzzleService(),
 );

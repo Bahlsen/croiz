@@ -47,26 +47,27 @@ class CrosswordInputController {
       WordCompletionChecker.fromReaders(
         readBoard: _safeReadBoard,
         readFoundWords: () => _read<Set<String>>(foundWordsProvider),
-        writeFoundWords: (v) =>
-            _read(foundWordsProvider.notifier).setFoundWords(v),
+        writeFoundWords:
+            (v) => _read(foundWordsProvider.notifier).setFoundWords(v),
         readLockedCells: () => _read<Set<CellKey>>(lockedCellsProvider),
-        writeLockedCells: (v) =>
-            _read(lockedCellsProvider.notifier).setLockedCells(v),
+        writeLockedCells:
+            (v) => _read(lockedCellsProvider.notifier).setLockedCells(v),
         readFlashingCells: () => _read<Set<CellKey>>(flashingCellsProvider),
-        writeFlashingCells: (v) =>
-            _read(flashingCellsProvider.notifier).setFlashingCells(v),
-        readCellEntriesIndex: () => _read<Map<CellKey, List<PuzzleEntryData>>>(
-          cellEntriesIndexProvider,
-        ),
+        writeFlashingCells:
+            (v) => _read(flashingCellsProvider.notifier).setFlashingCells(v),
+        readCellEntriesIndex:
+            () => _read<Map<CellKey, List<PuzzleEntryData>>>(
+              cellEntriesIndexProvider,
+            ),
         readWordCheckService: () => _read(wordCheckServiceProvider),
         readGameAudioService: () => _read(gameAudioServiceProvider),
         readAudioMuted: () => _read<bool>(gameAudioMutedProvider),
         readEndGameService: () => _read(endGameServiceProvider),
         readFlashClearDelay: () => _read<Duration>(flashClearDelayProvider),
-        readCheckDebounceDelay: () =>
-            _read<Duration>(wordCheckDebounceDelayProvider),
-        finalizeTimer: (boardId) =>
-            _read(gameTimerProvider(boardId)).finalizeSync(),
+        readCheckDebounceDelay:
+            () => _read<Duration>(wordCheckDebounceDelayProvider),
+        finalizeTimer:
+            (boardId) => _read(gameTimerProvider(boardId)).finalizeSync(),
       );
 
   GameBoard _safeReadBoard() {
@@ -158,10 +159,10 @@ class CrosswordInputController {
   // ─────────────────────────────────────────────────────────────────────────
 
   /// Find the previous cell within the same entry (for backspace on empty cell).
-  /// 
+  ///
   /// If [allowLocked] is true, returns locked cells too (caller should check
   /// before clearing). If false, skips locked cells.
-  /// 
+  ///
   /// If we're at the first cell of an entry, this returns the last cell of
   /// the previous entry in the same direction (skipping black cells).
   SelectedCell? _findPreviousCellInEntry(
@@ -231,7 +232,7 @@ class CrosswordInputController {
   }
 
   /// Find the last cell of the previous entry in the same direction.
-  /// 
+  ///
   /// This is used when we're at the first cell of an entry and need to
   /// jump to the previous word (skipping black cells).
   SelectedCell? _findLastCellOfPreviousEntry(
@@ -243,12 +244,11 @@ class CrosswordInputController {
     bool allowLocked = false,
   }) {
     final direction = isAcross ? 'across' : 'down';
-    
+
     // Get all entries in the same direction, sorted by position
-    final sameDirectionEntries = entries
-        .where((e) => e.direction == direction)
-        .toList();
-    
+    final sameDirectionEntries =
+        entries.where((e) => e.direction == direction).toList();
+
     // Sort by position: for across, sort by (y, x); for down, sort by (x, y)
     if (isAcross) {
       sameDirectionEntries.sort((a, b) {
@@ -264,7 +264,10 @@ class CrosswordInputController {
 
     // Find current entry's index
     final currentIndex = sameDirectionEntries.indexWhere(
-      (e) => e.x == currentEntry.x && e.y == currentEntry.y && e.direction == currentEntry.direction,
+      (e) =>
+          e.x == currentEntry.x &&
+          e.y == currentEntry.y &&
+          e.direction == currentEntry.direction,
     );
 
     if (currentIndex <= 0) {
@@ -274,7 +277,7 @@ class CrosswordInputController {
 
     // Get the previous entry
     final prevEntry = sameDirectionEntries[currentIndex - 1];
-    
+
     // Calculate the last cell of the previous entry
     final lastRow = isAcross ? prevEntry.y : prevEntry.y + prevEntry.length - 1;
     final lastCol = isAcross ? prevEntry.x + prevEntry.length - 1 : prevEntry.x;
@@ -337,7 +340,9 @@ class CrosswordInputController {
         // Only clear if not locked
         final prevKey = CellKey(prevCell.row, prevCell.col);
         if (!lockedCells.contains(prevKey)) {
-          _read(gameBoardProvider.notifier).setLetter(prevCell.row, prevCell.col, '');
+          _read(
+            gameBoardProvider.notifier,
+          ).setLetter(prevCell.row, prevCell.col, '');
         }
       }
       return;
@@ -430,8 +435,8 @@ class CrosswordInputController {
             if (otherContaining != null) {
               final newDir =
                   (otherContaining.directionEnum == EntryDirection.across)
-                  ? WordDirection.horizontal
-                  : WordDirection.vertical;
+                      ? WordDirection.horizontal
+                      : WordDirection.vertical;
               _read(wordDirectionProvider.notifier).setDirection(newDir);
             }
           }
@@ -577,7 +582,8 @@ class CrosswordInputController {
     final keyLabel = logical.keyLabel;
     if (keyLabel.length == 1) {
       final char = keyLabel.toUpperCase();
-      if (RegExp(r'[A-ZÀ-ÖØ-Ý]', unicode: true).hasMatch(char)) {
+      // Allow Latin (A-Z, accents) and Cyrillic (0400-04FF, 0500-052F for supplement)
+      if (RegExp(r'[A-ZÀ-ÖØ-Ý\u0400-\u052F]', unicode: true).hasMatch(char)) {
         setLetterAndAdvance(char);
       }
     }

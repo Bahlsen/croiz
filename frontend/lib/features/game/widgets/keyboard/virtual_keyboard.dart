@@ -87,6 +87,17 @@ class VirtualKeyboard extends ConsumerWidget {
     ['Z', 'X', 'C', 'V', 'B', 'N', 'M', backspaceToken],
   ];
 
+  /// Ukrainian layout with backspace included.
+  /// Standard layout:
+  /// Й Ц У К Е Н Г Ш Щ З Х Ї
+  /// Ф І В А П Р О Л Д Ж Є
+  /// Ґ Я Ч С М И Т Ь Б Ю
+  static const List<List<String>> ukrainianLayout = [
+    ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ї'],
+    ['Ф', 'І', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Є'],
+    ['Ґ', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', backspaceToken],
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final rows = _buildRows();

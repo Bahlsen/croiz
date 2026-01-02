@@ -1,5 +1,3 @@
-// ignore: unused_import
-import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -237,7 +235,8 @@ class AppLocalizationsFr extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirmer Tout Révéler';
 
   @override
-  String get revealAllConfirmationMessage => 'Êtes-vous sûr de vouloir révéler tout le puzzle ?';
+  String get revealAllConfirmationMessage =>
+      'Êtes-vous sûr de vouloir révéler tout le puzzle ?';
 
   @override
   String get yes => 'Oui';

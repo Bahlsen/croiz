@@ -37,8 +37,16 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   @override
   Widget build(BuildContext context) {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
+    final board = ref.watch(gameBoardProvider.select((b) => b));
+    final language = board.language.toLowerCase();
+    final isCyrillic = ['uk', 'ua', 'ru'].contains(language);
+
     final layout =
-        isAzerty ? VirtualKeyboard.azertyLayout : VirtualKeyboard.qwertyLayout;
+        isCyrillic
+            ? VirtualKeyboard.ukrainianLayout
+            : (isAzerty
+                ? VirtualKeyboard.azertyLayout
+                : VirtualKeyboard.qwertyLayout);
     final kbSize = ref.watch(gameKeyboardSizeProvider);
 
     // Map keyboard size to responsive key height and font size.
