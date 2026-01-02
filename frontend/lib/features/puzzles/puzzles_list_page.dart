@@ -63,28 +63,29 @@ class PuzzlesListPage extends ConsumerWidget {
           );
 
           if (puzzleId != null && context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                duration: const Duration(seconds: 5),
-                content: Text(
-                  AppLocalizations.of(context)?.successMessage ??
-                      'Puzzle generated successfully!',
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 4),
+                  content: Text(
+                    AppLocalizations.of(context)?.successMessage ??
+                        'Puzzle generated successfully!',
+                  ),
+                  action: SnackBarAction(
+                    label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
+                    onPressed: () {
+                      // Hide immediately on tap to avoid "never disappears" feeling
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      if (context.mounted) {
+                        final encodedId = Uri.encodeComponent(puzzleId);
+                        context.push('/crossword?id=$encodedId');
+                      }
+                    },
+                  ),
                 ),
-                action: SnackBarAction(
-                  label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
-                  onPressed: () {
-                    if (context.mounted) {
-                      context.push(
-                        Uri(
-                          path: '/crossword',
-                          queryParameters: {'id': puzzleId},
-                        ).toString(),
-                      );
-                    }
-                  },
-                ),
-              ),
-            );
+              );
           }
         },
       ),

@@ -200,6 +200,7 @@ class PuzzleCard extends ConsumerWidget {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              duration: const Duration(seconds: 4),
               content: Text(
                 AppLocalizations.of(context)?.successMessage ??
                     'Puzzle deleted successfully',
