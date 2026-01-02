@@ -65,6 +65,7 @@ class PuzzlesListPage extends ConsumerWidget {
           if (puzzleId != null && context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                duration: const Duration(seconds: 5),
                 content: Text(
                   AppLocalizations.of(context)?.successMessage ??
                       'Puzzle generated successfully!',
@@ -72,9 +73,14 @@ class PuzzlesListPage extends ConsumerWidget {
                 action: SnackBarAction(
                   label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
                   onPressed: () {
-                    // Navigate to game
-                    // Use go_router which should be available here
-                    GoRouter.of(context).push('/game/$puzzleId');
+                    if (context.mounted) {
+                      context.push(
+                        Uri(
+                          path: '/crossword',
+                          queryParameters: {'id': puzzleId},
+                        ).toString(),
+                      );
+                    }
                   },
                 ),
               ),
