@@ -42,7 +42,7 @@ class GeminiPuzzleService {
   Future<List<GeneratedWord>> generateWords({
     required String topic,
     required String language, // 'fr', 'en'
-    int count = 25,
+    int count = 40, // Increased from 25 to provide more placement options
     int difficultyLevel = 2, // 1-5
   }) async {
     final prompt = buildPrompt(topic, language, count, difficultyLevel);
@@ -186,7 +186,8 @@ class GeminiPuzzleService {
     }
 
     return '''
-Generate a list of $count distinct crossword puzzle words related to the topic: "$topic".
+Generate a list of $count distinct, diverse crossword puzzle words related to the topic: "$topic".
+Ensure variety in word lengths (mix of short 3-5 letter words and longer 8-15 letter words) to maximize grid density.
 Language: $langName.
 Difficulty Level: $difficulty/5.
 

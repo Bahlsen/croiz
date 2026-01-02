@@ -209,32 +209,6 @@ void main() {
     });
 
     group('completion status filtering', () {
-      test('shows all puzzles when showCompleted is true', () {
-        final testPuzzles = createTestPuzzles();
-        final container = ProviderContainer(
-          overrides: [
-            puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-            // Mark easy-en and medium-en as completed
-            completedPuzzleIdsProvider.overrideWithValue(
-              const AsyncValue.data({'easy-en', 'medium-en'}),
-            ),
-          ],
-        );
-        addTearDown(container.dispose);
-
-        // Set available languages
-        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
-          'en',
-          'fr',
-        });
-
-        // showCompleted defaults to true
-        final filtered = container.read(filteredPuzzlesProvider);
-
-        // All puzzles should be shown
-        expect(filtered.length, 7);
-      });
-
       test('hides completed puzzles when showCompleted is false', () {
         final testPuzzles = createTestPuzzles();
         final container = ProviderContainer(

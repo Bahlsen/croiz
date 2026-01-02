@@ -27,9 +27,10 @@ class GridGenerator {
 
   /// Main entry point: attempts to place as many words as possible.
   /// Uses a random restart strategy to find the best layout.
+  /// Increased attempts from 100 to 150 for better optimization with 40 words.
   List<PlacedWord> generate(
     List<GeneratedWord> words, {
-    int attempts = 100,
+    int attempts = 150, // Increased from 100
     String? language,
   }) {
     if (words.isEmpty) {
@@ -61,11 +62,11 @@ class GridGenerator {
             // and put it first.
             ..sort((a, b) => b.answer.length.compareTo(a.answer.length));
 
-      // Pick one of the top 3 as start (or fewer if list small)
+      // Pick one of the top 5 longest words as start (increased from 3)
       // Then shuffle the rest
-      if (shuffled.length > 3) {
-        final top = shuffled.sublist(0, 3)..shuffle();
-        final rest = shuffled.sublist(3)..shuffle();
+      if (shuffled.length > 5) {
+        final top = shuffled.sublist(0, 5)..shuffle();
+        final rest = shuffled.sublist(5)..shuffle();
         shuffled
           ..clear()
           ..addAll(top)
@@ -151,9 +152,10 @@ class GridGenerator {
     final density = filledCells / (area > 0 ? area : 1);
 
     // Weighting:
-    // Word Count is King.
-    // Density is Queen.
-    return (wordCount * 1000.0) + (density * 100.0);
+    // Word Count is King - heavily prioritize placing more words
+    // Density is Queen - compact grids are more aesthetic
+    // Increased word count weight to strongly favor more placements
+    return (wordCount * 2000.0) + (density * 200.0); // Doubled weights
   }
 
   /// Single pass generation logic with multi-pass retry for rejected words
@@ -190,7 +192,8 @@ class GridGenerator {
     // Multi-pass placement: keep trying until no progress is made
     var madeProgress = true;
     var passCount = 0;
-    const maxPasses = 5; // Limit total passes to avoid infinite loops
+    const maxPasses =
+        7; // Increased from 5 to allow more refinement with 40 words
 
     while (madeProgress && passCount < maxPasses) {
       madeProgress = false;
@@ -534,13 +537,17 @@ class GridGenerator {
 
     // Multi-intersection bonus: exponentially reward words that connect at multiple points
     // This creates a more "woven" structure that's harder to place words into gaps
+    // Increased bonus to strongly favor multi-intersections
     final multiIntersectionBonus =
-        intersections > 1 ? intersections * intersections * 50.0 : 0.0;
+        intersections > 1
+            ? intersections * intersections * 100.0
+            : 0.0; // Doubled from 50
 
     // Final Score: Rewards hard intersections, long words, and multi-connections
     // We boost the base value of an intersection to ensure it's always worth it
+    // Increased intersection base score from 200 to 300 to favor more crossings
     return weightedIntersectionScore +
-        (intersections * 200.0) +
+        (intersections * 300.0) + // Increased from 200
         lengthBonus +
         multiIntersectionBonus;
   }
