@@ -100,7 +100,7 @@ class PuzzleCard extends ConsumerWidget {
                                       ).toUpperCase(),
                                       style: TextStyle(
                                         color: colors.last,
-                                        fontSize: 8.sp,
+                                        fontSize: 10.sp,
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: 0.5,
                                       ),
@@ -112,7 +112,7 @@ class PuzzleCard extends ConsumerWidget {
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 13.sp,
+                                              fontSize: 16.sp,
                                               letterSpacing: -0.3,
                                               decoration:
                                                   isCompleted

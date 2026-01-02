@@ -345,7 +345,7 @@ class _InProgressCard extends ConsumerWidget {
                             puzzle.descriptor.title,
                             style: theme.textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.bold,
-                              fontSize: 12.sp,
+                              fontSize: 14.sp,
                               letterSpacing: -0.5,
                             ),
                             maxLines: 1,
@@ -378,7 +378,7 @@ class _InProgressCard extends ConsumerWidget {
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: colors.last.withValues(alpha: 0.8),
                                 fontWeight: FontWeight.w800,
-                                fontSize: 7.sp,
+                                fontSize: 9.sp,
                                 letterSpacing: 0.5,
                               ),
                             ),
