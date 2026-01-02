@@ -191,7 +191,7 @@ class ContinuePlayingSection extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 20.h,
+              height: 155, // Height to fit all info comfortably
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -245,23 +245,25 @@ class _InProgressCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final difficultyColors = _getDifficultyColors(puzzle.descriptor.difficulty);
 
     return Container(
-      width: 180,
-      margin: const EdgeInsets.all(8),
+      width: 180, // Balanced width for all info
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey.shade900 : Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
-            blurRadius: 8,
+            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
         border: Border.all(
-          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
+          color:
+              isDark
+                  ? Colors.white.withValues(alpha: 0.1)
+                  : Colors.black.withValues(alpha: 0.05),
           width: 1,
         ),
       ),
@@ -271,99 +273,65 @@ class _InProgressCard extends ConsumerWidget {
           onTap: () => _navigateToPuzzle(context, ref),
           borderRadius: BorderRadius.circular(16),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Title
-                Text(
-                  puzzle.descriptor.title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12.sp,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                // Difficulty tag
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        difficultyColors.first.withValues(alpha: 0.8),
-                        difficultyColors.last.withValues(alpha: 0.8),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Builder(
-                    builder: (context) {
-                      final l10n = AppLocalizations.of(context);
-                      String label;
-                      switch (puzzle.descriptor.difficulty) {
-                        case 1:
-                          label = l10n?.easy ?? 'Easy';
-                          break;
-                        case 2:
-                          label = l10n?.medium ?? 'Medium';
-                          break;
-                        case 3:
-                          label = l10n?.hard ?? 'Hard';
-                          break;
-                        case 4:
-                          label = l10n?.expert ?? 'Expert';
-                          break;
-                        case 5:
-                          label = l10n?.pro ?? 'Pro';
-                          break;
-                        default:
-                          label = puzzle.descriptor.difficultyLabel;
-                      }
-                      return Text(
-                        label.toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const Spacer(),
-                // Progress and time row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${puzzle.completionPercent}%',
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    _DifficultyIndicator(
+                      difficulty: puzzle.descriptor.difficulty,
                     ),
                     Text(
                       _formatTime(puzzle.progress.elapsedSeconds),
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.6,
+                          alpha: 0.7,
                         ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 8.sp,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                // Progress bar
+                const SizedBox(height: 10),
+                // Title (Readable and Bold)
+                Expanded(
+                  child: Text(
+                    puzzle.descriptor.title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14.sp,
+                      height: 1.1,
+                      letterSpacing: -0.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                // Progress Label
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${puzzle.completionPercent}%',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                // Progress Bar
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(3),
                   child: LinearProgressIndicator(
                     value: puzzle.completionPercent / 100,
-                    minHeight: 6,
+                    minHeight: 4,
                     backgroundColor: theme.colorScheme.surfaceContainerHighest,
                     valueColor: AlwaysStoppedAnimation<Color>(
                       theme.colorScheme.primary,
@@ -377,8 +345,26 @@ class _InProgressCard extends ConsumerWidget {
       ),
     );
   }
+}
 
-  List<Color> _getDifficultyColors(int difficulty) {
+class _DifficultyIndicator extends StatelessWidget {
+  const _DifficultyIndicator({required this.difficulty});
+  final int difficulty;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = _getColors();
+    return Container(
+      width: 40,
+      height: 6,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        gradient: LinearGradient(colors: colors),
+      ),
+    );
+  }
+
+  List<Color> _getColors() {
     switch (difficulty) {
       case 1:
         return [Colors.green, Colors.teal];
