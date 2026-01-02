@@ -232,4 +232,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get clearFilters => 'Effacer les filtres';
+
+  @override
+  String get revealAllConfirmationTitle => 'Confirmer Tout Révéler';
+
+  @override
+  String get revealAllConfirmationMessage => 'Êtes-vous sûr de vouloir révéler tout le puzzle ?';
+
+  @override
+  String get yes => 'Oui';
+
+  @override
+  String get no => 'Non';
 }

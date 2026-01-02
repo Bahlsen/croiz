@@ -30,7 +30,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get selectLanguage => 'Виберіть мову';
 
   @override
-  String get selectAWord => 'Select a word';
+  String get selectAWord => 'Виберіть слово';
 
   @override
   String get menu => 'Меню';
@@ -137,43 +137,43 @@ class AppLocalizationsUk extends AppLocalizations {
   String get qwerty => 'QWERTY';
 
   @override
-  String get generatorTitle => 'Puzzle Generator';
+  String get generatorTitle => 'Генератор головоломок';
 
   @override
-  String get topicLabel => 'Topic (e.g. Science, Travel...)';
+  String get topicLabel => 'Тема (напр. Наука, Подорожі...)';
 
   @override
-  String get topicHint => 'Enter a topic';
+  String get topicHint => 'Введіть тему';
 
   @override
-  String get languageLabel => 'Language';
+  String get languageLabel => 'Мова';
 
   @override
-  String get difficultyLabel => 'Difficulty';
+  String get difficultyLabel => 'Складність';
 
   @override
-  String get sizeLabel => 'Grid Size';
+  String get sizeLabel => 'Розмір сітки';
 
   @override
-  String get generateButton => 'GENERATE';
+  String get generateButton => 'ЗГЕНЕРУВАТИ';
 
   @override
-  String get generating => 'Generating...';
+  String get generating => 'Генерація...';
 
   @override
-  String get successMessage => 'Puzzle generated successfully!';
+  String get successMessage => 'Головоломку успішно створено!';
 
   @override
-  String get playButton => 'PLAY';
+  String get playButton => 'ГРАТИ';
 
   @override
-  String get errorTopicMissing => 'Please enter a topic';
+  String get errorTopicMissing => 'Будь ласка, введіть тему';
 
   @override
-  String get quick => 'Quick';
+  String get quick => 'Швидкий';
 
   @override
-  String get standard => 'Standard';
+  String get standard => 'Стандартний';
 
   @override
   String get continuePlaying => 'Продовжити';
@@ -201,35 +201,47 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String semanticCellRowColumn(Object col, Object row) {
-    return 'Cell row $row, column $col';
+    return 'Комірка рядок $row, стовпчик $col';
   }
 
   @override
   String semanticCellNumber(Object number) {
-    return 'number $number';
+    return 'номер $number';
   }
 
   @override
   String semanticCellLetter(Object letter) {
-    return 'letter $letter';
+    return 'літера $letter';
   }
 
   @override
-  String get semanticCellEmpty => 'empty';
+  String get semanticCellEmpty => 'пусто';
 
   @override
-  String get semanticCellSelected => 'selected';
+  String get semanticCellSelected => 'вибрано';
 
   @override
   String semanticClueAcross(Object clue) {
-    return 'Across: $clue';
+    return 'По горизонталі: $clue';
   }
 
   @override
   String semanticClueDown(Object clue) {
-    return 'Down: $clue';
+    return 'По вертикалі: $clue';
   }
 
   @override
-  String get clearFilters => 'Clear filters';
+  String get clearFilters => 'Очистити фільтри';
+
+  @override
+  String get revealAllConfirmationTitle => 'Підтвердити розкриття всього';
+
+  @override
+  String get revealAllConfirmationMessage => 'Ви впевнені, що хочете розкрити весь кросворд?';
+
+  @override
+  String get yes => 'Так';
+
+  @override
+  String get no => 'Ні';
 }

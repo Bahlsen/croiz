@@ -305,9 +305,36 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     }
   }
 
-  void _revealAll() {
+  Future<void> _revealAll() async {
     setState(() => _revealOpen = false);
-    ref.read(gameBoardProvider.notifier).revealAll();
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        final loc = AppLocalizations.of(context);
+        return AlertDialog(
+          title: Text(loc?.revealAllConfirmationTitle ?? 'Confirm Reveal All'),
+          content: Text(
+            loc?.revealAllConfirmationMessage ??
+                'Are you sure you want to reveal the entire puzzle?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(loc?.no ?? 'No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(loc?.yes ?? 'Yes'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      ref.read(gameBoardProvider.notifier).revealAll();
+    }
   }
 
   Future<void> _openMenu(BuildContext ctx) async {
