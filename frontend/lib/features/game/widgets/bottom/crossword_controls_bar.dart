@@ -39,14 +39,18 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
     final board = ref.watch(gameBoardProvider.select((b) => b));
     final language = board.language.toLowerCase();
+    // For Russian, we internally treat it as Ukrainian as requested
     final isCyrillic = ['uk', 'ua', 'ru'].contains(language);
 
+    final isSpanish = language == 'es';
     final layout =
         isCyrillic
             ? VirtualKeyboard.ukrainianLayout
-            : (isAzerty
-                ? VirtualKeyboard.azertyLayout
-                : VirtualKeyboard.qwertyLayout);
+            : (isSpanish
+                ? VirtualKeyboard.spanishLayout
+                : (isAzerty
+                    ? VirtualKeyboard.azertyLayout
+                    : VirtualKeyboard.qwertyLayout));
     final kbSize = ref.watch(gameKeyboardSizeProvider);
 
     // Map keyboard size to responsive key height and font size.

@@ -3,7 +3,16 @@ import 'dart:ui';
 /// Configuration for supported languages in the application.
 class AppLanguages {
   /// Languages that have full UI localization (ARB files).
-  static const Set<String> uiSupported = {'en', 'fr', 'uk'};
+  static const Set<String> uiSupported = {
+    'en',
+    'fr',
+    'uk',
+    'es',
+    'de',
+    'it',
+    'pt',
+    'ru',
+  };
 
   /// Languages supported for puzzle generation (via Gemini).
   /// This can be broader than UI-supported languages.
@@ -15,6 +24,7 @@ class AppLanguages {
     'de',
     'it',
     'pt',
+    'ru',
   };
 
   static const Map<String, ({String name, String flag})> _metadata = {

@@ -72,7 +72,18 @@ class GeminiPuzzleService {
 
   String _buildPrompt(String topic, String lang, int count, int difficulty) {
     // Determine language-specific instructions
-    final langName = lang == 'fr' ? 'French' : 'English';
+    final effectiveLang = lang == 'ru' ? 'uk' : lang;
+    final langNames = {
+      'en': 'English',
+      'fr': 'French',
+      'uk': 'Ukrainian',
+      'es': 'Spanish',
+      'de': 'German',
+      'it': 'Italian',
+      'pt': 'Portuguese',
+    };
+    final langName = langNames[effectiveLang] ?? 'English';
+
     const jsonFormat = '''
 [
   {"word": "EXAMPLE", "clue": "Description..."},
@@ -129,14 +140,16 @@ class GeminiPuzzleService {
 
     // Language-specific normalization and character constraints
     String langConstraints;
-    if (lang == 'fr') {
+    if (effectiveLang == 'fr') {
       langConstraints = 'Normalized (remove ALL accents: É->E, Ê->E, Ç->C).';
-    } else if (lang == 'es') {
+    } else if (effectiveLang == 'es') {
       langConstraints =
           'Normalized (remove accents like Á, É, Í, Ó, Ú, but PRESERVE the letter Ñ). Only A-Z and Ñ are allowed.';
-    } else if (lang == 'de') {
+    } else if (effectiveLang == 'de') {
       langConstraints =
           'Normalized (Convert Umlauts: Ä->AE, Ö->OE, Ü->UE, and ß->SS). Use only A-Z.';
+    } else if (effectiveLang == 'uk') {
+      langConstraints = 'Use only Ukrainian Cyrillic characters.';
     } else {
       langConstraints = 'Normalized (A-Z only).';
     }
