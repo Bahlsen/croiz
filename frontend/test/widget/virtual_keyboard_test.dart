@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 
 void main() {
   group('VirtualKeyboard simplified (no extra letters)', () {
+    setUp(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (
+            methodCall,
+          ) async {
+            return null; // Handle haptic feedback calls
+          });
+    });
+
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null);
+    });
     testWidgets(
       'injects backspace when includeBackspace true and absent from layout',
       (tester) async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -253,19 +254,21 @@ class CrosswordCell extends ConsumerWidget {
             ref.read(wordDirectionProvider.notifier).setDirection(newDir);
           }
         },
-        child: AnimatedScale(
-          scale: isSelected ? 1.05 : 1.0,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOutBack,
-          child: _OuterBorder(
-            border: border,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              decoration: decoration,
-              child: content,
+        child: _OuterBorder(
+              border: border,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                decoration: decoration,
+                child: content,
+              ),
+            )
+            .animate(target: isSelected ? 1 : 0)
+            .scale(
+              begin: const Offset(1, 1),
+              end: const Offset(1.05, 1.05),
+              duration: 200.ms,
+              curve: Curves.easeOutBack,
             ),
-          ),
-        ),
       ),
     );
   }
