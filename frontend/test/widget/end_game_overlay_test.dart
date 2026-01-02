@@ -90,9 +90,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: Scaffold(body: EndGameOverlay()),
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  const MaterialApp(home: Scaffold(body: EndGameOverlay())),
         ),
       ),
     );
@@ -103,10 +103,16 @@ void main() {
 
     // mark words as found
     container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
-    await tester.pumpAndSettle();
+
+    // Use multiple pumps to trigger the first few frames of animations
+    // instead of pumpAndSettle which would timeout on repeating animations
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // overlay should appear
     expect(congratsFinder, findsOneWidget);
+    // Use find.textContaining or check for the fallback 'View' if localization is missing
     expect(find.text('View'), findsOneWidget);
     expect(find.text('Restart'), findsOneWidget);
   });
