@@ -308,17 +308,17 @@ class GridGenerator {
 
       if (char == null) {
         if (!_isIsolated(cx, cy, isHorizontal)) {
-          return -1.0; // Invalid
+          return -1; // Invalid
         }
       } else {
         if (char != word[i]) {
-          return -1.0; // Mismatch
+          return -1; // Mismatch
         }
         intersections++;
         // Boost score for difficult letters
         final weight = _letterWeights[char.toUpperCase()] ?? 1;
         weightedIntersectionScore +=
-            (weight * 15.0); // Multiplier to make it significant
+            weight * 15; // Multiplier to make it significant
       }
     }
 
@@ -326,20 +326,20 @@ class GridGenerator {
     final beforeX = isHorizontal ? x - 1 : x;
     final beforeY = isHorizontal ? y : y - 1;
     if (isValid(beforeX, beforeY) && _grid[beforeY][beforeX] != null) {
-      return -1.0;
+      return -1;
     }
 
     final afterX = isHorizontal ? x + word.length : x;
     final afterY = isHorizontal ? y : y + word.length;
     if (isValid(afterX, afterY) && _grid[afterY][afterX] != null) {
-      return -1.0;
+      return -1;
     }
 
     // Constraint: Must intersect at least once (unless it's the very first word, but this func is for subsequent words)
     // Actually, in `_generateSinglePass`, we already placed the first word.
     // So all subsequent words MUST attach.
     if (intersections == 0) {
-      return -1.0;
+      return -1;
     }
 
     // 2. Score Calculation: GRAVITY
