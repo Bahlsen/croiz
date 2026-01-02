@@ -102,7 +102,7 @@ void main() {
     });
   });
 
-  group('calculateCompletionPercent', () {
+  group('calculateCompletionPercent (deprecated - cell-based)', () {
     test('returns 0 for empty grid', () {
       final grid = [
         [null, null, null],
@@ -171,6 +171,284 @@ void main() {
       // 3 white cells, 1 filled (A)
       final percent = service.calculateCompletionPercent(grid, solution);
       expect(percent, closeTo(33.33, 0.1));
+    });
+  });
+
+  group('calculateCompletionPercentByWords', () {
+    test('returns 0 when no words are completed', () {
+      // Grid: 3x3 with 2 words (one across, one down)
+      // Word 1 (across): A-B-C at row 0
+      // Word 2 (down): A-D-G at col 0
+      final grid = [
+        ['A', null, null],
+        [null, null, null],
+        [null, null, null],
+      ];
+      final solution = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ABC',
+        },
+        {
+          'id': 'd1',
+          'direction': 'down',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ADG',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 0 words completed out of 2 = 0%
+      expect(percent, 0.0);
+    });
+
+    test('returns 100 when all words are completed', () {
+      final grid = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ];
+      final solution = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ABC',
+        },
+        {
+          'id': 'd1',
+          'direction': 'down',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ADG',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 2 words completed out of 2 = 100%
+      expect(percent, 100.0);
+    });
+
+    test('returns 50 when half of words are completed', () {
+      // Complete first word (ABC across), but not second (ADG down)
+      final grid = [
+        ['A', 'B', 'C'],
+        [null, null, null],
+        [null, null, null],
+      ];
+      final solution = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+        ['G', 'H', 'I'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ABC',
+        },
+        {
+          'id': 'd1',
+          'direction': 'down',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ADG',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 1 word completed out of 2 = 50%
+      expect(percent, 50.0);
+    });
+
+    test('handles words with black cells correctly', () {
+      // Grid with black cells (null in solution)
+      final grid = [
+        ['A', 'B', null],
+        ['C', null, null],
+      ];
+      final solution = [
+        ['A', 'B', null], // null = black cell
+        ['C', null, null],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 2,
+          'answer': 'AB',
+        },
+        {
+          'id': 'd1',
+          'direction': 'down',
+          'x': 0,
+          'y': 0,
+          'length': 2,
+          'answer': 'AC',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 2 words completed out of 2 = 100%
+      expect(percent, 100.0);
+    });
+
+    test('word is not completed if one letter is wrong', () {
+      // First word has wrong letter
+      final grid = [
+        ['A', 'X', 'C'], // X is wrong (should be B)
+        ['D', 'E', 'F'],
+      ];
+      final solution = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ABC',
+        },
+        {
+          'id': 'a2',
+          'direction': 'across',
+          'x': 0,
+          'y': 1,
+          'length': 3,
+          'answer': 'DEF',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 1 word completed out of 2 = 50%
+      expect(percent, 50.0);
+    });
+
+    test('word is not completed if partially filled', () {
+      // First word partially filled
+      final grid = [
+        ['A', 'B', null], // missing C
+        ['D', 'E', 'F'],
+      ];
+      final solution = [
+        ['A', 'B', 'C'],
+        ['D', 'E', 'F'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'ABC',
+        },
+        {
+          'id': 'a2',
+          'direction': 'across',
+          'x': 0,
+          'y': 1,
+          'length': 3,
+          'answer': 'DEF',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 1 word completed out of 2 = 50%
+      expect(percent, 50.0);
+    });
+
+    test('handles complex grid with multiple words', () {
+      // Simulate a real crossword with intersecting words
+      final grid = [
+        ['C', 'A', 'T'],
+        ['A', null, 'O'],
+        ['R', null, 'P'],
+      ];
+      final solution = [
+        ['C', 'A', 'T'],
+        ['A', null, 'O'],
+        ['R', null, 'P'],
+      ];
+      final clues = [
+        {
+          'id': 'a1',
+          'direction': 'across',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'CAT',
+        },
+        {
+          'id': 'd1',
+          'direction': 'down',
+          'x': 0,
+          'y': 0,
+          'length': 3,
+          'answer': 'CAR',
+        },
+        {
+          'id': 'd2',
+          'direction': 'down',
+          'x': 2,
+          'y': 0,
+          'length': 3,
+          'answer': 'TOP',
+        },
+      ];
+      final percent = service.calculateCompletionPercentByWords(
+        grid,
+        solution,
+        clues,
+      );
+      // 3 words completed out of 3 = 100%
+      expect(percent, 100.0);
     });
   });
 

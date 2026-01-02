@@ -96,6 +96,9 @@ class PuzzleProgressService {
   /// - `solution` is the puzzle solution
   /// - Black cells (null in solution) are ignored
   /// - Returns 0-100 percentage
+  ///
+  /// **DEPRECATED**: This method calculates completion based on filled cells,
+  /// not completed words. Use [calculateCompletionPercentByWords] instead.
   double calculateCompletionPercent(
     List<List<String?>> grid,
     List<List<String?>> solution,
@@ -127,6 +130,78 @@ class PuzzleProgressService {
     }
 
     return (filledCount / totalWhiteCells) * 100;
+  }
+
+  /// Calculate completion percentage based on completed words.
+  ///
+  /// - `grid` is the user's current grid
+  /// - `solution` is the puzzle solution
+  /// - `clues` is the list of clue definitions from the puzzle JSON
+  /// - Returns 0-100 percentage based on how many words are fully correct
+  ///
+  /// A word is considered completed only if ALL its letters match the solution.
+  double calculateCompletionPercentByWords(
+    List<List<String?>> grid,
+    List<List<String?>> solution,
+    List<Map<String, dynamic>> clues,
+  ) {
+    if (clues.isEmpty) {
+      return 0;
+    }
+
+    var completedWords = 0;
+
+    for (final clue in clues) {
+      final direction = clue['direction'] as String?;
+      final x = clue['x'] as int?;
+      final y = clue['y'] as int?;
+      final length = clue['length'] as int?;
+
+      if (direction == null || x == null || y == null || length == null) {
+        continue;
+      }
+
+      var isWordComplete = true;
+
+      for (var i = 0; i < length; i++) {
+        final row = direction == 'across' ? y : y + i;
+        final col = direction == 'across' ? x + i : x;
+
+        // Check bounds
+        if (row >= solution.length || col >= solution[row].length) {
+          isWordComplete = false;
+          break;
+        }
+
+        final solutionCell = solution[row][col];
+
+        // Skip black cells
+        if (solutionCell == null) {
+          continue;
+        }
+
+        // Check if user's grid has this cell
+        if (row >= grid.length || col >= grid[row].length) {
+          isWordComplete = false;
+          break;
+        }
+
+        final userCell = grid[row][col];
+
+        // Check if cell matches solution (case-insensitive)
+        if (userCell == null ||
+            userCell.toUpperCase() != solutionCell.toUpperCase()) {
+          isWordComplete = false;
+          break;
+        }
+      }
+
+      if (isWordComplete) {
+        completedWords++;
+      }
+    }
+
+    return (completedWords / clues.length) * 100;
   }
 
   /// Get all in-progress puzzles sorted by most recently saved.

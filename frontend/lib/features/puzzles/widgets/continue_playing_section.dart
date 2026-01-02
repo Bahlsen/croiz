@@ -93,8 +93,13 @@ final inProgressPuzzlesProvider = FutureProvider.autoDispose<
     // Load solution to calculate percent
     final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
     final solution = _extractSolutionGrid(puzzleJson);
+    final clues = _extractClues(puzzleJson);
 
-    final percent = service.calculateCompletionPercent(savedGrid, solution);
+    final percent = service.calculateCompletionPercentByWords(
+      savedGrid,
+      solution,
+      clues,
+    );
 
     // Only show puzzles that are actually in progress (not 0% or 100%)
     if (percent > 0 && percent < 100) {
@@ -155,6 +160,23 @@ List<List<String?>> _extractSolutionGrid(Map<String, dynamic> puzzleJson) {
     grid.add(rowList);
   }
   return grid;
+}
+
+/// Extract clues from puzzle JSON.
+List<Map<String, dynamic>> _extractClues(Map<String, dynamic> puzzleJson) {
+  // Use 'entries' which is the standard key for our Puzzle model
+  final entries = puzzleJson['entries'] as List<dynamic>?;
+  if (entries != null) {
+    return entries.cast<Map<String, dynamic>>().toList();
+  }
+
+  // Fallback to 'clues' if it's a list (legacy or different format)
+  final cluesData = puzzleJson['clues'];
+  if (cluesData is List) {
+    return cluesData.cast<Map<String, dynamic>>().toList();
+  }
+
+  return [];
 }
 
 /// A horizontal scrollable section showing puzzles that are in progress.

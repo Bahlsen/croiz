@@ -4,11 +4,44 @@ import '../puzzles_provider.dart';
 import '../puzzle_filter_provider.dart';
 
 /// Search bar for puzzles with autocomplete suggestions.
-class PuzzleSearchBar extends ConsumerWidget {
+class PuzzleSearchBar extends ConsumerStatefulWidget {
   const PuzzleSearchBar({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PuzzleSearchBar> createState() => _PuzzleSearchBarState();
+}
+
+class _PuzzleSearchBarState extends ConsumerState<PuzzleSearchBar> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Sync controller with provider state on rebuild
+    // If controller is empty but provider has a query, clear the provider
+    final currentQuery = ref.read(puzzleFilterProvider).searchQuery;
+    if (_controller.text.isEmpty && currentQuery.isNotEmpty) {
+      // Reset the search query when returning to the page
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(puzzleFilterProvider.notifier).setSearchQuery('');
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final puzzlesAsync = ref.watch(puzzlesProvider);
 
     return Container(
@@ -42,44 +75,51 @@ class PuzzleSearchBar extends ConsumerWidget {
         onSelected: (String selection) {
           ref.read(puzzleFilterProvider.notifier).setSearchQuery(selection);
         },
-        fieldViewBuilder:
-            (context, controller, focusNode, onFieldSubmitted) => TextField(
-              controller: controller,
-              focusNode: focusNode,
-              style: const TextStyle(fontSize: 14),
-              decoration: InputDecoration(
-                hintText: 'Search puzzles...',
-                hintStyle: TextStyle(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                  fontSize: 14,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 20,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                isDense: true,
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 11),
-                suffixIcon:
-                    controller.text.isNotEmpty
-                        ? IconButton(
-                          icon: const Icon(Icons.clear, size: 18),
-                          onPressed: () {
-                            controller.clear();
-                            ref
-                                .read(puzzleFilterProvider.notifier)
-                                .setSearchQuery('');
-                          },
-                        )
-                        : null,
+        // ignore: prefer_expression_function_bodies
+        fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
+          // Use our managed controller instead of the one provided by Autocomplete
+          return TextField(
+            controller: _controller,
+            focusNode: focusNode,
+            style: const TextStyle(fontSize: 14),
+            decoration: InputDecoration(
+              hintText: 'Search puzzles...',
+              hintStyle: TextStyle(
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                fontSize: 14,
               ),
-              onChanged: (value) {
-                ref.read(puzzleFilterProvider.notifier).setSearchQuery(value);
-              },
+              prefixIcon: Icon(
+                Icons.search,
+                size: 20,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              isDense: true,
+              border: InputBorder.none,
+              contentPadding: const EdgeInsets.symmetric(vertical: 11),
+              suffixIcon:
+                  _controller.text.isNotEmpty
+                      ? IconButton(
+                        icon: const Icon(Icons.clear, size: 18),
+                        onPressed: () {
+                          _controller.clear();
+                          ref
+                              .read(puzzleFilterProvider.notifier)
+                              .setSearchQuery('');
+                          // Rebuild to hide the clear button
+                          setState(() {});
+                        },
+                      )
+                      : null,
             ),
+            onChanged: (value) {
+              ref.read(puzzleFilterProvider.notifier).setSearchQuery(value);
+              // Rebuild to show/hide the clear button
+              setState(() {});
+            },
+          );
+        },
       ),
     );
   }

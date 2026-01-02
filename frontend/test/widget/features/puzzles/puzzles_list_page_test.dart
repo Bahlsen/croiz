@@ -263,4 +263,51 @@ void main() {
     // Verify menu is shown
     expect(find.byType(CrosswordControlsMenu), findsOneWidget);
   });
+
+  testWidgets(
+    'search query persists when search bar text is cleared on rebuild',
+    (tester) async {
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            puzzlesProvider.overrideWith((ref) async => testPuzzles),
+            inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Sizer(
+              builder:
+                  (context, orientation, deviceType) => const PuzzlesListPage(),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Initially, all 3 puzzles should be visible
+      expect(find.text('Easy Puzzle'), findsOneWidget);
+      expect(find.text('Medium Puzzle'), findsOneWidget);
+
+      // Find and enter text in search bar
+      final searchField = find.byType(TextField);
+      expect(searchField, findsOneWidget);
+
+      await tester.enterText(searchField, 'Easy');
+      await tester.pumpAndSettle();
+
+      // Only "Easy Puzzle" should be visible now
+      expect(find.text('Easy Puzzle'), findsOneWidget);
+      expect(find.text('Medium Puzzle'), findsNothing);
+
+      // Clear the search field (simulating what happens when widget rebuilds)
+      await tester.enterText(searchField, '');
+      await tester.pumpAndSettle();
+
+      // After clearing the search, all puzzles should be visible again
+      expect(find.text('Easy Puzzle'), findsOneWidget);
+      expect(find.text('Medium Puzzle'), findsOneWidget);
+    },
+  );
 }
