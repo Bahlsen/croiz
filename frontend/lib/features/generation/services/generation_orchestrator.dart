@@ -28,7 +28,9 @@ class PuzzleGenerationOrchestrator {
       topic: topic,
       language: language,
       difficultyLevel: difficulty,
-      count: size * 2, // Request proportional word count
+      count:
+          size *
+          4, // Request proportional word count (need strict surplus for density)
     );
 
     if (words.length < 5) {
@@ -61,7 +63,32 @@ class PuzzleGenerationOrchestrator {
       difficulty,
     );
 
-    // 4. Save
+    // 4. Quality Control
+    // Calculate density: filled cells / total bounding box area (or total area?)
+    // Standard crossword density is usually > 30% words.
+    // Our "cells" list contains all cells (including black ones if we generated full grid).
+    // Actually `cells` in our JSON contains x, y, is_black.
+    // Let's count black vs total (width * height).
+
+    final totalCells = size * size;
+    final blackCells =
+        puzzleJson['cells'].where((c) => c['is_black'] as bool).length;
+    final filledCells = totalCells - blackCells;
+    final density = filledCells / totalCells;
+
+    // Threshold: 0.25 (25%) is a low bar but ensures we don't have empty grids.
+    // A good 15x15 has ~225 cells. 25% is ~56 letters.
+    // If we placed 27 words avg length 5 ~ 135 letters ~ 60% density!
+    // So 0.35 is a safe lower bound.
+    if (density < 0.35) {
+      throw UserFriendlyException(
+        'The generated puzzle was not dense enough ($filledCells letters). Please try again or choose a different topic.',
+        technicalDetails:
+            'Density too low: ${density.toStringAsFixed(2)} < 0.35',
+      );
+    }
+
+    // 5. Save
     await _repository.savePuzzle(puzzleJson);
 
     // 5. Invalidate provider to refresh list

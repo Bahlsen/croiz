@@ -44,6 +44,25 @@ void main() {
           const GeneratedWord(answer: 'NICE', clue: 'Coastal city'),
           const GeneratedWord(answer: 'CAFE', clue: 'Coffee shop'),
           const GeneratedWord(answer: 'WINE', clue: 'Beverage'),
+          const GeneratedWord(answer: 'FRENCH', clue: 'Language'),
+          const GeneratedWord(answer: 'BREAD', clue: 'Baguette'),
+          const GeneratedWord(answer: 'CHEESE', clue: 'Fromage'),
+          const GeneratedWord(answer: 'EIFFEL', clue: 'Famous tower'),
+          const GeneratedWord(answer: 'LOUVRE', clue: 'Museum'),
+          const GeneratedWord(answer: 'SEINE', clue: 'River'),
+          const GeneratedWord(answer: 'ROUEN', clue: 'Normandy city'),
+          const GeneratedWord(answer: 'BERET', clue: 'Hat'),
+          const GeneratedWord(answer: 'CREPE', clue: 'Pancake'),
+          const GeneratedWord(answer: 'MARSEILLE', clue: 'Port city'),
+          const GeneratedWord(answer: 'BORDEAUX', clue: 'Wine region'),
+          const GeneratedWord(answer: 'FRANC', clue: 'Old currency'),
+          const GeneratedWord(answer: 'EURO', clue: 'Current currency'),
+          const GeneratedWord(answer: 'TOUR', clue: 'Trip'),
+          const GeneratedWord(answer: 'JARDIN', clue: 'Garden'),
+          const GeneratedWord(answer: 'PALAIS', clue: 'Palace'),
+          const GeneratedWord(answer: 'CHAMPS', clue: 'Fields'),
+          const GeneratedWord(answer: 'AVENUE', clue: 'Street'),
+          const GeneratedWord(answer: 'METRO', clue: 'Subway'),
         ];
 
         when(
@@ -80,14 +99,13 @@ void main() {
             topic: 'France',
             language: 'fr',
             difficultyLevel: 2,
-            count: 30, // size * 2
+            count: 60, // size * 4
           ),
         ).called(1);
 
         // Verify puzzle was saved
-        final captured = verify(
-          () => mockRepository.savePuzzle(captureAny()),
-        ).captured;
+        final captured =
+            verify(() => mockRepository.savePuzzle(captureAny())).captured;
         expect(captured, hasLength(1));
 
         final savedPuzzle = captured.first as Map<String, dynamic>;
@@ -179,6 +197,20 @@ void main() {
           const GeneratedWord(answer: 'WORD', clue: 'Text unit'),
           const GeneratedWord(answer: 'HOLD', clue: 'Grasp'),
           const GeneratedWord(answer: 'HERO', clue: 'Champion'),
+          const GeneratedWord(answer: 'WORD', clue: 'Vocabulary'),
+          const GeneratedWord(answer: 'HOPE', clue: 'Optimism'),
+          const GeneratedWord(answer: 'HOME', clue: 'Residence'),
+          const GeneratedWord(answer: 'HOWL', clue: 'Wolf sound'),
+          const GeneratedWord(answer: 'HEAL', clue: 'Cure'),
+          const GeneratedWord(answer: 'HEAT', clue: 'Warmth'),
+          const GeneratedWord(answer: 'HEAR', clue: 'Listen'),
+          const GeneratedWord(answer: 'HEAD', clue: 'Top of body'),
+          const GeneratedWord(answer: 'HEART', clue: 'Organ'),
+          const GeneratedWord(answer: 'HEAVY', clue: 'Not light'),
+          const GeneratedWord(answer: 'HEDGE', clue: 'Bush fence'),
+          const GeneratedWord(answer: 'HEIGHT', clue: 'Tallness'),
+          const GeneratedWord(answer: 'HELM', clue: 'Steering'),
+          const GeneratedWord(answer: 'HERD', clue: 'Animal group'),
         ];
 
         when(
@@ -207,9 +239,8 @@ void main() {
         );
 
         // Assert
-        final captured = verify(
-          () => mockRepository.savePuzzle(captureAny()),
-        ).captured;
+        final captured =
+            verify(() => mockRepository.savePuzzle(captureAny())).captured;
         final savedPuzzle = captured.first as Map<String, dynamic>;
 
         // Check metadata

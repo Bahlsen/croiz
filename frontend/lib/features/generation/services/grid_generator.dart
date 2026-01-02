@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:croiz/features/generation/models/generated_word.dart';
 
 /// Represents a word placed on the grid.
@@ -17,7 +15,6 @@ class PlacedWord {
   final bool isHorizontal;
 }
 
-/// A rudimentary crossword grid generator.
 class GridGenerator {
   GridGenerator({required this.width, required this.height})
     : _grid = List.generate(height, (_) => List.filled(width, null));
@@ -28,7 +25,7 @@ class GridGenerator {
 
   /// Main entry point: attempts to place as many words as possible.
   /// Uses a random restart strategy to find the best layout.
-  List<PlacedWord> generate(List<GeneratedWord> words, {int attempts = 50}) {
+  List<PlacedWord> generate(List<GeneratedWord> words, {int attempts = 100}) {
     if (words.isEmpty) {
       return [];
     }
@@ -152,7 +149,7 @@ class GridGenerator {
     return (wordCount * 1000.0) + (density * 100.0);
   }
 
-  /// Single pass generation logic
+  /// Single pass generation logic with multi-pass retry for rejected words
   List<PlacedWord> _generateSinglePass(List<GeneratedWord> words) {
     // We work on a temp grid by clearing the current one first
     // Since we run this sequentially in loop, we reuse the class _grid
@@ -163,68 +160,78 @@ class GridGenerator {
     }
 
     final placed = <PlacedWord>[];
-    final remaining = List<GeneratedWord>.from(words);
+    var remaining = List<GeneratedWord>.from(words);
+    final rejected = <GeneratedWord>[]; // Words we couldn't place this round
 
-    // Place the first word in the center
+    // Place the first word in the center (randomly horizontal or vertical)
     final first = remaining.removeAt(0);
-    final startX = (width - first.answer.length) ~/ 2;
-    final startY = height ~/ 2;
+    final isFirstHorizontal = DateTime.now().microsecond.isEven;
 
-    // Check if it fits
-    // Note: _evaluatePlacement checks invalid placements and returns -1.0.
-    // It also checks for intersections > 0 usually, but for the first word,
-    // we must allow 0 intersections (since grid is empty).
-    // So we need a special check or modify _evaluatePlacement.
-    // _evaluatePlacement returns -1.0 if invalid.
-    // BUT it explicitly returns -1.0 if intersections == 0.
-    // So for the first word, we can't use it directly if it enforces intersections.
-
-    // Let's modify _evaluatePlacement to have an optional flag `allowNoIntersections`.
-    // Or just manually check bounds here.
-
-    if (startX < 0 || startX + first.answer.length > width) {
-      return [];
+    int startX, startY;
+    if (isFirstHorizontal) {
+      startX = (width - first.answer.length) ~/ 2;
+      startY = height ~/ 2;
+      if (startX < 0 || startX + first.answer.length > width) {
+        return [];
+      }
+    } else {
+      startX = width ~/ 2;
+      startY = (height - first.answer.length) ~/ 2;
+      if (startY < 0 || startY + first.answer.length > height) {
+        return [];
+      }
     }
-    // Only Horizontal check needed as we place horizontally.
 
-    _place(first, startX, startY, true, placed);
+    _place(first, startX, startY, isFirstHorizontal, placed);
 
-    var addedSomething = true;
-    while (addedSomething && remaining.isNotEmpty) {
-      addedSomething = false;
+    // Multi-pass placement: keep trying until no progress is made
+    var madeProgress = true;
+    var passCount = 0;
+    const maxPasses = 5; // Limit total passes to avoid infinite loops
 
-      // In this pass, we try to place the NEXT word in the shuffled list
-      // Instead of iterating all remaining words for the best slot (Generic Greedy),
-      // let's iterate all remaining words and find the GLOBAL best move among them.
-      // This is slightly more expensive O(N_remaining * GridSize) but better results.
+    while (madeProgress && passCount < maxPasses) {
+      madeProgress = false;
+      passCount++;
+      rejected.clear();
 
-      _Move? globalBestMove;
-      GeneratedWord? bestWord;
-      var bestWordIndex = -1;
+      while (remaining.isNotEmpty) {
+        _Move? globalBestMove;
+        GeneratedWord? bestWord;
+        var bestWordIndex = -1;
 
-      for (var i = 0; i < remaining.length; i++) {
-        final candidate = remaining[i];
-        final move = _findBestMoveForWord(candidate.answer);
+        for (var i = 0; i < remaining.length; i++) {
+          final candidate = remaining[i];
+          final move = _findBestMoveForWord(candidate.answer);
 
-        if (move != null) {
-          if (globalBestMove == null || move.score > globalBestMove.score) {
-            globalBestMove = move;
-            bestWord = candidate;
-            bestWordIndex = i;
+          if (move != null) {
+            if (globalBestMove == null || move.score > globalBestMove.score) {
+              globalBestMove = move;
+              bestWord = candidate;
+              bestWordIndex = i;
+            }
           }
+        }
+
+        if (globalBestMove != null && bestWord != null) {
+          _place(
+            bestWord,
+            globalBestMove.x,
+            globalBestMove.y,
+            globalBestMove.isHorizontal,
+            placed,
+          );
+          remaining.removeAt(bestWordIndex);
+          madeProgress = true;
+        } else {
+          // No word from remaining could be placed; move all to rejected
+          rejected.addAll(remaining);
+          remaining.clear();
         }
       }
 
-      if (globalBestMove != null && bestWord != null) {
-        _place(
-          bestWord,
-          globalBestMove.x,
-          globalBestMove.y,
-          globalBestMove.isHorizontal,
-          placed,
-        );
-        remaining.removeAt(bestWordIndex);
-        addedSomething = true;
+      // Retry rejected words in the next pass (new intersections may exist now)
+      if (rejected.isNotEmpty && madeProgress) {
+        remaining = List<GeneratedWord>.from(rejected);
       }
     }
 
@@ -342,25 +349,24 @@ class GridGenerator {
       return -1;
     }
 
-    // 2. Score Calculation: GRAVITY
-    // Calculate distance from grid center
-    final centerX = width / 2;
-    final centerY = height / 2;
+    // 2. Score Calculation:
+    // Removed Gravity Penalty to encourage using the full grid size provided by the user.
+    // We want the puzzle to expand to the edges if possible.
 
-    // Word center approximation
-    final wordCenterX = isHorizontal ? x + (word.length / 2) : x + 0.5;
-    final wordCenterY = isHorizontal ? y + 0.5 : y + (word.length / 2);
+    // Bonus for longer words (more letters = higher density contribution)
+    final lengthBonus = word.length * 10.0;
 
-    final dist = sqrt(
-      pow(wordCenterX - centerX, 2) + pow(wordCenterY - centerY, 2),
-    );
+    // Multi-intersection bonus: exponentially reward words that connect at multiple points
+    // This creates a more "woven" structure that's harder to place words into gaps
+    final multiIntersectionBonus =
+        intersections > 1 ? intersections * intersections * 50.0 : 0.0;
 
-    // Penalty grows with distance (Gravity)
-    // Helps keep puzzle compact
-    final gravityPenalty = dist * 2;
-
-    // Final Score: Rewards hard intersections, Penalizes distance
-    return weightedIntersectionScore - gravityPenalty + (intersections * 100);
+    // Final Score: Rewards hard intersections, long words, and multi-connections
+    // We boost the base value of an intersection to ensure it's always worth it
+    return weightedIntersectionScore +
+        (intersections * 200.0) +
+        lengthBonus +
+        multiIntersectionBonus;
   }
 
   /// Checks if placing a character at x,y (as part of a word flowing isHorizontal)

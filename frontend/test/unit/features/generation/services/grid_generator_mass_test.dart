@@ -1,235 +1,176 @@
 import 'dart:math';
-
 import 'package:croiz/features/generation/models/generated_word.dart';
 import 'package:croiz/features/generation/services/grid_generator.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// A mix of English and French words for variety
-const _wordBank = [
-  'APPLE',
-  'BANANA',
-  'CHERRY',
-  'DATE',
-  'ELDERBERRY',
-  'FIG',
-  'GRAPE',
-  'HONEYDEW',
-  'KIWI',
-  'LEMON',
-  'MANGO',
-  'NECTARINE',
-  'ORANGE',
-  'PAPAYA',
-  'QUINCE',
-  'RASPBERRY',
-  'STRAWBERRY',
-  'TANGERINE',
-  'UGLI',
-  'VANILLA',
-  'WATERMELON',
-  'XIGUA',
-  'YAM',
-  'ZUCCHINI',
-  'MAISON',
-  'CHAISE',
-  'TABLE',
-  'FENETRE',
-  'PORTE',
-  'TOIT',
-  'JARDIN',
-  'FLEUR',
-  'ARBRE',
-  'VOITURE',
-  'ROUTE',
-  'VILLE',
-  'PAYS',
-  'MONDE',
-  'LUMIERE',
-  'SOLEIL',
-  'LUNE',
-  'ETOILE',
-  'CIEL',
-  'NUAGE',
-  'PLUIE',
-  'NEIGE',
-  'VENT',
-  'ORAGE',
-  'ECLAIR',
-  'TONNERRE',
-  'RIVIERE',
-  'MER',
-  'OCEAN',
-  'MONTAGNE',
-  'VALLEE',
-  'FORET',
-  'DESERT',
-  'SABLE',
-  'ROCHE',
-  'PIERRE',
-  'CAILLOU',
-  'CHEMIN',
-  'SENTIER',
-  'RUE',
-  'AVENUE',
-  'PLACE',
-  'PARC',
-  'BANQUE',
-  'ECOLE',
-  'HOPITAL',
-  'MAIRIE',
-  'EGLISE',
-  'GARE',
-  'AEROPORT',
-  'PORT',
-  'USINE',
-  'BUREAU',
-  'MAGASIN',
-  'MARCHE',
-  'HOTEL',
-  'RESTAURANT',
-  'CAFE',
-  'BAR',
-  'CINEMA',
-  'THEATRE',
-  'MUSEE',
-  'STADE',
-  'PISCINE',
-  'PLAGE',
-  'VACANCES',
-  'VOYAGE',
-  'AVENTURE',
-  'HISTOIRE',
-  'MYSTERE',
-  'SECRET',
-  'TRESOR',
-  'CARTE',
-  'BOUSSOLE',
-  'DIRECTON',
-  'NORD',
-  'SUD',
-  'EST',
-  'OUEST',
-  'GAUCHE',
-  'DROITE',
-  'HAUT',
-  'BAS',
-];
+// Helper to calculate density
+double calculateDensity(List<PlacedWord> placed, int width, int height) {
+  final grid = List.generate(height, (_) => List.filled(width, false));
+  var filledCount = 0;
+
+  // Mark filled cells
+  for (final pw in placed) {
+    for (var i = 0; i < pw.word.answer.length; i++) {
+      final x = pw.isHorizontal ? pw.startX + i : pw.startX;
+      final y = pw.isHorizontal ? pw.startY : pw.startY + i;
+      if (!grid[y][x]) {
+        grid[y][x] = true;
+        filledCount++;
+      }
+    }
+  }
+
+  // Determine bounding box of the actual puzzle to calculate density relative to the "used area"
+  // vs entire grid. Users care about black squares *inside* the puzzle bounds.
+  var minX = width;
+  var maxX = 0;
+  var minY = height;
+  var maxY = 0;
+
+  if (filledCount == 0) {
+    return 0;
+  }
+
+  for (var y = 0; y < height; y++) {
+    for (var x = 0; x < width; x++) {
+      if (grid[y][x]) {
+        if (x < minX) {
+          minX = x;
+        }
+        if (x > maxX) {
+          maxX = x;
+        }
+        if (y < minY) {
+          minY = y;
+        }
+        if (y > maxY) {
+          maxY = y;
+        }
+      }
+    }
+  }
+
+  final area = (maxX - minX + 1) * (maxY - minY + 1);
+  return filledCount / area;
+}
 
 void main() {
-  group('GridGenerator Mass Test', () {
-    test('run mass generation and report stats', () {
-      final generator = GridGenerator(width: 20, height: 20);
-      final random = Random(42); // Fixed seed for reproducibility
+  test('Mass Generation Benchmark', () {
+    final generator = GridGenerator(width: 15, height: 15);
+    final random = Random(42); // Fixed seed for reproducibility
 
-      // Accumulators for stats
-      var totalInputWords = 0;
-      var totalPlacedWords = 0;
-      var totalFilledCells = 0;
-      var totalBoundingBoxArea = 0;
-      var totalIntersections = 0;
-      const iterations = 50;
+    // Sample words pool (simulate AI output)
+    final commonWords = [
+      'APPLE',
+      'BANANA',
+      'CHERRY',
+      'DATE',
+      'ELDERBERRY',
+      'FIG',
+      'GRAPE',
+      'HONEYDEW',
+      'KIWI',
+      'LEMON',
+      'MANGO',
+      'NECTARINE',
+      'ORANGE',
+      'PAPAYA',
+      'QUINCE',
+      'RASPBERRY',
+      'STRAWBERRY',
+      'TANGERINE',
+      'UGLI',
+      'VANILLA',
+      'WATERMELON',
+      'XIGUA',
+      'YAM',
+      'ZUCCHINI',
+      'BERRY',
+      'MELON',
+      'FRUIT',
+      'SWEET',
+      'SOUR',
+      'FRESH',
+      'JUICY',
+      'RIPE',
+      'GREEN',
+      'RED',
+      'YELLOW',
+      'LION',
+      'TIGER',
+      'BEAR',
+      'WOLF',
+      'FOX',
+      'ZEBRA',
+      'GIRAFFE',
+      'ELEPHANT',
+      'MONKEY',
+      'APE',
+      'GORILLA',
+      'CHIMP',
+      'LEMUR',
+      'KOALA',
+      'KANGAROO',
+      'PANDA',
+      'SLOTH',
+      'OTTER',
+      'BEAVER',
+      'RACCOON',
+      'SKUNK',
+      'BADGER',
+      'DOG',
+      'CAT',
+      'MOUSE',
+      'RAT',
+      'HAMSTER',
+      'GERBIL',
+      'GUINEA',
+      'PIG',
+    ];
 
-      debugPrint('Running $iterations iterations...');
+    var totalDensity = 0.0;
+    // var totalWordsPlaced = 0;
+    var successCount = 0;
+    const iterations = 50;
 
-      for (var i = 0; i < iterations; i++) {
-        // Pick 20 random words
-        const count = 20;
-        final words = <GeneratedWord>[];
-        for (var j = 0; j < count; j++) {
-          final wordStr = _wordBank[random.nextInt(_wordBank.length)];
-          words.add(GeneratedWord(answer: wordStr, clue: 'Clue for $wordStr'));
-        }
+    // debugPrint('Starting Mass Generation Benchmark ($iterations iterations)...');
 
-        // Run generation
-        final result = generator.generate(words);
-        totalInputWords += count;
-        totalPlacedWords += result.length;
+    for (var i = 0; i < iterations; i++) {
+      // Pick 20 random words
+      final currentWords = List<GeneratedWord>.from(
+        (commonWords..shuffle(random))
+            .take(60)
+            .map((w) => GeneratedWord(answer: w, clue: 'Clue')),
+      );
 
-        // Calculate metrics for this run
-        if (result.isEmpty) {
-          continue;
-        }
+      final result = generator.generate(currentWords, attempts: 20);
 
-        var minX = 20;
-        var maxX = 0;
-        var minY = 20;
-        var maxY = 0;
-        var filledCount = 0;
-
-        // Create a temporary grid to count filled cells correctly
-        // (handling overlap which is effectively shared cells)
-        final tempGrid = List.generate(20, (_) => List<bool>.filled(20, false));
-
-        for (final pw in result) {
-          for (var k = 0; k < pw.word.answer.length; k++) {
-            final x = pw.isHorizontal ? pw.startX + k : pw.startX;
-            final y = pw.isHorizontal ? pw.startY : pw.startY + k;
-
-            // Update bounding box
-            if (x < minX) {
-              minX = x;
-            }
-            if (x > maxX) {
-              maxX = x;
-            }
-            if (y < minY) {
-              minY = y;
-            }
-            if (y > maxY) {
-              maxY = y;
-            }
-
-            // Mark filled
-            if (!tempGrid[y][x]) {
-              tempGrid[y][x] = true;
-              filledCount++;
-            }
-          }
-        }
-
-        // Calculate approx intersections
-        // (Sum of lengths - filledCount)
-        final sumLengths = result.fold<int>(
-          0,
-          (p, e) => p + e.word.answer.length,
-        );
-        final intersections = sumLengths - filledCount;
-        totalIntersections += intersections;
-
-        totalFilledCells += filledCount;
-
-        final width = maxX - minX + 1;
-        final height = maxY - minY + 1;
-        totalBoundingBoxArea += width * height;
+      if (result.isNotEmpty) {
+        final density = calculateDensity(result, 15, 15);
+        totalDensity += density;
+        // totalWordsPlaced += result.length;
+        successCount++;
+        // print('Run $i: ${result.length} words, Density: ${density.toStringAsFixed(2)}');
       }
+    }
 
-      final avgPlacedPct = (totalPlacedWords / totalInputWords) * 100;
-      final avgFilledPerRun = totalFilledCells / iterations;
-      final avgAreaPerRun = totalBoundingBoxArea / iterations;
-      final avgDensity =
-          avgAreaPerRun > 0 ? (avgFilledPerRun / avgAreaPerRun) : 0.0;
-      final avgIntersections = totalIntersections / iterations;
+    final avgDensity = totalDensity / successCount;
+    // final avgWords = totalWordsPlaced / successCount;
 
-      debugPrint('--- MASS TEST RESULTS ---');
-      debugPrint('Iterations: $iterations');
-      debugPrint(
-        'Avg Words Placed: ${(totalPlacedWords / iterations).toStringAsFixed(1)} / ${(totalInputWords / iterations).toStringAsFixed(1)} ($avgPlacedPct%)',
-      );
-      debugPrint(
-        'Avg Focused Density (Filled / BoundingBox): ${avgDensity.toStringAsFixed(2)}',
-      );
-      debugPrint('Avg Intersections: ${avgIntersections.toStringAsFixed(1)}');
-      debugPrint('-------------------------');
+    // debugPrint('--------------------------------------------------');
+    // debugPrint('Benchmark Results:');
+    // debugPrint('Average Density: ${avgDensity.toStringAsFixed(2)}');
+    // debugPrint('Average Words Placed: ${avgWords.toStringAsFixed(1)}');
+    // debugPrint('--------------------------------------------------');
 
-      // Fail if performance is too bad (baseline check)
-      // Current baseline approx: 20-30% words placed, density maybe 0.3
-      // We want to improve this.
-      expect(
-        avgPlacedPct,
-        greaterThan(10),
-        reason: 'Placement rate is extremely low!',
-      );
-    });
+    // Fail if density is too low to force us to improve it.
+    // Current rough estimate of "bad" density is < 0.25 (25% filled)
+    // A good crossword is usually > 30-40% filled relative to bounding box?
+    // Let's set a baseline expectation.
+    expect(
+      avgDensity,
+      greaterThan(0.25),
+      reason: 'Average density should be decent',
+    );
   });
 }

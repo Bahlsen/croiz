@@ -1,5 +1,4 @@
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
-import 'package:croiz/features/puzzles/logic/generated_puzzles_controller.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:flutter/material.dart';
@@ -22,10 +21,7 @@ void main() {
   });
 
   Widget createSubject(PuzzleDescriptor descriptor) => ProviderScope(
-    overrides: [
-      generatedPuzzlesRepositoryProvider.overrideWithValue(mockRepo),
-      generatedPuzzlesControllerProvider, // Ensure controller is initialized
-    ],
+    overrides: [generatedPuzzlesRepositoryProvider.overrideWithValue(mockRepo)],
     child: Sizer(
       builder:
           (context, orientation, deviceType) => MaterialApp(

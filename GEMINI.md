@@ -15,6 +15,7 @@ Read and follow ALL instructions from that file, including:
 - Never ignore linting or analysis issues
 - Always write tests before implementing features
 - Use "Deploy APK to Phone (USB) - Debug" launcher to hot reload (if a session is active, nothing to do it will hot reload automatically)
+- **Mandatory Final Check**: After each dev task, ALWAYS check `current_problems` and fix ALL reported issues.
 
 ## Quick Reference
 
