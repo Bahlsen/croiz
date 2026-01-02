@@ -40,16 +40,17 @@ class CrosswordContent extends ConsumerWidget {
         }
         return Stack(
           children: [
-            Column(
-              children: [
-                // Grid takes ALL remaining space after controls are measured.
-                const Expanded(
-                  child: CrosswordGridArea(),
-                ),
-                // Controls area with intrinsic height.
-                // This is measured FIRST, then grid gets the rest.
-                CrosswordControlsArea(controller: controller),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Column(
+                children: [
+                  // Grid takes ALL remaining space after controls are measured.
+                  const Expanded(child: CrosswordGridArea()),
+                  // Controls area with intrinsic height.
+                  // This is measured FIRST, then grid gets the rest.
+                  CrosswordControlsArea(controller: controller),
+                ],
+              ),
             ),
             const Positioned.fill(child: EndGameOverlay()),
           ],
