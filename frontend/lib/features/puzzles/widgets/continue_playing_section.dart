@@ -7,6 +7,8 @@ import '../../../services/persistence/hive_puzzle_storage.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/responsive/responsive.dart';
 import '../../game/providers/puzzle_loader_provider.dart';
+import '../logic/generated_puzzles_controller.dart';
+import 'package:flutter/services.dart'; // For HapticFeedback
 
 /// Information about an in-progress puzzle for display.
 class InProgressPuzzleInfo {
@@ -271,6 +273,10 @@ class _InProgressCard extends ConsumerWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _navigateToPuzzle(context, ref),
+          onLongPress:
+              puzzle.descriptor.source.isLocal
+                  ? () => _onLongPress(context, ref)
+                  : null,
           borderRadius: BorderRadius.circular(16),
           child: Padding(
             padding: const EdgeInsets.all(14),
@@ -344,6 +350,71 @@ class _InProgressCard extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _onLongPress(BuildContext context, WidgetRef ref) async {
+    await HapticFeedback.mediumImpact();
+
+    if (!context.mounted) {
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)?.deletePuzzle ?? 'Delete Puzzle?',
+            ),
+            content: Text(
+              AppLocalizations.of(context)?.deletePuzzleConfirmation ??
+                  'Are you sure you want to delete "${puzzle.descriptor.title}"? This cannot be undone.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      try {
+        await ref
+            .read(generatedPuzzlesControllerProvider.notifier)
+            .deletePuzzle(puzzle.descriptor.id);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)?.successMessage ??
+                    'Puzzle deleted successfully',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } on Object catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error deleting puzzle: $e'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+      }
+    }
   }
 }
 

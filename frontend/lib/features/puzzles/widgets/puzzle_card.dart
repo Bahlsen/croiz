@@ -144,11 +144,32 @@ class PuzzleCard extends ConsumerWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      unawaited(
-        ref
+      try {
+        await ref
             .read(generatedPuzzlesControllerProvider.notifier)
-            .deletePuzzle(descriptor.id),
-      );
+            .deletePuzzle(descriptor.id);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)?.successMessage ??
+                    'Puzzle deleted successfully',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } on Object catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error deleting puzzle: $e'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+      }
     }
   }
 
