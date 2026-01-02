@@ -7,11 +7,10 @@ void main() {
   group('VirtualKeyboard simplified (no extra letters)', () {
     setUp(() {
       TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(SystemChannels.platform, (
-            methodCall,
-          ) async {
-            return null; // Handle haptic feedback calls
-          });
+          .setMockMethodCallHandler(
+            SystemChannels.platform,
+            (methodCall) async => null,
+          ); // Handle haptic feedback calls
     });
 
     tearDown(() {
