@@ -44,7 +44,7 @@ class PuzzleGenerationOrchestrator {
     // 2. Build Grid
     // 2. Build Grid
     final generator = GridGenerator(width: size, height: size);
-    final placedWords = generator.generate(words);
+    final placedWords = generator.generate(words, language: language);
 
     if (placedWords.isEmpty) {
       throw UserFriendlyException(

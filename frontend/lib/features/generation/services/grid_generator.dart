@@ -23,13 +23,20 @@ class GridGenerator {
   final int height;
   final List<List<String?>> _grid; // null = empty, char = filled
 
+  String? _currentLanguage;
+
   /// Main entry point: attempts to place as many words as possible.
   /// Uses a random restart strategy to find the best layout.
-  List<PlacedWord> generate(List<GeneratedWord> words, {int attempts = 100}) {
+  List<PlacedWord> generate(
+    List<GeneratedWord> words, {
+    int attempts = 100,
+    String? language,
+  }) {
     if (words.isEmpty) {
       return [];
     }
 
+    _currentLanguage = language;
     var bestGrid = <PlacedWord>[];
     var bestScore = -1.0;
 
@@ -271,35 +278,122 @@ class GridGenerator {
 
   /// Returns a score > 0 if valid.
   /// Score = Intersections + CompactnessBonus
-  // Scrabble-like weights for letters (English/French mix approximation)
-  static const Map<String, int> _letterWeights = {
-    'E': 1,
-    'A': 1,
-    'I': 1,
-    'O': 1,
-    'N': 1,
-    'R': 1,
-    'T': 1,
-    'L': 1,
-    'S': 1,
-    'U': 1,
-    'D': 2,
-    'G': 2,
-    'M': 3,
-    'B': 3,
-    'C': 3,
-    'P': 3,
-    'F': 4,
-    'H': 4,
-    'V': 4,
-    'J': 8,
-    'Q': 10,
-    'K': 5,
-    'W': 4,
-    'X': 8,
-    'Y': 4,
-    'Z': 10,
+  static const Map<String, Map<String, int>> _languageWeights = {
+    'en': {
+      'E': 1,
+      'A': 1,
+      'I': 1,
+      'O': 1,
+      'N': 1,
+      'R': 1,
+      'T': 1,
+      'L': 1,
+      'S': 1,
+      'U': 1,
+      'D': 2,
+      'G': 2,
+      'B': 3,
+      'C': 3,
+      'M': 3,
+      'P': 3,
+      'F': 4,
+      'H': 4,
+      'V': 4,
+      'W': 4,
+      'Y': 4,
+      'K': 5,
+      'J': 8,
+      'X': 8,
+      'Q': 10,
+      'Z': 10,
+    },
+    'fr': {
+      'E': 1,
+      'A': 1,
+      'I': 1,
+      'N': 1,
+      'R': 1,
+      'T': 1,
+      'S': 1,
+      'U': 1,
+      'L': 1,
+      'O': 1,
+      'D': 2,
+      'G': 2,
+      'M': 2,
+      'B': 3,
+      'C': 3,
+      'P': 3,
+      'F': 4,
+      'H': 4,
+      'V': 4,
+      'J': 8,
+      'Q': 8,
+      'K': 10,
+      'W': 10,
+      'X': 10,
+      'Y': 10,
+      'Z': 10,
+    },
+    'es': {
+      'A': 1,
+      'E': 1,
+      'O': 1,
+      'S': 1,
+      'I': 1,
+      'R': 1,
+      'N': 1,
+      'L': 1,
+      'T': 1,
+      'D': 2,
+      'G': 2,
+      'C': 3,
+      'B': 3,
+      'M': 3,
+      'P': 3,
+      'F': 4,
+      'H': 4,
+      'V': 4,
+      'Y': 4,
+      'J': 8,
+      'Ñ': 8,
+      'Z': 10,
+      'X': 10,
+      'K': 10,
+      'W': 10,
+    },
+    'de': {
+      'E': 1,
+      'N': 1,
+      'R': 1,
+      'I': 1,
+      'S': 1,
+      'T': 1,
+      'A': 1,
+      'H': 1,
+      'D': 2,
+      'U': 2,
+      'L': 2,
+      'C': 2,
+      'M': 3,
+      'G': 3,
+      'W': 3,
+      'O': 3,
+      'Z': 3,
+      'B': 4,
+      'F': 4,
+      'K': 4,
+      'P': 4,
+      'V': 4,
+      'J': 6,
+      'Y': 6,
+      'X': 8,
+      'Q': 10,
+    },
   };
+
+  Map<String, int> _getWeights(String? lang) =>
+      _languageWeights[lang?.toLowerCase()] ?? _languageWeights['en']!;
 
   /// Returns a score > 0 if valid.
   /// Score = WeightedIntersections - CenterDistancePenalty
@@ -323,7 +417,8 @@ class GridGenerator {
         }
         intersections++;
         // Boost score for difficult letters
-        final weight = _letterWeights[char.toUpperCase()] ?? 1;
+        final weights = _getWeights(_currentLanguage);
+        final weight = weights[char.toUpperCase()] ?? 1;
         weightedIntersectionScore +=
             weight * 15; // Multiplier to make it significant
       }

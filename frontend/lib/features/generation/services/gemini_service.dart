@@ -127,6 +127,20 @@ class GeminiPuzzleService {
         diffInstructions = 'Standard difficulty.';
     }
 
+    // Language-specific normalization and character constraints
+    String langConstraints;
+    if (lang == 'fr') {
+      langConstraints = 'Normalized (remove ALL accents: É->E, Ê->E, Ç->C).';
+    } else if (lang == 'es') {
+      langConstraints =
+          'Normalized (remove accents like Á, É, Í, Ó, Ú, but PRESERVE the letter Ñ). Only A-Z and Ñ are allowed.';
+    } else if (lang == 'de') {
+      langConstraints =
+          'Normalized (Convert Umlauts: Ä->AE, Ö->OE, Ü->UE, and ß->SS). Use only A-Z.';
+    } else {
+      langConstraints = 'Normalized (A-Z only).';
+    }
+
     return '''
 Generate a list of $count distinct crossword puzzle words related to the topic: "$topic".
 Language: $langName.
@@ -138,8 +152,8 @@ $diffInstructions
 Global Constraints:
 1. Valid $langName dictionary word.
 2. Between 3 and 15 letters long.
-3. No spaces, no hyphens, just A-Z letters.
-4. Normalized (remove accents: É->E, Ê->E).
+3. No spaces, no hyphens.
+4. $langConstraints
 5. Provide a clue for each word based on the difficulty instructions above.
 
 Output MUST be a valid JSON array. Do not include markdown formatting like ```json ... ```. 
