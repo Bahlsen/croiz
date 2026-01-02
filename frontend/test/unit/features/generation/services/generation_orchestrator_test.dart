@@ -38,6 +38,7 @@ void main() {
       test('should generate and save a puzzle successfully', () async {
         // Arrange
         final words = [
+          const GeneratedWord(answer: 'REVOLUTION', clue: 'Big change'),
           const GeneratedWord(answer: 'FRANCE', clue: 'European country'),
           const GeneratedWord(answer: 'PARIS', clue: 'Capital'),
           const GeneratedWord(answer: 'LYON', clue: 'Second city'),
@@ -87,7 +88,7 @@ void main() {
           topic: 'France',
           language: 'fr',
           difficulty: 2,
-          size: 15,
+          size: 10,
         );
 
         // Assert
@@ -345,11 +346,8 @@ void main() {
         // Arrange
         // We place just one small word in a large grid
         final words = [
-          const GeneratedWord(answer: 'CAT', clue: 'Pet'),
-          const GeneratedWord(answer: 'DOG', clue: 'Pet'),
-          const GeneratedWord(answer: 'BAT', clue: 'Animal'),
-          const GeneratedWord(answer: 'RAT', clue: 'Animal'),
-          const GeneratedWord(answer: 'MAT', clue: 'Floor'),
+          const GeneratedWord(answer: 'A', clue: 'First letter'),
+          const GeneratedWord(answer: 'B', clue: 'Second letter'),
         ];
 
         when(

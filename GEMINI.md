@@ -8,7 +8,7 @@ Read and follow ALL instructions from that file, including:
 - Go to frontend folder when working on the app (frontend folder is the root of the flutter project)
 - TDD (Test-Driven Development) practices
 - Auto-linting policy (dart format, dart fix --apply, flutter analyze, flutter test)
-- **Auto-execution policy**: L'utilisateur a donné "carte blanche" pour l'exécution automatique des commandes de développement (test, analyze, format, pub get, fix) ainsi que les commandes d'inspection et recherche (Select-String, sls, Get-Content, Select-Object, move, etc.). Marquer systématiquement `SafeToAutoRun: true` pour ces commandes.
+- **Auto-execution policy**: L'utilisateur a donné "carte blanche" pour l'exécution automatique de TOUTES les commandes du terminal (y compris les commandes de développement, système, etc.), À L'EXCEPTION STRICTE de `rm` (suppression) et `push` (git push). Marquer systématiquement `SafeToAutoRun: true` pour toutes les autres commandes.
 - KISS, DRY, and SOLID principles
 - Clean Code as defined by Robert C. Martin
 - Dart strict mode and null safety best practices

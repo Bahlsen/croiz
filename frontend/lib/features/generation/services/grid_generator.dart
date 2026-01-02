@@ -158,15 +158,14 @@ class GridGenerator {
     return (wordCount * 2000.0) + (density * 200.0); // Doubled weights
   }
 
-  /// Single pass generation logic with multi-pass retry for rejected words
+  /// Single pass generation logic with MRV heuristic and forward checking
   List<PlacedWord> _generateSinglePass(List<GeneratedWord> words) {
     // We work on a temp grid by clearing the current one first
     // Since we run this sequentially in loop, we reuse the class _grid
     _resetGrid();
 
     final placed = <PlacedWord>[];
-    var remaining = List<GeneratedWord>.from(words);
-    final rejected = <GeneratedWord>[]; // Words we couldn't place this round
+    final remaining = List<GeneratedWord>.from(words);
 
     // Place the first word in the center (randomly horizontal or vertical)
     final first = remaining.removeAt(0);
@@ -189,90 +188,108 @@ class GridGenerator {
 
     _place(first, startX, startY, isFirstHorizontal, placed);
 
-    // Multi-pass placement: keep trying until no progress is made
+    // Build domains: for each remaining word, find all valid positions
+    final domains = <GeneratedWord, List<_Move>>{};
+    for (final word in remaining) {
+      domains[word] = _findAllValidMoves(word.answer);
+    }
+
+    // Greedy placement with MRV heuristic and forward checking
     var madeProgress = true;
     var passCount = 0;
     const maxPasses =
         7; // Increased from 5 to allow more refinement with 40 words
 
-    while (madeProgress && passCount < maxPasses) {
+    while (madeProgress && passCount < maxPasses && remaining.isNotEmpty) {
       madeProgress = false;
       passCount++;
-      rejected.clear();
 
-      while (remaining.isNotEmpty) {
-        _Move? globalBestMove;
-        GeneratedWord? bestWord;
-        var bestWordIndex = -1;
+      // MRV: Select word with fewest valid positions (most constrained)
+      GeneratedWord? bestWord;
+      var minMoves = double.infinity;
 
-        for (var i = 0; i < remaining.length; i++) {
-          final candidate = remaining[i];
-          final move = _findBestMoveForWord(candidate.answer);
-
-          if (move != null) {
-            if (globalBestMove == null || move.score > globalBestMove.score) {
-              globalBestMove = move;
-              bestWord = candidate;
-              bestWordIndex = i;
-            }
-          }
-        }
-
-        if (globalBestMove != null && bestWord != null) {
-          _place(
-            bestWord,
-            globalBestMove.x,
-            globalBestMove.y,
-            globalBestMove.isHorizontal,
-            placed,
-          );
-          remaining.removeAt(bestWordIndex);
-          madeProgress = true;
-        } else {
-          // No word from remaining could be placed; move all to rejected
-          rejected.addAll(remaining);
-          remaining.clear();
+      for (final word in remaining) {
+        final moveCount = domains[word]?.length ?? 0;
+        if (moveCount > 0 && moveCount < minMoves) {
+          minMoves = moveCount.toDouble();
+          bestWord = word;
         }
       }
 
-      // Retry rejected words in the next pass (new intersections may exist now)
-      if (rejected.isNotEmpty && madeProgress) {
-        remaining = List<GeneratedWord>.from(rejected);
+      if (bestWord == null) {
+        // No word can be placed
+        break;
+      }
+
+      // Get best move for this word
+      final moves = domains[bestWord]!;
+      if (moves.isEmpty) {
+        remaining.remove(bestWord);
+        domains.remove(bestWord);
+        continue;
+      }
+
+      // Pick highest scoring move
+      moves.sort((a, b) => b.score.compareTo(a.score));
+      final bestMove = moves.first;
+
+      // Place the word
+      _place(bestWord, bestMove.x, bestMove.y, bestMove.isHorizontal, placed);
+      remaining.remove(bestWord);
+      domains.remove(bestWord);
+      madeProgress = true;
+
+      // Forward Checking: Update domains of remaining words
+      // Remove moves that are now invalid due to the new placement
+      for (final word in remaining) {
+        final validMoves = domains[word];
+        if (validMoves == null) {
+          continue;
+        }
+
+        validMoves.removeWhere((move) {
+          final score = _evaluatePlacement(
+            word.answer,
+            move.x,
+            move.y,
+            move.isHorizontal,
+          );
+          return score < 0; // Invalid after new placement
+        });
+
+        // If domain becomes empty, this word can't be placed anymore
+        // But we continue trying others
       }
     }
 
     return placed;
   }
 
-  /// Finds the best position for a specific word on the current grid.
-  _Move? _findBestMoveForWord(String word) {
-    _Move? bestMove;
-    var maxScore = -1.0;
+  /// Find all valid positions for a word (for MRV heuristic)
+  List<_Move> _findAllValidMoves(String word) {
+    final moves = <_Move>[];
 
-    // Iterate over every cell
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         // Try horizontal
         if (x + word.length <= width) {
           final score = _evaluatePlacement(word, x, y, true);
-          if (score > maxScore) {
-            maxScore = score;
-            bestMove = _Move(x, y, isHorizontal: true, score: score);
+          if (score > 0) {
+            moves.add(_Move(x, y, isHorizontal: true, score: score));
           }
         }
 
         // Try vertical
         if (y + word.length <= height) {
           final score = _evaluatePlacement(word, x, y, false);
-          if (score > maxScore) {
-            maxScore = score;
-            bestMove = _Move(x, y, isHorizontal: false, score: score);
+          if (score > 0) {
+            moves.add(_Move(x, y, isHorizontal: false, score: score));
           }
         }
       }
     }
 
-    return bestMove;
+    return moves;
   }
 
   /// Returns a score > 0 if valid.
