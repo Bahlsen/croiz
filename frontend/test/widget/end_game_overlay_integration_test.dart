@@ -70,7 +70,10 @@ void main() {
 
     // Allow providers and UI to settle
     await tester.pump();
-    await tester.pumpAndSettle();
+    // Use limited pumps to avoid timeout from infinite animations
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Ensure the provider recorded the found word
     expect(container.read(foundWordsProvider).length, equals(1));
@@ -141,7 +144,10 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    // Use limited pumps to avoid timeout from infinite animations
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Verify overlay is showing
     expect(find.text('Congratulations!'), findsOneWidget);
@@ -153,7 +159,10 @@ void main() {
 
     // Tap the Restart button
     await tester.tap(find.text('Restart'));
-    await tester.pumpAndSettle();
+    // Use limited pumps to avoid timeout from infinite animations
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Verify all state is reset
     expect(container.read(foundWordsProvider), isEmpty);
@@ -232,7 +241,10 @@ void main() {
         ),
       ),
     );
-    await tester.pumpAndSettle();
+    // Use limited pumps to avoid timeout from infinite animations
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Verify overlay is showing
     expect(find.text('Congratulations!'), findsOneWidget);
@@ -246,7 +258,10 @@ void main() {
 
     // Tap the View button
     await tester.tap(find.text('View'));
-    await tester.pumpAndSettle();
+    // Use limited pumps instead of pumpAndSettle to avoid timeout from infinite animations
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Verify state is NOT reset - progress is preserved
     expect(container.read(foundWordsProvider).length, equals(1));

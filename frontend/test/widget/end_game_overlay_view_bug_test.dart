@@ -74,7 +74,11 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+
+      // Use limited pumps instead of pumpAndSettle to avoid infinite animation timeout
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
       expect(find.text('Congratulations!'), findsOneWidget);
       expect(find.text('View'), findsOneWidget);
@@ -82,7 +86,11 @@ void main() {
 
       // Tap View
       await tester.tap(find.text('View'));
-      await tester.pumpAndSettle();
+
+      // Use limited pumps instead of pumpAndSettle
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
       // Overlay should be dismissed, game content visible, no black screen
       expect(find.text('Congratulations!'), findsNothing);
@@ -160,7 +168,11 @@ void main() {
           ),
         ),
       );
-      await tester.pumpAndSettle();
+
+      // Use limited pumps instead of pumpAndSettle to avoid infinite animation timeout
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
       expect(find.text('Congratulations!'), findsOneWidget);
       expect(find.text('View'), findsOneWidget);
@@ -168,7 +180,11 @@ void main() {
 
       // Tap View
       await tester.tap(find.text('View'));
-      await tester.pumpAndSettle();
+
+      // Use limited pumps instead of pumpAndSettle
+      for (var i = 0; i < 10; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
       // Overlay should be dismissed, game content visible
       expect(find.text('Congratulations!'), findsNothing);

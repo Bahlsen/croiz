@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
-import 'package:croiz/features/puzzles/widgets/difficulty_filter_chips.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/features/puzzles/widgets/puzzles_filter_row.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 
 void main() {
@@ -47,7 +47,10 @@ void main() {
   testWidgets('shows ContinuePlayingSection at top', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => testPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:
@@ -63,12 +66,15 @@ void main() {
     expect(find.byType(ContinuePlayingSection), findsOneWidget);
   });
 
-  testWidgets('shows DifficultyFilterChips below ContinuePlayingSection', (
+  testWidgets('shows PuzzlesFilterRow below ContinuePlayingSection', (
     tester,
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => testPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:
@@ -80,14 +86,17 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Filter chips should be visible
-    expect(find.byType(DifficultyFilterChips), findsOneWidget);
+    // Filter chips should be visible (inside PuzzlesFilterRow)
+    expect(find.byType(PuzzlesFilterRow), findsOneWidget);
   });
 
   testWidgets('list shows all puzzles initially', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => testPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:
@@ -108,7 +117,10 @@ void main() {
   testWidgets('shows puzzle count in app bar', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => testPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:
@@ -135,6 +147,7 @@ void main() {
               () => testPuzzles,
             ),
           ),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -163,6 +176,7 @@ void main() {
           puzzlesProvider.overrideWith(
             (ref) async => throw Exception('Test error'),
           ),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -197,7 +211,10 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => manyPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => manyPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:
@@ -218,7 +235,10 @@ void main() {
   testWidgets('settings icon opens settings menu', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => testPuzzles)],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => testPuzzles),
+          inProgressPuzzlesProvider.overrideWith((ref) async => []),
+        ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
