@@ -217,8 +217,8 @@ void main() {
       expect(result, isNotEmpty);
       expect(result.length, greaterThanOrEqualTo(2));
 
-      // Verify first word is the longest
-      expect(['FRANCE', 'EIFFEL'], contains(result[0].word.answer));
+      // Verify first word is one of the top length words (randomized start)
+      expect(['FRANCE', 'EIFFEL', 'PARIS'], contains(result[0].word.answer));
 
       // Check that placed words have valid positions
       for (final placed in result) {

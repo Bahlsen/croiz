@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:croiz/features/generation/models/generated_word.dart';
 
 /// Represents a word placed on the grid.
@@ -262,8 +264,41 @@ class GridGenerator {
 
   /// Returns a score > 0 if valid.
   /// Score = Intersections + CompactnessBonus
+  // Scrabble-like weights for letters (English/French mix approximation)
+  static const Map<String, int> _letterWeights = {
+    'E': 1,
+    'A': 1,
+    'I': 1,
+    'O': 1,
+    'N': 1,
+    'R': 1,
+    'T': 1,
+    'L': 1,
+    'S': 1,
+    'U': 1,
+    'D': 2,
+    'G': 2,
+    'M': 3,
+    'B': 3,
+    'C': 3,
+    'P': 3,
+    'F': 4,
+    'H': 4,
+    'V': 4,
+    'J': 8,
+    'Q': 10,
+    'K': 5,
+    'W': 4,
+    'X': 8,
+    'Y': 4,
+    'Z': 10,
+  };
+
+  /// Returns a score > 0 if valid.
+  /// Score = WeightedIntersections - CenterDistancePenalty
   double _evaluatePlacement(String word, int x, int y, bool isHorizontal) {
     var intersections = 0;
+    var weightedIntersectionScore = 0.0;
 
     // 1. Validity Check & Intersection Count
     for (var i = 0; i < word.length; i++) {
@@ -273,13 +308,17 @@ class GridGenerator {
 
       if (char == null) {
         if (!_isIsolated(cx, cy, isHorizontal)) {
-          return -1; // Invalid
+          return -1.0; // Invalid
         }
       } else {
         if (char != word[i]) {
-          return -1; // Mismatch
+          return -1.0; // Mismatch
         }
         intersections++;
+        // Boost score for difficult letters
+        final weight = _letterWeights[char.toUpperCase()] ?? 1;
+        weightedIntersectionScore +=
+            (weight * 15.0); // Multiplier to make it significant
       }
     }
 
@@ -287,31 +326,41 @@ class GridGenerator {
     final beforeX = isHorizontal ? x - 1 : x;
     final beforeY = isHorizontal ? y : y - 1;
     if (isValid(beforeX, beforeY) && _grid[beforeY][beforeX] != null) {
-      return -1;
+      return -1.0;
     }
 
     final afterX = isHorizontal ? x + word.length : x;
     final afterY = isHorizontal ? y : y + word.length;
     if (isValid(afterX, afterY) && _grid[afterY][afterX] != null) {
-      return -1;
+      return -1.0;
     }
 
     // Constraint: Must intersect at least once (unless it's the very first word, but this func is for subsequent words)
     // Actually, in `_generateSinglePass`, we already placed the first word.
     // So all subsequent words MUST attach.
     if (intersections == 0) {
-      return -1;
+      return -1.0;
     }
 
-    // 2. Score Calculation
-    // Base score: Intersections (High is good)
-    // Penalty: Distance from center (Keep it compact) ?
-    // Actually, simpler is check how many Neighbors it effectively has.
+    // 2. Score Calculation: GRAVITY
+    // Calculate distance from grid center
+    final centerX = width / 2.0;
+    final centerY = height / 2.0;
 
-    // Use a simple metric: Intersections squared (reward high connectivity heavily)
-    final connectivityScore = (intersections * intersections).toDouble();
+    // Word center approximation
+    final wordCenterX = isHorizontal ? x + (word.length / 2.0) : x + 0.5;
+    final wordCenterY = isHorizontal ? y + 0.5 : y + (word.length / 2.0);
 
-    return connectivityScore;
+    final dist = sqrt(
+      pow(wordCenterX - centerX, 2) + pow(wordCenterY - centerY, 2),
+    );
+
+    // Penalty grows with distance (Gravity)
+    // Helps keep puzzle compact
+    final gravityPenalty = dist * 2.0;
+
+    // Final Score: Rewards hard intersections, Penalizes distance
+    return weightedIntersectionScore - gravityPenalty + (intersections * 100.0);
   }
 
   /// Checks if placing a character at x,y (as part of a word flowing isHorizontal)
