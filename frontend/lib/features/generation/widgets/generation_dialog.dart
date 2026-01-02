@@ -150,6 +150,14 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
                         value: 15,
                         child: Text('15x15 (${l10n?.standard ?? 'Standard'})'),
                       ),
+                      const DropdownMenuItem(
+                        value: 20,
+                        child: Text('20x20 (Large)'),
+                      ),
+                      const DropdownMenuItem(
+                        value: 25,
+                        child: Text('25x25 (Extra Large)'),
+                      ),
                     ],
                     onChanged: (v) => setState(() => _size = v!),
                   ),
