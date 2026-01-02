@@ -80,28 +80,67 @@ class GeminiPuzzleService {
 ]
 ''';
 
-    // Difficulty nuance
-    String diffDesc;
-    if (difficulty <= 2) {
-      diffDesc = 'simple and common words';
-    } else if (difficulty >= 4) {
-      diffDesc = 'complex, rare or scholarly words';
-    } else {
-      diffDesc = 'medium difficulty words';
+    // Detailed difficulty criteria
+    String diffInstructions;
+    switch (difficulty) {
+      case 1: // Very Easy
+        diffInstructions = '''
+- Target Audience: Beginners and kids.
+- Words: Very common, everyday words. Avoid any obscure terms.
+- Clues: Direct, literal definitions. Simple and short.
+- Topic Connection: Use general knowledge related to "$topic".
+''';
+        break;
+      case 2: // Easy
+        diffInstructions = '''
+- Target Audience: Casual solvers.
+- Words: Mostly common words.
+- Clues: Straightforward definitions.
+- Topic Connection: Standard facts about "$topic".
+''';
+        break;
+      case 3: // Medium
+        diffInstructions = '''
+- Target Audience: Regular crossword players.
+- Words: Mix of common and some slightly less common words.
+- Clues: Standard definitions, occasional synonyms or simple associations.
+- Topic Connection: Good knowledge of "$topic".
+''';
+        break;
+      case 4: // Hard
+        diffInstructions = '''
+- Target Audience: Experienced solvers.
+- Words: Include some rare, literary, or technical terms.
+- Clues: Use synonyms, associations, or slightly abstract descriptions.
+- Topic Connection: Specific or detailed knowledge of "$topic".
+''';
+        break;
+      case 5: // Expert
+        diffInstructions = '''
+- Target Audience: Experts.
+- Words: Rare, obscure, or specific vocabulary. Long words preferred.
+- Clues: Puns, wordplay, double meanings, cryptic hints, or abstract associations.
+- Topic Connection: Deep cuts, obscure facts, or tangential relationships to "$topic".
+''';
+        break;
+      default:
+        diffInstructions = 'Standard difficulty.';
     }
 
     return '''
 Generate a list of $count distinct crossword puzzle words related to the topic: "$topic".
 Language: $langName.
-Difficulty: $diffDesc.
+Difficulty Level: $difficulty/5.
 
-Each word must be:
+Specific Difficulty Instructions:
+$diffInstructions
+
+Global Constraints:
 1. Valid $langName dictionary word.
 2. Between 3 and 15 letters long.
 3. No spaces, no hyphens, just A-Z letters.
 4. Normalized (remove accents: É->E, Ê->E).
-
-5. Provide a clue for each word. The clue should be definition-style (crossword style).
+5. Provide a clue for each word based on the difficulty instructions above.
 
 Output MUST be a valid JSON array. Do not include markdown formatting like ```json ... ```. 
 Just the raw JSON array.

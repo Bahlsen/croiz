@@ -344,12 +344,12 @@ class GridGenerator {
 
     // 2. Score Calculation: GRAVITY
     // Calculate distance from grid center
-    final centerX = width / 2.0;
-    final centerY = height / 2.0;
+    final centerX = width / 2;
+    final centerY = height / 2;
 
     // Word center approximation
-    final wordCenterX = isHorizontal ? x + (word.length / 2.0) : x + 0.5;
-    final wordCenterY = isHorizontal ? y + 0.5 : y + (word.length / 2.0);
+    final wordCenterX = isHorizontal ? x + (word.length / 2) : x + 0.5;
+    final wordCenterY = isHorizontal ? y + 0.5 : y + (word.length / 2);
 
     final dist = sqrt(
       pow(wordCenterX - centerX, 2) + pow(wordCenterY - centerY, 2),
@@ -357,10 +357,10 @@ class GridGenerator {
 
     // Penalty grows with distance (Gravity)
     // Helps keep puzzle compact
-    final gravityPenalty = dist * 2.0;
+    final gravityPenalty = dist * 2;
 
     // Final Score: Rewards hard intersections, Penalizes distance
-    return weightedIntersectionScore - gravityPenalty + (intersections * 100.0);
+    return weightedIntersectionScore - gravityPenalty + (intersections * 100);
   }
 
   /// Checks if placing a character at x,y (as part of a word flowing isHorizontal)
