@@ -7,11 +7,31 @@ import 'package:sizer/sizer.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 
+import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+
+class FakeGameBoardNotifier extends GameBoardNotifier {
+  @override
+  GameBoard build() => GameBoard(
+    id: 'test',
+    title: 'Test',
+    gridSize: 5,
+    createdAt: DateTime.now(),
+    grid: [],
+    clues: {},
+    blackCells: [],
+    difficulty: 1,
+    language: 'en',
+  );
+}
+
 void main() {
   testWidgets('Keyboard size default is medium and updates to large', (
     tester,
   ) async {
-    final container = ProviderContainer();
+    final container = ProviderContainer(
+      overrides: [gameBoardProvider.overrideWith(FakeGameBoardNotifier.new)],
+    );
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,

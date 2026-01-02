@@ -112,7 +112,10 @@ void main() {
 
       // Mark words as found to trigger overlay
       container.read(foundWordsProvider.notifier).setFoundWords({'0,0,across'});
-      await tester.pumpAndSettle();
+      // Use limited pumps to avoid timeout from infinite animations
+      for (var i = 0; i < 20; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
 
       // Expect formatted time displayed
       expect(find.text('02:05'), findsOneWidget);

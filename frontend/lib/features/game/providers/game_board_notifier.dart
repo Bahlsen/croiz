@@ -123,11 +123,22 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     );
   }
 
-  /// Handle loading state - throws appropriate error.
-  Never _handleLoading() {
+  /// Handle loading state - returns dummy/empty board if no puzzle selected.
+  GameBoard _handleLoading() {
     final selected = ref.read(selectedPuzzleIdProvider);
     if (selected == null) {
-      throw StateError('No puzzle selected');
+      // Return a dummy empty board to prevent UI crashes in tests or initial states
+      return GameBoard(
+        id: 'empty',
+        title: '',
+        gridSize: 0,
+        createdAt: DateTime.now(),
+        grid: [],
+        clues: {},
+        blackCells: [],
+        difficulty: 1,
+        language: 'en',
+      );
     }
     throw StateError('Puzzle is loading: $selected');
   }

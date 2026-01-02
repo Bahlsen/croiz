@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -26,8 +27,16 @@ class GeneratedPuzzlesRepository {
     final box = await _openBox();
     final data = box.get(id);
     if (data != null) {
-      // Hive might return it as LinkedMap, casting safely
-      return Map<String, dynamic>.from(data as Map);
+      // Hive returns Map<dynamic, dynamic> which causes issues with json_serializable
+      // parsing of nested objects (mostly Metadata and Cell/Entry annotations).
+      // The safest way to "normalize" this structure to strictly Map<String, dynamic>
+      // throughout the entire depth is to encode and decode it.
+      try {
+        return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
+      } on Object catch (_) {
+        // Fallback or re-throw
+        return Map<String, dynamic>.from(data as Map);
+      }
     }
     return null;
   }

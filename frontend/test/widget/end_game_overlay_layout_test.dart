@@ -80,7 +80,9 @@ void main() {
     );
 
     await tester.pump();
-    await tester.pumpAndSettle();
+    // Pump for enough time to let entry animations finish (max delay is 800ms)
+    // We cannot use pumpAndSettle because of the infinite shimmer/repeat animation
+    await tester.pump(const Duration(seconds: 2));
 
     // Overlay text should appear and block interaction area
     expect(find.text('Congratulations!'), findsOneWidget);

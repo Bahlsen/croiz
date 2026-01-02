@@ -137,7 +137,7 @@ class _EndGameOverlayState extends ConsumerState<EndGameOverlay> {
                             color: scheme.primary,
                           ),
                         )
-                        .animate(onPlay: (controller) => controller.repeat())
+                        .animate()
                         .shimmer(
                           duration: 2000.ms,
                           color: scheme.primaryContainer.withValues(alpha: 0.5),

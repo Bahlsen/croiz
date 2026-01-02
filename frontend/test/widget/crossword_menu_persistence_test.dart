@@ -5,12 +5,31 @@ import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 
+import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
+
+class FakeGameBoardNotifier extends GameBoardNotifier {
+  @override
+  GameBoard build() => GameBoard(
+    id: 'test',
+    title: 'Test',
+    gridSize: 5,
+    createdAt: DateTime.now(),
+    grid: [],
+    clues: {},
+    blackCells: [],
+    difficulty: 1,
+    language: 'en',
+  );
+}
+
 void main() {
   testWidgets('Menu toggles persist across open/close', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [gameBoardProvider.overrideWith(FakeGameBoardNotifier.new)],
         child: Sizer(
           builder:
               (context, orientation, deviceType) => MaterialApp(

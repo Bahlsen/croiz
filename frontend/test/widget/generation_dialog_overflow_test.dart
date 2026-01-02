@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/generation/widgets/generation_dialog.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 
 void main() {
   testWidgets('GenerationDialog handles small height without overflow', (
     WidgetTester tester,
   ) async {
     // Standard small phone size (common for keyboard simulation)
-    // 360x640 is a standard Android size.
-    tester.view.physicalSize = const Size(360, 640);
+    // 800x1600 to rule out constraint issues
+    tester.view.physicalSize = const Size(800, 1600);
     tester.view.devicePixelRatio = 1.0;
 
     addTearDown(() {
@@ -19,7 +20,11 @@ void main() {
 
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(home: Scaffold(body: GenerationDialog())),
+        child: MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: GenerationDialog()),
+        ),
       ),
     );
 

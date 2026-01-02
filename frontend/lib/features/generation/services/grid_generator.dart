@@ -197,12 +197,14 @@ class GridGenerator {
     // Greedy placement with MRV heuristic and forward checking
     var madeProgress = true;
     var passCount = 0;
-    const maxPasses =
-        7; // Increased from 5 to allow more refinement with 40 words
+    // Limit passes to prevent infinite loops, but allow enough for full grid
+    final maxPasses = words.length + 10;
+    // print('maxPasses: $maxPasses, remaining: ${remaining.length}');
 
     while (madeProgress && passCount < maxPasses && remaining.isNotEmpty) {
       madeProgress = false;
       passCount++;
+      // print('Pass $passCount, remaining: ${remaining.length}');
 
       // MRV: Select word with fewest valid positions (most constrained)
       GeneratedWord? bestWord;
@@ -210,6 +212,7 @@ class GridGenerator {
 
       for (final word in remaining) {
         final moveCount = domains[word]?.length ?? 0;
+        // print('Word ${word.answer} has $moveCount moves');
         if (moveCount > 0 && moveCount < minMoves) {
           minMoves = moveCount.toDouble();
           bestWord = word;
@@ -217,13 +220,15 @@ class GridGenerator {
       }
 
       if (bestWord == null) {
-        // No word can be placed
+        // No word can be placed - all remaining words have no valid positions
         break;
       }
+      // print('Selected bestWord: ${bestWord.answer} with $minMoves moves');
 
       // Get best move for this word
       final moves = domains[bestWord]!;
       if (moves.isEmpty) {
+        // print('Moves empty for ${bestWord.answer}');
         remaining.remove(bestWord);
         domains.remove(bestWord);
         continue;
@@ -232,6 +237,7 @@ class GridGenerator {
       // Pick highest scoring move
       moves.sort((a, b) => b.score.compareTo(a.score));
       final bestMove = moves.first;
+      // print('Placing ${bestWord.answer} at ${bestMove.x},${bestMove.y} (${bestMove.isHorizontal ? "H" : "V"}) score: ${bestMove.score}');
 
       // Place the word
       _place(bestWord, bestMove.x, bestMove.y, bestMove.isHorizontal, placed);
@@ -261,7 +267,7 @@ class GridGenerator {
         // But we continue trying others
       }
     }
-
+    // print('Pass ended. Placed: ${placed.length}');
     return placed;
   }
 

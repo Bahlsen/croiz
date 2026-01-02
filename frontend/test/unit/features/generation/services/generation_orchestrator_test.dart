@@ -5,6 +5,8 @@ import 'package:croiz/features/generation/services/gemini_service.dart';
 import 'package:croiz/features/generation/services/generation_orchestrator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:croiz/data/models/puzzle.dart';
+import 'package:croiz/features/generation/utils/puzzle_converter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MockGeminiPuzzleService extends Mock implements GeminiPuzzleService {}
@@ -64,6 +66,17 @@ void main() {
           const GeneratedWord(answer: 'CHAMPS', clue: 'Fields'),
           const GeneratedWord(answer: 'AVENUE', clue: 'Street'),
           const GeneratedWord(answer: 'METRO', clue: 'Subway'),
+          // Add filler words to ensure density
+          const GeneratedWord(answer: 'ART', clue: 'Creative'),
+          const GeneratedWord(answer: 'BUS', clue: 'Transport'),
+          const GeneratedWord(answer: 'CAR', clue: 'Vehicle'),
+          const GeneratedWord(answer: 'DOG', clue: 'Pet'),
+          const GeneratedWord(answer: 'CAT', clue: 'Pet'),
+          const GeneratedWord(answer: 'EAT', clue: 'Food'),
+          const GeneratedWord(answer: 'BAT', clue: 'Animal'),
+          const GeneratedWord(answer: 'HAT', clue: 'Clothing'),
+          const GeneratedWord(answer: 'MAT', clue: 'Rug'),
+          const GeneratedWord(answer: 'PAT', clue: 'Touch'),
         ];
 
         when(
@@ -100,7 +113,7 @@ void main() {
             topic: 'France',
             language: 'fr',
             difficultyLevel: 2,
-            count: 60, // size * 4
+            count: 40, // size * 4
           ),
         ).called(1);
 
@@ -116,10 +129,21 @@ void main() {
         expect(savedPuzzle['metadata']['language'], 'fr');
         expect(savedPuzzle['metadata']['difficulty'], 2);
         expect(savedPuzzle['metadata']['author'], 'AI');
-        expect(savedPuzzle['rows'], 15);
-        expect(savedPuzzle['cols'], 15);
+        expect(savedPuzzle['rows'], 10);
+        expect(savedPuzzle['cols'], 10);
         expect(savedPuzzle['cells'], isNotEmpty);
         expect(savedPuzzle['entries'], isNotEmpty);
+
+        // Verify that the generated JSON can be loaded back
+        // This reproduces the "error when loading" issue reported by user
+        try {
+          final puzzleModel = Puzzle.fromJson(savedPuzzle);
+          final gameBoard = PuzzleConverter.puzzleToGameBoard(puzzleModel);
+          expect(gameBoard.grid.length, 10);
+          expect(gameBoard.entries, isNotEmpty);
+        } catch (e, st) {
+          fail('Failed to load generated puzzle: $e\n$st');
+        }
       });
 
       test('should throw exception when not enough words generated', () async {
@@ -236,7 +260,7 @@ void main() {
           topic: 'test topic',
           language: 'en',
           difficulty: 3,
-          size: 10,
+          size: 5,
         );
 
         // Assert
@@ -251,13 +275,13 @@ void main() {
         expect(metadata['language'], 'en');
         expect(metadata['difficulty'], 3);
         expect(metadata['difficulty_label'], 'Generated');
-        expect(metadata['width'], 10);
-        expect(metadata['height'], 10);
+        expect(metadata['width'], 5);
+        expect(metadata['height'], 5);
 
         // Check grid structure
-        expect(savedPuzzle['rows'], 10);
-        expect(savedPuzzle['cols'], 10);
-        expect(savedPuzzle['cells'], hasLength(100)); // 10x10 grid
+        expect(savedPuzzle['rows'], 5);
+        expect(savedPuzzle['cols'], 5);
+        expect(savedPuzzle['cells'], hasLength(25)); // 5x5 grid
 
         // Check cells structure
         final cells = savedPuzzle['cells'] as List;
@@ -346,8 +370,12 @@ void main() {
         // Arrange
         // We place just one small word in a large grid
         final words = [
-          const GeneratedWord(answer: 'A', clue: 'First letter'),
-          const GeneratedWord(answer: 'B', clue: 'Second letter'),
+          const GeneratedWord(answer: 'NO', clue: 'Refusal'),
+          const GeneratedWord(answer: 'GO', clue: 'Move'),
+          const GeneratedWord(answer: 'DO', clue: 'Action'),
+          const GeneratedWord(answer: 'TO', clue: 'Direction'),
+          const GeneratedWord(answer: 'SO', clue: 'Thus'),
+          const GeneratedWord(answer: 'IT', clue: 'Thing'),
         ];
 
         when(

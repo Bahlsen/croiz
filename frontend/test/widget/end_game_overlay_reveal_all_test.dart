@@ -81,7 +81,11 @@ void main() {
 
     // Allow timers (flash/persist) to run
     await tester.pump(const Duration(milliseconds: 600));
-    await tester.pumpAndSettle();
+    // Use limited pumps to avoid timeout from infinite animations
+    // The shimmer/repeat animation in EndGameOverlay causes pumpAndSettle to loop forever
+    for (var i = 0; i < 20; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
 
     // Now the overlay should appear
     expect(congratsFinder, findsOneWidget);

@@ -35,7 +35,7 @@ class PuzzleFilterState {
   /// Whether any filter is active (not default).
   bool get hasActiveFilters =>
       selectedDifficulties.length < 5 ||
-      !showCompleted ||
+      showCompleted ||
       selectedLanguages.isNotEmpty ||
       showGeneratedOnly ||
       searchQuery.isNotEmpty;

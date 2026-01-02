@@ -29,12 +29,12 @@ void main() {
       expect(state.selectedLanguages, isEmpty);
     });
 
-    test('showCompleted is true by default', () {
+    test('showCompleted is false by default', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
       final state = container.read(puzzleFilterProvider);
-      expect(state.showCompleted, isTrue);
+      expect(state.showCompleted, isFalse);
     });
   });
 
@@ -196,7 +196,7 @@ void main() {
         4,
         5,
       });
-      expect(container.read(puzzleFilterProvider).showCompleted, isTrue);
+      expect(container.read(puzzleFilterProvider).showCompleted, isFalse);
     });
   });
 
@@ -259,13 +259,13 @@ void main() {
       expect(container.read(puzzleFilterProvider).hasActiveFilters, isTrue);
     });
 
-    test('returns true when showCompleted is false', () {
+    test('returns true when showCompleted is true', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
       container
           .read(puzzleFilterProvider.notifier)
-          .setShowCompleted(showCompleted: false);
+          .setShowCompleted(showCompleted: true);
 
       expect(container.read(puzzleFilterProvider).hasActiveFilters, isTrue);
     });
