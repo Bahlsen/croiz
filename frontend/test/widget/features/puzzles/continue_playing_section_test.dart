@@ -65,7 +65,6 @@ void main() {
 
     expect(find.text('Test Puzzle 1'), findsOneWidget);
     expect(find.text('45%'), findsOneWidget);
-    expect(find.text('5m'), findsOneWidget); // 300s = 5m
   });
 
   testWidgets('card shows difficulty badge', (tester) async {

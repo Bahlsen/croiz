@@ -371,12 +371,13 @@ class _CellContent extends StatelessWidget {
             : Colors.black;
 
     final numberStyle = TextStyle(
-      fontSize: 8,
+      fontSize: 9,
       color:
           isBlack
               ? blackLetterColor.withAlpha((0.58 * 255).round())
               : scheme.onSurface.withAlpha((0.58 * 255).round()),
       fontWeight: FontWeight.w500,
+      height: 1,
     );
 
     final baseLetterStyle = TextStyle(
@@ -391,32 +392,34 @@ class _CellContent extends StatelessWidget {
       letterSpacing: -0.5,
     );
 
-    return Stack(
-      children: [
-        if (cellNumber != null)
-          Positioned(
-            left: 2,
-            top: 1,
-            child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 200),
-              opacity: isBlack ? 0.3 : 0.8,
-              child: Text('$cellNumber', style: numberStyle),
-            ),
-          ),
-        Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: _letterPadding,
-              child: AnimatedDefaultTextStyle(
+    return ClipRect(
+      child: Stack(
+        children: [
+          if (cellNumber != null)
+            Positioned(
+              left: 3,
+              top: 2,
+              child: AnimatedOpacity(
                 duration: const Duration(milliseconds: 200),
-                style: baseLetterStyle,
-                child: Text(letter ?? ''),
+                opacity: isBlack ? 0.3 : 0.8,
+                child: Text('$cellNumber', style: numberStyle),
+              ),
+            ),
+          Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Padding(
+                padding: _letterPadding,
+                child: AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 200),
+                  style: baseLetterStyle,
+                  child: Text(letter ?? ''),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

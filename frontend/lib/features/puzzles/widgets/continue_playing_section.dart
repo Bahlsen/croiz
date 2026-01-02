@@ -260,14 +260,6 @@ class _InProgressCard extends ConsumerWidget {
     );
   }
 
-  static String _formatTime(int seconds) {
-    if (seconds < 60) {
-      return '${seconds}s';
-    }
-    final minutes = seconds ~/ 60;
-    return '${minutes}m';
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -275,7 +267,7 @@ class _InProgressCard extends ConsumerWidget {
     final colors = _getDifficultyColors(puzzle.descriptor.difficulty);
 
     return Container(
-      width: 200, // More horizontal width vs height
+      width: 160, // Compact width for better density
       margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey.shade900 : Colors.white,
@@ -345,19 +337,11 @@ class _InProgressCard extends ConsumerWidget {
                             puzzle.descriptor.title,
                             style: theme.textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.bold,
-                              fontSize: 14.sp,
+                              fontSize: 16.sp,
                               letterSpacing: -0.5,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          '${puzzle.completionPercent}%',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: colors.last,
-                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ],
@@ -367,44 +351,24 @@ class _InProgressCard extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _getDifficultyLabel(
-                                puzzle.descriptor.difficulty,
-                                context,
-                              ).toUpperCase(),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: colors.last.withValues(alpha: 0.8),
-                                fontWeight: FontWeight.w800,
-                                fontSize: 9.sp,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              _formatTime(puzzle.progress.elapsedSeconds),
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant
-                                    .withValues(alpha: 0.5),
-                                fontSize: 7.sp,
-                              ),
-                            ),
-                          ],
+                        Text(
+                          _getDifficultyLabel(
+                            puzzle.descriptor.difficulty,
+                            context,
+                          ).toUpperCase(),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: colors.last.withValues(alpha: 0.8),
+                            fontWeight: FontWeight.w800,
+                            fontSize: 11.sp,
+                            letterSpacing: 0.5,
+                          ),
                         ),
-                        // Mini localized progress ring
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            value: puzzle.completionPercent / 100,
-                            strokeWidth: 3,
-                            backgroundColor:
-                                theme.colorScheme.surfaceContainerHighest,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              colors.last,
-                            ),
+                        Text(
+                          '${puzzle.completionPercent}%',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: colors.last,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 18.sp,
                           ),
                         ),
                       ],
@@ -418,7 +382,7 @@ class _InProgressCard extends ConsumerWidget {
                 right: 0,
                 bottom: 0,
                 child: Container(
-                  height: 3,
+                  height: 5,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainerHighest,
                     borderRadius: const BorderRadius.only(

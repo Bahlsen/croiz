@@ -100,7 +100,7 @@ class PuzzleCard extends ConsumerWidget {
                                       ).toUpperCase(),
                                       style: TextStyle(
                                         color: colors.last,
-                                        fontSize: 10.sp,
+                                        fontSize: 12.sp,
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: 0.5,
                                       ),
@@ -112,7 +112,7 @@ class PuzzleCard extends ConsumerWidget {
                                         style: theme.textTheme.titleMedium
                                             ?.copyWith(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16.sp,
+                                              fontSize: 18.sp,
                                               letterSpacing: -0.3,
                                               decoration:
                                                   isCompleted
@@ -252,7 +252,7 @@ class PuzzleCard extends ConsumerWidget {
       style: theme.textTheme.bodySmall?.copyWith(
         color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
         fontWeight: FontWeight.w500,
-        fontSize: 9.sp,
+        fontSize: 11.sp,
       ),
     );
   }
@@ -291,7 +291,7 @@ class PuzzleCard extends ConsumerWidget {
           '$percent%',
           style: theme.textTheme.labelSmall?.copyWith(
             fontWeight: FontWeight.w900,
-            fontSize: 8.sp,
+            fontSize: 10.sp,
             color: primaryColor,
           ),
         ),
