@@ -183,17 +183,40 @@ class ContinuePlayingSection extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.fromLTRB(4.w, 2.h, 4.w, 1.h),
-              child: Text(
-                l10n?.continuePlaying ?? 'Continue Playing',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                ),
+              padding: EdgeInsets.fromLTRB(4.w, 1.5.h, 4.w, 0.5.h),
+              child: Row(
+                children: [
+                  Text(
+                    l10n?.continuePlaying ?? 'Continue Playing',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                      color: theme.colorScheme.primary.withValues(alpha: 0.9),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primaryContainer,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      '${puzzles.length}',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(
-              height: 155, // Height to fit all info comfortably
+              height: 115, // Significantly reduced from 155
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: 2.w),
@@ -209,7 +232,7 @@ class ContinuePlayingSection extends ConsumerWidget {
       },
       loading:
           () => SizedBox(
-            height: 20.h,
+            height: 15.h,
             child: const Center(child: CircularProgressIndicator()),
           ),
       error: (e, s) => const SizedBox.shrink(),
@@ -238,27 +261,30 @@ class _InProgressCard extends ConsumerWidget {
   }
 
   static String _formatTime(int seconds) {
+    if (seconds < 60) {
+      return '${seconds}s';
+    }
     final minutes = seconds ~/ 60;
-    final secs = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+    return '${minutes}m';
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final colors = _getDifficultyColors(puzzle.descriptor.difficulty);
 
     return Container(
-      width: 180, // Balanced width for all info
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      width: 200, // More horizontal width vs height
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: BoxDecoration(
         color: isDark ? Colors.grey.shade900 : Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
@@ -277,79 +303,183 @@ class _InProgressCard extends ConsumerWidget {
               puzzle.descriptor.source.isLocal
                   ? () => _onLongPress(context, ref)
                   : null,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _DifficultyIndicator(
-                      difficulty: puzzle.descriptor.difficulty,
-                    ),
-                    Text(
-                      _formatTime(puzzle.progress.elapsedSeconds),
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant.withValues(
-                          alpha: 0.7,
+          borderRadius: BorderRadius.circular(12),
+          child: Stack(
+            children: [
+              // Subtle background progress hint
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: FractionallySizedBox(
+                    widthFactor: puzzle.completionPercent / 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            colors.first.withValues(alpha: 0.05),
+                            colors.last.withValues(alpha: 0.1),
+                          ],
                         ),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 8.sp,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          bottomLeft: Radius.circular(12),
+                        ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                // Title (Readable and Bold)
-                Expanded(
-                  child: Text(
-                    puzzle.descriptor.title,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14.sp,
-                      height: 1.1,
-                      letterSpacing: -0.3,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(height: 10),
-                // Progress Label
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '${puzzle.completionPercent}%',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 12.sp,
-                      ),
+                    Row(
+                      children: [
+                        _DifficultyDot(
+                          difficulty: puzzle.descriptor.difficulty,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            puzzle.descriptor.title,
+                            style: theme.textTheme.titleSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12.sp,
+                              letterSpacing: -0.5,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${puzzle.completionPercent}%',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: colors.last,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _getDifficultyLabel(
+                                puzzle.descriptor.difficulty,
+                                context,
+                              ).toUpperCase(),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: colors.last.withValues(alpha: 0.8),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 7.sp,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              _formatTime(puzzle.progress.elapsedSeconds),
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant
+                                    .withValues(alpha: 0.5),
+                                fontSize: 7.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Mini localized progress ring
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            value: puzzle.completionPercent / 100,
+                            strokeWidth: 3,
+                            backgroundColor:
+                                theme.colorScheme.surfaceContainerHighest,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              colors.last,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
-                // Progress Bar
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(3),
-                  child: LinearProgressIndicator(
-                    value: puzzle.completionPercent / 100,
-                    minHeight: 4,
-                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      theme.colorScheme.primary,
+              ),
+              // Bottom Progress Bar (Neon line)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Container(
+                  height: 3,
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                  ),
+                  child: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: puzzle.completionPercent / 100,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: colors),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(12),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  String _getDifficultyLabel(int difficulty, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    switch (difficulty) {
+      case 1:
+        return l10n?.easy ?? 'Easy';
+      case 2:
+        return l10n?.medium ?? 'Medium';
+      case 3:
+        return l10n?.hard ?? 'Hard';
+      case 4:
+        return l10n?.expert ?? 'Expert';
+      case 5:
+        return l10n?.pro ?? 'Pro';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  List<Color> _getDifficultyColors(int difficulty) {
+    switch (difficulty) {
+      case 1:
+        return [Colors.green, Colors.teal];
+      case 2:
+        return [Colors.amber, Colors.orange];
+      case 3:
+        return [Colors.orange, Colors.deepOrange];
+      case 4:
+        return [Colors.red, Colors.pink];
+      case 5:
+        return [Colors.purple, Colors.indigo];
+      default:
+        return [Colors.grey, Colors.blueGrey];
+    }
   }
 
   Future<void> _onLongPress(BuildContext context, WidgetRef ref) async {
@@ -418,19 +548,26 @@ class _InProgressCard extends ConsumerWidget {
   }
 }
 
-class _DifficultyIndicator extends StatelessWidget {
-  const _DifficultyIndicator({required this.difficulty});
+class _DifficultyDot extends StatelessWidget {
+  const _DifficultyDot({required this.difficulty});
   final int difficulty;
 
   @override
   Widget build(BuildContext context) {
     final colors = _getColors();
     return Container(
-      width: 40,
-      height: 6,
+      width: 10,
+      height: 10,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(3),
+        shape: BoxShape.circle,
         gradient: LinearGradient(colors: colors),
+        boxShadow: [
+          BoxShadow(
+            color: colors.last.withValues(alpha: 0.5),
+            blurRadius: 4,
+            spreadRadius: 1,
+          ),
+        ],
       ),
     );
   }

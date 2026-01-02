@@ -28,71 +28,119 @@ class PuzzleCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final colors = _getDifficultyColors(descriptor.difficulty);
 
     return Opacity(
-      opacity: isCompleted ? 0.7 : 1.0,
+      opacity: isCompleted ? 0.6 : 1.0,
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+        margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.6.h),
         decoration: BoxDecoration(
           color: isDark ? Colors.grey.shade900 : Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
           border: Border.all(
             color:
-                isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
+                isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.04),
             width: 1,
           ),
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(12),
             onTap: () => _onTap(context, ref),
             onLongPress:
                 descriptor.source.isLocal
                     ? () => _onLongPress(context, ref)
                     : null,
-            child: Padding(
-              padding: EdgeInsets.all(4.w),
+            child: IntrinsicHeight(
               child: Row(
                 children: [
-                  // Info Section
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildDifficultyTag(theme, context),
-                        SizedBox(height: 1.h),
-                        Text(
-                          descriptor.title,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
-                            decoration:
-                                isCompleted ? TextDecoration.lineThrough : null,
-                            color:
-                                isCompleted
-                                    ? theme.colorScheme.onSurfaceVariant
-                                        .withValues(alpha: 0.6)
-                                    : null,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: 0.5.h),
-                        _buildMetadata(theme),
-                      ],
+                  // Difficulty Color Strip
+                  Container(
+                    width: 6,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: colors,
+                      ),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                      ),
                     ),
                   ),
-                  SizedBox(width: 4.w),
-                  // Progress Section
-                  _buildProgressIndicator(theme),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 4.w,
+                        vertical: 1.2.h,
+                      ),
+                      child: Row(
+                        children: [
+                          // Left Section: Importance Info
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      _getDifficultyLabel(
+                                        descriptor.difficulty,
+                                        context,
+                                      ).toUpperCase(),
+                                      style: TextStyle(
+                                        color: colors.last,
+                                        fontSize: 8.sp,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        descriptor.title,
+                                        style: theme.textTheme.titleMedium
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13.sp,
+                                              letterSpacing: -0.3,
+                                              decoration:
+                                                  isCompleted
+                                                      ? TextDecoration
+                                                          .lineThrough
+                                                      : null,
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                if (descriptor.origin.isNotEmpty ||
+                                    descriptor.year.isNotEmpty) ...[
+                                  SizedBox(height: 0.4.h),
+                                  _buildMetadata(theme),
+                                ],
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 3.w),
+                          // Right Section: Progress
+                          _buildProgressIndicator(theme, colors.last),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -173,51 +221,22 @@ class PuzzleCard extends ConsumerWidget {
     }
   }
 
-  Widget _buildDifficultyTag(ThemeData theme, BuildContext context) {
-    final colors = _getDifficultyColors(descriptor.difficulty);
+  String _getDifficultyLabel(int difficulty, BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    String label;
-    switch (descriptor.difficulty) {
+    switch (difficulty) {
       case 1:
-        label = l10n?.easy ?? 'Easy';
-        break;
+        return l10n?.easy ?? 'Easy';
       case 2:
-        label = l10n?.medium ?? 'Medium';
-        break;
+        return l10n?.medium ?? 'Medium';
       case 3:
-        label = l10n?.hard ?? 'Hard';
-        break;
+        return l10n?.hard ?? 'Hard';
       case 4:
-        label = l10n?.expert ?? 'Expert';
-        break;
+        return l10n?.expert ?? 'Expert';
       case 5:
-        label = l10n?.pro ?? 'Pro';
-        break;
+        return l10n?.pro ?? 'Pro';
       default:
-        label = descriptor.difficultyLabel;
+        return descriptor.difficultyLabel;
     }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colors.first.withValues(alpha: 0.8),
-            colors.last.withValues(alpha: 0.8),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label.toUpperCase(),
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 10,
-          fontWeight: FontWeight.w800,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
   }
 
   Widget _buildMetadata(ThemeData theme) {
@@ -230,21 +249,22 @@ class PuzzleCard extends ConsumerWidget {
     return Text(
       parts.join(' • '),
       style: theme.textTheme.bodySmall?.copyWith(
-        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
         fontWeight: FontWeight.w500,
+        fontSize: 9.sp,
       ),
     );
   }
 
-  Widget _buildProgressIndicator(ThemeData theme) {
+  Widget _buildProgressIndicator(ThemeData theme, Color primaryColor) {
     if (isCompleted) {
       return Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
           color: Colors.green.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
-        child: const Icon(Icons.check_circle, color: Colors.green, size: 32),
+        child: const Icon(Icons.check_circle, color: Colors.green, size: 24),
       );
     }
 
@@ -257,20 +277,21 @@ class PuzzleCard extends ConsumerWidget {
       alignment: Alignment.center,
       children: [
         SizedBox(
-          width: 48,
-          height: 48,
+          width: 36,
+          height: 36,
           child: CircularProgressIndicator(
             value: percent / 100,
-            strokeWidth: 4,
+            strokeWidth: 3,
             backgroundColor: theme.colorScheme.surfaceContainerHighest,
-            color: theme.colorScheme.primary,
+            color: primaryColor,
           ),
         ),
         Text(
           '$percent%',
           style: theme.textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 10.sp,
+            fontWeight: FontWeight.w900,
+            fontSize: 8.sp,
+            color: primaryColor,
           ),
         ),
       ],
