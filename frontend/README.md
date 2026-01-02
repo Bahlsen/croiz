@@ -235,3 +235,17 @@ GitHub Actions automatically runs:
 - Coverage report generation
 
 See `.github/workflows/flutter-tests.yml`
+
+## Build & Release
+
+For production releases, it is recommended to obfuscate the Dart code to reduce binary size and make reverse engineering more difficult.
+
+**Build Command:**
+
+```bash
+flutter build appbundle --obfuscate --split-debug-info=./build/app/outputs/symbols
+```
+
+- `--obfuscate`: Enables code obfuscation.
+- `--split-debug-info`: Output debug symbols to the specified directory (save these for de-obfuscating stack traces later).
+
