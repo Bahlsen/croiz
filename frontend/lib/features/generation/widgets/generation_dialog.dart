@@ -5,7 +5,6 @@ import 'package:croiz/features/generation/services/generation_orchestrator.dart'
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class GenerationDialog extends ConsumerStatefulWidget {
   const GenerationDialog({super.key});
@@ -53,24 +52,7 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
       );
 
       if (mounted) {
-        Navigator.of(context).pop(); // Close dialog
-
-        // Show success snackbar
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              AppLocalizations.of(context)?.successMessage ??
-                  'Puzzle generated successfully!',
-            ),
-            action: SnackBarAction(
-              label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
-              onPressed: () {
-                // Navigate to game
-                context.push('/game/$puzzleId');
-              },
-            ),
-          ),
-        );
+        Navigator.of(context).pop(puzzleId); // Return puzzleId to caller
       }
     } on UserFriendlyException catch (e) {
       // Display user-friendly message

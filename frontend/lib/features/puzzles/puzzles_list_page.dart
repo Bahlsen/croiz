@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
@@ -55,11 +56,30 @@ class PuzzlesListPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.auto_awesome),
         label: Text(AppLocalizations.of(context)?.generateButton ?? 'GENERATE'),
-        onPressed: () {
-          showDialog(
+        onPressed: () async {
+          final puzzleId = await showDialog<String>(
             context: context,
             builder: (context) => const GenerationDialog(),
           );
+
+          if (puzzleId != null && context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  AppLocalizations.of(context)?.successMessage ??
+                      'Puzzle generated successfully!',
+                ),
+                action: SnackBarAction(
+                  label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
+                  onPressed: () {
+                    // Navigate to game
+                    // Use go_router which should be available here
+                    GoRouter.of(context).push('/game/$puzzleId');
+                  },
+                ),
+              ),
+            );
+          }
         },
       ),
     );
