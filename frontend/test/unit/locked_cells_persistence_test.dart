@@ -9,6 +9,7 @@ import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -126,12 +127,21 @@ void main() {
             .setSelected('locked-test-a');
         await container.read(puzzleLoaderProvider.future);
         await Future.microtask(() {});
-        container.read(gameBoardProvider);
+        // Initialize controller for input
+        final controller = CrosswordInputController.fromContainer(container);
+        // Ensure first cell is selected
+        container
+            .read(selectedCellProvider.notifier)
+            .select(const SelectedCell(0, 0));
+        container
+            .read(wordDirectionProvider.notifier)
+            .setDirection(WordDirection.horizontal);
 
         // Fill in the first row with 'A', 'B', 'C' to complete the word
-        container.read(gameBoardProvider.notifier).setLetter(0, 0, 'A');
-        container.read(gameBoardProvider.notifier).setLetter(0, 1, 'B');
-        container.read(gameBoardProvider.notifier).setLetter(0, 2, 'C');
+        controller
+          ..setLetterAndAdvance('A')
+          ..setLetterAndAdvance('B')
+          ..setLetterAndAdvance('C');
 
         // Wait for word check debounce to detect the found word
         await Future<void>.delayed(const Duration(milliseconds: 100));

@@ -25,57 +25,68 @@ class PuzzleCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-      decoration: BoxDecoration(
-        color: isDark ? Colors.grey.shade900 : Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-        border: Border.all(
-          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
-          width: 1,
-        ),
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
+    return Opacity(
+      opacity: isCompleted ? 0.7 : 1.0,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+        decoration: BoxDecoration(
+          color: isDark ? Colors.grey.shade900 : Colors.white,
           borderRadius: BorderRadius.circular(16),
-          onTap: () => _onTap(context, ref),
-          child: Padding(
-            padding: EdgeInsets.all(4.w),
-            child: Row(
-              children: [
-                // Info Section
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildDifficultyTag(theme, context),
-                      SizedBox(height: 1.h),
-                      Text(
-                        descriptor.title,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.sp,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: Border.all(
+            color:
+                isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
+            width: 1,
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () => _onTap(context, ref),
+            child: Padding(
+              padding: EdgeInsets.all(4.w),
+              child: Row(
+                children: [
+                  // Info Section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildDifficultyTag(theme, context),
+                        SizedBox(height: 1.h),
+                        Text(
+                          descriptor.title,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.sp,
+                            decoration:
+                                isCompleted ? TextDecoration.lineThrough : null,
+                            color:
+                                isCompleted
+                                    ? theme.colorScheme.onSurfaceVariant
+                                        .withValues(alpha: 0.6)
+                                    : null,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 0.5.h),
-                      _buildMetadata(theme),
-                    ],
+                        SizedBox(height: 0.5.h),
+                        _buildMetadata(theme),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(width: 4.w),
-                // Progress Section
-                _buildProgressIndicator(theme),
-              ],
+                  SizedBox(width: 4.w),
+                  // Progress Section
+                  _buildProgressIndicator(theme),
+                ],
+              ),
             ),
           ),
         ),

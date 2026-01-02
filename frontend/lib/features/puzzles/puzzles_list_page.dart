@@ -102,6 +102,8 @@ class PuzzlesListPage extends ConsumerWidget {
     List<PuzzleDescriptor> allPuzzles,
   ) {
     final filteredPuzzles = ref.watch(filteredPuzzlesProvider);
+    final completedIdsAsync = ref.watch(completedPuzzleIdsProvider);
+    final completedIds = completedIdsAsync.whenOrNull(data: (ids) => ids) ?? {};
 
     return Column(
       children: [
@@ -165,7 +167,8 @@ class PuzzlesListPage extends ConsumerWidget {
             itemCount: filteredPuzzles.length,
             itemBuilder: (context, index) {
               final puzzle = filteredPuzzles[index];
-              return PuzzleCard(descriptor: puzzle);
+              final isCompleted = completedIds.contains(puzzle.id);
+              return PuzzleCard(descriptor: puzzle, isCompleted: isCompleted);
             },
           ),
         ),

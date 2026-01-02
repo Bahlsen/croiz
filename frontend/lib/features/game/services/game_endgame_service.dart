@@ -39,6 +39,7 @@ class GameEndgameService {
           foundWords: foundWords,
           lockedCells: lockedCells,
           elapsedSeconds: timer.elapsedSeconds,
+          isCompleted: true,
         ),
       );
 

@@ -101,11 +101,15 @@ class GameBoardNotifier extends _$GameBoardNotifier {
 
           // Persist the previous puzzle's state asynchronously
           if (prevGrid != null) {
+            final isCompleted =
+                board.entries != null &&
+                prevFoundWords.length == board.entries!.length;
             _persistPreviousPuzzle(
               prevId,
               prevGrid,
               prevFoundWords,
               prevLockedCells,
+              isCompleted: isCompleted,
             );
           }
         }
@@ -176,13 +180,15 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     String puzzleId,
     List<List<String?>> grid,
     List<String> foundWords,
-    List<String> lockedCells,
-  ) {
+    List<String> lockedCells, {
+    required bool isCompleted,
+  }) {
     _persistenceService.persistPreviousPuzzle(
       puzzleId: puzzleId,
       grid: grid,
       foundWords: foundWords,
       lockedCells: lockedCells,
+      isCompleted: isCompleted,
     );
   }
 
@@ -520,12 +526,18 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     } on Object {
       // ignore if state not ready
     }
+    final entries = state.entries;
+    final isCompleted =
+        entries != null &&
+        ref.read(foundWordsProvider).length == entries.length;
+
     _persistenceService.schedulePersist(
       puzzleId: state.id,
       grid: state.grid,
       foundWords: ref.read(foundWordsProvider),
       lockedCells: ref.read(lockedCellsProvider),
       elapsedSeconds: ref.read(gameTimerProvider(state.id)).elapsedSeconds,
+      isCompleted: isCompleted,
     );
   }
 

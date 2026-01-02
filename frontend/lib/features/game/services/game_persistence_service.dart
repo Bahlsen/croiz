@@ -46,6 +46,7 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required bool isCompleted,
   }) {
     cancelTimer();
     _persistTimer = Timer(_persistDebounce, () {
@@ -55,6 +56,7 @@ class GamePersistenceService {
         foundWords: foundWords,
         lockedCells: lockedCells,
         elapsedSeconds: elapsedSeconds,
+        isCompleted: isCompleted,
       );
     });
   }
@@ -66,12 +68,14 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required bool isCompleted,
   }) => _persistProgress(
     puzzleId: puzzleId,
     grid: grid,
     foundWords: foundWords,
     lockedCells: lockedCells,
     elapsedSeconds: elapsedSeconds,
+    isCompleted: isCompleted,
   );
 
   /// Persist the previous puzzle's state when switching puzzles.
@@ -81,6 +85,7 @@ class GamePersistenceService {
     required List<List<String?>> grid,
     required List<String> foundWords,
     required List<String> lockedCells,
+    bool isCompleted = false,
   }) {
     cancelTimer();
     () async {
@@ -91,6 +96,7 @@ class GamePersistenceService {
           'savedAt': DateTime.now().toIso8601String(),
           'foundWords': foundWords,
           'lockedCells': lockedCells,
+          'isCompleted': isCompleted,
         };
         await _storage.save(
           puzzleId,
@@ -113,6 +119,7 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required bool isCompleted,
   }) async {
     try {
       final payload = {
@@ -122,6 +129,7 @@ class GamePersistenceService {
         'foundWords': foundWords.toList(),
         'lockedCells': lockedCells.map((c) => '${c.row},${c.col}').toList(),
         'elapsedSeconds': elapsedSeconds,
+        'isCompleted': isCompleted,
       };
       await _storage.save(
         puzzleId,
