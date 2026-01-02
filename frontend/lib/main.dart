@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:flutter/services.dart';
 import 'package:croiz/features/splash/splash_screen.dart';
+import 'package:croiz/core/config/app_languages.dart';
 import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
@@ -125,11 +126,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              supportedLocales: const [
-                Locale('en'),
-                Locale('fr'),
-                Locale('uk'),
-              ],
+              supportedLocales: AppLanguages.uiLocales,
             ),
       );
     }
@@ -150,7 +147,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
-            supportedLocales: const [Locale('en'), Locale('fr'), Locale('uk')],
+            supportedLocales: AppLanguages.uiLocales,
           ),
     );
   }

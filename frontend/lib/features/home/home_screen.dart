@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:croiz/core/config/app_languages.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:croiz/services/providers.dart';
@@ -37,29 +38,21 @@ class HomeScreen extends ConsumerWidget {
               semanticLabel: loc.selectLanguage,
               size: ResponsiveIconSize.md,
             ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'en',
-                child: Text(
-                  loc.languageEnglish,
-                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
-                ),
-              ),
-              PopupMenuItem(
-                value: 'fr',
-                child: Text(
-                  loc.languageFrench,
-                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
-                ),
-              ),
-              PopupMenuItem(
-                value: 'uk',
-                child: Text(
-                  loc.languageUkrainian,
-                  style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
-                ),
-              ),
-            ],
+            itemBuilder:
+                (context) =>
+                    AppLanguages.uiSupported
+                        .map(
+                          (code) => PopupMenuItem(
+                            value: code,
+                            child: Text(
+                              '${AppLanguages.getFlag(code)} ${AppLanguages.getName(code)}',
+                              style: TextStyle(
+                                fontSize: ResponsiveFontSize.bodyMedium,
+                              ),
+                            ),
+                          ),
+                        )
+                        .toList(),
           ),
         ],
       ),

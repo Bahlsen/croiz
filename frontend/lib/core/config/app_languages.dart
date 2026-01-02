@@ -1,6 +1,23 @@
+import 'dart:ui';
+
 /// Configuration for supported languages in the application.
 class AppLanguages {
-  static const Map<String, ({String name, String flag})> supported = {
+  /// Languages that have full UI localization (ARB files).
+  static const Set<String> uiSupported = {'en', 'fr', 'uk'};
+
+  /// Languages supported for puzzle generation (via Gemini).
+  /// This can be broader than UI-supported languages.
+  static const Set<String> puzzleSupported = {
+    'en',
+    'fr',
+    'uk',
+    'es',
+    'de',
+    'it',
+    'pt',
+  };
+
+  static const Map<String, ({String name, String flag})> _metadata = {
     'en': (name: 'English', flag: '🇬🇧'),
     'fr': (name: 'Français', flag: '🇫🇷'),
     'uk': (name: 'Українська', flag: '🇺🇦'),
@@ -11,8 +28,11 @@ class AppLanguages {
     'ru': (name: 'Русский', flag: '🇷🇺'),
   };
 
-  static String getName(String code) =>
-      supported[code]?.name ?? code.toUpperCase();
+  /// Returns only the locales that have UI support.
+  static List<Locale> get uiLocales => uiSupported.map(Locale.new).toList();
 
-  static String getFlag(String code) => supported[code]?.flag ?? '🌐';
+  static String getName(String code) =>
+      _metadata[code]?.name ?? code.toUpperCase();
+
+  static String getFlag(String code) => _metadata[code]?.flag ?? '🌐';
 }

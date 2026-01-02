@@ -2,6 +2,7 @@ import 'package:croiz/core/config/app_difficulty.dart';
 import 'package:croiz/core/config/app_languages.dart';
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/services/generation_orchestrator.dart';
+import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,17 @@ class GenerationDialog extends ConsumerStatefulWidget {
 class _GenerationDialogState extends ConsumerState<GenerationDialog> {
   final _formKey = GlobalKey<FormState>();
   final _topicController = TextEditingController();
-  String _language = 'en'; // Default to English
+  String _language = 'en';
+
+  @override
+  void initState() {
+    super.initState();
+    // Default to current app locale if supported for generation, otherwise default to English
+    final appLanguage = ref.read(localeProvider).languageCode;
+    _language =
+        AppLanguages.puzzleSupported.contains(appLanguage) ? appLanguage : 'en';
+  }
+
   double _difficulty = 3;
   int _size = 15;
   bool _isLoading = false;
@@ -41,12 +52,9 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
     try {
       final orchestrator = ref.read(puzzleGenerationOrchestratorProvider);
 
-      // Handle special case: Russian -> Ukrainian
-      final targetLang = _language == 'ru' ? 'uk' : _language;
-
       final puzzleId = await orchestrator.generateAndSave(
         topic: _topicController.text,
-        language: targetLang,
+        language: _language,
         difficulty: _difficulty.round(),
         size: _size,
       );
@@ -122,11 +130,13 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
                       border: const OutlineInputBorder(),
                     ),
                     items:
-                        AppLanguages.supported.entries
+                        AppLanguages.puzzleSupported
                             .map(
-                              (e) => DropdownMenuItem(
-                                value: e.key,
-                                child: Text('${e.value.flag} ${e.value.name}'),
+                              (code) => DropdownMenuItem(
+                                value: code,
+                                child: Text(
+                                  '${AppLanguages.getFlag(code)} ${AppLanguages.getName(code)}',
+                                ),
                               ),
                             )
                             .toList(),
