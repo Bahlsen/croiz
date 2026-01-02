@@ -552,6 +552,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed'**
   String get completedFilter;
+
+  /// No description provided for @deletePuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Generated Puzzle'**
+  String get deletePuzzle;
+
+  /// No description provided for @deletePuzzleConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this puzzle? This action cannot be undone.'**
+  String get deletePuzzleConfirmation;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

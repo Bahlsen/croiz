@@ -66,7 +66,7 @@ final class GameTimerProvider
   }
 }
 
-String _$gameTimerHash() => r'b772ce521409515987dd5f10f5fc314788203b3c';
+String _$gameTimerHash() => r'cbbdaeb4e63ff5375cbfd87e35eb9b9b5b6a46f8';
 
 final class GameTimerFamily extends $Family
     with $FunctionalFamilyOverride<GameTimer, String> {

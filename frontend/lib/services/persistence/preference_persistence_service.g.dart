@@ -60,4 +60,4 @@ final class PreferencePersistenceServiceProvider
 }
 
 String _$preferencePersistenceServiceHash() =>
-    r'c1e56cdb68a45a5666b9cb2302f8be8591cf9f08';
+    r'57c1bd9e851105ebb658718f8dc6b4e4b20c417a';

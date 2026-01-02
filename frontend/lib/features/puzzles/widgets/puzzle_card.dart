@@ -5,7 +5,11 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/core/responsive/responsive.dart';
+import 'package:croiz/features/puzzles/logic/generated_puzzles_controller.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/services.dart'; // For HapticFeedback
+
+import 'dart:async'; // For unawaited
 
 /// A premium, branded card representing a puzzle in the list.
 class PuzzleCard extends ConsumerWidget {
@@ -50,6 +54,10 @@ class PuzzleCard extends ConsumerWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(16),
             onTap: () => _onTap(context, ref),
+            onLongPress:
+                descriptor.source.isLocal
+                    ? () => _onLongPress(context, ref)
+                    : null,
             child: Padding(
               padding: EdgeInsets.all(4.w),
               child: Row(
@@ -98,6 +106,50 @@ class PuzzleCard extends ConsumerWidget {
     ref.read(selectedPuzzleIdProvider.notifier).setSelected(descriptor.id);
     final encodedId = Uri.encodeComponent(descriptor.id);
     context.go('/crossword?id=$encodedId');
+  }
+
+  Future<void> _onLongPress(BuildContext context, WidgetRef ref) async {
+    unawaited(HapticFeedback.mediumImpact());
+
+    if (!context.mounted) {
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text(
+              AppLocalizations.of(context)?.deletePuzzle ?? 'Delete Puzzle?',
+            ),
+            content: Text(
+              AppLocalizations.of(context)?.deletePuzzleConfirmation ??
+                  'Are you sure you want to delete "${descriptor.title}"? This cannot be undone.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      unawaited(
+        ref
+            .read(generatedPuzzlesControllerProvider.notifier)
+            .deletePuzzle(descriptor.id),
+      );
+    }
   }
 
   Widget _buildDifficultyTag(ThemeData theme, BuildContext context) {

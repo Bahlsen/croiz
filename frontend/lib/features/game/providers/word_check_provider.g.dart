@@ -57,4 +57,4 @@ final class WordCheckServiceProvider
   }
 }
 
-String _$wordCheckServiceHash() => r'1d06fd5af8722d1f55a09a9c08bd00747de5d43a';
+String _$wordCheckServiceHash() => r'7719e32e71f604e8a4bb4488feb056c12275e766';

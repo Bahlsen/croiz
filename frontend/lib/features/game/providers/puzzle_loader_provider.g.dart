@@ -125,7 +125,7 @@ final class PuzzleAssetLoaderProvider
   }
 }
 
-String _$puzzleAssetLoaderHash() => r'a9ed4a82b606d74ab8ef9164bb9be2cf73b895ed';
+String _$puzzleAssetLoaderHash() => r'a69a41c1ba12f71af950b1c42d1348e5ca0f951c';
 
 /// Provider to load the puzzle asynchronously from JSON.
 ///

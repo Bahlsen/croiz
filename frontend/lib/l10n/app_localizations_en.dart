@@ -1,3 +1,5 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -235,8 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirm Reveal All';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Are you sure you want to reveal the entire puzzle?';
+  String get revealAllConfirmationMessage => 'Are you sure you want to reveal the entire puzzle?';
 
   @override
   String get yes => 'Yes';
@@ -246,4 +247,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completedFilter => 'Completed';
+
+  @override
+  String get deletePuzzle => 'Delete Generated Puzzle';
+
+  @override
+  String get deletePuzzleConfirmation => 'Are you sure you want to delete this puzzle? This action cannot be undone.';
+
+  @override
+  String get cancel => 'Cancel';
 }

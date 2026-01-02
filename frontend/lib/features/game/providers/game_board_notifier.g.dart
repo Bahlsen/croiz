@@ -58,7 +58,7 @@ final class FlashClearDelayProvider
   }
 }
 
-String _$flashClearDelayHash() => r'aa713b163954f6c1c70ae0e53fda4cbacb0e5024';
+String _$flashClearDelayHash() => r'7d6fb3e168802938de722243788a3d74e1a31dbe';
 
 /// Debounce delay for word completion checks during fast typing.
 /// In production: 16ms (one frame) to batch checks while staying responsive.
@@ -111,7 +111,7 @@ final class WordCheckDebounceDelayProvider
 }
 
 String _$wordCheckDebounceDelayHash() =>
-    r'dd949cf53d6f53331fb2d0744a0e1e9eb432bbd7';
+    r'74fa28b70bee9450f53ea1c639c50ca4c0d5924d';
 
 /// Main notifier for the game board state.
 
@@ -149,7 +149,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'4e274456433955a57b1f50b2c13b03a688665774';
+String _$gameBoardNotifierHash() => r'0e294bf4b644b0d171e290f0afbc19b8180b734e';
 
 /// Main notifier for the game board state.
 

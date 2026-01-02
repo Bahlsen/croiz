@@ -190,7 +190,7 @@ final class CellFlashingProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$cellFlashingHash() => r'1e6f78849057751cfb9aef618fe02f39056be7b8';
+String _$cellFlashingHash() => r'4d27e524df34031e89c30f738f37c6d24de8a70b';
 
 /// Provider family for whether a specific cell is currently flashing.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
@@ -341,7 +341,7 @@ final class CellClearedFlashingProvider
 }
 
 String _$cellClearedFlashingHash() =>
-    r'44502969998e503fe56f9682bf6dcae5052ee4bd';
+    r'948bc3990cd0f23b610987bf2b4037189505f9e8';
 
 /// Provider family for whether a specific cell is in the "cleared flash" set.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.

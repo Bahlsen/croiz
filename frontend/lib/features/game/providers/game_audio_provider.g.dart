@@ -52,4 +52,4 @@ final class GameAudioServiceProvider
   }
 }
 
-String _$gameAudioServiceHash() => r'2d6d611109a86ae2787fcffa6ac5d2364c40b8a0';
+String _$gameAudioServiceHash() => r'72ee31f7eb03d2f0ce0d68be54d2790f5367ef86';
