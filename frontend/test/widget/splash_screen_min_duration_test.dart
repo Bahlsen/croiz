@@ -42,15 +42,16 @@ void main() {
           gameAudioServiceProvider.overrideWithValue(_ImmediateAudioService()),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: SplashScreen(
-              onInitialized: () {
-                initialized = true;
-              },
-            ),
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: SplashScreen(
+                  onInitialized: () {
+                    initialized = true;
+                  },
+                ),
+              ),
         ),
       ),
     );

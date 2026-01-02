@@ -14,12 +14,13 @@ void main() {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => Scaffold(
-            // `CrosswordControlsMenu` uses Positioned.fill and expects to be
-            // a child of a Stack. Mirror that here to avoid parent-data
-            // errors in tests.
-            body: Stack(children: [CrosswordControlsMenu(onClose: () {})]),
-          ),
+          builder:
+              (context, state) => Scaffold(
+                // `CrosswordControlsMenu` uses Positioned.fill and expects to be
+                // a child of a Stack. Mirror that here to avoid parent-data
+                // errors in tests.
+                body: Stack(children: [CrosswordControlsMenu(onClose: () {})]),
+              ),
         ),
         GoRoute(
           path: '/puzzles',
@@ -31,11 +32,12 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp.router(
-            routerConfig: router,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp.router(
+                routerConfig: router,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+              ),
         ),
       ),
     );

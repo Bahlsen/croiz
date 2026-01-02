@@ -38,12 +38,13 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            theme: AppTheme.lightTheme(),
-            home: const Scaffold(
-              body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
-            ),
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                theme: AppTheme.lightTheme(),
+                home: const Scaffold(
+                  body: CrosswordCell(row: 0, col: 1, key: Key('cell-0-1')),
+                ),
+              ),
         ),
       ),
     );

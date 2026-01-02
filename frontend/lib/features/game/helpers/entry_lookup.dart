@@ -35,14 +35,15 @@ EntryContext? computeCurrentEntry(
   final dirStr = horizontal ? 'across' : 'down';
   final entry = entries.firstWhere(
     (e) => e.x == startX && e.y == startY && e.direction == dirStr,
-    orElse: () => const PuzzleEntryData(
-      number: -1,
-      direction: 'across',
-      x: -1,
-      y: -1,
-      length: 0,
-      clue: null,
-    ),
+    orElse:
+        () => const PuzzleEntryData(
+          number: -1,
+          direction: 'across',
+          x: -1,
+          y: -1,
+          length: 0,
+          clue: null,
+        ),
   );
   if (entry.number == -1) {
     return null;

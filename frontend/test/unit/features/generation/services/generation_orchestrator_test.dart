@@ -283,6 +283,105 @@ void main() {
           expect(entry, containsPair('clue', isA<String>()));
         }
       });
+
+      test('should throw exception when no words could be placed', () async {
+        // Arrange
+        final words = List.generate(
+          10,
+          (i) => GeneratedWord(answer: 'WORD$i', clue: 'Clue $i'),
+        );
+
+        when(
+          () => mockGeminiService.generateWords(
+            topic: any(named: 'topic'),
+            language: any(named: 'language'),
+            difficultyLevel: any(named: 'difficultyLevel'),
+            count: any(named: 'count'),
+          ),
+        ).thenAnswer((_) async => words);
+
+        final orchestrator = container.read(
+          puzzleGenerationOrchestratorProvider,
+        );
+
+        // We use a tiny grid and words that won't intersect easily
+        // But GridGenerator is usually good at placing at least one.
+        // To force 0 placed words, we'd need GridGenerator to fail completely.
+        // Actually, if we provide words that are all too long for the grid:
+        final longWords = [
+          const GeneratedWord(answer: 'EXTREMELYLONGWORD', clue: 'Long'),
+          const GeneratedWord(answer: 'ANOTHEREXTREMELYLONGWORD', clue: 'Long'),
+          const GeneratedWord(answer: 'YETANOTHERLONGWORD', clue: 'Long'),
+          const GeneratedWord(answer: 'ANDONE MOREJUSTINCASE', clue: 'Long'),
+          const GeneratedWord(answer: 'OKAYLASTONEIPROMISE', clue: 'Long'),
+        ];
+        when(
+          () => mockGeminiService.generateWords(
+            topic: any(named: 'topic'),
+            language: any(named: 'language'),
+            difficultyLevel: any(named: 'difficultyLevel'),
+            count: any(named: 'count'),
+          ),
+        ).thenAnswer((_) async => longWords);
+
+        // Act & Assert
+        expect(
+          () => orchestrator.generateAndSave(
+            topic: 'Test',
+            language: 'en',
+            size: 5, // Tiny grid
+          ),
+          throwsA(
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('Unable to create a puzzle grid'),
+            ),
+          ),
+        );
+      });
+
+      test('should throw exception when density is too low', () async {
+        // Arrange
+        // We place just one small word in a large grid
+        final words = [
+          const GeneratedWord(answer: 'CAT', clue: 'Pet'),
+          const GeneratedWord(answer: 'DOG', clue: 'Pet'),
+          const GeneratedWord(answer: 'BAT', clue: 'Animal'),
+          const GeneratedWord(answer: 'RAT', clue: 'Animal'),
+          const GeneratedWord(answer: 'MAT', clue: 'Floor'),
+        ];
+
+        when(
+          () => mockGeminiService.generateWords(
+            topic: any(named: 'topic'),
+            language: any(named: 'language'),
+            difficultyLevel: any(named: 'difficultyLevel'),
+            count: any(named: 'count'),
+          ),
+        ).thenAnswer((_) async => words);
+
+        final orchestrator = container.read(
+          puzzleGenerationOrchestratorProvider,
+        );
+
+        // Act & Assert
+        // A 15x15 grid (225 cells) with only ~12-15 letters will definitely be < 35% density.
+        expect(
+          () => orchestrator.generateAndSave(
+            topic: 'Test',
+            language: 'en',
+            size: 15,
+          ),
+          throwsA(
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('not dense enough'),
+            ),
+          ),
+        );
+      });
     });
   });
 }

@@ -237,7 +237,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirmar Revelar Todo';
 
   @override
-  String get revealAllConfirmationMessage => '¿Estás seguro de que quieres revelar todo el crucigrama?';
+  String get revealAllConfirmationMessage =>
+      '¿Estás seguro de que quieres revelar todo el crucigrama?';
 
   @override
   String get yes => 'Sí';
@@ -252,7 +253,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get deletePuzzle => 'Eliminar Crucigrama Generado';
 
   @override
-  String get deletePuzzleConfirmation => '¿Estás seguro de que quieres eliminar este crucigrama? Esta acción no se puede deshacer.';
+  String get deletePuzzleConfirmation =>
+      '¿Estás seguro de que quieres eliminar este crucigrama? Esta acción no se puede deshacer.';
 
   @override
   String get cancel => 'Cancelar';

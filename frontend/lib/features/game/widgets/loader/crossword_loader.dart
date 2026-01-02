@@ -8,22 +8,23 @@ class CrosswordLoadingScaffold extends StatelessWidget {
   void _showMenu(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: Text(AppLocalizations.of(context)?.home ?? 'Home'),
-              onTap: () {
-                Navigator.of(ctx).pop();
-                context.go('/puzzles');
-              },
+      builder:
+          (ctx) => AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: Text(AppLocalizations.of(context)?.home ?? 'Home'),
+                  onTap: () {
+                    Navigator.of(ctx).pop();
+                    context.go('/puzzles');
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
@@ -93,22 +94,23 @@ class CrosswordErrorScaffold extends StatelessWidget {
   void _showMenu(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        contentPadding: EdgeInsets.zero,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.home),
-              title: Text(AppLocalizations.of(context)?.home ?? 'Home'),
-              onTap: () {
-                Navigator.of(ctx).pop();
-                context.go('/puzzles');
-              },
+      builder:
+          (ctx) => AlertDialog(
+            contentPadding: EdgeInsets.zero,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.home),
+                  title: Text(AppLocalizations.of(context)?.home ?? 'Home'),
+                  onTap: () {
+                    Navigator.of(ctx).pop();
+                    context.go('/puzzles');
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 

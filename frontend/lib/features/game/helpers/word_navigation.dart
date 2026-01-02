@@ -13,10 +13,12 @@ PuzzleEntryData computeAdjacentEntry(
   }
   // Direction-first ordering: navigate within current direction by number,
   // wrap into the other direction only when overflowing.
-  final across = entries.where((e) => e.direction == 'across').toList()
-    ..sort((a, b) => a.number.compareTo(b.number));
-  final down = entries.where((e) => e.direction == 'down').toList()
-    ..sort((a, b) => a.number.compareTo(b.number));
+  final across =
+      entries.where((e) => e.direction == 'across').toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
+  final down =
+      entries.where((e) => e.direction == 'down').toList()
+        ..sort((a, b) => a.number.compareTo(b.number));
 
   final isAcross = current.direction == 'across';
   final currentList = isAcross ? across : down;

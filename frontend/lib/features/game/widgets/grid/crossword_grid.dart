@@ -96,9 +96,7 @@ class _CrosswordGridState extends ConsumerState<CrosswordGrid> {
           final row = index ~/ size;
           final col = index % size;
           // Performance: wrap each cell in RepaintBoundary to isolate repaints
-          return RepaintBoundary(
-            child: CrosswordCell(row: row, col: col),
-          );
+          return RepaintBoundary(child: CrosswordCell(row: row, col: col));
         },
       ),
     );

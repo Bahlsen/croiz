@@ -69,8 +69,13 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
   );
 
   return puzzlesAsync.when(
-    data: (puzzles) =>
-        _filterPuzzles(puzzles, filterState, completedIds, availableLanguages),
+    data:
+        (puzzles) => _filterPuzzles(
+          puzzles,
+          filterState,
+          completedIds,
+          availableLanguages,
+        ),
     loading: () => [],
     error: (e, s) => [],
   );
@@ -82,48 +87,49 @@ List<PuzzleDescriptor> _filterPuzzles(
   PuzzleFilterState filterState,
   Set<String> completedIds,
   Set<String> availableLanguages,
-) => puzzles.where((puzzle) {
-  // Filter by difficulty
-  if (!filterState.selectedDifficulties.contains(puzzle.difficulty)) {
-    return false;
-  }
+) =>
+    puzzles.where((puzzle) {
+      // Filter by difficulty
+      if (!filterState.selectedDifficulties.contains(puzzle.difficulty)) {
+        return false;
+      }
 
-  // Filter by language
-  // If selectedLanguages is empty, show all puzzles (multilingual default)
-  if (filterState.selectedLanguages.isNotEmpty &&
-      !filterState.selectedLanguages.contains(puzzle.language)) {
-    return false;
-  }
+      // Filter by language
+      // If selectedLanguages is empty, show all puzzles (multilingual default)
+      if (filterState.selectedLanguages.isNotEmpty &&
+          !filterState.selectedLanguages.contains(puzzle.language)) {
+        return false;
+      }
 
-  // Filter by generated status
-  if (filterState.showGeneratedOnly) {
-    // Assuming 'generated' or 'ai' identifies generated puzzles.
-    // Also matching 'test' as user context showed 'test' origin.
-    // Ideally this should be more robust.
-    final isGenerated =
-        puzzle.origin.toLowerCase().contains('generated') ||
-        puzzle.origin.toLowerCase() == 'ai' ||
-        puzzle.origin.toLowerCase() ==
-            'test'; // temporary: include 'test' for user context
-    if (!isGenerated) {
-      return false;
-    }
-  }
+      // Filter by generated status
+      if (filterState.showGeneratedOnly) {
+        // Assuming 'generated' or 'ai' identifies generated puzzles.
+        // Also matching 'test' as user context showed 'test' origin.
+        // Ideally this should be more robust.
+        final isGenerated =
+            puzzle.origin.toLowerCase().contains('generated') ||
+            puzzle.origin.toLowerCase() == 'ai' ||
+            puzzle.origin.toLowerCase() ==
+                'test'; // temporary: include 'test' for user context
+        if (!isGenerated) {
+          return false;
+        }
+      }
 
-  // Filter by search query
-  if (filterState.searchQuery.isNotEmpty) {
-    final query = filterState.searchQuery.toLowerCase();
-    final matchesTitle = puzzle.title.toLowerCase().contains(query);
-    final matchesSubtitle = puzzle.subtitle.toLowerCase().contains(query);
-    if (!matchesTitle && !matchesSubtitle) {
-      return false;
-    }
-  }
+      // Filter by search query
+      if (filterState.searchQuery.isNotEmpty) {
+        final query = filterState.searchQuery.toLowerCase();
+        final matchesTitle = puzzle.title.toLowerCase().contains(query);
+        final matchesSubtitle = puzzle.subtitle.toLowerCase().contains(query);
+        if (!matchesTitle && !matchesSubtitle) {
+          return false;
+        }
+      }
 
-  // Filter by completion status
-  if (!filterState.showCompleted && completedIds.contains(puzzle.id)) {
-    return false;
-  }
+      // Filter by completion status
+      if (!filterState.showCompleted && completedIds.contains(puzzle.id)) {
+        return false;
+      }
 
-  return true;
-}).toList();
+      return true;
+    }).toList();

@@ -1,94 +1,143 @@
-import 'package:croiz/features/generation/models/generated_word.dart';
+import 'dart:convert';
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
+import 'package:croiz/features/generation/services/gemini_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockGeminiClient extends Mock implements GeminiClient {}
 
 void main() {
-  group('GeneratedWord', () {
-    group('fromJson', () {
-      test('should parse valid JSON with word field', () {
-        const jsonData = {'word': 'PARIS', 'clue': 'Capital of France'};
+  group('GeminiPuzzleService', () {
+    late MockGeminiClient mockClient;
+    late GeminiPuzzleService service;
 
-        final word = GeneratedWord.fromJson(jsonData);
+    setUp(() {
+      mockClient = MockGeminiClient();
+      service = GeminiPuzzleService(client: mockClient);
+    });
 
-        expect(word.answer, 'PARIS');
-        expect(word.clue, 'Capital of France');
+    group('generateWords', () {
+      test('should return a list of words on success', () async {
+        final jsonResponse = jsonEncode([
+          {'word': 'APPLE', 'clue': 'A fruit'},
+          {'word': 'BANANA', 'clue': 'Another fruit'},
+        ]);
+
+        when(
+          () => mockClient.generateContent(any()),
+        ).thenAnswer((_) async => jsonResponse);
+
+        final result = await service.generateWords(
+          topic: 'Fruit',
+          language: 'en',
+        );
+
+        expect(result, hasLength(2));
+        expect(result[0].answer, 'APPLE');
+        expect(result[1].answer, 'BANANA');
       });
 
-      test('should parse valid JSON with answer field', () {
-        const jsonData = {'answer': 'LYON', 'clue': 'Second largest city'};
+      test(
+        'should throw UserFriendlyException when response is null',
+        () async {
+          when(
+            () => mockClient.generateContent(any()),
+          ).thenAnswer((_) async => null);
 
-        final word = GeneratedWord.fromJson(jsonData);
+          expect(
+            () => service.generateWords(topic: 'Test', language: 'en'),
+            throwsA(
+              isA<UserFriendlyException>().having(
+                (e) => e.userMessage,
+                'userMessage',
+                contains('Unable to generate puzzle'),
+              ),
+            ),
+          );
+        },
+      );
 
-        expect(word.answer, 'LYON');
-        expect(word.clue, 'Second largest city');
+      test('should handle generic errors', () async {
+        when(
+          () => mockClient.generateContent(any()),
+        ).thenThrow(Exception('test error'));
+
+        expect(
+          () => service.generateWords(topic: 'Test', language: 'en'),
+          throwsA(
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('Unable to generate puzzle'),
+            ),
+          ),
+        );
       });
 
-      test('should normalize to uppercase', () {
-        const jsonData = {'word': 'paris', 'clue': 'Capital'};
+      test('should handle service errors (firebase/api/etc)', () async {
+        when(
+          () => mockClient.generateContent(any()),
+        ).thenThrow(Exception('firebase_ai: permission denied'));
 
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, 'PARIS');
-      });
-
-      test('should trim whitespace from answer and clue', () {
-        const jsonData = {'word': '  PARIS  ', 'clue': '  Capital  '};
-
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, 'PARIS');
-        expect(word.clue, 'Capital');
-      });
-
-      test('should handle empty clue', () {
-        const jsonData = {'word': 'TEST', 'clue': ''};
-
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, 'TEST');
-        expect(word.clue, '');
-      });
-
-      test('should handle missing word and answer fields', () {
-        const jsonData = {'clue': 'Some clue'};
-
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, ''); // Falls back to empty string
-        expect(word.clue, 'Some clue');
-      });
-
-      test('should handle missing clue field', () {
-        const jsonData = {'word': 'TEST'};
-
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, 'TEST');
-        expect(word.clue, '');
-      });
-
-      test('should prefer word field over answer field', () {
-        const jsonData = {'word': 'WORD', 'answer': 'ANSWER', 'clue': 'Test'};
-
-        final word = GeneratedWord.fromJson(jsonData);
-
-        expect(word.answer, 'WORD');
+        expect(
+          () => service.generateWords(topic: 'Test', language: 'en'),
+          throwsA(
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('Service temporarily unavailable'),
+            ),
+          ),
+        );
       });
     });
 
-    group('constructor', () {
-      test('should create word with answer and clue', () {
-        const word = GeneratedWord(answer: 'HELLO', clue: 'Greeting');
+    group('parseResponse', () {
+      test('should parse valid JSON', () {
+        final jsonResponse = jsonEncode([
+          {'word': 'APPLE', 'clue': 'A fruit'},
+        ]);
 
-        expect(word.answer, 'HELLO');
-        expect(word.clue, 'Greeting');
+        final result = service.parseResponse(jsonResponse);
+
+        expect(result, hasLength(1));
+        expect(result[0].answer, 'APPLE');
       });
 
-      test('should be immutable', () {
-        const word1 = GeneratedWord(answer: 'TEST', clue: 'Exam');
-        const word2 = GeneratedWord(answer: 'TEST', clue: 'Exam');
+      test('should handle markdown-wrapped JSON (```json)', () {
+        const jsonResponse =
+            '```json\n[{"word": "CAR", "clue": "Vehicle"}]\n```';
+        final result = service.parseResponse(jsonResponse);
+        expect(result, hasLength(1));
+        expect(result[0].answer, 'CAR');
+      });
 
-        expect(word1.answer, word2.answer);
-        expect(word1.clue, word2.clue);
+      test('should throw UserFriendlyException on invalid JSON', () {
+        expect(
+          () => service.parseResponse('invalid json'),
+          throwsA(
+            isA<UserFriendlyException>().having(
+              (e) => e.userMessage,
+              'userMessage',
+              contains('An error occurred during generation'),
+            ),
+          ),
+        );
+      });
+    });
+
+    group('buildPrompt', () {
+      test('should include topic and count', () {
+        final prompt = service.buildPrompt('Space', 'en', 10, 3);
+        expect(prompt, contains('topic: "Space"'));
+        expect(prompt, contains('list of 10 distinct'));
+      });
+
+      test('should include difficulty instructions for all levels', () {
+        for (var i = 1; i <= 5; i++) {
+          final prompt = service.buildPrompt('Test', 'en', 10, i);
+          expect(prompt, contains('Difficulty Level: $i/5'));
+        }
       });
     });
   });

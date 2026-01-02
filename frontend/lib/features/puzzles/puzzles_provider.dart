@@ -40,9 +40,8 @@ class PuzzleDescriptor {
         difficulty: (json['difficulty'] as int?) ?? 2,
         difficultyLabel: json['difficulty_label']?.toString() ?? 'Medium',
         language: json['language']?.toString() ?? 'en',
-        source: json['source'] == 'local'
-            ? PuzzleSource.local
-            : PuzzleSource.asset,
+        source:
+            json['source'] == 'local' ? PuzzleSource.local : PuzzleSource.asset,
       );
 
   final String id;

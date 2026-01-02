@@ -60,9 +60,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: Scaffold(body: EndGameOverlay()),
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  const MaterialApp(home: Scaffold(body: EndGameOverlay())),
         ),
       ),
     );

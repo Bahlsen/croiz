@@ -17,9 +17,10 @@ class CrosswordGridArea extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
       // Use the minimum of width and height to ensure grid fits
-      final size = constraints.maxWidth < constraints.maxHeight
-          ? constraints.maxWidth
-          : constraints.maxHeight;
+      final size =
+          constraints.maxWidth < constraints.maxHeight
+              ? constraints.maxWidth
+              : constraints.maxHeight;
 
       if (kDebugMode) {
         debugPrint(

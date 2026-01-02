@@ -14,8 +14,8 @@ void main() {
         overrides: [puzzlesProvider.overrideWith((ref) async => [])],
         child: MaterialApp(
           home: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const PuzzlesListPage(),
+            builder:
+                (context, orientation, deviceType) => const PuzzlesListPage(),
           ),
         ),
       ),

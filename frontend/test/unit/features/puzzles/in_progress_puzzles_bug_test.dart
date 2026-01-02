@@ -108,9 +108,9 @@ void main() {
         );
 
         // Now let's show the CORRECT pattern
-        final fixedInProgressProvider = FutureProvider.autoDispose<List<String>>((
-          ref,
-        ) async {
+        final fixedInProgressProvider = FutureProvider.autoDispose<
+          List<String>
+        >((ref) async {
           // CORRECT: Await the puzzlesProvider.future instead of using maybeWhen
           final puzzles = await ref.watch(delayedPuzzlesProvider.future);
 
@@ -180,12 +180,13 @@ void main() {
         expect(gridData, isA<List>());
 
         // Verify we can extract the grid correctly
-        final grid = (gridData as List).map<List<String?>>((row) {
-          if (row is! List) {
-            return <String?>[];
-          }
-          return row.map<String?>((cell) => cell as String?).toList();
-        }).toList();
+        final grid =
+            (gridData as List).map<List<String?>>((row) {
+              if (row is! List) {
+                return <String?>[];
+              }
+              return row.map<String?>((cell) => cell as String?).toList();
+            }).toList();
 
         expect(grid.length, 3);
         expect(grid[0][0], 'A');
@@ -241,8 +242,8 @@ void main() {
           assetLoader: (_) async => {'cells': [], 'cols': 3, 'rows': 3},
         );
 
-        final progressList = await service
-            .getInProgressPuzzlesSortedByRecency();
+        final progressList =
+            await service.getInProgressPuzzlesSortedByRecency();
 
         expect(progressList, isNotEmpty);
         expect(progressList.first.puzzleId, 'test-puzzle-1');

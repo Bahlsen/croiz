@@ -7,10 +7,7 @@ import 'package:sizer/sizer.dart';
 /// (.h, .w, .sp) to avoid LateInitializationError.
 class TestSizerWrapper extends StatelessWidget {
   /// Creates a TestSizerWrapper.
-  const TestSizerWrapper({
-    required this.child,
-    super.key,
-  });
+  const TestSizerWrapper({required this.child, super.key});
 
   /// The widget to wrap with Sizer.
   final Widget child;
@@ -26,8 +23,5 @@ class TestSizerWrapper extends StatelessWidget {
 /// initialization for widget tests.
 Widget wrapWithSizer(Widget child, {List<LocalizationsDelegate>? delegates}) =>
     TestSizerWrapper(
-      child: MaterialApp(
-        localizationsDelegates: delegates,
-        home: child,
-      ),
+      child: MaterialApp(localizationsDelegates: delegates, home: child),
     );

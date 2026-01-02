@@ -14,19 +14,18 @@ GameBoard _makeBoard({
   required List<List<bool>> blackCells,
   required List<PuzzleEntryData> entries,
   required List<List<String?>> solutionGrid,
-}) =>
-    GameBoard(
-      id: id,
-      title: 'Test $id',
-      gridSize: gridSize,
-      createdAt: DateTime.now(),
-      grid: List.generate(gridSize, (_) => List<String?>.filled(gridSize, null)),
-      clues: const {},
-      blackCells: blackCells,
-      difficulty: 1,
-      entries: entries,
-      solutionGrid: solutionGrid,
-    );
+}) => GameBoard(
+  id: id,
+  title: 'Test $id',
+  gridSize: gridSize,
+  createdAt: DateTime.now(),
+  grid: List.generate(gridSize, (_) => List<String?>.filled(gridSize, null)),
+  clues: const {},
+  blackCells: blackCells,
+  difficulty: 1,
+  entries: entries,
+  solutionGrid: solutionGrid,
+);
 
 void main() {
   group('Navigation after puzzle change - bug reproduction', () {
@@ -427,9 +426,9 @@ void main() {
         container.read(gameBoardProvider);
 
         // Simulate having found words and locked cells in board1
-        container
-            .read(foundWordsProvider.notifier)
-            .setFoundWords({'0,0,across'});
+        container.read(foundWordsProvider.notifier).setFoundWords({
+          '0,0,across',
+        });
         container.read(lockedCellsProvider.notifier).setLockedCells({
           const CellKey(0, 0),
           const CellKey(0, 1),
@@ -457,12 +456,14 @@ void main() {
         expect(
           container.read(foundWordsProvider),
           isEmpty,
-          reason: 'BUG: foundWords from board1 should be cleared on puzzle change',
+          reason:
+              'BUG: foundWords from board1 should be cleared on puzzle change',
         );
         expect(
           container.read(lockedCellsProvider),
           isEmpty,
-          reason: 'BUG: lockedCells from board1 should be cleared on puzzle change',
+          reason:
+              'BUG: lockedCells from board1 should be cleared on puzzle change',
         );
 
         // The key test: navigation in board2 should work correctly
@@ -623,11 +624,7 @@ void main() {
         }
 
         // It should be (1,0) - next cell in the down entry
-        expect(
-          sel3,
-          isNotNull,
-          reason: 'Should have a selection after typing',
-        );
+        expect(sel3, isNotNull, reason: 'Should have a selection after typing');
         expect(
           sel3!.row,
           equals(1),

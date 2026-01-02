@@ -57,11 +57,12 @@ class _BackspaceKeyState extends State<BackspaceKey> {
     _repeatTimer = Timer.periodic(const Duration(milliseconds: 260), (t) {
       _trigger();
       _phase++;
-      final newIntervalMs = _phase > 8
-          ? 55
-          : _phase > 3
-          ? 110
-          : 260;
+      final newIntervalMs =
+          _phase > 8
+              ? 55
+              : _phase > 3
+              ? 110
+              : 260;
       if (newIntervalMs != _repeatIntervalMs) {
         t.cancel();
         _repeatTimer = Timer.periodic(

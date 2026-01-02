@@ -15,15 +15,19 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Builder(
-              builder: (context) => Scaffold(
-                body: Stack(children: [CrosswordControlsMenu(onClose: () {})]),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Builder(
+                  builder:
+                      (context) => Scaffold(
+                        body: Stack(
+                          children: [CrosswordControlsMenu(onClose: () {})],
+                        ),
+                      ),
+                ),
               ),
-            ),
-          ),
         ),
       ),
     );

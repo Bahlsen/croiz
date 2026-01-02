@@ -53,11 +53,15 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Scaffold(
-                body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
-              ),
-            ),
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Scaffold(
+                    body: CrosswordControlsBar(
+                      onKey: (_) {},
+                      onBackspace: () {},
+                    ),
+                  ),
+                ),
           ),
         ),
       );

@@ -41,8 +41,9 @@ void main() {
         ),
         GoRoute(
           path: '/crossword',
-          builder: (context, state) =>
-              CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
+          builder:
+              (context, state) =>
+                  CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
         ),
       ],
     );
@@ -56,9 +57,9 @@ void main() {
           ),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp.router(
-            routerConfig: router,
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  MaterialApp.router(routerConfig: router),
         ),
       ),
     );

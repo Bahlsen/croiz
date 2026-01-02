@@ -10,13 +10,15 @@ class AppDifficulty {
     (level: 5, label: 'Master', color: Colors.black),
   ];
 
-  static String getLabel(int level) => levels
-      .firstWhere((d) => d.level == level, orElse: () => levels.last)
-      .label;
+  static String getLabel(int level) =>
+      levels
+          .firstWhere((d) => d.level == level, orElse: () => levels.last)
+          .label;
 
-  static Color getColor(int level) => levels
-      .firstWhere((d) => d.level == level, orElse: () => levels.last)
-      .color;
+  static Color getColor(int level) =>
+      levels
+          .firstWhere((d) => d.level == level, orElse: () => levels.last)
+          .color;
 
   static int get minLevel => levels.first.level;
   static int get maxLevel => levels.last.level;

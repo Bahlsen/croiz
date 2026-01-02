@@ -20,8 +20,9 @@ final appRouter = GoRouter(
         }
         return null;
       },
-      builder: (context, state) =>
-          CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
+      builder:
+          (context, state) =>
+              CrosswordScreen(puzzleId: state.uri.queryParameters['id']),
     ),
   ],
 );

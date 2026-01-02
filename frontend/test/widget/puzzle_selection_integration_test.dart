@@ -71,9 +71,9 @@ void main() {
           puzzleAssetLoaderProvider.overrideWithValue(fakeLoader),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp.router(
-            routerConfig: router,
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  MaterialApp.router(routerConfig: router),
         ),
       ),
     );

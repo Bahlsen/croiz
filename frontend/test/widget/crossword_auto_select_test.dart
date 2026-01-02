@@ -42,27 +42,32 @@ void main() {
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
           ],
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Builder(
-                builder: (context) => Column(
-                  children: [
-                    const Expanded(child: CrosswordScreen()),
-                    Consumer(
-                      builder: (context, ref, _) {
-                        final sel = ref.watch(selectedCellProvider);
-                        if (sel == null) {
-                          return const Text('sel:none', key: Key('sel'));
-                        }
-                        return Text(
-                          'sel:${sel.row},${sel.col}',
-                          key: const Key('sel'),
-                        );
-                      },
-                    ),
-                  ],
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Builder(
+                    builder:
+                        (context) => Column(
+                          children: [
+                            const Expanded(child: CrosswordScreen()),
+                            Consumer(
+                              builder: (context, ref, _) {
+                                final sel = ref.watch(selectedCellProvider);
+                                if (sel == null) {
+                                  return const Text(
+                                    'sel:none',
+                                    key: Key('sel'),
+                                  );
+                                }
+                                return Text(
+                                  'sel:${sel.row},${sel.col}',
+                                  key: const Key('sel'),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       );

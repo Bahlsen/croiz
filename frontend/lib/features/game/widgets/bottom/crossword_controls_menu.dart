@@ -87,24 +87,25 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               Expanded(
                                 child: Text(
                                   AppLocalizations.of(context)!.menu,
-                                  style: Theme.of(context).textTheme.titleLarge
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: ResponsiveFontSize.titleLarge,
-                                      ),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: ResponsiveFontSize.titleLarge,
+                                  ),
                                 ),
                               ),
                               IconButton(
                                 icon: Icon(
                                   Icons.close,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
-                                tooltip: MaterialLocalizations.of(
-                                  context,
-                                ).closeButtonTooltip,
+                                tooltip:
+                                    MaterialLocalizations.of(
+                                      context,
+                                    ).closeButtonTooltip,
                                 onPressed: onClose,
                               ),
                             ],
@@ -120,9 +121,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.home,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -141,9 +141,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.zoom_out_map,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -204,9 +203,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.language,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -220,9 +218,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     left: ResponsivePadding.md,
                                   ),
                                   child: DropdownButton<String>(
-                                    value: ref
-                                        .watch(localeProvider)
-                                        .languageCode,
+                                    value:
+                                        ref.watch(localeProvider).languageCode,
                                     underline: const SizedBox.shrink(),
                                     items: [
                                       DropdownMenuItem(
@@ -270,9 +267,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               SwitchListTile(
                                 secondary: Icon(
                                   Icons.keyboard,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -308,9 +304,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               SwitchListTile(
                                 secondary: Icon(
                                   Icons.volume_off,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -336,9 +331,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               SwitchListTile(
                                 secondary: Icon(
                                   Icons.brightness_6,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -362,9 +356,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.help_outline,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(
@@ -378,9 +371,8 @@ class CrosswordControlsMenu extends ConsumerWidget {
                               ListTile(
                                 leading: Icon(
                                   Icons.info_outline,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
                                   size: ResponsiveIconSize.md,
                                 ),
                                 title: Text(

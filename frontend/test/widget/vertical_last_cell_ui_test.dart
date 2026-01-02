@@ -48,8 +48,9 @@ void main() {
             flashClearDelayProvider.overrideWith((ref) => Duration.zero),
           ],
           child: Sizer(
-            builder: (context, orientation, deviceType) =>
-                const MaterialApp(home: CrosswordScreen()),
+            builder:
+                (context, orientation, deviceType) =>
+                    const MaterialApp(home: CrosswordScreen()),
           ),
         ),
       );

@@ -12,13 +12,14 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
-            ),
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+                ),
+              ),
         ),
       ),
     );

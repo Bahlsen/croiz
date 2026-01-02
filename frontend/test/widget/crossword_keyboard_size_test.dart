@@ -16,25 +16,26 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(
-              body: Stack(
-                children: [
-                  // Show both menu and controls bar so UI uses same providers
-                  CrosswordControlsMenu(onClose: () {}),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: CrosswordControlsBar(
-                      onKey: (_) {},
-                      onBackspace: () {},
-                    ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: Stack(
+                    children: [
+                      // Show both menu and controls bar so UI uses same providers
+                      CrosswordControlsMenu(onClose: () {}),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: CrosswordControlsBar(
+                          onKey: (_) {},
+                          onBackspace: () {},
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
         ),
       ),
     );

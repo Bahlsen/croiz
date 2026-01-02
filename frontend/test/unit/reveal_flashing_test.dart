@@ -459,7 +459,7 @@ void main() {
     final dir = container.read(wordDirectionProvider);
     final isAcross = dir == WordDirection.horizontal;
     final sel = container.read(selectedCellProvider)!;
-    
+
     final index = container.read(cellEntriesIndexProvider);
     final containing = findContainingEntry(
       row: sel.row,
@@ -477,6 +477,10 @@ void main() {
 
     expect(nextEmpty, isNotNull, reason: 'Should find next empty cell');
     expect(nextEmpty!.row, 0);
-    expect(nextEmpty.col, 1, reason: 'Next empty should be col 1 after revealing col 0');
+    expect(
+      nextEmpty.col,
+      1,
+      reason: 'Next empty should be col 1 after revealing col 0',
+    );
   });
 }

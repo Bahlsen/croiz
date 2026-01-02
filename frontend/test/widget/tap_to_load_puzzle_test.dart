@@ -58,8 +58,9 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) =>
-                MaterialApp.router(routerConfig: appRouter),
+            builder:
+                (context, orientation, deviceType) =>
+                    MaterialApp.router(routerConfig: appRouter),
           ),
         ),
       );

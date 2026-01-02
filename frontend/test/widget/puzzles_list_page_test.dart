@@ -16,9 +16,9 @@ void main() {
       ProviderScope(
         overrides: [puzzlesProvider.overrideWithValue(AsyncValue.data(sample))],
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: PuzzlesListPage(),
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  const MaterialApp(home: PuzzlesListPage()),
         ),
       ),
     );

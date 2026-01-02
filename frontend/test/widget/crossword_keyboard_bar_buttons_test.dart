@@ -13,16 +13,17 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Scaffold(
-                body: Column(
-                  children: [
-                    const Expanded(child: Placeholder()),
-                    CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
-                  ],
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Scaffold(
+                    body: Column(
+                      children: [
+                        const Expanded(child: Placeholder()),
+                        CrosswordControlsBar(onKey: (_) {}, onBackspace: () {}),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       );

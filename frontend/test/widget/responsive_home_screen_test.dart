@@ -10,16 +10,17 @@ void main() {
   group('HomeScreen responsive layout', () {
     Widget createTestApp({Size? screenSize}) => ProviderScope(
       child: Sizer(
-        builder: (context, orientation, screenType) => const MaterialApp(
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en'), Locale('fr')],
-          home: HomeScreen(),
-        ),
+        builder:
+            (context, orientation, screenType) => const MaterialApp(
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [Locale('en'), Locale('fr')],
+              home: HomeScreen(),
+            ),
       ),
     );
 
@@ -83,8 +84,7 @@ void main() {
       expect(buttonFinder, findsOneWidget);
 
       // Get the button's size
-      final buttonBox =
-          tester.renderObject<RenderBox>(buttonFinder);
+      final buttonBox = tester.renderObject<RenderBox>(buttonFinder);
       final buttonSize = buttonBox.size;
 
       // Button should have minimum touch target of 48x48 (accessibility)
@@ -99,16 +99,17 @@ void main() {
   group('Responsive text scaling', () {
     Widget createTestApp() => ProviderScope(
       child: Sizer(
-        builder: (context, orientation, screenType) => const MaterialApp(
-          localizationsDelegates: [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: [Locale('en'), Locale('fr')],
-          home: HomeScreen(),
-        ),
+        builder:
+            (context, orientation, screenType) => const MaterialApp(
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: [Locale('en'), Locale('fr')],
+              home: HomeScreen(),
+            ),
       ),
     );
 

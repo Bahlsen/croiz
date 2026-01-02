@@ -80,16 +80,18 @@ void main() {
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Builder(
-                builder: (context) => Consumer(
-                  builder: (context, ref, _) {
-                    final controller = CrosswordInputController(ref);
-                    return CrosswordBody(controller: controller);
-                  },
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Builder(
+                    builder:
+                        (context) => Consumer(
+                          builder: (context, ref, _) {
+                            final controller = CrosswordInputController(ref);
+                            return CrosswordBody(controller: controller);
+                          },
+                        ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       );
@@ -206,16 +208,18 @@ void main() {
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Builder(
-                builder: (context) => Consumer(
-                  builder: (context, ref, _) {
-                    final controller = CrosswordInputController(ref);
-                    return CrosswordBody(controller: controller);
-                  },
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Builder(
+                    builder:
+                        (context) => Consumer(
+                          builder: (context, ref, _) {
+                            final controller = CrosswordInputController(ref);
+                            return CrosswordBody(controller: controller);
+                          },
+                        ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       );

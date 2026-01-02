@@ -34,9 +34,10 @@ PuzzleEntryData? findContainingEntry({
     if (!wantAcross && e.directionEnum != EntryDirection.down) {
       continue;
     }
-    final contains = wantAcross
-        ? (row == e.y && col >= e.x && col < e.x + e.length)
-        : (col == e.x && row >= e.y && row < e.y + e.length);
+    final contains =
+        wantAcross
+            ? (row == e.y && col >= e.x && col < e.x + e.length)
+            : (col == e.x && row >= e.y && row < e.y + e.length);
     if (contains) {
       return e;
     }

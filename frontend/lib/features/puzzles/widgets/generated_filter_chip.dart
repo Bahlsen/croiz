@@ -18,13 +18,15 @@ class GeneratedFilterChip extends ConsumerWidget {
       selectedColor: Theme.of(context).colorScheme.tertiaryContainer,
       checkmarkColor: Theme.of(context).colorScheme.tertiary,
       labelStyle: TextStyle(
-        color: isSelected
-            ? Theme.of(context).colorScheme.onTertiaryContainer
-            : null, // Default
+        color:
+            isSelected
+                ? Theme.of(context).colorScheme.onTertiaryContainer
+                : null, // Default
       ),
-      side: isSelected
-          ? BorderSide.none
-          : BorderSide(color: Theme.of(context).colorScheme.outline),
+      side:
+          isSelected
+              ? BorderSide.none
+              : BorderSide(color: Theme.of(context).colorScheme.outline),
       onSelected: (selected) {
         ref
             .read(puzzleFilterProvider.notifier)

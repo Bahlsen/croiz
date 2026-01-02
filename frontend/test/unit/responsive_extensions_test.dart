@@ -9,9 +9,9 @@ void main() {
       // Set up a medium-sized device (400x800)
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -36,9 +36,9 @@ void main() {
     testWidgets('provides consistent font size values', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -58,7 +58,10 @@ void main() {
       expect(ResponsiveFontSize.displayLarge, greaterThan(0));
 
       // Verify ordering (smaller categories should be smaller than larger)
-      expect(ResponsiveFontSize.caption, lessThan(ResponsiveFontSize.bodySmall));
+      expect(
+        ResponsiveFontSize.caption,
+        lessThan(ResponsiveFontSize.bodySmall),
+      );
       expect(
         ResponsiveFontSize.bodySmall,
         lessThan(ResponsiveFontSize.bodyMedium),
@@ -86,9 +89,9 @@ void main() {
     testWidgets('provides consistent icon size values', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -111,9 +114,9 @@ void main() {
     testWidgets('provides consistent padding values', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -136,9 +139,9 @@ void main() {
     testWidgets('provides consistent border radius values', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -161,9 +164,9 @@ void main() {
     testWidgets('provides consistent button dimensions', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -189,9 +192,9 @@ void main() {
     testWidgets('provides consistent keyboard dimensions', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -231,9 +234,9 @@ void main() {
     testWidgets('provides consistent grid dimensions', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -246,9 +249,9 @@ void main() {
     testWidgets('provides consistent overlay dimensions', (tester) async {
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -268,9 +271,9 @@ void main() {
 
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 
@@ -283,9 +286,9 @@ void main() {
 
       await tester.pumpWidget(
         Sizer(
-          builder: (context, orientation, screenType) => const MaterialApp(
-            home: Scaffold(body: SizedBox.shrink()),
-          ),
+          builder:
+              (context, orientation, screenType) =>
+                  const MaterialApp(home: Scaffold(body: SizedBox.shrink())),
         ),
       );
 

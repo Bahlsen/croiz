@@ -60,16 +60,17 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => const MaterialApp(
-              home: Scaffold(
-                body: Stack(
-                  children: [
-                    Center(child: Text('Game Content')),
-                    EndGameOverlay(),
-                  ],
+            builder:
+                (context, orientation, deviceType) => const MaterialApp(
+                  home: Scaffold(
+                    body: Stack(
+                      children: [
+                        Center(child: Text('Game Content')),
+                        EndGameOverlay(),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       );
@@ -142,18 +143,20 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: Sizer(
-            builder: (context, orientation, deviceType) => MaterialApp(
-              home: Builder(
-                builder: (context) => const Scaffold(
-                  body: Stack(
-                    children: [
-                      Center(child: Text('Game Content')),
-                      EndGameOverlay(),
-                    ],
+            builder:
+                (context, orientation, deviceType) => MaterialApp(
+                  home: Builder(
+                    builder:
+                        (context) => const Scaffold(
+                          body: Stack(
+                            children: [
+                              Center(child: Text('Game Content')),
+                              EndGameOverlay(),
+                            ],
+                          ),
+                        ),
                   ),
                 ),
-              ),
-            ),
           ),
         ),
       );

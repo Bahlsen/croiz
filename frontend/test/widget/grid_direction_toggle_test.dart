@@ -33,9 +33,9 @@ void main() {
           puzzleLoaderProvider.overrideWith((ref) async => boardWithEntries),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: CrosswordScreen(),
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  const MaterialApp(home: CrosswordScreen()),
         ),
       ),
     );

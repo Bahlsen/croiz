@@ -162,10 +162,6 @@ class GridGenerator {
     // Since we run this sequentially in loop, we reuse the class _grid
     _resetGrid();
 
-    if (words.isEmpty) {
-      return [];
-    }
-
     final placed = <PlacedWord>[];
     var remaining = List<GeneratedWord>.from(words);
     final rejected = <GeneratedWord>[]; // Words we couldn't place this round

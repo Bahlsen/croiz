@@ -70,21 +70,23 @@ class CrosswordClueHeader extends ConsumerWidget {
         centerWidget = ClueBannerContainer(entry: entryCtx.entry);
         leftArrow = ClueBannerArrow(
           icon: Icons.chevron_left,
-          onTap: () => _navigateToAdjacentEntry(
-            ref,
-            entryCtx.entries,
-            entryCtx.entry,
-            -1,
-          ),
+          onTap:
+              () => _navigateToAdjacentEntry(
+                ref,
+                entryCtx.entries,
+                entryCtx.entry,
+                -1,
+              ),
         );
         rightArrow = ClueBannerArrow(
           icon: Icons.chevron_right,
-          onTap: () => _navigateToAdjacentEntry(
-            ref,
-            entryCtx.entries,
-            entryCtx.entry,
-            1,
-          ),
+          onTap:
+              () => _navigateToAdjacentEntry(
+                ref,
+                entryCtx.entries,
+                entryCtx.entry,
+                1,
+              ),
         );
       }
     }
@@ -134,9 +136,10 @@ class CrosswordClueHeader extends ConsumerWidget {
       return;
     }
     final next = computeAdjacentEntry(entries, current, delta);
-    final newDir = next.direction == 'across'
-        ? WordDirection.horizontal
-        : WordDirection.vertical;
+    final newDir =
+        next.direction == 'across'
+            ? WordDirection.horizontal
+            : WordDirection.vertical;
     ref.read(wordDirectionProvider.notifier).setDirection(newDir);
     ref
         .read(selectedCellProvider.notifier)

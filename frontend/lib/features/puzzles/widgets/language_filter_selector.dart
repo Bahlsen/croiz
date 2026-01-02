@@ -10,8 +10,8 @@ class LanguageFilterSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final availableLanguages = ref.watch(availableLanguagesProvider).toList()
-      ..sort();
+    final availableLanguages =
+        ref.watch(availableLanguagesProvider).toList()..sort();
     final filterState = ref.watch(puzzleFilterProvider);
 
     // Don't render if there's only one language available
@@ -23,14 +23,12 @@ class LanguageFilterSelector extends ConsumerWidget {
     final isAllSelected = selectedLanguages.isEmpty; // Empty implies All
 
     // Calculate display count
-    final count = isAllSelected
-        ? availableLanguages.length
-        : selectedLanguages.length;
+    final count =
+        isAllSelected ? availableLanguages.length : selectedLanguages.length;
 
     // Create label text
-    final labelText = isAllSelected
-        ? 'All Languages ($count)'
-        : 'Languages ($count)';
+    final labelText =
+        isAllSelected ? 'All Languages ($count)' : 'Languages ($count)';
 
     return OutlinedButton.icon(
       onPressed: () => _showLanguageSelector(context, availableLanguages),
@@ -40,13 +38,15 @@ class LanguageFilterSelector extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         visualDensity: VisualDensity.compact,
         side: BorderSide(
-          color: isAllSelected
-              ? Colors.grey.shade300
-              : Theme.of(context).colorScheme.primary,
+          color:
+              isAllSelected
+                  ? Colors.grey.shade300
+                  : Theme.of(context).colorScheme.primary,
         ),
-        foregroundColor: isAllSelected
-            ? Theme.of(context).textTheme.bodyMedium?.color
-            : Theme.of(context).colorScheme.primary,
+        foregroundColor:
+            isAllSelected
+                ? Theme.of(context).textTheme.bodyMedium?.color
+                : Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -60,8 +60,9 @@ class LanguageFilterSelector extends ConsumerWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      builder: (context) =>
-          _LanguageSelectionSheet(availableLanguages: availableLanguages),
+      builder:
+          (context) =>
+              _LanguageSelectionSheet(availableLanguages: availableLanguages),
     );
   }
 }

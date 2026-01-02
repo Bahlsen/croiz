@@ -79,9 +79,8 @@ class PuzzleProgressService {
     }
 
     final savedAtStr = data['savedAt'] as String?;
-    final savedAt = savedAtStr != null
-        ? DateTime.parse(savedAtStr)
-        : DateTime.now();
+    final savedAt =
+        savedAtStr != null ? DateTime.parse(savedAtStr) : DateTime.now();
     final elapsedSeconds = (data['elapsedSeconds'] as int?) ?? 0;
 
     return PuzzleProgress(

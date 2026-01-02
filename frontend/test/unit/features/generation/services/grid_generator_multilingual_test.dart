@@ -56,5 +56,56 @@ void main() {
       expect(result, isNotEmpty);
       expect(result.any((pw) => pw.word.answer == 'MUENCHEN'), isTrue);
     });
+
+    test('should support Italian', () {
+      final words = [
+        const GeneratedWord(answer: 'PIZZA', clue: 'Food'),
+        const GeneratedWord(answer: 'ROMA', clue: 'Capital'),
+      ];
+
+      final result = generator.generate(words, language: 'it');
+      expect(result, isNotEmpty);
+      expect(result.any((pw) => pw.word.answer == 'PIZZA'), isTrue);
+    });
+
+    test('should support Portuguese', () {
+      final words = [
+        const GeneratedWord(answer: 'FADO', clue: 'Music'),
+        const GeneratedWord(answer: 'LISBOA', clue: 'Capital'),
+      ];
+
+      final result = generator.generate(words, language: 'pt');
+      expect(result, isNotEmpty);
+      expect(result.any((pw) => pw.word.answer == 'LISBOA'), isTrue);
+    });
+
+    test('should support Ukrainian', () {
+      final words = [
+        const GeneratedWord(answer: 'КИЇВ', clue: 'Capital'),
+        const GeneratedWord(answer: 'МОВА', clue: 'Language'),
+      ];
+
+      final result = generator.generate(words, language: 'uk');
+      expect(result, isNotEmpty);
+      expect(result.any((pw) => pw.word.answer == 'КИЇВ'), isTrue);
+    });
+
+    test('should map Russian to Ukrainian weights', () {
+      final words = [const GeneratedWord(answer: 'КИЇВ', clue: 'Capital')];
+
+      // We just ensure it works with 'ru' without crashing
+      // (internally it uses 'uk' weights)
+      final result = generator.generate(words, language: 'ru');
+      expect(result, isNotEmpty);
+      expect(result[0].word.answer, 'КИЇВ');
+    });
+
+    test('should fallback to English weights for unknown language', () {
+      final words = [const GeneratedWord(answer: 'TEST', clue: 'Test')];
+
+      final result = generator.generate(words, language: 'zz'); // Unknown
+      expect(result, isNotEmpty);
+      expect(result[0].word.answer, 'TEST');
+    });
   });
 }

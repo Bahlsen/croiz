@@ -54,9 +54,10 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: Scaffold(body: SafeArea(child: SizedBox.expand())),
-          ),
+          builder:
+              (context, orientation, deviceType) => const MaterialApp(
+                home: Scaffold(body: SafeArea(child: SizedBox.expand())),
+              ),
         ),
       ),
     );
@@ -66,11 +67,14 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: Sizer(
-          builder: (context, orientation, deviceType) => MaterialApp(
-            home: Scaffold(
-              body: SafeArea(child: CrosswordContent(controller: controller)),
-            ),
-          ),
+          builder:
+              (context, orientation, deviceType) => MaterialApp(
+                home: Scaffold(
+                  body: SafeArea(
+                    child: CrosswordContent(controller: controller),
+                  ),
+                ),
+              ),
         ),
       ),
     );

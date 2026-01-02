@@ -16,37 +16,35 @@ class CrosswordClueActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-      children: [
-        if (onMenu != null)
-          SizedBox(
-            width: 12.w,
-            height: 5.h,
-            child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
-          )
-        else
-          SizedBox(width: 12.w),
-        const Spacer(),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (onReveal != null)
-              SizedBox(
-                width: 10.w,
-                height: 4.5.h,
-                child: Center(
-                  child: ClueHeaderRevealButton(onPressed: onReveal),
-                ),
-              ),
-            if (onReveal != null && onClear != null)
-              SizedBox(width: ResponsivePadding.sm),
-            if (onClear != null)
-              SizedBox(
-                width: 10.w,
-                height: 4.5.h,
-                child: Center(child: ClueHeaderClearButton(onPressed: onClear)),
-              ),
-          ],
-        ),
-      ],
-    );
+    children: [
+      if (onMenu != null)
+        SizedBox(
+          width: 12.w,
+          height: 5.h,
+          child: Center(child: ClueHeaderMenuButton(onPressed: onMenu)),
+        )
+      else
+        SizedBox(width: 12.w),
+      const Spacer(),
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (onReveal != null)
+            SizedBox(
+              width: 10.w,
+              height: 4.5.h,
+              child: Center(child: ClueHeaderRevealButton(onPressed: onReveal)),
+            ),
+          if (onReveal != null && onClear != null)
+            SizedBox(width: ResponsivePadding.sm),
+          if (onClear != null)
+            SizedBox(
+              width: 10.w,
+              height: 4.5.h,
+              child: Center(child: ClueHeaderClearButton(onPressed: onClear)),
+            ),
+        ],
+      ),
+    ],
+  );
 }

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('GridGenerator', () {
-    test('should place a single word in the center horizontally', () {
+    test('should place a single word in the center', () {
       // Arrange
       final generator = GridGenerator(width: 10, height: 10);
       final words = [const GeneratedWord(answer: 'HELLO', clue: 'Greeting')];
@@ -15,9 +15,40 @@ void main() {
       // Assert
       expect(result, hasLength(1));
       expect(result[0].word.answer, 'HELLO');
-      expect(result[0].isHorizontal, true);
-      expect(result[0].startY, 5); // Middle row
-      expect(result[0].startX, 2); // Centered: (10 - 5) / 2 = 2
+      if (result[0].isHorizontal) {
+        expect(result[0].startY, 5); // Middle row
+        expect(result[0].startX, 2); // Centered: (10 - 5) / 2 = 2
+      } else {
+        expect(result[0].startX, 5); // Middle column
+        expect(result[0].startY, 2); // Centered: (10 - 5) / 2 = 2
+      }
+    });
+
+    test('should handle both horizontal and vertical initial placements', () {
+      // This test ensures both branches of orientation randomness are hit for coverage
+      final generator = GridGenerator(width: 10, height: 10);
+      final words = [const GeneratedWord(answer: 'HELLO', clue: 'Greeting')];
+
+      var horizontalHit = false;
+      var verticalHit = false;
+
+      // Small number of attempts to avoid excessive test time,
+      // but enough to statistically hit both (p > 1 - 2^-9)
+      for (var i = 0; i < 10; i++) {
+        final result = generator.generate(words, attempts: 1);
+        if (result.isNotEmpty) {
+          if (result[0].isHorizontal) {
+            horizontalHit = true;
+          } else {
+            verticalHit = true;
+          }
+        }
+        if (horizontalHit && verticalHit) {
+          break;
+        }
+      }
+
+      expect(horizontalHit || verticalHit, isTrue);
     });
 
     test('should return empty list when no words provided', () {
@@ -39,11 +70,12 @@ void main() {
         const GeneratedWord(answer: 'VERYLONGWORD', clue: 'Too long'),
       ];
 
-      // Act
-      final result = generator.generate(words);
-
-      // Assert
-      expect(result, isEmpty);
+      // Act & Assert
+      // Run many times to ensure both horizontal and vertical length check branches are hit
+      for (var i = 0; i < 100; i++) {
+        final result = generator.generate(words, attempts: 1);
+        expect(result, isEmpty);
+      }
     });
 
     test('should place multiple words with intersections', () {

@@ -96,8 +96,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         // progress (`value`) to compute elapsed time so tests that
         // advance time via `tester.pump` remain deterministic.
         final animationDuration = _controller.duration ?? Duration.zero;
-        final elapsedMs = (animationDuration.inMilliseconds * _controller.value)
-            .round();
+        final elapsedMs =
+            (animationDuration.inMilliseconds * _controller.value).round();
         final elapsed = Duration(milliseconds: elapsedMs);
         const buffer = Duration(milliseconds: 300);
         final remaining = animationDuration - elapsed;
@@ -118,19 +118,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,
-          builder: (context, child) => FadeTransition(
-            opacity: _fadeAnimation,
-            child: ScaleTransition(scale: _scaleAnimation, child: child),
-          ),
+          builder:
+              (context, child) => FadeTransition(
+                opacity: _fadeAnimation,
+                child: ScaleTransition(scale: _scaleAnimation, child: child),
+              ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // Logo / App name (localized and using theme)
               Text(
                 AppLocalizations.of(context)!.appTitle,
-                style: Theme.of(
-                  context,
-                ).textTheme.displayLarge?.copyWith(
+                style: Theme.of(context).textTheme.displayLarge?.copyWith(
                   letterSpacing: 8,
                   fontSize: ResponsiveFontSize.headlineLarge,
                 ),
@@ -148,26 +147,29 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
               // Loading indicator
               initState.when(
-                data: (_) => Icon(
-                  Icons.check_circle,
-                  color: scheme.primary,
-                  size: ResponsiveIconSize.lg,
-                ),
-                loading: () => SizedBox(
-                  width: ResponsiveIconSize.lg,
-                  height: ResponsiveIconSize.lg,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      scheme.onSurface.withAlpha((0.7 * 255).round()),
+                data:
+                    (_) => Icon(
+                      Icons.check_circle,
+                      color: scheme.primary,
+                      size: ResponsiveIconSize.lg,
                     ),
-                  ),
-                ),
-                error: (_, _) => Icon(
-                  Icons.warning_amber_rounded,
-                  color: scheme.error,
-                  size: ResponsiveIconSize.lg,
-                ),
+                loading:
+                    () => SizedBox(
+                      width: ResponsiveIconSize.lg,
+                      height: ResponsiveIconSize.lg,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          scheme.onSurface.withAlpha((0.7 * 255).round()),
+                        ),
+                      ),
+                    ),
+                error:
+                    (_, _) => Icon(
+                      Icons.warning_amber_rounded,
+                      color: scheme.error,
+                      size: ResponsiveIconSize.lg,
+                    ),
               ),
               SizedBox(height: ResponsiveSpacing.md),
 

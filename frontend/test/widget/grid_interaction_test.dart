@@ -36,9 +36,9 @@ void main() {
           ),
         ],
         child: Sizer(
-          builder: (context, orientation, deviceType) => const MaterialApp(
-            home: CrosswordScreen(),
-          ),
+          builder:
+              (context, orientation, deviceType) =>
+                  const MaterialApp(home: CrosswordScreen()),
         ),
       ),
     );
@@ -54,10 +54,11 @@ void main() {
     await tester.pumpAndSettle();
 
     // Count existing 'Z' occurrences inside the grid (should be 0 initially for empty cell set).
-    final zInGridBefore = find
-        .descendant(of: gridFinder, matching: find.text('Z'))
-        .evaluate()
-        .length;
+    final zInGridBefore =
+        find
+            .descendant(of: gridFinder, matching: find.text('Z'))
+            .evaluate()
+            .length;
 
     // Tap letter 'Z' on virtual keyboard. Ensure the key is visible first
     // so the tap doesn't compute off-screen coordinates in headless tests.
@@ -73,10 +74,11 @@ void main() {
     filled.onPressed!();
     await tester.pumpAndSettle();
 
-    final zInGridAfter = find
-        .descendant(of: gridFinder, matching: find.text('Z'))
-        .evaluate()
-        .length;
+    final zInGridAfter =
+        find
+            .descendant(of: gridFinder, matching: find.text('Z'))
+            .evaluate()
+            .length;
     expect(zInGridAfter, greaterThan(zInGridBefore));
   });
 }

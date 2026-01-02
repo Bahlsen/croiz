@@ -53,12 +53,13 @@ class PuzzleListTile extends ConsumerWidget {
         title,
         style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
       ),
-      subtitle: effectiveSubtitle != null && effectiveSubtitle.isNotEmpty
-          ? Text(
-              effectiveSubtitle,
-              style: TextStyle(fontSize: ResponsiveFontSize.bodySmall),
-            )
-          : null,
+      subtitle:
+          effectiveSubtitle != null && effectiveSubtitle.isNotEmpty
+              ? Text(
+                effectiveSubtitle,
+                style: TextStyle(fontSize: ResponsiveFontSize.bodySmall),
+              )
+              : null,
       trailing: effectiveTrailing,
       onTap: () {
         ref.read(selectedPuzzleIdProvider.notifier).setSelected(puzzleId);
@@ -91,21 +92,24 @@ class MetadataLoadingPuzzleTile extends ConsumerWidget {
     // Otherwise, fetch full metadata
     final meta = ref.watch(puzzleMetadataProvider(descriptor.path));
     return meta.when(
-      loading: () => PuzzleListTile(
-        title: descriptor.title,
-        puzzleId: token,
-        isLoading: true,
-      ),
-      error: (_, _) => PuzzleListTile(
-        title: descriptor.title,
-        puzzleId: token,
-        hasError: true,
-      ),
-      data: (full) => PuzzleListTile(
-        title: full.title,
-        puzzleId: full.id,
-        subtitle: full.subtitle.isNotEmpty ? full.subtitle : null,
-      ),
+      loading:
+          () => PuzzleListTile(
+            title: descriptor.title,
+            puzzleId: token,
+            isLoading: true,
+          ),
+      error:
+          (_, _) => PuzzleListTile(
+            title: descriptor.title,
+            puzzleId: token,
+            hasError: true,
+          ),
+      data:
+          (full) => PuzzleListTile(
+            title: full.title,
+            puzzleId: full.id,
+            subtitle: full.subtitle.isNotEmpty ? full.subtitle : null,
+          ),
     );
   }
 }
@@ -137,9 +141,10 @@ class YearGroupExpansionTile extends StatelessWidget {
         ),
       ),
       initiallyExpanded: false,
-      children: sortedPuzzles
-          .map((p) => MetadataLoadingPuzzleTile(descriptor: p))
-          .toList(),
+      children:
+          sortedPuzzles
+              .map((p) => MetadataLoadingPuzzleTile(descriptor: p))
+              .toList(),
     );
   }
 }
@@ -173,14 +178,15 @@ class OriginGroupExpansionTile extends ConsumerWidget {
         style: TextStyle(fontSize: ResponsiveFontSize.bodyLarge),
       ),
       initiallyExpanded: false,
-      children: yearKeys
-          .map(
-            (year) => YearGroupExpansionTile(
-              year: year,
-              puzzles: puzzlesByYear[year]!,
-            ),
-          )
-          .toList(),
+      children:
+          yearKeys
+              .map(
+                (year) => YearGroupExpansionTile(
+                  year: year,
+                  puzzles: puzzlesByYear[year]!,
+                ),
+              )
+              .toList(),
     );
   }
 }
@@ -202,29 +208,33 @@ class LazyOriginExpansionTile extends ConsumerWidget {
         builder: (context, ref2, _) {
           final idx = ref2.watch(originIndexProvider(origin));
           return idx.when(
-            loading: () => Padding(
-              padding: EdgeInsets.all(ResponsivePadding.xl),
-              child: const Center(child: CircularProgressIndicator()),
-            ),
-            error: (e, st) => Padding(
-              padding: EdgeInsets.all(ResponsivePadding.md),
-              child: Text(
-                AppLocalizations.of(context)?.errorLoading ?? 'Error loading',
-                style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
-              ),
-            ),
+            loading:
+                () => Padding(
+                  padding: EdgeInsets.all(ResponsivePadding.xl),
+                  child: const Center(child: CircularProgressIndicator()),
+                ),
+            error:
+                (e, st) => Padding(
+                  padding: EdgeInsets.all(ResponsivePadding.md),
+                  child: Text(
+                    AppLocalizations.of(context)?.errorLoading ??
+                        'Error loading',
+                    style: TextStyle(fontSize: ResponsiveFontSize.bodyMedium),
+                  ),
+                ),
             data: (items) {
               final years = _groupByYear(items);
               final yearKeys = OriginGroupExpansionTile.sortYears(years.keys);
               return Column(
-                children: yearKeys
-                    .map(
-                      (year) => YearGroupExpansionTile(
-                        year: year,
-                        puzzles: years[year]!,
-                      ),
-                    )
-                    .toList(),
+                children:
+                    yearKeys
+                        .map(
+                          (year) => YearGroupExpansionTile(
+                            year: year,
+                            puzzles: years[year]!,
+                          ),
+                        )
+                        .toList(),
               );
             },
           );

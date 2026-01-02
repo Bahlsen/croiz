@@ -18,9 +18,12 @@ void main() {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Builder(
-            builder: (context) => Scaffold(
-              body: Center(child: Text(AppLocalizations.of(context)!.puzzles)),
-            ),
+            builder:
+                (context) => Scaffold(
+                  body: Center(
+                    child: Text(AppLocalizations.of(context)!.puzzles),
+                  ),
+                ),
           ),
         ),
       );

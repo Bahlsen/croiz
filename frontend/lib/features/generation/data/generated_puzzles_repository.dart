@@ -4,11 +4,17 @@ import 'package:hive/hive.dart';
 
 /// Repository for managing locally generated puzzles backed by Hive.
 class GeneratedPuzzlesRepository {
+  GeneratedPuzzlesRepository({Box? box}) : _box = box;
+
   static const String boxName = 'generated_puzzles';
+  final Box? _box;
+
+  Future<Box> _openBox() async =>
+      _box ?? await Hive.openBox(boxName); // coverage:ignore-line
 
   /// Saves a generated puzzle (full JSON) to local storage.
   Future<void> savePuzzle(Map<String, dynamic> puzzleJson) async {
-    final box = await Hive.openBox(boxName);
+    final box = await _openBox();
     final id = puzzleJson['id'] as String;
     // Add source tag to ensure it's loaded correctly later
     puzzleJson['source'] = 'local';
@@ -17,7 +23,7 @@ class GeneratedPuzzlesRepository {
 
   /// Retrieves a specific puzzle by ID.
   Future<Map<String, dynamic>?> getPuzzle(String id) async {
-    final box = await Hive.openBox(boxName);
+    final box = await _openBox();
     final data = box.get(id);
     if (data != null) {
       // Hive might return it as LinkedMap, casting safely
@@ -28,13 +34,13 @@ class GeneratedPuzzlesRepository {
 
   /// Deletes a puzzle by ID.
   Future<void> deletePuzzle(String id) async {
-    final box = await Hive.openBox(boxName);
+    final box = await _openBox();
     await box.delete(id);
   }
 
   /// Returns descriptors for all stored puzzles.
   Future<List<PuzzleDescriptor>> getAllDescriptors() async {
-    final box = await Hive.openBox(boxName);
+    final box = await _openBox();
     final descriptors = <PuzzleDescriptor>[];
 
     for (final key in box.keys) {
@@ -72,5 +78,5 @@ class GeneratedPuzzlesRepository {
 }
 
 final generatedPuzzlesRepositoryProvider = Provider<GeneratedPuzzlesRepository>(
-  (ref) => GeneratedPuzzlesRepository(),
+  (ref) => GeneratedPuzzlesRepository(), // coverage:ignore-line
 );

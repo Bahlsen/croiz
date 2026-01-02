@@ -5,14 +5,39 @@ import 'package:firebase_ai/firebase_ai.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:developer' as developer;
 
+/// Abstraction for the Gemini model to allow mocking in tests.
+// ignore: one_member_abstracts
+abstract class GeminiClient {
+  Future<String?> generateContent(String prompt);
+}
+
+// coverage:ignore-start
+/// Production implementation using Firebase AI (Vertex AI).
+class FirebaseGeminiClient implements GeminiClient {
+  FirebaseGeminiClient(this._model);
+  final GenerativeModel _model;
+
+  @override
+  Future<String?> generateContent(String prompt) async {
+    final response = await _model.generateContent([Content.text(prompt)]);
+    return response.text;
+  }
+}
+// coverage:ignore-end
+
 class GeminiPuzzleService {
-  GeminiPuzzleService({GenerativeModel? model})
-    : _model =
-          model ?? FirebaseAI.vertexAI().generativeModel(model: _modelName);
+  GeminiPuzzleService({GeminiClient? client})
+    : _client =
+          client ??
+          // coverage:ignore-start
+          FirebaseGeminiClient(
+            FirebaseAI.vertexAI().generativeModel(model: _modelName),
+          );
+  // coverage:ignore-end
 
   // Default to Flash 2.0 as it's free and fast (1.5 models retired Sept 2025)
   static const _modelName = 'gemini-2.0-flash';
-  final GenerativeModel _model;
+  final GeminiClient _client;
 
   Future<List<GeneratedWord>> generateWords({
     required String topic,
@@ -20,13 +45,11 @@ class GeminiPuzzleService {
     int count = 25,
     int difficultyLevel = 2, // 1-5
   }) async {
-    // FirebaseAI automatically uses the Firebase app credentials
-    final prompt = _buildPrompt(topic, language, count, difficultyLevel);
+    final prompt = buildPrompt(topic, language, count, difficultyLevel);
 
     try {
-      final response = await _model.generateContent([Content.text(prompt)]);
+      final text = await _client.generateContent(prompt);
 
-      final text = response.text;
       if (text == null) {
         developer.log(
           'Empty response from Gemini API',
@@ -39,7 +62,7 @@ class GeminiPuzzleService {
         );
       }
 
-      return _parseResponse(text);
+      return parseResponse(text);
     } on UserFriendlyException {
       // Re-throw user-friendly exceptions as-is
       rethrow;
@@ -70,7 +93,15 @@ class GeminiPuzzleService {
     }
   }
 
-  String _buildPrompt(String topic, String lang, int count, int difficulty) {
+  String buildPrompt(String topic, String lang, int count, int difficulty) =>
+      _buildPromptImpl(topic, lang, count, difficulty);
+
+  String _buildPromptImpl(
+    String topic,
+    String lang,
+    int count,
+    int difficulty,
+  ) {
     // Determine language-specific instructions
     final effectiveLang = lang == 'ru' ? 'uk' : lang;
     final langNames = {
@@ -177,7 +208,7 @@ $jsonFormat
 ''';
   }
 
-  List<GeneratedWord> _parseResponse(String text) {
+  List<GeneratedWord> parseResponse(String text) {
     // Sanitize: sometimes models output markdown blocks
     var cleaner = text.trim();
     if (cleaner.startsWith('```json')) {
@@ -206,6 +237,8 @@ $jsonFormat
   }
 }
 
+// coverage:ignore-start
 final geminiPuzzleServiceProvider = Provider<GeminiPuzzleService>(
   (ref) => GeminiPuzzleService(),
 );
+// coverage:ignore-end
