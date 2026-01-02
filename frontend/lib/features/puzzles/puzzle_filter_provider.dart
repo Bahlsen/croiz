@@ -7,7 +7,7 @@ class PuzzleFilterState {
     this.selectedDifficulties = const {1, 2, 3, 4, 5},
     this.selectedLanguages = const {},
     this.availableLanguages = const {'en'},
-    this.showCompleted = true,
+    this.showCompleted = false,
     this.showGeneratedOnly = false,
     this.searchQuery = '',
   });
@@ -134,6 +134,12 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
   /// Set whether to show completed puzzles.
   void setShowCompleted({required bool showCompleted}) {
     state = state.copyWith(showCompleted: showCompleted);
+    _persist();
+  }
+
+  /// Toggle completed puzzles filter.
+  void toggleShowCompleted() {
+    state = state.copyWith(showCompleted: !state.showCompleted);
     _persist();
   }
 

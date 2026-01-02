@@ -117,7 +117,7 @@ class ClueBannerContainer extends ConsumerWidget {
             style: TextStyle(
               color: colorScheme.primary,
               fontWeight: FontWeight.bold,
-              fontSize: ResponsiveFontSize.titleMedium,
+              fontSize: ResponsiveFontSize.titleSmall,
             ),
           ),
         ),

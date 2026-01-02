@@ -4,6 +4,7 @@ import 'package:croiz/core/config/app_difficulty.dart';
 import '../puzzle_filter_provider.dart';
 import '../filtered_puzzles_provider.dart';
 import 'generated_filter_chip.dart';
+import 'completed_filter_chip.dart';
 import 'language_filter_selector.dart';
 
 /// A horizontal scrollable row of all puzzle filters.
@@ -61,6 +62,10 @@ class PuzzlesFilterRow extends ConsumerWidget {
               ),
             );
           }),
+
+          // Completed Chip
+          const CompletedFilterChip(),
+          const SizedBox(width: 8),
 
           // Generated Chip
           const GeneratedFilterChip(),

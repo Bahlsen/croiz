@@ -244,4 +244,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get no => 'Non';
+
+  @override
+  String get completedFilter => 'Terminés';
 }

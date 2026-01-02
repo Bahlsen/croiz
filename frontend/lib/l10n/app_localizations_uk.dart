@@ -244,4 +244,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get no => 'Ні';
+
+  @override
+  String get completedFilter => 'Завершені';
 }
