@@ -53,7 +53,9 @@ class GridValidator {
         final x = pw.isHorizontal ? pw.startX + i : pw.startX;
         final y = pw.isHorizontal ? pw.startY : pw.startY + i;
 
-        if (x < 0 || x >= width || y < 0 || y >= height) continue;
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+          continue;
+        }
 
         final char = pw.word.answer[i];
         if (grid[y][x] != null && grid[y][x] != char) {
@@ -68,7 +70,9 @@ class GridValidator {
     // Neighbors must be part of a word that includes the current cell in that direction.
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        if (grid[y][x] == null) continue;
+        if (grid[y][x] == null) {
+          continue;
+        }
 
         // Check horizontal adjacency
         if (x + 1 < width && grid[y][x + 1] != null) {
@@ -139,7 +143,9 @@ class GridValidator {
       }
     }
 
-    if (totalFilled == 0) return true;
+    if (totalFilled == 0) {
+      return true;
+    }
 
     // BFS to count reachable filled cells
     final visited = <String>{};

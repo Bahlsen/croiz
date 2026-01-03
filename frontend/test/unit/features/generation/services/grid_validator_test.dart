@@ -188,7 +188,9 @@ void main() {
 
       for (var i = 0; i < 100; i++) {
         final result = generator.generate(words, attempts: 20);
-        if (result.isEmpty) continue;
+        if (result.isEmpty) {
+          continue;
+        }
 
         final validation = GridValidator.validate(result, 15, 15);
         expect(

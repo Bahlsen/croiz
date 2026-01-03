@@ -24,7 +24,7 @@ class PuzzleGenerationOrchestrator {
     int difficulty = 2,
     int size = 15,
   }) async {
-    // 1. Generate Words via Gemini
+    // 1. Generate Words via Gemini (we do this once as it's the most expensive/slow part)
     final words = await _geminiService.generateWords(
       topic: topic,
       language: language,
@@ -42,68 +42,78 @@ class PuzzleGenerationOrchestrator {
       );
     }
 
-    // 2. Build Grid
-    // 2. Build Grid
-    final generator = GridGenerator(width: size, height: size);
-    final placedWords = generator.generate(words, language: language);
+    const maxRetries = 3;
+    Map<String, dynamic>? lastValidPuzzleJson;
 
-    if (placedWords.isEmpty) {
-      throw UserFriendlyException(
-        'Unable to create a puzzle grid. Please try again or choose a different difficulty.',
-        technicalDetails: 'Grid generator returned 0 placed words',
-      );
-    }
+    for (var attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        // 2. Build Grid
+        final generator = GridGenerator(width: size, height: size);
+        final placedWords = generator.generate(words, language: language);
 
-    // 2b. Strict Validation
-    final validation = GridValidator.validate(placedWords, size, size);
-    if (!validation.isValid) {
-      throw UserFriendlyException(
-        'The generated puzzle contains structural errors. Please try again or choose a different topic.',
-        technicalDetails:
-            'Grid validation failed: ${validation.errors.join("; ")}',
-      );
-    }
+        if (placedWords.isEmpty) {
+          throw UserFriendlyException(
+            'Unable to create a puzzle grid.',
+            technicalDetails: 'Grid generator returned 0 placed words',
+          );
+        }
 
-    // 3. Convert to Puzzle format
-    final puzzleJson = _convertToPuzzleJson(
-      placedWords,
-      size,
-      size,
-      topic,
-      language,
-      difficulty,
-    );
+        // 2b. Strict Validation
+        final validation = GridValidator.validate(placedWords, size, size);
+        if (!validation.isValid) {
+          throw UserFriendlyException(
+            'The generated puzzle contains structural errors.',
+            technicalDetails:
+                'Grid validation failed: ${validation.errors.join("; ")}',
+          );
+        }
 
-    // 4. Quality Control
-    // Calculate density: filled cells / total bounding box area (or total area?)
-    // Standard crossword density is usually > 30% words.
-    // Our "cells" list contains all cells (including black ones if we generated full grid).
-    // Actually `cells` in our JSON contains x, y, is_black.
-    // Let's count black vs total (width * height).
+        // 3. Convert to Puzzle format
+        final puzzleJson = _convertToPuzzleJson(
+          placedWords,
+          size,
+          size,
+          topic,
+          language,
+          difficulty,
+        );
 
-    final totalCells = size * size;
-    final blackCells =
-        puzzleJson['cells'].where((c) => c['is_black'] as bool).length;
-    final filledCells = totalCells - blackCells;
-    final density = filledCells / totalCells;
+        // 4. Quality Control
+        final totalCells = size * size;
+        final blackCells =
+            puzzleJson['cells'].where((c) => c['is_black'] as bool).length;
+        final filledCells = totalCells - blackCells;
+        final density = filledCells / totalCells;
 
-    // Threshold: 0.25 (25%) is a low bar but ensures we don't have empty grids.
-    // A good 15x15 has ~225 cells. 25% is ~56 letters.
-    // If we placed 27 words avg length 5 ~ 135 letters ~ 60% density!
-    // If we placed 27 words avg length 5 ~ 135 letters ~ 60% density!
-    // So 0.20 is a safe lower bound for the current generator performance (observed ~0.26).
-    if (density < 0.20) {
-      throw UserFriendlyException(
-        'The generated puzzle was not dense enough ($filledCells letters). Please try again or choose a different topic.',
-        technicalDetails:
-            'Density too low: ${density.toStringAsFixed(2)} < 0.20',
-      );
+        // Threshold: 0.20 is our safe lower bound
+        if (density < 0.20) {
+          throw UserFriendlyException(
+            'The generated puzzle was not dense enough ($filledCells letters).',
+            technicalDetails:
+                'Density too low: ${density.toStringAsFixed(2)} < 0.20',
+          );
+        }
+
+        // If we reached here, the puzzle is valid and dense enough!
+        lastValidPuzzleJson = puzzleJson;
+        break;
+      } catch (e) {
+        // Log the failure for this attempt
+        // ignore: avoid_print
+        print('Generation attempt $attempt fail: $e');
+
+        if (attempt == maxRetries) {
+          rethrow;
+        }
+        // Otherwise, continue to next attempt
+      }
     }
 
     // 5. Save
+    final puzzleJson = lastValidPuzzleJson!;
     await _repository.savePuzzle(puzzleJson);
 
-    // 5. Invalidate provider to refresh list
+    // 6. Invalidate provider to refresh list
     _ref.invalidate(puzzlesProvider);
 
     return puzzleJson['id'] as String;
