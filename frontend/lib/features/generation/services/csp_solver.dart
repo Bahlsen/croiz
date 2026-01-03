@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:croiz/features/generation/models/slot.dart';
@@ -55,6 +56,9 @@ class CrosswordCSPSolver {
 
   /// Counter for backtracking (to prevent infinite loops)
   int _backtracks = 0;
+
+  /// Best partial solution found so far
+  Map<Slot, String> _bestAssignment = {};
 
   /// Initialize domains with all words of correct length
   void _initializeDomains() {
@@ -124,43 +128,48 @@ class CrosswordCSPSolver {
   /// Returns a complete or partial solution.
   CSPSolveResult solve() {
     _backtracks = 0;
+    _bestAssignment = {};
 
     // Step 1: Apply AC-3 to reduce domains
+    // Save initial domains in case AC-3 is too strict (wipes out solution)
+    final initialDomains = _saveState();
     final ac3Result = _ac3();
-    if (!ac3Result) {
-      return const CSPSolveResult(
-        success: false,
-        assignments: {},
-        failureReason: 'AC-3 detected no solution possible',
-      );
-    }
 
-    // Check for empty domains after AC-3
-    for (final slot in slots) {
-      if (_domains[slot]!.isEmpty) {
-        return CSPSolveResult(
-          success: false,
-          assignments: {},
-          unfilledSlots: [slot],
-          failureReason: 'Empty domain for slot ${slot.id} after AC-3',
-        );
-      }
+    if (!ac3Result || slots.any((s) => _domains[s]!.isEmpty)) {
+      // AC-3 proved no FULL solution exists.
+      // But we want a PARTIAL solution if possible.
+      // Restore domains and proceed to backtracking (without strict global consistency).
+      _restoreState(initialDomains);
+      // Optional: Log this specific fallback
     }
 
     // Step 2: Backtracking search with MRV/LCV
+    // CRITICAL: Filter out slots that have 0 possible words after constraints
+    // These slots are impossible to fill, so don't let them block the search.
+    final possibleSlots = slots.where((s) => _domains[s]!.isNotEmpty).toList();
+    final impossibleSlotsCount = slots.length - possibleSlots.length;
+
+    if (impossibleSlotsCount > 0) {
+      developer.log(
+        'CSP: Skipping $impossibleSlotsCount impossible slots with 0 matching words.',
+      );
+    }
+
     final assignment = <Slot, String>{};
-    final result = _backtrack(assignment);
+    final result = _backtrack(assignment, possibleSlots);
 
     if (result != null) {
       return CSPSolveResult(success: true, assignments: result);
     }
 
-    // Partial solution - return what we have
+    // Return the best partial solution found during search
     return CSPSolveResult(
       success: false,
-      assignments: assignment,
-      unfilledSlots: slots.where((s) => !assignment.containsKey(s)).toList(),
-      failureReason: 'Backtracking exhausted after $_backtracks attempts',
+      assignments: _bestAssignment,
+      unfilledSlots:
+          slots.where((s) => !_bestAssignment.containsKey(s)).toList(),
+      failureReason:
+          'Backtracking exhausted after $_backtracks attempts. Best effort returned.',
     );
   }
 
@@ -248,19 +257,23 @@ class CrosswordCSPSolver {
   }
 
   /// Backtracking search with MRV and LCV heuristics.
-  Map<Slot, String>? _backtrack(Map<Slot, String> assignment) {
+  Map<Slot, String>? _backtrack(
+    Map<Slot, String> assignment,
+    List<Slot> activeSlots,
+  ) {
     _backtracks++;
     if (_backtracks > maxBacktracks) {
       return null; // Exceeded limit
     }
 
     // Check if complete
-    if (assignment.length == slots.length) {
+    if (assignment.length == activeSlots.length) {
       return Map.from(assignment);
     }
 
     // MRV: Select unassigned slot with smallest domain
-    final unassigned = slots.where((s) => !assignment.containsKey(s)).toList();
+    final unassigned =
+        activeSlots.where((s) => !assignment.containsKey(s)).toList();
     if (unassigned.isEmpty) {
       return Map.from(assignment);
     }
@@ -281,25 +294,20 @@ class CrosswordCSPSolver {
         // Make assignment
         assignment[slot] = word;
 
+        // Track best partial solution
+        if (assignment.length > _bestAssignment.length) {
+          _bestAssignment = Map.from(assignment);
+        }
+
         // Forward checking: save and reduce neighbor domains
         final savedDomains = _saveState();
         _forwardCheck(slot, word, assignment);
 
-        // Check if any domain became empty
-        var valid = true;
-        for (final neighbor in _neighbors[slot]!) {
-          if (!assignment.containsKey(neighbor) &&
-              _domains[neighbor]!.isEmpty) {
-            valid = false;
-            break;
-          }
-        }
-
-        if (valid) {
-          final result = _backtrack(assignment);
-          if (result != null) {
-            return result;
-          }
+        // In sparse dictionary mode, we don't discard if a neighbor's domain is wiped.
+        // We just proceed to fill as much as we can. The neighbor will simply remain empty.
+        final result = _backtrack(assignment, activeSlots);
+        if (result != null) {
+          return result;
         }
 
         // Backtrack: restore state

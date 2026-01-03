@@ -236,6 +236,65 @@ $jsonFormat
       );
     }
   }
+
+  Future<List<GeneratedWord>> generateClues({
+    required List<String> words,
+    required String language,
+    required int difficulty,
+  }) async {
+    if (words.isEmpty) return [];
+
+    final prompt = _buildCluePrompt(words, language, difficulty);
+
+    try {
+      final text = await _client.generateContent(prompt);
+      if (text == null) {
+        throw UserFriendlyException(
+          'Unable to generate clues.',
+          technicalDetails: 'Empty response for clue generation',
+        );
+      }
+      return parseResponse(text);
+    } catch (e) {
+      developer.log(
+        'Gemini clue generation error: $e',
+        name: 'GeminiService',
+        level: 1000,
+      );
+      // Fallback: return words with generic clues if API fails
+      return words.map((w) => GeneratedWord(answer: w, clue: '...')).toList();
+    }
+  }
+
+  String _buildCluePrompt(List<String> words, String lang, int difficulty) {
+    // Determine language-specific instructions
+    final effectiveLang = lang == 'ru' ? 'uk' : lang;
+    final langNames = {
+      'en': 'English',
+      'fr': 'French',
+      'uk': 'Ukrainian',
+      'es': 'Spanish',
+      'de': 'German',
+      'it': 'Italian',
+      'pt': 'Portuguese',
+    };
+    final langName = langNames[effectiveLang] ?? 'English';
+
+    return '''
+Generate concise crossword clues for the following list of words in $langName.
+Difficulty Level: $difficulty/5.
+
+Words:
+${words.join(', ')}
+
+Output MUST be a valid JSON array of objects with "word" and "clue" fields.
+Format:
+[
+  {"word": "WORD1", "clue": "Clue for word 1..."},
+  {"word": "WORD2", "clue": "Clue for word 2..."}
+]
+''';
+  }
 }
 
 // coverage:ignore-start

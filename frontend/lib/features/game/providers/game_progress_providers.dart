@@ -61,3 +61,18 @@ class LockedCellsNotifier extends _$LockedCellsNotifier {
   /// Replace the locked cells set.
   void setLockedCells(Set<CellKey> v) => state = v;
 }
+
+/// Holds cells that should flash for REVEAL animation.
+@Riverpod(keepAlive: true)
+class FlashingRevealedCellsNotifier extends _$FlashingRevealedCellsNotifier {
+  @override
+  Set<CellKey> build() => <CellKey>{};
+
+  /// Set the flashing revealed cells set.
+  void setFlashingRevealedCells(Set<CellKey> v) => state = v;
+}
+
+/// Provider family for whether a specific cell is currently flashing for reveal.
+@Riverpod(keepAlive: true)
+bool cellRevealedFlashing(Ref ref, CellKey key) =>
+    ref.watch(flashingRevealedCellsProvider.select((set) => set.contains(key)));

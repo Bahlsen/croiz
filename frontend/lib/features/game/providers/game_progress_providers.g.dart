@@ -425,3 +425,149 @@ abstract class _$LockedCellsNotifier extends $Notifier<Set<CellKey>> {
     element.handleCreate(ref, build);
   }
 }
+
+/// Holds cells that should flash for REVEAL animation.
+
+@ProviderFor(FlashingRevealedCellsNotifier)
+final flashingRevealedCellsProvider = FlashingRevealedCellsNotifierProvider._();
+
+/// Holds cells that should flash for REVEAL animation.
+final class FlashingRevealedCellsNotifierProvider
+    extends $NotifierProvider<FlashingRevealedCellsNotifier, Set<CellKey>> {
+  /// Holds cells that should flash for REVEAL animation.
+  FlashingRevealedCellsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'flashingRevealedCellsProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$flashingRevealedCellsNotifierHash();
+
+  @$internal
+  @override
+  FlashingRevealedCellsNotifier create() => FlashingRevealedCellsNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Set<CellKey> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Set<CellKey>>(value),
+    );
+  }
+}
+
+String _$flashingRevealedCellsNotifierHash() =>
+    r'961779934a209e9d7dd7b2152fe773ed6a086931';
+
+/// Holds cells that should flash for REVEAL animation.
+
+abstract class _$FlashingRevealedCellsNotifier extends $Notifier<Set<CellKey>> {
+  Set<CellKey> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final ref = this.ref as $Ref<Set<CellKey>, Set<CellKey>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<Set<CellKey>, Set<CellKey>>,
+              Set<CellKey>,
+              Object?,
+              Object?
+            >;
+    element.handleCreate(ref, build);
+  }
+}
+
+/// Provider family for whether a specific cell is currently flashing for reveal.
+
+@ProviderFor(cellRevealedFlashing)
+final cellRevealedFlashingProvider = CellRevealedFlashingFamily._();
+
+/// Provider family for whether a specific cell is currently flashing for reveal.
+
+final class CellRevealedFlashingProvider
+    extends $FunctionalProvider<bool, bool, bool>
+    with $Provider<bool> {
+  /// Provider family for whether a specific cell is currently flashing for reveal.
+  CellRevealedFlashingProvider._({
+    required CellRevealedFlashingFamily super.from,
+    required CellKey super.argument,
+  }) : super(
+         retry: null,
+         name: r'cellRevealedFlashingProvider',
+         isAutoDispose: false,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$cellRevealedFlashingHash();
+
+  @override
+  String toString() {
+    return r'cellRevealedFlashingProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  bool create(Ref ref) {
+    final argument = this.argument as CellKey;
+    return cellRevealedFlashing(ref, argument);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(bool value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<bool>(value),
+    );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CellRevealedFlashingProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$cellRevealedFlashingHash() =>
+    r'709268ce1b2c0c230d649aaa0f536d6684fb7545';
+
+/// Provider family for whether a specific cell is currently flashing for reveal.
+
+final class CellRevealedFlashingFamily extends $Family
+    with $FunctionalFamilyOverride<bool, CellKey> {
+  CellRevealedFlashingFamily._()
+    : super(
+        retry: null,
+        name: r'cellRevealedFlashingProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+      );
+
+  /// Provider family for whether a specific cell is currently flashing for reveal.
+
+  CellRevealedFlashingProvider call(CellKey key) =>
+      CellRevealedFlashingProvider._(argument: key, from: this);
+
+  @override
+  String toString() => r'cellRevealedFlashingProvider';
+}

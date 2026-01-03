@@ -12,6 +12,8 @@ class MockGameAudioService implements GameAudioService {
   int typeCallCount = 0;
   int deleteCallCount = 0;
   int successCallCount = 0;
+  int victoryCallCount = 0;
+  int revealCallCount = 0;
 
   @override
   Future<void> playType() async {
@@ -30,7 +32,12 @@ class MockGameAudioService implements GameAudioService {
 
   @override
   Future<void> playVictory() async {
-    successCallCount++;
+    victoryCallCount++;
+  }
+
+  @override
+  Future<void> playReveal() async {
+    revealCallCount++;
   }
 
   @override

@@ -110,11 +110,16 @@ class CrosswordClueHeader extends ConsumerWidget {
       ],
     );
 
+    // ACTIONS: Get the puzzle title if available to display in the header
+    final puzzleAsync = ref.watch(puzzleLoaderProvider);
+    final title = puzzleAsync.value?.title;
+
     // Actions row placed below the main clue bar
     final actionsRow = CrosswordClueActionsRow(
       onMenu: onMenu,
       onReveal: onReveal,
       onClear: onClear,
+      title: title,
     );
 
     return Padding(

@@ -7,8 +7,8 @@ void main() {
   group('GridFirstGenerator', () {
     test('defaults are configured correctly', () {
       final generator = GridFirstGenerator(width: 15, height: 15);
-      expect(generator.targetBlackRatio, 0.32);
-      expect(generator.minWordLength, 2);
+      expect(generator.targetBlackRatio, 0.20);
+      expect(generator.minWordLength, 3);
       expect(generator.maxAttempts, 20);
     });
 

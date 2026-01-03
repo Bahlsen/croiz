@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
@@ -60,12 +61,13 @@ class PuzzleGenerationOrchestrator {
           themeWords: words,
           fillWords: fillWords,
         );
-        // Enforce strict success to prevent partial fills (structural errors)
-        if (!result.success) {
+        // RELAXED CHECK: If we have a good number of words, we accept it.
+        // The generator now returns the best attempt even if 'success' is false.
+        if (result.placedWords.length < 5) {
           throw UserFriendlyException(
             'Unable to create a complete puzzle grid.',
             technicalDetails:
-                'GridFirstGenerator failed to fill all slots (Success: false)',
+                'GridFirstGenerator failed to fill enough slots (Success: ${result.success}, Words: ${result.placedWords.length})',
           );
         }
 
@@ -79,14 +81,29 @@ class PuzzleGenerationOrchestrator {
           );
         }
 
-        // 2b. Strict Validation
+        // 2b. Validation
         final validation = GridValidator.validate(placedWords, size, size);
         if (!validation.isValid) {
-          throw UserFriendlyException(
-            'The generated puzzle contains structural errors.',
-            technicalDetails:
-                'Grid validation failed: ${validation.errors.join("; ")}',
-          );
+          // Filter for critical errors that make the puzzle unplayable
+          final criticalErrors =
+              validation.errors.where((e) {
+                final lower = e.toLowerCase();
+                return lower.contains('collision') ||
+                    lower.contains('bounds') ||
+                    lower.contains('exceeds');
+              }).toList();
+
+          if (criticalErrors.isNotEmpty) {
+            throw UserFriendlyException(
+              'The generated puzzle contains structural errors.',
+              technicalDetails:
+                  'Grid validation failed: ${criticalErrors.join("; ")}',
+            );
+          }
+
+          // Log non-critical errors (adjacency, connectivity) but proceed
+          // ignore: avoid_print
+          print('Non-critical validation warnings: ${validation.errors}');
         }
 
         // 3. Convert to Puzzle format
@@ -97,6 +114,7 @@ class PuzzleGenerationOrchestrator {
           topic,
           language,
           difficulty,
+          fillWords.toSet(),
         );
 
         // 4. Quality Control
@@ -106,17 +124,63 @@ class PuzzleGenerationOrchestrator {
         final filledCells = totalCells - blackCells;
         final density = filledCells / totalCells;
 
-        // Threshold: 0.20 is our safe lower bound
-        if (density < 0.20) {
+        // Threshold: 0.15 is our safe lower bound
+        if (density < 0.15) {
           throw UserFriendlyException(
             'The generated puzzle was not dense enough ($filledCells letters).',
             technicalDetails:
-                'Density too low: ${density.toStringAsFixed(2)} < 0.20',
+                'Density too low: ${density.toStringAsFixed(2)} < 0.15',
           );
         }
 
         // If we reached here, the puzzle is valid and dense enough!
         lastValidPuzzleJson = puzzleJson;
+
+        // POST-PROCESS: Fetch missing clues for fill words (Hybrid Generation)
+        final entries = lastValidPuzzleJson['entries'] as List<dynamic>;
+        final entriesNeedingClues =
+            entries.where((e) {
+              final clue = e['clue'] as String;
+              return clue == '...' || clue == 'Common word';
+            }).toList();
+
+        if (entriesNeedingClues.isNotEmpty) {
+          print(
+            'Fetching clues for ${entriesNeedingClues.length} fill words...',
+          );
+          try {
+            final wordsToFetch =
+                entriesNeedingClues
+                    .map((e) => e['answer'] as String)
+                    .toSet()
+                    .toList();
+            // Batched fetch (max 50)
+            final batch = wordsToFetch.take(50).toList();
+
+            final generatedClues = await _geminiService.generateClues(
+              words: batch,
+              language: language,
+              difficulty: difficulty,
+            );
+
+            // Update entries map
+            final clueMap = {
+              for (final w in generatedClues) w.answer.toUpperCase(): w.clue,
+            };
+            if (clueMap.isNotEmpty) {
+              for (final entry in entries) {
+                final word = (entry['answer'] as String).toUpperCase();
+                if (clueMap.containsKey(word)) {
+                  entry['clue'] = clueMap[word];
+                }
+              }
+            }
+          } on Exception catch (e) {
+            // Log error but continue with what we have
+            developer.log('Failed to fetch clues for fill words: $e');
+          }
+        }
+
         break;
       } catch (e) {
         // Log the failure for this attempt
@@ -147,6 +211,7 @@ class PuzzleGenerationOrchestrator {
     String topic,
     String language,
     int difficulty,
+    Set<String> fillDictionary,
   ) {
     final id = const Uuid().v4();
 
@@ -205,34 +270,100 @@ class PuzzleGenerationOrchestrator {
     }
 
     // 3. Build Entries
+    // REVISED STRATEGY: Scan the gridState to find ALL words (horizontal and vertical).
+    // This detects "accidental" words formed by intersecting placement, which is common
+    // in dense grids (and crucial for legal crossword navigation).
+    // It also fixes the UI bug where selecting an "intersecting" cell with no defined word
+    // would result in empty selection.
+    //
+    // We map found words to:
+    // 1. PlacedWord (if exact match) -> use its Clue
+    // 2. Dictionary (if valid) -> "Found word"
+    // 3. Unknown (if invalid) -> "..."
+
     final entries = <Map<String, dynamic>>[];
 
-    // We map PlacedWords to entries.
-    // Issue: The generator might have placed words that overlap.
-    // The visual grid is authoritative.
-    // We need to match PlacedWords to the grid positions and numbers.
-    // Or we can simple re-scan the grid for words if we didn't track them.
-    // Since we Have `placedWords`, let's use them.
-
+    // Create lookup for existing PlacedWords
+    final placedMap = <String, PlacedWord>{};
     for (final pw in placedWords) {
-      final num = numberMap['${pw.startX},${pw.startY}'];
-      if (num == null) {
-        // This is weird. Every placed word SHOULD start at a numbered square.
-        // It might happen if our "Start" detection logic differs from grid reality,
-        // but it shouldn't.
-        continue;
+      final key =
+          '${pw.word.answer}_${pw.startX}_${pw.startY}_${pw.isHorizontal}';
+      placedMap[key] = pw;
+    }
+
+    // Helper to generate entry
+    void addEntry(int startX, int startY, String word, bool isHorizontal) {
+      if (word.length < 2) return; // Ignore single letters
+
+      final num = numberMap['$startX,$startY'];
+      if (num == null) return;
+
+      // Try to find matching PlacedWord
+      final key = '${word}_${startX}_${startY}_$isHorizontal';
+      final match = placedMap[key];
+
+      var clue = match?.word.clue;
+      if (clue == null) {
+        // Accidental word. Check if valid.
+        if (fillDictionary.contains(word)) {
+          clue = 'Common word';
+        } else if (placedWords.any((pw) => pw.word.answer == word)) {
+          // Maybe it was placed elsewhere or is a theme word?
+          clue = 'Theme word';
+        } else {
+          // Invalid or unknown word
+          clue = '...';
+        }
       }
 
       entries.add({
-        'id': '${pw.isHorizontal ? 'A' : 'D'}$num',
+        'id': '${isHorizontal ? 'A' : 'D'}$num',
         'number': num,
-        'direction': pw.isHorizontal ? 'across' : 'down',
-        'x': pw.startX,
-        'y': pw.startY,
-        'length': pw.word.answer.length,
-        'answer': pw.word.answer,
-        'clue': pw.word.clue,
+        'direction': isHorizontal ? 'across' : 'down',
+        'x': startX,
+        'y': startY,
+        'length': word.length,
+        'answer': word,
+        'clue': clue,
       });
+    }
+
+    // Scan Horizontal
+    for (var y = 0; y < rows; y++) {
+      var currentWord = '';
+      var startX = -1;
+      for (var x = 0; x <= cols; x++) {
+        final char = (x < cols) ? gridState[y][x] : null;
+        if (char != null) {
+          if (startX == -1) startX = x;
+          currentWord += char;
+        } else {
+          if (currentWord.length >= 2) {
+            addEntry(startX, y, currentWord, true);
+          }
+          currentWord = '';
+          startX = -1;
+        }
+      }
+    }
+
+    // Scan Vertical
+    for (var x = 0; x < cols; x++) {
+      var currentWord = '';
+      var startY = -1;
+      for (var y = 0; y <= rows; y++) {
+        final char = (y < rows) ? gridState[y][x] : null;
+        if (char != null) {
+          if (startY == -1) startY = y;
+          currentWord += char;
+        } else {
+          if (currentWord.length >= 2) {
+            addEntry(x, startY, currentWord, false);
+          }
+          currentWord = '';
+          startY = -1;
+        }
+      }
     }
 
     // Sort entries

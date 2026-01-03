@@ -15,6 +15,9 @@ abstract class AudioService {
   /// Plays the game completion victory sound effect.
   Future<void> playVictory();
 
+  /// Plays the reveal effect sound (wow factor).
+  Future<void> playReveal();
+
   /// Future that completes when the service is fully initialized.
   Future<void> get ready;
 

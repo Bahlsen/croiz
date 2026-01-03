@@ -18,6 +18,7 @@ class TestableAudioService implements AudioService {
   int deleteCount = 0;
   int successCount = 0;
   int victoryCount = 0;
+  int revealCount = 0;
   bool isDisposed = false;
 
   // Simulate throttling like the real service
@@ -60,6 +61,11 @@ class TestableAudioService implements AudioService {
   }
 
   @override
+  Future<void> playReveal() async {
+    revealCount++;
+  }
+
+  @override
   Future<void> dispose() async {
     isDisposed = true;
   }
@@ -97,6 +103,11 @@ void main() {
     test('playVictory increments counter', () async {
       await service.playVictory();
       expect(service.victoryCount, 1);
+    });
+
+    test('playReveal increments counter', () async {
+      await service.playReveal();
+      expect(service.revealCount, 1);
     });
 
     test('playType is throttled at 80ms', () async {

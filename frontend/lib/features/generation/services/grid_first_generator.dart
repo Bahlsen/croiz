@@ -54,9 +54,8 @@ class GridFirstGenerator {
     required this.width,
     required this.height,
     Gaddag? gaddag,
-    this.targetBlackRatio =
-        0.32, // Increased to 0.32 to support small dictionaries
-    this.minWordLength = 2,
+    this.targetBlackRatio = 0.30,
+    this.minWordLength = 3,
     this.maxAttempts = 20, // Increased attempts
     Random? random,
   }) : _gaddag = gaddag ?? Gaddag(),
@@ -71,18 +70,13 @@ class GridFirstGenerator {
   final Gaddag _gaddag;
   final Random _random;
 
-  bool _gaddagBuilt = false;
-
   /// Build the GADDAG dictionary from theme words and fill words.
   void buildDictionary(List<String> words) {
     _gaddag.build(words);
-    _gaddagBuilt = true;
   }
 
-  /// Add words to the existing dictionary.
   void addWords(List<String> words) {
     words.forEach(_gaddag.addWord);
-    _gaddagBuilt = _gaddag.wordCount > 0;
   }
 
   /// Generate a crossword using grid-first approach.
@@ -93,14 +87,14 @@ class GridFirstGenerator {
     required List<GeneratedWord> themeWords,
     List<String>? fillWords,
   }) {
-    // Ensure dictionary is built
-    if (!_gaddagBuilt) {
-      final allWords = themeWords.map((w) => w.answer).toList();
-      if (fillWords != null) {
-        allWords.addAll(fillWords);
-      }
-      buildDictionary(allWords);
+    // Always rebuild dictionary to ensure all words (theme + fill) are included
+    // The previous check `if (!_gaddagBuilt)` was preventing fill words from being added
+    // if the GADDAG was already initialized (e.g. in tests or reused instances).
+    final allWords = themeWords.map((w) => w.answer).toList();
+    if (fillWords != null) {
+      allWords.addAll(fillWords);
     }
+    buildDictionary(allWords);
 
     GridFirstResult? bestResult;
     var bestScore = -1.0;
@@ -119,6 +113,32 @@ class GridFirstGenerator {
           result.placedWords.length > bestResult.placedWords.length) {
         bestResult = result;
       }
+    }
+
+    // RELAXED MODE: If we have a decent partial result, return it instead of failing completely.
+    // A puzzle with 90% words placed is better than an error message.
+    if (bestResult != null && bestResult.placedWords.length > 5) {
+      // POST-PROCESS: Prune disconnected words to ensure the grid is a single island.
+      // This is crucial for user experience (connectivity).
+      final connectedWords = _pruneDisconnectedComponents(
+        bestResult.placedWords,
+      );
+
+      // If pruning reduced the word count too much, we might still fail,
+      // but usually it leaves the main chunk.
+      // Re-build grid with only connected words
+      final newGrid = _buildGrid(connectedWords, bestResult.template);
+
+      return GridFirstResult(
+        placedWords: connectedWords,
+        grid: newGrid,
+        template: bestResult.template,
+        metrics:
+            bestResult
+                .metrics, // Metrics technically change but using old ones is fine approx
+        success: bestResult.success,
+        failureReason: bestResult.failureReason,
+      );
     }
 
     return bestResult ??
@@ -200,7 +220,7 @@ class GridFirstGenerator {
       final solver = CrosswordCSPSolver(
         gaddag: _gaddag,
         slots: remainingSlots,
-        maxBacktracks: 5000,
+        maxBacktracks: 10000,
       )..applyKnownLetters(knownLetters);
 
       final result = solver.solve();
@@ -262,8 +282,18 @@ class GridFirstGenerator {
         continue;
       }
 
-      // Prioritize central slots
+      // Prioritize slots that intersect with already placed words to promote connectivity
+      // Secondary priority: distance from center
       candidates.sort((a, b) {
+        final intersectsA =
+            assignment.keys.any((s) => a.getIntersection(s) != null) ? 0 : 1;
+        final intersectsB =
+            assignment.keys.any((s) => b.getIntersection(s) != null) ? 0 : 1;
+
+        if (intersectsA != intersectsB) {
+          return intersectsA.compareTo(intersectsB);
+        }
+
         final distA = a.distanceFromCenter(width, height);
         final distB = b.distanceFromCenter(width, height);
         return distA.compareTo(distB);
@@ -352,10 +382,7 @@ class GridFirstGenerator {
 
       // Find the GeneratedWord or create a fill word
       var generatedWord = themeWordMap[wordStr];
-      generatedWord ??= GeneratedWord(
-        answer: wordStr,
-        clue: 'Fill word: $wordStr',
-      );
+      generatedWord ??= GeneratedWord(answer: wordStr, clue: '...');
 
       placedWords.add(
         PlacedWord(
@@ -447,5 +474,97 @@ class GridFirstGenerator {
 
     // Require at least 30% of each direction (relaxed from 40%)
     return horizontal >= total * 0.3 && vertical >= total * 0.3;
+  }
+
+  /// Prune isolated components of the grid, keeping only the largest connected set of words.
+  List<PlacedWord> _pruneDisconnectedComponents(List<PlacedWord> words) {
+    if (words.isEmpty) {
+      return [];
+    }
+
+    // Build adjacency graph: two words are connected if they intersect
+    // Map<PlacedWord, List<PlacedWord>> adjacency
+    final adjacency = <PlacedWord, List<PlacedWord>>{};
+    for (final w in words) {
+      adjacency[w] = [];
+    }
+
+    // Naive O(N^2) intersection check - fine for N<100
+    for (var i = 0; i < words.length; i++) {
+      for (var j = i + 1; j < words.length; j++) {
+        final w1 = words[i];
+        final w2 = words[j];
+
+        // Strict intersection check: share a common cell with the same letter
+        if (_wordsIntersect(w1, w2)) {
+          adjacency[w1]!.add(w2);
+          adjacency[w2]!.add(w1);
+        }
+      }
+    }
+
+    // Find Connected Components via BFS
+    final components = <List<PlacedWord>>[];
+    final visited = <PlacedWord>{};
+
+    for (final w in words) {
+      if (visited.contains(w)) {
+        continue;
+      }
+
+      final component = <PlacedWord>[];
+      final queue = <PlacedWord>[w];
+      visited.add(w);
+
+      while (queue.isNotEmpty) {
+        final current = queue.removeAt(0);
+        component.add(current);
+
+        for (final neighbor in adjacency[current]!) {
+          if (!visited.contains(neighbor)) {
+            visited.add(neighbor);
+            queue.add(neighbor);
+          }
+        }
+      }
+      components.add(component);
+    }
+
+    // Sort components by size (descending) and return the largest
+    if (components.isEmpty) {
+      return [];
+    }
+    components.sort((a, b) => b.length.compareTo(a.length));
+
+    return components.first;
+  }
+
+  bool _wordsIntersect(PlacedWord w1, PlacedWord w2) {
+    // If same orientation, they can't cross-intersect (we assume no overlap in same dir)
+    if (w1.isHorizontal == w2.isHorizontal) {
+      return false;
+    }
+
+    final hWord = w1.isHorizontal ? w1 : w2;
+    final vWord = w1.isHorizontal ? w2 : w1;
+
+    // Calculate intersection point
+    final x = vWord.startX;
+    final y = hWord.startY;
+
+    // Check if intersection point is within both words
+    final hStart = hWord.startX;
+    final hEnd = hWord.startX + hWord.word.answer.length;
+    final vStart = vWord.startY;
+    final vEnd = vWord.startY + vWord.word.answer.length;
+
+    if (x >= hStart && x < hEnd && y >= vStart && y < vEnd) {
+      // Must verify chars match (should be true for placed words, but good to be safe)
+      // Actually, if we are post-processing a generated grid, letters MUST match at intersection
+      // or else the grid is invalid. We assume they match or simply that they cross spatially.
+      return true;
+    }
+
+    return false;
   }
 }

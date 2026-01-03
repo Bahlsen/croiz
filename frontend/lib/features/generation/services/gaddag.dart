@@ -51,14 +51,14 @@ class Gaddag {
 
   /// Add a single word to the GADDAG
   void addWord(String word) {
-    final upperWord = word.toUpperCase();
-    if (upperWord.isEmpty || _allWords.contains(upperWord)) {
+    final cleaned = word.trim().toUpperCase();
+    if (cleaned.isEmpty || _allWords.contains(cleaned)) {
       return;
     }
 
-    _allWords.add(upperWord);
-    _wordsByLength.putIfAbsent(upperWord.length, () => {}).add(upperWord);
-    _insertWord(upperWord);
+    _allWords.add(cleaned);
+    _wordsByLength.putIfAbsent(cleaned.length, () => {}).add(cleaned);
+    _insertWord(cleaned);
   }
 
   /// Insert all representations of a word.

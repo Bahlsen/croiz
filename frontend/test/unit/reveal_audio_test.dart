@@ -10,11 +10,15 @@ import 'package:croiz/services/audio_service.dart';
 class MockAudio implements AudioService {
   int success = 0;
   int victory = 0;
+  int reveal = 0;
   @override
   Future<void> playSuccess() async => success++;
 
   @override
   Future<void> playVictory() async => victory++;
+
+  @override
+  Future<void> playReveal() async => reveal++;
 
   @override
   Future<void> playDelete() async {}

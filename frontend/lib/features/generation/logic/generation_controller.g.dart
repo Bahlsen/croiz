@@ -42,7 +42,7 @@ final class GenerationControllerProvider
 }
 
 String _$generationControllerHash() =>
-    r'c2c46f45ba6ac502e73ea6dca77d4d5b4ccb0f00';
+    r'6f0b892b440063108378306878ec55c598d880d8';
 
 abstract class _$GenerationController extends $Notifier<AsyncValue<String?>> {
   AsyncValue<String?> build();

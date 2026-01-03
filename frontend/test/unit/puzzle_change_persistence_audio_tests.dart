@@ -26,6 +26,9 @@ class FakeAudioService implements AudioService {
   Future<void> playVictory() async {}
 
   @override
+  Future<void> playReveal() async {}
+
+  @override
   Future<void> dispose() async {}
 
   @override

@@ -19,6 +19,14 @@ class MockGameAudioService implements GameAudioService {
     victoryCount = 0;
     typeCount = 0;
     deleteCount = 0;
+    revealCount = 0;
+  }
+
+  int revealCount = 0;
+
+  @override
+  Future<void> playReveal() async {
+    revealCount++;
   }
 
   @override
