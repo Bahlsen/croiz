@@ -1,0 +1,501 @@
+import 'dart:collection';
+import 'dart:math';
+
+import 'package:croiz/features/generation/models/slot.dart';
+import 'package:croiz/features/generation/services/gaddag.dart';
+
+/// Result of CSP solving
+class CSPSolveResult {
+  const CSPSolveResult({
+    required this.success,
+    required this.assignments,
+    this.unfilledSlots = const [],
+    this.failureReason,
+  });
+
+  /// Whether a complete solution was found
+  final bool success;
+
+  /// Map of slot to assigned word
+  final Map<Slot, String> assignments;
+
+  /// Slots that could not be filled (if incomplete)
+  final List<Slot> unfilledSlots;
+
+  /// Reason for failure if not successful
+  final String? failureReason;
+}
+
+/// Crossword CSP Solver using AC-3 and backtracking with MRV/LCV heuristics.
+///
+/// Solves the constraint satisfaction problem of filling crossword slots
+/// with valid words from a dictionary (GADDAG).
+class CrosswordCSPSolver {
+  CrosswordCSPSolver({
+    required this.gaddag,
+    required this.slots,
+    this.maxBacktracks = 10000,
+  }) {
+    _initializeDomains();
+    _buildConstraintGraph();
+  }
+
+  final Gaddag gaddag;
+  final List<Slot> slots;
+  final int maxBacktracks;
+
+  /// Domain for each slot (possible words)
+  final Map<Slot, List<String>> _domains = {};
+
+  /// Constraint graph: intersecting slots
+  final Map<Slot, List<Slot>> _neighbors = {};
+
+  /// Intersection details between slots
+  final Map<String, IntersectionPoint> _intersections = {};
+
+  /// Counter for backtracking (to prevent infinite loops)
+  int _backtracks = 0;
+
+  /// Initialize domains with all words of correct length
+  void _initializeDomains() {
+    for (final slot in slots) {
+      final words = gaddag.findWordsByLength(slot.length);
+      _domains[slot] = words.toList();
+    }
+  }
+
+  /// Build the constraint graph from slot intersections
+  void _buildConstraintGraph() {
+    for (final slot in slots) {
+      _neighbors[slot] = [];
+    }
+
+    for (var i = 0; i < slots.length; i++) {
+      for (var j = i + 1; j < slots.length; j++) {
+        final intersection = slots[i].getIntersection(slots[j]);
+        if (intersection != null) {
+          _neighbors[slots[i]]!.add(slots[j]);
+          _neighbors[slots[j]]!.add(slots[i]);
+
+          // Store intersection details
+          final key1 = '${slots[i].hashCode}_${slots[j].hashCode}';
+          final key2 = '${slots[j].hashCode}_${slots[i].hashCode}';
+          _intersections[key1] = intersection;
+          _intersections[key2] = intersection;
+        }
+      }
+    }
+  }
+
+  /// Apply known letter constraints to reduce domains.
+  ///
+  /// [knownLetters] maps Point(x,y) to the known letter at that position.
+  void applyKnownLetters(Map<Point<int>, String> knownLetters) {
+    for (final slot in slots) {
+      final constraints = <int, String>{};
+
+      // Check each cell of the slot for known letters
+      for (var i = 0; i < slot.length; i++) {
+        final cell = slot.getCell(i);
+        final knownLetter = knownLetters[cell];
+        if (knownLetter != null) {
+          constraints[i] = knownLetter.toUpperCase();
+        }
+      }
+
+      if (constraints.isNotEmpty) {
+        // Filter domain to only words matching constraints
+        _domains[slot] =
+            _domains[slot]!.where((word) {
+              for (final entry in constraints.entries) {
+                if (entry.key >= word.length ||
+                    word[entry.key] != entry.value) {
+                  return false;
+                }
+              }
+              return true;
+            }).toList();
+      }
+    }
+  }
+
+  /// Main solving function.
+  ///
+  /// Returns a complete or partial solution.
+  CSPSolveResult solve() {
+    _backtracks = 0;
+
+    // Step 1: Apply AC-3 to reduce domains
+    final ac3Result = _ac3();
+    if (!ac3Result) {
+      return const CSPSolveResult(
+        success: false,
+        assignments: {},
+        failureReason: 'AC-3 detected no solution possible',
+      );
+    }
+
+    // Check for empty domains after AC-3
+    for (final slot in slots) {
+      if (_domains[slot]!.isEmpty) {
+        return CSPSolveResult(
+          success: false,
+          assignments: {},
+          unfilledSlots: [slot],
+          failureReason: 'Empty domain for slot ${slot.id} after AC-3',
+        );
+      }
+    }
+
+    // Step 2: Backtracking search with MRV/LCV
+    final assignment = <Slot, String>{};
+    final result = _backtrack(assignment);
+
+    if (result != null) {
+      return CSPSolveResult(success: true, assignments: result);
+    }
+
+    // Partial solution - return what we have
+    return CSPSolveResult(
+      success: false,
+      assignments: assignment,
+      unfilledSlots: slots.where((s) => !assignment.containsKey(s)).toList(),
+      failureReason: 'Backtracking exhausted after $_backtracks attempts',
+    );
+  }
+
+  /// AC-3 (Arc Consistency) algorithm.
+  ///
+  /// Reduces domains by ensuring every value has support in connected domains.
+  /// Returns false if any domain becomes empty (no solution).
+  bool _ac3() {
+    final queue = Queue<(Slot, Slot)>();
+
+    // Add all arcs to queue
+    for (final slot in slots) {
+      for (final neighbor in _neighbors[slot]!) {
+        queue.add((slot, neighbor));
+      }
+    }
+
+    while (queue.isNotEmpty) {
+      final (slotI, slotJ) = queue.removeFirst();
+
+      if (_revise(slotI, slotJ)) {
+        if (_domains[slotI]!.isEmpty) {
+          return false; // Domain wiped out
+        }
+
+        // Add neighbors back to queue
+        for (final neighbor in _neighbors[slotI]!) {
+          if (neighbor != slotJ) {
+            queue.add((neighbor, slotI));
+          }
+        }
+      }
+    }
+
+    return true;
+  }
+
+  /// Revise the domain of slotI with respect to slotJ.
+  ///
+  /// Removes values from slotI's domain that have no support in slotJ's domain.
+  bool _revise(Slot slotI, Slot slotJ) {
+    var revised = false;
+    final intersection = _getIntersection(slotI, slotJ);
+    if (intersection == null) {
+      return false;
+    }
+
+    final posI =
+        slotI.isHorizontal
+            ? intersection.positionInHorizontal
+            : intersection.positionInVertical;
+    final posJ =
+        slotJ.isHorizontal
+            ? intersection.positionInHorizontal
+            : intersection.positionInVertical;
+
+    _domains[slotI]!.removeWhere((wordI) {
+      if (posI >= wordI.length) {
+        return true;
+      }
+      final letterI = wordI[posI];
+
+      // Check if any word in slotJ's domain supports this letter
+      final hasSupport = _domains[slotJ]!.any((wordJ) {
+        if (posJ >= wordJ.length) {
+          return false;
+        }
+        return wordJ[posJ] == letterI;
+      });
+
+      if (!hasSupport) {
+        revised = true;
+        return true;
+      }
+      return false;
+    });
+
+    return revised;
+  }
+
+  /// Get intersection between two slots.
+  IntersectionPoint? _getIntersection(Slot slotA, Slot slotB) {
+    final key = '${slotA.hashCode}_${slotB.hashCode}';
+    return _intersections[key];
+  }
+
+  /// Backtracking search with MRV and LCV heuristics.
+  Map<Slot, String>? _backtrack(Map<Slot, String> assignment) {
+    _backtracks++;
+    if (_backtracks > maxBacktracks) {
+      return null; // Exceeded limit
+    }
+
+    // Check if complete
+    if (assignment.length == slots.length) {
+      return Map.from(assignment);
+    }
+
+    // MRV: Select unassigned slot with smallest domain
+    final unassigned = slots.where((s) => !assignment.containsKey(s)).toList();
+    if (unassigned.isEmpty) {
+      return Map.from(assignment);
+    }
+
+    final slot = _selectMRVVariable(unassigned);
+
+    // Get domain (may have been reduced)
+    final domain = _getCurrentDomain(slot, assignment);
+    if (domain.isEmpty) {
+      return null;
+    }
+
+    // LCV: Order values by least constraining
+    final orderedWords = _orderByLCV(slot, domain, assignment);
+
+    for (final word in orderedWords) {
+      if (_isConsistent(slot, word, assignment)) {
+        // Make assignment
+        assignment[slot] = word;
+
+        // Forward checking: save and reduce neighbor domains
+        final savedDomains = _saveState();
+        _forwardCheck(slot, word, assignment);
+
+        // Check if any domain became empty
+        var valid = true;
+        for (final neighbor in _neighbors[slot]!) {
+          if (!assignment.containsKey(neighbor) &&
+              _domains[neighbor]!.isEmpty) {
+            valid = false;
+            break;
+          }
+        }
+
+        if (valid) {
+          final result = _backtrack(assignment);
+          if (result != null) {
+            return result;
+          }
+        }
+
+        // Backtrack: restore state
+        _restoreState(savedDomains);
+        assignment.remove(slot);
+      }
+    }
+
+    return null;
+  }
+
+  /// Select variable with Minimum Remaining Values (MRV) heuristic.
+  Slot _selectMRVVariable(List<Slot> unassigned) => unassigned.reduce((a, b) {
+    final domainA = _domains[a]!.length;
+    final domainB = _domains[b]!.length;
+    if (domainA != domainB) {
+      return domainA < domainB ? a : b;
+    }
+    // Tie-breaker: degree heuristic (more constraints first)
+    return _neighbors[a]!.length > _neighbors[b]!.length ? a : b;
+  });
+
+  /// Get current valid domain for a slot given current assignments.
+  List<String> _getCurrentDomain(Slot slot, Map<Slot, String> assignment) {
+    final domain = List<String>.from(_domains[slot]!);
+
+    // Filter by intersection constraints
+    for (final neighbor in _neighbors[slot]!) {
+      if (assignment.containsKey(neighbor)) {
+        final intersection = _getIntersection(slot, neighbor);
+        if (intersection == null) {
+          continue;
+        }
+
+        final neighborWord = assignment[neighbor]!;
+        final posInSlot =
+            slot.isHorizontal
+                ? intersection.positionInHorizontal
+                : intersection.positionInVertical;
+        final posInNeighbor =
+            neighbor.isHorizontal
+                ? intersection.positionInHorizontal
+                : intersection.positionInVertical;
+
+        if (posInNeighbor >= neighborWord.length) {
+          continue;
+        }
+        final requiredLetter = neighborWord[posInNeighbor];
+
+        domain.removeWhere((word) {
+          if (posInSlot >= word.length) {
+            return true;
+          }
+          return word[posInSlot] != requiredLetter;
+        });
+      }
+    }
+
+    return domain;
+  }
+
+  /// Order words by Least Constraining Value (LCV) heuristic.
+  List<String> _orderByLCV(
+    Slot slot,
+    List<String> words,
+    Map<Slot, String> assignment,
+  ) {
+    if (words.length <= 1) {
+      return words;
+    }
+
+    final unassignedNeighbors =
+        _neighbors[slot]!.where((n) => !assignment.containsKey(n)).toList();
+
+    if (unassignedNeighbors.isEmpty) {
+      return words;
+    }
+
+    // Score each word by remaining options for neighbors
+    final scores = <String, int>{};
+    for (final word in words) {
+      var score = 0;
+      for (final neighbor in unassignedNeighbors) {
+        final intersection = _getIntersection(slot, neighbor);
+        if (intersection == null) {
+          continue;
+        }
+
+        final posInSlot =
+            slot.isHorizontal
+                ? intersection.positionInHorizontal
+                : intersection.positionInVertical;
+        final posInNeighbor =
+            neighbor.isHorizontal
+                ? intersection.positionInHorizontal
+                : intersection.positionInVertical;
+
+        if (posInSlot >= word.length) {
+          continue;
+        }
+        final letter = word[posInSlot];
+
+        // Count compatible words in neighbor's domain
+        score +=
+            _domains[neighbor]!.where((w) {
+              if (posInNeighbor >= w.length) {
+                return false;
+              }
+              return w[posInNeighbor] == letter;
+            }).length;
+      }
+      scores[word] = score;
+    }
+
+    // Sort descending (more options = less constraining)
+    words.sort((a, b) => (scores[b] ?? 0).compareTo(scores[a] ?? 0));
+    return words;
+  }
+
+  /// Check if assigning word to slot is consistent with current assignment.
+  bool _isConsistent(Slot slot, String word, Map<Slot, String> assignment) {
+    for (final neighbor in _neighbors[slot]!) {
+      if (!assignment.containsKey(neighbor)) {
+        continue;
+      }
+
+      final intersection = _getIntersection(slot, neighbor);
+      if (intersection == null) {
+        continue;
+      }
+
+      final neighborWord = assignment[neighbor]!;
+      final posInSlot =
+          slot.isHorizontal
+              ? intersection.positionInHorizontal
+              : intersection.positionInVertical;
+      final posInNeighbor =
+          neighbor.isHorizontal
+              ? intersection.positionInHorizontal
+              : intersection.positionInVertical;
+
+      if (posInSlot >= word.length || posInNeighbor >= neighborWord.length) {
+        return false;
+      }
+
+      if (word[posInSlot] != neighborWord[posInNeighbor]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /// Forward checking: reduce domains of neighbors.
+  void _forwardCheck(Slot slot, String word, Map<Slot, String> assignment) {
+    for (final neighbor in _neighbors[slot]!) {
+      if (assignment.containsKey(neighbor)) {
+        continue;
+      }
+
+      final intersection = _getIntersection(slot, neighbor);
+      if (intersection == null) {
+        continue;
+      }
+
+      final posInSlot =
+          slot.isHorizontal
+              ? intersection.positionInHorizontal
+              : intersection.positionInVertical;
+      final posInNeighbor =
+          neighbor.isHorizontal
+              ? intersection.positionInHorizontal
+              : intersection.positionInVertical;
+
+      if (posInSlot >= word.length) {
+        continue;
+      }
+      final requiredLetter = word[posInSlot];
+
+      _domains[neighbor]!.removeWhere((w) {
+        if (posInNeighbor >= w.length) {
+          return true;
+        }
+        return w[posInNeighbor] != requiredLetter;
+      });
+    }
+  }
+
+  /// Save current domain state for backtracking.
+  Map<Slot, List<String>> _saveState() =>
+      _domains.map((k, v) => MapEntry(k, List.from(v)));
+
+  /// Restore domain state after backtracking.
+  void _restoreState(Map<Slot, List<String>> saved) {
+    for (final entry in saved.entries) {
+      _domains[entry.key] = entry.value;
+    }
+  }
+}
