@@ -1,96 +1,232 @@
-# Ajout d'une nouvelle langue dans Croiz
+# Adding a New Language to Croiz
 
-Ce document détaille la procédure pour ajouter le support d'une nouvelle langue dans l'application Croiz.
+This document details the procedure for adding support for a new language in the Croiz application.
 
-## 1. Localisation de l'interface (UI)
+## Overview
 
-L'application utilise le package standard Flutter `flutter_localizations` basé sur des fichiers ARB.
+Adding a new language involves several components:
+1. **UI Localization** - Translating interface text
+2. **App Configuration** - Registering the language
+3. **Virtual Keyboard** - For non-Latin alphabets (Cyrillic, Greek, etc.)
+4. **Puzzle Generation** - Language-specific word weights and fill dictionaries
+5. **Gemini Instructions** - Language-specific generation prompts
 
-### Étapes :
-1.  **Créer le fichier ARB** :
-    Dans `lib/l10n/`, créez un nouveau fichier nommé `app_<code_langue>.arb` (ex: `app_es.arb` pour l'espagnol).
-2.  **Traduire les chaînes** :
-    Copiez le contenu de `app_en.arb` dans votre nouveau fichier et remplacez les valeurs par les traductions appropriées.
-3.  **Générer les fichiers Dart** :
-    L'application est configurée pour générer les fichiers de localisation automatiquement. Si ce n'est pas le cas, vous pouvez lancer :
-    ```bash
-    flutter gen-l10n
-    ```
-    *Note : Actuellement, les fichiers générés sont versionnés dans `lib/l10n/`.*
+## 1. UI Localization
+
+The application uses Flutter's standard `flutter_localizations` package with ARB files.
+
+### Steps:
+
+1. **Create the ARB file**:
+   In `lib/l10n/`, create a new file named `app_<language_code>.arb` (e.g., `app_es.arb` for Spanish).
+
+2. **Translate the strings**:
+   Copy the content of `app_en.arb` into your new file and replace the values with appropriate translations.
+
+3. **Generate Dart files**:
+   The application is configured to generate localization files automatically. If needed, you can run:
+   ```bash
+   flutter gen-l10n
+   ```
+   *Note: Currently, generated files are versioned in `lib/l10n/`.*
 
 > [!IMPORTANT]
-> **Cas particulier du Russe (ru)** : 
-> Bien que la langue soit affichée comme "Русский" dans l'UI, toutes les traductions internes et la logique de génération doivent correspondre à l'**Ukrainien**. 
-> Si vous ajoutez des mots ou des traductions pour le Russe, ils doivent être saisis en Ukrainien.
+> **Special Case: Russian (ru)**:
+> Although displayed as "Русский" in the UI, all internal translations and generation logic should correspond to **Ukrainian**.
+> If you add words or translations for Russian, they must be entered in Ukrainian.
 
-## 2. Configuration de l'application
+## 2. App Configuration
 
-Il est nécessaire d'enregistrer la nouvelle langue dans le fichier de configuration central.
+Register the new language in the central configuration file.
 
-### Fichier : `lib/core/config/app_languages.dart`
+### File: `lib/core/config/app_languages.dart`
 
-1.  Ajoutez le code de la langue à l'ensemble `uiSupported` :
-    ```dart
-    static const Set<String> uiSupported = {'en', 'fr', 'uk', 'es'};
-    ```
-2.  (Optionnel) Ajoutez le code à `puzzleSupported` si vous souhaitez autoriser la génération de puzzles dans cette langue :
-    ```dart
-    static const Set<String> puzzleSupported = {
-      'en', 'fr', 'uk', 'es', ...
-    };
-    ```
-3.  Ajoutez les métadonnées (nom et drapeau) dans la map `_metadata` :
-    ```dart
-    'es': (name: 'Español', flag: '🇪🇸'),
-    ```
+1. Add the language code to the `uiSupported` set:
+   ```dart
+   static const Set<String> uiSupported = {'en', 'fr', 'uk', 'es'};
+   ```
 
-## 3. Clavier Virtuel (Pour les langues non-latines)
+2. (Optional) Add the code to `puzzleSupported` if you want to allow puzzle generation in this language:
+   ```dart
+   static const Set<String> puzzleSupported = {
+     'en', 'fr', 'uk', 'es', ...
+   };
+   ```
 
-Si la langue utilise un alphabet spécifique (ex: Grec, Russe, Bulgare), vous devez configurer le clavier virtuel.
+3. Add metadata (name and flag) to the `_metadata` map:
+   ```dart
+   'es': (name: 'Español', flag: '🇪🇸'),
+   ```
 
-### Étapes :
-1.  **Définir le layout** :
-    Dans `lib/features/game/widgets/keyboard/virtual_keyboard.dart`, ajoutez une constante pour le layout (ex: `static const List<List<String>> spanishLayout = ...`).
-2.  **Appliquer le layout** :
-    Dans `lib/features/game/widgets/bottom/crossword_controls_bar.dart`, mettez à jour la logique de sélection dans la méthode `build` :
-    ```dart
-    final isSpanish = language == 'es';
-    final layout = isSpanish 
-        ? VirtualKeyboard.spanishLayout 
-        : (isCyrillic ? ...);
-    ```
+## 3. Virtual Keyboard (For non-Latin languages)
 
-## 4. Adaptation de l'algorithme de génération
+If the language uses a specific alphabet (e.g., Greek, Russian, Bulgarian), you must configure the virtual keyboard.
 
-L'ajout d'une langue pour la génération nécessite deux adaptations majeures pour s'assurer que les puzzles sont de qualité.
+### Steps:
 
-### A. Placement des mots (Poids des lettres)
-**Fichier : `lib/features/generation/services/grid_generator.dart`**
+1. **Define the layout**:
+   In `lib/features/game/widgets/keyboard/virtual_keyboard.dart`, add a constant for the layout:
+   ```dart
+   static const List<List<String>> spanishLayout = [
+     ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+     ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ñ'],
+     ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
+   ];
+   ```
 
-L'algorithme de placement doit connaître la fréquence/difficulté des lettres pour optimiser les intersections.
-1.  **Mettre à jour `_languageWeights`** : Ajoutez une entrée avec le poids (1 à 10) de chaque lettre (basé sur le score Scrabble).
-    ```dart
-    'it': { 'A': 1, 'E': 1, ..., 'Z': 10 },
-    ```
-2.  **Mapping du code langue** : Si nécessaire, mappez les variantes (ex: `ru` -> `uk`) dans la méthode `_getWeights`.
+2. **Apply the layout**:
+   In `lib/features/game/widgets/bottom/crossword_controls_bar.dart`, update the selection logic in the `build` method:
+   ```dart
+   final isSpanish = language == 'es';
+   final layout = isSpanish
+       ? VirtualKeyboard.spanishLayout
+       : (isCyrillic ? VirtualKeyboard.cyrillicLayout : VirtualKeyboard.defaultLayout);
+   ```
 
-### B. Instructions de génération (Gemini)
-**Fichier : `lib/features/generation/services/gemini_service.dart`**
+### Currently Supported Keyboard Layouts:
 
-Le service doit savoir comment demander à l'IA de générer des mots valides.
-1.  **Nom de la langue** : Mappez le code ISO au nom complet dans `langNames`.
-2.  **Contraintes de normalisation** : Définissez dans `langConstraints` comment l'IA doit formater les mots (ex: suppression des accents, conservation de lettres spéciales comme le `Ñ`, conversion des Umlauts).
-3.  **Mapping spécifique** : Pour le Russe, assurez-vous de mapper `ru` vers `uk` avant de sélectionner le nom et les contraintes.
+| Language | Layout | Special Characters |
+|----------|--------|-------------------|
+| English | QWERTY | None |
+| French | QWERTY | Accented letters via long-press |
+| Spanish | QWERTY + Ñ | Ñ on second row |
+| German | QWERTY | ÄÖÜß via long-press |
+| Italian | QWERTY | Accented letters via long-press |
+| Portuguese | QWERTY | Accented letters via long-press |
+| Ukrainian | ЙЦУКЕН | Full Cyrillic layout |
+| Russian | ЙЦУКЕН | Maps to Ukrainian layout |
 
-## 5. Données des Puzzles (Facultatif)
+## 4. Puzzle Generation Adaptation
 
-Si vous souhaitez ajouter des grilles "officielles" (fixes) pour cette langue :
-1.  Créez un dossier dans `assets/data/<source>/`.
-2.  Ajoutez vos fichiers JSON de puzzles.
-3.  Référencez le dossier dans la section `assets` du `pubspec.yaml`.
-4.  Mettez à jour `lib/features/game/providers/puzzle_loader_provider.dart` pour inclure cette nouvelle source.
+Adding a language for generation requires two major adaptations to ensure quality puzzles.
 
-## Impacts potentiels
+### A. Word Placement (Letter Weights)
 
-- **Police d'écriture** : L'interface utilise Google Fonts. Pour certaines langues (ex: Arabe, Thaï), il faudra peut-être ajuster la police dans `lib/core/theme.dart` pour garantir le support des glyphes.
-- **Accessibilité** : N'oubliez pas de vérifier les descriptions sémantiques (ex: `letterLabel`) dans les fichiers ARB pour la lecture d'écran.
+**File: `lib/features/generation/services/grid_generator.dart`**
+
+The placement algorithm needs to know letter frequency/difficulty to optimize intersections.
+
+1. **Update `_languageWeights`**: Add an entry with the weight (1 to 10) of each letter (based on Scrabble scores):
+   ```dart
+   'it': { 'A': 1, 'E': 1, ..., 'Z': 10 },
+   ```
+
+2. **Language code mapping**: If necessary, map variants (e.g., `ru` -> `uk`) in the `_getWeights` method.
+
+### B. Fill Dictionary
+
+**File: `assets/dictionaries/fill_<lang>.txt`**
+
+Create a fill dictionary with common words (3-8 letters) for the language. This improves intersection potential.
+
+**Current fill dictionaries:**
+- `fill_en.txt` - English
+- `fill_fr.txt` - French
+- `fill_es.txt` - Spanish
+- `fill_de.txt` - German
+- `fill_it.txt` - Italian
+- `fill_pt.txt` - Portuguese
+- `fill_uk.txt` - Ukrainian (also used for Russian)
+
+**Dictionary format:**
+```
+# Comments start with #
+WORD1
+WORD2
+WORD3
+```
+
+**Update the service:**
+In `lib/features/generation/services/fill_dictionary_service.dart`, add the language mapping:
+```dart
+static const Map<String, String> _languageMapping = {
+  'en': 'en',
+  'fr': 'fr',
+  'es': 'es',
+  // ... add your language
+  'xx': 'xx', // New language
+};
+```
+
+### C. Generation Instructions (Gemini)
+
+**File: `lib/features/generation/services/gemini_service.dart`**
+
+The service must know how to ask the AI to generate valid words.
+
+1. **Language name**: Map the ISO code to full name in `langNames`:
+   ```dart
+   'es': 'Spanish',
+   ```
+
+2. **Normalization constraints**: Define in `langConstraints` how the AI should format words (e.g., remove accents, preserve special letters like `Ñ`, convert Umlauts):
+   ```dart
+   'es': 'Use only uppercase Spanish letters. The Ñ character is allowed.',
+   ```
+
+3. **Specific mapping**: For Russian, ensure `ru` maps to `uk` before selecting name and constraints.
+
+## 5. Puzzle Data (Optional)
+
+To add "official" (fixed) puzzles for this language:
+
+1. Create a folder in `assets/data/<source>/`.
+2. Add your puzzle JSON files.
+3. Reference the folder in the `assets` section of `pubspec.yaml`.
+4. Update `lib/features/game/providers/puzzle_loader_provider.dart` to include this new source.
+
+## 6. Testing
+
+After adding a new language:
+
+1. **Run analysis**:
+   ```bash
+   flutter analyze
+   ```
+
+2. **Run tests**:
+   ```bash
+   flutter test
+   ```
+
+3. **Manual testing**:
+   - Switch UI language and verify all strings are translated
+   - Generate a puzzle in the new language
+   - Verify keyboard layout works correctly
+   - Check that letters display properly in the grid
+
+## Potential Impacts
+
+- **Font**: The interface uses Google Fonts. For some languages (e.g., Arabic, Thai), you may need to adjust the font in `lib/core/theme.dart` to ensure glyph support.
+
+- **Accessibility**: Don't forget to verify semantic descriptions (e.g., `letterLabel`) in ARB files for screen readers.
+
+- **RTL Languages**: Arabic and Hebrew require right-to-left (RTL) layout support. This would need additional configuration in the theme and widget layouts.
+
+## Language Support Matrix
+
+| Language | Code | UI | Puzzles | Keyboard | Fill Dict |
+|----------|------|----|---------| ---------|-----------|
+| English | en | ✅ | ✅ | QWERTY | ✅ |
+| French | fr | ✅ | ✅ | QWERTY | ✅ |
+| Spanish | es | ✅ | ✅ | QWERTY+Ñ | ✅ |
+| German | de | ✅ | ✅ | QWERTY | ✅ |
+| Italian | it | ✅ | ✅ | QWERTY | ✅ |
+| Portuguese | pt | ✅ | ✅ | QWERTY | ✅ |
+| Ukrainian | uk | ✅ | ✅ | Cyrillic | ✅ |
+| Russian | ru | ✅ | ✅ | Cyrillic | ✅ (uses uk) |
+
+## Checklist for Adding a New Language
+
+- [ ] Create ARB file (`lib/l10n/app_<code>.arb`)
+- [ ] Add to `uiSupported` in `app_languages.dart`
+- [ ] Add to `puzzleSupported` in `app_languages.dart`
+- [ ] Add metadata (name, flag) in `app_languages.dart`
+- [ ] Create keyboard layout (if non-Latin)
+- [ ] Update keyboard selection logic
+- [ ] Add letter weights to grid generator
+- [ ] Create fill dictionary (`assets/dictionaries/fill_<code>.txt`)
+- [ ] Add language mapping in `fill_dictionary_service.dart`
+- [ ] Add Gemini language name and constraints
+- [ ] Run tests
+- [ ] Manual verification

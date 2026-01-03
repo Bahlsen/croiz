@@ -54,7 +54,7 @@ class GridFirstGenerator {
     required this.width,
     required this.height,
     Gaddag? gaddag,
-    this.targetBlackRatio = 0.18,
+    this.targetBlackRatio = 0.12, // Reduced from 0.18 for denser grids
     this.minWordLength = 3,
     this.maxAttempts = 5,
     Random? random,
@@ -147,15 +147,28 @@ class GridFirstGenerator {
       random: _random,
     )..generate();
 
-    // Try different template styles
-    final styles = [
+    // Try template styles in priority order (open is most reliable)
+    final stylesToTry = [
       TemplateStyle.open,
+      TemplateStyle.random,
       TemplateStyle.diagonal,
       TemplateStyle.checkerboard,
-      TemplateStyle.random,
     ];
-    final style = styles[_random.nextInt(styles.length)];
-    final template = templateGenerator.generateWithStyle(style);
+
+    // Find first template with balanced slots
+    List<List<bool>>? validTemplate;
+    for (final style in stylesToTry) {
+      final candidate = templateGenerator.generateWithStyle(style);
+      if (_hasBalancedSlots(candidate)) {
+        validTemplate = candidate;
+        break;
+      }
+    }
+
+    // Fallback to open style if no balanced template found
+    final template =
+        validTemplate ??
+        templateGenerator.generateWithStyle(TemplateStyle.open);
 
     // Step 2: Extract slots
     final slots = SlotExtractor.extractSlots(
@@ -408,4 +421,31 @@ class GridFirstGenerator {
       metrics.avgIntersectionsPerWord * 30.0 +
       metrics.letterDensity * 20.0 -
       metrics.blackSquareRatio * 10.0;
+
+  /// Check if a template has balanced horizontal and vertical slots.
+  ///
+  /// Ensures at least 30% of slots are horizontal and 30% are vertical
+  /// to maximize intersection potential and grid coverage.
+  /// Less strict for small grids or few slots.
+  bool _hasBalancedSlots(List<List<bool>> grid) {
+    final slots = SlotExtractor.extractSlots(grid, minLength: minWordLength);
+
+    // Accept any template with slots for small grids
+    if (slots.isEmpty) {
+      return false;
+    }
+
+    // For very small slot counts, be lenient
+    if (slots.length < 6) {
+      return slots.any((s) => s.isHorizontal) &&
+          slots.any((s) => !s.isHorizontal);
+    }
+
+    final horizontal = slots.where((s) => s.isHorizontal).length;
+    final vertical = slots.where((s) => !s.isHorizontal).length;
+    final total = horizontal + vertical;
+
+    // Require at least 30% of each direction (relaxed from 40%)
+    return horizontal >= total * 0.3 && vertical >= total * 0.3;
+  }
 }
