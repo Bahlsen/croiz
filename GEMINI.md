@@ -8,11 +8,11 @@ Read and follow ALL instructions from that file, including:
 - Go to frontend folder when working on the app (frontend folder is the root of the flutter project)
 - TDD (Test-Driven Development) practices
 - Auto-linting policy (dart format, dart fix --apply, flutter analyze, flutter test)
-- **Auto-execution policy**: L'utilisateur a donné "carte blanche". Cependant, le filtre de sécurité Antigravity bloque les pipes `|`.
-  - **RÈGLE CRITIQUE** : Ne JAMAIS utiliser de pipes `|` dans les commandes `run_command`.
+- **Auto-execution policy**: L'utilisateur a donné "carte blanche". Cependant, le filtre de sécurité Antigravity bloque les pipes `|` et redirections `>`.
+  - **RÈGLE CRITIQUE** : Ne JAMAIS utiliser de pipes `|` ou redirections `>` dans les commandes `run_command`.
   - Utilisez simplement la commande brute : `flutter test ...`.
   - L'agent gérera la lecture de la sortie via ses outils internes.
-  - Marquer `SafeToAutoRun: true` pour ces commandes sans pipes.
+  - Marquer `SafeToAutoRun: true` pour ces commandes sans pipes/redirections.
 - KISS, DRY, and SOLID principles
 - Clean Code as defined by Robert C. Martin
 - Dart strict mode and null safety best practices
