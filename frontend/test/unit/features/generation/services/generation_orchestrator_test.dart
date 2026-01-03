@@ -2,6 +2,7 @@ import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/models/generated_word.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
+import 'package:croiz/features/generation/services/fill_dictionary_service.dart';
 import 'package:croiz/features/generation/services/generation_orchestrator.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -14,22 +15,117 @@ class MockGeminiPuzzleService extends Mock implements GeminiPuzzleService {}
 class MockGeneratedPuzzlesRepository extends Mock
     implements GeneratedPuzzlesRepository {}
 
+class MockFillDictionaryService extends Mock implements FillDictionaryService {}
+
 void main() {
   group('PuzzleGenerationOrchestrator', () {
     late MockGeminiPuzzleService mockGeminiService;
     late MockGeneratedPuzzlesRepository mockRepository;
+    late MockFillDictionaryService mockFillService;
     late ProviderContainer container;
 
     setUp(() {
       mockGeminiService = MockGeminiPuzzleService();
       mockRepository = MockGeneratedPuzzlesRepository();
+      mockFillService = MockFillDictionaryService();
 
       container = ProviderContainer(
         overrides: [
           geminiPuzzleServiceProvider.overrideWithValue(mockGeminiService),
           generatedPuzzlesRepositoryProvider.overrideWithValue(mockRepository),
+          fillDictionaryServiceProvider.overrideWithValue(mockFillService),
         ],
       );
+
+      // Default behavior for mockFillService - provide rich dictionary
+      when(() => mockFillService.loadDictionary(any())).thenAnswer(
+        (_) async => [
+          'THE',
+          'AND',
+          'FOR',
+          'ARE',
+          'BUT',
+          'NOT',
+          'YOU',
+          'ALL',
+          'CAN',
+          'HAD',
+          'HER',
+          'WAS',
+          'ONE',
+          'OUR',
+          'OUT',
+          'DAY',
+          'GET',
+          'HAS',
+          'HIM',
+          'HIS',
+          'HOW',
+          'ITS',
+          'MAY',
+          'NEW',
+          'NOW',
+          'OLD',
+          'SEE',
+          'WAY',
+          'WHO',
+          'BOY',
+          'DID',
+          'OWN',
+          'SAY',
+          'SHE',
+          'TOO',
+          'USE',
+          'THEN',
+          'THEM',
+          'BEEN',
+          'HAVE',
+          'MANY',
+          'SOME',
+          'TIME',
+          'VERY',
+          'WHEN',
+          'COME',
+          'MAKE',
+          'LIKE',
+          'BACK',
+          'ONLY',
+          'OVER',
+          'SUCH',
+          'INTO',
+          'YEAR',
+          'YOUR',
+          'GOOD',
+          'GIVE',
+          'MOST',
+          'JUST',
+          'TAKE',
+          'PEOPLE',
+          'KNOW',
+          'WANT',
+          'WORK',
+          'FIRST',
+          'WELL',
+          'EVEN',
+          'STATE',
+          'CHILD',
+          'WORLD',
+          'AFTER',
+          'HOUSE',
+          'PLACE',
+          'THING',
+          'GREAT',
+        ],
+      );
+
+      // Default behavior for mockGeminiService.generateClues
+      when(
+        () => mockGeminiService.generateClues(
+          words: any(named: 'words'),
+          language: any(named: 'language'),
+          difficulty: any(named: 'difficulty'),
+        ),
+      ).thenAnswer((_) async => []);
     });
 
     tearDown(() {
@@ -166,9 +262,8 @@ void main() {
           puzzleGenerationOrchestratorProvider,
         );
 
-        // Act & Assert
         expect(
-          () => orchestrator.generateAndSave(topic: 'Test', language: 'en'),
+          orchestrator.generateAndSave(topic: 'Test', language: 'en'),
           throwsA(
             isA<UserFriendlyException>().having(
               (e) => e.userMessage,
@@ -197,9 +292,8 @@ void main() {
           puzzleGenerationOrchestratorProvider,
         );
 
-        // Act & Assert
         expect(
-          () => orchestrator.generateAndSave(topic: 'Test', language: 'en'),
+          orchestrator.generateAndSave(topic: 'Test', language: 'en'),
           throwsA(
             isA<Exception>().having(
               (e) => e.toString(),
@@ -351,7 +445,7 @@ void main() {
 
         // Act & Assert
         expect(
-          () => orchestrator.generateAndSave(
+          orchestrator.generateAndSave(
             topic: 'Test',
             language: 'en',
             size: 5, // Tiny grid
@@ -360,7 +454,7 @@ void main() {
             isA<UserFriendlyException>().having(
               (e) => e.userMessage,
               'userMessage',
-              contains('Unable to create a puzzle grid'),
+              contains('Unable to create a complete puzzle grid'),
             ),
           ),
         );
@@ -370,12 +464,12 @@ void main() {
         // Arrange
         // We place just one small word in a large grid
         final words = [
-          const GeneratedWord(answer: 'NO', clue: 'Refusal'),
-          const GeneratedWord(answer: 'GO', clue: 'Move'),
-          const GeneratedWord(answer: 'DO', clue: 'Action'),
-          const GeneratedWord(answer: 'TO', clue: 'Direction'),
-          const GeneratedWord(answer: 'SO', clue: 'Thus'),
-          const GeneratedWord(answer: 'IT', clue: 'Thing'),
+          const GeneratedWord(answer: 'APPLE', clue: 'Fruit'),
+          const GeneratedWord(answer: 'BREAD', clue: 'Food'),
+          const GeneratedWord(answer: 'CHAIR', clue: 'Furniture'),
+          const GeneratedWord(answer: 'TABLE', clue: 'Furniture'),
+          const GeneratedWord(answer: 'HOUSE', clue: 'Building'),
+          const GeneratedWord(answer: 'WORLD', clue: 'Planet'),
         ];
 
         when(
@@ -394,11 +488,7 @@ void main() {
         // Act & Assert
         // A 15x15 grid (225 cells) with only ~12-15 letters will definitely be < 35% density.
         expect(
-          () => orchestrator.generateAndSave(
-            topic: 'Test',
-            language: 'en',
-            size: 15,
-          ),
+          orchestrator.generateAndSave(topic: 'Test', language: 'en', size: 15),
           throwsA(
             isA<UserFriendlyException>().having(
               (e) => e.userMessage,

@@ -15,11 +15,13 @@ class PuzzleGenerationOrchestrator {
     this._geminiService,
     this._repository,
     this._ref,
+    this._fillService,
   );
 
   final GeminiPuzzleService _geminiService;
   final GeneratedPuzzlesRepository _repository;
   final Ref _ref;
+  final FillDictionaryService _fillService;
 
   Future<String> generateAndSave({
     required String topic,
@@ -51,9 +53,7 @@ class PuzzleGenerationOrchestrator {
     for (var attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         // 2. Load Fill Dictionary (v3 Requirement)
-        final fillWords = await FillDictionaryService.instance.loadDictionary(
-          language,
-        );
+        final fillWords = await _fillService.loadDictionary(language);
 
         // 3. Build Grid (Grid-First v3)
         final generator = GridFirstGenerator(width: size, height: size);
@@ -145,7 +145,7 @@ class PuzzleGenerationOrchestrator {
             }).toList();
 
         if (entriesNeedingClues.isNotEmpty) {
-          print(
+          developer.log(
             'Fetching clues for ${entriesNeedingClues.length} fill words...',
           );
           try {
@@ -184,8 +184,7 @@ class PuzzleGenerationOrchestrator {
         break;
       } catch (e) {
         // Log the failure for this attempt
-        // ignore: avoid_print
-        print('Generation attempt $attempt fail: $e');
+        developer.log('Generation attempt $attempt fail: $e');
 
         if (attempt == maxRetries) {
           rethrow;
@@ -292,11 +291,20 @@ class PuzzleGenerationOrchestrator {
     }
 
     // Helper to generate entry
-    void addEntry(int startX, int startY, String word, bool isHorizontal) {
-      if (word.length < 2) return; // Ignore single letters
+    void addEntry({
+      required int startX,
+      required int startY,
+      required String word,
+      required bool isHorizontal,
+    }) {
+      if (word.length < 2) {
+        return; // Ignore single letters
+      }
 
       final num = numberMap['$startX,$startY'];
-      if (num == null) return;
+      if (num == null) {
+        return;
+      }
 
       // Try to find matching PlacedWord
       final key = '${word}_${startX}_${startY}_$isHorizontal';
@@ -335,11 +343,18 @@ class PuzzleGenerationOrchestrator {
       for (var x = 0; x <= cols; x++) {
         final char = (x < cols) ? gridState[y][x] : null;
         if (char != null) {
-          if (startX == -1) startX = x;
+          if (startX == -1) {
+            startX = x;
+          }
           currentWord += char;
         } else {
           if (currentWord.length >= 2) {
-            addEntry(startX, y, currentWord, true);
+            addEntry(
+              startX: startX,
+              startY: y,
+              word: currentWord,
+              isHorizontal: true,
+            );
           }
           currentWord = '';
           startX = -1;
@@ -354,11 +369,18 @@ class PuzzleGenerationOrchestrator {
       for (var y = 0; y <= rows; y++) {
         final char = (y < rows) ? gridState[y][x] : null;
         if (char != null) {
-          if (startY == -1) startY = y;
+          if (startY == -1) {
+            startY = y;
+          }
           currentWord += char;
         } else {
           if (currentWord.length >= 2) {
-            addEntry(x, startY, currentWord, false);
+            addEntry(
+              startX: x,
+              startY: startY,
+              word: currentWord,
+              isHorizontal: false,
+            );
           }
           currentWord = '';
           startY = -1;
@@ -402,5 +424,6 @@ final puzzleGenerationOrchestratorProvider =
         ref.watch(geminiPuzzleServiceProvider),
         ref.watch(generatedPuzzlesRepositoryProvider),
         ref,
+        ref.watch(fillDictionaryServiceProvider),
       ),
     );

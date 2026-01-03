@@ -1,7 +1,7 @@
 # 🧩 Crossword Generation Engine - Unified Documentation
 
-**Version**: 3.8 (January 3, 2026)  
-**Status**: PRODUCTION READY (v3.8)
+**Version**: 3.9 (January 3, 2026)  
+**Status**: PRODUCTION READY (v3.9)
 
 ---
 
@@ -1828,8 +1828,9 @@ Fill words (words from the local dictionary used to bridge theme words) were dis
 ### J.2 Improvement
 - **Silent Placeholder**: Changed the fallback clue for fill words from `"Fill word: $word"` to `"..."` in `GridFirstGenerator`.
 - **Reasoning**: This prevents revealing the answer in the clue list before the hybrid generation pass completes. It also provides a cleaner UI if the clue generation pass is delayed or fails.
+- **Lint Cleanup**: Resolved 24+ lint warnings in `GridFirstGenerator` (e.g., `always_put_control_body_on_new_line`) to ensure production code quality.
 
 ---
 
 *Document last updated: January 3, 2026*
-*Final Review: Production Ready v3.8*
+*Final Review: Production Ready v3.9*

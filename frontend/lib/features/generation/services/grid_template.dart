@@ -11,7 +11,7 @@ class GridTemplateGenerator {
   GridTemplateGenerator({
     required this.width,
     required this.height,
-    this.targetBlackRatio = 0.18,
+    this.targetBlackRatio = 0.20,
     this.minWordLength = 3,
     Random? random,
   }) : _random = random ?? Random();
@@ -178,11 +178,10 @@ class GridTemplateGenerator {
       return false;
     }
 
-    // Check connectivity - Disabled to allow generation to succeed.
-    // Disconnected components are pruned in post-processing.
-    // if (!_checkConnectivity(grid)) {
-    //   return false;
-    // }
+    // Check connectivity
+    if (!_checkConnectivity(grid)) {
+      return false;
+    }
 
     return true;
   }
@@ -222,6 +221,54 @@ class GridTemplateGenerator {
     }
 
     return true;
+  }
+
+  /// Check if all white squares are connected using BFS.
+  bool _checkConnectivity(List<List<bool>> grid) {
+    Point<int>? start;
+    var totalWhite = 0;
+
+    for (var y = 0; y < height; y++) {
+      for (var x = 0; x < width; x++) {
+        if (!grid[y][x]) {
+          start ??= Point(x, y);
+          totalWhite++;
+        }
+      }
+    }
+
+    if (start == null) {
+      return true; // All black squares is trivially connected
+    }
+
+    final visited = <Point<int>>{};
+    final queue = [start];
+    visited.add(start);
+
+    var count = 0;
+    while (queue.isNotEmpty) {
+      final current = queue.removeAt(0);
+      count++;
+
+      // Neighbors
+      final neighbors = [
+        Point(current.x + 1, current.y),
+        Point(current.x - 1, current.y),
+        Point(current.x, current.y + 1),
+        Point(current.x, current.y - 1),
+      ];
+
+      for (final n in neighbors) {
+        if (n.x >= 0 && n.x < width && n.y >= 0 && n.y < height) {
+          if (!grid[n.y][n.x] && !visited.contains(n)) {
+            visited.add(n);
+            queue.add(n);
+          }
+        }
+      }
+    }
+
+    return count == totalWhite;
   }
 
   /// Validate an existing grid template

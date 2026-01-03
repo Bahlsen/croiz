@@ -242,7 +242,9 @@ $jsonFormat
     required String language,
     required int difficulty,
   }) async {
-    if (words.isEmpty) return [];
+    if (words.isEmpty) {
+      return [];
+    }
 
     final prompt = _buildCluePrompt(words, language, difficulty);
 
@@ -255,7 +257,7 @@ $jsonFormat
         );
       }
       return parseResponse(text);
-    } catch (e) {
+    } on Exception catch (e) {
       developer.log(
         'Gemini clue generation error: $e',
         name: 'GeminiService',

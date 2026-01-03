@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Service for loading fill dictionaries based on language.
 ///
@@ -151,3 +152,7 @@ class FillDictionaryService {
     _cache.clear();
   }
 }
+
+final fillDictionaryServiceProvider = Provider<FillDictionaryService>(
+  (ref) => FillDictionaryService.instance,
+);

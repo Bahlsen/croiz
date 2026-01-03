@@ -54,9 +54,9 @@ class GridFirstGenerator {
     required this.width,
     required this.height,
     Gaddag? gaddag,
-    this.targetBlackRatio = 0.30,
+    this.targetBlackRatio = 0.20,
     this.minWordLength = 3,
-    this.maxAttempts = 20, // Increased attempts
+    this.maxAttempts = 100, // Increased attempts
     Random? random,
   }) : _gaddag = gaddag ?? Gaddag(),
        _random = random ?? Random();

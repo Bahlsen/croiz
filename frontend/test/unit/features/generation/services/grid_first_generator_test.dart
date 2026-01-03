@@ -9,7 +9,7 @@ void main() {
       final generator = GridFirstGenerator(width: 15, height: 15);
       expect(generator.targetBlackRatio, 0.20);
       expect(generator.minWordLength, 3);
-      expect(generator.maxAttempts, 20);
+      expect(generator.maxAttempts, 100);
     });
 
     test('generate produces valid grid with sufficient words', () {
