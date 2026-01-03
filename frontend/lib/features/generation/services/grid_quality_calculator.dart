@@ -1,5 +1,5 @@
 import 'package:croiz/features/generation/models/grid_quality_metrics.dart';
-import 'package:croiz/features/generation/services/grid_generator.dart';
+import 'package:croiz/features/generation/models/placed_word.dart';
 
 /// Calculator for grid quality metrics.
 ///
@@ -190,6 +190,87 @@ class GridQualityCalculator {
       totalColumns: gridWidth,
     );
   }
+
+  /// Perform a deep structural analysis to detect patterns like spines.
+  static GridStructureAnalysis analyzeStructure(List<PlacedWord> placedWords) {
+    if (placedWords.isEmpty) {
+      return const GridStructureAnalysis.empty();
+    }
+
+    final horizontalWords = placedWords.where((w) => w.isHorizontal).toList();
+    final verticalWords = placedWords.where((w) => !w.isHorizontal).toList();
+
+    // Map cells to words for fast lookup
+    final horizontalCells = <String, PlacedWord>{};
+    for (final pw in horizontalWords) {
+      for (var i = 0; i < pw.word.answer.length; i++) {
+        horizontalCells['${pw.startX + i},${pw.startY}'] = pw;
+      }
+    }
+
+    final verticalCells = <String, PlacedWord>{};
+    for (final pw in verticalWords) {
+      for (var i = 0; i < pw.word.answer.length; i++) {
+        verticalCells['${pw.startX},${pw.startY + i}'] = pw;
+      }
+    }
+
+    // Find intersection cells
+    final intersectionCells = horizontalCells.keys.toSet().intersection(
+      verticalCells.keys.toSet(),
+    );
+    final totalIntersections = intersectionCells.length;
+
+    // Count intersections per word
+    final wordIntersections = <PlacedWord, int>{};
+    for (final pw in placedWords) {
+      var count = 0;
+      for (var i = 0; i < pw.word.answer.length; i++) {
+        final x = pw.isHorizontal ? pw.startX + i : pw.startX;
+        final y = pw.isHorizontal ? pw.startY : pw.startY + i;
+        final key = '$x,$y';
+
+        if (intersectionCells.contains(key)) {
+          count++;
+        }
+      }
+      wordIntersections[pw] = count;
+    }
+
+    // Detect spine pattern: one word has >70% of intersections
+    PlacedWord? spineWord;
+    double spineRatio = 0;
+    if (totalIntersections > 0) {
+      for (final entry in wordIntersections.entries) {
+        final ratio = entry.value / totalIntersections;
+        if (ratio > spineRatio) {
+          spineRatio = ratio;
+          spineWord = entry.key;
+        }
+      }
+    }
+
+    // Count isolated words (0 intersections)
+    final isolatedWords =
+        wordIntersections.entries.where((e) => e.value == 0).length;
+
+    // Find minimum intersections per word
+    final minIntersections =
+        wordIntersections.values.isEmpty
+            ? 0
+            : wordIntersections.values.reduce((a, b) => a < b ? a : b);
+
+    return GridStructureAnalysis(
+      horizontalCount: horizontalWords.length,
+      verticalCount: verticalWords.length,
+      totalIntersections: totalIntersections,
+      spineWord: spineWord,
+      spineIntersectionRatio: spineRatio,
+      isolatedWordCount: isolatedWords,
+      minIntersectionsPerWord: minIntersections,
+      wordIntersections: wordIntersections,
+    );
+  }
 }
 
 /// Analysis of sparse coverage in a crossword grid.
@@ -233,4 +314,79 @@ class SparseCoverageAnalysis {
   @override
   String toString() =>
       warningMessage.isNotEmpty ? warningMessage : 'Good coverage';
+}
+
+/// Detailed structural analysis of the grid
+class GridStructureAnalysis {
+  const GridStructureAnalysis({
+    required this.horizontalCount,
+    required this.verticalCount,
+    required this.totalIntersections,
+    required this.spineWord,
+    required this.spineIntersectionRatio,
+    required this.isolatedWordCount,
+    required this.minIntersectionsPerWord,
+    required this.wordIntersections,
+  });
+
+  const GridStructureAnalysis.empty()
+    : horizontalCount = 0,
+      verticalCount = 0,
+      totalIntersections = 0,
+      spineWord = null,
+      spineIntersectionRatio = 0,
+      isolatedWordCount = 0,
+      minIntersectionsPerWord = 0,
+      wordIntersections = const {};
+
+  final int horizontalCount;
+  final int verticalCount;
+  final int totalIntersections;
+  final PlacedWord? spineWord;
+  final double spineIntersectionRatio;
+  final int isolatedWordCount;
+  final int minIntersectionsPerWord;
+  final Map<PlacedWord, int> wordIntersections;
+
+  /// Has spine pattern when one word has >70% of all intersections
+  bool get hasSpinePattern =>
+      spineIntersectionRatio > 0.7 && totalIntersections >= 3;
+
+  String? get spineWordAnswer => spineWord?.word.answer;
+
+  /// Orientation is unbalanced when ratio is >3:1
+  bool get isOrientationUnbalanced {
+    if (horizontalCount == 0 && verticalCount == 0) {
+      return false;
+    }
+    return orientationRatio > 3.0;
+  }
+
+  double get orientationRatio {
+    if (horizontalCount == 0 && verticalCount == 0) {
+      return 1;
+    }
+    if (horizontalCount == 0 || verticalCount == 0) {
+      return (horizontalCount + verticalCount).toDouble();
+    }
+    final max =
+        horizontalCount > verticalCount ? horizontalCount : verticalCount;
+    final min =
+        horizontalCount < verticalCount ? horizontalCount : verticalCount;
+    return max / min;
+  }
+
+  /// Has isolated words if any word has 0 intersections
+  bool get hasIsolatedWords => isolatedWordCount > 0;
+
+  @override
+  String toString() => '''
+GridStructureAnalysis(
+  horizontal: $horizontalCount, vertical: $verticalCount,
+  orientationRatio: ${orientationRatio.toStringAsFixed(2)},
+  totalIntersections: $totalIntersections,
+  spineWord: ${spineWordAnswer ?? 'none'}, spineRatio: ${(spineIntersectionRatio * 100).toStringAsFixed(1)}%,
+  isolatedWords: $isolatedWordCount,
+  minIntersections: $minIntersectionsPerWord
+)''';
 }

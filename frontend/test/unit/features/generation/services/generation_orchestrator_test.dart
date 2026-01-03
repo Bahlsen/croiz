@@ -330,8 +330,8 @@ void main() {
         );
 
         // We use a tiny grid and words that won't intersect easily
-        // But GridGenerator is usually good at placing at least one.
-        // To force 0 placed words, we'd need GridGenerator to fail completely.
+        // But the generator is usually good at placing at least one.
+        // To force 0 placed words, we'd need the generator to fail completely.
         // Actually, if we provide words that are all too long for the grid:
         final longWords = [
           const GeneratedWord(answer: 'EXTREMELYLONGWORD', clue: 'Long'),

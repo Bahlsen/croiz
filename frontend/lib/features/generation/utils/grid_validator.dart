@@ -1,4 +1,4 @@
-import 'package:croiz/features/generation/services/grid_generator.dart';
+import 'package:croiz/features/generation/models/placed_word.dart';
 
 class GridValidationResult {
   GridValidationResult({required this.isValid, this.errors = const []});

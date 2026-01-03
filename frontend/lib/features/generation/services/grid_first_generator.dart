@@ -5,7 +5,7 @@ import 'package:croiz/features/generation/models/grid_quality_metrics.dart';
 import 'package:croiz/features/generation/models/slot.dart';
 import 'package:croiz/features/generation/services/csp_solver.dart';
 import 'package:croiz/features/generation/services/gaddag.dart';
-import 'package:croiz/features/generation/services/grid_generator.dart';
+import 'package:croiz/features/generation/models/placed_word.dart';
 import 'package:croiz/features/generation/services/grid_quality_calculator.dart';
 import 'package:croiz/features/generation/services/grid_template.dart';
 

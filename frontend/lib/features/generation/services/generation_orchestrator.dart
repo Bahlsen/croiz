@@ -1,7 +1,9 @@
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
-import 'package:croiz/features/generation/services/grid_generator.dart';
+import 'package:croiz/features/generation/models/placed_word.dart';
+import 'package:croiz/features/generation/services/fill_dictionary_service.dart';
+import 'package:croiz/features/generation/services/grid_first_generator.dart';
 import 'package:croiz/features/generation/utils/grid_validator.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -47,14 +49,24 @@ class PuzzleGenerationOrchestrator {
 
     for (var attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        // 2. Build Grid
-        final generator = GridGenerator(width: size, height: size);
-        final placedWords = generator.generate(words, language: language);
+        // 2. Load Fill Dictionary (v3 Requirement)
+        final fillWords = await FillDictionaryService.instance.loadDictionary(
+          language,
+        );
+
+        // 3. Build Grid (Grid-First v3)
+        final generator = GridFirstGenerator(width: size, height: size);
+        final result = generator.generate(
+          themeWords: words,
+          fillWords: fillWords,
+        );
+        final placedWords = result.placedWords;
 
         if (placedWords.isEmpty) {
           throw UserFriendlyException(
             'Unable to create a puzzle grid.',
-            technicalDetails: 'Grid generator returned 0 placed words',
+            technicalDetails:
+                'GridFirstGenerator returned 0 placed words (Reason: ${result.failureReason})',
           );
         }
 
@@ -187,7 +199,7 @@ class PuzzleGenerationOrchestrator {
     final entries = <Map<String, dynamic>>[];
 
     // We map PlacedWords to entries.
-    // Issue: GridGenerator might have placed words that overlap.
+    // Issue: The generator might have placed words that overlap.
     // The visual grid is authoritative.
     // We need to match PlacedWords to the grid positions and numbers.
     // Or we can simple re-scan the grid for words if we didn't track them.
