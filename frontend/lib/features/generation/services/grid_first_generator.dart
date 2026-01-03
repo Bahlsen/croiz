@@ -54,9 +54,10 @@ class GridFirstGenerator {
     required this.width,
     required this.height,
     Gaddag? gaddag,
-    this.targetBlackRatio = 0.12, // Reduced from 0.18 for denser grids
-    this.minWordLength = 3,
-    this.maxAttempts = 5,
+    this.targetBlackRatio =
+        0.32, // Increased to 0.32 to support small dictionaries
+    this.minWordLength = 2,
+    this.maxAttempts = 20, // Increased attempts
     Random? random,
   }) : _gaddag = gaddag ?? Gaddag(),
        _random = random ?? Random();
@@ -149,10 +150,9 @@ class GridFirstGenerator {
 
     // Try template styles in priority order (open is most reliable)
     final stylesToTry = [
-      TemplateStyle.open,
-      TemplateStyle.random,
-      TemplateStyle.diagonal,
+      TemplateStyle.random, // Most reliable with target ratio
       TemplateStyle.checkerboard,
+      TemplateStyle.diagonal,
     ];
 
     // Find first template with balanced slots
@@ -168,7 +168,7 @@ class GridFirstGenerator {
     // Fallback to open style if no balanced template found
     final template =
         validTemplate ??
-        templateGenerator.generateWithStyle(TemplateStyle.open);
+        templateGenerator.generateWithStyle(TemplateStyle.random);
 
     // Step 2: Extract slots
     final slots = SlotExtractor.extractSlots(

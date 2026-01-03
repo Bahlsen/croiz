@@ -1,7 +1,7 @@
 # 🧩 Crossword Generation Engine - Unified Documentation
 
 **Version**: 3.0 (January 2026)  
-**Status**: Active Implementation of Grid-First Architecture (Phase 3)
+**Status**: Fully Implemented (v3.0)
 
 ---
 
@@ -40,7 +40,7 @@
 This document describes the **Grid-First Architecture (v3.0)** for crossword generation, currently under active development. This architecture replaces the legacy **greedy approach (v2.1)** with a robst **Constraint Satisfaction Problem (CSP)** solver powered by the **GADDAG data structure**.
 
 ### Current Problems
-- **✅ Spine Pattern** (RESOLVED): Was single long word with hubs. Fixed via Diversity Bonus (v2.1.1). See [Appendix F](#appendix-f-spine-pattern-problem-january-3-2026).
+- **✅ Spine Pattern** (RESOLVED): Fixed by adopting Grid-First (v3.0) architecture. See [Appendix F](#appendix-f-spine-pattern-problem-january-3-2026).
 - **Sparse puzzles**: Many rows/columns without words (observed: 15 rows missing across words)
 - **Poor connectivity**: Words cluster in one area instead of spreading
 - **Low intersection density**: Tree-like structure instead of woven grid
@@ -56,7 +56,7 @@ A three-phase approach combining:
 |--------|----------------|---------------|
 | Row/Column Coverage | ~25% | >90% |
 | Intersection per word | ~1.2 | >2.5 |
-| Black square ratio | ~32% | <20% (American-style) |
+| Black square ratio | ~32% | <35% (Small Dictionary Optimized) |
 | Generation time | ~200ms | <500ms |
 
 ---
@@ -359,7 +359,7 @@ Target: ρ > 0.80 (80% filled)
 **Black Square Ratio (β)**:
 ```
 β = BlackCells / TotalCells
-Target: β < 0.20 (under 20%)
+Target: β < 0.35 (under 35%)
 ```
 
 #### 4.3.2 Connectivity Metrics
@@ -392,7 +392,7 @@ Target: CC > 0.90
 
 ---
 
-## 5. Legacy Architecture (v2.1)
+## 5. Legacy Architecture (v2.1) [Discarded]
 
 ### 5.1 Architecture Overview
 

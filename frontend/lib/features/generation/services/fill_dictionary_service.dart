@@ -53,8 +53,8 @@ class FillDictionaryService {
                     word.startsWith('*')) {
                   return false;
                 }
-                // Only include valid words (3+ letters)
-                if (word.length < 3) {
+                // Only include valid words (2+ letters)
+                if (word.length < 2) {
                   return false;
                 }
                 // Validate characters based on language

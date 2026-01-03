@@ -60,6 +60,15 @@ class PuzzleGenerationOrchestrator {
           themeWords: words,
           fillWords: fillWords,
         );
+        // Enforce strict success to prevent partial fills (structural errors)
+        if (!result.success) {
+          throw UserFriendlyException(
+            'Unable to create a complete puzzle grid.',
+            technicalDetails:
+                'GridFirstGenerator failed to fill all slots (Success: false)',
+          );
+        }
+
         final placedWords = result.placedWords;
 
         if (placedWords.isEmpty) {
