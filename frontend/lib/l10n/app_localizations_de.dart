@@ -237,8 +237,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Bestätigung: Alles aufdecken';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Sind Sie sicher, dass Sie das gesamte Rätsel aufdecken möchten?';
+  String get revealAllConfirmationMessage => 'Sind Sie sicher, dass Sie das gesamte Rätsel aufdecken möchten?';
 
   @override
   String get yes => 'Ja';
@@ -253,8 +252,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get deletePuzzle => 'Generiertes Rätsel löschen';
 
   @override
-  String get deletePuzzleConfirmation =>
-      'Sind Sie sicher, dass Sie dieses Rätsel löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.';
+  String get deletePuzzleConfirmation => 'Sind Sie sicher, dass Sie dieses Rätsel löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get deleteSuccessMessage => 'Rätsel erfolgreich gelöscht';
 
   @override
   String get cancel => 'Abbrechen';

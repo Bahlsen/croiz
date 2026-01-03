@@ -237,8 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirm Reveal All';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Are you sure you want to reveal the entire puzzle?';
+  String get revealAllConfirmationMessage => 'Are you sure you want to reveal the entire puzzle?';
 
   @override
   String get yes => 'Yes';
@@ -253,8 +252,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deletePuzzle => 'Delete Generated Puzzle';
 
   @override
-  String get deletePuzzleConfirmation =>
-      'Are you sure you want to delete this puzzle? This action cannot be undone.';
+  String get deletePuzzleConfirmation => 'Are you sure you want to delete this puzzle? This action cannot be undone.';
+
+  @override
+  String get deleteSuccessMessage => 'Puzzle deleted successfully';
 
   @override
   String get cancel => 'Cancel';

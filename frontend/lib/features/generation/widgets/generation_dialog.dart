@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'package:croiz/core/config/app_difficulty.dart';
 import 'package:croiz/core/config/app_languages.dart';
-import 'package:croiz/core/exceptions/user_friendly_exception.dart';
-import 'package:croiz/features/generation/services/generation_orchestrator.dart';
+import 'package:croiz/features/generation/logic/generation_controller.dart';
+import 'package:croiz/features/puzzles/pending_puzzles_provider.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,6 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
 
   double _difficulty = 3;
   int _size = 15;
-  bool _isLoading = false;
   String? _error;
 
   @override
@@ -44,44 +44,29 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
+    final pending = ref.read(pendingPuzzlesProvider);
+    if (pending.isNotEmpty) {
+      setState(() {
+        _error = 'A generation is already in progress. Please wait.';
+      });
+      return;
+    }
 
-    try {
-      final orchestrator = ref.read(puzzleGenerationOrchestratorProvider);
+    // Start generation in background
+    unawaited(
+      ref
+          .read(generationControllerProvider.notifier)
+          .generateInBackgroundTask(
+            topic: _topicController.text,
+            language: _language,
+            difficulty: _difficulty.round(),
+            size: _size,
+          ),
+    );
 
-      final puzzleId = await orchestrator.generateAndSave(
-        topic: _topicController.text,
-        language: _language,
-        difficulty: _difficulty.round(),
-        size: _size,
-      );
-
-      if (mounted) {
-        Navigator.of(context).pop(puzzleId); // Return puzzleId to caller
-      }
-    } on UserFriendlyException catch (e) {
-      // Display user-friendly message
-      if (mounted) {
-        setState(() {
-          _error = e.userMessage;
-        });
-      }
-    } on Exception {
-      // Fallback for any unexpected errors
-      if (mounted) {
-        setState(() {
-          _error = 'An unexpected error occurred. Please try again.';
-        });
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+    // Close immediately
+    if (mounted) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -195,9 +180,12 @@ class _GenerationDialogState extends ConsumerState<GenerationDialog> {
                   SizedBox(
                     height: 48,
                     child: FilledButton(
-                      onPressed: _isLoading ? null : _generate,
+                      onPressed:
+                          ref.watch(pendingPuzzlesProvider).isNotEmpty
+                              ? null
+                              : _generate,
                       child:
-                          _isLoading
+                          ref.watch(pendingPuzzlesProvider).isNotEmpty
                               ? const SizedBox(
                                 width: 24,
                                 height: 24,

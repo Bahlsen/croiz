@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/features/puzzles/pending_puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
@@ -12,6 +13,8 @@ import 'package:croiz/features/puzzles/widgets/puzzles_filter_row.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 import 'package:croiz/features/generation/widgets/generation_dialog.dart';
+import 'package:croiz/features/generation/logic/generation_controller.dart';
+import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 
 /// Puzzle selection page with filters, continue playing section, and performance.
 class PuzzlesListPage extends ConsumerWidget {
@@ -21,6 +24,56 @@ class PuzzlesListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final puzzlesAsync = ref.watch(puzzlesProvider);
+
+    // Listen to background generation status
+    ref.listen(generationControllerProvider, (previous, next) {
+      next.when(
+        data: (puzzleId) {
+          if (puzzleId != null && context.mounted) {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  duration: const Duration(seconds: 4),
+                  content: Text(
+                    AppLocalizations.of(context)?.successMessage ??
+                        'Puzzle generated successfully!',
+                  ),
+                  action: SnackBarAction(
+                    label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      if (context.mounted) {
+                        final encodedId = Uri.encodeComponent(puzzleId);
+                        context.push('/crossword?id=$encodedId');
+                      }
+                    },
+                  ),
+                ),
+              );
+          }
+        },
+        error: (e, st) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  content: Text(
+                    e is UserFriendlyException
+                        ? e.userMessage
+                        : 'Failed to generate puzzle',
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+          }
+        },
+        loading: () {},
+      );
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -56,37 +109,11 @@ class PuzzlesListPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         icon: const Icon(Icons.auto_awesome),
         label: Text(AppLocalizations.of(context)?.generateButton ?? 'GENERATE'),
-        onPressed: () async {
-          final puzzleId = await showDialog<String>(
+        onPressed: () {
+          showDialog<void>(
             context: context,
             builder: (context) => const GenerationDialog(),
           );
-
-          if (puzzleId != null && context.mounted) {
-            ScaffoldMessenger.of(context)
-              ..clearSnackBars()
-              ..showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  duration: const Duration(seconds: 4),
-                  content: Text(
-                    AppLocalizations.of(context)?.successMessage ??
-                        'Puzzle generated successfully!',
-                  ),
-                  action: SnackBarAction(
-                    label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
-                    onPressed: () {
-                      // Hide immediately on tap to avoid "never disappears" feeling
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      if (context.mounted) {
-                        final encodedId = Uri.encodeComponent(puzzleId);
-                        context.push('/crossword?id=$encodedId');
-                      }
-                    },
-                  ),
-                ),
-              );
-          }
         },
       ),
     );
@@ -202,7 +229,14 @@ class PuzzlesListPage extends ConsumerWidget {
           itemBuilder: (context, index) {
             final puzzle = filteredPuzzles[index];
             final isCompleted = completedIds.contains(puzzle.id);
-            return PuzzleCard(descriptor: puzzle, isCompleted: isCompleted);
+            final isPending = ref
+                .watch(pendingPuzzlesProvider)
+                .any((p) => p.tempId == puzzle.id);
+            return PuzzleCard(
+              descriptor: puzzle,
+              isCompleted: isCompleted,
+              isPending: isPending,
+            );
           },
         ),
       ],

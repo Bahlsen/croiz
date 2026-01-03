@@ -237,8 +237,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirmar Revelar Tudo';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Tem certeza de que deseja revelar todo o puzzle?';
+  String get revealAllConfirmationMessage => 'Tem certeza de que deseja revelar todo o puzzle?';
 
   @override
   String get yes => 'Sim';
@@ -253,8 +252,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get deletePuzzle => 'Excluir Puzzle Gerado';
 
   @override
-  String get deletePuzzleConfirmation =>
-      'Tem certeza de que deseja excluir este puzzle? Esta ação não pode ser desfeita.';
+  String get deletePuzzleConfirmation => 'Tem certeza de que deseja excluir este puzzle? Esta ação não pode ser desfeita.';
+
+  @override
+  String get deleteSuccessMessage => 'Puzzle excluído com sucesso';
 
   @override
   String get cancel => 'Cancelar';

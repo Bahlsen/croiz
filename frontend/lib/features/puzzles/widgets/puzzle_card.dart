@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
-import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/puzzles/logic/generated_puzzles_controller.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 
@@ -17,12 +16,14 @@ class PuzzleCard extends ConsumerWidget {
     required this.descriptor,
     this.completionPercent,
     this.isCompleted = false,
+    this.isPending = false,
     super.key,
   });
 
   final PuzzleDescriptor descriptor;
   final int? completionPercent;
   final bool isCompleted;
+  final bool isPending;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,18 +32,19 @@ class PuzzleCard extends ConsumerWidget {
     final colors = _getDifficultyColors(descriptor.difficulty);
 
     return Opacity(
-      opacity: isCompleted ? 0.6 : 1.0,
+      opacity: isCompleted ? 0.6 : (isPending ? 0.5 : 1.0),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.6.h),
         decoration: BoxDecoration(
           color: isDark ? Colors.grey.shade900 : Colors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
+            if (!isPending)
+              BoxShadow(
+                color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
           ],
           border: Border.all(
             color:
@@ -54,11 +56,12 @@ class PuzzleCard extends ConsumerWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: () => _onTap(context, ref),
+            onTap:
+                (isPending || isCompleted) ? null : () => _onTap(context, ref),
             onLongPress:
-                descriptor.source.isLocal
-                    ? () => _onLongPress(context, ref)
-                    : null,
+                (isPending || !descriptor.source.isLocal)
+                    ? null
+                    : () => _onLongPress(context, ref),
             child: IntrinsicHeight(
               child: Row(
                 children: [
@@ -135,8 +138,11 @@ class PuzzleCard extends ConsumerWidget {
                             ),
                           ),
                           SizedBox(width: 3.w),
-                          // Right Section: Progress
-                          _buildProgressIndicator(theme, colors.last),
+                          // Right Section: Progress or Pending Indicator
+                          if (isPending)
+                            _buildPendingIndicator(theme, colors.last)
+                          else
+                            _buildProgressIndicator(theme, colors.last),
                         ],
                       ),
                     ),
@@ -202,7 +208,7 @@ class PuzzleCard extends ConsumerWidget {
             SnackBar(
               duration: const Duration(seconds: 4),
               content: Text(
-                AppLocalizations.of(context)?.successMessage ??
+                AppLocalizations.of(context)?.deleteSuccessMessage ??
                     'Puzzle deleted successfully',
               ),
               backgroundColor: Colors.green,
@@ -299,20 +305,22 @@ class PuzzleCard extends ConsumerWidget {
     );
   }
 
-  List<Color> _getDifficultyColors(int difficulty) {
-    switch (difficulty) {
-      case 1:
-        return [Colors.green, Colors.teal];
-      case 2:
-        return [Colors.amber, Colors.orange];
-      case 3:
-        return [Colors.orange, Colors.deepOrange];
-      case 4:
-        return [Colors.red, Colors.pink];
-      case 5:
-        return [Colors.purple, Colors.indigo];
-      default:
-        return [Colors.grey, Colors.blueGrey];
-    }
-  }
+  Widget _buildPendingIndicator(ThemeData theme, Color primaryColor) =>
+      SizedBox(
+        width: 24,
+        height: 24,
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: primaryColor.withValues(alpha: 0.5),
+        ),
+      );
+
+  List<Color> _getDifficultyColors(int difficulty) => switch (difficulty) {
+    1 => [Colors.green, Colors.teal],
+    2 => [Colors.amber, Colors.orange],
+    3 => [Colors.orange, Colors.deepOrange],
+    4 => [Colors.red, Colors.pink],
+    5 => [Colors.purple, Colors.indigo],
+    _ => [Colors.grey, Colors.blueGrey],
+  };
 }

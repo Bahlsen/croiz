@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'puzzles_provider.dart';
+import 'pending_puzzles_provider.dart';
 import 'puzzle_filter_provider.dart';
 import '../../services/persistence/hive_puzzle_storage.dart';
 
@@ -60,6 +61,7 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
   final filterState = ref.watch(puzzleFilterProvider);
   final completedIdsAsync = ref.watch(completedPuzzleIdsProvider);
   final availableLanguages = ref.watch(availableLanguagesProvider);
+  final pendingPuzzles = ref.watch(pendingPuzzlesProvider);
 
   // Get completed IDs set (empty if loading/error)
   final completedIds = completedIdsAsync.when(
@@ -68,7 +70,7 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
     error: (e, s) => <String>{},
   );
 
-  return puzzlesAsync.when(
+  final filtered = puzzlesAsync.when(
     data:
         (puzzles) => _filterPuzzles(
           puzzles,
@@ -79,6 +81,14 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
     loading: () => [],
     error: (e, s) => [],
   );
+
+  // Prepend pending puzzles (they are always relevant to the user who just clicked generate)
+  // We convert them to descriptors for uniform handling, but the UI will check against
+  // pendingPuzzlesProvider to show the "ghost" state.
+  final pendingDescriptors =
+      pendingPuzzles.map((p) => p.toDescriptor()).toList();
+
+  return [...pendingDescriptors, ...filtered];
 });
 
 /// Filter puzzles based on the current filter state.

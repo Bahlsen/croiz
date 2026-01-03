@@ -149,7 +149,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'0e294bf4b644b0d171e290f0afbc19b8180b734e';
+String _$gameBoardNotifierHash() => r'5af7615161a296fa2480756b1848c322e7663d4b';
 
 /// Main notifier for the game board state.
 
