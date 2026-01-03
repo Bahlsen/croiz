@@ -191,7 +191,7 @@ class GridGenerator {
     // Build domains: for each remaining word, find all valid positions
     final domains = <GeneratedWord, List<_Move>>{};
     for (final word in remaining) {
-      domains[word] = _findAllValidMoves(word.answer);
+      domains[word] = _findAllValidMoves(word.answer, placed);
     }
 
     // Greedy placement with MRV heuristic and forward checking
@@ -259,6 +259,7 @@ class GridGenerator {
             move.x,
             move.y,
             move.isHorizontal,
+            existingPlacements: placed,
           );
           return score < 0; // Invalid after new placement
         });
@@ -272,14 +273,20 @@ class GridGenerator {
   }
 
   /// Find all valid positions for a word (for MRV heuristic)
-  List<_Move> _findAllValidMoves(String word) {
+  List<_Move> _findAllValidMoves(String word, [List<PlacedWord>? placed]) {
     final moves = <_Move>[];
 
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
         // Try horizontal
         if (x + word.length <= width) {
-          final score = _evaluatePlacement(word, x, y, true);
+          final score = _evaluatePlacement(
+            word,
+            x,
+            y,
+            true,
+            existingPlacements: placed,
+          );
           if (score > 0) {
             moves.add(_Move(x, y, isHorizontal: true, score: score));
           }
@@ -287,7 +294,13 @@ class GridGenerator {
 
         // Try vertical
         if (y + word.length <= height) {
-          final score = _evaluatePlacement(word, x, y, false);
+          final score = _evaluatePlacement(
+            word,
+            x,
+            y,
+            false,
+            existingPlacements: placed,
+          );
           if (score > 0) {
             moves.add(_Move(x, y, isHorizontal: false, score: score));
           }
@@ -504,9 +517,22 @@ class GridGenerator {
 
   /// Returns a score > 0 if valid.
   /// Score = WeightedIntersections - CenterDistancePenalty
-  double _evaluatePlacement(String word, int x, int y, bool isHorizontal) {
+  ///
+  /// Solution 4 from GENERATION_DOCUMENTATION.md Appendix F:
+  /// - Diversity Bonus: Rewards connecting to multiple different words
+  /// - Anti-Spine Penalty: Penalizes placements that would create a spine pattern
+  double _evaluatePlacement(
+    String word,
+    int x,
+    int y,
+    bool isHorizontal, {
+    List<PlacedWord>? existingPlacements,
+  }) {
     var intersections = 0;
     var weightedIntersectionScore = 0.0;
+
+    // Track which cells we intersect for diversity calculation
+    final intersectedCells = <String>[];
 
     // 1. Validity Check & Intersection Count
     for (var i = 0; i < word.length; i++) {
@@ -523,6 +549,7 @@ class GridGenerator {
           return -1; // Mismatch
         }
         intersections++;
+        intersectedCells.add('$cx,$cy');
         // Boost score for difficult letters
         final weights = _getWeights(_currentLanguage);
         final weight = weights[char.toUpperCase()] ?? 1;
@@ -544,35 +571,190 @@ class GridGenerator {
       return -1;
     }
 
-    // Constraint: Must intersect at least once (unless it's the very first word, but this func is for subsequent words)
-    // Actually, in `_generateSinglePass`, we already placed the first word.
-    // So all subsequent words MUST attach.
+    // Constraint: Must intersect at least once
     if (intersections == 0) {
       return -1;
     }
 
-    // 2. Score Calculation:
-    // Removed Gravity Penalty to encourage using the full grid size provided by the user.
-    // We want the puzzle to expand to the edges if possible.
+    // 2. Score Calculation
 
     // Bonus for longer words (more letters = higher density contribution)
     final lengthBonus = word.length * 10.0;
 
     // Multi-intersection bonus: exponentially reward words that connect at multiple points
-    // This creates a more "woven" structure that's harder to place words into gaps
-    // Increased bonus to strongly favor multi-intersections
     final multiIntersectionBonus =
-        intersections > 1
-            ? intersections * intersections * 100.0
-            : 0.0; // Doubled from 50
+        intersections > 1 ? intersections * intersections * 200.0 : 0.0;
 
-    // Final Score: Rewards hard intersections, long words, and multi-connections
-    // We boost the base value of an intersection to ensure it's always worth it
-    // Increased intersection base score from 200 to 300 to favor more crossings
+    // ==== SOLUTION 4: DIVERSITY BONUS ====
+    // Count how many UNIQUE words this placement intersects with
+    // This prevents the "spine" pattern where all words connect to just one word
+    var diversityBonus = 0.0;
+    var antiSpinePenalty = 0.0;
+
+    if (existingPlacements != null && existingPlacements.isNotEmpty) {
+      final uniqueWordsIntersected = _countUniqueWordsIntersected(
+        intersectedCells,
+        existingPlacements,
+      );
+
+      // Diversity Bonus: +500 points for each unique word we connect to
+      // This strongly encourages connecting to multiple different words
+      diversityBonus = uniqueWordsIntersected * 500.0;
+
+      // Anti-Spine Penalty: If we only connect to ONE word and there are already
+      // 4+ words placed, this creates a "spoke" pattern. Penalize it.
+      if (uniqueWordsIntersected == 1 && existingPlacements.length >= 4) {
+        // Check if we would be creating a spine pattern
+        final spineCheck = _wouldCreateSpinePattern(
+          existingPlacements,
+          intersectedCells,
+        );
+        if (spineCheck) {
+          antiSpinePenalty =
+              -1000.0; // Strong penalty for spine-creating placements
+        }
+      }
+    }
+
+    // ==== ORIENTATION BALANCE BONUS ====
+    // Encourage balanced mix of horizontal and vertical words
+    var orientationBonus = 0.0;
+    if (existingPlacements != null && existingPlacements.length >= 2) {
+      final horizontalCount =
+          existingPlacements.where((pw) => pw.isHorizontal).length;
+      final verticalCount = existingPlacements.length - horizontalCount;
+
+      // Give bonus to the minority orientation to restore balance
+      if (horizontalCount > verticalCount && !isHorizontal) {
+        // This is a vertical placement when we have more horizontal
+        orientationBonus = (horizontalCount - verticalCount) * 50.0;
+      } else if (verticalCount > horizontalCount && isHorizontal) {
+        // This is a horizontal placement when we have more vertical
+        orientationBonus = (verticalCount - horizontalCount) * 50.0;
+      }
+    }
+
+    // Final Score
     return weightedIntersectionScore +
-        (intersections * 300.0) + // Increased from 200
+        (intersections * 300.0) +
         lengthBonus +
-        multiIntersectionBonus;
+        multiIntersectionBonus +
+        diversityBonus +
+        antiSpinePenalty +
+        orientationBonus;
+  }
+
+  /// Count how many unique existing words this placement would intersect with.
+  ///
+  /// For example, if the new word crosses "HELLO" at position 3 and "WORLD" at position 5,
+  /// this returns 2 (two unique words).
+  int _countUniqueWordsIntersected(
+    List<String> intersectedCells,
+    List<PlacedWord> existingPlacements,
+  ) {
+    final intersectedWords = <int>{}; // Set of word indices
+
+    for (final cellKey in intersectedCells) {
+      final parts = cellKey.split(',');
+      final cellX = int.parse(parts[0]);
+      final cellY = int.parse(parts[1]);
+
+      // Find which existing word owns this cell
+      for (var i = 0; i < existingPlacements.length; i++) {
+        final pw = existingPlacements[i];
+        if (_wordContainsCell(pw, cellX, cellY)) {
+          intersectedWords.add(i);
+        }
+      }
+    }
+
+    return intersectedWords.length;
+  }
+
+  /// Check if a placed word contains a specific cell
+  bool _wordContainsCell(PlacedWord pw, int cellX, int cellY) {
+    for (var i = 0; i < pw.word.answer.length; i++) {
+      final wx = pw.isHorizontal ? pw.startX + i : pw.startX;
+      final wy = pw.isHorizontal ? pw.startY : pw.startY + i;
+      if (wx == cellX && wy == cellY) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /// Check if adding a word at these intersection points would create a spine pattern.
+  ///
+  /// A spine pattern occurs when one word becomes the "hub" for most other words.
+  /// We detect this by checking if the word we're connecting to already has
+  /// too many connections (> 50% of all placed words connect to it).
+  bool _wouldCreateSpinePattern(
+    List<PlacedWord> existingPlacements,
+    List<String> intersectedCells,
+  ) {
+    if (existingPlacements.length < 4) {
+      return false; // Too few words to form a spine
+    }
+
+    // Find which word we're connecting to
+    int? connectedWordIndex;
+    for (final cellKey in intersectedCells) {
+      final parts = cellKey.split(',');
+      final cellX = int.parse(parts[0]);
+      final cellY = int.parse(parts[1]);
+
+      for (var i = 0; i < existingPlacements.length; i++) {
+        if (_wordContainsCell(existingPlacements[i], cellX, cellY)) {
+          connectedWordIndex = i;
+          break;
+        }
+      }
+      if (connectedWordIndex != null) {
+        break;
+      }
+    }
+
+    if (connectedWordIndex == null) {
+      return false;
+    }
+
+    // Count how many OTHER words already connect to this word
+    final connectedWord = existingPlacements[connectedWordIndex];
+    var connectionCount = 0;
+
+    for (var i = 0; i < existingPlacements.length; i++) {
+      if (i == connectedWordIndex) {
+        continue;
+      }
+
+      final otherWord = existingPlacements[i];
+      if (_wordsIntersect(connectedWord, otherWord)) {
+        connectionCount++;
+      }
+    }
+
+    // If this word already has > 70% of all words connected to it,
+    // adding another connection would strengthen the spine pattern
+    final threshold = existingPlacements.length * 0.7;
+    return connectionCount >= threshold;
+  }
+
+  /// Check if two placed words share any cell (intersect)
+  bool _wordsIntersect(PlacedWord word1, PlacedWord word2) {
+    for (var i = 0; i < word1.word.answer.length; i++) {
+      final x1 = word1.isHorizontal ? word1.startX + i : word1.startX;
+      final y1 = word1.isHorizontal ? word1.startY : word1.startY + i;
+
+      for (var j = 0; j < word2.word.answer.length; j++) {
+        final x2 = word2.isHorizontal ? word2.startX + j : word2.startX;
+        final y2 = word2.isHorizontal ? word2.startY : word2.startY + j;
+
+        if (x1 == x2 && y1 == y2) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /// Checks if placing a character at x,y (as part of a word flowing isHorizontal)

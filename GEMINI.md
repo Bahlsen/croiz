@@ -8,14 +8,19 @@ Read and follow ALL instructions from that file, including:
 - Go to frontend folder when working on the app (frontend folder is the root of the flutter project)
 - TDD (Test-Driven Development) practices
 - Auto-linting policy (dart format, dart fix --apply, flutter analyze, flutter test)
-- **Auto-execution policy**: L'utilisateur a donné "carte blanche" pour l'exécution automatique de TOUTES les commandes du terminal (y compris les commandes de développement, système, etc.), À L'EXCEPTION STRICTE de `rm` (suppression) et `push` (git push). Marquer systématiquement `SafeToAutoRun: true` pour toutes les autres commandes.
+- **Auto-execution policy**: L'utilisateur a donné "carte blanche". Cependant, le filtre de sécurité Antigravity bloque les pipes `|`.
+  - **RÈGLE CRITIQUE** : Ne JAMAIS utiliser de pipes `|` dans les commandes `run_command`.
+  - Utilisez simplement la commande brute : `flutter test ...`.
+  - L'agent gérera la lecture de la sortie via ses outils internes.
+  - Marquer `SafeToAutoRun: true` pour ces commandes sans pipes.
 - KISS, DRY, and SOLID principles
 - Clean Code as defined by Robert C. Martin
 - Dart strict mode and null safety best practices
 - Never ignore linting or analysis issues
 - Always write tests before implementing features
 - Use "Deploy APK to Phone (USB) - Debug" launcher to hot reload (if a session is active, nothing to do it will hot reload automatically)
-- **Mandatory Final Check**: After each dev task, ALWAYS check `current_problems` and fix ALL reported issues.
+- **Mandatory Final Check**: After each dev task, ALWAYS check and fix ALL availability issues (linter errors, warnings) reported by `flutter analyze`. Treat `current_problems` as the IDE's "Problems" view.
+- **Generation Logic**: Always use the **Grid-First (v3.0)** architecture (GADDAG + CSP) for generation tasks. Do NOT downgrade to greedy algorithms. See `frontend/lib/features/generation/GENERATION_DOCUMENTATION.md`.
 
 ## Quick Reference
 

@@ -60,6 +60,12 @@ You DO NOT need to ask permission for : run flutter analyze, run the widget test
 NEVER implement fallbacks, alternative solutions, or extra features unless explicitly requested by the user.
 ALWAYS add tests for any new feature or bug fix.
 
+## Command Execution Policy
+- **Auto-execution**: You have "carte blanche", BUT Antigravity security blocks pipes `|`.
+- **CRITICAL RULE**: NEVER use pipes `|` in `run_command`.
+- **CORRECT USAGE**: Run raw commands like `flutter test ...`. Do NOT try to filter output with `Select-Object`.
+- Always set `SafeToAutoRun: true` for these pipe-free commands.
+
 ALWAYS ensure that the code you write builds.
 
 

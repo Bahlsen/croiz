@@ -44,7 +44,7 @@ flutter test --coverage --no-pub
 ```powershell
 cd frontend
 # Utilise des jokers et regex pour capturer FAIL, Error, Exception, failed, etc.
-flutter test --no-pub 2>&1 | Select-String -Pattern "FAIL.*", ".*Error.*", ".*Exception.*", ".*failed.*", ".*timeout.*" -Context 2, 5 | Select-Object -First 100
+flutter test --no-pub | Select-String -Pattern "FAIL.*", ".*Error.*", ".*Exception.*", ".*failed.*", ".*timeout.*" -Context 2, 5 | Select-Object -First 100
 ```
 
 ### 7. Nettoyer le projet

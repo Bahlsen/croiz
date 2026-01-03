@@ -154,6 +154,13 @@ final dioProvider = Provider<Dio>(...);
 
 // Secure Storage
 final secureStorageProvider = Provider<FlutterSecureStorage>(...);
+ 
+### Client-Side Generation Engine (v3.0)
+ 
+The app now generates puzzles locally using a "Grid-First" approach:
+- **GADDAG Data Structure**: Efficient bidirectional specific-letter lookups.
+- **CSP Solver**: Uses ARC consistency (AC-3) and backtracking (MRV/LCV variables) to fill grids.
+- **Isolates**: Generation runs in background isolates to keep UI responsive.
 ```
 
 ## Backend Architecture (Spring Boot)
@@ -563,4 +570,4 @@ GET /actuator/metrics/http.requests.total
 
 ---
 
-**Last Updated**: November 29, 2025
+**Last Updated**: January 3, 2026

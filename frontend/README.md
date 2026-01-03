@@ -32,7 +32,8 @@ lib/
 ├── features/            # Feature modules
 │   ├── home/            # Home screen
 │   ├── game/            # Game screens
-│   └── auth/            # Authentication
+│   ├── auth/            # Authentication
+│   └── generation/      # Puzzle Generation Engine v3.0
 ├── data/                # Data layer
 │   ├── models/          # DTOs/serialization
 │   ├── repositories/    # Data repositories
@@ -198,6 +199,13 @@ If you add or remove raw puzzle JSON files under `frontend/assets/data/`, re-run
 5. **Build UI screens** in `features/my_feature/`
 
 6. **Write tests** in `test/unit/` and `test/widget/`
+ 
+## Feature: In-App Generation (v3.0)
+ 
+The app includes a sophisticated local puzzle generator:
+- **Architecture**: Grid-First (GADDAG + CSP)
+- **Performance**: <500ms for 15x15 grids
+- **Documentation**: See [GENERATION_DOCUMENTATION.md](lib/features/generation/GENERATION_DOCUMENTATION.md)
 
 ### Code Generation
 

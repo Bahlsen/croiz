@@ -11,7 +11,7 @@ croiz/
 ├── frontend/          # Flutter mobile application (Riverpod state management)
 ├── backend/           # Spring Boot REST API
 ├── shared/            # Shared models and constants
-├── tools/             # Python puzzle generation scripts
+├── tools/             # Legacy/Utility scripts (Python)
 ├── .github/workflows/ # CI/CD pipelines
 └── docs/              # Project documentation
 ```
@@ -87,17 +87,13 @@ cd backend
 ```
 
 ### Puzzle Generation
+ 
+The project now features a robust **In-App Generation Engine v3.0** (Dart):
+- **Grid-First Architecture**: Uses CSP solver and GADDAG for high-quality grids.
+- **On-Device**: No backend required for generation.
+- **Multilingual**: Supports English, French, Spanish, German, etc.
 
-```powershell
-# Navigate to tools directory
-cd tools
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Generate a puzzle
-python generate_puzzle.py
-```
+ Legacy Python scripts are in `tools/` but the core generation is now in `frontend/features/generation/`.
 
 ## Testing
 
