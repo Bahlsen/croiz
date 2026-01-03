@@ -2,6 +2,7 @@ import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
 import 'package:croiz/features/generation/services/grid_generator.dart';
+import 'package:croiz/features/generation/utils/grid_validator.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
@@ -50,6 +51,16 @@ class PuzzleGenerationOrchestrator {
       throw UserFriendlyException(
         'Unable to create a puzzle grid. Please try again or choose a different difficulty.',
         technicalDetails: 'Grid generator returned 0 placed words',
+      );
+    }
+
+    // 2b. Strict Validation
+    final validation = GridValidator.validate(placedWords, size, size);
+    if (!validation.isValid) {
+      throw UserFriendlyException(
+        'The generated puzzle contains structural errors. Please try again or choose a different topic.',
+        technicalDetails:
+            'Grid validation failed: ${validation.errors.join("; ")}',
       );
     }
 
