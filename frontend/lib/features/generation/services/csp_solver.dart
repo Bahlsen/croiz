@@ -455,13 +455,15 @@ class CrosswordCSPSolver {
         // Count compatible words in neighbor's domain
         // Optimization: Use forward checking concept here too?
         // For now, keep it simple but maybe limit the check if domain is huge.
-        int count = 0;
+        var count = 0;
         final neighborDomain = _domains[neighbor]!;
-        final limit = 100; // Sample first 100 if huge
+        const limit = 100; // Sample first 100 if huge
         var checked = 0;
 
         for (final w in neighborDomain) {
-          if (checked++ > limit) break;
+          if (checked++ > limit) {
+            break;
+          }
           if (posInNeighbor < w.length && w[posInNeighbor] == letter) {
             count++;
           }

@@ -7,9 +7,9 @@ void main() {
   group('GridFirstGenerator', () {
     test('defaults are configured correctly', () {
       final generator = GridFirstGenerator(width: 15, height: 15);
-      expect(generator.targetBlackRatio, 0.22);
+      expect(generator.targetBlackRatio, 0.18); // Professional standard
       expect(generator.minWordLength, 3);
-      expect(generator.maxAttempts, 100);
+      expect(generator.maxAttempts, 150); // More attempts for denser grids
     });
 
     test('generate produces valid grid with sufficient words', () {

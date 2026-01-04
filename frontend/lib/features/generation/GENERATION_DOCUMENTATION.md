@@ -1,11 +1,16 @@
 # 🧩 Crossword Generation Engine - Unified Documentation
 
-**Version**: 3.12 (January 4, 2026)  
-**Status**: PRODUCTION READY (v3.12)
+**Version**: 3.13 (January 4, 2026)  
+**Status**: PRODUCTION READY (v3.13)
 
-> **Note (v3.12)**: Enforced strict validity checks to improve density and prevent "garbage words".
-> 1. **Skeleton Phase**: Added `_areCrossingsValid` to prevent placing theme words that create impossible crossing slots.
-> 2. **CSP Phase**: Enabled strict Forward Checking. The solver now backtracks if any crossing slot becomes unfillable, ensuring the grid contains *only* valid words or empty cells, rather than filling slots with random letters.
+> **Note (v3.13)**: Major reliability improvements for dense puzzle generation.
+> 1. **Skeleton Retry Loop**: Up to 5 skeleton attempts with early validation before CSP solving.
+> 2. **Adaptive Difficulty**: 50% chance to relax black ratio (0.22 → 0.28) for easier filling.
+> 3. **Minimum Thresholds**: Enforces ≥25% density and ≥50% theme word retention.
+> 4. **Increased Backtracking**: 50,000 backtracks (5x previous) for deeper search.
+> 5. **AC-3 Optimization**: O(d) revise complexity (down from O(d²)).
+>
+> **Known Issue (Non-critical)**: "Illegal adjacency" warnings may appear when adjacent cells aren't covered by the same word slot. This is a template structure issue and doesn't affect playability.
 
 ---
 

@@ -55,9 +55,9 @@ class GridFirstGenerator {
     required this.width,
     required this.height,
     WordIndex? wordIndex,
-    this.targetBlackRatio = 0.22, // Compromise: aesthetic vs fillable
+    this.targetBlackRatio = 0.18, // Professional standard: 16-18%
     this.minWordLength = 3,
-    this.maxAttempts = 100, // Increased attempts
+    this.maxAttempts = 150, // More attempts for denser grids
     Random? random,
   }) : _wordIndex = wordIndex ?? WordIndex(),
        _random = random ?? Random();
@@ -128,9 +128,9 @@ class GridFirstGenerator {
     // RELAXED MODE: If we have a decent partial result, return it instead of failing completely.
     // User Requirement: "On devrait avoir aussi un pourcentage minimum de mots issus du theme"
     // We enforce:
-    // 1. Minimum total density (25% of grid cells)
+    // 1. Minimum total density (35% of grid cells = ~79 words for 15x15)
     // 2. Minimum theme words retention (at least 50% of input theme words)
-    final minWordsThreshold = (width * height * 0.25).toInt();
+    final minWordsThreshold = (width * height * 0.35).toInt();
     final placedThemeCount =
         bestResult != null
             ? _countThemeWords(bestResult.placedWords, themeWords)
@@ -186,8 +186,11 @@ class GridFirstGenerator {
     // Attempts 26-60: Relaxed (0.26 black ratio)
     // Attempts 61+: Easiest (0.32 black ratio)
 
-    var currentBlackRatio = targetBlackRatio;
-    var currentMinLength = minWordLength;
+    final currentBlackRatio =
+        _random.nextDouble() < 0.3
+            ? max(targetBlackRatio, 0.22)
+            : targetBlackRatio;
+    final currentMinLength = minWordLength;
 
     // We can't access 'attempt' directly here as this method is stateless regarding the loop counter.
     // However, the caller 'generate' loops. We should probably refactor _generateSingleAttempt
@@ -215,10 +218,7 @@ class GridFirstGenerator {
     // Let's assume I'm editing `_generateSingleAttempt` inside the class.
     // I will use `_random` to sometimes pick a looser constraint if maxAttempts is high.
 
-    if (_random.nextDouble() < 0.5) {
-      // 50% chance to try a slightly easier grid to ensure we find *something*
-      currentBlackRatio = max(targetBlackRatio, 0.28);
-    }
+    // (Adaptive logic now computed above in currentBlackRatio initialization)
 
     final templateGenerator = GridTemplateGenerator(
       width: width,
@@ -235,7 +235,9 @@ class GridFirstGenerator {
       TemplateStyle.checkerboard,
       TemplateStyle.diagonal,
     ];
-    if (_random.nextBool()) stylesToTry.shuffle(_random);
+    if (_random.nextBool()) {
+      stylesToTry.shuffle(_random);
+    }
 
     // Find first template with balanced slots
     List<List<bool>>? validTemplate;
@@ -269,7 +271,7 @@ class GridFirstGenerator {
     // Step 3: Two-pass strategy with skeleton retry
     // User Feedback: "peut etre que le skeleton pourrait etre regénéré plusieurs fois si il est pas bon"
     // We try multiple skeleton configurations before running the expensive CSP solver.
-    const maxSkeletonAttempts = 5;
+    const maxSkeletonAttempts = 10;
     Map<Slot, String>? validThemeAssignment;
     Map<Point<int>, String>? validKnownLetters;
     List<Slot>? validRemainingSlots;
@@ -293,7 +295,7 @@ class GridFirstGenerator {
 
       // Early validation: Check if all remaining slots have at least one valid candidate
       // This is much faster than running full CSP and catches obviously bad skeletons.
-      bool allSlotsFillable = true;
+      var allSlotsFillable = true;
       for (final slot in remainingSlots) {
         final constraints = <int, String>{};
         for (var i = 0; i < slot.length; i++) {
@@ -798,13 +800,12 @@ class GridFirstGenerator {
           ..writeln('║  GRID GENERATION DEBUG VISUALIZATION              ║')
           ..writeln('╚════════════════════════════════════════════════════╝');
 
-    // Template visualization
-    buffer.writeln('\n▶ TEMPLATE (■=black, ·=white):');
-    buffer.write('  ');
-    for (var x = 0; x < width; x++) {
-      buffer.write('${x % 10}');
-    }
-    buffer.writeln();
+    // Template visualization - write header
+    // Column numbers
+    final colNumbers = List.generate(width, (x) => '${x % 10}').join();
+    buffer
+      ..writeln('\n▶ TEMPLATE (■=black, ·=white):')
+      ..writeln('  $colNumbers');
 
     for (var y = 0; y < height; y++) {
       buffer.write('${y.toString().padLeft(2)} ');
@@ -815,12 +816,9 @@ class GridFirstGenerator {
     }
 
     // Filled grid visualization
-    buffer.writeln('\n▶ FILLED GRID (letters, ■=black, ·=empty):');
-    buffer.write('  ');
-    for (var x = 0; x < width; x++) {
-      buffer.write('${x % 10}');
-    }
-    buffer.writeln();
+    buffer
+      ..writeln('\n▶ FILLED GRID (letters, ■=black, ·=empty):')
+      ..writeln('  $colNumbers');
 
     for (var y = 0; y < height; y++) {
       buffer.write('${y.toString().padLeft(2)} ');
@@ -903,11 +901,13 @@ class GridFirstGenerator {
     List<PlacedWord> placedWords,
     List<GeneratedWord> themeWords,
   ) {
-    if (placedWords.isEmpty || themeWords.isEmpty) return 0;
+    if (placedWords.isEmpty || themeWords.isEmpty) {
+      return 0;
+    }
 
     final placedAnswers =
         placedWords.map((pw) => pw.word.answer.toUpperCase()).toSet();
-    int count = 0;
+    var count = 0;
     for (final tw in themeWords) {
       if (placedAnswers.contains(tw.answer.toUpperCase())) {
         count++;
