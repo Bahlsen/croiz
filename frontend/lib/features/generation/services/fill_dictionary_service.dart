@@ -23,7 +23,7 @@ class FillDictionaryService {
     'it': 'it',
     'pt': 'pt',
     'uk': 'uk',
-    'ru': 'uk', // Russian uses Ukrainian dictionary
+    'ru': 'ru', // Russian uses its own dictionary now
   };
 
   /// Load fill dictionary for a specific language.
@@ -46,9 +46,15 @@ class FillDictionaryService {
       final words =
           content
               .split('\n')
-              .map((line) => line.trim().toUpperCase())
+              .map((line) {
+                var normalized = line.trim().toUpperCase();
+                // Normalize: remove spaces, hyphens, apostrophes for multi-word expressions
+                // e.g., "ARC-EN-CIEL" -> "ARCENCIEL"
+                normalized = normalized.replaceAll(RegExp(r"[\s\-']"), '');
+                return normalized;
+              })
               .where((word) {
-                // Skip empty lines and comments
+                // Skip empty lines and comments (checking original line isn't needed if word is empty)
                 if (word.isEmpty ||
                     word.startsWith('#') ||
                     word.startsWith('*')) {

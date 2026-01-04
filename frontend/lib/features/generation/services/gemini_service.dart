@@ -42,7 +42,7 @@ class GeminiPuzzleService {
   Future<List<GeneratedWord>> generateWords({
     required String topic,
     required String language, // 'fr', 'en'
-    int count = 40, // Increased from 25 to provide more placement options
+    int count = 60, // More words with varied lengths for better grid coverage
     int difficultyLevel = 2, // 1-5
   }) async {
     final prompt = buildPrompt(topic, language, count, difficultyLevel);
@@ -185,11 +185,21 @@ class GeminiPuzzleService {
       langConstraints = 'Normalized (A-Z only).';
     }
 
+    // Calculate length distribution for better grid coverage
+    final shortCount = (count * 0.25).round(); // 25% short (3-4 letters)
+    final mediumCount = (count * 0.45).round(); // 45% medium (5-7 letters)
+    final longCount =
+        count - shortCount - mediumCount; // 30% long (8-15 letters)
+
     return '''
 Generate a list of $count distinct, diverse crossword puzzle words related to the topic: "$topic".
-Ensure variety in word lengths (mix of short 3-5 letter words and longer 8-15 letter words) to maximize grid density.
 Language: $langName.
 Difficulty Level: $difficulty/5.
+
+**CRITICAL: Word Length Distribution** (for optimal crossword grid density):
+- $shortCount words of 3-4 letters (short, easy to place, MUST be related to topic)
+- $mediumCount words of 5-7 letters (medium length, core thematic vocabulary)
+- $longCount words of 8-15 letters (long words, essential for anchoring)
 
 Specific Difficulty Instructions:
 $diffInstructions

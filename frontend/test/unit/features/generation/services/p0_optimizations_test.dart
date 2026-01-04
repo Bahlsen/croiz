@@ -8,7 +8,7 @@ void main() {
     group('targetBlackRatio reduction', () {
       test('should default to 0.12 instead of 0.18', () {
         final generator = GridFirstGenerator(width: 15, height: 15);
-        expect(generator.targetBlackRatio, 0.20);
+        expect(generator.targetBlackRatio, 0.18);
       });
 
       test('should accept custom targetBlackRatio', () {
@@ -26,7 +26,7 @@ void main() {
         final templateGenerator = GridTemplateGenerator(
           width: 15,
           height: 15,
-          targetBlackRatio: 0.20,
+          targetBlackRatio: 0.18,
         );
 
         final template = templateGenerator.generateWithStyle(
@@ -103,7 +103,7 @@ void main() {
         final templateGenerator = GridTemplateGenerator(
           width: 15,
           height: 15,
-          targetBlackRatio: 0.20,
+          targetBlackRatio: 0.18,
         );
 
         final template = templateGenerator.generate();

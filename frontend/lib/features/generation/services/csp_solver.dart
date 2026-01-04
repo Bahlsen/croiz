@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 import 'dart:math';
 
 import 'package:croiz/features/generation/models/slot.dart';
-import 'package:croiz/features/generation/services/gaddag.dart';
+import 'package:croiz/features/generation/services/word_index.dart';
 
 /// Result of CSP solving
 class CSPSolveResult {
@@ -30,10 +30,10 @@ class CSPSolveResult {
 /// Crossword CSP Solver using AC-3 and backtracking with MRV/LCV heuristics.
 ///
 /// Solves the constraint satisfaction problem of filling crossword slots
-/// with valid words from a dictionary (GADDAG).
+/// with valid words from a dictionary.
 class CrosswordCSPSolver {
   CrosswordCSPSolver({
-    required this.gaddag,
+    required this.wordIndex,
     required this.slots,
     this.maxBacktracks = 10000,
   }) {
@@ -41,7 +41,7 @@ class CrosswordCSPSolver {
     _buildConstraintGraph();
   }
 
-  final Gaddag gaddag;
+  final WordIndex wordIndex;
   final List<Slot> slots;
   final int maxBacktracks;
 
@@ -63,7 +63,7 @@ class CrosswordCSPSolver {
   /// Initialize domains with all words of correct length
   void _initializeDomains() {
     for (final slot in slots) {
-      final words = gaddag.findWordsByLength(slot.length);
+      final words = wordIndex.findWordsByLength(slot.length);
       _domains[slot] = words.toList();
     }
   }
@@ -150,9 +150,30 @@ class CrosswordCSPSolver {
     final impossibleSlotsCount = slots.length - possibleSlots.length;
 
     if (impossibleSlotsCount > 0) {
-      developer.log(
-        'CSP: Skipping $impossibleSlotsCount impossible slots with 0 matching words.',
-      );
+      // Analyze which lengths are missing
+      final missingByLength = <int, int>{};
+      for (final slot in slots) {
+        if (_domains[slot]!.isEmpty) {
+          missingByLength[slot.length] =
+              (missingByLength[slot.length] ?? 0) + 1;
+        }
+      }
+
+      final buffer =
+          StringBuffer()
+            ..writeln(
+              'CSP: Skipping $impossibleSlotsCount impossible slots with 0 matching words.',
+            )
+            ..writeln('  Missing words by slot length:');
+      final sortedLengths = missingByLength.keys.toList()..sort();
+      for (final len in sortedLengths) {
+        final dictCount = wordIndex.findWordsByLength(len).length;
+        buffer.writeln(
+          '    Length $len: ${missingByLength[len]} slots need words (dictionary has $dictCount)',
+        );
+      }
+
+      developer.log(buffer.toString());
     }
 
     final assignment = <Slot, String>{};
@@ -210,6 +231,7 @@ class CrosswordCSPSolver {
   /// Revise the domain of slotI with respect to slotJ.
   ///
   /// Removes values from slotI's domain that have no support in slotJ's domain.
+  /// Optimized to O(D_I + D_J) instead of O(D_I * D_J).
   bool _revise(Slot slotI, Slot slotJ) {
     var revised = false;
     final intersection = _getIntersection(slotI, slotJ);
@@ -226,21 +248,22 @@ class CrosswordCSPSolver {
             ? intersection.positionInHorizontal
             : intersection.positionInVertical;
 
+    // optimization: Pre-calculate the set of valid characters in slotJ at posJ
+    final validCharsInJ = <String>{};
+    for (final wordJ in _domains[slotJ]!) {
+      if (posJ < wordJ.length) {
+        validCharsInJ.add(wordJ[posJ]);
+      }
+    }
+
     _domains[slotI]!.removeWhere((wordI) {
       if (posI >= wordI.length) {
         return true;
       }
       final letterI = wordI[posI];
 
-      // Check if any word in slotJ's domain supports this letter
-      final hasSupport = _domains[slotJ]!.any((wordJ) {
-        if (posJ >= wordJ.length) {
-          return false;
-        }
-        return wordJ[posJ] == letterI;
-      });
-
-      if (!hasSupport) {
+      // Check if letterI exists in the set of valid characters
+      if (!validCharsInJ.contains(letterI)) {
         revised = true;
         return true;
       }
@@ -261,6 +284,7 @@ class CrosswordCSPSolver {
     Map<Slot, String> assignment,
     List<Slot> activeSlots,
   ) {
+    // Check timeout/limit
     _backtracks++;
     if (_backtracks > maxBacktracks) {
       return null; // Exceeded limit
@@ -287,7 +311,13 @@ class CrosswordCSPSolver {
     }
 
     // LCV: Order values by least constraining
-    final orderedWords = _orderByLCV(slot, domain, assignment);
+    // Optimization: If domain is huge, LCV sorting can be expensive (D * neighbors * D_neighbor).
+    // For large dictionaries, we might skip LCV or simplify it.
+    // We'll keep it but restrict how many words we verify if domain is massive (>1000).
+    var orderedWords = domain;
+    if (domain.length < 500) {
+      orderedWords = _orderByLCV(slot, domain, assignment);
+    }
 
     for (final word in orderedWords) {
       if (_isConsistent(slot, word, assignment)) {
@@ -303,14 +333,26 @@ class CrosswordCSPSolver {
         final savedDomains = _saveState();
         _forwardCheck(slot, word, assignment);
 
-        // In sparse dictionary mode, we don't discard if a neighbor's domain is wiped.
-        // We just proceed to fill as much as we can. The neighbor will simply remain empty.
-        final result = _backtrack(assignment, activeSlots);
-        if (result != null) {
-          return result;
+        // Check if any neighbor domain became empty (Strict Mode)
+        // If placing this word makes a neighbor impossible to fill, it's an invalid move.
+        // This prevents creating "garbage words" in crossing slots.
+        var validMove = true;
+        for (final neighbor in _neighbors[slot]!) {
+          if (!assignment.containsKey(neighbor) &&
+              _domains[neighbor]!.isEmpty) {
+            validMove = false;
+            break;
+          }
         }
 
-        // Backtrack: restore state
+        if (validMove) {
+          final result = _backtrack(assignment, activeSlots);
+          if (result != null) {
+            return result;
+          }
+        }
+
+        // Backtrack: restore state (if move was invalid or recursive search failed)
         _restoreState(savedDomains);
         assignment.remove(slot);
       }
@@ -411,13 +453,20 @@ class CrosswordCSPSolver {
         final letter = word[posInSlot];
 
         // Count compatible words in neighbor's domain
-        score +=
-            _domains[neighbor]!.where((w) {
-              if (posInNeighbor >= w.length) {
-                return false;
-              }
-              return w[posInNeighbor] == letter;
-            }).length;
+        // Optimization: Use forward checking concept here too?
+        // For now, keep it simple but maybe limit the check if domain is huge.
+        int count = 0;
+        final neighborDomain = _domains[neighbor]!;
+        final limit = 100; // Sample first 100 if huge
+        var checked = 0;
+
+        for (final w in neighborDomain) {
+          if (checked++ > limit) break;
+          if (posInNeighbor < w.length && w[posInNeighbor] == letter) {
+            count++;
+          }
+        }
+        score += count;
       }
       scores[word] = score;
     }

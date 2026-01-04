@@ -1,7 +1,11 @@
 import 'dart:developer' as developer;
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
+import 'package:croiz/features/generation/models/generated_word.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/features/generation/services/gemini_service.dart';
+
 import 'package:croiz/features/generation/models/placed_word.dart';
 import 'package:croiz/features/generation/services/fill_dictionary_service.dart';
 import 'package:croiz/features/generation/services/grid_first_generator.dart';
@@ -36,7 +40,7 @@ class PuzzleGenerationOrchestrator {
       difficultyLevel: difficulty,
       count:
           size *
-          4, // Request proportional word count (need strict surplus for density)
+          5, // Request more thematic words (75 for 15x15) to ensure density
     );
 
     if (words.length < 5) {
@@ -55,12 +59,18 @@ class PuzzleGenerationOrchestrator {
         // 2. Load Fill Dictionary (v3 Requirement)
         final fillWords = await _fillService.loadDictionary(language);
 
-        // 3. Build Grid (Grid-First v3)
-        final generator = GridFirstGenerator(width: size, height: size);
-        final result = generator.generate(
-          themeWords: words,
-          fillWords: fillWords,
-        );
+        // 3. Build Grid (Grid-First v3) - Run in Isolate to avoid UI freeze
+        // Serialize GeneratedWord to Map for isolate transfer
+        final themeWordData =
+            words.map((w) => {'answer': w.answer, 'clue': w.clue}).toList();
+
+        final result = await compute(_runGenerationInIsolate, {
+          'width': size,
+          'height': size,
+          'targetBlackRatio': 0.22,
+          'themeWords': themeWordData,
+          'fillWords': fillWords,
+        });
         // RELAXED CHECK: If we have a good number of words, we accept it.
         // The generator now returns the best attempt even if 'success' is false.
         if (result.placedWords.length < 5) {
@@ -427,3 +437,32 @@ final puzzleGenerationOrchestratorProvider =
         ref.watch(fillDictionaryServiceProvider),
       ),
     );
+
+/// Isolated entry point for grid generation to prevent UI jank.
+/// Uses serialized data (Maps) instead of complex objects for isolate transfer.
+GridFirstResult _runGenerationInIsolate(Map<String, dynamic> params) {
+  final width = params['width'] as int;
+  final height = params['height'] as int;
+  final targetBlackRatio = params['targetBlackRatio'] as double;
+  final themeWordData = params['themeWords'] as List<dynamic>;
+  final fillWords = params['fillWords'] as List<String>;
+
+  // Reconstruct GeneratedWord objects from serialized data
+  final themeWords =
+      themeWordData
+          .map(
+            (data) => GeneratedWord(
+              answer: data['answer'] as String,
+              clue: data['clue'] as String,
+            ),
+          )
+          .toList();
+
+  final generator = GridFirstGenerator(
+    width: width,
+    height: height,
+    targetBlackRatio: targetBlackRatio,
+  );
+
+  return generator.generate(themeWords: themeWords, fillWords: fillWords);
+}

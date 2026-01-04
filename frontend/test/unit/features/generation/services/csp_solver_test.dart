@@ -2,15 +2,15 @@ import 'dart:math';
 
 import 'package:croiz/features/generation/models/slot.dart';
 import 'package:croiz/features/generation/services/csp_solver.dart';
-import 'package:croiz/features/generation/services/gaddag.dart';
+import 'package:croiz/features/generation/services/word_index.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('CrosswordCSPSolver', () {
-    late Gaddag gaddag;
+    late WordIndex wordIndex;
 
     setUp(() {
-      gaddag = Gaddag();
+      wordIndex = WordIndex();
     });
 
     test('should solve simple 2-slot puzzle', () {
@@ -31,10 +31,10 @@ void main() {
       );
 
       // Words: CAT (horizontal), BAT (vertical - shares A at position 1)
-      gaddag.build(['CAT', 'BAT', 'DOG', 'HAT']);
+      wordIndex.build(['CAT', 'BAT', 'DOG', 'HAT']);
 
       final solver = CrosswordCSPSolver(
-        gaddag: gaddag,
+        wordIndex: wordIndex,
         slots: [horizontalSlot, verticalSlot],
       );
 
@@ -58,9 +58,9 @@ void main() {
         length: 3,
       );
 
-      final gaddag = Gaddag()..build(['CAT', 'BAT', 'HAT', 'DOG']);
+      final wordIndex = WordIndex()..build(['CAT', 'BAT', 'HAT', 'DOG']);
 
-      final solver = CrosswordCSPSolver(gaddag: gaddag, slots: [slot])
+      final solver = CrosswordCSPSolver(wordIndex: wordIndex, slots: [slot])
         ..applyKnownLetters({const Point(0, 0): 'C'});
 
       final result = solver.solve();
@@ -90,9 +90,12 @@ void main() {
       // 4-letter words have 'S' at position 2: TEST, BEST
       // 3-letter words all start with different letters: CAT, DOG
       // No 3-letter word starts with 'S', so unsolvable
-      gaddag.build(['TEST', 'BEST', 'CAT', 'DOG']);
+      wordIndex.build(['TEST', 'BEST', 'CAT', 'DOG']);
 
-      final solver = CrosswordCSPSolver(gaddag: gaddag, slots: [slot1, slot2]);
+      final solver = CrosswordCSPSolver(
+        wordIndex: wordIndex,
+        slots: [slot1, slot2],
+      );
 
       final result = solver.solve();
 
@@ -122,10 +125,10 @@ void main() {
       );
 
       // CAT intersects with words having A in middle
-      gaddag.build(['CAT', 'BAT', 'DAG', 'HAG', 'BAG']);
+      wordIndex.build(['CAT', 'BAT', 'DAG', 'HAG', 'BAG']);
 
       final solver = CrosswordCSPSolver(
-        gaddag: gaddag,
+        wordIndex: wordIndex,
         slots: [horizontal, vertical],
       );
 
@@ -167,10 +170,10 @@ void main() {
       }
 
       // Limited dictionary that might not fill all slots
-      gaddag.build(['APPLE', 'AMPLE', 'ANGST']);
+      wordIndex.build(['APPLE', 'AMPLE', 'ANGST']);
 
       final solver = CrosswordCSPSolver(
-        gaddag: gaddag,
+        wordIndex: wordIndex,
         slots: slots,
         maxBacktracks: 100, // Low limit to force early termination
       );
@@ -206,14 +209,14 @@ void main() {
       );
 
       // Many 3-letter, few 4-letter, one 5-letter word
-      gaddag.build([
+      wordIndex.build([
         'CAT', 'BAT', 'HAT', 'RAT', 'SAT', // 3-letter
         'FISH', 'BIRD', // 4-letter
         'APPLE', // 5-letter
       ]);
 
       final solver = CrosswordCSPSolver(
-        gaddag: gaddag,
+        wordIndex: wordIndex,
         slots: [slot1, slot2, slot3],
       );
 
@@ -224,7 +227,7 @@ void main() {
     });
 
     test('should handle empty slots list', () {
-      final solver = CrosswordCSPSolver(gaddag: gaddag, slots: []);
+      final solver = CrosswordCSPSolver(wordIndex: wordIndex, slots: []);
 
       final result = solver.solve();
 
@@ -241,9 +244,9 @@ void main() {
         length: 4,
       );
 
-      gaddag.build(['TEST', 'BEST', 'NEST']);
+      wordIndex.build(['TEST', 'BEST', 'NEST']);
 
-      final solver = CrosswordCSPSolver(gaddag: gaddag, slots: [slot]);
+      final solver = CrosswordCSPSolver(wordIndex: wordIndex, slots: [slot]);
 
       final result = solver.solve();
 

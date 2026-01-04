@@ -11,7 +11,7 @@ class GridTemplateGenerator {
   GridTemplateGenerator({
     required this.width,
     required this.height,
-    this.targetBlackRatio = 0.20,
+    this.targetBlackRatio = 0.22, // Compromise: aesthetic vs fillable
     this.minWordLength = 3,
     Random? random,
   }) : _random = random ?? Random();
@@ -30,14 +30,31 @@ class GridTemplateGenerator {
     final targetBlacks = (width * height * targetBlackRatio / 2).round();
     var placedBlacks = 0;
     var attempts = 0;
-    const maxAttempts = 1000;
+    const maxAttempts = 2000;
+
+    // Use grid zones for better distribution
+    final zones = _generateZonePositions();
+    var zoneIndex = 0;
 
     while (placedBlacks < targetBlacks && attempts < maxAttempts) {
       attempts++;
 
-      // Only place in first half (left side or top half for symmetry)
-      final x = _random.nextInt((width + 1) ~/ 2);
-      final y = _random.nextInt(height);
+      int x, y;
+      if (zoneIndex < zones.length && _random.nextDouble() < 0.7) {
+        // 70% chance to use zone-based placement for better distribution
+        final zone = zones[zoneIndex % zones.length];
+        x = zone.x + _random.nextInt(3).clamp(0, (width ~/ 2) - zone.x);
+        y = zone.y + _random.nextInt(3).clamp(0, height - 1 - zone.y);
+        zoneIndex++;
+      } else {
+        // Random placement in first half
+        x = _random.nextInt((width + 1) ~/ 2);
+        y = _random.nextInt(height);
+      }
+
+      // Clamp to valid range
+      x = x.clamp(0, (width - 1) ~/ 2);
+      y = y.clamp(0, height - 1);
 
       // Skip if already black
       if (grid[y][x]) {
@@ -47,6 +64,12 @@ class GridTemplateGenerator {
       // Calculate symmetric position (180° rotation)
       final symX = width - 1 - x;
       final symY = height - 1 - y;
+
+      // Check anti-clustering before placing
+      if (_wouldCreateCluster(grid, x, y) ||
+          (symX != x || symY != y) && _wouldCreateCluster(grid, symX, symY)) {
+        continue;
+      }
 
       // Temporarily place blacks
       grid[y][x] = true;
@@ -67,6 +90,52 @@ class GridTemplateGenerator {
     }
 
     return grid;
+  }
+
+  /// Generate zone positions for better black square distribution.
+  List<Point<int>> _generateZonePositions() {
+    final zones = <Point<int>>[];
+    const zoneSize = 4;
+
+    for (var zy = 1; zy < height - 1; zy += zoneSize) {
+      for (var zx = 1; zx < (width ~/ 2); zx += zoneSize) {
+        zones.add(Point(zx, zy));
+      }
+    }
+
+    // Shuffle zones for variety
+    zones.shuffle(_random);
+    return zones;
+  }
+
+  /// Check if placing a black square at (x, y) would create a bad cluster.
+  /// Based on real puzzle analysis: professional puzzles allow linear runs
+  /// of 3+ blacks but avoid large 2x2 solid blocks.
+  bool _wouldCreateCluster(List<List<bool>> grid, int x, int y) {
+    // Check for 2x2 block (this is the main thing to avoid)
+    // Check all 4 possible 2x2 blocks that would include (x, y)
+    for (var dy = -1; dy <= 0; dy++) {
+      for (var dx = -1; dx <= 0; dx++) {
+        var blockCount = 0;
+        for (var by = 0; by <= 1; by++) {
+          for (var bx = 0; bx <= 1; bx++) {
+            final nx = x + dx + bx;
+            final ny = y + dy + by;
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+              if ((nx == x && ny == y) || grid[ny][nx]) {
+                blockCount++;
+              }
+            }
+          }
+        }
+        // Reject if this would create a 2x2 solid black block
+        if (blockCount >= 4) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /// Generate a template with predefined pattern style.
@@ -183,7 +252,40 @@ class GridTemplateGenerator {
       return false;
     }
 
+    // Check quadrant balance to avoid "leaning" grids
+    if (!_checkQuadrantBalance(grid)) {
+      return false;
+    }
+
     return true;
+  }
+
+  /// Check that the grid is roughly balanced between quadrants.
+  /// With 180° symmetry, we only need to compare Top-Left vs Top-Right
+  /// (since TL=BR and TR=BL).
+  bool _checkQuadrantBalance(List<List<bool>> grid) {
+    var tlCount = 0;
+    var trCount = 0;
+
+    final midX = width ~/ 2;
+    final midY = height ~/ 2;
+
+    for (var y = 0; y < midY; y++) {
+      for (var x = 0; x < midX; x++) {
+        if (grid[y][x]) {
+          tlCount++;
+        }
+      }
+      for (var x = width - midX; x < width; x++) {
+        if (grid[y][x]) {
+          trCount++;
+        }
+      }
+    }
+
+    // Allow a small difference (e.g., 3 black squares)
+    // If difference is large, it looks unbalanced.
+    return (tlCount - trCount).abs() <= 3;
   }
 
   /// Check that all word slots are at least minWordLength
