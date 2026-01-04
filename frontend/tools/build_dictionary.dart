@@ -1,11 +1,14 @@
+// ignore_for_file: avoid_print
+// This is a CLI tool that intentionally uses print for output.
+
 import 'dart:convert';
 import 'dart:io';
 
 void main() {
   // Assuming script is run from project root (c:\Projects\croiz) or frontend root
   // We'll try to find the assets directory relative to current location
-  Directory dataDir;
-  File targetFile;
+  late final Directory dataDir;
+  late final File targetFile;
 
   if (Directory('frontend/assets/data').existsSync()) {
     // We are in project root
@@ -26,8 +29,8 @@ void main() {
 
   // Set to store unique words
   final uniqueWords = <String>{};
-  int processedFiles = 0;
-  int errorFiles = 0;
+  var processedFiles = 0;
+  var errorFiles = 0;
 
   // Walk the directory
   try {
@@ -61,13 +64,13 @@ void main() {
               '\rProcessed $processedFiles puzzles. Unique words found: ${uniqueWords.length}',
             );
           }
-        } catch (e) {
+        } on Exception catch (_) {
           errorFiles++;
           // Silently ignore parse errors
         }
       }
     }
-  } catch (e) {
+  } on Exception catch (e) {
     print('Error listing directory: $e');
     exit(1);
   }
@@ -85,22 +88,14 @@ void main() {
   // Sort and write
   print('Sorting and writing to file...');
   final sortedWords = uniqueWords.toList()..sort();
-  final buffer = StringBuffer();
-
-  // Add some header comments
-  buffer.writeln('# Auto-generated dictionary from local puzzle database');
-  buffer.writeln('# Source: assets/data');
-  buffer.writeln('# Count: ${uniqueWords.length} words');
-  buffer.writeln('# Date: ${DateTime.now().toIso8601String()}');
-
-  for (final word in sortedWords) {
-    // Filter:
-    // 1. Length >= 2
-    // 2. Only letters (sanity check, though sanitization happened earlier)
-    if (word.length >= 2) {
-      buffer.writeln(word);
-    }
-  }
+  final buffer =
+      StringBuffer()
+        ..writeln('# Auto-generated dictionary from local puzzle database')
+        ..writeln('# Source: assets/data')
+        ..writeln('# Count: ${uniqueWords.length} words')
+        ..writeln('# Date: ${DateTime.now().toIso8601String()}')
+        ..writeAll(sortedWords.where((w) => w.length >= 2), '\n')
+        ..writeln();
 
   targetFile.writeAsStringSync(buffer.toString());
   print('Success! Dictionary saved to ${targetFile.path}');

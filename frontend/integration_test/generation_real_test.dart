@@ -167,7 +167,7 @@ void main() {
                   greaterThan(0.40),
                   reason: 'Density should be above 40%',
                 );
-              } catch (e, st) {
+              } on Exception catch (e, st) {
                 print('❌ ERROR: $e');
                 print(st);
                 results.add(

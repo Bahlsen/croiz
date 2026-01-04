@@ -1,3 +1,6 @@
+// ignore_for_file: avoid_print
+// This is a CLI tool that intentionally uses print for output.
+
 import 'dart:io';
 import 'dart:convert';
 
@@ -14,8 +17,7 @@ void main() async {
     'es': '$baseUrl/es/es_full.txt',
     'de': '$baseUrl/de/de_full.txt',
     'it': '$baseUrl/it/it_full.txt',
-    'pt':
-        '$baseUrl/pt_br/pt_br_full.txt', // Using Brazilian Portuguese as it's typically larger
+    'pt': '$baseUrl/pt_br/pt_br_full.txt',
     'ru': '$baseUrl/ru/ru_full.txt',
     'uk': '$baseUrl/uk/uk_full.txt',
   };
@@ -56,32 +58,35 @@ void main() async {
       final lines = content.split('\n');
 
       // Regex for valid words (allow accented chars)
-      // We'll be deeper in validation inside the service, but here we filter garbage.
-      // Latin/Cyrillic + common accents.
       final validWordExp = RegExp(r'^[A-ZÀ-ÖØ-ÞĀ-ŽА-ЯҐЄІЇ]+$');
 
       for (final line in lines) {
-        if (line.trim().isEmpty) continue;
+        if (line.trim().isEmpty) {
+          continue;
+        }
 
         // Format: "word count"
         final parts = line.trim().split(' ');
-        if (parts.isEmpty) continue;
+        if (parts.isEmpty) {
+          continue;
+        }
 
-        var word = parts[0].toUpperCase();
+        final word = parts[0].toUpperCase();
 
-        // Sanitize: Remove non-letters (keep accents)
-        // Actually, let's just check if it IS letters.
-        // If it contains numbers or symbols, skip.
-        if (word.length < 2) continue;
+        // Skip short words
+        if (word.length < 2) {
+          continue;
+        }
 
-        // Removing specific punctuation if attached?
-        // Frequency lists sometimes have "don't". We can strip non-alpha.
-        // But for foreign languages, we need to respect accents.
-        // Simple heuristic: if it contains any digit or common symbol, skip.
-        if (word.contains(RegExp(r'[0-9\._,;:"!¡?¿\(\)\[\]\{\}]'))) continue;
+        // Skip words with digits or symbols
+        if (word.contains(RegExp(r'[0-9\\._,;:"!¡?¿\(\)\[\]\{\}]'))) {
+          continue;
+        }
 
-        // Add to set
-        uniqueWords.add(word);
+        // Use the regex to validate word characters
+        if (validWordExp.hasMatch(word)) {
+          uniqueWords.add(word);
+        }
       }
 
       if (uniqueWords.isEmpty) {
@@ -92,21 +97,20 @@ void main() async {
       print('  Derived ${uniqueWords.length} unique words.');
 
       print('  Writing to ${effectiveFile.path}...');
-      final buffer = StringBuffer();
-      buffer.writeln('# Auto-fetched dictionary');
-      buffer.writeln('# Source: $url');
-      buffer.writeln('# Date: ${DateTime.now().toIso8601String()}');
-
       final sortedList = uniqueWords.toList()..sort();
-      for (final w in sortedList) {
-        buffer.writeln(w);
-      }
+      final buffer =
+          StringBuffer()
+            ..writeln('# Auto-fetched dictionary')
+            ..writeln('# Source: $url')
+            ..writeln('# Date: ${DateTime.now().toIso8601String()}')
+            ..writeAll(sortedList, '\n')
+            ..writeln();
 
       await effectiveFile.writeAsString(buffer.toString());
       print(
         '  Success! ${(effectiveFile.lengthSync() / 1024).toStringAsFixed(1)} KB',
       );
-    } catch (e) {
+    } on Exception catch (e) {
       print('  Error processing $lang: $e');
     }
   }
