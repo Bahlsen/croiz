@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
+import 'package:croiz/core/config/feature_flags.dart';
 
 enum PuzzleSource {
   asset,
@@ -237,9 +238,14 @@ final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
   final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
   final assetPuzzles = await compute(_parseAllFromIndex, raw);
 
-  // 2. Load from local generation repository
-  final repo = ref.read(generatedPuzzlesRepositoryProvider);
-  final localPuzzles = await repo.getAllDescriptors();
+  // 2. Load from local generation repository (if enabled)
+  final List<PuzzleDescriptor> localPuzzles;
+  if (FeatureFlags.isGenerationEnabled) {
+    final repo = ref.read(generatedPuzzlesRepositoryProvider);
+    localPuzzles = await repo.getAllDescriptors();
+  } else {
+    localPuzzles = [];
+  }
 
   // 3. Merge
   final all = [...assetPuzzles, ...localPuzzles]

@@ -15,6 +15,7 @@ import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart'
 import 'package:croiz/features/generation/widgets/generation_dialog.dart';
 import 'package:croiz/features/generation/logic/generation_controller.dart';
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
+import 'package:croiz/core/config/feature_flags.dart';
 
 /// Puzzle selection page with filters, continue playing section, and performance.
 class PuzzlesListPage extends ConsumerWidget {
@@ -25,55 +26,57 @@ class PuzzlesListPage extends ConsumerWidget {
     final isLight = Theme.of(context).brightness == Brightness.light;
     final puzzlesAsync = ref.watch(puzzlesProvider);
 
-    // Listen to background generation status
-    ref.listen(generationControllerProvider, (previous, next) {
-      next.when(
-        data: (puzzleId) {
-          if (puzzleId != null && context.mounted) {
-            ScaffoldMessenger.of(context)
-              ..clearSnackBars()
-              ..showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  duration: const Duration(seconds: 4),
-                  content: Text(
-                    AppLocalizations.of(context)?.successMessage ??
-                        'Puzzle generated successfully!',
+    // Listen to background generation status (if enabled)
+    if (FeatureFlags.isGenerationEnabled) {
+      ref.listen(generationControllerProvider, (previous, next) {
+        next.when(
+          data: (puzzleId) {
+            if (puzzleId != null && context.mounted) {
+              ScaffoldMessenger.of(context)
+                ..clearSnackBars()
+                ..showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(seconds: 4),
+                    content: Text(
+                      AppLocalizations.of(context)?.successMessage ??
+                          'Puzzle generated successfully!',
+                    ),
+                    action: SnackBarAction(
+                      label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        if (context.mounted) {
+                          final encodedId = Uri.encodeComponent(puzzleId);
+                          context.push('/crossword?id=$encodedId');
+                        }
+                      },
+                    ),
                   ),
-                  action: SnackBarAction(
-                    label: AppLocalizations.of(context)?.playButton ?? 'PLAY',
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      if (context.mounted) {
-                        final encodedId = Uri.encodeComponent(puzzleId);
-                        context.push('/crossword?id=$encodedId');
-                      }
-                    },
+                );
+            }
+          },
+          error: (e, st) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context)
+                ..clearSnackBars()
+                ..showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text(
+                      e is UserFriendlyException
+                          ? e.userMessage
+                          : 'Failed to generate puzzle',
+                    ),
+                    backgroundColor: Theme.of(context).colorScheme.error,
                   ),
-                ),
-              );
-          }
-        },
-        error: (e, st) {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context)
-              ..clearSnackBars()
-              ..showSnackBar(
-                SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  content: Text(
-                    e is UserFriendlyException
-                        ? e.userMessage
-                        : 'Failed to generate puzzle',
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                ),
-              );
-          }
-        },
-        loading: () {},
-      );
-    });
+                );
+            }
+          },
+          loading: () {},
+        );
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -106,16 +109,21 @@ class PuzzlesListPage extends ConsumerWidget {
       backgroundColor:
           isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
       body: _buildBody(context, ref, puzzlesAsync),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.auto_awesome),
-        label: Text(AppLocalizations.of(context)?.generateButton ?? 'GENERATE'),
-        onPressed: () {
-          showDialog<void>(
-            context: context,
-            builder: (context) => const GenerationDialog(),
-          );
-        },
-      ),
+      floatingActionButton:
+          FeatureFlags.isGenerationEnabled
+              ? FloatingActionButton.extended(
+                icon: const Icon(Icons.auto_awesome),
+                label: Text(
+                  AppLocalizations.of(context)?.generateButton ?? 'GENERATE',
+                ),
+                onPressed: () {
+                  showDialog<void>(
+                    context: context,
+                    builder: (context) => const GenerationDialog(),
+                  );
+                },
+              )
+              : null,
     );
   }
 
