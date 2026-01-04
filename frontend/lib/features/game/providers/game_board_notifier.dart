@@ -410,6 +410,11 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     }
 
     state = state.updateCell(row, col, letter);
+
+    // Play reveal sound
+    if (!ref.read(gameAudioMutedProvider)) {
+      unawaited(ref.read(gameAudioServiceProvider).playReveal());
+    }
     _checkWordCompletionAfterReveal(CellKey(row, col));
     _schedulePersist();
   }
