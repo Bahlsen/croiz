@@ -1,6 +1,6 @@
 import 'package:croiz/services/persistence/drift_puzzle_storage.dart';
 import 'package:croiz/data/db/app_database.dart';
-import 'package:drift/drift.dart';
+
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -19,7 +19,7 @@ void main() {
 
   group('DriftPuzzleStorage', () {
     test('save and load puzzle', () async {
-      final puzzleId = 'p1';
+      const puzzleId = 'p1';
       final payload = {'id': puzzleId, 'data': 'test'};
 
       await storage.save(puzzleId, payload);
@@ -48,7 +48,7 @@ void main() {
       // Checking DriftPuzzleStorage implementation might be needed if it extracts these fields.
       // For now, simple save/load confirms basic table integrity.
 
-      final puzzleId = 'p3';
+      const puzzleId = 'p3';
       await storage.save(puzzleId, {
         'id': puzzleId,
         'difficulty': 1,

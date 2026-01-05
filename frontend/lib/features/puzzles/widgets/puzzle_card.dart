@@ -5,7 +5,7 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/puzzles/logic/generated_puzzles_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:go_router/go_router.dart';
+import 'package:croiz/routes/app_routes.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 
 import 'dart:async'; // For unawaited
@@ -158,8 +158,7 @@ class PuzzleCard extends ConsumerWidget {
 
   void _onTap(BuildContext context, WidgetRef ref) {
     ref.read(selectedPuzzleIdProvider.notifier).setSelected(descriptor.id);
-    final encodedId = Uri.encodeComponent(descriptor.id);
-    context.go('/crossword?id=$encodedId');
+    CrosswordRoute(id: descriptor.id).go(context);
   }
 
   Future<void> _onLongPress(BuildContext context, WidgetRef ref) async {

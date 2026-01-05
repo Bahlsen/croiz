@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:croiz/routes/app_routes.dart';
 import 'dart:ui' as ui;
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -133,7 +133,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 ),
                                 onTap: () {
                                   onClose();
-                                  context.go('/puzzles');
+                                  const HomeRoute().go(context);
                                 },
                               ),
                               const Divider(),

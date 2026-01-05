@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:croiz/routes/app_routes.dart';
 import '../puzzles_provider.dart';
 import '../../../services/persistence/storage_provider.dart';
 import '../../../l10n/app_localizations.dart';
@@ -274,12 +274,7 @@ class _InProgressCard extends ConsumerWidget {
         .read(selectedPuzzleIdProvider.notifier)
         .setSelected(puzzle.descriptor.id);
 
-    context.go(
-      Uri(
-        path: '/crossword',
-        queryParameters: {'id': puzzle.descriptor.id},
-      ).toString(),
-    );
+    CrosswordRoute(id: puzzle.descriptor.id).go(context);
   }
 
   @override
