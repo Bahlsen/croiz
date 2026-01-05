@@ -86,7 +86,7 @@ jobs:
       - name: Compute coverage and enforce threshold
         if: success()
         run: |
-          dart tools/compute_coverage.dart --threshold=70
+          dart tools/compute_coverage.dart --threshold=80
 
       - name: Upload coverage artifact
         if: success()
