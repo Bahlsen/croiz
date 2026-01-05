@@ -10,6 +10,8 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 /// Integration-style widget test that reproduces the selection flow and
 /// captures the asset path passed to the puzzle loader. This confirms the
@@ -69,6 +71,7 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWithValue(puzzlesAsync),
           puzzleAssetLoaderProvider.overrideWithValue(fakeLoader),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
         child: Sizer(
           builder:

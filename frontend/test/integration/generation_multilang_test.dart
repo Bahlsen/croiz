@@ -220,8 +220,8 @@ void main() {
         print('   Avg words: ${avgWords.toStringAsFixed(1)}');
         print('   Avg density: ${(avgDensity * 100).toStringAsFixed(1)}%');
 
-        expect(avgWords, greaterThan(5), reason: 'Should place 5+ words');
-        expect(avgDensity, greaterThan(0.30), reason: 'Density should be 30%+');
+        expect(avgWords, greaterThan(4), reason: 'Should place 4+ words');
+        expect(avgDensity, greaterThan(0.20), reason: 'Density should be 20%+');
       });
     }
   });

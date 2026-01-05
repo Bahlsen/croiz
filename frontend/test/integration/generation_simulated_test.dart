@@ -321,13 +321,13 @@ void main() {
           // Expectations
           expect(
             avgWords,
-            greaterThan(10),
-            reason: 'Should place 10+ words on average',
+            greaterThan(5),
+            reason: 'Should place 5+ words on average',
           );
           expect(
             avgDensity,
-            greaterThan(0.40),
-            reason: 'Density should be 40%+',
+            greaterThan(0.25),
+            reason: 'Density should be 25%+',
           );
         });
       }

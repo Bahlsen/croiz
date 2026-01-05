@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 void main() {
   setUpAll(TestWidgetsFlutterBinding.ensureInitialized);
@@ -22,6 +24,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
       ],
     );
     addTearDown(container.dispose);

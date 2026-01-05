@@ -8,6 +8,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:sizer/sizer.dart';
 import 'clue_banner_container_test.dart'; // for extractTextFromSpan
+import '../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 
 void main() {
   group('CrosswordClueHeader', () {
@@ -46,6 +48,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
       );
       addTearDown(container.dispose);
@@ -124,6 +127,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
       );
       addTearDown(container.dispose);
@@ -178,6 +182,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
       );
       addTearDown(container.dispose);
@@ -241,6 +246,7 @@ void main() {
       final container = ProviderContainer(
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
       );
       addTearDown(container.dispose);

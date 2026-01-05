@@ -5,6 +5,8 @@ import 'package:sizer/sizer.dart';
 import 'package:croiz/features/game/widgets/end_game_overlay.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 void main() {
   testWidgets('EndGameOverlay appears when revealAll is called', (
@@ -46,6 +48,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         // Make flashing/persistence deterministic in tests
         flashClearDelayProvider.overrideWithValue(Duration.zero),
         wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),

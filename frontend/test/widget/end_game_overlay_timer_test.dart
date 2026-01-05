@@ -8,6 +8,8 @@ import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 class TestSecureStorage extends FlutterSecureStorage {
   final Map<String, String> _map = {};
@@ -89,6 +91,7 @@ void main() {
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
           secureStorageProvider.overrideWithValue(TestSecureStorage()),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
       );
       addTearDown(container.dispose);
