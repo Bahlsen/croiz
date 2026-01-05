@@ -11,7 +11,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/data/models/puzzle.dart';
 import 'package:croiz/features/generation/utils/puzzle_converter.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
-import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 
 part 'puzzle_loader_provider.g.dart';
@@ -113,12 +113,13 @@ Future<GameBoard> puzzleLoader(Ref ref) async {
     board = board.copyWith(id: match.id);
   }
 
-  // Attempt to restore persisted grid from Hive so callers of
+  // Attempt to restore persisted grid from storage so callers of
   // `puzzleLoaderProvider.future` receive a board that already includes
   // any previously-saved progress. This avoids races where the board
   // is loaded and UI attaches before async restore completes.
   try {
-    final stored = await HivePuzzleStorage().load(board.id);
+    final storage = ref.read(puzzleStorageProvider);
+    final stored = await storage.load(board.id);
     if (stored != null) {
       final gridData = stored['grid'];
       if (gridData is List) {

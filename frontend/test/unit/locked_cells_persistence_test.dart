@@ -1,38 +1,26 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import '../helpers/fake_puzzle_storage.dart';
+import '../helpers/fake_audio_service.dart';
+import 'package:croiz/features/game/services/game_persistence_service.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
+import 'package:croiz/services/providers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Locked cells persistence on puzzle switch', () {
-    late Directory tempDir;
-    late Box<String> box;
+    late FakePuzzleStorage storage;
+    late GamePersistenceService persistence;
 
     setUp(() async {
-      tempDir = Directory.systemTemp.createTempSync('hive_locked_test');
-      Hive.init(tempDir.path);
-      box = await Hive.openBox<String>('puzzle_progress');
-    });
-
-    tearDown(() async {
-      try {
-        await box.clear();
-        await box.close();
-        await Hive.close();
-        tempDir.deleteSync(recursive: true);
-      } on Object {
-        // best-effort cleanup
-      }
+      storage = FakePuzzleStorage();
+      persistence = GamePersistenceService(storage);
     });
 
     test(
@@ -117,6 +105,8 @@ void main() {
             }),
             flashClearDelayProvider.overrideWithValue(Duration.zero),
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            gamePersistenceServiceProvider.overrideWithValue(persistence),
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
           ],
         );
         addTearDown(container.dispose);
@@ -181,27 +171,27 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 200));
 
         // Verify the stored data for puzzle A includes lockedCells
-        final storedRaw = box.get('locked-test-a');
+        final storedData = await storage.load('locked-test-a');
+
         expect(
-          storedRaw,
+          storedData,
           isNotNull,
           reason: 'Puzzle A progress should be saved when switching away',
         );
 
-        final stored = jsonDecode(storedRaw!) as Map<String, dynamic>;
         expect(
-          stored['lockedCells'],
+          storedData!['lockedCells'],
           isNotNull,
           reason: 'lockedCells should be saved in storage',
         );
         expect(
-          stored['lockedCells'],
+          storedData['lockedCells'],
           isNotEmpty,
           reason: 'lockedCells should contain the locked cells from puzzle A',
         );
 
         // BUG TEST: The lockedCells should contain 3 cells
-        final lockedCellsList = stored['lockedCells'] as List;
+        final lockedCellsList = storedData['lockedCells'] as List;
         expect(
           lockedCellsList.length,
           equals(3),

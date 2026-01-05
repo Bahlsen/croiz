@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
-import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
 import 'package:croiz/features/game/providers/word_check_provider.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 
 /// Result of loading puzzle progress from storage.
 class ProgressLoadResult {
@@ -44,8 +44,7 @@ class ProgressLoadResult {
 /// Extracted from GameBoardNotifier to follow Single Responsibility Principle.
 /// Handles loading persisted progress and computing initial state from grid.
 class GameProgressService {
-  GameProgressService(this._wordCheck, {PuzzleStorageInterface? storage})
-    : _storage = storage ?? HivePuzzleStorage();
+  GameProgressService(this._wordCheck, this._storage);
 
   final PuzzleStorageInterface _storage;
   final WordCheckService _wordCheck;
@@ -243,5 +242,6 @@ class InitialStateResult {
 /// Provider for the progress service.
 final gameProgressServiceProvider = Provider<GameProgressService>((ref) {
   final wordCheck = ref.read(wordCheckServiceProvider);
-  return GameProgressService(wordCheck);
+  final storage = ref.watch(puzzleStorageProvider);
+  return GameProgressService(wordCheck, storage);
 });

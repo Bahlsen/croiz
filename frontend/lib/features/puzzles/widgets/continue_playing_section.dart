@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../puzzles_provider.dart';
-import '../../../services/persistence/puzzle_progress_service.dart';
-import '../../../services/persistence/hive_puzzle_storage.dart';
+import '../../../services/persistence/storage_provider.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/responsive/responsive.dart';
 import '../../game/providers/puzzle_loader_provider.dart';
 import '../logic/generated_puzzles_controller.dart';
+
+import '../../game/providers/game_providers.dart';
+import 'package:croiz/services/persistence/puzzle_progress_service.dart'; // For PuzzleProgressService, PuzzleProgress
+import 'package:croiz/services/persistence/puzzle_progress_provider.dart'; // For provider
 import 'package:flutter/services.dart'; // For HapticFeedback
 
 /// Information about an in-progress puzzle for display.
@@ -30,7 +33,7 @@ class InProgressPuzzleInfo {
 final inProgressPuzzlesProvider = FutureProvider.autoDispose<
   List<InProgressPuzzleInfo>
 >((ref) async {
-  final storage = HivePuzzleStorage();
+  final storage = ref.watch(puzzleStorageProvider);
 
   // Listen to storage changes to automatically refresh the list
   // whenever a puzzle is saved (e.g. from the game screen).
@@ -40,10 +43,7 @@ final inProgressPuzzlesProvider = FutureProvider.autoDispose<
   });
   ref.onDispose(subscription.cancel);
 
-  final service = PuzzleProgressService(
-    storage: storage,
-    assetLoader: defaultPuzzleJsonLoader,
-  );
+  final service = ref.watch(puzzleProgressServiceProvider);
 
   // Get all puzzles with saved progress
   final progressList = await service.getInProgressPuzzlesSortedByRecency();

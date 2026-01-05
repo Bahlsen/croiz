@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'puzzles_provider.dart';
 import 'pending_puzzles_provider.dart';
 import 'puzzle_filter_provider.dart';
-import '../../services/persistence/hive_puzzle_storage.dart';
+import '../../services/persistence/storage_provider.dart';
 
 /// Provider that returns the set of completed puzzle IDs.
 ///
@@ -10,7 +10,7 @@ import '../../services/persistence/hive_puzzle_storage.dart';
 /// completion in storage. This checks the `isCompleted` field in the
 /// saved puzzle data.
 final completedPuzzleIdsProvider = FutureProvider<Set<String>>((ref) async {
-  final storage = HivePuzzleStorage();
+  final storage = ref.watch(puzzleStorageProvider);
   final allKeys = await storage.getAllKeys();
   final completedIds = <String>{};
 

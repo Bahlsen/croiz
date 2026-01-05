@@ -6,7 +6,7 @@ import 'package:croiz/features/splash/splash_screen.dart';
 import 'package:croiz/core/config/app_languages.dart';
 import 'package:croiz/core/theme.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
+import 'package:croiz/services/persistence/drift_migration_service.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -32,9 +32,7 @@ Future<void> main() async {
     // though Gemini features won't work.
   }
 
-  // Initialize Hive for puzzle persistence and open box.
-  await HivePuzzleStorage.init();
-  await HivePuzzleStorage.openBox();
+  // Hive initialization removed (migrated to Drift)
 
   runApp(const ProviderScope(child: CroizApp()));
 }
@@ -53,6 +51,9 @@ class _CroizAppState extends ConsumerState<CroizApp> {
   // Load persisted locale here so the app starts with the user's choice.
   Future<void> _onInitialized() async {
     try {
+      // Run Database Migration (one-time)
+      await ref.read(driftMigrationServiceProvider).runMigrationIfNeeded();
+
       final prefs = await SharedPreferences.getInstance();
       final saved = prefs.getString('locale');
       if (saved != null && saved.isNotEmpty) {

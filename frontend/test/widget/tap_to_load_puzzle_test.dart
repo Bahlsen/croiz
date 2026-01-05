@@ -7,6 +7,8 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/routes/app_router.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/persistence/storage_provider.dart'; // for puzzleStorageProvider
+import '../helpers/fake_puzzle_storage.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +33,7 @@ void main() {
           puzzlesProvider.overrideWithValue(
             AsyncValue.data(<PuzzleDescriptor>[desc]),
           ),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           // Override loader to avoid JSON parsing and return a minimal board.
           puzzleAssetLoaderProvider.overrideWithValue(
             (String assetPath) async => GameBoard(

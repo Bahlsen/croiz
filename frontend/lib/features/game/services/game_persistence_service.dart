@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/services/persistence/hive_puzzle_storage.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
+import 'package:croiz/services/persistence/storage_provider.dart';
 
 /// Service responsible for persisting puzzle progress.
 ///
@@ -16,12 +16,9 @@ import 'package:croiz/services/persistence/puzzle_progress_service.dart'
 /// Handles debounced persistence of game state including grid, found words,
 /// locked cells, and elapsed time.
 class GamePersistenceService {
-  GamePersistenceService({PuzzleStorageInterface? storage})
-    : _storageFallback = storage;
+  GamePersistenceService(this._storage);
 
-  final PuzzleStorageInterface? _storageFallback;
-  PuzzleStorageInterface get _storage =>
-      _storageFallback ?? HivePuzzleStorage();
+  final PuzzleStorageInterface _storage;
   Timer? _persistTimer;
   static const Duration _persistDebounce = Duration(milliseconds: 200);
 
@@ -144,6 +141,7 @@ class GamePersistenceService {
 }
 
 /// Provider for the persistence service.
-final gamePersistenceServiceProvider = Provider<GamePersistenceService>(
-  (ref) => GamePersistenceService(),
-);
+final gamePersistenceServiceProvider = Provider<GamePersistenceService>((ref) {
+  final storage = ref.watch(puzzleStorageProvider);
+  return GamePersistenceService(storage);
+});

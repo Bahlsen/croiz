@@ -1,39 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import '../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/audio_service.dart';
 
-class FakeAudioService implements AudioService {
-  int successCount = 0;
-  @override
-  Future<void> playSuccess() async => successCount++;
-
-  @override
-  Future<void> playType() async {}
-
-  @override
-  Future<void> playDelete() async {}
-
-  @override
-  Future<void> playVictory() async {}
-
-  @override
-  Future<void> playReveal() async {}
-
-  @override
-  Future<void> dispose() async {}
-
-  @override
-  Future<void> get ready async {}
-}
+import '../helpers/fake_audio_service.dart';
 
 class FakeGameTimer extends GameTimer {
   FakeGameTimer(super.ref, super.gameId);
@@ -48,7 +23,7 @@ class FakeGameTimer extends GameTimer {
 
 void main() {
   group('Puzzle change persistence & audio', () {
-    test('GameTimer.setElapsed called from persisted Hive payload', () async {
+    test('GameTimer.setElapsed called from persisted payload', () async {
       final board = GameBoard(
         id: 'persist-1',
         title: 'persist',
@@ -69,11 +44,9 @@ void main() {
       );
 
       // Prepare Hive box with stored payload containing elapsedSeconds
-      final tempDir = Directory.systemTemp.createTempSync('hive_test');
-      Hive.init(tempDir.path);
-      final box = await Hive.openBox<String>('puzzle_progress');
+      final storage = FakePuzzleStorage();
       final payload = {'elapsedSeconds': 42};
-      await box.put(board.id, jsonEncode(payload));
+      await storage.save(board.id, payload);
 
       final container = ProviderContainer(
         overrides: [
@@ -82,17 +55,10 @@ void main() {
           puzzleLoaderProvider.overrideWith((ref) async => board),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          puzzleStorageProvider.overrideWithValue(storage),
         ],
       );
       addTearDown(() async {
-        await box.delete(board.id);
-        await box.close();
-        await Hive.close();
-        try {
-          tempDir.deleteSync(recursive: true);
-        } on Object {
-          // ignore
-        }
         container.dispose();
       });
 

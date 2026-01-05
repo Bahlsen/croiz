@@ -1,9 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import '../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 // import removed: not needed in this unit test
@@ -62,9 +60,7 @@ void main() {
         ],
       );
 
-      final tempDir = Directory.systemTemp.createTempSync('hive_test');
-      Hive.init(tempDir.path);
-      final box = await Hive.openBox<String>('puzzle_progress');
+      final storage = FakePuzzleStorage();
 
       final container = ProviderContainer(
         overrides: [
@@ -83,18 +79,10 @@ void main() {
           }),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          puzzleStorageProvider.overrideWithValue(storage),
         ],
       );
       addTearDown(() async {
-        try {
-          await box.delete(boardA.id);
-          await box.delete(boardB.id);
-          await box.close();
-          await Hive.close();
-          tempDir.deleteSync(recursive: true);
-        } on Object {
-          // best-effort cleanup
-        }
         container.dispose();
       });
 
@@ -110,16 +98,17 @@ void main() {
       // Wait for the debounced persist to complete (simulate normal typing)
       await Future<void>.delayed(const Duration(milliseconds: 500));
 
-      // Verify Hive stored board A progress
+      // Verify stored board A progress
       // (no prints in tests)
-      final raw = box.get(boardA.id);
+      final savedA = await storage.load(boardA.id);
       expect(
-        raw,
+        savedA,
         isNotNull,
         reason: 'Expected debounce-driven persist to save progress',
       );
-      final stored = jsonDecode(raw!) as Map<String, dynamic>;
-      expect(stored['grid'][0][0], equals('X'));
+      final savedGridList = savedA!['grid'] as List;
+      final row = savedGridList[0] as List;
+      expect(row[0], equals('X'));
 
       // Now switch to B and back to A; restore should pick up saved progress
       container.read(selectedPuzzleIdProvider.notifier).setSelected('board-b');
@@ -128,9 +117,9 @@ void main() {
       container.read(selectedPuzzleIdProvider.notifier).setSelected('board-a');
       await container.read(puzzleLoaderProvider.future);
       // ensure stored payload still present
-      final raw2 = box.get(boardA.id);
+      final savedA2 = await storage.load(boardA.id);
       expect(
-        raw2,
+        savedA2,
         isNotNull,
         reason: 'stored payload should still exist after switching back',
       );

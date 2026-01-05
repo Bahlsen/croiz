@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
@@ -11,26 +9,12 @@ import 'package:croiz/features/game/services/game_reveal_service.dart';
 import 'package:croiz/features/game/services/game_endgame_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/providers/word_check_provider.dart';
-import 'package:croiz/services/persistence/puzzle_progress_service.dart'
-    show PuzzleStorageInterface;
+import '../helpers/fake_puzzle_storage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-class FakePuzzleStorage implements PuzzleStorageInterface {
-  @override
-  Future<List<String>> getAllKeys() async => [];
-
-  @override
-  Future<Map<String, dynamic>?> load(String id) async => null;
-
-  @override
-  Stream<void> get onDataChanged => const Stream.empty();
-
-  @override
-  Future<void> save(String id, Map<String, dynamic> payload) async {}
-}
 
 class FakeSelectedPuzzleIdNotifier extends SelectedPuzzleIdNotifier {
   FakeSelectedPuzzleIdNotifier(this._initId);
@@ -63,12 +47,9 @@ void main() {
   Widget createSubject(GameBoard board) {
     // Instantiate mocks/fakes
     final storage = FakePuzzleStorage();
-    final persistenceService = GamePersistenceService(storage: storage);
+    final persistenceService = GamePersistenceService(storage);
     final wordCheckService = WordCheckService();
-    final progressService = GameProgressService(
-      wordCheckService,
-      storage: storage,
-    );
+    final progressService = GameProgressService(wordCheckService, storage);
     final revealService = GameRevealService(wordCheckService);
     final endgameService = GameEndgameService();
 

@@ -1,91 +1,105 @@
 import 'dart:convert';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/data/db/app_database.dart';
+import 'package:croiz/data/db/database_provider.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 
-/// Repository for managing locally generated puzzles backed by Hive.
+/// Repository for managing locally generated puzzles backed by Drift (SQLite).
 class GeneratedPuzzlesRepository {
-  GeneratedPuzzlesRepository({Box? box}) : _box = box;
+  GeneratedPuzzlesRepository(this.db);
 
-  static const String boxName = 'generated_puzzles';
-  final Box? _box;
-
-  Future<Box> _openBox() async =>
-      _box ?? await Hive.openBox(boxName); // coverage:ignore-line
+  final AppDatabase db;
 
   /// Saves a generated puzzle (full JSON) to local storage.
   Future<void> savePuzzle(Map<String, dynamic> puzzleJson) async {
-    final box = await _openBox();
     final id = puzzleJson['id'] as String;
-    // Add source tag to ensure it's loaded correctly later
+    // Add source tag
     puzzleJson['source'] = 'local';
-    await box.put(id, puzzleJson);
+
+    final metadata = puzzleJson['metadata'] as Map<String, dynamic>? ?? {};
+    final difficulty = (metadata['difficulty'] as int?) ?? 2;
+    final language = metadata['language']?.toString() ?? 'fr';
+    final title = metadata['title']?.toString() ?? 'Untitled Puzzle';
+
+    await db
+        .into(db.generatedPuzzles)
+        .insert(
+          GeneratedPuzzlesCompanion(
+            puzzleId: Value(id),
+            jsonPayload: Value(jsonEncode(puzzleJson)),
+            createdAt: Value(DateTime.now()),
+            difficulty: Value(difficulty),
+            language: Value(language),
+            title: Value(title),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
   }
 
   /// Retrieves a specific puzzle by ID.
   Future<Map<String, dynamic>?> getPuzzle(String id) async {
-    final box = await _openBox();
-    final data = box.get(id);
-    if (data != null) {
-      // Hive returns Map<dynamic, dynamic> which causes issues with json_serializable
-      // parsing of nested objects (mostly Metadata and Cell/Entry annotations).
-      // The safest way to "normalize" this structure to strictly Map<String, dynamic>
-      // throughout the entire depth is to encode and decode it.
-      try {
-        return jsonDecode(jsonEncode(data)) as Map<String, dynamic>;
-      } on Object catch (_) {
-        // Fallback or re-throw
-        return Map<String, dynamic>.from(data as Map);
-      }
+    final record =
+        await (db.select(db.generatedPuzzles)
+          ..where((t) => t.puzzleId.equals(id))).getSingleOrNull();
+
+    if (record != null) {
+      return jsonDecode(record.jsonPayload) as Map<String, dynamic>;
     }
     return null;
   }
 
   /// Deletes a puzzle by ID.
   Future<void> deletePuzzle(String id) async {
-    final box = await _openBox();
-    await box.delete(id);
+    await (db.delete(db.generatedPuzzles)
+      ..where((t) => t.puzzleId.equals(id))).go();
   }
 
   /// Returns descriptors for all stored puzzles.
   Future<List<PuzzleDescriptor>> getAllDescriptors() async {
-    final box = await _openBox();
-    final descriptors = <PuzzleDescriptor>[];
+    final query = db.select(db.generatedPuzzles)..orderBy([
+      (t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc),
+    ]);
 
-    for (final key in box.keys) {
-      final data = box.get(key);
-      if (data is Map) {
-        final json = Map<String, dynamic>.from(data);
+    final records = await query.get();
 
-        // Extract metadata
-        final metadata = json['metadata'] as Map? ?? {};
-
-        descriptors.add(
-          PuzzleDescriptor(
-            id: json['id']?.toString() ?? key.toString(),
-            title: metadata['title']?.toString() ?? 'Untitled Puzzle',
-            path: key.toString(), // For local puzzles, path is the ID/Key
+    return records
+        .map(
+          (record) => PuzzleDescriptor(
+            id: record.puzzleId,
+            title: record.title,
+            path: record.puzzleId,
             subtitle: 'Custom Puzzle',
             origin: 'generated',
-            year: DateTime.now().year.toString(), // Could be stored in metadata
-            difficulty: (metadata['difficulty'] as int?) ?? 2,
-            difficultyLabel:
-                metadata['difficulty_label']?.toString() ?? 'Medium',
-            language: metadata['language']?.toString() ?? 'fr',
+            year: record.createdAt.year.toString(),
+            difficulty: record.difficulty,
+            difficultyLabel: _getDifficultyLabel(record.difficulty),
+            language: record.language,
             source: PuzzleSource.local,
           ),
-        );
-      }
-    }
+        )
+        .toList();
+  }
 
-    // Sort by creation time (if we had it) or title
-    descriptors.sort(
-      (a, b) => b.id.compareTo(a.id),
-    ); // Newest first (assuming ID has timestamp or random)
-    return descriptors;
+  String _getDifficultyLabel(int difficulty) {
+    switch (difficulty) {
+      case 1:
+        return 'Easy';
+      case 2:
+        return 'Medium';
+      case 3:
+        return 'Hard';
+      case 4:
+        return 'Expert';
+      default:
+        return 'Medium';
+    }
   }
 }
 
 final generatedPuzzlesRepositoryProvider = Provider<GeneratedPuzzlesRepository>(
-  (ref) => GeneratedPuzzlesRepository(), // coverage:ignore-line
+  (ref) {
+    final db = ref.watch(appDatabaseProvider);
+    return GeneratedPuzzlesRepository(db);
+  },
 );

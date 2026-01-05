@@ -1,29 +1,24 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+
+final mockPuzzleJson = {
+  'rows': 5,
+  'cols': 5,
+  'cells': [
+    {'solution': 'A', 'is_black': false},
+  ],
+};
 
 void main() {
-  late Directory tmp;
+  late FakePuzzleStorage storage;
+
   setUp(() async {
-    tmp = Directory.systemTemp.createTempSync('hive_test');
-    Hive.init(tmp.path);
-    await Hive.openBox<String>('puzzle_progress');
-    final box = Hive.box<String>('puzzle_progress');
-    await box.clear();
-  });
-  tearDown(() async {
-    await Hive.box<String>('puzzle_progress').close();
-    try {
-      tmp.deleteSync(recursive: true);
-    } on Object catch (_) {
-      // ignore cleanup errors in test teardown
-    }
+    storage = FakePuzzleStorage();
   });
 
   test('restores persisted puzzle grid and persists changes', () async {
@@ -35,12 +30,14 @@ void main() {
       [null, 'B', null],
       ['D', null, null],
     ];
-    final payload = jsonEncode({
+    final payload = {
       'grid': savedGrid,
       'savedAt': DateTime.now().toIso8601String(),
-    });
-    final box = Hive.box<String>('puzzle_progress');
-    await box.put(id, payload);
+    };
+    await storage.save(id, payload);
+
+    final data = await storage.load(id);
+    expect(data, isNotNull);
 
     // Create a minimal board with same dimensions but empty grid
     const size = 3;
@@ -63,6 +60,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        puzzleStorageProvider.overrideWithValue(storage),
       ],
     );
     addTearDown(container.dispose);
@@ -84,10 +82,10 @@ void main() {
 
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
-    final boxOut = Hive.box<String>('puzzle_progress');
-    final raw = boxOut.get(id);
-    expect(raw, isNotNull);
-    final parsed = jsonDecode(raw!);
-    expect(parsed['grid'][2][2], equals('Z'));
+    final saved = await storage.load(id);
+    expect(saved, isNotNull);
+    final savedGridList = saved!['grid'] as List;
+    final row = savedGridList[2] as List;
+    expect(row[2], equals('Z'));
   });
 }
