@@ -114,7 +114,16 @@ All features use **Riverpod** for state management:
 ```dart
 // Feature-specific provider example
 final myFeatureStateProvider = 
-    StateNotifierProvider<MyFeatureNotifier, MyFeatureState>(...);
+    // Use @riverpod annotation (Riverpod 3.x)
+    @riverpod
+    class MyFeature extends _$MyFeature {
+      @override
+      MyFeatureState build() => MyFeatureState.initial();
+      
+      void doSomething() {
+        state = state.copyWith(...);
+      }
+    }
 
 // Access in widgets
 class MyWidget extends ConsumerWidget {

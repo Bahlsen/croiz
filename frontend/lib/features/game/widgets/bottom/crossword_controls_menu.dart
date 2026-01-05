@@ -55,7 +55,7 @@ class CrosswordControlsMenu extends ConsumerWidget {
         onTap: onClose,
         child: BackdropFilter(
           filter: ui.ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-          child: Container(
+          child: ColoredBox(
             color: Theme.of(
               context,
             ).colorScheme.onSurface.withAlpha((0.45 * 255).round()),

@@ -55,7 +55,7 @@ final originIndexProvider = FutureProvider.family<List<PuzzleDescriptor>, String
 ### `puzzleFilterProvider`
 Manages the current filter state:
 ```dart
-final puzzleFilterProvider = StateNotifierProvider<PuzzleFilterNotifier, PuzzleFilterState>(
+final puzzleFilterProvider = NotifierProvider<PuzzleFilterNotifier, PuzzleFilterState>(PuzzleFilterNotifier.new);
   (ref) => PuzzleFilterNotifier(),
 );
 ```

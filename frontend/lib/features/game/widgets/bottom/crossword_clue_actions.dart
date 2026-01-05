@@ -16,7 +16,7 @@ class ClueHeaderMenuButton extends StatelessWidget {
     return Semantics(
       label: AppLocalizations.of(context)?.menu ?? 'Menu',
       button: true,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: colorScheme.surfaceContainerHigh.withAlpha(isDark ? 80 : 150),
           borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
@@ -53,7 +53,7 @@ class ClueHeaderClearButton extends StatelessWidget {
           AppLocalizations.of(context)?.clearIncorrectLetters ??
           'Clear incorrect letters',
       button: true,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: colorScheme.errorContainer.withAlpha(isDark ? 60 : 120),
           borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
@@ -90,7 +90,7 @@ class ClueHeaderRevealButton extends StatelessWidget {
     return Semantics(
       label: AppLocalizations.of(context)?.reveal ?? 'Reveal',
       button: true,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: colorScheme.secondaryContainer.withAlpha(isDark ? 60 : 120),
           borderRadius: BorderRadius.circular(ResponsiveBorderRadius.md),
