@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
 
+@TableIndex(name: 'puzzles_filter_idx', columns: {#difficulty, #language})
+@TableIndex(name: 'puzzles_title_idx', columns: {#title})
 class GeneratedPuzzles extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get puzzleId => text().unique()();

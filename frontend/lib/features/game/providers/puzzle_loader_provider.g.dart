@@ -180,4 +180,4 @@ final class PuzzleLoaderProvider
   }
 }
 
-String _$puzzleLoaderHash() => r'aa91a0fc47b6196cd2d0be1e49e176ea13683a5b';
+String _$puzzleLoaderHash() => r'057d81f21cce8363cc25b7d431463f2a9b9e39e2';

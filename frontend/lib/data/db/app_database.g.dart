@@ -903,6 +903,14 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $PuzzleProgressTable puzzleProgress = $PuzzleProgressTable(this);
+  late final Index puzzlesFilterIdx = Index(
+    'puzzles_filter_idx',
+    'CREATE INDEX puzzles_filter_idx ON generated_puzzles (difficulty, language)',
+  );
+  late final Index puzzlesTitleIdx = Index(
+    'puzzles_title_idx',
+    'CREATE INDEX puzzles_title_idx ON generated_puzzles (title)',
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -910,6 +918,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   List<DatabaseSchemaEntity> get allSchemaEntities => [
     generatedPuzzles,
     puzzleProgress,
+    puzzlesFilterIdx,
+    puzzlesTitleIdx,
   ];
 }
 
