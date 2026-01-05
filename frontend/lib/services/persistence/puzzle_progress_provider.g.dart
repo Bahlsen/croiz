@@ -55,4 +55,4 @@ final class PuzzleProgressServiceProvider
 }
 
 String _$puzzleProgressServiceHash() =>
-    r'f93e576c32c42ebb67f568f24407b7429110929c';
+    r'808365d76cba4a9e6df8af5706d0c61af4383a53';

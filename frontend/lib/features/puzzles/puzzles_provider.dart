@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:croiz/features/generation/data/generated_puzzles_repository.dart';
 import 'package:croiz/core/config/feature_flags.dart';
+
+part 'puzzles_provider.g.dart';
 
 enum PuzzleSource {
   asset,
@@ -147,7 +149,8 @@ String puzzleTitleFromJson(
 /// Strict behaviour: requires `assets/data/puzzles_index.json` to exist and contain
 /// a JSON object with an "items" array. Each item must have an "origin" field.
 /// Provider that returns the list of available origins (for lazy-loading).
-final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
+@riverpod
+Future<List<String>> puzzleOrigins(Ref ref) async {
   final rawIndex = await rootBundle.loadString(
     'assets/data/puzzles_index.json',
   );
@@ -181,43 +184,40 @@ final puzzleOriginsProvider = FutureProvider<List<String>>((ref) async {
   }
 
   return origins.toList()..sort();
-});
+}
 
-/// Provider to load puzzles for a single origin from the main index.
-final originIndexProvider =
-    FutureProvider.family<List<PuzzleDescriptor>, String>((ref, origin) async {
-      final rawIndex = await rootBundle.loadString(
-        'assets/data/puzzles_index.json',
-      );
-      final parsedIndex = jsonDecode(rawIndex);
+@riverpod
+Future<List<PuzzleDescriptor>> originIndex(Ref ref, String origin) async {
+  final rawIndex = await rootBundle.loadString(
+    'assets/data/puzzles_index.json',
+  );
+  final parsedIndex = jsonDecode(rawIndex);
 
-      if (parsedIndex is! Map<String, dynamic>) {
-        throw StateError('Invalid puzzles_index.json: expected JSON object.');
+  if (parsedIndex is! Map<String, dynamic>) {
+    throw StateError('Invalid puzzles_index.json: expected JSON object.');
+  }
+
+  final items = parsedIndex['items'];
+  if (items is! List) {
+    throw StateError('Invalid puzzles_index.json: "items" array is missing.');
+  }
+
+  final out = <PuzzleDescriptor>[];
+  for (final e in items) {
+    if (e is Map<String, dynamic>) {
+      final itemOrigin = e['origin']?.toString() ?? '';
+      if (itemOrigin == origin) {
+        final rawPath = e['path']?.toString() ?? '';
+        // Normalize the path before creating descriptor
+        final normalizedPath = _normalizeIndexedPath(rawPath);
+        out.add(PuzzleDescriptor.fromJson({...e, 'path': normalizedPath}));
       }
+    }
+  }
 
-      final items = parsedIndex['items'];
-      if (items is! List) {
-        throw StateError(
-          'Invalid puzzles_index.json: "items" array is missing.',
-        );
-      }
-
-      final out = <PuzzleDescriptor>[];
-      for (final e in items) {
-        if (e is Map<String, dynamic>) {
-          final itemOrigin = e['origin']?.toString() ?? '';
-          if (itemOrigin == origin) {
-            final rawPath = e['path']?.toString() ?? '';
-            // Normalize the path before creating descriptor
-            final normalizedPath = _normalizeIndexedPath(rawPath);
-            out.add(PuzzleDescriptor.fromJson({...e, 'path': normalizedPath}));
-          }
-        }
-      }
-
-      out.sort(_sortByYearDescThenTitle);
-      return out;
-    });
+  out.sort(_sortByYearDescThenTitle);
+  return out;
+}
 
 int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
   final ai = int.tryParse(a.year) ?? -9999;
@@ -232,8 +232,8 @@ int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
 // Fallback parsing removed: origin indexes must be provided via
 // assets/data/puzzles_index_by_origin/<origin>.json.
 
-/// Backwards-compatible provider returning all puzzles (parses off UI thread).
-final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
+@riverpod
+Future<List<PuzzleDescriptor>> puzzles(Ref ref) async {
   // 1. Load from assets
   final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
   final assetPuzzles = await compute(_parseAllFromIndex, raw);
@@ -252,7 +252,7 @@ final puzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
     ..sort(_sortByYearDescThenTitle);
 
   return all;
-});
+}
 
 List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
   final parsed = jsonDecode(raw);
@@ -297,10 +297,8 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
 }
 
 /// Loads full metadata for a single puzzle asset path on demand.
-final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
-  ref,
-  path,
-) async {
+@riverpod
+Future<PuzzleDescriptor> puzzleMetadata(Ref ref, String path) async {
   // `path` here is the normalized indexed path (no leading `assets/`).
   final token = puzzleTokenFromAssetPath(path);
   try {
@@ -331,4 +329,4 @@ final puzzleMetadataProvider = FutureProvider.family<PuzzleDescriptor, String>((
     // Strict behavior: propagate error so UI can show an explicit failure.
     throw StateError('Failed to load puzzle metadata for "$path": $err');
   }
-});
+}

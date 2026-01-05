@@ -3,7 +3,9 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/data/db/app_database.dart';
 import 'package:croiz/data/db/database_provider.dart';
 import 'package:drift/drift.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'generated_puzzles_repository.g.dart';
 
 /// Repository for managing locally generated puzzles backed by Drift (SQLite).
 class GeneratedPuzzlesRepository {
@@ -97,9 +99,8 @@ class GeneratedPuzzlesRepository {
   }
 }
 
-final generatedPuzzlesRepositoryProvider = Provider<GeneratedPuzzlesRepository>(
-  (ref) {
-    final db = ref.watch(appDatabaseProvider);
-    return GeneratedPuzzlesRepository(db);
-  },
-);
+@Riverpod(keepAlive: true)
+GeneratedPuzzlesRepository generatedPuzzlesRepository(Ref ref) {
+  final db = ref.watch(appDatabaseProvider);
+  return GeneratedPuzzlesRepository(db);
+}

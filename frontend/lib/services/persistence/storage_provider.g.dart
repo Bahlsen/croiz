@@ -54,4 +54,4 @@ final class PuzzleStorageProvider
   }
 }
 
-String _$puzzleStorageHash() => r'92ef9a645bcfc466011792e7f0023f16995358a8';
+String _$puzzleStorageHash() => r'd6cf474553d9b8488b32eceb21b4aa248891e9ef';
