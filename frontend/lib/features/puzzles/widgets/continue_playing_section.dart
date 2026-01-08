@@ -1,3 +1,5 @@
+// ignore_for_file: provider_dependencies
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,7 +35,7 @@ class InProgressPuzzleInfo {
 ///
 /// Fetches all puzzles with saved progress, calculates completion percent,
 /// and returns them sorted by most recently played.
-@riverpod
+@Riverpod(dependencies: [puzzleStorage, puzzleProgressService, puzzles])
 Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
   final storage = ref.watch(puzzleStorageProvider);
 

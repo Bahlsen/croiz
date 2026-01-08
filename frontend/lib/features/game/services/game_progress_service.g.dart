@@ -67,4 +67,4 @@ final class GameProgressServiceProvider
 }
 
 String _$gameProgressServiceHash() =>
-    r'779054a0765d76f877923568bedb2a1d623c60a6';
+    r'88211e8383eacc1fc3bb37be3ac1ffdd76a42b91';

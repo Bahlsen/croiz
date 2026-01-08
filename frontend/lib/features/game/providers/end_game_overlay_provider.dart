@@ -1,3 +1,4 @@
+// ignore_for_file: provider_dependencies
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 // Listen to puzzle selection changes so the overlay is reset when a new
@@ -8,7 +9,7 @@ import 'puzzle_loader_provider.dart';
 
 part 'end_game_overlay_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [SelectedPuzzleIdNotifier])
 class EndGameOverlayVisibleNotifier extends _$EndGameOverlayVisibleNotifier {
   @override
   bool build() {

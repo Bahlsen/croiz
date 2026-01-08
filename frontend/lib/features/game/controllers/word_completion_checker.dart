@@ -1,3 +1,4 @@
+// ignore_for_file: provider_dependencies
 import 'dart:async';
 import 'dart:developer' as developer;
 
@@ -173,10 +174,6 @@ class WordCompletionChecker {
     for (final entry in entriesToCheck) {
       final wordKey = wordCheckService.getWordKey(entry);
       final complete = wordCheckService.isWordComplete(board, entry);
-
-      print(
-        'Checking entry ${entry.number} ${entry.direction}: complete=$complete',
-      );
 
       // Skip if already found
       if (foundWords.contains(wordKey)) {

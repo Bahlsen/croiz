@@ -154,7 +154,7 @@ void main() {
 }
 
 /// Test notifier that allows overriding the initial state.
-class _TestFilterNotifier extends PuzzleFilterNotifier {
+class _TestFilterNotifier extends PuzzleFilter {
   _TestFilterNotifier({required Set<String> selectedLanguages})
     : _selectedLanguages = selectedLanguages;
 

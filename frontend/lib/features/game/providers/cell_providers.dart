@@ -9,7 +9,7 @@ part 'cell_providers.g.dart';
 
 /// Index of entries by cell for fast lookups.
 /// Maps a CellKey to the list of entries (across/down) that include it.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [GameBoardNotifier])
 Map<CellKey, List<PuzzleEntryData>> cellEntriesIndex(Ref ref) {
   // Recompute index only when entries change (grid changes do not matter).
   final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
@@ -31,7 +31,7 @@ Map<CellKey, List<PuzzleEntryData>> cellEntriesIndex(Ref ref) {
 
 /// Pre-sorted across entries for fast navigation.
 /// Computed once when entries change, not on every keystroke.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [GameBoardNotifier])
 List<PuzzleEntryData> sortedAcrossEntries(Ref ref) {
   final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
   if (entries == null || entries.isEmpty) {
@@ -43,7 +43,7 @@ List<PuzzleEntryData> sortedAcrossEntries(Ref ref) {
 
 /// Pre-sorted down entries for fast navigation.
 /// Computed once when entries change, not on every keystroke.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [GameBoardNotifier])
 List<PuzzleEntryData> sortedDownEntries(Ref ref) {
   final entries = ref.watch(gameBoardProvider.select((b) => b.entries));
   if (entries == null || entries.isEmpty) {
@@ -55,7 +55,7 @@ List<PuzzleEntryData> sortedDownEntries(Ref ref) {
 
 /// Precomputed clue numbers map for quick per-cell lookup.
 /// Uses CellKey for efficient hashability.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [GameBoardNotifier])
 Map<CellKey, int> clueNumbers(Ref ref) {
   // Only depend on gridSize and entries, which are sufficient for numbering.
   final size = ref.watch(gameBoardProvider.select((b) => b.gridSize));
@@ -67,6 +67,6 @@ Map<CellKey, int> clueNumbers(Ref ref) {
 /// `cellValueProvider(CellKey(r, c))` to rebuild only when that cell's letter
 /// changes, avoiding large grid rebuilds.
 /// Uses CellKey for efficient hashability (unlike `List<int>`).
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [GameBoardNotifier])
 String? cellValue(Ref ref, CellKey key) =>
     ref.watch(gameBoardProvider.select((b) => b.grid[key.row][key.col]));

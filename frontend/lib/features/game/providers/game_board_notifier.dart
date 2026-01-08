@@ -49,10 +49,8 @@ Duration wordCheckDebounceDelay(Ref ref) => const Duration(milliseconds: 16);
     gameProgressService,
     gameRevealService,
     gameEndgameService,
-    AudioMutedNotifier,
     gameAudioService,
     flashClearDelay,
-    wordCheckDebounceDelay,
   ],
 )
 class GameBoardNotifier extends _$GameBoardNotifier {
@@ -100,7 +98,6 @@ class GameBoardNotifier extends _$GameBoardNotifier {
 
     return puzzleAsync.when(
       data: (board) {
-        print('DEBUG: GameBoardNotifier.build for ${board.id}');
         // Detect puzzle change: if we had a previous puzzle and the ID changed,
         // clear all game state (selection, foundWords, lockedCells, etc.)
         final prevId = _lastLoadedPuzzleId;
@@ -249,7 +246,7 @@ class GameBoardNotifier extends _$GameBoardNotifier {
   }
 
   Future<void> _restoreProgress(String puzzleId, GameBoard board) async {
-    print('DEBUG: _restoreProgress called for $puzzleId');
+    // print('DEBUG: _restoreProgress called for $puzzleId');
     try {
       await _progressService.loadProgress(
         board: board,
@@ -265,8 +262,8 @@ class GameBoardNotifier extends _$GameBoardNotifier {
           unawaited(ref.read(gameTimerProvider(board.id)).setElapsed(seconds));
         },
       );
-    } on Object catch (e, st) {
-      print('DEBUG: Failed to restore progress: $e\n$st');
+    } on Object {
+      // print('DEBUG: Failed to restore progress: $e\n$st');
       if (ref.mounted) {
         _populateInitialFoundLockedFromGrid(board);
       }

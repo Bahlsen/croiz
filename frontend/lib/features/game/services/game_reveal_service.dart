@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -39,8 +38,7 @@ class GameRevealService {
     required int col,
   }) {
     final solutionGrid = board.solutionGrid;
-    if (solutionGrid == null) return null;
-    return solutionGrid[row][col];
+    return solutionGrid?[row][col];
   }
 
   /// Reveals the solution letter at the given cell.
@@ -53,12 +51,16 @@ class GameRevealService {
     required (void Function(), void Function()) soundCallbacks,
   }) {
     final solutionGrid = board.solutionGrid;
-    if (solutionGrid == null) return;
+    if (solutionGrid == null) {
+      return;
+    }
 
     final (playSuccess, _) = soundCallbacks;
 
     final solution = solutionGrid[cell.row][cell.col];
-    if (solution == null) return;
+    if (solution == null) {
+      return;
+    }
 
     final newGrid = currentGrid.map(List<String?>.from).toList();
     newGrid[cell.row][cell.col] = solution;
@@ -134,7 +136,7 @@ class GameRevealService {
       );
     }
 
-    final newGrid = solutionGrid.map((row) => List<String?>.from(row)).toList();
+    final newGrid = solutionGrid.map(List<String?>.from).toList();
     final newFound = _wordCheck.scanForCompletedWords(board, newGrid);
     final newLocked = <CellKey>{};
     if (board.entries != null) {
@@ -164,7 +166,9 @@ class GameRevealService {
     required void Function() playSuccess,
     required bool Function() shouldPlaySound,
   }) {
-    if (cells.isEmpty) return;
+    if (cells.isEmpty) {
+      return;
+    }
 
     setFlashingCells(cells);
     if (shouldPlaySound()) {

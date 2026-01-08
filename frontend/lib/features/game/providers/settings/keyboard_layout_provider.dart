@@ -1,10 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/services/persistence/preference_persistence_service.dart';
 
+// ignore_for_file: provider_dependencies
 part 'keyboard_layout_provider.g.dart';
 
 /// Provider for keyboard layout preference.
-@Riverpod(keepAlive: true)
+
+@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
 class KeyboardLayoutNotifier extends _$KeyboardLayoutNotifier {
   @override
   bool build() => false; // false = QWERTY by default

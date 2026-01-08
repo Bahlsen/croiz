@@ -1,5 +1,3 @@
-import 'dart:developer' as developer;
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -41,12 +39,12 @@ class GameProgressService {
     required void Function(int seconds)? setElapsedSeconds,
   }) async {
     try {
-      print('GameProgressService: Attempting to load progress for ${board.id}');
+      // print('GameProgressService: Attempting to load progress for ${board.id}');
       final savedData = await _storage.load(board.id);
-      print(
-        'GameProgressService: Loaded data for ${board.id}: ${savedData != null ? 'Found' : 'Null'}',
-      );
-      if (savedData == null) return;
+      // print('GameProgressService: Loaded data for ${board.id}: ${savedData != null ? 'Found' : 'Null'}');
+      if (savedData == null) {
+        return;
+      }
 
       // 1. Restore Grid
       final savedGrid = savedData['grid'];
@@ -78,7 +76,7 @@ class GameProgressService {
 
       // 3. Restore Locked Cells
       final savedLocked = savedData['lockedCells'];
-      print('Restoring progress for ${board.id}, savedLocked: $savedLocked');
+      // print('Restoring progress for ${board.id}, savedLocked: $savedLocked');
       if (savedLocked is List) {
         final locked = <CellKey>{};
         for (final entry in savedLocked) {
@@ -91,7 +89,7 @@ class GameProgressService {
             }
           }
         }
-        print('Restored locked cells: $locked');
+        // print('Restored locked cells: $locked');
         setLockedCells(locked);
       }
 
@@ -100,8 +98,8 @@ class GameProgressService {
       if (savedElapsed is int && setElapsedSeconds != null) {
         setElapsedSeconds(savedElapsed);
       }
-    } on Object catch (e, st) {
-      print('GameProgressService: Failed to load progress: $e\n$st');
+    } on Object {
+      // print('GameProgressService: Failed to load progress: $e\n$st');
     }
   }
 
@@ -139,7 +137,9 @@ class GameProgressService {
 
     for (final entry in entries) {
       final key = _wordCheck.getWordKey(entry);
-      if (currentFoundWords.contains(key)) continue;
+      if (currentFoundWords.contains(key)) {
+        continue;
+      }
 
       final keys = _wordCheck.getCellKeys(entry);
       if (keys.contains(pos)) {
@@ -172,7 +172,7 @@ class CheckCompletionResult {
 
 @Riverpod(keepAlive: true, dependencies: [wordCheckService, puzzleStorage])
 GameProgressService gameProgressService(Ref ref) {
-  print('DEBUG: gameProgressService provider called');
+  // print('DEBUG: gameProgressService provider called');
   final wordCheck = ref.watch(wordCheckServiceProvider);
   final storage = ref.watch(puzzleStorageProvider);
   return GameProgressService(wordCheck, storage);

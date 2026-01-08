@@ -113,7 +113,9 @@ class PuzzleGenerationOrchestrator {
 
           // Log non-critical errors (adjacency, connectivity) but proceed
           // ignore: avoid_print
-          print('Non-critical validation warnings: ${validation.errors}');
+          developer.log(
+            'Non-critical validation warnings: ${validation.errors}',
+          );
         }
 
         // 3. Convert to Puzzle format

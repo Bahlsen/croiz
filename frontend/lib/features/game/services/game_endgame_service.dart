@@ -14,14 +14,20 @@ class GameEndgameService {
   /// A puzzle is completed if the grid matches the solution grid.
   bool isPuzzleCorrect(GameBoard board, List<List<String?>> currentGrid) {
     final solutionGrid = board.solutionGrid;
-    if (solutionGrid == null) return false;
+    if (solutionGrid == null) {
+      return false;
+    }
 
-    if (board.gridSize != currentGrid.length) return false;
+    if (board.gridSize != currentGrid.length) {
+      return false;
+    }
 
     for (var r = 0; r < board.gridSize; r++) {
       for (var c = 0; c < board.gridSize; c++) {
         // Skip black cells if they exist (though typically solutionGrid has nulls there)
-        if (board.blackCells[r][c]) continue;
+        if (board.blackCells[r][c]) {
+          continue;
+        }
 
         final solution = solutionGrid[r][c];
         final current = currentGrid[r][c];
@@ -39,8 +45,12 @@ class GameEndgameService {
   bool isBoardFilled(GameBoard board, List<List<String?>> grid) {
     for (var r = 0; r < board.gridSize; r++) {
       for (var c = 0; c < board.gridSize; c++) {
-        if (board.blackCells[r][c]) continue;
-        if (grid[r][c] == null || grid[r][c]!.isEmpty) return false;
+        if (board.blackCells[r][c]) {
+          continue;
+        }
+        if (grid[r][c] == null || grid[r][c]!.isEmpty) {
+          return false;
+        }
       }
     }
     return true;
@@ -58,8 +68,12 @@ class GameEndgameService {
     required dynamic audioService,
     required bool playVictorySound,
   }) {
-    if (board.entries == null || board.entries!.isEmpty) return false;
-    if (foundWords.length < board.entries!.length) return false;
+    if (board.entries == null || board.entries!.isEmpty) {
+      return false;
+    }
+    if (foundWords.length < board.entries!.length) {
+      return false;
+    }
 
     // Puzzle solved!
     timer.stop();
@@ -83,6 +97,4 @@ class GameEndgameService {
 }
 
 @Riverpod(keepAlive: true, dependencies: [])
-GameEndgameService gameEndgameService(Ref ref) {
-  return GameEndgameService();
-}
+GameEndgameService gameEndgameService(Ref ref) => GameEndgameService();

@@ -1,3 +1,4 @@
+// ignore_for_file: provider_dependencies
 import 'package:croiz/services/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

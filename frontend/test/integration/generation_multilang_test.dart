@@ -3,6 +3,7 @@
 import 'package:croiz/features/generation/models/generated_word.dart';
 import 'package:croiz/features/generation/services/fill_dictionary_service.dart';
 import 'package:croiz/features/generation/services/grid_first_generator.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 
 /// Multi-language generation test

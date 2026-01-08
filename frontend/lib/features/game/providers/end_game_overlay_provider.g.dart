@@ -21,9 +21,13 @@ final class EndGameOverlayVisibleNotifierProvider
         retry: null,
         name: r'endGameOverlayVisibleProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[selectedPuzzleIdProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          EndGameOverlayVisibleNotifierProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = selectedPuzzleIdProvider;
 
   @override
   String debugGetCreateSourceHash() => _$endGameOverlayVisibleNotifierHash();
@@ -42,7 +46,7 @@ final class EndGameOverlayVisibleNotifierProvider
 }
 
 String _$endGameOverlayVisibleNotifierHash() =>
-    r'7f5997acd4dd2747337c97b80f986d8cee8c6b69';
+    r'da17b154a5aff9546bada85c568cb73adda3a8be';
 
 abstract class _$EndGameOverlayVisibleNotifier extends $Notifier<bool> {
   bool build();

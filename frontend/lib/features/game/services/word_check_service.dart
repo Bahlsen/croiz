@@ -92,7 +92,9 @@ class WordCheckService {
 
   /// Scans the entire board for correctly completed words.
   Set<String> scanForCompletedWords(GameBoard board, List<List<String?>> grid) {
-    if (board.entries == null) return <String>{};
+    if (board.entries == null) {
+      return <String>{};
+    }
 
     final boardWithGrid = board.copyWith(grid: grid);
     final found = <String>{};

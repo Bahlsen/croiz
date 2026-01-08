@@ -140,10 +140,8 @@ final class GameBoardNotifierProvider
           gameProgressServiceProvider,
           gameRevealServiceProvider,
           gameEndgameServiceProvider,
-          audioMutedProvider,
           gameAudioServiceProvider,
           flashClearDelayProvider,
-          wordCheckDebounceDelayProvider,
         ],
         $allTransitiveDependencies: <ProviderOrFamily>{
           GameBoardNotifierProvider.$allTransitiveDependencies0,
@@ -164,9 +162,6 @@ final class GameBoardNotifierProvider
           GameBoardNotifierProvider.$allTransitiveDependencies15,
           GameBoardNotifierProvider.$allTransitiveDependencies16,
           GameBoardNotifierProvider.$allTransitiveDependencies17,
-          GameBoardNotifierProvider.$allTransitiveDependencies18,
-          GameBoardNotifierProvider.$allTransitiveDependencies19,
-          GameBoardNotifierProvider.$allTransitiveDependencies20,
         },
       );
 
@@ -193,12 +188,8 @@ final class GameBoardNotifierProvider
       GameProgressServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies14 = gameRevealServiceProvider;
   static final $allTransitiveDependencies15 = gameEndgameServiceProvider;
-  static final $allTransitiveDependencies16 = audioMutedProvider;
-  static final $allTransitiveDependencies17 =
-      AudioMutedNotifierProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies18 = gameAudioServiceProvider;
-  static final $allTransitiveDependencies19 = flashClearDelayProvider;
-  static final $allTransitiveDependencies20 = wordCheckDebounceDelayProvider;
+  static final $allTransitiveDependencies16 = gameAudioServiceProvider;
+  static final $allTransitiveDependencies17 = flashClearDelayProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -216,7 +207,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'57e392ed5ae5445e50f599f0c971fbb7078501dc';
+String _$gameBoardNotifierHash() => r'9e77e6a838a3e88a2b470607af172a62d196bdee';
 
 /// Main notifier for the game board state.
 
