@@ -43,8 +43,8 @@ final class PuzzleOriginsProvider
         retry: null,
         name: r'puzzleOriginsProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -62,7 +62,7 @@ final class PuzzleOriginsProvider
   }
 }
 
-String _$puzzleOriginsHash() => r'3376e61369a9a58d0e6b01c9a763751e8b3df1c2';
+String _$puzzleOriginsHash() => r'5e21161037c51a05c1c0ccd28fd4053610057592';
 
 @ProviderFor(originIndex)
 final originIndexProvider = OriginIndexFamily._();
@@ -121,7 +121,7 @@ final class OriginIndexProvider
   }
 }
 
-String _$originIndexHash() => r'f02af96473eb029eb8f394fc6a234523240e8ff9';
+String _$originIndexHash() => r'436aece4d5dd686f83f7276cd1db69b7ed705714';
 
 final class OriginIndexFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<PuzzleDescriptor>>, String> {
@@ -129,8 +129,8 @@ final class OriginIndexFamily extends $Family
     : super(
         retry: null,
         name: r'originIndexProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
         isAutoDispose: true,
       );
 
@@ -160,10 +160,17 @@ final class PuzzlesProvider
         argument: null,
         retry: null,
         name: r'puzzlesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        isAutoDispose: false,
+        dependencies: <ProviderOrFamily>[generatedPuzzlesRepositoryProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          PuzzlesProvider.$allTransitiveDependencies0,
+          PuzzlesProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = generatedPuzzlesRepositoryProvider;
+  static final $allTransitiveDependencies1 =
+      GeneratedPuzzlesRepositoryProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$puzzlesHash();
@@ -180,7 +187,7 @@ final class PuzzlesProvider
   }
 }
 
-String _$puzzlesHash() => r'5c8f25063d8a9ad8f93c85bff7f2b2fef1f8d780';
+String _$puzzlesHash() => r'd4836812e830e11b4de2fd9eb32d225be8d1acc7';
 
 /// Loads full metadata for a single puzzle asset path on demand.
 
@@ -242,7 +249,7 @@ final class PuzzleMetadataProvider
   }
 }
 
-String _$puzzleMetadataHash() => r'7891ec4871519d9809622374176e7013707c5f7a';
+String _$puzzleMetadataHash() => r'3fa82730facd8304752cf9ed6d09aeaf6eff6b8f';
 
 /// Loads full metadata for a single puzzle asset path on demand.
 
@@ -252,8 +259,8 @@ final class PuzzleMetadataFamily extends $Family
     : super(
         retry: null,
         name: r'puzzleMetadataProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
         isAutoDispose: true,
       );
 

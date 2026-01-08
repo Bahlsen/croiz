@@ -5,5 +5,5 @@ import 'package:croiz/features/game/services/game_audio_service.dart';
 part 'game_audio_provider.g.dart';
 
 /// Provider for the game audio service.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 AudioService gameAudioService(Ref ref) => GameAudioService();

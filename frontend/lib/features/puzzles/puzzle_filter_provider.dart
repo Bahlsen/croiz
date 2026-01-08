@@ -1,5 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+part 'puzzle_filter_provider.g.dart';
 
 /// State for puzzle filtering.
 class PuzzleFilterState {
@@ -58,14 +60,9 @@ class PuzzleFilterState {
   );
 }
 
-/// Provider for puzzle filter state.
-final puzzleFilterProvider =
-    NotifierProvider<PuzzleFilterNotifier, PuzzleFilterState>(
-      PuzzleFilterNotifier.new,
-    );
-
 /// Notifier for managing puzzle filter state.
-class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
+@riverpod
+class PuzzleFilter extends _$PuzzleFilter {
   static const _keyDifficulties = 'puzzle_filter_difficulties';
   static const _keyLanguages = 'puzzle_filter_languages';
   static const _keyShowCompleted = 'puzzle_filter_show_completed';
@@ -92,13 +89,6 @@ class PuzzleFilterNotifier extends Notifier<PuzzleFilterState> {
   /// against the correct set of actually available languages.
   void toggleLanguage(String language, Set<String> availableLanguages) {
     var current = Set<String>.from(state.selectedLanguages);
-
-    // Logic:
-    // If empty, it means ALL available languages are effectively selected.
-    // If we are toggling 'fr':
-    // - If we were in "All" mode, we must first materialize the set of all languages,
-    //   then remove 'fr' (effectively UNCHECKING 'fr').
-    // - If we were in "Specific" mode (current is not empty), we just add/remove.
 
     if (current.isEmpty) {
       // Materialize all

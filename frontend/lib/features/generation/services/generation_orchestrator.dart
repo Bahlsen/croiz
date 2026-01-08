@@ -436,6 +436,12 @@ final puzzleGenerationOrchestratorProvider =
         ref,
         ref.watch(fillDictionaryServiceProvider),
       ),
+      dependencies: [
+        geminiPuzzleServiceProvider,
+        generatedPuzzlesRepositoryProvider,
+        fillDictionaryServiceProvider,
+        puzzlesProvider,
+      ],
     );
 
 /// Isolated entry point for grid generation to prevent UI jank.

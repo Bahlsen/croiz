@@ -26,8 +26,8 @@ final class GameAudioServiceProvider
         retry: null,
         name: r'gameAudioServiceProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -52,4 +52,4 @@ final class GameAudioServiceProvider
   }
 }
 
-String _$gameAudioServiceHash() => r'72ee31f7eb03d2f0ce0d68be54d2790f5367ef86';
+String _$gameAudioServiceHash() => r'b39286e4492bd7264f431e844a223613570feabd';

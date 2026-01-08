@@ -1,15 +1,18 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'puzzles_provider.dart';
 import 'pending_puzzles_provider.dart';
 import 'puzzle_filter_provider.dart';
 import '../../services/persistence/storage_provider.dart';
+
+part 'filtered_puzzles_provider.g.dart';
 
 /// Provider that returns the set of completed puzzle IDs.
 ///
 /// A puzzle is considered "completed" if it has been saved with 100%
 /// completion in storage. This checks the `isCompleted` field in the
 /// saved puzzle data.
-final completedPuzzleIdsProvider = FutureProvider<Set<String>>((ref) async {
+@riverpod
+Future<Set<String>> completedPuzzleIds(Ref ref) async {
   final storage = ref.watch(puzzleStorageProvider);
   final allKeys = await storage.getAllKeys();
   final completedIds = <String>{};
@@ -26,41 +29,44 @@ final completedPuzzleIdsProvider = FutureProvider<Set<String>>((ref) async {
   }
 
   return completedIds;
-});
+}
 
 /// Provider that returns all available languages from the puzzle index.
 ///
 /// Derives the set of unique language codes from all puzzles.
-final availableLanguagesProvider = Provider<Set<String>>((ref) {
+@riverpod
+Set<String> availableLanguages(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   return puzzlesAsync.when(
     data: (puzzles) => puzzles.map((p) => p.language).toSet(),
     loading: () => const {'en'},
     error: (e, s) => const {'en'},
   );
-});
+}
 
 /// Provider that returns all available difficulties from the puzzle index.
 ///
 /// Derives the set of unique difficulty levels from all puzzles.
-final availableDifficultiesProvider = Provider<Set<int>>((ref) {
+@riverpod
+Set<int> availableDifficulties(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   return puzzlesAsync.when(
     data: (puzzles) => puzzles.map((p) => p.difficulty).toSet(),
     loading: () => const {},
     error: (e, s) => const {},
   );
-});
+}
 
 /// Provider that returns puzzles filtered by the current filter state.
 ///
 /// Watches both [puzzlesProvider] and [puzzleFilterProvider] and returns
 /// only puzzles that match the current filters.
-final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
+@riverpod
+List<PuzzleDescriptor> filteredPuzzles(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   final filterState = ref.watch(puzzleFilterProvider);
   final completedIdsAsync = ref.watch(completedPuzzleIdsProvider);
-  final availableLanguages = ref.watch(availableLanguagesProvider);
+  final availableLanguagesSet = ref.watch(availableLanguagesProvider);
   final pendingPuzzles = ref.watch(pendingPuzzlesProvider);
 
   // Get completed IDs set (empty if loading/error)
@@ -76,7 +82,7 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
           puzzles,
           filterState,
           completedIds,
-          availableLanguages,
+          availableLanguagesSet,
         ),
     loading: () => [],
     error: (e, s) => [],
@@ -89,7 +95,7 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
       pendingPuzzles.map((p) => p.toDescriptor()).toList();
 
   return [...pendingDescriptors, ...filtered];
-});
+}
 
 /// Filter puzzles based on the current filter state.
 List<PuzzleDescriptor> _filterPuzzles(

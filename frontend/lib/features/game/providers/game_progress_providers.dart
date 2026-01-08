@@ -5,7 +5,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 part 'game_progress_providers.g.dart';
 
 /// Holds the set of found word keys (format: "row,col,direction").
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 class FoundWordsNotifier extends _$FoundWordsNotifier {
   @override
   Set<String> build() => <String>{};
@@ -21,7 +21,7 @@ class FoundWordsNotifier extends _$FoundWordsNotifier {
 }
 
 /// Holds cells that should flash (for word completion animation).
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 class FlashingCellsNotifier extends _$FlashingCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -32,12 +32,12 @@ class FlashingCellsNotifier extends _$FlashingCellsNotifier {
 
 /// Provider family for whether a specific cell is currently flashing.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [FlashingCellsNotifier])
 bool cellFlashing(Ref ref, CellKey key) =>
     ref.watch(flashingCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 class FlashingClearedCellsNotifier extends _$FlashingClearedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -48,12 +48,12 @@ class FlashingClearedCellsNotifier extends _$FlashingClearedCellsNotifier {
 
 /// Provider family for whether a specific cell is in the "cleared flash" set.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [FlashingClearedCellsNotifier])
 bool cellClearedFlashing(Ref ref, CellKey key) =>
     ref.watch(flashingClearedCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that are locked (found words cannot be edited).
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 class LockedCellsNotifier extends _$LockedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -63,7 +63,7 @@ class LockedCellsNotifier extends _$LockedCellsNotifier {
 }
 
 /// Holds cells that should flash for REVEAL animation.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 class FlashingRevealedCellsNotifier extends _$FlashingRevealedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -73,6 +73,6 @@ class FlashingRevealedCellsNotifier extends _$FlashingRevealedCellsNotifier {
 }
 
 /// Provider family for whether a specific cell is currently flashing for reveal.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [FlashingRevealedCellsNotifier])
 bool cellRevealedFlashing(Ref ref, CellKey key) =>
     ref.watch(flashingRevealedCellsProvider.select((set) => set.contains(key)));

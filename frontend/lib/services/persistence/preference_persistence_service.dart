@@ -41,6 +41,6 @@ class PreferencePersistenceService {
 }
 
 /// Provider for PreferencePersistenceService.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [])
 PreferencePersistenceService preferencePersistenceService(Ref ref) =>
     PreferencePersistenceService();

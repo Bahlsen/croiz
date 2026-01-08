@@ -10,7 +10,9 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 
+// ignore: riverpod_missing_dependencies
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -106,6 +108,7 @@ void main() {
             flashClearDelayProvider.overrideWithValue(Duration.zero),
             wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
             gamePersistenceServiceProvider.overrideWithValue(persistence),
+            puzzleStorageProvider.overrideWithValue(storage),
             gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
           ],
         );
@@ -205,7 +208,9 @@ void main() {
             .setSelected('locked-test-a');
         await container.read(puzzleLoaderProvider.future);
         await Future.microtask(() {});
+        print('TEST: Switched back to puzzle A, triggering build');
         container.read(gameBoardProvider);
+        print('TEST: Board A build triggered');
 
         // Wait for restore to complete (longer delay for async restore)
         for (var i = 0; i < 20; i++) {

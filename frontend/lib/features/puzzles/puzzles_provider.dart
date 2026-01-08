@@ -149,7 +149,7 @@ String puzzleTitleFromJson(
 /// Strict behaviour: requires `assets/data/puzzles_index.json` to exist and contain
 /// a JSON object with an "items" array. Each item must have an "origin" field.
 /// Provider that returns the list of available origins (for lazy-loading).
-@riverpod
+@Riverpod(dependencies: [])
 Future<List<String>> puzzleOrigins(Ref ref) async {
   final rawIndex = await rootBundle.loadString(
     'assets/data/puzzles_index.json',
@@ -186,7 +186,7 @@ Future<List<String>> puzzleOrigins(Ref ref) async {
   return origins.toList()..sort();
 }
 
-@riverpod
+@Riverpod(dependencies: [])
 Future<List<PuzzleDescriptor>> originIndex(Ref ref, String origin) async {
   final rawIndex = await rootBundle.loadString(
     'assets/data/puzzles_index.json',
@@ -232,7 +232,7 @@ int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
 // Fallback parsing removed: origin indexes must be provided via
 // assets/data/puzzles_index_by_origin/<origin>.json.
 
-@riverpod
+@Riverpod(keepAlive: true, dependencies: [generatedPuzzlesRepository])
 Future<List<PuzzleDescriptor>> puzzles(Ref ref) async {
   // 1. Load from assets
   final raw = await rootBundle.loadString('assets/data/puzzles_index.json');
@@ -297,7 +297,7 @@ List<PuzzleDescriptor> _parseAllFromIndex(String raw) {
 }
 
 /// Loads full metadata for a single puzzle asset path on demand.
-@riverpod
+@Riverpod(dependencies: [])
 Future<PuzzleDescriptor> puzzleMetadata(Ref ref, String path) async {
   // `path` here is the normalized indexed path (no leading `assets/`).
   final token = puzzleTokenFromAssetPath(path);

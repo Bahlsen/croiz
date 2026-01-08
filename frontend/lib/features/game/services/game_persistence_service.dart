@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
 import 'package:croiz/services/persistence/storage_provider.dart';
+
+part 'game_persistence_service.g.dart';
 
 /// Service responsible for persisting puzzle progress.
 ///
@@ -140,8 +142,8 @@ class GamePersistenceService {
   }
 }
 
-/// Provider for the persistence service.
-final gamePersistenceServiceProvider = Provider<GamePersistenceService>((ref) {
+@Riverpod(keepAlive: true, dependencies: [puzzleStorage])
+GamePersistenceService gamePersistenceService(Ref ref) {
   final storage = ref.watch(puzzleStorageProvider);
   return GamePersistenceService(storage);
-});
+}

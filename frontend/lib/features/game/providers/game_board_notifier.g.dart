@@ -32,8 +32,8 @@ final class FlashClearDelayProvider
         retry: null,
         name: r'flashClearDelayProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -58,7 +58,7 @@ final class FlashClearDelayProvider
   }
 }
 
-String _$flashClearDelayHash() => r'7d6fb3e168802938de722243788a3d74e1a31dbe';
+String _$flashClearDelayHash() => r'c1c12a598d4dcf30111c9faf7ac1dcdd69a2eafd';
 
 /// Debounce delay for word completion checks during fast typing.
 /// In production: 16ms (one frame) to batch checks while staying responsive.
@@ -84,8 +84,8 @@ final class WordCheckDebounceDelayProvider
         retry: null,
         name: r'wordCheckDebounceDelayProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -111,7 +111,7 @@ final class WordCheckDebounceDelayProvider
 }
 
 String _$wordCheckDebounceDelayHash() =>
-    r'74fa28b70bee9450f53ea1c639c50ca4c0d5924d';
+    r'998595f59997b2bd956d3b634845878c1547eb5c';
 
 /// Main notifier for the game board state.
 
@@ -129,9 +129,76 @@ final class GameBoardNotifierProvider
         retry: null,
         name: r'gameBoardProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          puzzleLoaderProvider,
+          selectedPuzzleIdProvider,
+          foundWordsProvider,
+          lockedCellsProvider,
+          flashingCellsProvider,
+          flashingClearedCellsProvider,
+          gamePersistenceServiceProvider,
+          gameProgressServiceProvider,
+          gameRevealServiceProvider,
+          gameEndgameServiceProvider,
+          audioMutedProvider,
+          gameAudioServiceProvider,
+          flashClearDelayProvider,
+          wordCheckDebounceDelayProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          GameBoardNotifierProvider.$allTransitiveDependencies0,
+          GameBoardNotifierProvider.$allTransitiveDependencies1,
+          GameBoardNotifierProvider.$allTransitiveDependencies2,
+          GameBoardNotifierProvider.$allTransitiveDependencies3,
+          GameBoardNotifierProvider.$allTransitiveDependencies4,
+          GameBoardNotifierProvider.$allTransitiveDependencies5,
+          GameBoardNotifierProvider.$allTransitiveDependencies6,
+          GameBoardNotifierProvider.$allTransitiveDependencies7,
+          GameBoardNotifierProvider.$allTransitiveDependencies8,
+          GameBoardNotifierProvider.$allTransitiveDependencies9,
+          GameBoardNotifierProvider.$allTransitiveDependencies10,
+          GameBoardNotifierProvider.$allTransitiveDependencies11,
+          GameBoardNotifierProvider.$allTransitiveDependencies12,
+          GameBoardNotifierProvider.$allTransitiveDependencies13,
+          GameBoardNotifierProvider.$allTransitiveDependencies14,
+          GameBoardNotifierProvider.$allTransitiveDependencies15,
+          GameBoardNotifierProvider.$allTransitiveDependencies16,
+          GameBoardNotifierProvider.$allTransitiveDependencies17,
+          GameBoardNotifierProvider.$allTransitiveDependencies18,
+          GameBoardNotifierProvider.$allTransitiveDependencies19,
+          GameBoardNotifierProvider.$allTransitiveDependencies20,
+        },
       );
+
+  static final $allTransitiveDependencies0 = puzzleLoaderProvider;
+  static final $allTransitiveDependencies1 =
+      PuzzleLoaderProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      PuzzleLoaderProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      PuzzleLoaderProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      PuzzleLoaderProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      PuzzleLoaderProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      PuzzleLoaderProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 = foundWordsProvider;
+  static final $allTransitiveDependencies8 = lockedCellsProvider;
+  static final $allTransitiveDependencies9 = flashingCellsProvider;
+  static final $allTransitiveDependencies10 = flashingClearedCellsProvider;
+  static final $allTransitiveDependencies11 = gamePersistenceServiceProvider;
+  static final $allTransitiveDependencies12 = gameProgressServiceProvider;
+  static final $allTransitiveDependencies13 =
+      GameProgressServiceProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies14 = gameRevealServiceProvider;
+  static final $allTransitiveDependencies15 = gameEndgameServiceProvider;
+  static final $allTransitiveDependencies16 = audioMutedProvider;
+  static final $allTransitiveDependencies17 =
+      AudioMutedNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies18 = gameAudioServiceProvider;
+  static final $allTransitiveDependencies19 = flashClearDelayProvider;
+  static final $allTransitiveDependencies20 = wordCheckDebounceDelayProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -149,7 +216,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'2b1389d12f67da26c385809e565a3d159633fe96';
+String _$gameBoardNotifierHash() => r'57e392ed5ae5445e50f599f0c971fbb7078501dc';
 
 /// Main notifier for the game board state.
 

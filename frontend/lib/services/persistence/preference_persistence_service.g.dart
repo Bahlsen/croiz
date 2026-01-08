@@ -32,8 +32,8 @@ final class PreferencePersistenceServiceProvider
         retry: null,
         name: r'preferencePersistenceServiceProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -60,4 +60,4 @@ final class PreferencePersistenceServiceProvider
 }
 
 String _$preferencePersistenceServiceHash() =>
-    r'57c1bd9e851105ebb658718f8dc6b4e4b20c417a';
+    r'2c8f1f5c1c8aa730afcc7c162300709389066f15';

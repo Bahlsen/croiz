@@ -24,8 +24,8 @@ final class FoundWordsNotifierProvider
         retry: null,
         name: r'foundWordsProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -45,7 +45,7 @@ final class FoundWordsNotifierProvider
 }
 
 String _$foundWordsNotifierHash() =>
-    r'0d6fb8fdc1028b0ae17d137383f55c4731b699c5';
+    r'4a453130f542ef57a53037dd4a7aafedfbf5bb42';
 
 /// Holds the set of found word keys (format: "row,col,direction").
 
@@ -83,8 +83,8 @@ final class FlashingCellsNotifierProvider
         retry: null,
         name: r'flashingCellsProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -104,7 +104,7 @@ final class FlashingCellsNotifierProvider
 }
 
 String _$flashingCellsNotifierHash() =>
-    r'0bbfebe4bc52ccfc68e24a918e14706a63043f25';
+    r'bbcd53004e70bfe6e5f32fc87cd708e138ff16b7';
 
 /// Holds cells that should flash (for word completion animation).
 
@@ -150,6 +150,8 @@ final class CellFlashingProvider extends $FunctionalProvider<bool, bool, bool>
          $allTransitiveDependencies: null,
        );
 
+  static final $allTransitiveDependencies0 = flashingCellsProvider;
+
   @override
   String debugGetCreateSourceHash() => _$cellFlashingHash();
 
@@ -190,7 +192,7 @@ final class CellFlashingProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$cellFlashingHash() => r'4d27e524df34031e89c30f738f37c6d24de8a70b';
+String _$cellFlashingHash() => r'10b60d6887789d35c2b4907f2402efc4f63e3c06';
 
 /// Provider family for whether a specific cell is currently flashing.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
@@ -201,8 +203,10 @@ final class CellFlashingFamily extends $Family
     : super(
         retry: null,
         name: r'cellFlashingProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[flashingCellsProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          CellFlashingProvider.$allTransitiveDependencies0,
+        ],
         isAutoDispose: false,
       );
 
@@ -232,8 +236,8 @@ final class FlashingClearedCellsNotifierProvider
         retry: null,
         name: r'flashingClearedCellsProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -253,7 +257,7 @@ final class FlashingClearedCellsNotifierProvider
 }
 
 String _$flashingClearedCellsNotifierHash() =>
-    r'ff3141a82b080ac6ccc08cd3398411ab633a569d';
+    r'22e3eea6e160c33eb91b4776f444a9c00a1b7100';
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
 
@@ -300,6 +304,8 @@ final class CellClearedFlashingProvider
          $allTransitiveDependencies: null,
        );
 
+  static final $allTransitiveDependencies0 = flashingClearedCellsProvider;
+
   @override
   String debugGetCreateSourceHash() => _$cellClearedFlashingHash();
 
@@ -341,7 +347,7 @@ final class CellClearedFlashingProvider
 }
 
 String _$cellClearedFlashingHash() =>
-    r'948bc3990cd0f23b610987bf2b4037189505f9e8';
+    r'9adfb7abace2c0786f61d0a0e7a65c835a418fd2';
 
 /// Provider family for whether a specific cell is in the "cleared flash" set.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
@@ -352,8 +358,10 @@ final class CellClearedFlashingFamily extends $Family
     : super(
         retry: null,
         name: r'cellClearedFlashingProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[flashingClearedCellsProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          CellClearedFlashingProvider.$allTransitiveDependencies0,
+        ],
         isAutoDispose: false,
       );
 
@@ -383,8 +391,8 @@ final class LockedCellsNotifierProvider
         retry: null,
         name: r'lockedCellsProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -404,7 +412,7 @@ final class LockedCellsNotifierProvider
 }
 
 String _$lockedCellsNotifierHash() =>
-    r'10f3129b5a333b67062c70ab36ba3222203f9b60';
+    r'b94132fee6fc40a82e62a48b9bf3d2968877c6bf';
 
 /// Holds cells that are locked (found words cannot be edited).
 
@@ -442,8 +450,8 @@ final class FlashingRevealedCellsNotifierProvider
         retry: null,
         name: r'flashingRevealedCellsProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -463,7 +471,7 @@ final class FlashingRevealedCellsNotifierProvider
 }
 
 String _$flashingRevealedCellsNotifierHash() =>
-    r'961779934a209e9d7dd7b2152fe773ed6a086931';
+    r'af4dbbf913775ad872170e9f54ce604d8d92036f';
 
 /// Holds cells that should flash for REVEAL animation.
 
@@ -507,6 +515,8 @@ final class CellRevealedFlashingProvider
          $allTransitiveDependencies: null,
        );
 
+  static final $allTransitiveDependencies0 = flashingRevealedCellsProvider;
+
   @override
   String debugGetCreateSourceHash() => _$cellRevealedFlashingHash();
 
@@ -548,7 +558,7 @@ final class CellRevealedFlashingProvider
 }
 
 String _$cellRevealedFlashingHash() =>
-    r'709268ce1b2c0c230d649aaa0f536d6684fb7545';
+    r'ed3e2983448e30dcbb1f24960ceef052e8974ccd';
 
 /// Provider family for whether a specific cell is currently flashing for reveal.
 
@@ -558,8 +568,10 @@ final class CellRevealedFlashingFamily extends $Family
     : super(
         retry: null,
         name: r'cellRevealedFlashingProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[flashingRevealedCellsProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          CellRevealedFlashingProvider.$allTransitiveDependencies0,
+        ],
         isAutoDispose: false,
       );
 

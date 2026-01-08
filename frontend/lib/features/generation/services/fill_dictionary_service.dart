@@ -161,4 +161,5 @@ class FillDictionaryService {
 
 final fillDictionaryServiceProvider = Provider<FillDictionaryService>(
   (ref) => FillDictionaryService.instance,
+  dependencies: [],
 );

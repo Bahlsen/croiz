@@ -14,11 +14,14 @@ class FakePuzzleStorage implements PuzzleStorageInterface {
 
   @override
   Future<Map<String, dynamic>?> load(String id) async {
+    print('FakePuzzleStorage: loading $id');
     final entry = _data[id];
     if (entry == null) {
+      print('FakePuzzleStorage: $id not found');
       return null;
     }
     // Return a copy to prevent mutation of stored data
+    print('FakePuzzleStorage: $id found, data length: ${entry.length}');
     return Map<String, dynamic>.from(entry);
   }
 
@@ -27,6 +30,7 @@ class FakePuzzleStorage implements PuzzleStorageInterface {
 
   @override
   Future<void> save(String id, Map<String, dynamic> payload) async {
+    print('FakePuzzleStorage: saving $id, keys: ${payload.keys.toList()}');
     _data[id] = payload;
     _controller.add(null);
   }

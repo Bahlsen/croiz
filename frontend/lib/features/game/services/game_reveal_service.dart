@@ -1,29 +1,21 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/utils/flash_utils.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/providers/word_check_provider.dart';
 
-/// Result of a reveal operation containing updated state.
+part 'game_reveal_service.g.dart';
+
+/// Result of a reveal operation.
 class RevealResult {
-  const RevealResult({
+  RevealResult({
     required this.newGrid,
     required this.newFoundWords,
     required this.newLockedCells,
     required this.cellsToFlash,
     required this.hasChanges,
   });
-
-  /// No-op result when nothing was revealed.
-  factory RevealResult.noOp(GameBoard board) => RevealResult(
-    newGrid: board.grid,
-    newFoundWords: const <String>{},
-    newLockedCells: const <CellKey>{},
-    cellsToFlash: const <CellKey>{},
-    hasChanges: false,
-  );
-
   final List<List<String?>> newGrid;
   final Set<String> newFoundWords;
   final Set<CellKey> newLockedCells;
@@ -34,198 +26,162 @@ class RevealResult {
 /// Service responsible for puzzle reveal operations.
 ///
 /// Extracted from GameBoardNotifier to follow Single Responsibility Principle.
-/// Handles reveal letter, reveal entry, and reveal all operations.
-
+/// Handles revealing a single letter, a whole word, or the entire puzzle.
 class GameRevealService {
-  const GameRevealService(this._wordCheck);
+  GameRevealService(this._wordCheck);
 
   final WordCheckService _wordCheck;
 
-  /// Reveal a single letter at the given cell.
-  /// Returns the revealed letter or null if no reveal was possible.
+  /// Reveals a single cell.
   String? revealLetterAt({
     required GameBoard board,
     required int row,
     required int col,
   }) {
-    final sol = board.solutionGrid;
-    if (sol == null) {
-      return null;
-    }
-    if (row < 0 || row >= sol.length) {
-      return null;
-    }
-    if (col < 0 || col >= sol[row].length) {
-      return null;
-    }
-    return sol[row][col];
+    final solutionGrid = board.solutionGrid;
+    if (solutionGrid == null) return null;
+    return solutionGrid[row][col];
   }
 
-  /// Reveal an entire entry (word).
-  /// Returns RevealResult with updated grid and cells to flash.
+  /// Reveals the solution letter at the given cell.
+  void revealLetter({
+    required CellKey cell,
+    required GameBoard board,
+    required List<List<String?>> currentGrid,
+    required void Function(List<List<String?>> grid) setGrid,
+    required void Function(Set<CellKey> cells) triggerFlash,
+    required (void Function(), void Function()) soundCallbacks,
+  }) {
+    final solutionGrid = board.solutionGrid;
+    if (solutionGrid == null) return;
+
+    final (playSuccess, _) = soundCallbacks;
+
+    final solution = solutionGrid[cell.row][cell.col];
+    if (solution == null) return;
+
+    final newGrid = currentGrid.map(List<String?>.from).toList();
+    newGrid[cell.row][cell.col] = solution;
+
+    setGrid(newGrid);
+    triggerFlash({cell});
+
+    // Play reveal sound
+    playSuccess();
+  }
+
+  /// Reveals the selected word.
   RevealResult revealEntry({
     required GameBoard board,
     required PuzzleEntryData entry,
     required Set<String> currentFoundWords,
     required Set<CellKey> currentLockedCells,
   }) {
-    final sol = board.solutionGrid;
-    if (sol == null) {
-      return RevealResult.noOp(board);
-    }
-
-    final key = _wordCheck.getWordKey(entry);
-    final entryCellKeys = _wordCheck.getCellKeys(entry);
-
-    // If already found or locked, treat as no-op
-    if (currentFoundWords.contains(key) ||
-        currentLockedCells.containsAll(entryCellKeys)) {
-      return RevealResult.noOp(board);
+    final solutionGrid = board.solutionGrid;
+    if (solutionGrid == null) {
+      return RevealResult(
+        newGrid: board.grid,
+        newFoundWords: currentFoundWords,
+        newLockedCells: currentLockedCells,
+        cellsToFlash: {},
+        hasChanges: false,
+      );
     }
 
     final newGrid = board.grid.map(List<String?>.from).toList();
-    final cells = <CellKey>{};
+    final affectedCells = <CellKey>{};
 
-    if (entry.direction == 'across') {
-      final row = entry.y;
-      for (var i = 0; i < entry.length; i++) {
-        final col = entry.x + i;
-        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
-          newGrid[row][col] = sol[row][col];
-          cells.add(CellKey(row, col));
-        }
-      }
-    } else {
-      final col = entry.x;
-      for (var i = 0; i < entry.length; i++) {
-        final row = entry.y + i;
-        if (row >= 0 && row < sol.length && col >= 0 && col < sol[row].length) {
-          newGrid[row][col] = sol[row][col];
-          cells.add(CellKey(row, col));
-        }
+    for (var i = 0; i < entry.length; i++) {
+      final r = entry.direction == 'across' ? entry.y : entry.y + i;
+      final c = entry.direction == 'across' ? entry.x + i : entry.x;
+
+      final solution = solutionGrid[r][c];
+      if (solution != null) {
+        newGrid[r][c] = solution;
+        affectedCells.add(CellKey(r, c));
       }
     }
 
-    final newFound = Set<String>.from(currentFoundWords)..add(key);
-    final newLocked = Set<CellKey>.from(currentLockedCells)..addAll(cells);
+    final newFound = Set<String>.from(currentFoundWords)
+      ..add(_wordCheck.getWordKey(entry));
+    final newLocked = Set<CellKey>.from(currentLockedCells)
+      ..addAll(affectedCells);
 
     return RevealResult(
       newGrid: newGrid,
       newFoundWords: newFound,
       newLockedCells: newLocked,
-      cellsToFlash: cells,
+      cellsToFlash: affectedCells,
       hasChanges: true,
     );
   }
 
-  /// Reveal the entire puzzle.
-  /// Returns RevealResult with updated grid and cells to flash (only newly revealed).
+  /// Reveals the entire puzzle.
   RevealResult revealAll({
     required GameBoard board,
     required Set<String> currentFoundWords,
     required Set<CellKey> currentLockedCells,
     required Set<CellKey> currentlyFlashing,
   }) {
-    final sol = board.solutionGrid;
-    if (sol == null) {
-      return RevealResult.noOp(board);
-    }
-
-    final entries = board.entries;
-    // Early return if already complete
-    if (entries != null && entries.isNotEmpty) {
-      if (currentFoundWords.length == entries.length) {
-        return RevealResult.noOp(board);
-      }
-    }
-
-    // Capture state before reveal
-    final beforeBoard = board;
-    final newGrid = sol.map(List<String?>.from).toList();
-    final afterBoard = board.copyWith(grid: newGrid);
-
-    // Determine which entries are newly completed
-    final allKeys = <String>{};
-    final newlyFound = <String>{};
-    final newCells = <CellKey>{};
-
-    if (entries != null) {
-      for (final e in entries) {
-        final key = _wordCheck.getWordKey(e);
-        allKeys.add(key);
-
-        final wasComplete = _wordCheck.isWordComplete(beforeBoard, e);
-        final isCompleteNow = _wordCheck.isWordComplete(afterBoard, e);
-        final cellKeys = _wordCheck.getCellKeys(e);
-        final wasLocked = currentLockedCells.containsAll(cellKeys);
-
-        if (!wasComplete &&
-            isCompleteNow &&
-            !currentFoundWords.contains(key) &&
-            !wasLocked) {
-          newlyFound.add(key);
-          newCells.addAll(cellKeys);
-        }
-      }
-    }
-
-    // Filter out cells that are already flashing
-    final toFlash =
-        newCells.where((c) => !currentlyFlashing.contains(c)).toSet();
-
-    // Lock all non-black cells
-    final locked = <CellKey>{};
-    for (var r = 0; r < newGrid.length; r++) {
-      for (var c = 0; c < newGrid[r].length; c++) {
-        if (!board.blackCells[r][c]) {
-          locked.add(CellKey(r, c));
-        }
-      }
-    }
-
-    // If no entries metadata, all cells should flash
-    if (entries == null || entries.isEmpty) {
+    final solutionGrid = board.solutionGrid;
+    if (solutionGrid == null) {
       return RevealResult(
-        newGrid: newGrid,
-        newFoundWords: allKeys,
-        newLockedCells: locked,
-        cellsToFlash: locked,
-        hasChanges: true,
+        newGrid: board.grid,
+        newFoundWords: currentFoundWords,
+        newLockedCells: currentLockedCells,
+        cellsToFlash: {},
+        hasChanges: false,
       );
     }
 
+    final newGrid = solutionGrid.map((row) => List<String?>.from(row)).toList();
+    final newFound = _wordCheck.scanForCompletedWords(board, newGrid);
+    final newLocked = <CellKey>{};
+    if (board.entries != null) {
+      for (final entry in board.entries!) {
+        if (newFound.contains(_wordCheck.getWordKey(entry))) {
+          newLocked.addAll(_wordCheck.getCellKeys(entry));
+        }
+      }
+    }
+
+    final cellsToFlash = newLocked.difference(currentLockedCells);
+
     return RevealResult(
       newGrid: newGrid,
-      newFoundWords: allKeys,
-      newLockedCells: locked,
-      cellsToFlash: toFlash,
-      hasChanges: newlyFound.isNotEmpty || toFlash.isNotEmpty,
+      newFoundWords: newFound,
+      newLockedCells: newLocked,
+      cellsToFlash: cellsToFlash,
+      hasChanges: true,
     );
   }
 
-  /// Helper to trigger flash animation and play sound.
+  /// Trigger visual feedback for revealed cells.
   void triggerFlash({
     required Set<CellKey> cells,
-    required void Function(Set<CellKey>) setFlashingCells,
+    required void Function(Set<CellKey> cells) setFlashingCells,
     required Duration Function() getFlashDelay,
-    required Future<void> Function() playSuccess,
-    bool Function()? shouldPlaySound,
+    required void Function() playSuccess,
+    required bool Function() shouldPlaySound,
   }) {
-    if (cells.isEmpty) {
-      return;
+    if (cells.isEmpty) return;
+
+    setFlashingCells(cells);
+    if (shouldPlaySound()) {
+      playSuccess();
     }
-    triggerFlashAndPlaySuccess(
-      cells,
-      setFlashingCells,
-      getFlashDelay,
-      playSuccess: playSuccess,
-      shouldPlaySound: shouldPlaySound,
-    );
+
+    final delay = getFlashDelay();
+    if (delay == Duration.zero) {
+      setFlashingCells(<CellKey>{});
+    } else {
+      Future.delayed(delay, () => setFlashingCells(<CellKey>{}));
+    }
   }
 }
 
-/// Provider for the reveal service.
-final gameRevealServiceProvider = Provider<GameRevealService>((ref) {
-  final wordCheck = ref.read(wordCheckServiceProvider);
+@Riverpod(keepAlive: true, dependencies: [wordCheckService])
+GameRevealService gameRevealService(Ref ref) {
+  final wordCheck = ref.watch(wordCheckServiceProvider);
   return GameRevealService(wordCheck);
-});
+}

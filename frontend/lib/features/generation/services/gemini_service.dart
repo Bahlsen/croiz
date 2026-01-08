@@ -312,5 +312,6 @@ Format:
 // coverage:ignore-start
 final geminiPuzzleServiceProvider = Provider<GeminiPuzzleService>(
   (ref) => GeminiPuzzleService(),
+  dependencies: [],
 );
 // coverage:ignore-end

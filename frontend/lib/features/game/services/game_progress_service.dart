@@ -1,247 +1,179 @@
 import 'dart:developer' as developer;
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
+import 'package:croiz/features/game/providers/word_check_provider.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'
     show PuzzleStorageInterface;
-import 'package:croiz/features/game/providers/word_check_provider.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
 
-/// Result of loading puzzle progress from storage.
-class ProgressLoadResult {
-  const ProgressLoadResult({
-    required this.grid,
-    required this.foundWords,
-    required this.lockedCells,
-    required this.elapsedSeconds,
-  });
+part 'game_progress_service.g.dart';
 
-  /// Empty result when no progress was stored.
-  static const empty = ProgressLoadResult(
-    grid: null,
-    foundWords: null,
-    lockedCells: null,
-    elapsedSeconds: null,
-  );
-
-  final List<List<String?>>? grid;
-  final Set<String>? foundWords;
-  final Set<CellKey>? lockedCells;
-  final int? elapsedSeconds;
-
-  bool get hasData =>
-      grid != null ||
-      foundWords != null ||
-      lockedCells != null ||
-      elapsedSeconds != null;
+/// Result of computing initial state from grid.
+class InitialStateResult {
+  InitialStateResult({required this.foundWords, required this.lockedCells});
+  final Set<String> foundWords;
+  final Set<CellKey> lockedCells;
+  bool get isEmpty => foundWords.isEmpty && lockedCells.isEmpty;
 }
 
 /// Service responsible for loading and restoring puzzle progress.
 ///
 /// Extracted from GameBoardNotifier to follow Single Responsibility Principle.
-/// Handles loading persisted progress and computing initial state from grid.
+/// Handles coordinate mapping and state reconstruction from persistent storage.
 class GameProgressService {
   GameProgressService(this._wordCheck, this._storage);
 
-  final PuzzleStorageInterface _storage;
   final WordCheckService _wordCheck;
+  final PuzzleStorageInterface _storage;
 
-  /// Load persisted progress for a puzzle.
-  Future<ProgressLoadResult> loadProgress(
-    String puzzleId, {
-    required int expectedRows,
-    required int expectedCols,
+  /// Loads progress for a given puzzle from storage and applies it to the board.
+  ///
+  /// This operation is asynchronous and reconstructs foundWords, lockedCells,
+  /// and the play grid.
+  Future<void> loadProgress({
+    required GameBoard board,
+    required void Function(List<List<String?>> grid) setGrid,
+    required void Function(Set<String> found) setFoundWords,
+    required void Function(Set<CellKey> locked) setLockedCells,
+    required void Function(int seconds)? setElapsedSeconds,
   }) async {
     try {
-      final stored = await _storage.load(puzzleId);
-      if (stored == null) {
-        return ProgressLoadResult.empty;
-      }
-
-      // Parse grid
-      List<List<String?>>? grid;
-      final gridData = stored['grid'];
-      if (gridData is List) {
-        final rows = gridData.length;
-        final cols =
-            rows > 0 && gridData[0] is List ? (gridData[0] as List).length : 0;
-        if (rows == expectedRows && cols == expectedCols) {
-          final newGrid = <List<String?>>[];
-          for (final r in gridData) {
-            final rowList = <String?>[];
-            for (final c in (r as List)) {
-              if (c == null) {
-                rowList.add(null);
-              } else {
-                rowList.add(c.toString());
-              }
-            }
-            newGrid.add(rowList);
-          }
-          grid = newGrid;
-        }
-      }
-
-      // Parse found words
-      Set<String>? foundWords;
-      final found = stored['foundWords'];
-      if (found is List) {
-        foundWords = found.cast<String>().toSet();
-      }
-
-      // Parse locked cells
-      Set<CellKey>? lockedCells;
-      final locked = stored['lockedCells'];
-      if (locked is List) {
-        final set = <CellKey>{};
-        for (final s in locked) {
-          if (s is String) {
-            final parts = s.split(',');
-            if (parts.length == 2) {
-              final r = int.tryParse(parts[0]);
-              final c = int.tryParse(parts[1]);
-              if (r != null && c != null) {
-                set.add(CellKey(r, c));
-              }
-            }
-          }
-        }
-        lockedCells = set;
-      }
-
-      // Parse elapsed time
-      int? elapsedSeconds;
-      final timerVal = stored['elapsedSeconds'];
-      if (timerVal is num) {
-        elapsedSeconds = timerVal.toInt();
-      }
-
-      return ProgressLoadResult(
-        grid: grid,
-        foundWords: foundWords,
-        lockedCells: lockedCells,
-        elapsedSeconds: elapsedSeconds,
+      print('GameProgressService: Attempting to load progress for ${board.id}');
+      final savedData = await _storage.load(board.id);
+      print(
+        'GameProgressService: Loaded data for ${board.id}: ${savedData != null ? 'Found' : 'Null'}',
       );
+      if (savedData == null) return;
+
+      // 1. Restore Grid
+      final savedGrid = savedData['grid'];
+      if (savedGrid is List) {
+        final newGrid = board.grid.map(List<String?>.from).toList();
+        for (var r = 0; r < savedGrid.length && r < newGrid.length; r++) {
+          final rowData = savedGrid[r];
+          if (rowData is List) {
+            for (var c = 0; c < rowData.length && c < newGrid[r].length; c++) {
+              final val = rowData[c];
+              if (val is String?) {
+                newGrid[r][c] = val;
+              }
+            }
+          }
+        }
+        setGrid(newGrid);
+      }
+
+      // 2. Restore Found Words
+      final savedFound = savedData['foundWords'];
+      if (savedFound is List) {
+        setFoundWords(savedFound.map((e) => e.toString()).toSet());
+      } else {
+        // Legacy/Fallback: Re-scan grid if foundWords is missing
+        final found = _wordCheck.scanForCompletedWords(board, board.grid);
+        setFoundWords(found);
+      }
+
+      // 3. Restore Locked Cells
+      final savedLocked = savedData['lockedCells'];
+      print('Restoring progress for ${board.id}, savedLocked: $savedLocked');
+      if (savedLocked is List) {
+        final locked = <CellKey>{};
+        for (final entry in savedLocked) {
+          final parts = entry.toString().split(',');
+          if (parts.length == 2) {
+            final r = int.tryParse(parts[0]);
+            final c = int.tryParse(parts[1]);
+            if (r != null && c != null) {
+              locked.add(CellKey(r, c));
+            }
+          }
+        }
+        print('Restored locked cells: $locked');
+        setLockedCells(locked);
+      }
+
+      // 4. Restore Elapsed Time
+      final savedElapsed = savedData['elapsedSeconds'];
+      if (savedElapsed is int && setElapsedSeconds != null) {
+        setElapsedSeconds(savedElapsed);
+      }
     } on Object catch (e, st) {
-      if (kDebugMode) {
-        developer.log('Failed to load puzzle progress: $e', stackTrace: st);
-      }
-      return ProgressLoadResult.empty;
+      print('GameProgressService: Failed to load progress: $e\n$st');
     }
   }
 
-  /// Compute initial found/locked words from current grid state.
-  /// Used when no stored progress exists.
+  /// Scans the grid for completed words and returns the found/locked sets.
   InitialStateResult computeInitialState({required GameBoard board}) {
-    final entries = board.entries;
-    if (entries == null || entries.isEmpty) {
-      return InitialStateResult.empty;
-    }
-
-    final newFound = <String>{};
-    final newLocked = <CellKey>{};
-
-    for (final entry in entries) {
-      if (_wordCheck.isWordComplete(board, entry)) {
-        final key = _wordCheck.getWordKey(entry);
-        newFound.add(key);
-        newLocked.addAll(_wordCheck.getCellKeys(entry));
+    final found = _wordCheck.scanForCompletedWords(board, board.grid);
+    final locked = <CellKey>{};
+    if (board.entries != null) {
+      for (final entry in board.entries!) {
+        if (found.contains(_wordCheck.getWordKey(entry))) {
+          locked.addAll(_wordCheck.getCellKeys(entry));
+        }
       }
     }
-
-    return InitialStateResult(foundWords: newFound, lockedCells: newLocked);
+    return InitialStateResult(foundWords: found, lockedCells: locked);
   }
 
-  /// Checks for word completion at a specific cell position.
-  /// Returns a result containing newly found words and cells to flash/lock.
-  WordCompletionResult checkCompletionAtPos({
+  /// Helper to check completion at a specific position.
+  CheckCompletionResult checkCompletionAtPos({
     required GameBoard board,
     required CellKey pos,
     required Set<String> currentFoundWords,
   }) {
-    final allEntries = board.entries;
-    if (allEntries == null) {
-      return WordCompletionResult.empty;
-    }
-
-    final entriesForCell =
-        allEntries.where((e) {
-          final isAcross = e.directionEnum == EntryDirection.across;
-          if (isAcross) {
-            return e.y == pos.row &&
-                (pos.col >= e.x && pos.col < e.x + e.length);
-          } else {
-            return e.x == pos.col &&
-                (pos.row >= e.y && pos.row < e.y + e.length);
-          }
-        }).toList();
-
-    if (entriesForCell.isEmpty) {
-      return WordCompletionResult.empty;
-    }
-
     final newlyFound = <String>{};
     final cellsToFlash = <CellKey>{};
+    final entries = board.entries;
 
-    for (final e in entriesForCell) {
-      if (_wordCheck.isWordComplete(board, e)) {
-        final key = _wordCheck.getWordKey(e);
-        if (!currentFoundWords.contains(key)) {
+    if (entries == null) {
+      return CheckCompletionResult(
+        newlyFoundWords: {},
+        cellsToFlash: {},
+        hasChanges: false,
+      );
+    }
+
+    for (final entry in entries) {
+      final key = _wordCheck.getWordKey(entry);
+      if (currentFoundWords.contains(key)) continue;
+
+      final keys = _wordCheck.getCellKeys(entry);
+      if (keys.contains(pos)) {
+        if (_wordCheck.isWordComplete(board, entry)) {
           newlyFound.add(key);
-          cellsToFlash.addAll(_wordCheck.getCellKeys(e));
+          cellsToFlash.addAll(keys);
         }
       }
     }
 
-    return WordCompletionResult(
+    return CheckCompletionResult(
       newlyFoundWords: newlyFound,
       cellsToFlash: cellsToFlash,
+      hasChanges: newlyFound.isNotEmpty,
     );
   }
 }
 
-/// Result of checking word completion.
-class WordCompletionResult {
-  const WordCompletionResult({
+/// Result of checking completion at a position.
+class CheckCompletionResult {
+  CheckCompletionResult({
     required this.newlyFoundWords,
     required this.cellsToFlash,
+    required this.hasChanges,
   });
-
-  static const empty = WordCompletionResult(
-    newlyFoundWords: <String>{},
-    cellsToFlash: <CellKey>{},
-  );
-
   final Set<String> newlyFoundWords;
   final Set<CellKey> cellsToFlash;
-
-  bool get hasChanges => newlyFoundWords.isNotEmpty;
+  final bool hasChanges;
 }
 
-/// Result of computing initial state from grid.
-class InitialStateResult {
-  const InitialStateResult({
-    required this.foundWords,
-    required this.lockedCells,
-  });
-
-  static const empty = InitialStateResult(
-    foundWords: <String>{},
-    lockedCells: <CellKey>{},
-  );
-
-  final Set<String> foundWords;
-  final Set<CellKey> lockedCells;
-
-  bool get isEmpty => foundWords.isEmpty && lockedCells.isEmpty;
-}
-
-/// Provider for the progress service.
-final gameProgressServiceProvider = Provider<GameProgressService>((ref) {
-  final wordCheck = ref.read(wordCheckServiceProvider);
+@Riverpod(keepAlive: true, dependencies: [wordCheckService, puzzleStorage])
+GameProgressService gameProgressService(Ref ref) {
+  print('DEBUG: gameProgressService provider called');
+  final wordCheck = ref.watch(wordCheckServiceProvider);
   final storage = ref.watch(puzzleStorageProvider);
   return GameProgressService(wordCheck, storage);
-});
+}

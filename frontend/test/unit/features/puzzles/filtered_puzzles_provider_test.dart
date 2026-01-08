@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 import 'package:croiz/features/puzzles/filtered_puzzles_provider.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../../../helpers/fake_puzzle_storage.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -67,14 +69,19 @@ void main() {
     ),
   ];
 
+  /// Helper to create a ProviderContainer with the required storage override.
+  ProviderContainer createContainer(List<PuzzleDescriptor> puzzles) =>
+      ProviderContainer(
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(puzzles)),
+          puzzleStorageProvider.overrideWith((ref) => FakePuzzleStorage()),
+        ],
+      );
+
   group('filteredPuzzlesProvider', () {
     test('returns all when no filter active', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       // Set available languages to include both en and fr
@@ -89,11 +96,7 @@ void main() {
 
     test('filters by difficulty', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       // Set available languages first
@@ -113,11 +116,7 @@ void main() {
 
     test('filters by language', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       // Set available languages and select only French
@@ -134,11 +133,7 @@ void main() {
 
     test('combines difficulty and language filters', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       container.read(puzzleFilterProvider.notifier)
@@ -160,11 +155,7 @@ void main() {
 
     test('updates reactively on filter change', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       // Set available languages first
@@ -185,11 +176,7 @@ void main() {
 
     test('returns empty when no puzzles match filters', () {
       final testPuzzles = createTestPuzzles();
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       container.read(puzzleFilterProvider.notifier)
@@ -214,6 +201,7 @@ void main() {
         final container = ProviderContainer(
           overrides: [
             puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            puzzleStorageProvider.overrideWith((ref) => FakePuzzleStorage()),
             // Mark easy-en and medium-en as completed
             completedPuzzleIdsProvider.overrideWithValue(
               const AsyncValue.data({'easy-en', 'medium-en'}),
@@ -240,6 +228,7 @@ void main() {
         final container = ProviderContainer(
           overrides: [
             puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            puzzleStorageProvider.overrideWith((ref) => FakePuzzleStorage()),
             // Mark easy-en as completed
             completedPuzzleIdsProvider.overrideWithValue(
               const AsyncValue.data({'easy-en'}),
@@ -342,6 +331,7 @@ void main() {
         final container = ProviderContainer(
           overrides: [
             puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            puzzleStorageProvider.overrideWith((ref) => FakePuzzleStorage()),
           ],
         );
         addTearDown(container.dispose);
@@ -383,6 +373,7 @@ void main() {
         final container = ProviderContainer(
           overrides: [
             puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
+            puzzleStorageProvider.overrideWith((ref) => FakePuzzleStorage()),
           ],
         );
         addTearDown(container.dispose);
@@ -404,11 +395,7 @@ void main() {
     test('returns all difficulties present in puzzles', () {
       final testPuzzles = createTestPuzzles();
       // testPuzzles has difficulties: 1, 2, 3, 4, 5
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       final difficulties = container.read(availableDifficultiesProvider);
@@ -434,11 +421,7 @@ void main() {
           language: 'fr',
         ),
       ];
-      final container = ProviderContainer(
-        overrides: [
-          puzzlesProvider.overrideWithValue(AsyncValue.data(testPuzzles)),
-        ],
-      );
+      final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
       final difficulties = container.read(availableDifficultiesProvider);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/routes/app_routes.dart';
 import '../puzzles_provider.dart';
 import '../../../services/persistence/storage_provider.dart';
@@ -12,6 +13,8 @@ import '../../game/providers/game_providers.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart'; // For PuzzleProgressService, PuzzleProgress
 import 'package:croiz/services/persistence/puzzle_progress_provider.dart'; // For provider
 import 'package:flutter/services.dart'; // For HapticFeedback
+
+part 'continue_playing_section.g.dart';
 
 /// Information about an in-progress puzzle for display.
 class InProgressPuzzleInfo {
@@ -30,9 +33,8 @@ class InProgressPuzzleInfo {
 ///
 /// Fetches all puzzles with saved progress, calculates completion percent,
 /// and returns them sorted by most recently played.
-final inProgressPuzzlesProvider = FutureProvider.autoDispose<
-  List<InProgressPuzzleInfo>
->((ref) async {
+@riverpod
+Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
   final storage = ref.watch(puzzleStorageProvider);
 
   // Listen to storage changes to automatically refresh the list
@@ -114,7 +116,7 @@ final inProgressPuzzlesProvider = FutureProvider.autoDispose<
   }
 
   return inProgressList;
-});
+}
 
 /// Extract grid from saved puzzle data.
 List<List<String?>>? _extractGrid(Map<String, dynamic> data) {

@@ -31,8 +31,8 @@ final class WordCheckServiceProvider
         retry: null,
         name: r'wordCheckServiceProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[],
+        $allTransitiveDependencies: <ProviderOrFamily>[],
       );
 
   @override
@@ -57,4 +57,4 @@ final class WordCheckServiceProvider
   }
 }
 
-String _$wordCheckServiceHash() => r'7719e32e71f604e8a4bb4488feb056c12275e766';
+String _$wordCheckServiceHash() => r'b1a557b07110142e1b8f4d837f2bb8f0589a6794';
