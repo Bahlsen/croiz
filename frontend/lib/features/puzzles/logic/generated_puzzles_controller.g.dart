@@ -22,21 +22,9 @@ final class GeneratedPuzzlesControllerProvider
         retry: null,
         name: r'generatedPuzzlesControllerProvider',
         isAutoDispose: true,
-        dependencies: <ProviderOrFamily>[
-          generatedPuzzlesRepositoryProvider,
-          puzzlesProvider,
-        ],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          GeneratedPuzzlesControllerProvider.$allTransitiveDependencies0,
-          GeneratedPuzzlesControllerProvider.$allTransitiveDependencies1,
-          GeneratedPuzzlesControllerProvider.$allTransitiveDependencies2,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = generatedPuzzlesRepositoryProvider;
-  static final $allTransitiveDependencies1 =
-      GeneratedPuzzlesRepositoryProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies2 = puzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$generatedPuzzlesControllerHash();
@@ -47,7 +35,7 @@ final class GeneratedPuzzlesControllerProvider
 }
 
 String _$generatedPuzzlesControllerHash() =>
-    r'e2bd968c978825c6e729f4aa70328ff6bf542a20';
+    r'bb956cfd6577abb133c345227fc2eb35a5a5a155';
 
 abstract class _$GeneratedPuzzlesController extends $AsyncNotifier<void> {
   FutureOr<void> build();

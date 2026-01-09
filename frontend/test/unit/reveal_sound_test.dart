@@ -1,19 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mockito/mockito.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/features/game/services/game_audio_service.dart';
-
-class MockGameAudioService extends Mock implements GameAudioService {
-  int playRevealCallCount = 0;
-
-  @override
-  Future<void> playReveal() async {
-    playRevealCallCount++;
-  }
-}
+import '../helpers/test_helpers.dart';
+import '../helpers/fake_audio_service.dart';
 
 class FakeAudioMutedNotifier extends AudioMutedNotifier {
   FakeAudioMutedNotifier({required this.initialValue});
@@ -25,6 +16,8 @@ class FakeAudioMutedNotifier extends AudioMutedNotifier {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('revealLetterAt should play reveal sound', () async {
     final board = GameBoard(
       id: 't',
@@ -47,12 +40,12 @@ void main() {
       ],
     );
 
-    final mockAudio = MockGameAudioService();
+    final fakeAudio = FakeAudioService();
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: fakeAudio,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        gameAudioServiceProvider.overrideWithValue(mockAudio),
         gameAudioMutedProvider.overrideWith(
           () => FakeAudioMutedNotifier(initialValue: false),
         ),
@@ -64,7 +57,7 @@ void main() {
     container.read(gameBoardProvider.notifier).revealLetterAt(0, 0);
 
     // Verify
-    expect(mockAudio.playRevealCallCount, equals(1));
+    expect(fakeAudio.revealCount, equals(1));
   });
 
   test('revealLetterAt should NOT play reveal sound if muted', () async {
@@ -89,12 +82,12 @@ void main() {
       ],
     );
 
-    final mockAudio = MockGameAudioService();
+    final fakeAudio = FakeAudioService();
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: fakeAudio,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        gameAudioServiceProvider.overrideWithValue(mockAudio),
         gameAudioMutedProvider.overrideWith(
           () => FakeAudioMutedNotifier(initialValue: true),
         ),
@@ -106,6 +99,6 @@ void main() {
     container.read(gameBoardProvider.notifier).revealLetterAt(0, 0);
 
     // Verify
-    expect(mockAudio.playRevealCallCount, equals(0));
+    expect(fakeAudio.revealCount, equals(0));
   });
 }

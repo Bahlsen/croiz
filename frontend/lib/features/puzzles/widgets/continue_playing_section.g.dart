@@ -42,27 +42,9 @@ final class InProgressPuzzlesProvider
         retry: null,
         name: r'inProgressPuzzlesProvider',
         isAutoDispose: true,
-        dependencies: <ProviderOrFamily>[
-          puzzleStorageProvider,
-          puzzleProgressServiceProvider,
-          puzzlesProvider,
-        ],
-        $allTransitiveDependencies: <ProviderOrFamily>{
-          InProgressPuzzlesProvider.$allTransitiveDependencies0,
-          InProgressPuzzlesProvider.$allTransitiveDependencies1,
-          InProgressPuzzlesProvider.$allTransitiveDependencies2,
-          InProgressPuzzlesProvider.$allTransitiveDependencies3,
-          InProgressPuzzlesProvider.$allTransitiveDependencies4,
-        },
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = puzzleStorageProvider;
-  static final $allTransitiveDependencies1 =
-      PuzzleStorageProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies2 = puzzleProgressServiceProvider;
-  static final $allTransitiveDependencies3 = puzzlesProvider;
-  static final $allTransitiveDependencies4 =
-      PuzzlesProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$inProgressPuzzlesHash();
@@ -79,4 +61,4 @@ final class InProgressPuzzlesProvider
   }
 }
 
-String _$inProgressPuzzlesHash() => r'7fee2ee6a6f1558aca434bfb916c4645502334f0';
+String _$inProgressPuzzlesHash() => r'e7e04dc7774739f894d2db2578f308a304ff759f';

@@ -24,14 +24,9 @@ final class KeyboardLayoutNotifierProvider
         retry: null,
         name: r'keyboardLayoutProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[preferencePersistenceServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          KeyboardLayoutNotifierProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 =
-      preferencePersistenceServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$keyboardLayoutNotifierHash();
@@ -50,7 +45,7 @@ final class KeyboardLayoutNotifierProvider
 }
 
 String _$keyboardLayoutNotifierHash() =>
-    r'848308bfdae6ec926ee0dcba2d76461825da60f2';
+    r'1b50b71d5bd162d29b14fd6c3ad61a38cf603999';
 
 /// Provider for keyboard layout preference.
 

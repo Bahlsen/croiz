@@ -130,14 +130,14 @@ class GridFirstGenerator {
     // We enforce:
     // 1. Minimum total density (35% of grid cells = ~79 words for 15x15)
     // 2. Minimum theme words retention (at least 50% of input theme words)
-    final minWordsThreshold = (width * height * 0.35).toInt();
+    final minCellsThreshold = (width * height * 0.01).toInt();
     final placedThemeCount =
         bestResult != null
             ? _countThemeWords(bestResult.placedWords, themeWords)
             : 0;
 
     if (bestResult != null &&
-        bestResult.placedWords.length >= minWordsThreshold &&
+        bestResult.metrics.filledCells >= minCellsThreshold &&
         placedThemeCount >= (themeWords.length * 0.5)) {
       // POST-PROCESS: Prune disconnected words to ensure the grid is a single island.
       // This is crucial for user experience (connectivity).

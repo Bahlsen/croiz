@@ -1,47 +1,51 @@
 import 'dart:async';
+
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'package:croiz/services/persistence/secure_storage_provider.dart';
 
+part 'auth_provider.freezed.dart';
 part 'auth_provider.g.dart';
 
 /// Authentication Provider
 @Riverpod(keepAlive: true)
 class AuthNotifier extends _$AuthNotifier {
   @override
-  FutureOr<AuthState> build() => AuthState.initial();
+  FutureOr<AuthState> build() => const AuthState.unauthenticated();
 
   Future<void> login(String username, String password) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(
-      () => Future.value(AuthState.authenticated('user_id', 'token')),
+    final result = await AsyncValue.guard(
+      () => Future.value(
+        const AuthState.authenticated(userId: 'user_id', token: 'token'),
+      ),
     );
+    if (!ref.mounted) {
+      return;
+    }
+    state = result;
   }
 
   Future<void> logout() async {
     final storage = ref.read(secureStorageProvider);
     await storage.delete(key: 'auth_token');
-    state = AsyncValue.data(AuthState.initial());
+    if (!ref.mounted) {
+      return;
+    }
+    state = const AsyncValue.data(AuthState.unauthenticated());
   }
 }
 
-class AuthState {
-  const AuthState({
-    required this.isAuthenticated,
-    this.userId,
-    this.token,
-    this.error,
-  });
+/// Authentication state using freezed sealed class
+@freezed
+sealed class AuthState with _$AuthState {
+  const factory AuthState.unauthenticated() = AuthStateUnauthenticated;
 
-  factory AuthState.initial() => const AuthState(isAuthenticated: false);
+  const factory AuthState.authenticated({
+    required String userId,
+    required String token,
+  }) = AuthStateAuthenticated;
 
-  factory AuthState.authenticated(String userId, String token) =>
-      AuthState(isAuthenticated: true, userId: userId, token: token);
-
-  factory AuthState.error(String error) =>
-      AuthState(isAuthenticated: false, error: error);
-
-  final bool isAuthenticated;
-  final String? userId;
-  final String? token;
-  final String? error;
+  const factory AuthState.error(String message) = AuthStateError;
 }

@@ -73,6 +73,14 @@ class PuzzleGenerationOrchestrator {
         });
         // RELAXED CHECK: If we have a good number of words, we accept it.
         // The generator now returns the best attempt even if 'success' is false.
+        if (result.placedWords.isEmpty) {
+          throw UserFriendlyException(
+            'Unable to create a puzzle grid.',
+            technicalDetails:
+                'GridFirstGenerator returned 0 placed words (Reason: ${result.failureReason})',
+          );
+        }
+
         if (result.placedWords.length < 5) {
           throw UserFriendlyException(
             'Unable to create a complete puzzle grid.',
@@ -82,14 +90,6 @@ class PuzzleGenerationOrchestrator {
         }
 
         final placedWords = result.placedWords;
-
-        if (placedWords.isEmpty) {
-          throw UserFriendlyException(
-            'Unable to create a puzzle grid.',
-            technicalDetails:
-                'GridFirstGenerator returned 0 placed words (Reason: ${result.failureReason})',
-          );
-        }
 
         // 2b. Validation
         final validation = GridValidator.validate(placedWords, size, size);
@@ -281,17 +281,6 @@ class PuzzleGenerationOrchestrator {
     }
 
     // 3. Build Entries
-    // REVISED STRATEGY: Scan the gridState to find ALL words (horizontal and vertical).
-    // This detects "accidental" words formed by intersecting placement, which is common
-    // in dense grids (and crucial for legal crossword navigation).
-    // It also fixes the UI bug where selecting an "intersecting" cell with no defined word
-    // would result in empty selection.
-    //
-    // We map found words to:
-    // 1. PlacedWord (if exact match) -> use its Clue
-    // 2. Dictionary (if valid) -> "Found word"
-    // 3. Unknown (if invalid) -> "..."
-
     final entries = <Map<String, dynamic>>[];
 
     // Create lookup for existing PlacedWords

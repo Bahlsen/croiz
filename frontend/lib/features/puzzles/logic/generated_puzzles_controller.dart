@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated_puzzles_controller.g.dart';
 
-@Riverpod(dependencies: [generatedPuzzlesRepository, puzzles])
+@riverpod
 class GeneratedPuzzlesController extends _$GeneratedPuzzlesController {
   @override
   FutureOr<void> build() {
@@ -13,12 +13,16 @@ class GeneratedPuzzlesController extends _$GeneratedPuzzlesController {
 
   Future<void> deletePuzzle(String id) async {
     state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() async {
+    final result = await AsyncValue.guard(() async {
       final repo = ref.read(generatedPuzzlesRepositoryProvider);
       await repo.deletePuzzle(id);
 
       // Invalidate the puzzles provider to trigger a refresh of the list
       ref.invalidate(puzzlesProvider);
     });
+    if (!ref.mounted) {
+      return;
+    }
+    state = result;
   }
 }

@@ -24,8 +24,8 @@ final class FoundWordsNotifierProvider
         retry: null,
         name: r'foundWordsProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -45,7 +45,7 @@ final class FoundWordsNotifierProvider
 }
 
 String _$foundWordsNotifierHash() =>
-    r'4a453130f542ef57a53037dd4a7aafedfbf5bb42';
+    r'0d6fb8fdc1028b0ae17d137383f55c4731b699c5';
 
 /// Holds the set of found word keys (format: "row,col,direction").
 
@@ -83,8 +83,8 @@ final class FlashingCellsNotifierProvider
         retry: null,
         name: r'flashingCellsProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -104,7 +104,7 @@ final class FlashingCellsNotifierProvider
 }
 
 String _$flashingCellsNotifierHash() =>
-    r'bbcd53004e70bfe6e5f32fc87cd708e138ff16b7';
+    r'0bbfebe4bc52ccfc68e24a918e14706a63043f25';
 
 /// Holds cells that should flash (for word completion animation).
 
@@ -236,8 +236,8 @@ final class FlashingClearedCellsNotifierProvider
         retry: null,
         name: r'flashingClearedCellsProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -257,7 +257,7 @@ final class FlashingClearedCellsNotifierProvider
 }
 
 String _$flashingClearedCellsNotifierHash() =>
-    r'22e3eea6e160c33eb91b4776f444a9c00a1b7100';
+    r'ff3141a82b080ac6ccc08cd3398411ab633a569d';
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
 
@@ -391,8 +391,8 @@ final class LockedCellsNotifierProvider
         retry: null,
         name: r'lockedCellsProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -412,7 +412,7 @@ final class LockedCellsNotifierProvider
 }
 
 String _$lockedCellsNotifierHash() =>
-    r'b94132fee6fc40a82e62a48b9bf3d2968877c6bf';
+    r'10f3129b5a333b67062c70ab36ba3222203f9b60';
 
 /// Holds cells that are locked (found words cannot be edited).
 
@@ -450,8 +450,8 @@ final class FlashingRevealedCellsNotifierProvider
         retry: null,
         name: r'flashingRevealedCellsProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -471,7 +471,7 @@ final class FlashingRevealedCellsNotifierProvider
 }
 
 String _$flashingRevealedCellsNotifierHash() =>
-    r'af4dbbf913775ad872170e9f54ce604d8d92036f';
+    r'961779934a209e9d7dd7b2152fe773ed6a086931';
 
 /// Holds cells that should flash for REVEAL animation.
 

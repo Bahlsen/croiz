@@ -76,7 +76,7 @@ class GameEndgameService {
     }
 
     // Puzzle solved!
-    timer.stop();
+    timer.pause();
 
     // Final persist
     persistenceService.persistNow(
@@ -96,5 +96,5 @@ class GameEndgameService {
   }
 }
 
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 GameEndgameService gameEndgameService(Ref ref) => GameEndgameService();

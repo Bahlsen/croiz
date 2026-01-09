@@ -5,7 +5,7 @@ import 'package:croiz/domain/entities/game_entities.dart';
 part 'game_progress_providers.g.dart';
 
 /// Holds the set of found word keys (format: "row,col,direction").
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 class FoundWordsNotifier extends _$FoundWordsNotifier {
   @override
   Set<String> build() => <String>{};
@@ -21,7 +21,7 @@ class FoundWordsNotifier extends _$FoundWordsNotifier {
 }
 
 /// Holds cells that should flash (for word completion animation).
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 class FlashingCellsNotifier extends _$FlashingCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -37,7 +37,7 @@ bool cellFlashing(Ref ref, CellKey key) =>
     ref.watch(flashingCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that should flash red because they were cleared by the cleaner.
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 class FlashingClearedCellsNotifier extends _$FlashingClearedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -53,7 +53,7 @@ bool cellClearedFlashing(Ref ref, CellKey key) =>
     ref.watch(flashingClearedCellsProvider.select((set) => set.contains(key)));
 
 /// Holds cells that are locked (found words cannot be edited).
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 class LockedCellsNotifier extends _$LockedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};
@@ -63,7 +63,7 @@ class LockedCellsNotifier extends _$LockedCellsNotifier {
 }
 
 /// Holds cells that should flash for REVEAL animation.
-@Riverpod(keepAlive: true, dependencies: [])
+@Riverpod(keepAlive: true)
 class FlashingRevealedCellsNotifier extends _$FlashingRevealedCellsNotifier {
   @override
   Set<CellKey> build() => <CellKey>{};

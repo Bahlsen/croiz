@@ -24,14 +24,9 @@ final class AppIsDarkNotifierProvider
         retry: null,
         name: r'appIsDarkProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[preferencePersistenceServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          AppIsDarkNotifierProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 =
-      preferencePersistenceServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$appIsDarkNotifierHash();
@@ -49,7 +44,7 @@ final class AppIsDarkNotifierProvider
   }
 }
 
-String _$appIsDarkNotifierHash() => r'96260278bd301ba249894bee1638a9bedb720e3e';
+String _$appIsDarkNotifierHash() => r'34c336ae99f7ffc42c90eb1168eea19a274cd852';
 
 /// Provider for global dark mode state.
 

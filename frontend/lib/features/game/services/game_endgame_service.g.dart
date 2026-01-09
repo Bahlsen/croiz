@@ -27,8 +27,8 @@ final class GameEndgameServiceProvider
         retry: null,
         name: r'gameEndgameServiceProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -55,4 +55,4 @@ final class GameEndgameServiceProvider
 }
 
 String _$gameEndgameServiceHash() =>
-    r'e5309e6c3569cd9b8d40013cdbcdd43ec3c2f6f3';
+    r'777aee44f42c119e33330affa1773b3c8e4ccde7';

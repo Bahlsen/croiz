@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
-import 'package:croiz/services/providers.dart';
 
-import '../test_utils/fake_audio_service.dart';
+import '../helpers/fake_audio_service.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   testWidgets('VirtualKeyboard taps call playType', (tester) async {
@@ -13,7 +13,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [gameAudioServiceProvider.overrideWithValue(fake)],
+        overrides: [...commonOverrides(audioService: fake)],
         child: const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
       ),
     );
@@ -34,7 +34,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [gameAudioServiceProvider.overrideWithValue(fake)],
+        overrides: [...commonOverrides(audioService: fake)],
         child: const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
       ),
     );

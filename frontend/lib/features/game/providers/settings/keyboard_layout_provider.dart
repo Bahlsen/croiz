@@ -6,7 +6,7 @@ part 'keyboard_layout_provider.g.dart';
 
 /// Provider for keyboard layout preference.
 
-@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
+@Riverpod(keepAlive: true)
 class KeyboardLayoutNotifier extends _$KeyboardLayoutNotifier {
   @override
   bool build() => false; // false = QWERTY by default

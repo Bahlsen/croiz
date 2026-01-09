@@ -28,13 +28,9 @@ final class GeneratedPuzzlesRepositoryProvider
         retry: null,
         name: r'generatedPuzzlesRepositoryProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[appDatabaseProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          GeneratedPuzzlesRepositoryProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = appDatabaseProvider;
 
   @override
   String debugGetCreateSourceHash() => _$generatedPuzzlesRepositoryHash();
@@ -60,4 +56,4 @@ final class GeneratedPuzzlesRepositoryProvider
 }
 
 String _$generatedPuzzlesRepositoryHash() =>
-    r'4ffc9d8178014a2e0173c19ae17c13676fd1e7e7';
+    r'87cc1042d54c66480c4e8064455cbde818c7c083';

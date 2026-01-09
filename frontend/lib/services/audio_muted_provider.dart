@@ -4,7 +4,7 @@ import 'package:croiz/services/persistence/preference_persistence_service.dart';
 part 'audio_muted_provider.g.dart';
 
 /// Provider for global audio mute state.
-@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
+@Riverpod(keepAlive: true)
 class AudioMutedNotifier extends _$AudioMutedNotifier {
   @override
   bool build() => false; // not muted by default

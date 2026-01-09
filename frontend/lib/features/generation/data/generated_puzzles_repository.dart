@@ -99,7 +99,7 @@ class GeneratedPuzzlesRepository {
   }
 }
 
-@Riverpod(keepAlive: true, dependencies: [appDatabase])
+@Riverpod(keepAlive: true)
 GeneratedPuzzlesRepository generatedPuzzlesRepository(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   return GeneratedPuzzlesRepository(db);

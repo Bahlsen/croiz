@@ -27,16 +27,9 @@ final class PuzzleProgressServiceProvider
         retry: null,
         name: r'puzzleProgressServiceProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[puzzleStorageProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          PuzzleProgressServiceProvider.$allTransitiveDependencies0,
-          PuzzleProgressServiceProvider.$allTransitiveDependencies1,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = puzzleStorageProvider;
-  static final $allTransitiveDependencies1 =
-      PuzzleStorageProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$puzzleProgressServiceHash();
@@ -62,4 +55,4 @@ final class PuzzleProgressServiceProvider
 }
 
 String _$puzzleProgressServiceHash() =>
-    r'365a920ee1bbce4a0fc1ceac9caad3da22a5d53f';
+    r'808365d76cba4a9e6df8af5706d0c61af4383a53';

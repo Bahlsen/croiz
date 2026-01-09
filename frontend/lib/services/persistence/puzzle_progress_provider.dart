@@ -4,7 +4,7 @@ import 'package:croiz/services/persistence/storage_provider.dart';
 
 part 'puzzle_progress_provider.g.dart';
 
-@Riverpod(keepAlive: true, dependencies: [puzzleStorage])
+@Riverpod(keepAlive: true)
 PuzzleProgressService puzzleProgressService(Ref ref) {
   final storage = ref.watch(puzzleStorageProvider);
   return PuzzleProgressService(

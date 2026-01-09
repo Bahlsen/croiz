@@ -27,21 +27,9 @@ final class GameProgressServiceProvider
         retry: null,
         name: r'gameProgressServiceProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[
-          wordCheckServiceProvider,
-          puzzleStorageProvider,
-        ],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          GameProgressServiceProvider.$allTransitiveDependencies0,
-          GameProgressServiceProvider.$allTransitiveDependencies1,
-          GameProgressServiceProvider.$allTransitiveDependencies2,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = wordCheckServiceProvider;
-  static final $allTransitiveDependencies1 = puzzleStorageProvider;
-  static final $allTransitiveDependencies2 =
-      PuzzleStorageProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$gameProgressServiceHash();
@@ -67,4 +55,4 @@ final class GameProgressServiceProvider
 }
 
 String _$gameProgressServiceHash() =>
-    r'88211e8383eacc1fc3bb37be3ac1ffdd76a42b91';
+    r'fb091560a442b244260370931341b92303ef7a81';

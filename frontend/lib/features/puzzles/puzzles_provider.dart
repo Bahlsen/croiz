@@ -232,7 +232,7 @@ int _sortByYearDescThenTitle(PuzzleDescriptor a, PuzzleDescriptor b) {
 // Fallback parsing removed: origin indexes must be provided via
 // assets/data/puzzles_index_by_origin/<origin>.json.
 
-@Riverpod(keepAlive: true, dependencies: [generatedPuzzlesRepository])
+@Riverpod(keepAlive: true)
 Future<List<PuzzleDescriptor>> puzzles(Ref ref) async {
   // 1. Load from assets
   final raw = await rootBundle.loadString('assets/data/puzzles_index.json');

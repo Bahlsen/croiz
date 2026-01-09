@@ -27,13 +27,9 @@ final class GameRevealServiceProvider
         retry: null,
         name: r'gameRevealServiceProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[wordCheckServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          GameRevealServiceProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = wordCheckServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameRevealServiceHash();
@@ -58,4 +54,4 @@ final class GameRevealServiceProvider
   }
 }
 
-String _$gameRevealServiceHash() => r'714dd03c764e8a7b737db5b0c1293b7e2ba0fed9';
+String _$gameRevealServiceHash() => r'3b2bfe753ac81983c1421b4379489201a9968dd3';

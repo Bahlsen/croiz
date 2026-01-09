@@ -30,8 +30,8 @@ final class SelectedPuzzleIdNotifierProvider
         retry: null,
         name: r'selectedPuzzleIdProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -51,7 +51,7 @@ final class SelectedPuzzleIdNotifierProvider
 }
 
 String _$selectedPuzzleIdNotifierHash() =>
-    r'd16b633a195cf1e0f8072b31f0dc0ee4cc0ef42f';
+    r'e6b5ccc20c525f4753eb823a9c481155ceabb8b4';
 
 /// Holds the currently selected puzzle id.
 ///
@@ -98,8 +98,8 @@ final class PuzzleAssetLoaderProvider
         retry: null,
         name: r'puzzleAssetLoaderProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[],
-        $allTransitiveDependencies: <ProviderOrFamily>[],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
 
   @override
@@ -125,7 +125,7 @@ final class PuzzleAssetLoaderProvider
   }
 }
 
-String _$puzzleAssetLoaderHash() => r'f3ce0abb3fdc98cd91dbe281933492790e061e7d';
+String _$puzzleAssetLoaderHash() => r'a69a41c1ba12f71af950b1c42d1348e5ca0f951c';
 
 /// Provider to load the puzzle asynchronously from JSON.
 ///
@@ -162,31 +162,9 @@ final class PuzzleLoaderProvider
         retry: null,
         name: r'puzzleLoaderProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[
-          selectedPuzzleIdProvider,
-          puzzlesProvider,
-          generatedPuzzlesRepositoryProvider,
-          puzzleAssetLoaderProvider,
-          puzzleStorageProvider,
-        ],
-        $allTransitiveDependencies: <ProviderOrFamily>{
-          PuzzleLoaderProvider.$allTransitiveDependencies0,
-          PuzzleLoaderProvider.$allTransitiveDependencies1,
-          PuzzleLoaderProvider.$allTransitiveDependencies2,
-          PuzzleLoaderProvider.$allTransitiveDependencies3,
-          PuzzleLoaderProvider.$allTransitiveDependencies4,
-          PuzzleLoaderProvider.$allTransitiveDependencies5,
-        },
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = selectedPuzzleIdProvider;
-  static final $allTransitiveDependencies1 = puzzlesProvider;
-  static final $allTransitiveDependencies2 =
-      PuzzlesProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies3 =
-      PuzzlesProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies4 = puzzleAssetLoaderProvider;
-  static final $allTransitiveDependencies5 = puzzleStorageProvider;
 
   @override
   String debugGetCreateSourceHash() => _$puzzleLoaderHash();
@@ -202,4 +180,4 @@ final class PuzzleLoaderProvider
   }
 }
 
-String _$puzzleLoaderHash() => r'5023400ee784dd2275554338446ed92146089e0b';
+String _$puzzleLoaderHash() => r'057d81f21cce8363cc25b7d431463f2a9b9e39e2';

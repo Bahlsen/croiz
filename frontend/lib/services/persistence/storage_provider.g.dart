@@ -27,13 +27,9 @@ final class PuzzleStorageProvider
         retry: null,
         name: r'puzzleStorageProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[appDatabaseProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          PuzzleStorageProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 = appDatabaseProvider;
 
   @override
   String debugGetCreateSourceHash() => _$puzzleStorageHash();
@@ -58,4 +54,4 @@ final class PuzzleStorageProvider
   }
 }
 
-String _$puzzleStorageHash() => r'a5d609221b5a30da9bc7a86e6b16086b077e87ed';
+String _$puzzleStorageHash() => r'd6cf474553d9b8488b32eceb21b4aa248891e9ef';

@@ -5,7 +5,7 @@ import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/audio_service.dart';
-import 'package:croiz/services/providers.dart';
+import '../helpers/test_helpers.dart';
 
 class MockGameAudioService implements AudioService {
   int victoryCallCount = 0;
@@ -85,12 +85,10 @@ void main() {
           ],
         );
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          audioService: mockAudio,
           overrides: [
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-            gameAudioServiceProvider.overrideWithValue(mockAudio),
           ],
         );
         addTearDown(container.dispose);
@@ -159,12 +157,10 @@ void main() {
           ],
         );
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          audioService: mockAudio,
           overrides: [
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-            gameAudioServiceProvider.overrideWithValue(mockAudio),
           ],
         );
         addTearDown(container.dispose);
@@ -235,12 +231,10 @@ void main() {
           ],
         );
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          audioService: mockAudio,
           overrides: [
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-            gameAudioServiceProvider.overrideWithValue(mockAudio),
           ],
         );
         addTearDown(container.dispose);

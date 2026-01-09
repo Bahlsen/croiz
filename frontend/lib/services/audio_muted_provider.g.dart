@@ -24,14 +24,9 @@ final class AudioMutedNotifierProvider
         retry: null,
         name: r'audioMutedProvider',
         isAutoDispose: false,
-        dependencies: <ProviderOrFamily>[preferencePersistenceServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
-          AudioMutedNotifierProvider.$allTransitiveDependencies0,
-        ],
+        dependencies: null,
+        $allTransitiveDependencies: null,
       );
-
-  static final $allTransitiveDependencies0 =
-      preferencePersistenceServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$audioMutedNotifierHash();
@@ -50,7 +45,7 @@ final class AudioMutedNotifierProvider
 }
 
 String _$audioMutedNotifierHash() =>
-    r'df5e0afdb6baf372fb50fe1cb2ac6668c5935dd9';
+    r'4e422de8acf81afc1a78a360223aff723a216bad';
 
 /// Provider for global audio mute state.
 
