@@ -1,6 +1,7 @@
 // ignore_for_file: provider_dependencies
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/routes/app_routes.dart';
@@ -37,87 +38,86 @@ class InProgressPuzzleInfo {
 /// and returns them sorted by most recently played.
 @Riverpod(dependencies: [puzzleStorage, puzzleProgressService, puzzles])
 Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
-  final storage = ref.watch(puzzleStorageProvider);
+  try {
+    final storage = ref.watch(puzzleStorageProvider);
+    final service = ref.watch(puzzleProgressServiceProvider);
 
-  // Listen to storage changes to automatically refresh the list
-  // whenever a puzzle is saved (e.g. from the game screen).
-  final subscription = storage.onDataChanged.listen((_) {
-    // Debounce slightly if needed, but simple invalidation works fine
-    ref.invalidateSelf();
-  });
-  ref.onDispose(subscription.cancel);
-
-  final service = ref.watch(puzzleProgressServiceProvider);
-
-  // Get all puzzles with saved progress
-  final progressList = await service.getInProgressPuzzlesSortedByRecency();
-  if (progressList.isEmpty) {
-    return [];
-  }
-
-  // Get the puzzle descriptors to match progress with metadata.
-  // IMPORTANT: We must await the .future to properly wait for puzzlesProvider
-  // to load. Using maybeWhen with orElse would return empty list before
-  // the puzzles are loaded, causing the in-progress section to appear empty.
-  final puzzles = await ref.watch(puzzlesProvider.future);
-
-  if (puzzles.isEmpty) {
-    return [];
-  }
-
-  // Create a map for quick lookup
-  final puzzleMap = {for (final p in puzzles) p.id: p};
-
-  final inProgressList = <InProgressPuzzleInfo>[];
-
-  for (final progress in progressList) {
-    final descriptor = puzzleMap[progress.puzzleId];
-    if (descriptor == null) {
-      continue;
+    // Get all puzzles with saved progress
+    final progressList = await service.getInProgressPuzzlesSortedByRecency();
+    if (progressList.isEmpty) {
+      return [];
     }
 
-    // Load saved data to calculate completion percent
-    final data = await storage.load(progress.puzzleId);
-    if (data == null) {
-      continue;
+    // Get the puzzle descriptors to match progress with metadata.
+    // IMPORTANT: We must await the .future to properly wait for puzzlesProvider
+    // to load. Using maybeWhen with orElse would return empty list before
+    // the puzzles are loaded, causing the in-progress section to appear empty.
+    final puzzles = await ref.watch(puzzlesProvider.future);
+
+    if (puzzles.isEmpty) {
+      return [];
     }
 
-    // Skip completed puzzles
-    final isCompleted = data['isCompleted'] as bool? ?? false;
-    if (isCompleted) {
-      continue;
-    }
+    // Create a map for quick lookup
+    final puzzleMap = {for (final p in puzzles) p.id: p};
 
-    // Calculate completion percent from saved grid
-    final savedGrid = _extractGrid(data);
-    if (savedGrid == null) {
-      continue;
-    }
+    final inProgressList = <InProgressPuzzleInfo>[];
 
-    // Load solution to calculate percent
-    final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
-    final solution = _extractSolutionGrid(puzzleJson);
-    final clues = _extractClues(puzzleJson);
+    for (final progress in progressList) {
+      final descriptor = puzzleMap[progress.puzzleId];
+      if (descriptor == null) {
+        continue;
+      }
 
-    final percent = service.calculateCompletionPercentByWords(
-      savedGrid,
-      solution,
-      clues,
-    );
+      // Load saved data to calculate completion percent
+      final data = await storage.load(progress.puzzleId);
+      if (data == null) {
+        continue;
+      }
 
-    // Only show puzzles that are actually in progress (not 0% or 100%)
-    if (percent > 0 && percent < 100) {
-      inProgressList.add(
-        InProgressPuzzleInfo(
-          descriptor: descriptor,
-          progress: progress,
-          completionPercent: percent.round(),
-        ),
+      // Skip completed puzzles
+      final isCompleted = data['isCompleted'] as bool? ?? false;
+      if (isCompleted) {
+        continue;
+      }
+
+      // Calculate completion percent from saved grid
+      final savedGrid = _extractGrid(data);
+      if (savedGrid == null) {
+        continue;
+      }
+
+      // Load solution to calculate percent
+      final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
+      final solution = _extractSolutionGrid(puzzleJson);
+      final clues = _extractClues(puzzleJson);
+
+      final percent = service.calculateCompletionPercentByWords(
+        savedGrid,
+        solution,
+        clues,
       );
-    }
-  }
 
-  return inProgressList;
+      // Only show puzzles that are actually in progress (not 0% or 100%)
+      if (percent > 0 && percent < 100) {
+        inProgressList.add(
+          InProgressPuzzleInfo(
+            descriptor: descriptor,
+            progress: progress,
+            completionPercent: percent.round(),
+          ),
+        );
+      }
+    }
+
+    return inProgressList;
+  } on Object catch (e, st) {
+    // Log error but return empty list to prevent UI crash
+    if (kDebugMode) {
+      print('Error loading in-progress puzzles: $e\n$st');
+    }
+    return [];
+  }
 }
 
 /// Extract grid from saved puzzle data.
@@ -261,7 +261,12 @@ class ContinuePlayingSection extends ConsumerWidget {
             height: 15.h,
             child: const Center(child: CircularProgressIndicator()),
           ),
-      error: (e, s) => const SizedBox.shrink(),
+      error: (e, s) {
+        if (kDebugMode) {
+          print('Error in ContinuePlayingSection: $e\n$s');
+        }
+        return const SizedBox.shrink();
+      },
     );
   }
 }

@@ -129,9 +129,33 @@ final class GameBoardNotifierProvider
         retry: null,
         name: r'gameBoardProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          gamePersistenceServiceProvider,
+          gameProgressServiceProvider,
+          gameRevealServiceProvider,
+          gameEndgameServiceProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          GameBoardNotifierProvider.$allTransitiveDependencies0,
+          GameBoardNotifierProvider.$allTransitiveDependencies1,
+          GameBoardNotifierProvider.$allTransitiveDependencies2,
+          GameBoardNotifierProvider.$allTransitiveDependencies3,
+          GameBoardNotifierProvider.$allTransitiveDependencies4,
+          GameBoardNotifierProvider.$allTransitiveDependencies5,
+          GameBoardNotifierProvider.$allTransitiveDependencies6,
+        },
       );
+
+  static final $allTransitiveDependencies0 = gamePersistenceServiceProvider;
+  static final $allTransitiveDependencies1 =
+      GamePersistenceServiceProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GamePersistenceServiceProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = gameProgressServiceProvider;
+  static final $allTransitiveDependencies4 =
+      GameProgressServiceProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies5 = gameRevealServiceProvider;
+  static final $allTransitiveDependencies6 = gameEndgameServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -149,7 +173,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'38775990cb19b3497b85d34f1bfab6176efce3f2';
+String _$gameBoardNotifierHash() => r'11bfadf9f7db886fbc9d8f2266b0251382c57b01';
 
 /// Main notifier for the game board state.
 

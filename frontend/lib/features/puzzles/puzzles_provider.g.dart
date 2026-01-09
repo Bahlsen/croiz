@@ -161,9 +161,16 @@ final class PuzzlesProvider
         retry: null,
         name: r'puzzlesProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[generatedPuzzlesRepositoryProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          PuzzlesProvider.$allTransitiveDependencies0,
+          PuzzlesProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = generatedPuzzlesRepositoryProvider;
+  static final $allTransitiveDependencies1 =
+      GeneratedPuzzlesRepositoryProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$puzzlesHash();
@@ -180,7 +187,7 @@ final class PuzzlesProvider
   }
 }
 
-String _$puzzlesHash() => r'c31ab319970e638fd28bdf2eaf6d294a4002286d';
+String _$puzzlesHash() => r'd4836812e830e11b4de2fd9eb32d225be8d1acc7';
 
 /// Loads full metadata for a single puzzle asset path on demand.
 

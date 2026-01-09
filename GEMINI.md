@@ -13,6 +13,10 @@ Read and follow ALL instructions from that file, including:
   - Utilisez simplement la commande brute : `flutter test ...`.
   - L'agent gérera la lecture de la sortie via ses outils internes.
   - Marquer `SafeToAutoRun: true` pour ces commandes sans pipes/redirections.
+- **Shell Policy**: ALWAYS use bash for terminal commands, NEVER PowerShell.
+  - Use bash syntax (e.g., `ls`, `find`, `grep`, not `Get-ChildItem`, `Select-String`)
+  - Use forward slashes for paths (e.g., `lib/features/game`)
+  - Commands will run through Git Bash or WSL on Windows
 - KISS, DRY, and SOLID principles
 - Clean Code as defined by Robert C. Martin
 - Dart strict mode and null safety best practices

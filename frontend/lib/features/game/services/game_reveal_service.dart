@@ -184,7 +184,7 @@ class GameRevealService {
   }
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [wordCheckService])
 GameRevealService gameRevealService(Ref ref) {
   final wordCheck = ref.watch(wordCheckServiceProvider);
   return GameRevealService(wordCheck);

@@ -29,11 +29,14 @@ final class GeneratedPuzzlesControllerProvider
         $allTransitiveDependencies: <ProviderOrFamily>[
           GeneratedPuzzlesControllerProvider.$allTransitiveDependencies0,
           GeneratedPuzzlesControllerProvider.$allTransitiveDependencies1,
+          GeneratedPuzzlesControllerProvider.$allTransitiveDependencies2,
         ],
       );
 
   static final $allTransitiveDependencies0 = generatedPuzzlesRepositoryProvider;
-  static final $allTransitiveDependencies1 = puzzlesProvider;
+  static final $allTransitiveDependencies1 =
+      GeneratedPuzzlesRepositoryProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 = puzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$generatedPuzzlesControllerHash();

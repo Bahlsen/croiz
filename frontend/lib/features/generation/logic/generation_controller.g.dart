@@ -21,9 +21,13 @@ final class GenerationControllerProvider
         retry: null,
         name: r'generationControllerProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[pendingPuzzlesProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          GenerationControllerProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = pendingPuzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$generationControllerHash();
@@ -42,7 +46,7 @@ final class GenerationControllerProvider
 }
 
 String _$generationControllerHash() =>
-    r'6f0b892b440063108378306878ec55c598d880d8';
+    r'ee83b746536d3e922fb9779a37149b64a7534e87';
 
 abstract class _$GenerationController extends $Notifier<AsyncValue<String?>> {
   AsyncValue<String?> build();

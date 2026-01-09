@@ -142,7 +142,7 @@ class GamePersistenceService {
   }
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [puzzleStorage])
 GamePersistenceService gamePersistenceService(Ref ref) {
   final storage = ref.watch(puzzleStorageProvider);
   return GamePersistenceService(storage);

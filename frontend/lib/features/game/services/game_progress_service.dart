@@ -170,7 +170,7 @@ class CheckCompletionResult {
   final bool hasChanges;
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [wordCheckService, puzzleStorage])
 GameProgressService gameProgressService(Ref ref) {
   // print('DEBUG: gameProgressService provider called');
   final wordCheck = ref.watch(wordCheckServiceProvider);

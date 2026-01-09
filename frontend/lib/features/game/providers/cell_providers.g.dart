@@ -35,12 +35,33 @@ final class CellEntriesIndexProvider
         name: r'cellEntriesIndexProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[gameBoardProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           CellEntriesIndexProvider.$allTransitiveDependencies0,
-        ],
+          CellEntriesIndexProvider.$allTransitiveDependencies1,
+          CellEntriesIndexProvider.$allTransitiveDependencies2,
+          CellEntriesIndexProvider.$allTransitiveDependencies3,
+          CellEntriesIndexProvider.$allTransitiveDependencies4,
+          CellEntriesIndexProvider.$allTransitiveDependencies5,
+          CellEntriesIndexProvider.$allTransitiveDependencies6,
+          CellEntriesIndexProvider.$allTransitiveDependencies7,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameBoardProvider;
+  static final $allTransitiveDependencies1 =
+      GameBoardNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameBoardNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameBoardNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameBoardNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      GameBoardNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      GameBoardNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      GameBoardNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$cellEntriesIndexHash();
@@ -96,12 +117,33 @@ final class SortedAcrossEntriesProvider
         name: r'sortedAcrossEntriesProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[gameBoardProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           SortedAcrossEntriesProvider.$allTransitiveDependencies0,
-        ],
+          SortedAcrossEntriesProvider.$allTransitiveDependencies1,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies2,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies3,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies4,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies5,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies6,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies7,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameBoardProvider;
+  static final $allTransitiveDependencies1 =
+      GameBoardNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameBoardNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameBoardNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameBoardNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      GameBoardNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      GameBoardNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      GameBoardNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$sortedAcrossEntriesHash();
@@ -156,12 +198,33 @@ final class SortedDownEntriesProvider
         name: r'sortedDownEntriesProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[gameBoardProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           SortedDownEntriesProvider.$allTransitiveDependencies0,
-        ],
+          SortedDownEntriesProvider.$allTransitiveDependencies1,
+          SortedDownEntriesProvider.$allTransitiveDependencies2,
+          SortedDownEntriesProvider.$allTransitiveDependencies3,
+          SortedDownEntriesProvider.$allTransitiveDependencies4,
+          SortedDownEntriesProvider.$allTransitiveDependencies5,
+          SortedDownEntriesProvider.$allTransitiveDependencies6,
+          SortedDownEntriesProvider.$allTransitiveDependencies7,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameBoardProvider;
+  static final $allTransitiveDependencies1 =
+      GameBoardNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameBoardNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameBoardNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameBoardNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      GameBoardNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      GameBoardNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      GameBoardNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$sortedDownEntriesHash();
@@ -215,12 +278,33 @@ final class ClueNumbersProvider
         name: r'clueNumbersProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[gameBoardProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           ClueNumbersProvider.$allTransitiveDependencies0,
-        ],
+          ClueNumbersProvider.$allTransitiveDependencies1,
+          ClueNumbersProvider.$allTransitiveDependencies2,
+          ClueNumbersProvider.$allTransitiveDependencies3,
+          ClueNumbersProvider.$allTransitiveDependencies4,
+          ClueNumbersProvider.$allTransitiveDependencies5,
+          ClueNumbersProvider.$allTransitiveDependencies6,
+          ClueNumbersProvider.$allTransitiveDependencies7,
+        },
       );
 
   static final $allTransitiveDependencies0 = gameBoardProvider;
+  static final $allTransitiveDependencies1 =
+      GameBoardNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameBoardNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameBoardNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameBoardNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      GameBoardNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      GameBoardNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      GameBoardNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$clueNumbersHash();
@@ -279,6 +363,20 @@ final class CellValueProvider
        );
 
   static final $allTransitiveDependencies0 = gameBoardProvider;
+  static final $allTransitiveDependencies1 =
+      GameBoardNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      GameBoardNotifierProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      GameBoardNotifierProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies4 =
+      GameBoardNotifierProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      GameBoardNotifierProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      GameBoardNotifierProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 =
+      GameBoardNotifierProvider.$allTransitiveDependencies6;
 
   @override
   String debugGetCreateSourceHash() => _$cellValueHash();
@@ -334,9 +432,16 @@ final class CellValueFamily extends $Family
         retry: null,
         name: r'cellValueProvider',
         dependencies: <ProviderOrFamily>[gameBoardProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           CellValueProvider.$allTransitiveDependencies0,
-        ],
+          CellValueProvider.$allTransitiveDependencies1,
+          CellValueProvider.$allTransitiveDependencies2,
+          CellValueProvider.$allTransitiveDependencies3,
+          CellValueProvider.$allTransitiveDependencies4,
+          CellValueProvider.$allTransitiveDependencies5,
+          CellValueProvider.$allTransitiveDependencies6,
+          CellValueProvider.$allTransitiveDependencies7,
+        },
         isAutoDispose: false,
       );
 

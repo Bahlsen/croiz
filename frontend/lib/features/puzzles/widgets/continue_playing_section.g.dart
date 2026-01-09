@@ -52,6 +52,7 @@ final class InProgressPuzzlesProvider
           InProgressPuzzlesProvider.$allTransitiveDependencies1,
           InProgressPuzzlesProvider.$allTransitiveDependencies2,
           InProgressPuzzlesProvider.$allTransitiveDependencies3,
+          InProgressPuzzlesProvider.$allTransitiveDependencies4,
         },
       );
 
@@ -60,6 +61,8 @@ final class InProgressPuzzlesProvider
       PuzzleStorageProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 = puzzleProgressServiceProvider;
   static final $allTransitiveDependencies3 = puzzlesProvider;
+  static final $allTransitiveDependencies4 =
+      PuzzlesProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$inProgressPuzzlesHash();
@@ -76,4 +79,4 @@ final class InProgressPuzzlesProvider
   }
 }
 
-String _$inProgressPuzzlesHash() => r'7fee2ee6a6f1558aca434bfb916c4645502334f0';
+String _$inProgressPuzzlesHash() => r'1bc703a27a4cd3c2fb2fb503cdda179515a8b0d7';

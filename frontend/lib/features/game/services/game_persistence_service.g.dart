@@ -27,9 +27,16 @@ final class GamePersistenceServiceProvider
         retry: null,
         name: r'gamePersistenceServiceProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[puzzleStorageProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          GamePersistenceServiceProvider.$allTransitiveDependencies0,
+          GamePersistenceServiceProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = puzzleStorageProvider;
+  static final $allTransitiveDependencies1 =
+      PuzzleStorageProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$gamePersistenceServiceHash();
@@ -55,4 +62,4 @@ final class GamePersistenceServiceProvider
 }
 
 String _$gamePersistenceServiceHash() =>
-    r'29ec04a4bd5bba66ef15868e1088a5e11cc1db5b';
+    r'ebe208f1ec17cf5d9294885fdab0ff1027245b4e';

@@ -7,7 +7,7 @@ import 'package:uuid/uuid.dart';
 
 part 'generation_controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [PendingPuzzles])
 class GenerationController extends _$GenerationController {
   @override
   AsyncValue<String?> build() => const AsyncValue.data(null);
