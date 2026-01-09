@@ -5,7 +5,7 @@ import 'package:croiz/services/persistence/preference_persistence_service.dart';
 part 'locale_provider.g.dart';
 
 /// Provider for the application locale.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
 class LocaleNotifier extends _$LocaleNotifier {
   @override
   Locale build() => const Locale('en');

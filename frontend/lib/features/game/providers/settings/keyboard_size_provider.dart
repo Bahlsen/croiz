@@ -7,7 +7,7 @@ part 'keyboard_size_provider.g.dart';
 enum KeyboardSize { small, medium, large }
 
 /// Provider for keyboard size preference.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
 class KeyboardSizeNotifier extends _$KeyboardSizeNotifier {
   @override
   KeyboardSize build() => KeyboardSize.medium;

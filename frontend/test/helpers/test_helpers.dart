@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
-import 'package:croiz/services/persistence/preference_persistence_service.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
 import 'fake_puzzle_storage.dart';
@@ -33,8 +32,7 @@ List<dynamic> commonOverrides({
   PuzzleStorageInterface? storage,
   AudioService? audioService,
   PreferencePersistenceService? preferences,
-}) {
-  return [
+}) => [
     puzzleStorageProvider.overrideWithValue(storage ?? FakePuzzleStorage()),
     gameAudioServiceProvider.overrideWithValue(
       audioService ?? FakeAudioService(),
@@ -45,7 +43,6 @@ List<dynamic> commonOverrides({
     flashClearDelayProvider.overrideWithValue(Duration.zero),
     wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
   ];
-}
 
 /// Creates a [ProviderContainer] for testing with common overrides.
 ProviderContainer createTestContainer({
@@ -53,8 +50,7 @@ ProviderContainer createTestContainer({
   AudioService? audioService,
   PreferencePersistenceService? preferences,
   List<dynamic> overrides = const [],
-}) {
-  return ProviderContainer(
+}) => ProviderContainer(
     overrides: [
       ...commonOverrides(
         storage: storage,
@@ -64,4 +60,3 @@ ProviderContainer createTestContainer({
       ...overrides,
     ],
   );
-}

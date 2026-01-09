@@ -43,9 +43,16 @@ final class CompletedPuzzleIdsProvider
         retry: null,
         name: r'completedPuzzleIdsProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[puzzleStorageProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          CompletedPuzzleIdsProvider.$allTransitiveDependencies0,
+          CompletedPuzzleIdsProvider.$allTransitiveDependencies1,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = puzzleStorageProvider;
+  static final $allTransitiveDependencies1 =
+      PuzzleStorageProvider.$allTransitiveDependencies0;
 
   @override
   String debugGetCreateSourceHash() => _$completedPuzzleIdsHash();
@@ -63,7 +70,7 @@ final class CompletedPuzzleIdsProvider
 }
 
 String _$completedPuzzleIdsHash() =>
-    r'948dac9809ad27aaba74017394b765f397bbe013';
+    r'0f3b870921246b48e95c64450a238c057875671b';
 
 /// Provider that returns all available languages from the puzzle index.
 ///
@@ -89,9 +96,13 @@ final class AvailableLanguagesProvider
         retry: null,
         name: r'availableLanguagesProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[puzzlesProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          AvailableLanguagesProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = puzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$availableLanguagesHash();
@@ -116,7 +127,7 @@ final class AvailableLanguagesProvider
 }
 
 String _$availableLanguagesHash() =>
-    r'39d66ba66ef7e7a03c57a7816bfd6406ccfc0319';
+    r'8827e06cbe172600d85222d63e1f7f3e6ffaff64';
 
 /// Provider that returns all available difficulties from the puzzle index.
 ///
@@ -142,9 +153,13 @@ final class AvailableDifficultiesProvider
         retry: null,
         name: r'availableDifficultiesProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[puzzlesProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          AvailableDifficultiesProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = puzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$availableDifficultiesHash();
@@ -169,7 +184,7 @@ final class AvailableDifficultiesProvider
 }
 
 String _$availableDifficultiesHash() =>
-    r'5aa98cffdd1b5b492f345301459c2ba56bc87e0f';
+    r'e7c8d93cf0425bc1bb43f1b06de4a8415ad1cb97';
 
 /// Provider that returns puzzles filtered by the current filter state.
 ///
@@ -203,9 +218,33 @@ final class FilteredPuzzlesProvider
         retry: null,
         name: r'filteredPuzzlesProvider',
         isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          puzzlesProvider,
+          puzzleFilterProvider,
+          completedPuzzleIdsProvider,
+          availableLanguagesProvider,
+          pendingPuzzlesProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          FilteredPuzzlesProvider.$allTransitiveDependencies0,
+          FilteredPuzzlesProvider.$allTransitiveDependencies1,
+          FilteredPuzzlesProvider.$allTransitiveDependencies2,
+          FilteredPuzzlesProvider.$allTransitiveDependencies3,
+          FilteredPuzzlesProvider.$allTransitiveDependencies4,
+          FilteredPuzzlesProvider.$allTransitiveDependencies5,
+          FilteredPuzzlesProvider.$allTransitiveDependencies6,
+        },
       );
+
+  static final $allTransitiveDependencies0 = puzzlesProvider;
+  static final $allTransitiveDependencies1 = puzzleFilterProvider;
+  static final $allTransitiveDependencies2 = completedPuzzleIdsProvider;
+  static final $allTransitiveDependencies3 =
+      CompletedPuzzleIdsProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies4 =
+      CompletedPuzzleIdsProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies5 = availableLanguagesProvider;
+  static final $allTransitiveDependencies6 = pendingPuzzlesProvider;
 
   @override
   String debugGetCreateSourceHash() => _$filteredPuzzlesHash();
@@ -230,4 +269,4 @@ final class FilteredPuzzlesProvider
   }
 }
 
-String _$filteredPuzzlesHash() => r'b6c7c196697ac0c43378d8425714034a3aeea140';
+String _$filteredPuzzlesHash() => r'9f085759425cbc02ac83a7591f837a61a7ce211c';

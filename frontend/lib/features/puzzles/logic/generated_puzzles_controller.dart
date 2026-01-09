@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'generated_puzzles_controller.g.dart';
 
-@riverpod
+@Riverpod(dependencies: [generatedPuzzlesRepository, puzzles])
 class GeneratedPuzzlesController extends _$GeneratedPuzzlesController {
   @override
   FutureOr<void> build() {

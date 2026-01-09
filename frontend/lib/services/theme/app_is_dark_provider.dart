@@ -4,7 +4,7 @@ import 'package:croiz/services/persistence/preference_persistence_service.dart';
 part 'app_is_dark_provider.g.dart';
 
 /// Provider for global dark mode state.
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [preferencePersistenceService])
 class AppIsDarkNotifier extends _$AppIsDarkNotifier {
   @override
   bool build() => false; // light by default

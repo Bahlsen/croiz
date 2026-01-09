@@ -11,7 +11,7 @@ part 'filtered_puzzles_provider.g.dart';
 /// A puzzle is considered "completed" if it has been saved with 100%
 /// completion in storage. This checks the `isCompleted` field in the
 /// saved puzzle data.
-@riverpod
+@Riverpod(dependencies: [puzzleStorage])
 Future<Set<String>> completedPuzzleIds(Ref ref) async {
   final storage = ref.watch(puzzleStorageProvider);
   final allKeys = await storage.getAllKeys();
@@ -34,7 +34,7 @@ Future<Set<String>> completedPuzzleIds(Ref ref) async {
 /// Provider that returns all available languages from the puzzle index.
 ///
 /// Derives the set of unique language codes from all puzzles.
-@riverpod
+@Riverpod(dependencies: [puzzles])
 Set<String> availableLanguages(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   return puzzlesAsync.when(
@@ -47,7 +47,7 @@ Set<String> availableLanguages(Ref ref) {
 /// Provider that returns all available difficulties from the puzzle index.
 ///
 /// Derives the set of unique difficulty levels from all puzzles.
-@riverpod
+@Riverpod(dependencies: [puzzles])
 Set<int> availableDifficulties(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   return puzzlesAsync.when(
@@ -61,7 +61,15 @@ Set<int> availableDifficulties(Ref ref) {
 ///
 /// Watches both [puzzlesProvider] and [puzzleFilterProvider] and returns
 /// only puzzles that match the current filters.
-@riverpod
+@Riverpod(
+  dependencies: [
+    puzzles,
+    PuzzleFilter,
+    completedPuzzleIds,
+    availableLanguages,
+    PendingPuzzles,
+  ],
+)
 List<PuzzleDescriptor> filteredPuzzles(Ref ref) {
   final puzzlesAsync = ref.watch(puzzlesProvider);
   final filterState = ref.watch(puzzleFilterProvider);

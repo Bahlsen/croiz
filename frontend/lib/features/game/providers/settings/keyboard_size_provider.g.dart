@@ -24,9 +24,14 @@ final class KeyboardSizeNotifierProvider
         retry: null,
         name: r'keyboardSizeProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[preferencePersistenceServiceProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          KeyboardSizeNotifierProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 =
+      preferencePersistenceServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$keyboardSizeNotifierHash();
@@ -45,7 +50,7 @@ final class KeyboardSizeNotifierProvider
 }
 
 String _$keyboardSizeNotifierHash() =>
-    r'09844867230278c7caf24fba756d2530918b896b';
+    r'cc6d28cd26aafe283dbf7af5e73a0954dd29dcab';
 
 /// Provider for keyboard size preference.
 

@@ -24,9 +24,14 @@ final class LocaleNotifierProvider
         retry: null,
         name: r'localeProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[preferencePersistenceServiceProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          LocaleNotifierProvider.$allTransitiveDependencies0,
+        ],
       );
+
+  static final $allTransitiveDependencies0 =
+      preferencePersistenceServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$localeNotifierHash();
@@ -44,7 +49,7 @@ final class LocaleNotifierProvider
   }
 }
 
-String _$localeNotifierHash() => r'1be89bd581d1bfbad409eb220a59b14c9459aa58';
+String _$localeNotifierHash() => r'cd651470f0206409db48fc9d5ed77124789ceac0';
 
 /// Provider for the application locale.
 

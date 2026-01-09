@@ -237,7 +237,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Підтвердити розкриття всього';
 
   @override
-  String get revealAllConfirmationMessage => 'Ви впевнені, що хочете розкрити весь кросворд?';
+  String get revealAllConfirmationMessage =>
+      'Ви впевнені, що хочете розкрити весь кросворд?';
 
   @override
   String get yes => 'Так';
@@ -252,7 +253,8 @@ class AppLocalizationsUk extends AppLocalizations {
   String get deletePuzzle => 'Видалити згенеровану головоломку';
 
   @override
-  String get deletePuzzleConfirmation => 'Ви впевнені, що хочете видалити цю головоломку? Цю дію неможливо скасувати.';
+  String get deletePuzzleConfirmation =>
+      'Ви впевнені, що хочете видалити цю головоломку? Цю дію неможливо скасувати.';
 
   @override
   String get deleteSuccessMessage => 'Головоломку успішно видалено';
