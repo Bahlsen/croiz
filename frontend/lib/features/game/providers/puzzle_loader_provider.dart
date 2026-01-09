@@ -66,7 +66,16 @@ PuzzleLoaderFunction puzzleAssetLoader(Ref ref) => loadPuzzleFromAsset;
 /// IMPORTANT: this does **not** load any default puzzle. A puzzle id must be
 /// selected via `selectedPuzzleIdProvider` (or tests must override this
 /// provider). This guarantees we never silently load the same puzzle.
-@Riverpod(keepAlive: true)
+@Riverpod(
+  keepAlive: true,
+  dependencies: [
+    puzzles,
+    SelectedPuzzleIdNotifier,
+    puzzleAssetLoader,
+    generatedPuzzlesRepository,
+    puzzleStorage,
+  ],
+)
 Future<GameBoard> puzzleLoader(Ref ref) async {
   final selected = ref.watch(selectedPuzzleIdProvider);
   if (selected == null || selected.isEmpty) {
@@ -79,11 +88,15 @@ Future<GameBoard> puzzleLoader(Ref ref) async {
   final index = await ref.watch(puzzlesProvider.future);
   final match = index.firstWhere(
     (p) => p.id == selected,
-    orElse:
-        () =>
-            throw StateError(
-              'Selected puzzle id not found in index: $selected',
-            ),
+    orElse: () {
+      if (kDebugMode) {
+        developer.log(
+          'Puzzle ID "$selected" not found in index. Available IDs: ${index.map((p) => p.id).take(10).join(", ")}...',
+          name: 'PuzzleLoader',
+        );
+      }
+      throw StateError('Selected puzzle id not found in index: $selected');
+    },
   );
 
   GameBoard board;

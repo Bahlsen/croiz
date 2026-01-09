@@ -162,9 +162,31 @@ final class PuzzleLoaderProvider
         retry: null,
         name: r'puzzleLoaderProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[
+          puzzlesProvider,
+          selectedPuzzleIdProvider,
+          puzzleAssetLoaderProvider,
+          generatedPuzzlesRepositoryProvider,
+          puzzleStorageProvider,
+        ],
+        $allTransitiveDependencies: <ProviderOrFamily>{
+          PuzzleLoaderProvider.$allTransitiveDependencies0,
+          PuzzleLoaderProvider.$allTransitiveDependencies1,
+          PuzzleLoaderProvider.$allTransitiveDependencies2,
+          PuzzleLoaderProvider.$allTransitiveDependencies3,
+          PuzzleLoaderProvider.$allTransitiveDependencies4,
+          PuzzleLoaderProvider.$allTransitiveDependencies5,
+        },
       );
+
+  static final $allTransitiveDependencies0 = puzzlesProvider;
+  static final $allTransitiveDependencies1 =
+      PuzzlesProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      PuzzlesProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 = selectedPuzzleIdProvider;
+  static final $allTransitiveDependencies4 = puzzleAssetLoaderProvider;
+  static final $allTransitiveDependencies5 = puzzleStorageProvider;
 
   @override
   String debugGetCreateSourceHash() => _$puzzleLoaderHash();
@@ -180,4 +202,4 @@ final class PuzzleLoaderProvider
   }
 }
 
-String _$puzzleLoaderHash() => r'057d81f21cce8363cc25b7d431463f2a9b9e39e2';
+String _$puzzleLoaderHash() => r'a0ae7ef053ea5f0b1e35e5ce9c58b1ede99ef53a';

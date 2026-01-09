@@ -44,7 +44,7 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
 
     // Get all puzzles with saved progress
     final progressList = await service.getInProgressPuzzlesSortedByRecency();
-    if (progressList.isEmpty) {
+    if (!ref.mounted || progressList.isEmpty) {
       return [];
     }
 
@@ -54,7 +54,7 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
     // the puzzles are loaded, causing the in-progress section to appear empty.
     final puzzles = await ref.watch(puzzlesProvider.future);
 
-    if (puzzles.isEmpty) {
+    if (!ref.mounted || puzzles.isEmpty) {
       return [];
     }
 
@@ -64,6 +64,10 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
     final inProgressList = <InProgressPuzzleInfo>[];
 
     for (final progress in progressList) {
+      if (!ref.mounted) {
+        return [];
+      }
+
       final descriptor = puzzleMap[progress.puzzleId];
       if (descriptor == null) {
         continue;
@@ -71,8 +75,8 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
 
       // Load saved data to calculate completion percent
       final data = await storage.load(progress.puzzleId);
-      if (data == null) {
-        continue;
+      if (!ref.mounted || data == null) {
+        return [];
       }
 
       // Skip completed puzzles
@@ -89,6 +93,10 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
 
       // Load solution to calculate percent
       final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
+      if (!ref.mounted) {
+        return [];
+      }
+
       final solution = _extractSolutionGrid(puzzleJson);
       final clues = _extractClues(puzzleJson);
 

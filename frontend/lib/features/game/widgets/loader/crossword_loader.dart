@@ -64,7 +64,7 @@ class CrosswordLoadingScaffold extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)?.pleaseWait ?? 'Please wait',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: onBg.withAlpha((0.7 * 255).round()),
+                      color: onBg.withAlpha(178), // 70% opacity
                     ),
                   ),
                 ],
@@ -88,8 +88,15 @@ class CrosswordLoadingScaffold extends StatelessWidget {
 }
 
 class CrosswordErrorScaffold extends StatelessWidget {
-  const CrosswordErrorScaffold({required this.selectedId, super.key});
+  const CrosswordErrorScaffold({
+    required this.selectedId,
+    this.error,
+    this.stackTrace,
+    super.key,
+  });
   final String selectedId;
+  final Object? error;
+  final StackTrace? stackTrace;
 
   void _showMenu(BuildContext context) {
     showDialog<void>(
@@ -126,11 +133,64 @@ class CrosswordErrorScaffold extends StatelessWidget {
         child: Stack(
           children: [
             Center(
-              child: Text(
-                AppLocalizations.of(context)?.errorLoading ??
-                    'Error loading puzzle',
-                style: TextStyle(color: onBg),
-                textAlign: TextAlign.center,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: scheme.error),
+                    const SizedBox(height: 16),
+                    Text(
+                      AppLocalizations.of(context)?.errorLoading ??
+                          'Error loading puzzle',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        color: onBg,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Puzzle ID: $selectedId',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: onBg.withAlpha(178), // 70% opacity
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    if (error != null) ...[
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: scheme.errorContainer,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          error.toString(),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(
+                            color: scheme.onErrorContainer,
+                            fontFamily: 'monospace',
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () => context.go('/puzzles'),
+                      icon: const Icon(Icons.arrow_back),
+                      label: const Text('Back to Puzzles'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Positioned(

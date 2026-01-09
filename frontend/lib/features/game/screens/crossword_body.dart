@@ -26,7 +26,15 @@ class _CrosswordBodyState extends ConsumerState<CrosswordBody> {
 
     if (puzzleAsync is AsyncError) {
       final selected = ref.read(selectedPuzzleIdProvider) ?? '<null>';
-      return CrosswordErrorScaffold(selectedId: selected);
+      if (kDebugMode) {
+        debugPrint('Puzzle load error: ${puzzleAsync.error}');
+        debugPrint('Stack trace: ${puzzleAsync.stackTrace}');
+      }
+      return CrosswordErrorScaffold(
+        selectedId: selected,
+        error: puzzleAsync.error,
+        stackTrace: puzzleAsync.stackTrace,
+      );
     }
 
     final gridSize = ref

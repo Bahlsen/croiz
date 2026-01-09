@@ -39,10 +39,19 @@ Duration wordCheckDebounceDelay(Ref ref) => const Duration(milliseconds: 16);
 @Riverpod(
   keepAlive: true,
   dependencies: [
+    puzzleLoader,
     gamePersistenceService,
     gameProgressService,
     gameRevealService,
     gameEndgameService,
+    SelectedPuzzleIdNotifier,
+    SelectedCellNotifier,
+    FoundWordsNotifier,
+    LockedCellsNotifier,
+    FlashingCellsNotifier,
+    FlashingClearedCellsNotifier,
+    flashClearDelay,
+    gameTimer,
   ],
 )
 class GameBoardNotifier extends _$GameBoardNotifier {

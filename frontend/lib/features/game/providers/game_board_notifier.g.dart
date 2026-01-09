@@ -130,10 +130,19 @@ final class GameBoardNotifierProvider
         name: r'gameBoardProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[
+          puzzleLoaderProvider,
           gamePersistenceServiceProvider,
           gameProgressServiceProvider,
           gameRevealServiceProvider,
           gameEndgameServiceProvider,
+          selectedPuzzleIdProvider,
+          selectedCellProvider,
+          foundWordsProvider,
+          lockedCellsProvider,
+          flashingCellsProvider,
+          flashingClearedCellsProvider,
+          flashClearDelayProvider,
+          gameTimerProvider,
         ],
         $allTransitiveDependencies: <ProviderOrFamily>{
           GameBoardNotifierProvider.$allTransitiveDependencies0,
@@ -143,19 +152,47 @@ final class GameBoardNotifierProvider
           GameBoardNotifierProvider.$allTransitiveDependencies4,
           GameBoardNotifierProvider.$allTransitiveDependencies5,
           GameBoardNotifierProvider.$allTransitiveDependencies6,
+          GameBoardNotifierProvider.$allTransitiveDependencies7,
+          GameBoardNotifierProvider.$allTransitiveDependencies8,
+          GameBoardNotifierProvider.$allTransitiveDependencies9,
+          GameBoardNotifierProvider.$allTransitiveDependencies10,
+          GameBoardNotifierProvider.$allTransitiveDependencies11,
+          GameBoardNotifierProvider.$allTransitiveDependencies12,
+          GameBoardNotifierProvider.$allTransitiveDependencies13,
+          GameBoardNotifierProvider.$allTransitiveDependencies14,
+          GameBoardNotifierProvider.$allTransitiveDependencies15,
+          GameBoardNotifierProvider.$allTransitiveDependencies16,
+          GameBoardNotifierProvider.$allTransitiveDependencies17,
+          GameBoardNotifierProvider.$allTransitiveDependencies18,
         },
       );
 
-  static final $allTransitiveDependencies0 = gamePersistenceServiceProvider;
+  static final $allTransitiveDependencies0 = puzzleLoaderProvider;
   static final $allTransitiveDependencies1 =
-      GamePersistenceServiceProvider.$allTransitiveDependencies0;
+      PuzzleLoaderProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
-      GamePersistenceServiceProvider.$allTransitiveDependencies1;
-  static final $allTransitiveDependencies3 = gameProgressServiceProvider;
+      PuzzleLoaderProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      PuzzleLoaderProvider.$allTransitiveDependencies2;
   static final $allTransitiveDependencies4 =
+      PuzzleLoaderProvider.$allTransitiveDependencies3;
+  static final $allTransitiveDependencies5 =
+      PuzzleLoaderProvider.$allTransitiveDependencies4;
+  static final $allTransitiveDependencies6 =
+      PuzzleLoaderProvider.$allTransitiveDependencies5;
+  static final $allTransitiveDependencies7 = gamePersistenceServiceProvider;
+  static final $allTransitiveDependencies8 = gameProgressServiceProvider;
+  static final $allTransitiveDependencies9 =
       GameProgressServiceProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies5 = gameRevealServiceProvider;
-  static final $allTransitiveDependencies6 = gameEndgameServiceProvider;
+  static final $allTransitiveDependencies10 = gameRevealServiceProvider;
+  static final $allTransitiveDependencies11 = gameEndgameServiceProvider;
+  static final $allTransitiveDependencies12 = selectedCellProvider;
+  static final $allTransitiveDependencies13 = foundWordsProvider;
+  static final $allTransitiveDependencies14 = lockedCellsProvider;
+  static final $allTransitiveDependencies15 = flashingCellsProvider;
+  static final $allTransitiveDependencies16 = flashingClearedCellsProvider;
+  static final $allTransitiveDependencies17 = flashClearDelayProvider;
+  static final $allTransitiveDependencies18 = gameTimerProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -173,7 +210,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'11bfadf9f7db886fbc9d8f2266b0251382c57b01';
+String _$gameBoardNotifierHash() => r'bbaf09bf3665269557153e9643fd03320aa28c73';
 
 /// Main notifier for the game board state.
 
