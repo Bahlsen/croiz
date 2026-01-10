@@ -143,6 +143,8 @@ final class GameBoardNotifierProvider
           flashingClearedCellsProvider,
           flashClearDelayProvider,
           gameTimerProvider,
+          audioMutedProvider,
+          gameAudioServiceProvider,
         ],
         $allTransitiveDependencies: <ProviderOrFamily>{
           GameBoardNotifierProvider.$allTransitiveDependencies0,
@@ -164,6 +166,9 @@ final class GameBoardNotifierProvider
           GameBoardNotifierProvider.$allTransitiveDependencies16,
           GameBoardNotifierProvider.$allTransitiveDependencies17,
           GameBoardNotifierProvider.$allTransitiveDependencies18,
+          GameBoardNotifierProvider.$allTransitiveDependencies19,
+          GameBoardNotifierProvider.$allTransitiveDependencies20,
+          GameBoardNotifierProvider.$allTransitiveDependencies21,
         },
       );
 
@@ -193,6 +198,10 @@ final class GameBoardNotifierProvider
   static final $allTransitiveDependencies16 = flashingClearedCellsProvider;
   static final $allTransitiveDependencies17 = flashClearDelayProvider;
   static final $allTransitiveDependencies18 = gameTimerProvider;
+  static final $allTransitiveDependencies19 = audioMutedProvider;
+  static final $allTransitiveDependencies20 =
+      AudioMutedNotifierProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies21 = gameAudioServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -210,7 +219,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'bbaf09bf3665269557153e9643fd03320aa28c73';
+String _$gameBoardNotifierHash() => r'bb388ce1f3522829f580e6cb03862097c05550ce';
 
 /// Main notifier for the game board state.
 

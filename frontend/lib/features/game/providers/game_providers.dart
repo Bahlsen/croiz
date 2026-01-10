@@ -10,16 +10,28 @@ export 'game_selection_providers.dart';
 
 // Additional providers that haven't been modularized yet
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import '../helpers/board_helpers.dart';
 
 // Re-import for local use
 import 'game_state_providers.dart';
 import 'game_board_notifier.dart';
+import 'game_selection_providers.dart';
+
+part 'game_providers.g.dart';
 
 /// Set of cells belonging to the currently selected word.
 /// Optimized: only depends on selection, direction, and blackCells structure.
-final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
+@Riverpod(
+  keepAlive: true,
+  dependencies: [
+    SelectedCellNotifier,
+    WordDirectionNotifier,
+    GameBoardNotifier,
+  ],
+)
+Set<CellKey> selectedWordCells(Ref ref) {
   final selected = ref.watch(selectedCellProvider);
   final dir = ref.watch(wordDirectionProvider);
   if (selected == null) {
@@ -43,12 +55,11 @@ final selectedWordCellsProvider = Provider<Set<CellKey>>((ref) {
     }
   }
   return cells;
-});
+}
 
 /// Provider family that answers whether a specific cell is part of the
 /// currently selected word.
 /// Optimized: uses select() to only rebuild when this cell's membership changes.
-final cellInSelectedWordProvider = Provider.family<bool, CellKey>(
-  (ref, key) =>
-      ref.watch(selectedWordCellsProvider.select((set) => set.contains(key))),
-);
+@Riverpod(keepAlive: true, dependencies: [selectedWordCells])
+bool cellInSelectedWord(Ref ref, CellKey key) =>
+    ref.watch(selectedWordCellsProvider.select((set) => set.contains(key)));

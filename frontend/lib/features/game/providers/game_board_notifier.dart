@@ -52,6 +52,8 @@ Duration wordCheckDebounceDelay(Ref ref) => const Duration(milliseconds: 16);
     FlashingClearedCellsNotifier,
     flashClearDelay,
     gameTimer,
+    AudioMutedNotifier,
+    gameAudioService,
   ],
 )
 class GameBoardNotifier extends _$GameBoardNotifier {

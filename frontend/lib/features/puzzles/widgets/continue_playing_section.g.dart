@@ -79,4 +79,4 @@ final class InProgressPuzzlesProvider
   }
 }
 
-String _$inProgressPuzzlesHash() => r'1bc703a27a4cd3c2fb2fb503cdda179515a8b0d7';
+String _$inProgressPuzzlesHash() => r'488690e5ab67fa4886b037a7c3588f82a47b4272';

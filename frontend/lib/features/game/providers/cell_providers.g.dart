@@ -56,6 +56,9 @@ final class CellEntriesIndexProvider
           CellEntriesIndexProvider.$allTransitiveDependencies17,
           CellEntriesIndexProvider.$allTransitiveDependencies18,
           CellEntriesIndexProvider.$allTransitiveDependencies19,
+          CellEntriesIndexProvider.$allTransitiveDependencies20,
+          CellEntriesIndexProvider.$allTransitiveDependencies21,
+          CellEntriesIndexProvider.$allTransitiveDependencies22,
         },
       );
 
@@ -98,6 +101,12 @@ final class CellEntriesIndexProvider
       GameBoardNotifierProvider.$allTransitiveDependencies17;
   static final $allTransitiveDependencies19 =
       GameBoardNotifierProvider.$allTransitiveDependencies18;
+  static final $allTransitiveDependencies20 =
+      GameBoardNotifierProvider.$allTransitiveDependencies19;
+  static final $allTransitiveDependencies21 =
+      GameBoardNotifierProvider.$allTransitiveDependencies20;
+  static final $allTransitiveDependencies22 =
+      GameBoardNotifierProvider.$allTransitiveDependencies21;
 
   @override
   String debugGetCreateSourceHash() => _$cellEntriesIndexHash();
@@ -174,6 +183,9 @@ final class SortedAcrossEntriesProvider
           SortedAcrossEntriesProvider.$allTransitiveDependencies17,
           SortedAcrossEntriesProvider.$allTransitiveDependencies18,
           SortedAcrossEntriesProvider.$allTransitiveDependencies19,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies20,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies21,
+          SortedAcrossEntriesProvider.$allTransitiveDependencies22,
         },
       );
 
@@ -216,6 +228,12 @@ final class SortedAcrossEntriesProvider
       GameBoardNotifierProvider.$allTransitiveDependencies17;
   static final $allTransitiveDependencies19 =
       GameBoardNotifierProvider.$allTransitiveDependencies18;
+  static final $allTransitiveDependencies20 =
+      GameBoardNotifierProvider.$allTransitiveDependencies19;
+  static final $allTransitiveDependencies21 =
+      GameBoardNotifierProvider.$allTransitiveDependencies20;
+  static final $allTransitiveDependencies22 =
+      GameBoardNotifierProvider.$allTransitiveDependencies21;
 
   @override
   String debugGetCreateSourceHash() => _$sortedAcrossEntriesHash();
@@ -291,6 +309,9 @@ final class SortedDownEntriesProvider
           SortedDownEntriesProvider.$allTransitiveDependencies17,
           SortedDownEntriesProvider.$allTransitiveDependencies18,
           SortedDownEntriesProvider.$allTransitiveDependencies19,
+          SortedDownEntriesProvider.$allTransitiveDependencies20,
+          SortedDownEntriesProvider.$allTransitiveDependencies21,
+          SortedDownEntriesProvider.$allTransitiveDependencies22,
         },
       );
 
@@ -333,6 +354,12 @@ final class SortedDownEntriesProvider
       GameBoardNotifierProvider.$allTransitiveDependencies17;
   static final $allTransitiveDependencies19 =
       GameBoardNotifierProvider.$allTransitiveDependencies18;
+  static final $allTransitiveDependencies20 =
+      GameBoardNotifierProvider.$allTransitiveDependencies19;
+  static final $allTransitiveDependencies21 =
+      GameBoardNotifierProvider.$allTransitiveDependencies20;
+  static final $allTransitiveDependencies22 =
+      GameBoardNotifierProvider.$allTransitiveDependencies21;
 
   @override
   String debugGetCreateSourceHash() => _$sortedDownEntriesHash();
@@ -407,6 +434,9 @@ final class ClueNumbersProvider
           ClueNumbersProvider.$allTransitiveDependencies17,
           ClueNumbersProvider.$allTransitiveDependencies18,
           ClueNumbersProvider.$allTransitiveDependencies19,
+          ClueNumbersProvider.$allTransitiveDependencies20,
+          ClueNumbersProvider.$allTransitiveDependencies21,
+          ClueNumbersProvider.$allTransitiveDependencies22,
         },
       );
 
@@ -449,6 +479,12 @@ final class ClueNumbersProvider
       GameBoardNotifierProvider.$allTransitiveDependencies17;
   static final $allTransitiveDependencies19 =
       GameBoardNotifierProvider.$allTransitiveDependencies18;
+  static final $allTransitiveDependencies20 =
+      GameBoardNotifierProvider.$allTransitiveDependencies19;
+  static final $allTransitiveDependencies21 =
+      GameBoardNotifierProvider.$allTransitiveDependencies20;
+  static final $allTransitiveDependencies22 =
+      GameBoardNotifierProvider.$allTransitiveDependencies21;
 
   @override
   String debugGetCreateSourceHash() => _$clueNumbersHash();
@@ -545,6 +581,12 @@ final class CellValueProvider
       GameBoardNotifierProvider.$allTransitiveDependencies17;
   static final $allTransitiveDependencies19 =
       GameBoardNotifierProvider.$allTransitiveDependencies18;
+  static final $allTransitiveDependencies20 =
+      GameBoardNotifierProvider.$allTransitiveDependencies19;
+  static final $allTransitiveDependencies21 =
+      GameBoardNotifierProvider.$allTransitiveDependencies20;
+  static final $allTransitiveDependencies22 =
+      GameBoardNotifierProvider.$allTransitiveDependencies21;
 
   @override
   String debugGetCreateSourceHash() => _$cellValueHash();
@@ -621,6 +663,9 @@ final class CellValueFamily extends $Family
           CellValueProvider.$allTransitiveDependencies17,
           CellValueProvider.$allTransitiveDependencies18,
           CellValueProvider.$allTransitiveDependencies19,
+          CellValueProvider.$allTransitiveDependencies20,
+          CellValueProvider.$allTransitiveDependencies21,
+          CellValueProvider.$allTransitiveDependencies22,
         },
         isAutoDispose: false,
       );
