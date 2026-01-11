@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
+import 'package:croiz/services/providers.dart';
+import '../helpers/fake_audio_service.dart';
 
 void main() {
   group('VirtualKeyboard simplified (no extra letters)', () {
@@ -22,7 +27,12 @@ void main() {
       (tester) async {
         // Default layout does not explicitly include BACKSPACE token.
         await tester.pumpWidget(
-          const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
+          ProviderScope(
+            overrides: [
+              gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+            ],
+            child: const MaterialApp(home: Scaffold(body: VirtualKeyboard())),
+          ),
         );
         expect(find.byIcon(Icons.backspace_outlined), findsOneWidget);
       },
@@ -32,8 +42,13 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: VirtualKeyboard(includeBackspace: false)),
+        ProviderScope(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+          ],
+          child: const MaterialApp(
+            home: Scaffold(body: VirtualKeyboard(includeBackspace: false)),
+          ),
         ),
       );
       expect(find.byIcon(Icons.backspace_outlined), findsNothing);
@@ -47,8 +62,13 @@ void main() {
         ['D', VirtualKeyboard.backspaceToken],
       ];
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: VirtualKeyboard(layout: customLayout)),
+        ProviderScope(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+          ],
+          child: MaterialApp(
+            home: Scaffold(body: VirtualKeyboard(layout: customLayout)),
+          ),
         ),
       );
       expect(find.byIcon(Icons.backspace_outlined), findsOneWidget);
@@ -59,11 +79,16 @@ void main() {
     ) async {
       String? tapped;
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: VirtualKeyboard(
-              enabledLetters: const {'A', 'B'},
-              onKey: (k) => tapped = k,
+        ProviderScope(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: VirtualKeyboard(
+                enabledLetters: const {'A', 'B'},
+                onKey: (k) => tapped = k,
+              ),
             ),
           ),
         ),
@@ -81,8 +106,13 @@ void main() {
     testWidgets('backspace tap triggers callback', (tester) async {
       var count = 0;
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(body: VirtualKeyboard(onBackspace: () => count++)),
+        ProviderScope(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+          ],
+          child: MaterialApp(
+            home: Scaffold(body: VirtualKeyboard(onBackspace: () => count++)),
+          ),
         ),
       );
       await tester.tap(find.byIcon(Icons.backspace_outlined));
@@ -95,8 +125,13 @@ void main() {
       (tester) async {
         var count = 0;
         await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(body: VirtualKeyboard(onBackspace: () => count++)),
+          ProviderScope(
+            overrides: [
+              gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+            ],
+            child: MaterialApp(
+              home: Scaffold(body: VirtualKeyboard(onBackspace: () => count++)),
+            ),
           ),
         );
         final backspaceFinder = find.byIcon(Icons.backspace_outlined);
@@ -117,12 +152,25 @@ void main() {
       ];
       String? tapped;
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: VirtualKeyboard(
-              layout: layout,
-              onKey: (k) => tapped = k,
-              includeBackspace: false,
+        ProviderScope(
+          overrides: [
+            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(
+              body: VirtualKeyboard(
+                layout: layout,
+                onKey: (k) => tapped = k,
+                includeBackspace: false,
+                enableFeedback: false,
+              ),
             ),
           ),
         ),

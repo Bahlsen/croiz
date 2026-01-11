@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 void main() {
   testWidgets('PuzzlesListPage shows provided puzzles', (
@@ -16,7 +18,10 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWithValue(AsyncValue.data(sample))],
+        overrides: [
+          puzzlesProvider.overrideWithValue(AsyncValue.data(sample)),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+        ],
         child: Sizer(
           builder:
               (context, orientation, deviceType) =>

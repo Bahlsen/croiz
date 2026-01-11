@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../../../helpers/fake_puzzle_storage.dart';
 
 void main() {
   testWidgets('shows settings icon in app bar leading position', (
@@ -11,7 +13,10 @@ void main() {
   ) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [puzzlesProvider.overrideWith((ref) async => [])],
+        overrides: [
+          puzzlesProvider.overrideWith((ref) async => []),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+        ],
         child: MaterialApp(
           home: Sizer(
             builder:

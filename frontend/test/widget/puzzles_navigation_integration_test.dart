@@ -7,6 +7,10 @@ import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 void main() {
@@ -55,11 +59,20 @@ void main() {
           puzzleAssetLoaderProvider.overrideWithValue(
             (String path) async => fakeBoard,
           ),
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
         ],
         child: Sizer(
           builder:
-              (context, orientation, deviceType) =>
-                  MaterialApp.router(routerConfig: router),
+              (context, orientation, deviceType) => MaterialApp.router(
+                routerConfig: router,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: AppLocalizations.supportedLocales,
+              ),
         ),
       ),
     );
