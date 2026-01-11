@@ -7,6 +7,7 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/services/game_audio_service.dart';
+import '../helpers/test_helpers.dart';
 
 /// Counts how many times word completion is checked.
 class CountingWordCheckService extends WordCheckService {
@@ -131,13 +132,10 @@ void main() {
         final countingAudio = CountingAudioService();
         final board = _createTestBoard();
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          audioService: countingAudio,
           overrides: [
             wordCheckServiceProvider.overrideWithValue(countingWordCheck),
-            gameAudioServiceProvider.overrideWithValue(countingAudio),
-            flashClearDelayProvider.overrideWithValue(
-              const Duration(milliseconds: 100),
-            ),
             puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
           ],
         );
@@ -209,12 +207,10 @@ void main() {
       final countingAudio = CountingAudioService();
       final board = _createTestBoard();
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        audioService: countingAudio,
         overrides: [
           wordCheckServiceProvider.overrideWithValue(countingWordCheck),
-          gameAudioServiceProvider.overrideWithValue(countingAudio),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
         ],
       );

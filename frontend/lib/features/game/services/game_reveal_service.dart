@@ -80,7 +80,9 @@ class GameRevealService {
     required Set<CellKey> currentLockedCells,
   }) {
     final solutionGrid = board.solutionGrid;
-    if (solutionGrid == null) {
+    final wordKey = _wordCheck.getWordKey(entry);
+
+    if (solutionGrid == null || currentFoundWords.contains(wordKey)) {
       return RevealResult(
         newGrid: board.grid,
         newFoundWords: currentFoundWords,

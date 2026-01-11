@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/fake_puzzle_storage.dart';
 import '../helpers/fake_audio_service.dart';
+import '../helpers/test_helpers.dart';
 import 'package:croiz/features/game/services/game_persistence_service.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
@@ -10,8 +11,6 @@ import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
-import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
 
 // ignore: riverpod_missing_dependencies
 void main() {
@@ -20,10 +19,12 @@ void main() {
   group('Locked cells persistence on puzzle switch', () {
     late FakePuzzleStorage storage;
     late GamePersistenceService persistence;
+    late FakeAudioService audioService; // Use FakeAudioService directly
 
     setUp(() async {
       storage = FakePuzzleStorage();
       persistence = GamePersistenceService(storage);
+      audioService = FakeAudioService();
     });
 
     test(
@@ -84,8 +85,15 @@ void main() {
           ],
         );
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          storage: storage,
+          audioService: audioService,
+          flashClearDelay: Duration.zero,
+          wordCheckDebounceDelay: Duration.zero,
           overrides: [
+            // Explicitly override persistence service to use our instance
+            gamePersistenceServiceProvider.overrideWithValue(persistence),
+
             puzzlesProvider.overrideWithValue(
               AsyncValue.data([
                 PuzzleDescriptor(
@@ -106,11 +114,6 @@ void main() {
               }
               return boardB;
             }),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-            gamePersistenceServiceProvider.overrideWithValue(persistence),
-            puzzleStorageProvider.overrideWithValue(storage),
-            gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
           ],
         );
         addTearDown(container.dispose);

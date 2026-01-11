@@ -1,14 +1,15 @@
 # 🧩 Crossword Generation Engine - Unified Documentation
 
-**Version**: 3.13 (January 4, 2026)  
-**Status**: PRODUCTION READY (v3.13)
+**Version**: 3.14 (January 11, 2026)  
+**Status**: PRODUCTION READY (v3.14)
 
-> **Note (v3.13)**: Major reliability improvements for dense puzzle generation.
+> **Note (v3.14)**: Added deterministic template generation for robust testing.
 > 1. **Skeleton Retry Loop**: Up to 5 skeleton attempts with early validation before CSP solving.
 > 2. **Adaptive Difficulty**: 50% chance to relax black ratio (0.22 → 0.28) for easier filling.
 > 3. **Minimum Thresholds**: Enforces ≥25% density and ≥50% theme word retention.
 > 4. **Increased Backtracking**: 50,000 backtracks (5x previous) for deeper search.
 > 5. **AC-3 Optimization**: O(d) revise complexity (down from O(d²)).
+> 6. **Determinism**: Introduced `forceStyle` parameter for `GridFirstGenerator` to control template selection in tests.
 >
 > **Known Issue (Non-critical)**: "Illegal adjacency" warnings may appear when adjacent cells aren't covered by the same word slot. This is a template structure issue and doesn't affect playability.
 
@@ -442,6 +443,7 @@ To ensure generation success even with difficult theme words, the generator empl
 1. **Strict Mode (Attempts 0-50%)**: Tries validation with `targetBlackRatio = 0.22`. Produces professional-grade dense grids.
 2. **Relaxed Mode (Attempts 50-100%)**: Dynamically increases `targetBlackRatio` (up to 0.28-0.30). This introduces more black squares to break up difficult areas, ensuring a valid puzzle is produced rather than returning a partial/failure result.
 3. **Template Randomization**: Shuffles between `Random`, `Checkerboard`, and `Diagonal` styles to escape local optima.
+4. **Deterministic Mode**: When `forceStyle` is provided (e.g. for testing), the generator bypasses randomization and uses the specified `TemplateStyle`.
 
 ### 6.2 GADDAG Integration
 

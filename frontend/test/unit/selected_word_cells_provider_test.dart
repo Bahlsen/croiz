@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   test('selectedWordCellsProvider returns correct horizontal set', () {
-    final container = ProviderContainer();
+    final container = createTestContainer();
     addTearDown(container.dispose);
 
     const size = 5;
@@ -25,6 +25,7 @@ void main() {
       entries: const [],
     );
 
+    // Give a small delay to handle initial loader firing if needed
     container.read(gameBoardProvider.notifier).setBoard(board);
     container
         .read(selectedCellProvider.notifier)
@@ -41,7 +42,7 @@ void main() {
   });
 
   test('selectedWordCellsProvider returns correct vertical set', () {
-    final container = ProviderContainer();
+    final container = createTestContainer();
     addTearDown(container.dispose);
 
     const size = 5;

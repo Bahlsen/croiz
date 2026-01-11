@@ -31,7 +31,7 @@ class GameProgressService {
   ///
   /// This operation is asynchronous and reconstructs foundWords, lockedCells,
   /// and the play grid.
-  Future<void> loadProgress({
+  Future<bool> loadProgress({
     required GameBoard board,
     required void Function(List<List<String?>> grid) setGrid,
     required void Function(Set<String> found) setFoundWords,
@@ -39,11 +39,9 @@ class GameProgressService {
     required void Function(int seconds)? setElapsedSeconds,
   }) async {
     try {
-      // print('GameProgressService: Attempting to load progress for ${board.id}');
       final savedData = await _storage.load(board.id);
-      // print('GameProgressService: Loaded data for ${board.id}: ${savedData != null ? 'Found' : 'Null'}');
       if (savedData == null) {
-        return;
+        return false;
       }
 
       // 1. Restore Grid
@@ -76,7 +74,6 @@ class GameProgressService {
 
       // 3. Restore Locked Cells
       final savedLocked = savedData['lockedCells'];
-      // print('Restoring progress for ${board.id}, savedLocked: $savedLocked');
       if (savedLocked is List) {
         final locked = <CellKey>{};
         for (final entry in savedLocked) {
@@ -89,7 +86,6 @@ class GameProgressService {
             }
           }
         }
-        // print('Restored locked cells: $locked');
         setLockedCells(locked);
       }
 
@@ -98,8 +94,9 @@ class GameProgressService {
       if (savedElapsed is int && setElapsedSeconds != null) {
         setElapsedSeconds(savedElapsed);
       }
+      return true;
     } on Object {
-      // print('GameProgressService: Failed to load progress: $e\n$st');
+      return false;
     }
   }
 

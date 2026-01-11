@@ -3,28 +3,23 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import '../test_utils/test_board.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('arrow navigation skips cells that do not belong to any word', () {
-    final testBoard = makeEmptyBoard();
-    final container = ProviderContainer(
-      overrides: [
-        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
-      ],
-    );
-    addTearDown(container.dispose);
-
-    final boardNotifier = container.read(gameBoardProvider.notifier);
-
-    // Create a 5x5 grid with specific entries:
-    // - Word 1: horizontal at (0,0) length 3 -> cells (0,0), (0,1), (0,2)
-    // - Word 2: vertical at (2,0) length 3 -> cells (0,2), (1,2), (2,2)
-    // - Cell (0,3) is NOT black but doesn't belong to any word
-    // - Word 3: horizontal at (0,4) length 1 -> cell (0,4)
-
-    final boardWithEntries = boardNotifier.state.copyWith(
+    const size = 5;
+    final board = GameBoard(
+      id: 'test',
+      title: 'Test',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: List.generate(size, (_) => List<String?>.filled(size, null)),
+      clues: const {},
+      blackCells: List.generate(size, (_) => List<bool>.filled(size, false)),
+      difficulty: 1,
       entries: const [
         PuzzleEntryData(number: 1, direction: 'across', x: 0, y: 0, length: 3),
         PuzzleEntryData(number: 2, direction: 'down', x: 2, y: 0, length: 3),
@@ -32,7 +27,12 @@ void main() {
       ],
     );
 
-    container.read(gameBoardProvider.notifier).setBoard(boardWithEntries);
+    final container = createTestContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
 
     // Start at cell (0,2) - end of word 1
     container
@@ -47,7 +47,7 @@ void main() {
       physicalKey: PhysicalKeyboardKey.arrowRight,
       timeStamp: Duration(milliseconds: 1),
     );
-    controller.handleKey(event, boardNotifier.state.gridSize);
+    controller.handleKey(event);
 
     final sel = container.read(selectedCellProvider);
     expect(sel, isNotNull);
@@ -59,10 +59,21 @@ void main() {
   test(
     'arrow navigation works when no entries are defined (legacy behavior)',
     () {
-      final testBoard = makeEmptyBoard();
-      final container = ProviderContainer(
+      const size = 5;
+      final board = GameBoard(
+        id: 'test',
+        title: 'Test',
+        gridSize: size,
+        createdAt: DateTime.now(),
+        grid: List.generate(size, (_) => List<String?>.filled(size, null)),
+        clues: const {},
+        blackCells: List.generate(size, (_) => List<bool>.filled(size, false)),
+        difficulty: 1,
+      );
+
+      final container = createTestContainer(
         overrides: [
-          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
         ],
       );
       addTearDown(container.dispose);
@@ -78,7 +89,7 @@ void main() {
         physicalKey: PhysicalKeyboardKey.arrowRight,
         timeStamp: Duration(milliseconds: 1),
       );
-      controller.handleKey(event, container.read(gameBoardProvider).gridSize);
+      controller.handleKey(event);
 
       final sel = container.read(selectedCellProvider);
       expect(sel, isNotNull);
@@ -89,25 +100,27 @@ void main() {
   );
 
   test('arrow navigation wraps around when skipping isolated cells', () {
-    final testBoard = makeEmptyBoard();
-    final container = ProviderContainer(
-      overrides: [
-        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(testBoard)),
-      ],
-    );
-    addTearDown(container.dispose);
-
-    final boardNotifier = container.read(gameBoardProvider.notifier);
-
-    // Only one word at (1,1) horizontal length 2
-    // Cell (0,0) is isolated (not part of any word)
-    final boardWithEntries2 = boardNotifier.state.copyWith(
+    const size = 5;
+    final board = GameBoard(
+      id: 'test',
+      title: 'Test',
+      gridSize: size,
+      createdAt: DateTime.now(),
+      grid: List.generate(size, (_) => List<String?>.filled(size, null)),
+      clues: const {},
+      blackCells: List.generate(size, (_) => List<bool>.filled(size, false)),
+      difficulty: 1,
       entries: const [
         PuzzleEntryData(number: 1, direction: 'across', x: 1, y: 1, length: 2),
       ],
     );
 
-    container.read(gameBoardProvider.notifier).setBoard(boardWithEntries2);
+    final container = createTestContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
 
     // Start at cell (1,2) - end of the only word
     container
@@ -122,7 +135,7 @@ void main() {
       physicalKey: PhysicalKeyboardKey.arrowRight,
       timeStamp: Duration(milliseconds: 1),
     );
-    controller.handleKey(event, boardNotifier.state.gridSize);
+    controller.handleKey(event);
 
     final sel = container.read(selectedCellProvider);
     expect(sel, isNotNull);

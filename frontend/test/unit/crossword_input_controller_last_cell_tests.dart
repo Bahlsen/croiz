@@ -4,34 +4,15 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import '../test_utils/test_board.dart';
-import 'package:croiz/services/providers.dart';
-import 'package:croiz/features/game/services/game_audio_service.dart';
-
-class MockGameAudioService implements GameAudioService {
-  @override
-  Future<void> playType() async {}
-  @override
-  Future<void> playDelete() async {}
-  @override
-  Future<void> playSuccess() async {}
-  @override
-  Future<void> playVictory() async {}
-  @override
-  Future<void> playReveal() async {}
-  @override
-  Future<void> get ready => Future<void>.value();
-  @override
-  Future<void> dispose() async {}
-}
+import '../helpers/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('typing on filled cell replaces and advances to next editable', () {
     final board = makeEmptyBoard();
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
       ],
     );
@@ -55,9 +36,8 @@ void main() {
 
   test('typing on empty cell advances to next editable', () {
     final board = makeEmptyBoard();
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
       ],
     );
@@ -95,9 +75,8 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
         puzzleLoaderProvider.overrideWithValue(
           AsyncValue.data(boardWithEntries),
         ),

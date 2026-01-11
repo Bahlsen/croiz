@@ -2,10 +2,11 @@
 // The navigation jumps from one cell to another without logic after changing puzzles.
 // Hypothesis: Something is not reinitialized when changing puzzles.
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 /// Helper to create a GameBoard for testing.
 GameBoard _makeBoard({
@@ -28,6 +29,8 @@ GameBoard _makeBoard({
 );
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Navigation after puzzle change - bug reproduction', () {
     test(
       'typing letters after puzzle change should navigate correctly within new puzzle entries',
@@ -109,11 +112,11 @@ void main() {
 
         var currentBoard = board1;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          flashClearDelay: Duration.zero,
+          wordCheckDebounceDelay: Duration.zero,
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async => currentBoard),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);
@@ -289,11 +292,11 @@ void main() {
 
         var currentBoard = board1;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          flashClearDelay: Duration.zero,
+          wordCheckDebounceDelay: Duration.zero,
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async => currentBoard),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);
@@ -411,11 +414,11 @@ void main() {
 
         var currentBoard = board1;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          flashClearDelay: Duration.zero,
+          wordCheckDebounceDelay: Duration.zero,
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async => currentBoard),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);
@@ -555,11 +558,11 @@ void main() {
 
         var currentBoard = board1;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
+          flashClearDelay: Duration.zero,
+          wordCheckDebounceDelay: Duration.zero,
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async => currentBoard),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);

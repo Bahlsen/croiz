@@ -1,24 +1,14 @@
+import '../../../helpers/test_helpers.dart';
 import '../../../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:croiz/features/game/providers/game_providers.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
 
 void main() {
-  late FakePuzzleStorage storage;
-  // No need for GamePersistenceService variable if only checking storage side effects
-
-  setUp(() {
-    storage = FakePuzzleStorage();
-    storage = FakePuzzleStorage();
-  });
-  tearDown(() async {
-    // No specific cleanup needed for FakePuzzleStorage
-  });
-
   test('end-game triggers persistence of elapsedSeconds', () async {
     const id = 'endgame-puzzle';
 
@@ -54,10 +44,9 @@ void main() {
       solutionGrid: solution,
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        puzzleStorageProvider.overrideWithValue(storage),
       ],
     );
     addTearDown(container.dispose);
@@ -69,6 +58,7 @@ void main() {
     // Allow debounce persistence to run (persist is debounced by 200ms).
     await Future<void>.delayed(const Duration(milliseconds: 300));
 
+    final storage = container.read(puzzleStorageProvider) as FakePuzzleStorage;
     final saved = await storage.load(id);
     expect(saved, isNotNull, reason: 'Expected puzzle progress to be saved');
     expect(

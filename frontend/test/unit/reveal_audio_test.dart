@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:croiz/features/game/providers/game_board_notifier.dart';
-import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
-import 'package:croiz/features/game/providers/game_state_providers.dart';
+import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/services/audio_service.dart';
+import 'package:croiz/features/game/services/game_audio_service.dart';
+import '../helpers/test_helpers.dart';
 
-class MockAudio implements AudioService {
+class MockAudio implements GameAudioService {
   int success = 0;
   int victory = 0;
   int reveal = 0;
@@ -68,12 +67,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -115,12 +112,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -167,12 +162,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -216,12 +209,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -265,12 +256,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -321,12 +310,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      audioService: mock,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        gameAudioServiceProvider.overrideWithValue(mock),
       ],
     );
     addTearDown(container.dispose);
@@ -379,12 +366,10 @@ void main() {
         ],
       );
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        audioService: mock,
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          gameAudioServiceProvider.overrideWithValue(mock),
         ],
       );
       addTearDown(container.dispose);

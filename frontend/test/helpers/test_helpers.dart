@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
-import 'package:croiz/services/providers.dart';
+import 'package:croiz/features/game/providers/game_audio_provider.dart';
+import 'package:croiz/services/persistence/preference_persistence_service.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
@@ -32,31 +33,39 @@ List<dynamic> commonOverrides({
   PuzzleStorageInterface? storage,
   AudioService? audioService,
   PreferencePersistenceService? preferences,
+  Duration? flashClearDelay,
+  Duration? wordCheckDebounceDelay,
 }) => [
-    puzzleStorageProvider.overrideWithValue(storage ?? FakePuzzleStorage()),
-    gameAudioServiceProvider.overrideWithValue(
-      audioService ?? FakeAudioService(),
-    ),
-    preferencePersistenceServiceProvider.overrideWithValue(
-      preferences ?? FakePreferencePersistenceService(),
-    ),
-    flashClearDelayProvider.overrideWithValue(Duration.zero),
-    wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-  ];
+  puzzleStorageProvider.overrideWithValue(storage ?? FakePuzzleStorage()),
+  gameAudioServiceProvider.overrideWithValue(
+    audioService ?? FakeAudioService(),
+  ),
+  preferencePersistenceServiceProvider.overrideWithValue(
+    preferences ?? FakePreferencePersistenceService(),
+  ),
+  flashClearDelayProvider.overrideWithValue(flashClearDelay ?? Duration.zero),
+  wordCheckDebounceDelayProvider.overrideWithValue(
+    wordCheckDebounceDelay ?? Duration.zero,
+  ),
+];
 
 /// Creates a [ProviderContainer] for testing with common overrides.
 ProviderContainer createTestContainer({
   PuzzleStorageInterface? storage,
   AudioService? audioService,
   PreferencePersistenceService? preferences,
+  Duration? flashClearDelay,
+  Duration? wordCheckDebounceDelay,
   List<dynamic> overrides = const [],
 }) => ProviderContainer(
-    overrides: [
-      ...commonOverrides(
-        storage: storage,
-        audioService: audioService,
-        preferences: preferences,
-      ),
-      ...overrides,
-    ],
-  );
+  overrides: [
+    ...commonOverrides(
+      storage: storage,
+      audioService: audioService,
+      preferences: preferences,
+      flashClearDelay: flashClearDelay,
+      wordCheckDebounceDelay: wordCheckDebounceDelay,
+    ),
+    ...overrides,
+  ],
+);

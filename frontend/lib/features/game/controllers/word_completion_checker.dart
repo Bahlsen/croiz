@@ -6,7 +6,6 @@ import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
-import 'package:croiz/features/game/services/endgame_service.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/utils/flash_utils.dart';
@@ -33,7 +32,6 @@ class WordCompletionChecker {
     required this.readWordCheckService,
     required this.readGameAudioService,
     required this.readAudioMuted,
-    required this.readEndGameService,
     required this.readFlashClearDelay,
     required this.readCheckDebounceDelay,
     required this.finalizeTimer,
@@ -53,7 +51,6 @@ class WordCompletionChecker {
     required WordCheckService Function() readWordCheckService,
     required AudioService Function() readGameAudioService,
     required bool Function() readAudioMuted,
-    required EndGameService Function() readEndGameService,
     required Duration Function() readFlashClearDelay,
     required Duration Function() readCheckDebounceDelay,
     required void Function(String boardId) finalizeTimer,
@@ -69,7 +66,6 @@ class WordCompletionChecker {
     readWordCheckService: readWordCheckService,
     readGameAudioService: readGameAudioService,
     readAudioMuted: readAudioMuted,
-    readEndGameService: readEndGameService,
     readFlashClearDelay: readFlashClearDelay,
     readCheckDebounceDelay: readCheckDebounceDelay,
     finalizeTimer: finalizeTimer,
@@ -86,7 +82,6 @@ class WordCompletionChecker {
   final WordCheckService Function() readWordCheckService;
   final AudioService Function() readGameAudioService;
   final bool Function() readAudioMuted;
-  final EndGameService Function() readEndGameService;
   final Duration Function() readFlashClearDelay;
   final Duration Function() readCheckDebounceDelay;
   final void Function(String boardId) finalizeTimer;
@@ -302,7 +297,6 @@ WordCompletionChecker createWordCompletionCheckerFromRef(
   readWordCheckService: () => read<WordCheckService>(wordCheckServiceProvider),
   readGameAudioService: () => read<AudioService>(gameAudioServiceProvider),
   readAudioMuted: () => read<bool>(gameAudioMutedProvider),
-  readEndGameService: () => read(endGameServiceProvider),
   readFlashClearDelay: () => read<Duration>(flashClearDelayProvider),
   readCheckDebounceDelay: () => read<Duration>(wordCheckDebounceDelayProvider),
   finalizeTimer: (boardId) => read(gameTimerProvider(boardId)).finalizeSync(),

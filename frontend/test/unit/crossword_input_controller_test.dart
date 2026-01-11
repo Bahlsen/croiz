@@ -5,43 +5,12 @@ import 'package:croiz/features/game/controllers/crossword_input_controller.dart'
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/providers.dart';
-import 'package:croiz/features/game/services/game_audio_service.dart';
-
-// Mock pour le service audio
-class MockGameAudioService implements GameAudioService {
-  @override
-  Future<void> playType() async {}
-
-  @override
-  Future<void> playDelete() async {}
-
-  @override
-  Future<void> playSuccess() async {}
-
-  @override
-  Future<void> playVictory() async {}
-
-  @override
-  Future<void> playReveal() async {}
-
-  @override
-  Future<void> get ready => Future<void>.value();
-
-  @override
-  Future<void> dispose() async {}
-}
+import '../helpers/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('typing a letter sets it and advances selection', () {
-    final container = ProviderContainer(
-      overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      ],
-    );
-    addTearDown(container.dispose);
-    // Initialize a simple board and selection
     const size = 5;
     final grid = List<List<String?>>.generate(
       size,
@@ -61,7 +30,14 @@ void main() {
       blackCells: blacks,
       difficulty: 1,
     );
-    container.read(gameBoardProvider.notifier).setBoard(board);
+
+    final container = createTestContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
+
     container
         .read(selectedCellProvider.notifier)
         .select(const SelectedCell(0, 0));
@@ -88,14 +64,6 @@ void main() {
   });
 
   test('typing on a locked cell inserts into next selectable cell', () {
-    final container = ProviderContainer(
-      overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      ],
-    );
-    addTearDown(container.dispose);
-
-    // Initialize a simple board and ensure selection
     const size = 5;
     final grid = List<List<String?>>.generate(
       size,
@@ -115,7 +83,13 @@ void main() {
       blackCells: blacks,
       difficulty: 1,
     );
-    container.read(gameBoardProvider.notifier).setBoard(board);
+
+    final container = createTestContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
 
     container
         .read(selectedCellProvider.notifier)
@@ -153,16 +127,6 @@ void main() {
   test(
     'typing the final missing letter in the middle of a word does not advance into newly locked cells',
     () {
-      final container = ProviderContainer(
-        overrides: [
-          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-          // Avoid real timers in word-complete flashes.
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        ],
-      );
-      addTearDown(container.dispose);
-
       const size = 5;
       final grid = List<List<String?>>.generate(
         size,
@@ -222,7 +186,13 @@ void main() {
         entries: entries,
         solutionGrid: solutionGrid,
       );
-      container.read(gameBoardProvider.notifier).setBoard(board);
+
+      final container = createTestContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
       // Select the missing middle letter of the across word.
       container
@@ -269,13 +239,6 @@ void main() {
   test(
     'typing last letter of vertical entry moves to next entry first cell',
     () {
-      final container = ProviderContainer(
-        overrides: [
-          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-        ],
-      );
-      addTearDown(container.dispose);
-
       // Build a simple board with two vertical entries (numbers 5 and 6)
       const size = 5;
       final grid = List<List<String?>>.generate(
@@ -319,7 +282,12 @@ void main() {
         ),
       );
 
-      container.read(gameBoardProvider.notifier).setBoard(board);
+      final container = createTestContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
       // Select the last cell of entry 5 (row=1,col=0) and set vertical mode
       container
@@ -354,13 +322,6 @@ void main() {
   test(
     'typing last vertical entry with no next vertical moves to first across and switches direction',
     () {
-      final container = ProviderContainer(
-        overrides: [
-          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-        ],
-      );
-      addTearDown(container.dispose);
-
       // Build a simple board with one vertical entry and one across entry
       const size = 5;
       final grid = List<List<String?>>.generate(
@@ -404,7 +365,12 @@ void main() {
         ),
       );
 
-      container.read(gameBoardProvider.notifier).setBoard(board);
+      final container = createTestContainer(
+        overrides: [
+          puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        ],
+      );
+      addTearDown(container.dispose);
 
       // Select the only cell of vertical entry (row=0,col=0) and set vertical mode
       container
@@ -441,13 +407,6 @@ void main() {
   );
 
   test('skip next entry when it is already found and choose next available', () {
-    final container = ProviderContainer(
-      overrides: [
-        gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
-      ],
-    );
-    addTearDown(container.dispose);
-
     // Build a board with three across entries: 5,6,7 at x=0,2,4
     const size = 5;
     final grid = List<List<String?>>.generate(
@@ -497,12 +456,19 @@ void main() {
       ),
     );
 
-    container.read(gameBoardProvider.notifier).setBoard(board);
+    final container = createTestContainer(
+      overrides: [
+        puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+      ],
+    );
+    addTearDown(container.dispose);
 
-    // Mark entry 7 as already found
+    // Mark entry 7 as already found and locked
     final wordCheck = container.read(wordCheckServiceProvider);
     final key7 = wordCheck.getWordKey(e7);
     container.read(foundWordsProvider.notifier).setFoundWords(<String>{key7});
+    final locked7 = Set<CellKey>.from(wordCheck.getCellKeys(e7));
+    container.read(lockedCellsProvider.notifier).setLockedCells(locked7);
 
     // Select last cell of entry 6 (row=0,col=2) and horizontal
     container
@@ -523,10 +489,15 @@ void main() {
     controller.handleKey(event, size);
 
     // After typing at entry 6, it advances to next empty cell.
-    // Entry 7 is completed so it goes to entry 5 first empty cell (row=0, col=4)
+    // Entry 7 is completed so it goes to entry 5 first empty cell (row=0, col=0)
+    // Wait, the previous test said (0, 4) which was entry 7?
+    // Ah, entry 5 is at x=0, entry 6 is at x=2, entry 7 is at x=4.
+    // If I'm at entry 6 (x=2) and it's 1 letter long, I type 'X',
+    // it looks for next empty. Entry 7 is at x=4 but it is marked as found.
+    // So it wraps to entry 5 at x=0.
     final sel = container.read(selectedCellProvider);
     expect(sel, isNotNull);
     expect(sel!.row, 0);
-    expect(sel.col, 4);
+    expect(sel.col, 0);
   });
 }

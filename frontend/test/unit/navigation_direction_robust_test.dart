@@ -3,8 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   void setupBoard(
     ProviderContainer container,
     GameBoard board,
@@ -19,11 +22,9 @@ void main() {
 
   group('Navigation direction robustness', () {
     test('vertical: preserve direction when next vertical word exists', () {
-      final container = ProviderContainer(
-        overrides: [
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        wordCheckDebounceDelay: Duration.zero,
+        flashClearDelay: Duration.zero,
       );
       addTearDown(container.dispose);
       final read = container.read;
@@ -91,11 +92,9 @@ void main() {
     });
 
     test('vertical: switch to horizontal when no other vertical exists', () {
-      final container = ProviderContainer(
-        overrides: [
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        wordCheckDebounceDelay: Duration.zero,
+        flashClearDelay: Duration.zero,
       );
       addTearDown(container.dispose);
       final read = container.read;
@@ -165,11 +164,9 @@ void main() {
     });
 
     test('horizontal: preserve direction when next horizontal word exists', () {
-      final container = ProviderContainer(
-        overrides: [
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        wordCheckDebounceDelay: Duration.zero,
+        flashClearDelay: Duration.zero,
       );
       addTearDown(container.dispose);
       final read = container.read;
@@ -238,11 +235,9 @@ void main() {
     });
 
     test('horizontal: switch to vertical when no other horizontal exists', () {
-      final container = ProviderContainer(
-        overrides: [
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        wordCheckDebounceDelay: Duration.zero,
+        flashClearDelay: Duration.zero,
       );
       addTearDown(container.dispose);
       final read = container.read;

@@ -9,6 +9,7 @@ import 'package:croiz/features/generation/services/gemini_service.dart';
 import 'package:croiz/features/generation/models/placed_word.dart';
 import 'package:croiz/features/generation/services/fill_dictionary_service.dart';
 import 'package:croiz/features/generation/services/grid_first_generator.dart';
+import 'package:croiz/features/generation/services/grid_template.dart';
 import 'package:croiz/features/generation/utils/grid_validator.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,6 +33,8 @@ class PuzzleGenerationOrchestrator {
     required String language,
     int difficulty = 2,
     int size = 15,
+    int? seed,
+    TemplateStyle? templateStyle,
   }) async {
     // 1. Generate Words via Gemini (we do this once as it's the most expensive/slow part)
     final words = await _geminiService.generateWords(
@@ -70,6 +73,8 @@ class PuzzleGenerationOrchestrator {
           'targetBlackRatio': 0.22,
           'themeWords': themeWordData,
           'fillWords': fillWords,
+          'seed': seed,
+          'templateStyle': templateStyle?.name,
         });
         // RELAXED CHECK: If we have a good number of words, we accept it.
         // The generator now returns the best attempt even if 'success' is false.
@@ -443,6 +448,12 @@ GridFirstResult _runGenerationInIsolate(Map<String, dynamic> params) {
   final targetBlackRatio = params['targetBlackRatio'] as double;
   final themeWordData = params['themeWords'] as List<dynamic>;
   final fillWords = params['fillWords'] as List<String>;
+  final seed = params['seed'] as int?;
+  final styleName = params['templateStyle'] as String?;
+  final templateStyle =
+      styleName != null
+          ? TemplateStyle.values.firstWhere((s) => s.name == styleName)
+          : null;
 
   // Reconstruct GeneratedWord objects from serialized data
   final themeWords =
@@ -459,7 +470,12 @@ GridFirstResult _runGenerationInIsolate(Map<String, dynamic> params) {
     width: width,
     height: height,
     targetBlackRatio: targetBlackRatio,
+    seed: seed,
   );
 
-  return generator.generate(themeWords: themeWords, fillWords: fillWords);
+  return generator.generate(
+    themeWords: themeWords,
+    fillWords: fillWords,
+    forceStyle: templateStyle,
+  );
 }

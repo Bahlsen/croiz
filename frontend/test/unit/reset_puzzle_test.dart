@@ -5,7 +5,11 @@ import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
+import '../helpers/test_helpers.dart';
+
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('GameBoardNotifier.resetPuzzle', () {
     test('should clear all user progress and reset game state', () async {
       // Arrange: create a board with some progress (filled cells, found words)
@@ -49,11 +53,11 @@ void main() {
         ],
       );
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        flashClearDelay: Duration.zero,
+        wordCheckDebounceDelay: Duration.zero,
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -130,11 +134,11 @@ void main() {
         ],
       );
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        flashClearDelay: Duration.zero,
+        wordCheckDebounceDelay: Duration.zero,
         overrides: [
           puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);

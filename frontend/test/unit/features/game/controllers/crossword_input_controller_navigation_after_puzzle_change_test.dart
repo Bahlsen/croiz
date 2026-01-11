@@ -37,6 +37,8 @@ GameBoard _makeBoard(String id, String answer) {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test(
     'setLetterAndAdvance works after puzzle change with fresh navigation state',
     () {
@@ -62,24 +64,19 @@ void main() {
           .setDirection(WordDirection.horizontal);
 
       final controller = CrosswordInputController.fromContainer(container)
-        // Normal behavior on existing board: type and advance
         ..setLetterAndAdvance('A');
       final sel1 = container.read(selectedCellProvider);
       expect(sel1, isNotNull);
       expect(sel1!.row, equals(0));
       expect(sel1.col, equals(1));
 
-      // Now simulate loading a fresh puzzle (board2). In the app the observer
-      // would reset navigation state and clear selection; simulate that here.
+      // Simulate loading board2
       container.read(gameBoardProvider.notifier).setBoard(board2);
-      // clear selection as observer does on puzzle load
       container.read(selectedCellProvider.notifier).select(null);
-      // Reset controller internal navigation/timers as observer does
       controller
         ..resetNavigationState()
-        // On a fresh base, calling setLetterAndAdvance should select first cell
-        // and advance to the next empty cell.
         ..setLetterAndAdvance('D');
+
       final sel2 = container.read(selectedCellProvider);
       expect(sel2, isNotNull);
       expect(sel2!.row, equals(0));

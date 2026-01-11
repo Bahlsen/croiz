@@ -249,9 +249,8 @@ class GameBoardNotifier extends _$GameBoardNotifier {
   }
 
   Future<void> _restoreProgress(String puzzleId, GameBoard board) async {
-    // print('DEBUG: _restoreProgress called for $puzzleId');
     try {
-      await _progressService.loadProgress(
+      final success = await _progressService.loadProgress(
         board: board,
         setGrid: (grid) => state = state.copyWith(grid: grid),
         setFoundWords: (found) {
@@ -265,8 +264,11 @@ class GameBoardNotifier extends _$GameBoardNotifier {
           unawaited(ref.read(gameTimerProvider(board.id)).setElapsed(seconds));
         },
       );
+
+      if (!success && ref.mounted) {
+        _populateInitialFoundLockedFromGrid(board);
+      }
     } on Object {
-      // print('DEBUG: Failed to restore progress: $e\n$st');
       if (ref.mounted) {
         _populateInitialFoundLockedFromGrid(board);
       }

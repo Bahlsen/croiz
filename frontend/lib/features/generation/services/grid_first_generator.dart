@@ -58,9 +58,9 @@ class GridFirstGenerator {
     this.targetBlackRatio = 0.18, // Professional standard: 16-18%
     this.minWordLength = 3,
     this.maxAttempts = 150, // More attempts for denser grids
-    Random? random,
+    int? seed,
   }) : _wordIndex = wordIndex ?? WordIndex(),
-       _random = random ?? Random();
+       _random = seed != null ? Random(seed) : Random();
 
   final int width;
   final int height;
@@ -87,6 +87,7 @@ class GridFirstGenerator {
   GridFirstResult generate({
     required List<GeneratedWord> themeWords,
     List<String>? fillWords,
+    TemplateStyle? forceStyle,
   }) {
     // Always rebuild dictionary to ensure all words (theme + fill) are included
     // The previous check `if (!_gaddagBuilt)` was preventing fill words from being added
@@ -111,16 +112,18 @@ class GridFirstGenerator {
       if (attempt % 10 == 0) {
         developer.log('[GEN] Attempt $attempt/$maxAttempts...');
       }
-      final result = _generateSingleAttempt(themeWords);
+      final result = _generateSingleAttempt(themeWords, forceStyle: forceStyle);
 
       if (result.success) {
         final score = _calculateScore(result.metrics);
-        if (score > bestScore) {
+        if (score > bestScore || (score == bestScore && _random.nextBool())) {
           bestScore = score;
           bestResult = result;
         }
       } else if (bestResult == null ||
-          result.placedWords.length > bestResult.placedWords.length) {
+          result.placedWords.length > bestResult.placedWords.length ||
+          (result.placedWords.length == bestResult.placedWords.length &&
+              _random.nextBool())) {
         bestResult = result;
       }
     }
@@ -179,7 +182,10 @@ class GridFirstGenerator {
   }
 
   /// Single generation attempt with a specific template.
-  GridFirstResult _generateSingleAttempt(List<GeneratedWord> themeWords) {
+  GridFirstResult _generateSingleAttempt(
+    List<GeneratedWord> themeWords, {
+    TemplateStyle? forceStyle,
+  }) {
     // Step 1: Generate template
     // Adaptive difficulty: Relax constraints if previous attempts failed
     // Attempts 0-25: Strict (0.22 black ratio)
@@ -230,12 +236,16 @@ class GridFirstGenerator {
 
     // Try template styles in priority order (open is most reliable)
     // Randomize order to try different styles
-    final stylesToTry = [
-      TemplateStyle.random, // Most reliable with target ratio
-      TemplateStyle.checkerboard,
-      TemplateStyle.diagonal,
-    ];
-    if (_random.nextBool()) {
+    final stylesToTry =
+        forceStyle != null
+            ? [forceStyle]
+            : [
+              TemplateStyle.random, // Most reliable with target ratio
+              TemplateStyle.checkerboard,
+              TemplateStyle.diagonal,
+              TemplateStyle.open,
+            ];
+    if (forceStyle == null && _random.nextBool()) {
       stylesToTry.shuffle(_random);
     }
 

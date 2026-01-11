@@ -1,26 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../helpers/test_helpers.dart';
 import '../helpers/fake_puzzle_storage.dart';
 
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
-
-final mockPuzzleJson = {
-  'rows': 5,
-  'cols': 5,
-  'cells': [
-    {'solution': 'A', 'is_black': false},
-  ],
-};
 
 void main() {
-  late FakePuzzleStorage storage;
-
-  setUp(() async {
-    storage = FakePuzzleStorage();
-  });
-
   test('restores persisted puzzle grid and persists changes', () async {
     const id = 'test-puzzle';
 
@@ -30,10 +16,13 @@ void main() {
       [null, 'B', null],
       ['D', null, null],
     ];
+
     final payload = {
       'grid': savedGrid,
       'savedAt': DateTime.now().toIso8601String(),
     };
+
+    final storage = FakePuzzleStorage();
     await storage.save(id, payload);
 
     final data = await storage.load(id);
@@ -57,10 +46,10 @@ void main() {
       difficulty: 1,
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      storage: storage,
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        puzzleStorageProvider.overrideWithValue(storage),
       ],
     );
     addTearDown(container.dispose);

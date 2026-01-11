@@ -145,25 +145,21 @@ void main() {
   });
 
   group('strict providers (no fallbacks)', () {
-    testWidgets('originIndexProvider loads per-origin compact index', (
-      tester,
-    ) async {
+    test('originIndexProvider loads per-origin compact index', () async {
       // Mock assets for this test to avoid relying on full bundle.
       // originIndexProvider reads from the main puzzles_index.json
-      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
-        'flutter/assets',
-        (message) async {
-          final key = const StringCodec().decodeMessage(message);
-          if (key == 'assets/data/puzzles_index.json') {
-            const json = '''
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMessageHandler('flutter/assets', (message) async {
+            final key = const StringCodec().decodeMessage(message);
+            if (key == 'assets/data/puzzles_index.json') {
+              const json = '''
 {"items":[{"id":"cs2000-04-12","title":"Apr 12, 2000","subtitle":"","path":"crossynergy/2000/cs2000-04-12.json","origin":"crossynergy","year":"2000"}],"origins":["crossynergy"]}
 ''';
-            final bytes = Uint8List.fromList(json.codeUnits);
-            return ByteData.view(bytes.buffer);
-          }
-          return null;
-        },
-      );
+              final bytes = Uint8List.fromList(json.codeUnits);
+              return ByteData.view(bytes.buffer);
+            }
+            return null;
+          });
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
@@ -185,10 +181,8 @@ void main() {
       );
 
       // Restore handler
-      tester.binding.defaultBinaryMessenger.setMockMessageHandler(
-        'flutter/assets',
-        null,
-      );
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMessageHandler('flutter/assets', null);
     });
   });
 }

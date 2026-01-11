@@ -4,9 +4,10 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
-  test('revealLetterAt should flash the revealed cell', () {
+  test('revealLetterAt should flash the revealed cell', () async {
     final entries = [
       const PuzzleEntryData(
         number: 1,
@@ -39,11 +40,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      flashClearDelay: const Duration(milliseconds: 50),
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -56,10 +56,9 @@ void main() {
     expect(flashing.contains(const CellKey(0, 1)), isTrue);
     expect(flashing.contains(const CellKey(0, 2)), isTrue);
 
-    return Future.microtask(() {
-      final after = container.read(flashingCellsProvider);
-      expect(after, isEmpty);
-    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final after = container.read(flashingCellsProvider);
+    expect(after, isEmpty);
   });
 
   test('revealAll should only flash newly completed words', () async {
@@ -105,36 +104,37 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      flashClearDelay: const Duration(milliseconds: 50),
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
 
-    // Mark the across entry as already found
+    // Mark the across entry as already found and locked
     final wordCheck = container.read(wordCheckServiceProvider);
     final foundKey = wordCheck.getWordKey(entries[0]);
     container.read(foundWordsProvider.notifier).setFoundWords({foundKey});
+    final locked = Set<CellKey>.from(wordCheck.getCellKeys(entries[0]));
+    container.read(lockedCellsProvider.notifier).setLockedCells(locked);
 
     // Call revealAll
     container.read(gameBoardProvider.notifier).revealAll();
 
     final flashing = container.read(flashingCellsProvider);
-    // The down entry cells (col 2) should flash
-    expect(flashing, contains(const CellKey(0, 2)));
+    // The down entry cells (col 2, rows 1 and 2) should flash.
+    // Row 0, Col 2 SHOULD NOT flash because it was already locked by the across entry.
     expect(flashing, contains(const CellKey(1, 2)));
     expect(flashing, contains(const CellKey(2, 2)));
-    // The across entry cells should NOT flash
+    expect(flashing, isNot(contains(const CellKey(0, 2))));
+    // The across entry other cells should NOT flash
     expect(flashing, isNot(contains(const CellKey(0, 0))));
     expect(flashing, isNot(contains(const CellKey(0, 1))));
 
-    await Future.microtask(() {
-      final after = container.read(flashingCellsProvider);
-      expect(after, isEmpty);
-    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final after = container.read(flashingCellsProvider);
+    expect(after, isEmpty);
   });
 
   test('revealAll should not flash words whose cells are already locked', () async {
@@ -179,11 +179,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      flashClearDelay: const Duration(milliseconds: 50),
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -197,18 +196,18 @@ void main() {
     container.read(gameBoardProvider.notifier).revealAll();
 
     final flashing = container.read(flashingCellsProvider);
-    // The down entry cells (col 2) should flash
-    expect(flashing, contains(const CellKey(0, 2)));
+    // The down entry cells (col 2, rows 1 and 2) should flash
     expect(flashing, contains(const CellKey(1, 2)));
     expect(flashing, contains(const CellKey(2, 2)));
+    // (0, 2) was already locked
+    expect(flashing, isNot(contains(const CellKey(0, 2))));
     // The across entry cells should NOT flash because they were locked
     expect(flashing, isNot(contains(const CellKey(0, 0))));
     expect(flashing, isNot(contains(const CellKey(0, 1))));
 
-    await Future.microtask(() {
-      final after = container.read(flashingCellsProvider);
-      expect(after, isEmpty);
-    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final after = container.read(flashingCellsProvider);
+    expect(after, isEmpty);
   });
 
   test('revealEntry should flash all cells of the entry', () async {
@@ -242,11 +241,10 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      flashClearDelay: const Duration(milliseconds: 50),
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -258,13 +256,31 @@ void main() {
     expect(flashing.contains(const CellKey(1, 1)), isTrue);
     expect(flashing.contains(const CellKey(1, 2)), isTrue);
 
-    await Future.microtask(() {
-      final after = container.read(flashingCellsProvider);
-      expect(after, isEmpty);
-    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final after = container.read(flashingCellsProvider);
+    expect(after, isEmpty);
   });
 
   test('revealAll should flash all non-black cells', () async {
+    final entries = [
+      const PuzzleEntryData(
+        number: 1,
+        direction: 'across',
+        x: 0,
+        y: 0,
+        length: 2,
+        answer: 'AB',
+      ),
+      const PuzzleEntryData(
+        number: 2,
+        direction: 'down',
+        x: 0,
+        y: 0,
+        length: 2,
+        answer: 'AC',
+      ),
+    ];
+
     final board = GameBoard(
       id: 't',
       title: 't',
@@ -280,18 +296,17 @@ void main() {
         [false, true],
       ],
       difficulty: 1,
-      entries: [],
+      entries: entries,
       solutionGrid: [
         ['A', 'B'],
         ['C', null],
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
+      flashClearDelay: const Duration(milliseconds: 50),
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -304,10 +319,9 @@ void main() {
     expect(flashing.contains(const CellKey(1, 0)), isTrue);
     expect(flashing.contains(const CellKey(1, 1)), isFalse); // black
 
-    await Future.microtask(() {
-      final after = container.read(flashingCellsProvider);
-      expect(after, isEmpty);
-    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    final after = container.read(flashingCellsProvider);
+    expect(after, isEmpty);
   });
 
   test('revealEntry should advance selection to next empty cell', () {
@@ -352,11 +366,9 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
@@ -430,11 +442,9 @@ void main() {
       ],
     );
 
-    final container = ProviderContainer(
+    final container = createTestContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
-        flashClearDelayProvider.overrideWithValue(Duration.zero),
-        wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
     );
     addTearDown(container.dispose);
