@@ -65,9 +65,7 @@ void main() {
               .read(wordDirectionProvider.notifier)
               .setDirection(WordDirection.horizontal);
 
-          final controller = CrosswordInputController.fromContainer(container);
-
-          controller
+          CrosswordInputController.fromContainer(container)
             ..setLetterAndAdvance('C')
             ..setLetterAndAdvance('A')
             ..setLetterAndAdvance('T');
@@ -143,9 +141,7 @@ void main() {
               .read(wordDirectionProvider.notifier)
               .setDirection(WordDirection.vertical);
 
-          final controller = CrosswordInputController.fromContainer(container);
-
-          controller
+          CrosswordInputController.fromContainer(container)
             ..setLetterAndAdvance('D')
             ..setLetterAndAdvance('O')
             ..setLetterAndAdvance('G');
@@ -227,9 +223,9 @@ void main() {
               .read(wordDirectionProvider.notifier)
               .setDirection(WordDirection.horizontal);
 
-          final controller = CrosswordInputController.fromContainer(container);
-
-          controller.setLetterAndAdvance('A');
+          CrosswordInputController.fromContainer(
+            container,
+          ).setLetterAndAdvance('A');
 
           async.flushMicrotasks();
 
@@ -307,9 +303,9 @@ void main() {
               .read(wordDirectionProvider.notifier)
               .setDirection(WordDirection.horizontal);
 
-          final controller = CrosswordInputController.fromContainer(container);
-
-          controller.setLetterAndAdvance('A');
+          CrosswordInputController.fromContainer(
+            container,
+          ).setLetterAndAdvance('A');
 
           async.flushMicrotasks();
 
@@ -372,9 +368,9 @@ void main() {
               .read(wordDirectionProvider.notifier)
               .setDirection(WordDirection.horizontal);
 
-          final controller = CrosswordInputController.fromContainer(container);
-
-          controller.setLetterAndAdvance('C');
+          CrosswordInputController.fromContainer(
+            container,
+          ).setLetterAndAdvance('C');
 
           async.flushMicrotasks();
 
@@ -456,9 +452,7 @@ void main() {
             .read(wordDirectionProvider.notifier)
             .setDirection(WordDirection.horizontal);
 
-        final controller = CrosswordInputController.fromContainer(container);
-
-        controller
+        CrosswordInputController.fromContainer(container)
           ..setLetterAndAdvance('D')
           ..setLetterAndAdvance('O')
           ..setLetterAndAdvance('G');
@@ -521,9 +515,7 @@ void main() {
             .read(wordDirectionProvider.notifier)
             .setDirection(WordDirection.horizontal);
 
-        final controller = CrosswordInputController.fromContainer(container);
-
-        controller
+        CrosswordInputController.fromContainer(container)
           ..setLetterAndAdvance('A')
           ..setLetterAndAdvance('B')
           ..setLetterAndAdvance('C');
