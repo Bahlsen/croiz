@@ -9,11 +9,14 @@ library;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/game_audio_service.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 import 'perf_logger.dart';
 
 /// Mock audio service for performance tests
@@ -35,12 +38,19 @@ class _MockAudioService implements GameAudioService {
 }
 
 void main() {
+  // Initialize test environment and disable Google Fonts fetching
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    GoogleFonts.config.allowRuntimeFetching = false;
+  });
+
   group('State Update Performance Tests', () {
     late ProviderContainer container;
 
     setUp(() {
       container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
@@ -197,6 +207,7 @@ void main() {
 
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
@@ -219,15 +230,15 @@ void main() {
         difficulty: 1,
       );
 
-      container
-        ..read(gameBoardProvider.notifier).setBoard(board)
-        // Listen to providers to count notifications (ignoring initial fire)
-        ..listen(gameBoardProvider, (_, _) {
-          gameBoardNotifyCount++;
-        }, fireImmediately: false)
-        ..listen(selectedCellProvider, (_, _) {
-          selectedCellNotifyCount++;
-        }, fireImmediately: false);
+      container.read(gameBoardProvider.notifier).setBoard(board);
+
+      // Store subscriptions so we can dispose them
+      final sub1 = container.listen(gameBoardProvider, (_, _) {
+        gameBoardNotifyCount++;
+      }, fireImmediately: false);
+      final sub2 = container.listen(selectedCellProvider, (_, _) {
+        selectedCellNotifyCount++;
+      }, fireImmediately: false);
 
       // Set 10 letters
       for (var i = 0; i < 10; i++) {
@@ -255,12 +266,16 @@ void main() {
             'selectedCellProvider should not notify on setLetter, got $selectedCellNotifyCount',
       );
 
+      // Clean up subscriptions before disposing container
+      sub1.close();
+      sub2.close();
       container.dispose();
     });
 
     test('cellValueProvider family should isolate rebuilds', () {
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
         ],
       );
@@ -307,6 +322,7 @@ void main() {
     test('cellValueProvider returns correct values per cell', () {
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
@@ -354,6 +370,7 @@ void main() {
     test('Grid state update batch performance', () {
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),

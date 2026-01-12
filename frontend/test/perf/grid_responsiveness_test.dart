@@ -9,6 +9,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
@@ -16,6 +17,8 @@ import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/game_audio_service.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 import 'perf_logger.dart';
 
 class _MockAudioService implements GameAudioService {
@@ -36,6 +39,12 @@ class _MockAudioService implements GameAudioService {
 }
 
 void main() {
+  // Initialize test environment and disable Google Fonts fetching
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    GoogleFonts.config.allowRuntimeFetching = false;
+  });
+
   group('Grid Responsiveness Tests', () {
     late ProviderContainer container;
     late GameBoard board;
@@ -75,6 +84,7 @@ void main() {
 
       container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
@@ -234,6 +244,7 @@ void main() {
     test('setting letter at (0,0) should not affect cell (1,1) value', () {
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
         ],
       );
@@ -254,16 +265,17 @@ void main() {
       var cell00Reads = 0;
       var cell11Reads = 0;
 
-      container
-        ..read(gameBoardProvider.notifier).setBoard(board)
-        ..listen(
-          cellValueProvider(const CellKey(0, 0)),
-          (_, _) => cell00Reads++,
-        )
-        ..listen(
-          cellValueProvider(const CellKey(1, 1)),
-          (_, _) => cell11Reads++,
-        );
+      container.read(gameBoardProvider.notifier).setBoard(board);
+
+      // Store subscriptions so we can dispose them
+      final sub1 = container.listen(
+        cellValueProvider(const CellKey(0, 0)),
+        (_, _) => cell00Reads++,
+      );
+      final sub2 = container.listen(
+        cellValueProvider(const CellKey(1, 1)),
+        (_, _) => cell11Reads++,
+      );
 
       // Set letter only at (0,0)
       container.read(gameBoardProvider.notifier).setLetter(0, 0, 'X');
@@ -273,6 +285,9 @@ void main() {
       // Cell (1,1) should remain null
       expect(container.read(cellValueProvider(const CellKey(1, 1))), isNull);
 
+      // Clean up subscriptions before disposing container
+      sub1.close();
+      sub2.close();
       container.dispose();
     });
   });
@@ -281,6 +296,7 @@ void main() {
     test('full keystroke flow fits within 16ms frame budget', () {
       final container = ProviderContainer(
         overrides: [
+          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
           gameAudioServiceProvider.overrideWithValue(_MockAudioService()),
           flashClearDelayProvider.overrideWithValue(Duration.zero),
           wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
