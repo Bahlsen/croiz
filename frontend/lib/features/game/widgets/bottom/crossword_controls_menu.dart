@@ -6,6 +6,8 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:croiz/core/responsive/responsive.dart';
+import 'package:croiz/features/settings/widgets/help_dialog.dart';
+import 'package:croiz/features/settings/widgets/about_dialog.dart' as about;
 
 String kbSizeLabel(BuildContext context, WidgetRef ref) {
   final val = ref.watch(gameKeyboardSizeProvider);
@@ -366,7 +368,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     fontSize: ResponsiveFontSize.bodyLarge,
                                   ),
                                 ),
-                                onTap: onClose,
+                                onTap: () {
+                                  onClose();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => const HelpDialog(),
+                                  );
+                                },
                               ),
                               ListTile(
                                 leading: Icon(
@@ -381,7 +389,13 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                     fontSize: ResponsiveFontSize.bodyLarge,
                                   ),
                                 ),
-                                onTap: onClose,
+                                onTap: () {
+                                  onClose();
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => const about.AboutDialog(),
+                                  );
+                                },
                               ),
                               const Divider(),
                             ],

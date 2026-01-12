@@ -237,8 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirm Reveal All';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Are you sure you want to reveal the entire puzzle?';
+  String get revealAllConfirmationMessage => 'Are you sure you want to reveal the entire puzzle?';
 
   @override
   String get yes => 'Yes';
@@ -253,12 +252,92 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deletePuzzle => 'Delete Generated Puzzle';
 
   @override
-  String get deletePuzzleConfirmation =>
-      'Are you sure you want to delete this puzzle? This action cannot be undone.';
+  String get deletePuzzleConfirmation => 'Are you sure you want to delete this puzzle? This action cannot be undone.';
 
   @override
   String get deleteSuccessMessage => 'Puzzle deleted successfully';
 
   @override
   String get cancel => 'Cancel';
+
+  @override
+  String get appDescription => 'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.';
+
+  @override
+  String get credits => 'Credits';
+
+  @override
+  String get legal => 'Legal';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get openSourceLicenses => 'Open Source Licenses';
+
+  @override
+  String get howToPlayBasics => 'Basics';
+
+  @override
+  String get helpBasic1 => 'Tap a cell to select it and see the clue';
+
+  @override
+  String get helpBasic2 => 'Type letters using the on-screen keyboard or your device keyboard';
+
+  @override
+  String get helpBasic3 => 'Tap the selected cell again to switch between across/down';
+
+  @override
+  String get helpBasic4 => 'Completed words turn green automatically';
+
+  @override
+  String get controls => 'Controls';
+
+  @override
+  String get helpControl1 => 'Tap cells to navigate the grid';
+
+  @override
+  String get helpControl2 => 'Use arrow buttons to move between cells';
+
+  @override
+  String get helpControl3 => 'Backspace deletes the current letter';
+
+  @override
+  String get helpControl4 => 'Menu button (⋮) opens settings';
+
+  @override
+  String get features => 'Features';
+
+  @override
+  String get helpFeature1 => '🔍 Reveal: Show letters for a word or the entire puzzle';
+
+  @override
+  String get helpFeature2 => '🔄 Reset: Clear all your answers and start over';
+
+  @override
+  String get helpFeature3 => '🎨 Themes: Switch between light and dark mode';
+
+  @override
+  String get helpFeature4 => '🌍 Languages: Play puzzles in multiple languages';
+
+  @override
+  String get helpFeature5 => '✨ Generate: Create custom puzzles with AI';
+
+  @override
+  String get tips => 'Tips';
+
+  @override
+  String get helpTip1 => 'Start with shorter words - they\'re usually easier';
+
+  @override
+  String get helpTip2 => 'Look for common letter patterns and word endings';
+
+  @override
+  String get helpTip3 => 'Use crossing words to help solve difficult clues';
+
+  @override
+  String get helpTip4 => 'Your progress is saved automatically';
 }

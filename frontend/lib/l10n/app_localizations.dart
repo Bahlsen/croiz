@@ -68,8 +68,7 @@ import 'app_localizations_uk.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -77,8 +76,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -90,13 +88,12 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -107,7 +104,7 @@ abstract class AppLocalizations {
     Locale('it'),
     Locale('pt'),
     Locale('ru'),
-    Locale('uk'),
+    Locale('uk')
   ];
 
   /// No description provided for @appTitle.
@@ -589,10 +586,171 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.'**
+  String get appDescription;
+
+  /// No description provided for @credits.
+  ///
+  /// In en, this message translates to:
+  /// **'Credits'**
+  String get credits;
+
+  /// No description provided for @legal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get legal;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Source Licenses'**
+  String get openSourceLicenses;
+
+  /// No description provided for @howToPlayBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'Basics'**
+  String get howToPlayBasics;
+
+  /// No description provided for @helpBasic1.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a cell to select it and see the clue'**
+  String get helpBasic1;
+
+  /// No description provided for @helpBasic2.
+  ///
+  /// In en, this message translates to:
+  /// **'Type letters using the on-screen keyboard or your device keyboard'**
+  String get helpBasic2;
+
+  /// No description provided for @helpBasic3.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the selected cell again to switch between across/down'**
+  String get helpBasic3;
+
+  /// No description provided for @helpBasic4.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed words turn green automatically'**
+  String get helpBasic4;
+
+  /// No description provided for @controls.
+  ///
+  /// In en, this message translates to:
+  /// **'Controls'**
+  String get controls;
+
+  /// No description provided for @helpControl1.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap cells to navigate the grid'**
+  String get helpControl1;
+
+  /// No description provided for @helpControl2.
+  ///
+  /// In en, this message translates to:
+  /// **'Use arrow buttons to move between cells'**
+  String get helpControl2;
+
+  /// No description provided for @helpControl3.
+  ///
+  /// In en, this message translates to:
+  /// **'Backspace deletes the current letter'**
+  String get helpControl3;
+
+  /// No description provided for @helpControl4.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu button (⋮) opens settings'**
+  String get helpControl4;
+
+  /// No description provided for @features.
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get features;
+
+  /// No description provided for @helpFeature1.
+  ///
+  /// In en, this message translates to:
+  /// **'🔍 Reveal: Show letters for a word or the entire puzzle'**
+  String get helpFeature1;
+
+  /// No description provided for @helpFeature2.
+  ///
+  /// In en, this message translates to:
+  /// **'🔄 Reset: Clear all your answers and start over'**
+  String get helpFeature2;
+
+  /// No description provided for @helpFeature3.
+  ///
+  /// In en, this message translates to:
+  /// **'🎨 Themes: Switch between light and dark mode'**
+  String get helpFeature3;
+
+  /// No description provided for @helpFeature4.
+  ///
+  /// In en, this message translates to:
+  /// **'🌍 Languages: Play puzzles in multiple languages'**
+  String get helpFeature4;
+
+  /// No description provided for @helpFeature5.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Generate: Create custom puzzles with AI'**
+  String get helpFeature5;
+
+  /// No description provided for @tips.
+  ///
+  /// In en, this message translates to:
+  /// **'Tips'**
+  String get tips;
+
+  /// No description provided for @helpTip1.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with shorter words - they\'re usually easier'**
+  String get helpTip1;
+
+  /// No description provided for @helpTip2.
+  ///
+  /// In en, this message translates to:
+  /// **'Look for common letter patterns and word endings'**
+  String get helpTip2;
+
+  /// No description provided for @helpTip3.
+  ///
+  /// In en, this message translates to:
+  /// **'Use crossing words to help solve difficult clues'**
+  String get helpTip3;
+
+  /// No description provided for @helpTip4.
+  ///
+  /// In en, this message translates to:
+  /// **'Your progress is saved automatically'**
+  String get helpTip4;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -601,46 +759,31 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) => <String>[
-    'de',
-    'en',
-    'es',
-    'fr',
-    'it',
-    'pt',
-    'ru',
-    'uk',
-  ].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de':
-      return AppLocalizationsDe();
-    case 'en':
-      return AppLocalizationsEn();
-    case 'es':
-      return AppLocalizationsEs();
-    case 'fr':
-      return AppLocalizationsFr();
-    case 'it':
-      return AppLocalizationsIt();
-    case 'pt':
-      return AppLocalizationsPt();
-    case 'ru':
-      return AppLocalizationsRu();
-    case 'uk':
-      return AppLocalizationsUk();
+    case 'de': return AppLocalizationsDe();
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
+    case 'it': return AppLocalizationsIt();
+    case 'pt': return AppLocalizationsPt();
+    case 'ru': return AppLocalizationsRu();
+    case 'uk': return AppLocalizationsUk();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }
