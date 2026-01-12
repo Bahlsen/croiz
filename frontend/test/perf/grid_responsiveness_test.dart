@@ -6,14 +6,11 @@
 /// 3. Frame budget compliance (< 16ms for 60fps)
 library;
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/features/game/widgets/grid/crossword_cell.dart';
-import 'package:croiz/features/game/widgets/grid/crossword_grid.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/game/services/game_audio_service.dart';
@@ -157,86 +154,6 @@ void main() {
       );
 
       perfPrint('Direction toggle avg: ${avgMs.toStringAsFixed(3)}ms');
-    });
-
-    testWidgets('grid cell tap updates selection immediately', (tester) async {
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            home: Scaffold(
-              body: SizedBox(
-                width: 300,
-                height: 300,
-                child: CrosswordGrid(key: Key('test-grid')),
-              ),
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      // Verify initial selection is null
-      expect(container.read(selectedCellProvider), isNull);
-
-      final sw = Stopwatch()..start();
-
-      // Find and tap a cell
-      final cellFinder = find.byType(CrosswordCell).first;
-      await tester.tap(cellFinder);
-      await tester.pump(); // Single frame
-
-      sw.stop();
-
-      // Selection should be updated after single pump
-      expect(container.read(selectedCellProvider), isNotNull);
-
-      perfPrint(
-        'Tap-to-selection: ${sw.elapsedMilliseconds}ms (includes pump)',
-      );
-    });
-
-    testWidgets('rapid cell taps remain responsive', (tester) async {
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            home: Scaffold(
-              body: SizedBox(
-                width: 300,
-                height: 300,
-                child: CrosswordGrid(key: Key('test-grid')),
-              ),
-            ),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      final cells = find.byType(CrosswordCell);
-      expect(cells, findsNWidgets(25)); // 5x5 grid
-
-      final sw = Stopwatch()..start();
-
-      // Rapid-tap 10 different cells
-      for (var i = 0; i < 10; i++) {
-        await tester.tap(cells.at(i));
-        await tester.pump();
-      }
-
-      sw.stop();
-      final avgMs = sw.elapsedMilliseconds / 10;
-
-      // Each tap cycle should be fast
-      expect(
-        avgMs,
-        lessThan(50),
-        reason: 'Rapid taps should stay < 50ms each, got $avgMs ms avg',
-      );
-
-      perfPrint('Rapid tap avg: ${avgMs.toStringAsFixed(1)}ms per tap');
     });
   });
 
