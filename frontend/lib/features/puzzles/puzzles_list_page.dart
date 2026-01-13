@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:croiz/features/puzzles/widgets/empty_puzzles_state.dart';
 import 'package:croiz/routes/app_routes.dart';
@@ -253,18 +252,10 @@ class PuzzlesListPage extends ConsumerWidget {
                   .watch(pendingPuzzlesProvider)
                   .any((p) => p.tempId == puzzle.id);
               return PuzzleCard(
-                    descriptor: puzzle,
-                    isCompleted: isCompleted,
-                    isPending: isPending,
-                  )
-                  .animate(delay: (50 * index).clamp(0, 500).ms)
-                  .fadeIn(duration: 400.ms, curve: Curves.easeOut)
-                  .slideX(
-                    begin: 0.1,
-                    end: 0,
-                    duration: 400.ms,
-                    curve: Curves.easeOut,
-                  );
+                descriptor: puzzle,
+                isCompleted: isCompleted,
+                isPending: isPending,
+              );
             },
           )
         else
