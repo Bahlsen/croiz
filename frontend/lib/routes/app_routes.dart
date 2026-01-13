@@ -21,6 +21,25 @@ class CrosswordRoute extends GoRouteData with $CrosswordRoute {
   final String id;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      CrosswordScreen(puzzleId: id);
+  Page<void> buildPage(BuildContext context, GoRouterState state) =>
+      CustomTransitionPage<void>(
+        key: state.pageKey,
+        child: CrosswordScreen(puzzleId: id),
+        transitionsBuilder:
+            (context, animation, secondaryAnimation, child) => FadeTransition(
+              opacity: CurveTween(curve: Curves.easeIn).animate(animation),
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.05, 0),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeOutCubic,
+                  ),
+                ),
+                child: child,
+              ),
+            ),
+      );
 }

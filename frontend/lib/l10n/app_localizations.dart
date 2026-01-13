@@ -748,6 +748,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your progress is saved automatically'**
   String get helpTip4;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No puzzles found'**
+  String get noResults;
+
+  /// No description provided for @noResultsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search or filters.'**
+  String get noResultsDesc;
+
+  /// No description provided for @zeroPuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'No puzzles yet'**
+  String get zeroPuzzles;
+
+  /// No description provided for @zeroPuzzlesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate your first crossword to start playing!'**
+  String get zeroPuzzlesDesc;
+
+  /// No description provided for @generateFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get generateFirst;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

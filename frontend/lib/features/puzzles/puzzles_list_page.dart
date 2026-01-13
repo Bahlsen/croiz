@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
+import 'package:croiz/features/puzzles/widgets/empty_puzzles_state.dart';
 import 'package:croiz/routes/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -165,88 +167,114 @@ class PuzzlesListPage extends ConsumerWidget {
     final completedIdsAsync = ref.watch(completedPuzzleIdsProvider);
     final completedIds = completedIdsAsync.whenOrNull(data: (ids) => ids) ?? {};
 
+    final hasPuzzles = allPuzzles.isNotEmpty;
+    final hasResults = filteredPuzzles.isNotEmpty;
+
     return CustomScrollView(
       slivers: [
         // Continue Playing Section (Top sticky engagement)
         const SliverToBoxAdapter(child: ContinuePlayingSection()),
 
         // Discovery Area: Search + Filters
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const PuzzleSearchBar(),
-              const PuzzlesFilterRow(),
+        if (hasPuzzles)
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const PuzzleSearchBar(),
+                const PuzzlesFilterRow(),
 
-              // Filtered count row
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      if (hasResults)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest
+                                .withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            '${filteredPuzzles.length} ${AppLocalizations.of(context)?.puzzles ?? 'puzzles'}',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.labelSmall?.copyWith(
+                              color:
+                                  Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      const Spacer(),
+                      if (filteredPuzzles.length < allPuzzles.length)
+                        TextButton.icon(
+                          style: TextButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                          ),
+                          onPressed: () => _clearFilters(ref),
+                          icon: const Icon(Icons.filter_list_off, size: 14),
+                          label: Text(
+                            AppLocalizations.of(context)?.clearFilters ??
+                                'Clear filters',
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '${filteredPuzzles.length} ${AppLocalizations.of(context)?.puzzles ?? 'puzzles'}',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    if (filteredPuzzles.length < allPuzzles.length)
-                      TextButton.icon(
-                        style: TextButton.styleFrom(
-                          visualDensity: VisualDensity.compact,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                        onPressed: () => _clearFilters(ref),
-                        icon: const Icon(Icons.filter_list_off, size: 14),
-                        label: Text(
-                          AppLocalizations.of(context)?.clearFilters ??
-                              'Clear filters',
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
 
         // Divider
-        const SliverToBoxAdapter(child: Divider(height: 1)),
+        if (hasResults) const SliverToBoxAdapter(child: Divider(height: 1)),
 
-        // Puzzle list with performance optimizations
-        SliverList.builder(
-          itemCount: filteredPuzzles.length,
-          itemBuilder: (context, index) {
-            final puzzle = filteredPuzzles[index];
-            final isCompleted = completedIds.contains(puzzle.id);
-            final isPending = ref
-                .watch(pendingPuzzlesProvider)
-                .any((p) => p.tempId == puzzle.id);
-            return PuzzleCard(
-              descriptor: puzzle,
-              isCompleted: isCompleted,
-              isPending: isPending,
-            );
-          },
-        ),
+        // Puzzle list or Empty State
+        if (hasResults)
+          SliverList.builder(
+            itemCount: filteredPuzzles.length,
+            itemBuilder: (context, index) {
+              final puzzle = filteredPuzzles[index];
+              final isCompleted = completedIds.contains(puzzle.id);
+              final isPending = ref
+                  .watch(pendingPuzzlesProvider)
+                  .any((p) => p.tempId == puzzle.id);
+              return PuzzleCard(
+                    descriptor: puzzle,
+                    isCompleted: isCompleted,
+                    isPending: isPending,
+                  )
+                  .animate(delay: (50 * index).clamp(0, 500).ms)
+                  .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                  .slideX(
+                    begin: 0.1,
+                    end: 0,
+                    duration: 400.ms,
+                    curve: Curves.easeOut,
+                  );
+            },
+          )
+        else
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: EmptyPuzzlesState(
+              isNoResults: hasPuzzles,
+              onClearFilters: () => _clearFilters(ref),
+            ),
+          ),
       ],
     );
   }

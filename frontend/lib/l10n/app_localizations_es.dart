@@ -340,4 +340,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get helpTip4 => 'Your progress is saved automatically';
+
+  @override
+  String get noResults => 'No puzzles found';
+
+  @override
+  String get noResultsDesc => 'Try adjusting your search or filters.';
+
+  @override
+  String get zeroPuzzles => 'No puzzles yet';
+
+  @override
+  String get zeroPuzzlesDesc => 'Generate your first crossword to start playing!';
+
+  @override
+  String get generateFirst => 'Get Started';
 }
