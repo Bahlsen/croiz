@@ -11,6 +11,6 @@ export 'package:croiz/features/game/providers/settings/keyboard_layout_provider.
 export 'package:croiz/features/game/providers/settings/keyboard_size_provider.dart';
 export 'localization/locale_provider.dart';
 export 'package:croiz/features/game/providers/word_check_provider.dart';
-export 'network/dio_provider.dart';
+
 export 'auth/auth_provider.dart';
 export 'persistence/preference_persistence_service.dart';

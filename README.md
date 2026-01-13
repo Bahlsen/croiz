@@ -2,14 +2,12 @@
 
 [![CI](https://github.com/Bahlsen/croiz/actions/workflows/ci.yml/badge.svg)](https://github.com/Bahlsen/croiz/actions/workflows/ci.yml)
 
-A modern mobile crossword game built with Flutter and Spring Boot, featuring real-time gameplay, user authentication, and comprehensive scoring systems.
 
 ## Project Structure
 
 ```
 croiz/
 ├── frontend/          # Flutter mobile application (Riverpod state management)
-├── backend/           # Spring Boot REST API
 ├── shared/            # Shared models and constants
 ├── tools/             # Legacy/Utility scripts (Python)
 ├── .github/workflows/ # CI/CD pipelines
@@ -27,21 +25,13 @@ croiz/
 - **UI**: Google Fonts, Flutter SVG
 - **Testing**: flutter_test, mockito, mocktail, golden_toolkit
 
-### Backend
-- **Framework**: Spring Boot 4.0.1
-- **Language**: Java 21 LTS
-- **Database**: PostgreSQL + Flyway migrations
-- **Security**: Spring Security + JWT
-- **Build Tool**: Gradle
-- **Code Quality**: Spotless, JaCoCo
-- **Testing**: JUnit 5, Mockito, Spring Security Test, H2 (in-memory)
+
 
 ## Quick Start
 
 ### Prerequisites
 - Flutter 3.19+ with Dart 3.10+
-- Java 21 LTS
-- PostgreSQL 14+
+- Java 17 (for Android build)
 - Git
 - Android SDK (for mobile development)
 
@@ -64,27 +54,7 @@ flutter test
 flutter test --coverage
 ```
 
-### Backend Setup
 
-```powershell
-# Navigate to backend directory
-cd backend
-
-# Run the application
-.\gradlew bootRun
-
-# Run tests
-.\gradlew test
-
-# Run with code coverage
-.\gradlew jacocoTestReport
-
-# Check code formatting
-.\gradlew spotlessCheck
-
-# Apply code formatting
-.\gradlew spotlessApply
-```
 
 ### Puzzle Generation
  
@@ -103,9 +73,7 @@ The project now features a robust **In-App Generation Engine v3.0** (Dart):
 cd frontend
 flutter test
 
-# Backend
-cd backend
-.\gradlew test
+
 ```
 
 ### Integration Tests
@@ -125,10 +93,7 @@ cd frontend
 flutter test --coverage
 dart run tools/compute_coverage.dart
 
-# Backend
-cd backend
-.\gradlew jacocoTestReport
-# Report available at: backend/build/jacocoHtml/index.html
+
 ```
 
 ## CI/CD

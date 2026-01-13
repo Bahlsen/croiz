@@ -13,8 +13,8 @@ Complete setup instructions for the Croiz crossword game project development env
 ### Required Tools
 
 #### Java Development
-- **Java 21 LTS**
-  - Download: https://www.oracle.com/java/technologies/downloads/#java21
+- **Java 17** (for Android builds)
+  - Download: https://www.oracle.com/java/technologies/downloads/#java17
   - Verify: `java -version`
 
 #### Flutter Development
@@ -27,10 +27,7 @@ Complete setup instructions for the Croiz crossword game project development env
   - Verify: `dart --version`
 
 #### Database
-- **PostgreSQL 14+**
-  - Download: https://www.postgresql.org/download/
-  - Default port: 5432
-  - Create test database: `createdb croiz`
+
 
 #### Version Control
 - **Git 2.30+**
@@ -75,37 +72,7 @@ flutter doctor
 flutter run
 ```
 
-### 3. Backend Setup
 
-```bash
-cd backend
-
-# Set executable permissions (Linux/Mac)
-chmod +x gradlew
-
-# Download Gradle wrapper
-./gradlew wrapper
-
-# Build project
-./gradlew build
-
-# Run tests
-./gradlew test
-
-# Start development server
-./gradlew bootRun
-```
-
-### 4. Database Setup
-
-```bash
-# Create database
-createdb -U postgres croiz
-
-# Run migrations (automatic on app start)
-# Or manual with Flyway:
-./gradlew flywayMigrate
-```
 
 ## Development Environment Configuration
 
@@ -126,12 +93,7 @@ createdb -U postgres croiz
     "editor.defaultFormatter": "redhat.java",
     "editor.formatOnSave": true
   },
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-21",
-      "path": "/path/to/java/21"
-    }
-  ]
+
 }
 ```
 
@@ -140,18 +102,6 @@ createdb -U postgres croiz
 **Create `.env` file** in project root (never commit):
 
 ```env
-# Database
-POSTGRES_URL=jdbc:postgresql://localhost:5432/croiz
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=postgres
-
-# API
-API_BASE_URL=http://localhost:8080/api/v1
-
-# JWT Secret (development only)
-JWT_SECRET=dev-secret-key-change-in-production
-JWT_EXPIRATION=86400000
-
 # Flutter
 FLUTTER_ROOT=/path/to/flutter
 ```
@@ -173,26 +123,7 @@ Get-Content .env | ForEach-Object {
 
 ## Running the Applications
 
-### Terminal 1: Database (Optional if running as service)
-
-```bash
-# macOS/Linux
-pg_ctl -D /usr/local/var/postgres start
-
-# Windows (if installed as service)
-net start PostgreSQL
-```
-
-### Terminal 2: Backend API
-
-```bash
-cd backend
-./gradlew bootRun
-# API runs on: http://localhost:8080
-# Health check: http://localhost:8080/api/v1/health
-```
-
-### Terminal 3: Frontend App
+### Terminal 1: Frontend App
 
 ```bash
 cd frontend
@@ -232,35 +163,10 @@ flutter test --watch
 flutter test --coverage && open coverage/index.html
 ```
 
-### Backend Tests
+
 
 ```bash
-cd backend
-
-# Run all tests
-./gradlew test
-
-# Run specific test class
-./gradlew test --tests HealthControllerTest
-
-# Run with coverage
-./gradlew test jacocoTestReport
-
-# View coverage report
-open build/reports/jacoco/test/html/index.html
-
-# Run tests with logging
-./gradlew test --info
-```
-
-### Integration Tests
-
-```bash
-# Start backend first
-cd backend
-./gradlew bootRun
-
-# In another terminal, run Flutter integration tests
+# In terminal, run Flutter integration tests
 cd frontend
 flutter test integration_test/
 ```
@@ -283,18 +189,7 @@ devtools
 # Access at: http://localhost:9101
 ```
 
-### Backend Debugging
 
-```bash
-# Run with debug flag
-./gradlew bootRun --debug-jvm
-
-# In IntelliJ: Run → Debug 'CroizApiApplication'
-# Set breakpoints in code, execution will pause
-
-# View logs
-tail -f build/logs/*.log
-```
 
 ## Troubleshooting
 
@@ -314,23 +209,11 @@ chmod +x gradlew
 ./gradlew --version
 ```
 
-#### Database: "Connection refused"
+
+
 ```bash
-# Check if PostgreSQL is running
-psql -U postgres -c "SELECT version();"
-
-# Restart PostgreSQL
-pg_ctl restart -D /usr/local/var/postgres
-```
-
-#### Port already in use
-```bash
-# API port (8080)
-lsof -i :8080
-kill -9 <PID>
-
-# Database port (5432)
-lsof -i :5432
+# Flutter port (if applicable)
+lsof -i :port
 kill -9 <PID>
 ```
 
@@ -341,23 +224,7 @@ kill -9 <PID>
 ```bash
 # Flutter
 cd frontend
-dart format lib/ test/
-
-# Backend
-cd backend
-./gradlew spotlessApply
-```
-
-### Lint/Analyze
-
-```bash
-# Flutter
-cd frontend
 flutter analyze
-
-# Backend
-cd backend
-./gradlew check
 ```
 
 ## Useful Commands Reference
@@ -394,16 +261,7 @@ flutter doctor           # Check environment
 flutter config           # View/set configuration
 ```
 
-### Gradle Commands
 
-```bash
-./gradlew tasks                  # List available tasks
-./gradlew dependencies           # Show dependency tree
-./gradlew build                  # Build project
-./gradlew test                   # Run tests
-./gradlew bootRun               # Run application
-./gradlew clean                 # Clean build artifacts
-```
 
 ## Next Steps
 
@@ -416,8 +274,7 @@ flutter config           # View/set configuration
 ## Getting Help
 
 - **Flutter Docs**: https://flutter.dev/docs
-- **Spring Boot Docs**: https://spring.io/projects/spring-boot
-- **PostgreSQL Docs**: https://www.postgresql.org/docs/
+
 - **GitHub Docs**: https://docs.github.com/en/repositories
 
 ## Support

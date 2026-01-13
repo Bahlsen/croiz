@@ -150,13 +150,48 @@ class _AboutDialogState extends ConsumerState<AboutDialog> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            // TODO: Show privacy policy
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: Text(
+                                      l10n?.privacyPolicy ?? 'Privacy Policy',
+                                    ),
+                                    content: const Text(
+                                      'Privacy Policy coming soon.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                            );
                           },
                           child: Text(l10n?.privacyPolicy ?? 'Privacy Policy'),
                         ),
                         TextButton(
                           onPressed: () {
-                            // TODO: Show terms of service
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (context) => AlertDialog(
+                                    title: Text(
+                                      l10n?.termsOfService ??
+                                          'Terms of Service',
+                                    ),
+                                    content: const Text(
+                                      'Terms of Service coming soon.',
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                            );
                           },
                           child: Text(
                             l10n?.termsOfService ?? 'Terms of Service',

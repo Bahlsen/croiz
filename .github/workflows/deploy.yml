@@ -45,16 +45,12 @@ jobs:
             exit 1
           fi
 
-      - name: Set up JDK 21
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
+          java-version: '17'
           distribution: 'temurin'
           cache: gradle
-
-      - name: Build API JAR
-        working-directory: backend
-        run: ./gradlew bootJar
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -101,7 +97,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            backend/build/libs/croiz-api-*.jar
+
             frontend/build/app/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
