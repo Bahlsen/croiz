@@ -36,11 +36,19 @@ class InProgressPuzzleInfo {
 ///
 /// Fetches all puzzles with saved progress, calculates completion percent,
 /// and returns them sorted by most recently played.
-@Riverpod(dependencies: [puzzleStorage, puzzleProgressService, puzzles])
+@Riverpod(
+  dependencies: [
+    puzzleStorage,
+    puzzleProgressService,
+    puzzles,
+    puzzleJsonLoader,
+  ],
+)
 Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
   try {
     final storage = ref.watch(puzzleStorageProvider);
     final service = ref.watch(puzzleProgressServiceProvider);
+    final loader = ref.watch(puzzleJsonLoaderProvider);
 
     // Get all puzzles with saved progress
     final progressList = await service.getInProgressPuzzlesSortedByRecency();
@@ -92,7 +100,7 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
       }
 
       // Load solution to calculate percent
-      final puzzleJson = await defaultPuzzleJsonLoader(descriptor.path);
+      final puzzleJson = await loader(descriptor.path);
       if (!ref.mounted) {
         return [];
       }
@@ -106,8 +114,10 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
         clues,
       );
 
-      // Only show puzzles that are actually in progress (not 0% or 100%)
-      if (percent > 0 && percent < 100) {
+      // Only show puzzles that are actually in progress.
+      // A puzzle is in progress if it's not completed AND (either some words are found OR some letters are typed).
+      final hasLetters = _hasTypedLetters(savedGrid);
+      if ((percent > 0 || hasLetters) && percent < 100) {
         inProgressList.add(
           InProgressPuzzleInfo(
             descriptor: descriptor,
@@ -127,6 +137,10 @@ Future<List<InProgressPuzzleInfo>> inProgressPuzzles(Ref ref) async {
     return [];
   }
 }
+
+/// Check if the grid has any typed letters.
+bool _hasTypedLetters(List<List<String?>> grid) =>
+    grid.any((row) => row.any((cell) => cell != null && cell.isNotEmpty));
 
 /// Extract grid from saved puzzle data.
 List<List<String?>>? _extractGrid(Map<String, dynamic> data) {

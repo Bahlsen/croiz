@@ -17,6 +17,7 @@ class PuzzleCard extends ConsumerWidget {
     this.completionPercent,
     this.isCompleted = false,
     this.isPending = false,
+    this.compact = false,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class PuzzleCard extends ConsumerWidget {
   final int? completionPercent;
   final bool isCompleted;
   final bool isPending;
+  final bool compact;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,10 +36,13 @@ class PuzzleCard extends ConsumerWidget {
     return Opacity(
       opacity: isCompleted ? 0.6 : (isPending ? 0.5 : 1.0),
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.6.h),
+        margin:
+            compact
+                ? EdgeInsets.zero
+                : EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.6.h),
         decoration: BoxDecoration(
           color: isDark ? Colors.grey.shade900 : Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(compact ? 8 : 12),
           boxShadow: [
             if (!isPending)
               BoxShadow(
@@ -83,61 +88,23 @@ class PuzzleCard extends ConsumerWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: 4.w,
-                        vertical: 1.2.h,
+                        horizontal: compact ? 3.w : 4.w,
+                        vertical: compact ? 1.h : 1.2.h,
                       ),
                       child: Row(
                         children: [
                           // Left Section: Importance Info
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      _getDifficultyLabel(
-                                        descriptor.difficulty,
-                                        context,
-                                      ).toUpperCase(),
-                                      style: TextStyle(
-                                        color: colors.last,
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        descriptor.title,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18.sp,
-                                              letterSpacing: -0.3,
-                                              decoration:
-                                                  isCompleted
-                                                      ? TextDecoration
-                                                          .lineThrough
-                                                      : null,
-                                            ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                if (descriptor.origin.isNotEmpty ||
-                                    descriptor.year.isNotEmpty) ...[
-                                  SizedBox(height: 0.4.h),
-                                  _buildMetadata(theme),
-                                ],
-                              ],
-                            ),
+                            child:
+                                compact
+                                    ? _buildCompactContent(
+                                      context,
+                                      theme,
+                                      colors,
+                                    )
+                                    : _buildFullContent(context, theme, colors),
                           ),
-                          SizedBox(width: 3.w),
+                          if (!compact) SizedBox(width: 3.w),
                           // Right Section: Progress or Pending Indicator
                           if (isPending)
                             _buildPendingIndicator(theme, colors.last)
@@ -227,6 +194,81 @@ class PuzzleCard extends ConsumerWidget {
     }
   }
 
+  Widget _buildFullContent(
+    BuildContext context,
+    ThemeData theme,
+    List<Color> colors,
+  ) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Row(
+        children: [
+          Text(
+            _getDifficultyLabel(descriptor.difficulty, context).toUpperCase(),
+            style: TextStyle(
+              color: colors.last,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              descriptor.title,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: 18.sp,
+                letterSpacing: -0.3,
+                decoration: isCompleted ? TextDecoration.lineThrough : null,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+      if (descriptor.origin.isNotEmpty || descriptor.year.isNotEmpty) ...[
+        SizedBox(height: 0.4.h),
+        _buildMetadata(theme),
+      ],
+    ],
+  );
+
+  Widget _buildCompactContent(
+    BuildContext context,
+    ThemeData theme,
+    List<Color> colors,
+  ) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text(
+        _getDifficultyLabel(descriptor.difficulty, context).toUpperCase(),
+        style: TextStyle(
+          color: colors.last,
+          fontSize: 10.sp,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 0.5,
+        ),
+      ),
+      SizedBox(height: 0.2.h),
+      Text(
+        descriptor.title,
+        style: theme.textTheme.titleSmall?.copyWith(
+          fontWeight: FontWeight.bold,
+          fontSize: 16.sp,
+          letterSpacing: -0.3,
+          height: 1.1,
+          decoration: isCompleted ? TextDecoration.lineThrough : null,
+        ),
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    ],
+  );
+
   String _getDifficultyLabel(int difficulty, BuildContext context) {
     final l10n = AppLocalizations.of(context);
     switch (difficulty) {
@@ -274,10 +316,11 @@ class PuzzleCard extends ConsumerWidget {
       );
     }
 
-    final percent = completionPercent ?? 0;
-    if (percent == 0) {
+    if (completionPercent == null) {
       return const SizedBox.shrink();
     }
+
+    final percent = completionPercent!;
 
     return Stack(
       alignment: Alignment.center,

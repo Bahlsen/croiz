@@ -12,12 +12,12 @@ void main() {
   });
 
   group('PuzzleFilterNotifier initial state', () {
-    test('has all difficulties selected', () {
+    test('has medium difficulty selected by default (Quick Play mode)', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
       final state = container.read(puzzleFilterProvider);
-      expect(state.selectedDifficulties, {1, 2, 3, 4, 5});
+      expect(state.selectedDifficulties, {2});
     });
 
     test('has all languages selected (empty set) by default', () {
@@ -43,19 +43,19 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      // Initial state has all difficulties
+      // Initial state has medium (2) only
       expect(
         container.read(puzzleFilterProvider).selectedDifficulties,
-        contains(3),
+        contains(2),
       );
 
-      // Toggle difficulty 3 (Hard)
-      container.read(puzzleFilterProvider.notifier).toggleDifficulty(3);
+      // Toggle difficulty 2 (Medium)
+      container.read(puzzleFilterProvider.notifier).toggleDifficulty(2);
 
-      // Should no longer contain 3
+      // Should no longer contain 2
       expect(
         container.read(puzzleFilterProvider).selectedDifficulties,
-        isNot(contains(3)),
+        isNot(contains(2)),
       );
     });
 
@@ -63,18 +63,18 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      // First remove difficulty 3
-      container.read(puzzleFilterProvider.notifier).toggleDifficulty(3);
-      expect(
-        container.read(puzzleFilterProvider).selectedDifficulties,
-        isNot(contains(3)),
-      );
-
-      // Toggle again to add it back
+      // Default has only medium (2), toggle to add hard (3)
       container.read(puzzleFilterProvider.notifier).toggleDifficulty(3);
       expect(
         container.read(puzzleFilterProvider).selectedDifficulties,
         contains(3),
+      );
+
+      // Toggle again to remove it
+      container.read(puzzleFilterProvider.notifier).toggleDifficulty(3);
+      expect(
+        container.read(puzzleFilterProvider).selectedDifficulties,
+        isNot(contains(3)),
       );
     });
   });
@@ -172,30 +172,24 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
 
-      // Modify state
+      // Modify state - add more difficulties
       container.read(puzzleFilterProvider.notifier)
         ..toggleDifficulty(1)
-        ..toggleDifficulty(2)
-        ..setShowCompleted(showCompleted: false);
+        ..toggleDifficulty(3)
+        ..setShowCompleted(showCompleted: true);
 
       // Verify modifications
       expect(
         container.read(puzzleFilterProvider).selectedDifficulties,
-        isNot(contains(1)),
+        containsAll([1, 2, 3]),
       );
-      expect(container.read(puzzleFilterProvider).showCompleted, isFalse);
+      expect(container.read(puzzleFilterProvider).showCompleted, isTrue);
 
       // Clear filters
       container.read(puzzleFilterProvider.notifier).clearFilters();
 
-      // Should be back to defaults
-      expect(container.read(puzzleFilterProvider).selectedDifficulties, {
-        1,
-        2,
-        3,
-        4,
-        5,
-      });
+      // Should be back to defaults (medium only)
+      expect(container.read(puzzleFilterProvider).selectedDifficulties, {2});
       expect(container.read(puzzleFilterProvider).showCompleted, isFalse);
     });
   });
@@ -218,7 +212,7 @@ void main() {
         'puzzle_filter_difficulties',
       );
       expect(savedDifficulties, isNotNull);
-      expect(savedDifficulties, isNot(contains('3')));
+      expect(savedDifficulties, containsAll(['2', '3']));
     });
 
     test('state restores from SharedPreferences on init', () async {

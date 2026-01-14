@@ -26,6 +26,7 @@ Read and follow ALL instructions from that file, including:
 - **Mandatory Final Check**: After each dev task, ALWAYS check and fix ALL availability issues (linter errors, warnings) reported by `flutter analyze`. Treat `current_problems` as the IDE's "Problems" view.
 - **Generation Logic**: Always use the **Grid-First (v3.0)** architecture (GADDAG + CSP) for generation tasks. Do NOT downgrade to greedy algorithms. See `frontend/lib/features/generation/GENERATION_DOCUMENTATION.md`.
 - **Mandatory Documentation Update**: After EVERY dev task or change in logic, ALWAYS update the relevant documentation (e.g., `GENERATION_DOCUMENTATION.md`).
+- **Commit Policy**: ALWAYS use [Conventional Commits](https://www.conventionalcommits.org/) for git commit messages (e.g., `feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `ci:`).
 
 ## Quick Reference
 

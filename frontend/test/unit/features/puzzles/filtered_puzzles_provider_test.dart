@@ -84,11 +84,10 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
-      // Set available languages to include both en and fr
-      container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
-        'en',
-        'fr',
-      });
+      // Set all difficulties and available languages
+      container.read(puzzleFilterProvider.notifier)
+        ..setDifficulties({1, 2, 3, 4, 5})
+        ..setAvailableLanguages({'en', 'fr'});
 
       final filtered = container.read(filteredPuzzlesProvider);
       expect(filtered.length, testPuzzles.length);
@@ -99,13 +98,10 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
-      // Set available languages first
+      // Set available languages first, and filter to Easy (1) and Medium (2)
       container.read(puzzleFilterProvider.notifier)
-        ..setAvailableLanguages({'en', 'fr'})
-        // Deselect all except Easy (1) and Medium (2)
-        ..toggleDifficulty(3) // Remove Hard
-        ..toggleDifficulty(4) // Remove Expert
-        ..toggleDifficulty(5); // Remove Master
+        ..setDifficulties({1, 2})
+        ..setAvailableLanguages({'en', 'fr'});
 
       final filtered = container.read(filteredPuzzlesProvider);
 
@@ -119,8 +115,9 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
-      // Set available languages and select only French
+      // Set all difficulties, languages, then filter to French only
       container.read(puzzleFilterProvider.notifier)
+        ..setDifficulties({1, 2})
         ..setAvailableLanguages({'en', 'fr'})
         ..toggleLanguage('en', {'en', 'fr'}); // Remove English
 
@@ -136,13 +133,9 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
+      // Filter to Easy only, English only
       container.read(puzzleFilterProvider.notifier)
-        // Filter to Easy only
-        ..toggleDifficulty(2)
-        ..toggleDifficulty(3)
-        ..toggleDifficulty(4)
-        ..toggleDifficulty(5)
-        // Filter to English only
+        ..setDifficulties({1})
         ..setAvailableLanguages({'en', 'fr'})
         ..toggleLanguage('fr', {'en', 'fr'});
 
@@ -158,11 +151,10 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
-      // Set available languages first
-      container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
-        'en',
-        'fr',
-      });
+      // Set all difficulties and available languages first
+      container.read(puzzleFilterProvider.notifier)
+        ..setDifficulties({1, 2, 3, 4, 5})
+        ..setAvailableLanguages({'en', 'fr'});
 
       // Initially all puzzles
       expect(container.read(filteredPuzzlesProvider).length, 7);
@@ -179,13 +171,9 @@ void main() {
       final container = createContainer(testPuzzles);
       addTearDown(container.dispose);
 
+      // Filter to only Master difficulty, French only
       container.read(puzzleFilterProvider.notifier)
-        // Filter to only Master difficulty
-        ..toggleDifficulty(1)
-        ..toggleDifficulty(2)
-        ..toggleDifficulty(3)
-        ..toggleDifficulty(4)
-        // Filter to only French
+        ..setDifficulties({5})
         ..setAvailableLanguages({'en', 'fr'})
         ..toggleLanguage('en', {'en', 'fr'});
 
@@ -210,8 +198,9 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        // Set available languages and hide completed
+        // Set all difficulties and available languages, hide completed
         container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1, 2, 3, 4, 5})
           ..setAvailableLanguages({'en', 'fr'})
           ..setShowCompleted(showCompleted: false);
 
@@ -239,11 +228,8 @@ void main() {
 
         // Filter to Easy only and hide completed
         container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1})
           ..setAvailableLanguages({'en', 'fr'})
-          ..toggleDifficulty(2)
-          ..toggleDifficulty(3)
-          ..toggleDifficulty(4)
-          ..toggleDifficulty(5)
           ..setShowCompleted(showCompleted: false);
 
         final filtered = container.read(filteredPuzzlesProvider);
@@ -266,6 +252,7 @@ void main() {
         addTearDown(container.dispose);
 
         container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1, 2, 3, 4, 5})
           ..setAvailableLanguages({'en', 'fr'})
           ..setShowCompleted(showCompleted: false);
 
@@ -288,6 +275,7 @@ void main() {
         addTearDown(container.dispose);
 
         container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1, 2, 3, 4, 5})
           ..setAvailableLanguages({'en', 'fr'})
           ..setShowCompleted(showCompleted: false);
 
@@ -336,12 +324,10 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
-          'en',
-        });
-        container
-            .read(puzzleFilterProvider.notifier)
-            .setShowGeneratedOnly(showGeneratedOnly: true);
+        container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1})
+          ..setAvailableLanguages({'en'})
+          ..setShowGeneratedOnly(showGeneratedOnly: true);
 
         final filtered = container.read(filteredPuzzlesProvider);
 
@@ -378,10 +364,10 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        container.read(puzzleFilterProvider.notifier).setAvailableLanguages({
-          'en',
-        });
-        container.read(puzzleFilterProvider.notifier).setSearchQuery('apple');
+        container.read(puzzleFilterProvider.notifier)
+          ..setDifficulties({1})
+          ..setAvailableLanguages({'en'})
+          ..setSearchQuery('apple');
 
         final filtered = container.read(filteredPuzzlesProvider);
 

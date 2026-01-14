@@ -44,7 +44,7 @@ final class PuzzleFilterProvider
   }
 }
 
-String _$puzzleFilterHash() => r'ed4e9550f0cd1a7f6df9b2a0601b834048b324d6';
+String _$puzzleFilterHash() => r'f713fc92ce05e8c3774020c73523730a996fac51';
 
 /// Notifier for managing puzzle filter state.
 

@@ -6,7 +6,7 @@ part 'puzzle_filter_provider.g.dart';
 /// State for puzzle filtering.
 class PuzzleFilterState {
   const PuzzleFilterState({
-    this.selectedDifficulties = const {1, 2, 3, 4, 5},
+    this.selectedDifficulties = const {2},
     this.selectedLanguages = const {},
     this.availableLanguages = const {'en'},
     this.showCompleted = false,
@@ -35,12 +35,18 @@ class PuzzleFilterState {
   final String searchQuery;
 
   /// Whether any filter is active (not default).
+  /// Default state is: Medium difficulty only ({2}), showCompleted false,
+  /// all languages (empty set), showGeneratedOnly false, empty search.
   bool get hasActiveFilters =>
-      selectedDifficulties.length < 5 ||
+      !_isDefaultDifficulty ||
       showCompleted ||
       selectedLanguages.isNotEmpty ||
       showGeneratedOnly ||
       searchQuery.isNotEmpty;
+
+  /// Check if selected difficulties are the default (medium only).
+  bool get _isDefaultDifficulty =>
+      selectedDifficulties.length == 1 && selectedDifficulties.contains(2);
 
   /// Create a copy with optional field overrides.
   PuzzleFilterState copyWith({
@@ -80,6 +86,18 @@ class PuzzleFilter extends _$PuzzleFilter {
       current.add(difficulty);
     }
     state = state.copyWith(selectedDifficulties: current);
+    _persist();
+  }
+
+  /// Set a single difficulty level (for Quick Play mode).
+  void setDifficulty(int difficulty) {
+    state = state.copyWith(selectedDifficulties: {difficulty});
+    _persist();
+  }
+
+  /// Set multiple difficulty levels (for advanced filtering).
+  void setDifficulties(Set<int> difficulties) {
+    state = state.copyWith(selectedDifficulties: difficulties);
     _persist();
   }
 
