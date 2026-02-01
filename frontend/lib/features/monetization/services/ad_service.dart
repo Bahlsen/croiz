@@ -28,6 +28,8 @@ class MonetizationService {
 
   InterstitialAd? _interstitialAd;
   bool _isInterstitialAdReady = false;
+  // Track if showInterstitialAd() was called while ad was loading
+  bool _pendingShowRequest = false;
 
   Future<void> _initGoogleMobileAds() async {
     try {
@@ -77,18 +79,28 @@ class MonetizationService {
             onAdDismissedFullScreenContent: (ad) {
               _logger.i('Interstitial ad dismissed.');
               ad.dispose();
+              _pendingShowRequest = false;
               _loadInterstitialAd(); // Load the next one
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               _logger.e('Interstitial ad failed to show: $error');
               ad.dispose();
+              _pendingShowRequest = false;
               _loadInterstitialAd();
             },
           );
+
+          // If there was a pending show request, show the ad immediately
+          if (_pendingShowRequest) {
+            _logger.i('Showing pending interstitial ad...');
+            _pendingShowRequest = false;
+            showInterstitialAd();
+          }
         },
         onAdFailedToLoad: (error) {
           _logger.w('Interstitial ad failed to load: $error');
           _isInterstitialAdReady = false;
+          _pendingShowRequest = false;
           // Retry logic could go here, but for now we rely on the next attempt or simple reload
         },
       ),
@@ -96,18 +108,21 @@ class MonetizationService {
   }
 
   /// Shows the interstitial ad if it's ready.
-  /// Returns immediately if ad is not ready (offline or loading).
+  /// If the ad is still loading, marks it to be shown automatically when ready.
   void showInterstitialAd() {
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _logger.i('Showing interstitial ad...');
       _interstitialAd!.show();
       _isInterstitialAdReady = false;
       _interstitialAd = null;
+      _pendingShowRequest = false;
     } else {
       _logger.w(
-        'Interstitial ad not ready (ready: $_isInterstitialAdReady, ad: ${_interstitialAd != null}), attempting to load...',
+        'Interstitial ad not ready (ready: $_isInterstitialAdReady, ad: ${_interstitialAd != null}), will show when loaded...',
       );
-      // Try to load one for next time if it was null
+      // Mark that we want to show the ad as soon as it's ready
+      _pendingShowRequest = true;
+      // Try to load one if it was null
       if (_interstitialAd == null && !kIsWeb) {
         _loadInterstitialAd();
       }
