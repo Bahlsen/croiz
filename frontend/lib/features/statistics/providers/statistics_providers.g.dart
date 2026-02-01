@@ -181,18 +181,21 @@ String _$unlockedAchievementsHash() =>
     r'31fb9b0c689b718043ec2f53e1681a08b081e04f';
 
 /// Provider for the global UserStats.
-/// Refreshes automatically whenever stats are updated.
+/// Watches for real-time updates from the database.
 
-@ProviderFor(UserStatsNotifier)
-final userStatsProvider = UserStatsNotifierProvider._();
+@ProviderFor(userStats)
+final userStatsProvider = UserStatsProvider._();
 
 /// Provider for the global UserStats.
-/// Refreshes automatically whenever stats are updated.
-final class UserStatsNotifierProvider
-    extends $AsyncNotifierProvider<UserStatsNotifier, UserStats> {
+/// Watches for real-time updates from the database.
+
+final class UserStatsProvider
+    extends
+        $FunctionalProvider<AsyncValue<UserStats>, UserStats, Stream<UserStats>>
+    with $FutureModifier<UserStats>, $StreamProvider<UserStats> {
   /// Provider for the global UserStats.
-  /// Refreshes automatically whenever stats are updated.
-  UserStatsNotifierProvider._()
+  /// Watches for real-time updates from the database.
+  UserStatsProvider._()
     : super(
         from: null,
         argument: null,
@@ -201,9 +204,9 @@ final class UserStatsNotifierProvider
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[statisticsServiceProvider],
         $allTransitiveDependencies: <ProviderOrFamily>[
-          UserStatsNotifierProvider.$allTransitiveDependencies0,
-          UserStatsNotifierProvider.$allTransitiveDependencies1,
-          UserStatsNotifierProvider.$allTransitiveDependencies2,
+          UserStatsProvider.$allTransitiveDependencies0,
+          UserStatsProvider.$allTransitiveDependencies1,
+          UserStatsProvider.$allTransitiveDependencies2,
         ],
       );
 
@@ -214,35 +217,20 @@ final class UserStatsNotifierProvider
       StatisticsServiceProvider.$allTransitiveDependencies1;
 
   @override
-  String debugGetCreateSourceHash() => _$userStatsNotifierHash();
+  String debugGetCreateSourceHash() => _$userStatsHash();
 
   @$internal
   @override
-  UserStatsNotifier create() => UserStatsNotifier();
-}
+  $StreamProviderElement<UserStats> $createElement($ProviderPointer pointer) =>
+      $StreamProviderElement(pointer);
 
-String _$userStatsNotifierHash() => r'ae6ce1adb7572801e2d2e6884bf016290810aef8';
-
-/// Provider for the global UserStats.
-/// Refreshes automatically whenever stats are updated.
-
-abstract class _$UserStatsNotifier extends $AsyncNotifier<UserStats> {
-  FutureOr<UserStats> build();
-  @$mustCallSuper
   @override
-  void runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<UserStats>, UserStats>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<AsyncValue<UserStats>, UserStats>,
-              AsyncValue<UserStats>,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
+  Stream<UserStats> create(Ref ref) {
+    return userStats(ref);
   }
 }
+
+String _$userStatsHash() => r'311b20aeaf4b2b6678cda8f41798b5ade7ee349f';
 
 /// Stream provider for recent puzzle completions.
 

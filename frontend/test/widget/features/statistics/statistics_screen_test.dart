@@ -25,6 +25,9 @@ class FakeStatisticsService implements StatisticsService {
   Future<UserStats> getOrInitUserStats() async => stats;
 
   @override
+  Stream<UserStats> watchUserStats() => Stream.value(stats);
+
+  @override
   Stream<List<PuzzleStat>> watchRecentCompletions({int limit = 10}) =>
       Stream.value(allPuzzles.take(limit).toList());
 

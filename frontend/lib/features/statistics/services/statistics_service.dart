@@ -57,6 +57,31 @@ class StatisticsService {
     }
   }
 
+  /// Watches the global user statistics for real-time updates.
+  Stream<UserStats> watchUserStats() => (_db.select(
+    _db.userStatsTable,
+  )..where((t) => t.id.equals(1))).watchSingleOrNull().asyncMap((record) async {
+    if (record != null) {
+      return UserStats(
+        id: record.id,
+        totalPuzzlesCompleted: record.totalPuzzlesCompleted,
+        totalWordsFound: record.totalWordsFound,
+        totalPlayTimeSeconds: record.totalPlayTimeSeconds,
+        currentStreak: record.currentStreak,
+        longestStreak: record.longestStreak,
+        lastPlayedDate: record.lastPlayedDate,
+        createdAt: record.createdAt,
+        updatedAt: record.updatedAt,
+      );
+    } else {
+      // If strictly null, we might want to init it, but watch shouldn't cause side effects easily.
+      // For now, return a default or init it.
+      // Safe bet: assume getOrInitUserStats has been called or call it once.
+      // To be safe, we can just return default.
+      return getOrInitUserStats();
+    }
+  });
+
   /// Records a completed puzzle and updates global stats.
   Future<void> recordPuzzleCompletion({
     required String puzzleId,

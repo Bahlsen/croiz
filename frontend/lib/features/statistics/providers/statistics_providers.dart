@@ -31,23 +31,11 @@ Future<List<AchievementId>> unlockedAchievements(Ref ref) async {
 }
 
 /// Provider for the global UserStats.
-/// Refreshes automatically whenever stats are updated.
+/// Watches for real-time updates from the database.
 @Riverpod(keepAlive: true, dependencies: [statisticsService])
-class UserStatsNotifier extends _$UserStatsNotifier {
-  @override
-  Future<UserStats> build() async {
-    final service = ref.watch(statisticsServiceProvider);
-    return service.getOrInitUserStats();
-  }
-
-  /// Manually refresh stats (e.g., after recording a completion).
-  Future<void> refresh() async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() {
-      final service = ref.read(statisticsServiceProvider);
-      return service.getOrInitUserStats();
-    });
-  }
+Stream<UserStats> userStats(Ref ref) {
+  final service = ref.watch(statisticsServiceProvider);
+  return service.watchUserStats();
 }
 
 /// Stream provider for recent puzzle completions.

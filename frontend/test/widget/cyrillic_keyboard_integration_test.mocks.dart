@@ -55,6 +55,15 @@ class MockStatisticsService extends _i1.Mock implements _i3.StatisticsService {
           as _i4.Future<_i2.UserStats>);
 
   @override
+  _i4.Stream<_i2.UserStats> watchUserStats() =>
+      (super.noSuchMethod(
+            Invocation.method(#watchUserStats, []),
+            returnValue: _i4.Stream<_i2.UserStats>.empty(),
+            returnValueForMissingStub: _i4.Stream<_i2.UserStats>.empty(),
+          )
+          as _i4.Stream<_i2.UserStats>);
+
+  @override
   _i4.Future<void> recordPuzzleCompletion({
     required String? puzzleId,
     required int? timeSeconds,

@@ -22,6 +22,24 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 3; // Incremented for achievement tables
 
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onCreate: (Migrator m) async {
+      await m.createAll();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // Version 2: Added UserStatsTable and PuzzleStatsTable
+      if (from < 2) {
+        await m.createTable(userStatsTable);
+        await m.createTable(puzzleStatsTable);
+      }
+      // Version 3: Added UserAchievementsTable
+      if (from < 3) {
+        await m.createTable(userAchievementsTable);
+      }
+    },
+  );
+
   static QueryExecutor _openConnection() => driftDatabase(
     name: 'croiz_db',
     native: const DriftNativeOptions(shareAcrossIsolates: true),

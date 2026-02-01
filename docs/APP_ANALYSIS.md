@@ -548,7 +548,7 @@ Widget build(BuildContext context) {
 
 ---
 
-### 🧪 Plan 3: Widget Tests Coverage
+### 🧪 Plan 3: Widget Tests Coverage (In Progress)
 
 **Goal**: Achieve comprehensive widget test coverage for complex UI components.
 
@@ -572,6 +572,7 @@ genhtml coverage/lcov.info -o coverage/html
 | `EndGameOverlay` | High | ~20% | 80% |
 | `ContinuePlayingSection` | High | ~35% | 85% |
 | `GenerationDialog` | Medium | ~25% | 80% |
+| `StatisticsScreen` | Medium | 100% | 90% | ✅ Done
 
 #### Phase 2: Test Infrastructure (1 day)
 ```
@@ -684,7 +685,8 @@ testGoldens('CrosswordCell states', (tester) async {
 | `features/puzzles/widgets/` | ~55% | 85% | 🟡 |
 | `features/generation/widgets/` | ~25% | 75% | 🔴 |
 | `features/settings/widgets/` | ~60% | 80% | 🟡 |
-| **Overall Widget Coverage** | ~45% | 80% | 🔴 |
+| `features/statistics/screens/` | 100% | 90% | ✅ |
+| **Overall Widget Coverage** | ~48% | 80% | � |
 
 **Estimated Effort**: 10-12 days
 

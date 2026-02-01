@@ -27,184 +27,175 @@ class StatisticsScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.statisticsTitle), centerTitle: true),
       body: userStatsAsync.when(
         data:
-            (stats) => RefreshIndicator(
-              onRefresh: () => ref.read(userStatsProvider.notifier).refresh(),
-              child: ListView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 24,
+            (stats) => ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              children: [
+                // Summary Section
+                Text(
+                  l10n.statsSummary,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ).animate().fadeIn().slideX(),
+                const SizedBox(height: 16),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 1.3,
+                  children: [
+                    StatsSummaryCard(
+                      label: l10n.totalPuzzles,
+                      value: '${stats.totalPuzzlesCompleted}',
+                      icon: Icons.extension_rounded,
+                      color: Colors.blue,
+                    ),
+                    StatsSummaryCard(
+                      label: l10n.currentStreak,
+                      value: l10n.dayStreak(stats.currentStreak),
+                      icon: Icons.local_fire_department_rounded,
+                      color: Colors.orange,
+                    ),
+                    StatsSummaryCard(
+                      label: l10n.longestStreak,
+                      value: l10n.dayStreak(stats.longestStreak),
+                      icon: Icons.emoji_events_rounded,
+                      color: Colors.amber,
+                    ),
+                    StatsSummaryCard(
+                      label: l10n.totalTime,
+                      value: _formatTotalTime(stats.totalPlayTimeSeconds),
+                      icon: Icons.timer_rounded,
+                      color: Colors.green,
+                    ),
+                  ],
                 ),
-                children: [
-                  // Summary Section
-                  Text(
-                    l10n.statsSummary,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ).animate().fadeIn().slideX(),
-                  const SizedBox(height: 16),
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 1.3,
-                    children: [
-                      StatsSummaryCard(
-                        label: l10n.totalPuzzles,
-                        value: '${stats.totalPuzzlesCompleted}',
-                        icon: Icons.extension_rounded,
-                        color: Colors.blue,
-                      ),
-                      StatsSummaryCard(
-                        label: l10n.currentStreak,
-                        value: l10n.dayStreak(stats.currentStreak),
-                        icon: Icons.local_fire_department_rounded,
-                        color: Colors.orange,
-                      ),
-                      StatsSummaryCard(
-                        label: l10n.longestStreak,
-                        value: l10n.dayStreak(stats.longestStreak),
-                        icon: Icons.emoji_events_rounded,
-                        color: Colors.amber,
-                      ),
-                      StatsSummaryCard(
-                        label: l10n.totalTime,
-                        value: _formatTotalTime(stats.totalPlayTimeSeconds),
-                        icon: Icons.timer_rounded,
-                        color: Colors.green,
-                      ),
-                    ],
+
+                const SizedBox(height: 32),
+
+                // Achievements Section
+                Text(
+                  l10n.achievements,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
+                ).animate().fadeIn().slideX(),
+                const SizedBox(height: 16),
 
-                  const SizedBox(height: 32),
-
-                  // Achievements Section
-                  Text(
-                    l10n.achievements,
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ).animate().fadeIn().slideX(),
-                  const SizedBox(height: 16),
-
-                  unlockedAchievementsAsync.when(
-                    data: (unlockedIds) {
-                      final unlockedSet = unlockedIds.toSet();
-                      return SizedBox(
+                unlockedAchievementsAsync.when(
+                  data: (unlockedIds) {
+                    final unlockedSet = unlockedIds.toSet();
+                    return SizedBox(
+                      height: 140,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: AchievementId.values.length,
+                        separatorBuilder:
+                            (context, index) => const SizedBox(width: 12),
+                        itemBuilder: (context, index) {
+                          final id = AchievementId.values[index];
+                          final isUnlocked = unlockedSet.contains(id);
+                          return AchievementBadge(
+                            id: id,
+                            isUnlocked: isUnlocked,
+                          );
+                        },
+                      ),
+                    ).animate().fadeIn(delay: 100.ms).slideX();
+                  },
+                  loading:
+                      () => const SizedBox(
                         height: 140,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: AchievementId.values.length,
-                          separatorBuilder:
-                              (context, index) => const SizedBox(width: 12),
-                          itemBuilder: (context, index) {
-                            final id = AchievementId.values[index];
-                            final isUnlocked = unlockedSet.contains(id);
-                            return AchievementBadge(
-                              id: id,
-                              isUnlocked: isUnlocked,
-                            );
-                          },
-                        ),
-                      ).animate().fadeIn(delay: 100.ms).slideX();
-                    },
-                    loading:
-                        () => const SizedBox(
-                          height: 140,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                    error: (e, s) => Text('Error loading achievements: $e'),
-                  ),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                  error: (e, s) => Text('Error loading achievements: $e'),
+                ),
 
-                  const SizedBox(height: 32),
+                const SizedBox(height: 32),
 
-                  // Charts Section
-                  allCompletionsAsync.when(
-                    data:
-                        (completions) => Column(
-                          children: [
-                            if (completions.isNotEmpty) ...[
-                              StreakCalendar(completions: completions),
-                              const SizedBox(height: 32),
-                              CompletionChart(completions: completions),
-                              const SizedBox(height: 32),
-                            ],
+                // Charts Section
+                allCompletionsAsync.when(
+                  data:
+                      (completions) => Column(
+                        children: [
+                          if (completions.isNotEmpty) ...[
+                            StreakCalendar(completions: completions),
+                            const SizedBox(height: 32),
+                            CompletionChart(completions: completions),
+                            const SizedBox(height: 32),
                           ],
-                        ),
-                    loading:
-                        () => const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16),
-                            child: CircularProgressIndicator(),
-                          ),
-                        ),
-                    error:
-                        (err, stack) =>
-                            const SizedBox.shrink(), // Fail silently for charts
-                  ),
-
-                  // Recent Completions Section
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        l10n.recentCompletions,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                  loading:
+                      () => const Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: CircularProgressIndicator(),
                         ),
                       ),
-                      Icon(
-                        Icons.history_rounded,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ],
-                  ).animate().fadeIn(delay: 200.ms).slideX(),
-                  const SizedBox(height: 16),
+                  error:
+                      (err, stack) =>
+                          const SizedBox.shrink(), // Fail silently for charts
+                ),
 
-                  recentCompletionsAsync.when(
-                    data:
-                        (completions) =>
-                            completions.isEmpty
-                                ? Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 24,
-                                    ),
-                                    child: Text(
-                                      'No puzzles completed yet!',
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            color:
-                                                theme
-                                                    .colorScheme
-                                                    .onSurfaceVariant,
-                                          ),
+                // Recent Completions Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      l10n.recentCompletions,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(
+                      Icons.history_rounded,
+                      color: theme.colorScheme.primary,
+                    ),
+                  ],
+                ).animate().fadeIn(delay: 200.ms).slideX(),
+                const SizedBox(height: 16),
+
+                recentCompletionsAsync.when(
+                  data:
+                      (completions) =>
+                          completions.isEmpty
+                              ? Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 24,
+                                  ),
+                                  child: Text(
+                                    'No puzzles completed yet!',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
                                     ),
                                   ),
-                                )
-                                : ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: completions.length,
-                                  separatorBuilder:
-                                      (context, index) =>
-                                          const SizedBox(height: 12),
-                                  itemBuilder: (context, index) {
-                                    final completion = completions[index];
-                                    return _CompletionListTile(
-                                      completion: completion,
-                                    );
-                                  },
                                 ),
-                    loading:
-                        () => const Center(child: CircularProgressIndicator()),
-                    error: (err, stack) => Text('Error: $err'),
-                  ),
-                ],
-              ),
+                              )
+                              : ListView.separated(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: completions.length,
+                                separatorBuilder:
+                                    (context, index) =>
+                                        const SizedBox(height: 12),
+                                itemBuilder: (context, index) {
+                                  final completion = completions[index];
+                                  return _CompletionListTile(
+                                    completion: completion,
+                                  );
+                                },
+                              ),
+                  loading:
+                      () => const Center(child: CircularProgressIndicator()),
+                  error: (err, stack) => Text('Error: $err'),
+                ),
+              ],
             ),
+
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text('Error: $err')),
       ),
