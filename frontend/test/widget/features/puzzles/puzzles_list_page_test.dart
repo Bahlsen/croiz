@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
@@ -9,8 +10,33 @@ import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/puzzles/widgets/puzzles_filter_row.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  // Mock Google Mobile Ads platform channel
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMethodCallHandler(
+        const MethodChannel('plugins.flutter.io/google_mobile_ads'),
+        (call) async {
+          if (call.method == 'init') {
+            return null;
+          }
+          if (call.method == 'loadAd') {
+            // Return successful load response structure if needed?
+            // For BannerAd, it likely expects nothing or a generic success.
+            // Based on source, loadAd returns Future<void>.
+            return null;
+          }
+          if (call.method == 'disposeAd') {
+            return null;
+          }
+          return null;
+        },
+      );
+
   final testPuzzles = [
     PuzzleDescriptor(
       id: 'puzzle-1',
@@ -50,6 +76,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -74,6 +103,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -96,6 +128,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -120,6 +155,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -148,6 +186,9 @@ void main() {
             ),
           ),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -177,6 +218,9 @@ void main() {
             (ref) async => throw Exception('Test error'),
           ),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -214,6 +258,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => manyPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -238,6 +285,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => MockMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -272,6 +322,9 @@ void main() {
           overrides: [
             puzzlesProvider.overrideWith((ref) async => testPuzzles),
             inProgressPuzzlesProvider.overrideWith((ref) async => []),
+            monetizationServiceProvider.overrideWith(
+              (ref) => MockMonetizationService(),
+            ),
           ],
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -310,4 +363,49 @@ void main() {
       expect(find.text('Medium Puzzle'), findsOneWidget);
     },
   );
+}
+
+class MockMonetizationService implements MonetizationService {
+  @override
+  String get bannerAdUnitId => 'test_banner_id';
+
+  @override
+  String get interstitialAdUnitId => 'test_interstitial_id';
+
+  @override
+  BannerAd createBannerAd({
+    required void Function(Ad) onAdLoaded,
+    required void Function(Ad, LoadAdError) onAdFailedToLoad,
+  }) {
+    final ad = FakeBannerAd(onAdLoaded);
+    return ad;
+  }
+
+  @override
+  void showInterstitialAd() {}
+}
+
+class FakeBannerAd extends BannerAd {
+  FakeBannerAd(this.onLoadedCallback)
+    : super(
+        adUnitId: 'test',
+        size: AdSize.banner,
+        request: const AdRequest(),
+        listener: const BannerAdListener(),
+      );
+
+  final void Function(Ad) onLoadedCallback;
+
+  @override
+  Future<void> load() async {
+    // Wait for super.load() to complete so internal state is updated by mocked platform channel
+    await super.load();
+    // Then notify the listener (which updates BannerAdWidget state)
+    onLoadedCallback(this);
+  }
+
+  @override
+  Future<void> dispose() async {
+    await super.dispose();
+  }
 }

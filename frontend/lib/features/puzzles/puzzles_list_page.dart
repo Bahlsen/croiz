@@ -20,6 +20,7 @@ import 'package:croiz/features/generation/widgets/generation_dialog.dart';
 import 'package:croiz/features/generation/logic/generation_controller.dart';
 import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/core/config/feature_flags.dart';
+import 'package:croiz/features/monetization/widgets/banner_ad_widget.dart';
 
 /// Puzzle selection page with Quick Play mode and expandable filters.
 class PuzzlesListPage extends ConsumerStatefulWidget {
@@ -115,7 +116,12 @@ class _PuzzlesListPageState extends ConsumerState<PuzzlesListPage> {
       ),
       backgroundColor:
           isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
-      body: _buildBody(context, puzzlesAsync),
+      body: Column(
+        children: [
+          Expanded(child: _buildBody(context, puzzlesAsync)),
+          const BannerAdWidget(),
+        ],
+      ),
       floatingActionButton:
           FeatureFlags.isGenerationEnabled
               ? FloatingActionButton.extended(

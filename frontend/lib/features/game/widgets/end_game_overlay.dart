@@ -11,6 +11,7 @@ import '../providers/game_timer_provider.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 class EndGameOverlay extends ConsumerStatefulWidget {
   const EndGameOverlay({super.key});
@@ -69,10 +70,12 @@ class _EndGameOverlayState extends ConsumerState<EndGameOverlay> {
       );
     }
 
-    // Trigger confetti when it becomes completed and visible
+    // Trigger confetti and Ad when it becomes completed and visible
     if (completed && overlayVisible && !_wasCompleted) {
       _wasCompleted = true;
       _confettiController.play();
+      // Show ad on completion
+      ref.read(monetizationServiceProvider).showInterstitialAd();
     } else if (!completed || !overlayVisible) {
       _wasCompleted = false;
       _confettiController.stop();
