@@ -597,14 +597,14 @@ class _InProgressCard extends ConsumerWidget {
 
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text(
                   'Puzzle restarted successfully', // hardcoded fallback if not in l10n
                 ),
               ),
             );
           }
-        } catch (e) {
+        } on Object catch (e) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
