@@ -74,7 +74,7 @@ final filteredPuzzlesProvider = Provider<List<PuzzleDescriptor>>((ref) {
 Retrieves puzzles with saved progress:
 ```dart
 final inProgressPuzzlesProvider = FutureProvider<List<PuzzleDescriptor>>((ref) async {
-  // Reads from HivePuzzleStorage
+  // Reads from PuzzleStorage (Drift)
 });
 ```
 
@@ -122,7 +122,7 @@ Main screen featuring:
 Horizontal scroll showing puzzles with saved progress:
 - Displays progress percentage
 - Tap to resume playing
-- Swipe to dismiss/clear progress
+- Long press to restart (reset progress) or delete (for generated puzzles)
 
 ### `LanguageFilterSelector`
 Button opening a bottom sheet for language filtering:

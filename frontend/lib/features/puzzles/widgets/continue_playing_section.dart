@@ -339,10 +339,7 @@ class _InProgressCard extends ConsumerWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => _navigateToPuzzle(context, ref),
-          onLongPress:
-              puzzle.descriptor.source.isLocal
-                  ? () => _onLongPress(context, ref)
-                  : null,
+          onLongPress: () => _onLongPress(context, ref),
           borderRadius: BorderRadius.circular(12),
           child: Stack(
             children: [
@@ -501,60 +498,174 @@ class _InProgressCard extends ConsumerWidget {
       return;
     }
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(
-              AppLocalizations.of(context)?.deletePuzzle ?? 'Delete Puzzle?',
-            ),
-            content: Text(
-              AppLocalizations.of(context)?.deletePuzzleConfirmation ??
-                  'Are you sure you want to delete "${puzzle.descriptor.title}"? This cannot be undone.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(AppLocalizations.of(context)?.cancel ?? 'Cancel'),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                  foregroundColor: Theme.of(context).colorScheme.onError,
+    final l10n = AppLocalizations.of(context);
+    final isLocal = puzzle.descriptor.source.isLocal;
+
+    // Actions enum locally since it's only used here
+    // 0: Reset, 1: Delete
+    int? action;
+
+    if (isLocal) {
+      // Show menu for local puzzles (Reset + Delete)
+      action = await showDialog<int>(
+        context: context,
+        builder:
+            (context) => SimpleDialog(
+              title: Text(puzzle.descriptor.title),
+              children: [
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(context, 0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 8,
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.refresh),
+                        const SizedBox(width: 16),
+                        Text(l10n?.restart ?? 'Restart'),
+                      ],
+                    ),
+                  ),
                 ),
-                onPressed: () => Navigator.of(context).pop(true),
-                child: Text(AppLocalizations.of(context)?.delete ?? 'Delete'),
-              ),
-            ],
-          ),
-    );
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(context, 1),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 8,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete_outline,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                        const SizedBox(width: 16),
+                        Text(
+                          l10n?.delete ?? 'Delete',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+      );
+    } else {
+      // Only Reset is available for bundled puzzles
+      action = 0;
+    }
 
-    if (confirmed == true && context.mounted) {
-      try {
-        await ref
-            .read(generatedPuzzlesControllerProvider.notifier)
-            .deletePuzzle(puzzle.descriptor.id);
+    if (action == null || !context.mounted) {
+      return;
+    }
 
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              duration: const Duration(seconds: 4),
+    if (action == 0) {
+      // Reset (Restart) logic
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: Text(l10n?.restart ?? 'Restart Puzzle?'),
               content: Text(
-                AppLocalizations.of(context)?.successMessage ??
-                    'Puzzle deleted successfully',
+                'Are you sure you want to restart "${puzzle.descriptor.title}"? All progress will be lost.',
               ),
-              backgroundColor: Colors.green,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(l10n?.cancel ?? 'Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(l10n?.restart ?? 'Restart'),
+                ),
+              ],
             ),
-          );
+      );
+
+      if (confirmed == true && context.mounted) {
+        try {
+          await ref
+              .read(puzzleProgressServiceProvider)
+              .deleteProgress(puzzle.descriptor.id);
+          ref.invalidate(inProgressPuzzlesProvider);
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Puzzle restarted successfully', // hardcoded fallback if not in l10n
+                ),
+              ),
+            );
+          }
+        } catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Error: $e'), backgroundColor: Colors.red),
+            );
+          }
         }
-      } on Object catch (e) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error deleting puzzle: $e'),
-              backgroundColor: Theme.of(context).colorScheme.error,
+      }
+    } else if (action == 1) {
+      // Delete logic (existing)
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder:
+            (context) => AlertDialog(
+              title: Text(l10n?.deletePuzzle ?? 'Delete Puzzle?'),
+              content: Text(
+                l10n?.deletePuzzleConfirmation ??
+                    'Are you sure you want to delete "${puzzle.descriptor.title}"? This cannot be undone.',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(l10n?.cancel ?? 'Cancel'),
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    foregroundColor: Theme.of(context).colorScheme.onError,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(l10n?.delete ?? 'Delete'),
+                ),
+              ],
             ),
-          );
+      );
+
+      if (confirmed == true && context.mounted) {
+        try {
+          await ref
+              .read(generatedPuzzlesControllerProvider.notifier)
+              .deletePuzzle(puzzle.descriptor.id);
+
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                duration: const Duration(seconds: 4),
+                content: Text(
+                  l10n?.deleteSuccessMessage ?? 'Puzzle deleted successfully',
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        } on Object catch (e) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Error deleting puzzle: $e'),
+                backgroundColor: Theme.of(context).colorScheme.error,
+              ),
+            );
+          }
         }
       }
     }

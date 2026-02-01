@@ -132,6 +132,9 @@ class _MockStorage implements PuzzleStorageInterface {
   Future<void> save(String id, Map<String, dynamic> payload) async {}
 
   @override
+  Future<void> delete(String id) async {}
+
+  @override
   Future<List<String>> getAllKeys() async => [];
 
   @override

@@ -12,6 +12,9 @@ abstract class PuzzleStorageInterface {
   /// Save puzzle data by ID.
   Future<void> save(String id, Map<String, dynamic> payload);
 
+  /// Delete puzzle data by ID.
+  Future<void> delete(String id);
+
   /// Get all saved puzzle IDs.
   Future<List<String>> getAllKeys();
 
@@ -89,6 +92,10 @@ class PuzzleProgressService {
       elapsedSeconds: elapsedSeconds,
     );
   }
+
+  /// Delete progress for a specific puzzle.
+  Future<void> deleteProgress(String puzzleId) async =>
+      _storage.delete(puzzleId);
 
   /// Calculate completion percentage for a grid against a solution.
   ///

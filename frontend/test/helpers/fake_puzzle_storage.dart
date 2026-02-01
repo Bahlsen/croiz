@@ -30,4 +30,10 @@ class FakePuzzleStorage implements PuzzleStorageInterface {
     _data[id] = payload;
     _controller.add(null);
   }
+
+  @override
+  Future<void> delete(String id) async {
+    _data.remove(id);
+    _controller.add(null);
+  }
 }

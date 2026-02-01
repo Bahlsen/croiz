@@ -43,6 +43,12 @@ class DriftPuzzleStorage implements PuzzleStorageInterface {
   }
 
   @override
+  Future<void> delete(String id) async {
+    await (db.delete(db.puzzleProgress)
+      ..where((t) => t.puzzleId.equals(id))).go();
+  }
+
+  @override
   Future<List<String>> getAllKeys() async {
     final query = db.selectOnly(db.puzzleProgress)
       ..addColumns([db.puzzleProgress.puzzleId]);

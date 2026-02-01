@@ -33,6 +33,12 @@ class MockPuzzleStorage implements PuzzleStorageInterface {
   }
 
   @override
+  Future<void> delete(String id) async {
+    _data.remove(id);
+    _controller.add(null);
+  }
+
+  @override
   Future<List<String>> getAllKeys() async => _data.keys.toList();
 }
 
