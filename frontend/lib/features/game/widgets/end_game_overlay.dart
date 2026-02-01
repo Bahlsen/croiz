@@ -75,6 +75,9 @@ class _EndGameOverlayState extends ConsumerState<EndGameOverlay> {
       _wasCompleted = true;
       _confettiController.play();
       // Show ad on completion
+      if (kDebugMode) {
+        debugPrint('EndGameOverlay: Attempting to show interstitial ad...');
+      }
       ref.read(monetizationServiceProvider).showInterstitialAd();
     } else if (!completed || !overlayVisible) {
       _wasCompleted = false;

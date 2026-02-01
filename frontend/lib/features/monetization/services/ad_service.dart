@@ -99,13 +99,16 @@ class MonetizationService {
   /// Returns immediately if ad is not ready (offline or loading).
   void showInterstitialAd() {
     if (_isInterstitialAdReady && _interstitialAd != null) {
+      _logger.i('Showing interstitial ad...');
       _interstitialAd!.show();
       _isInterstitialAdReady = false;
       _interstitialAd = null;
     } else {
-      _logger.i('Interstitial ad not ready, skipping.');
-      // Optionally try to load one for next time if it was null
-      if (_interstitialAd == null) {
+      _logger.w(
+        'Interstitial ad not ready (ready: $_isInterstitialAdReady, ad: ${_interstitialAd != null}), attempting to load...',
+      );
+      // Try to load one for next time if it was null
+      if (_interstitialAd == null && !kIsWeb) {
         _loadInterstitialAd();
       }
     }
