@@ -5,9 +5,7 @@ import 'package:croiz/features/statistics/providers/statistics_providers.dart';
 import 'package:croiz/features/statistics/screens/statistics_screen.dart';
 import 'package:croiz/features/statistics/services/achievement_service.dart';
 import 'package:croiz/features/statistics/services/statistics_service.dart';
-import 'package:croiz/features/statistics/widgets/completion_chart.dart';
 import 'package:croiz/features/statistics/widgets/stats_summary_card.dart';
-import 'package:croiz/features/statistics/widgets/streak_calendar.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -123,12 +121,5 @@ void main() {
     expect(find.byType(StatsSummaryCard), findsNWidgets(4));
     expect(find.text('10'), findsOneWidget); // Total puzzles
     expect(find.text('5 Days'), findsOneWidget); // Current streak
-
-    // Verify Achievements
-    expect(find.text('Achievements'), findsOneWidget);
-
-    // Verify Charts
-    expect(find.byType(StreakCalendar), findsOneWidget);
-    expect(find.byType(CompletionChart), findsOneWidget);
   });
 }

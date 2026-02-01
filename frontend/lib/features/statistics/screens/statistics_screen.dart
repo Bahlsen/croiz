@@ -2,8 +2,7 @@ import 'package:croiz/features/statistics/models/achievement.dart';
 import 'package:croiz/features/statistics/providers/statistics_providers.dart';
 import 'package:croiz/features/statistics/widgets/achievement_badge.dart';
 import 'package:croiz/features/statistics/widgets/stats_summary_card.dart';
-import 'package:croiz/features/statistics/widgets/streak_calendar.dart';
-import 'package:croiz/features/statistics/widgets/completion_chart.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +19,6 @@ class StatisticsScreen extends ConsumerWidget {
     final recentCompletionsAsync = ref.watch(
       recentCompletionsProvider(limit: 5),
     );
-    final allCompletionsAsync = ref.watch(allCompletionsProvider);
     final unlockedAchievementsAsync = ref.watch(unlockedAchievementsProvider);
 
     return Scaffold(
@@ -115,32 +113,6 @@ class StatisticsScreen extends ConsumerWidget {
 
                 const SizedBox(height: 32),
 
-                // Charts Section
-                allCompletionsAsync.when(
-                  data:
-                      (completions) => Column(
-                        children: [
-                          if (completions.isNotEmpty) ...[
-                            StreakCalendar(completions: completions),
-                            const SizedBox(height: 32),
-                            CompletionChart(completions: completions),
-                            const SizedBox(height: 32),
-                          ],
-                        ],
-                      ),
-                  loading:
-                      () => const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                  error:
-                      (err, stack) =>
-                          const SizedBox.shrink(), // Fail silently for charts
-                ),
-
-                // Recent Completions Section
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
