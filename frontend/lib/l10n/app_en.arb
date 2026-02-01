@@ -126,5 +126,25 @@
   ,"onboardingFinishDesc": "Choose from thousands of puzzles in multiple languages."
   ,"onboardingSkip": "Skip"
   ,"onboardingNext": "Next"
-  ,"onboardingDone": "Get Started"
+  ,"onboardingDone": "Get Started",
+  "statisticsTitle": "Statistics",
+  "totalPuzzles": "Total Puzzles",
+  "currentStreak": "Current Streak",
+  "longestStreak": "Longest Streak",
+  "totalTime": "Total Time",
+  "recentCompletions": "Recent Completions",
+  "accuracy": "Accuracy",
+  "hints": "Hints",
+  "statsSummary": "Summary",
+  "activityLevel": "Activity Level",
+  "weeklyActivity": "Weekly Activity",
+  "achievements": "Achievements",
+  "dayStreak": "{count, plural, =1{1 Day} other{{count} Days}}",
+  "@dayStreak": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

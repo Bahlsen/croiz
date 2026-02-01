@@ -9,7 +9,12 @@ import 'package:croiz/features/game/services/game_reveal_service.dart';
 import 'package:croiz/features/game/services/game_endgame_service.dart';
 import 'package:croiz/features/game/services/word_check_service.dart';
 import 'package:croiz/features/game/providers/word_check_provider.dart';
+import 'package:croiz/features/statistics/services/statistics_service.dart';
 import '../helpers/fake_puzzle_storage.dart';
+import 'package:mockito/annotations.dart';
+
+@GenerateNiceMocks([MockSpec<StatisticsService>()])
+import 'cyrillic_keyboard_integration_test.mocks.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +56,7 @@ void main() {
     final wordCheckService = WordCheckService();
     final progressService = GameProgressService(wordCheckService, storage);
     final revealService = GameRevealService(wordCheckService);
-    final endgameService = GameEndgameService();
+    final endgameService = GameEndgameService(MockStatisticsService());
 
     // Create container with overrides
     final container = ProviderContainer(

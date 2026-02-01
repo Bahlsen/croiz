@@ -45,6 +45,8 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required int hintsUsed,
+    required int wordsRevealed,
     required bool isCompleted,
   }) {
     cancelTimer();
@@ -55,6 +57,8 @@ class GamePersistenceService {
         foundWords: foundWords,
         lockedCells: lockedCells,
         elapsedSeconds: elapsedSeconds,
+        hintsUsed: hintsUsed,
+        wordsRevealed: wordsRevealed,
         isCompleted: isCompleted,
       );
     });
@@ -67,6 +71,8 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required int hintsUsed,
+    required int wordsRevealed,
     required bool isCompleted,
   }) => _persistProgress(
     puzzleId: puzzleId,
@@ -74,6 +80,8 @@ class GamePersistenceService {
     foundWords: foundWords,
     lockedCells: lockedCells,
     elapsedSeconds: elapsedSeconds,
+    hintsUsed: hintsUsed,
+    wordsRevealed: wordsRevealed,
     isCompleted: isCompleted,
   );
 
@@ -84,6 +92,8 @@ class GamePersistenceService {
     required List<List<String?>> grid,
     required List<String> foundWords,
     required List<String> lockedCells,
+    int hintsUsed = 0,
+    int wordsRevealed = 0,
     bool isCompleted = false,
   }) {
     cancelTimer();
@@ -95,6 +105,8 @@ class GamePersistenceService {
           'savedAt': DateTime.now().toIso8601String(),
           'foundWords': foundWords,
           'lockedCells': lockedCells,
+          'hintsUsed': hintsUsed,
+          'wordsRevealed': wordsRevealed,
           'isCompleted': isCompleted,
         };
         await _storage.save(
@@ -118,6 +130,8 @@ class GamePersistenceService {
     required Set<String> foundWords,
     required Set<CellKey> lockedCells,
     required int elapsedSeconds,
+    required int hintsUsed,
+    required int wordsRevealed,
     required bool isCompleted,
   }) async {
     try {
@@ -128,8 +142,11 @@ class GamePersistenceService {
         'foundWords': foundWords.toList(),
         'lockedCells': lockedCells.map((c) => '${c.row},${c.col}').toList(),
         'elapsedSeconds': elapsedSeconds,
+        'hintsUsed': hintsUsed,
+        'wordsRevealed': wordsRevealed,
         'isCompleted': isCompleted,
       };
+
       await _storage.save(
         puzzleId,
         jsonDecode(jsonEncode(payload)) as Map<String, dynamic>,

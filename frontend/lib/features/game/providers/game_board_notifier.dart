@@ -263,6 +263,9 @@ class GameBoardNotifier extends _$GameBoardNotifier {
         setElapsedSeconds: (seconds) {
           unawaited(ref.read(gameTimerProvider(board.id)).setElapsed(seconds));
         },
+        setHintsUsed: (hints) => state = state.copyWith(hintsUsed: hints),
+        setWordsRevealed:
+            (words) => state = state.copyWith(wordsRevealed: words),
       );
 
       if (!success && ref.mounted) {
@@ -419,7 +422,9 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       return;
     }
 
-    state = state.updateCell(row, col, letter);
+    state = state
+        .updateCell(row, col, letter)
+        .copyWith(hintsUsed: state.hintsUsed + 1);
 
     // Play reveal sound
     if (!ref.read(gameAudioMutedProvider)) {
@@ -476,7 +481,11 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       return;
     }
 
-    state = state.copyWith(grid: result.newGrid);
+    state = state.copyWith(
+      grid: result.newGrid,
+      hintsUsed: state.hintsUsed + 1,
+      wordsRevealed: state.wordsRevealed + 1,
+    );
     ref.read(foundWordsProvider.notifier).setFoundWords(result.newFoundWords);
     ref
         .read(lockedCellsProvider.notifier)
@@ -563,6 +572,8 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       foundWords: ref.read(foundWordsProvider),
       lockedCells: ref.read(lockedCellsProvider),
       elapsedSeconds: ref.read(gameTimerProvider(state.id)).elapsedSeconds,
+      hintsUsed: state.hintsUsed,
+      wordsRevealed: state.wordsRevealed,
       isCompleted: isCompleted,
     );
   }

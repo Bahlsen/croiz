@@ -105,6 +105,12 @@ class _PuzzlesListPageState extends ConsumerState<PuzzlesListPage> {
           style: TextStyle(fontSize: ResponsiveFontSize.titleMedium),
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart_rounded),
+            tooltip:
+                AppLocalizations.of(context)?.statisticsTitle ?? 'Statistics',
+            onPressed: () => const StatisticsRoute().push(context),
+          ),
           // Back to Quick Play if in full list mode
           if (_showFullList)
             IconButton(
@@ -116,11 +122,14 @@ class _PuzzlesListPageState extends ConsumerState<PuzzlesListPage> {
       ),
       backgroundColor:
           isLight ? Colors.white : Theme.of(context).scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Expanded(child: _buildBody(context, puzzlesAsync)),
-          const SafeArea(top: false, child: BannerAdWidget()),
-        ],
+      body: SafeArea(
+        top: false, // Allow content to flow under AppBar
+        child: Column(
+          children: [
+            Expanded(child: _buildBody(context, puzzlesAsync)),
+            const BannerAdWidget(),
+          ],
+        ),
       ),
       floatingActionButton:
           FeatureFlags.isGenerationEnabled

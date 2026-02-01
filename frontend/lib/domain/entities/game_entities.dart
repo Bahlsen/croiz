@@ -81,6 +81,8 @@ class GameBoard extends GameEntity {
     this.entries,
     this.solutionGrid,
     this.language = 'en',
+    this.hintsUsed = 0,
+    this.wordsRevealed = 0,
   });
   final List<List<String?>> grid;
   final Map<String, String> clues;
@@ -89,6 +91,12 @@ class GameBoard extends GameEntity {
   final List<List<bool>> blackCells;
   final int difficulty;
   final String language;
+
+  /// Number of hints used (letters or words revealed).
+  final int hintsUsed;
+
+  /// Number of full words revealed by the user.
+  final int wordsRevealed;
 
   /// Optional: pre-computed entries (from Puzzle model) with number/position/clue.
   /// If present, UI can use these directly instead of recalculating numbering.
@@ -110,6 +118,8 @@ class GameBoard extends GameEntity {
     List<PuzzleEntryData>? entries,
     List<List<String?>>? solutionGrid,
     String? language,
+    int? hintsUsed,
+    int? wordsRevealed,
   }) => GameBoard(
     id: id ?? this.id,
     title: title,
@@ -122,6 +132,8 @@ class GameBoard extends GameEntity {
     entries: entries ?? this.entries,
     solutionGrid: solutionGrid ?? this.solutionGrid,
     language: language ?? this.language,
+    hintsUsed: hintsUsed ?? this.hintsUsed,
+    wordsRevealed: wordsRevealed ?? this.wordsRevealed,
   );
 
   /// Helper to create a new GameBoard with a single cell updated.

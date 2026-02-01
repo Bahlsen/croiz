@@ -5,14 +5,22 @@ import 'package:croiz/data/db/tables.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [GeneratedPuzzles, PuzzleProgress])
+@DriftDatabase(
+  tables: [
+    GeneratedPuzzles,
+    PuzzleProgress,
+    UserStatsTable,
+    PuzzleStatsTable,
+    UserAchievementsTable,
+  ],
+)
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3; // Incremented for achievement tables
 
   static QueryExecutor _openConnection() => driftDatabase(
     name: 'croiz_db',

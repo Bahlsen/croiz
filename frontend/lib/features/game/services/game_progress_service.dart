@@ -37,6 +37,8 @@ class GameProgressService {
     required void Function(Set<String> found) setFoundWords,
     required void Function(Set<CellKey> locked) setLockedCells,
     required void Function(int seconds)? setElapsedSeconds,
+    void Function(int hints)? setHintsUsed,
+    void Function(int words)? setWordsRevealed,
   }) async {
     try {
       final savedData = await _storage.load(board.id);
@@ -94,6 +96,18 @@ class GameProgressService {
       if (savedElapsed is int && setElapsedSeconds != null) {
         setElapsedSeconds(savedElapsed);
       }
+
+      // 5. Restore Statistics metrics
+      final savedHints = savedData['hintsUsed'];
+      if (savedHints is int && setHintsUsed != null) {
+        setHintsUsed(savedHints);
+      }
+
+      final savedWordsRevealed = savedData['wordsRevealed'];
+      if (savedWordsRevealed is int && setWordsRevealed != null) {
+        setWordsRevealed(savedWordsRevealed);
+      }
+
       return true;
     } on Object {
       return false;

@@ -126,6 +126,28 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 },
                               ),
                               const Divider(),
+                              ListTile(
+                                leading: Icon(
+                                  Icons.bar_chart_rounded,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
+                                ),
+                                title: Text(
+                                  AppLocalizations.of(
+                                        context,
+                                      )?.statisticsTitle ??
+                                      'Statistics',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
+                                ),
+                                onTap: () {
+                                  onClose();
+                                  const StatisticsRoute().push(context);
+                                },
+                              ),
+                              const Divider(),
                               // Compact keyboard size selector using a Dropdown
                               ListTile(
                                 leading: Icon(

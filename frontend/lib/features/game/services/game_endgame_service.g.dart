@@ -55,4 +55,4 @@ final class GameEndgameServiceProvider
 }
 
 String _$gameEndgameServiceHash() =>
-    r'777aee44f42c119e33330affa1773b3c8e4ccde7';
+    r'1c27a16a42e8704508a964333de84da36494e393';

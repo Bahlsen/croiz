@@ -1,6 +1,6 @@
 # 🧩 Croiz App - Comprehensive Analysis
 
-**Generated**: January 31, 2026  
+**Generated**: February 01, 2026  
 **Version**: 1.0.0+1
 
 ---
@@ -111,6 +111,15 @@ croiz/
 - **End game overlay** with confetti animation
 - **Celebration sounds** and visual effects
 - Navigation to puzzle list or restart
+
+### 8. Statistics & Progress Tracking
+
+- **Lifetime Statistics** — Track total puzzles completed, total words found, and total play time
+- **Streak Management** — Intelligent calculation of current and longest daily streaks
+- **Per-Puzzle Metrics** — Detailed records for each completion (time taken, hints used, accuracy, words revealed)
+- **Visual Progress** — Summary cards with gradients and animated puzzle completion history via `StatisticsScreen`
+- **Drift Integration** — Fully persistent statistics via `UserStatsTable` and `PuzzleStatsTable` with schema versioning
+
 
 ---
 
@@ -294,17 +303,16 @@ The app includes **~9,850 crossword puzzles** from major publications:
 
 ## 💡 Potential Improvements
 
-1. **Statistics/Leaderboards** — No puzzle completion stats or streaks
-2. **Social features** — No sharing or multiplayer modes
-3. **Subscription model** — Only ads; no premium tier for ad-free experience
-4. **Widget tests coverage** — Some complex widgets lack thorough testing
-5. **Web platform** — Integration tests not yet supported on web
+1. **Social features** — No sharing or multiplayer modes
+2. **Subscription model** — Only ads; no premium tier for ad-free experience
+3. **Widget tests coverage** — Some complex widgets lack thorough testing
+4. **Web platform** — Integration tests not yet supported on web
 
 ---
 
 ## 📋 Implementation Plans
 
-### 📊 Plan 1: Statistics & Leaderboards
+### 📊 Plan 1: Statistics & Leaderboards ✅ **DONE**
 
 **Goal**: Track puzzle completion stats, streaks, and display achievements.
 
@@ -405,10 +413,10 @@ enum Achievement {
 }
 ```
 
-#### Phase 5: Integration (1 day)
+#### Phase 5: Integration (In Progress)
 - [ ] Update `EndGameOverlay` to record stats on completion
-- [ ] Add "Stats" button to settings menu
-- [ ] Add route: `/statistics`
+- [x] Add "Stats" button to settings menu
+- [x] Add route: `/statistics`
 
 **Estimated Effort**: 8-10 days
 
@@ -687,7 +695,7 @@ testGoldens('CrosswordCell states', (tester) async {
 | Metric | Value |
 |--------|-------|
 | **Lines of Dart code** | ~50,000+ |
-| **Features** | 7 (game, puzzles, generation, splash, home, settings, monetization) |
+| **Features** | 8 (game, puzzles, generation, statistics, splash, home, settings, monetization) |
 | **Providers** | 50+ Riverpod providers |
 | **Widgets** | 100+ custom widgets |
 | **Test files** | 142+ tests |

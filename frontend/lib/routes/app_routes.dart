@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/features/onboarding/screens/onboarding_screen.dart';
+import 'package:croiz/features/statistics/screens/statistics_screen.dart';
 
 part 'app_routes.g.dart';
 
@@ -52,4 +53,13 @@ class OnboardingRoute extends GoRouteData with $OnboardingRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       const OnboardingScreen();
+}
+
+@TypedGoRoute<StatisticsRoute>(path: '/statistics')
+class StatisticsRoute extends GoRouteData with $StatisticsRoute {
+  const StatisticsRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const StatisticsScreen();
 }

@@ -237,8 +237,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirm Reveal All';
 
   @override
-  String get revealAllConfirmationMessage =>
-      'Are you sure you want to reveal the entire puzzle?';
+  String get revealAllConfirmationMessage => 'Are you sure you want to reveal the entire puzzle?';
 
   @override
   String get yes => 'Yes';
@@ -253,8 +252,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get deletePuzzle => 'Delete Generated Puzzle';
 
   @override
-  String get deletePuzzleConfirmation =>
-      'Are you sure you want to delete this puzzle? This action cannot be undone.';
+  String get deletePuzzleConfirmation => 'Are you sure you want to delete this puzzle? This action cannot be undone.';
 
   @override
   String get deleteSuccessMessage => 'Puzzle deleted successfully';
@@ -263,8 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancel => 'Cancel';
 
   @override
-  String get appDescription =>
-      'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.';
+  String get appDescription => 'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.';
 
   @override
   String get credits => 'Credits';
@@ -288,12 +285,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get helpBasic1 => 'Tap a cell to select it and see the clue';
 
   @override
-  String get helpBasic2 =>
-      'Type letters using the on-screen keyboard or your device keyboard';
+  String get helpBasic2 => 'Type letters using the on-screen keyboard or your device keyboard';
 
   @override
-  String get helpBasic3 =>
-      'Tap the selected cell again to switch between across/down';
+  String get helpBasic3 => 'Tap the selected cell again to switch between across/down';
 
   @override
   String get helpBasic4 => 'Completed words turn green automatically';
@@ -317,8 +312,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get features => 'Features';
 
   @override
-  String get helpFeature1 =>
-      '🔍 Reveal: Show letters for a word or the entire puzzle';
+  String get helpFeature1 => '🔍 Reveal: Show letters for a word or the entire puzzle';
 
   @override
   String get helpFeature2 => '🔄 Reset: Clear all your answers and start over';
@@ -366,36 +360,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingWelcomeTitle => 'Welcome to Croiz';
 
   @override
-  String get onboardingWelcomeDesc =>
-      'Play thousands of crosswords from top publishers.';
+  String get onboardingWelcomeDesc => 'Play thousands of crosswords from top publishers.';
 
   @override
   String get onboardingBasicTitle => 'How to Play';
 
   @override
-  String get onboardingBasicDesc =>
-      'Tap any cell to select it, then type letters to fill the grid.';
+  String get onboardingBasicDesc => 'Tap any cell to select it, then type letters to fill the grid.';
 
   @override
   String get onboardingDirectionTitle => 'Switch Direction';
 
   @override
-  String get onboardingDirectionDesc =>
-      'Tap the selected cell again (or double-tap) to switch between Across and Down.';
+  String get onboardingDirectionDesc => 'Tap the selected cell again (or double-tap) to switch between Across and Down.';
 
   @override
   String get onboardingCompletionTitle => 'Word Completion';
 
   @override
-  String get onboardingCompletionDesc =>
-      'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!';
+  String get onboardingCompletionDesc => 'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!';
 
   @override
   String get onboardingFinishTitle => 'You\'re All Set!';
 
   @override
-  String get onboardingFinishDesc =>
-      'Choose from thousands of puzzles in multiple languages.';
+  String get onboardingFinishDesc => 'Choose from thousands of puzzles in multiple languages.';
 
   @override
   String get onboardingSkip => 'Skip';
@@ -405,4 +394,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingDone => 'Get Started';
+
+  @override
+  String get statisticsTitle => 'Statistics';
+
+  @override
+  String get totalPuzzles => 'Total Puzzles';
+
+  @override
+  String get currentStreak => 'Current Streak';
+
+  @override
+  String get longestStreak => 'Longest Streak';
+
+  @override
+  String get totalTime => 'Total Time';
+
+  @override
+  String get recentCompletions => 'Recent Completions';
+
+  @override
+  String get accuracy => 'Accuracy';
+
+  @override
+  String get hints => 'Hints';
+
+  @override
+  String get statsSummary => 'Summary';
+
+  @override
+  String get activityLevel => 'Activity Level';
+
+  @override
+  String get weeklyActivity => 'Weekly Activity';
+
+  @override
+  String get achievements => 'Achievements';
+
+  @override
+  String dayStreak(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Days',
+      one: '1 Day',
+    );
+    return '$_temp0';
+  }
 }

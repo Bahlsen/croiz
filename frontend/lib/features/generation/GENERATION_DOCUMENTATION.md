@@ -11,7 +11,11 @@
 > 5. **AC-3 Optimization**: O(d) revise complexity (down from O(d²)).
 > 6. **Determinism**: Introduced `forceStyle` parameter for `GridFirstGenerator` to control template selection in tests.
 >
-> **Known Issue (Non-critical)**: "Illegal adjacency" warnings may appear when adjacent cells aren't covered by the same word slot. This is a template structure issue and doesn't affect playability.
+> **Note (v3.15)**: Integrated User Statistics & Progress Tracking.
+> 1. **Persistent Metrics**: Added `hintsUsed` and `wordsRevealed` to game persistence.
+> 2. **Global Stats**: Implemented streak calculation and total playtime tracking via `StatisticsService`.
+> 3. **Accuracy Tracking**: Individual puzzle accuracy is now recorded on completion.
+
 
 ---
 
