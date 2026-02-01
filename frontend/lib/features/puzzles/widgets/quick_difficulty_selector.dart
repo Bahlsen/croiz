@@ -49,13 +49,17 @@ class QuickDifficultySelector extends ConsumerWidget {
           Expanded(
             child: SegmentedButton<int>(
               segments:
-                  quickDifficulties.map((d) => ButtonSegment<int>(
-                      value: d.level,
-                      label: Text(
-                        _getDifficultyLabel(d.level, l10n),
-                        style: TextStyle(fontSize: 12.sp),
-                      ),
-                    )).toList(),
+                  quickDifficulties
+                      .map(
+                        (d) => ButtonSegment<int>(
+                          value: d.level,
+                          label: Text(
+                            _getDifficultyLabel(d.level, l10n),
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
+                        ),
+                      )
+                      .toList(),
               selected: {selectedDifficulty},
               onSelectionChanged: (Set<int> selection) {
                 if (selection.isNotEmpty) {
