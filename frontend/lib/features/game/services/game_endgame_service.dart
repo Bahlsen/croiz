@@ -108,7 +108,7 @@ class GameEndgameService {
   }
 }
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: true, dependencies: [statisticsService])
 GameEndgameService gameEndgameService(Ref ref) {
   final statsService = ref.watch(statisticsServiceProvider);
   return GameEndgameService(statsService);

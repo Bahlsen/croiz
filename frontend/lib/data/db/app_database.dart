@@ -20,7 +20,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(super.e);
 
   @override
-  int get schemaVersion => 3; // Incremented for achievement tables
+  int get schemaVersion => 4; // Incremented to recover from failed v3 migration
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -36,6 +36,24 @@ class AppDatabase extends _$AppDatabase {
       // Version 3: Added UserAchievementsTable
       if (from < 3) {
         await m.createTable(userAchievementsTable);
+      }
+      // Version 4: Recovery for potential failed v3 migration (tables missing but version bumped)
+      if (from < 4) {
+        try {
+          await m.createTable(userStatsTable);
+        } on Object catch (_) {
+          // Ignore if exists
+        }
+        try {
+          await m.createTable(puzzleStatsTable);
+        } on Object catch (_) {
+          // Ignore if exists
+        }
+        try {
+          await m.createTable(userAchievementsTable);
+        } on Object catch (_) {
+          // Ignore if exists
+        }
       }
     },
   );

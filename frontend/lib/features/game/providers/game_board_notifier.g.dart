@@ -169,6 +169,8 @@ final class GameBoardNotifierProvider
           GameBoardNotifierProvider.$allTransitiveDependencies19,
           GameBoardNotifierProvider.$allTransitiveDependencies20,
           GameBoardNotifierProvider.$allTransitiveDependencies21,
+          GameBoardNotifierProvider.$allTransitiveDependencies22,
+          GameBoardNotifierProvider.$allTransitiveDependencies23,
         },
       );
 
@@ -191,17 +193,21 @@ final class GameBoardNotifierProvider
       GameProgressServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies10 = gameRevealServiceProvider;
   static final $allTransitiveDependencies11 = gameEndgameServiceProvider;
-  static final $allTransitiveDependencies12 = selectedCellProvider;
-  static final $allTransitiveDependencies13 = foundWordsProvider;
-  static final $allTransitiveDependencies14 = lockedCellsProvider;
-  static final $allTransitiveDependencies15 = flashingCellsProvider;
-  static final $allTransitiveDependencies16 = flashingClearedCellsProvider;
-  static final $allTransitiveDependencies17 = flashClearDelayProvider;
-  static final $allTransitiveDependencies18 = gameTimerProvider;
-  static final $allTransitiveDependencies19 = audioMutedProvider;
-  static final $allTransitiveDependencies20 =
+  static final $allTransitiveDependencies12 =
+      GameEndgameServiceProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies13 =
+      GameEndgameServiceProvider.$allTransitiveDependencies2;
+  static final $allTransitiveDependencies14 = selectedCellProvider;
+  static final $allTransitiveDependencies15 = foundWordsProvider;
+  static final $allTransitiveDependencies16 = lockedCellsProvider;
+  static final $allTransitiveDependencies17 = flashingCellsProvider;
+  static final $allTransitiveDependencies18 = flashingClearedCellsProvider;
+  static final $allTransitiveDependencies19 = flashClearDelayProvider;
+  static final $allTransitiveDependencies20 = gameTimerProvider;
+  static final $allTransitiveDependencies21 = audioMutedProvider;
+  static final $allTransitiveDependencies22 =
       AudioMutedNotifierProvider.$allTransitiveDependencies0;
-  static final $allTransitiveDependencies21 = gameAudioServiceProvider;
+  static final $allTransitiveDependencies23 = gameAudioServiceProvider;
 
   @override
   String debugGetCreateSourceHash() => _$gameBoardNotifierHash();
@@ -219,7 +225,7 @@ final class GameBoardNotifierProvider
   }
 }
 
-String _$gameBoardNotifierHash() => r'2734d9d8717a22e3d1470932288453968ebc4392';
+String _$gameBoardNotifierHash() => r'f4093b64d71eaf7a924f4de140138141d2dc05d0';
 
 /// Main notifier for the game board state.
 

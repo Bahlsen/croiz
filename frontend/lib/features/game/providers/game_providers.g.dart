@@ -59,6 +59,8 @@ final class SelectedWordCellsProvider
           SelectedWordCellsProvider.$allTransitiveDependencies21,
           SelectedWordCellsProvider.$allTransitiveDependencies22,
           SelectedWordCellsProvider.$allTransitiveDependencies23,
+          SelectedWordCellsProvider.$allTransitiveDependencies24,
+          SelectedWordCellsProvider.$allTransitiveDependencies25,
         },
       );
 
@@ -90,9 +92,9 @@ final class SelectedWordCellsProvider
   static final $allTransitiveDependencies14 =
       GameBoardNotifierProvider.$allTransitiveDependencies11;
   static final $allTransitiveDependencies15 =
-      GameBoardNotifierProvider.$allTransitiveDependencies13;
+      GameBoardNotifierProvider.$allTransitiveDependencies12;
   static final $allTransitiveDependencies16 =
-      GameBoardNotifierProvider.$allTransitiveDependencies14;
+      GameBoardNotifierProvider.$allTransitiveDependencies13;
   static final $allTransitiveDependencies17 =
       GameBoardNotifierProvider.$allTransitiveDependencies15;
   static final $allTransitiveDependencies18 =
@@ -107,6 +109,10 @@ final class SelectedWordCellsProvider
       GameBoardNotifierProvider.$allTransitiveDependencies20;
   static final $allTransitiveDependencies23 =
       GameBoardNotifierProvider.$allTransitiveDependencies21;
+  static final $allTransitiveDependencies24 =
+      GameBoardNotifierProvider.$allTransitiveDependencies22;
+  static final $allTransitiveDependencies25 =
+      GameBoardNotifierProvider.$allTransitiveDependencies23;
 
   @override
   String debugGetCreateSourceHash() => _$selectedWordCellsHash();
@@ -209,6 +215,10 @@ final class CellInSelectedWordProvider
       SelectedWordCellsProvider.$allTransitiveDependencies22;
   static final $allTransitiveDependencies24 =
       SelectedWordCellsProvider.$allTransitiveDependencies23;
+  static final $allTransitiveDependencies25 =
+      SelectedWordCellsProvider.$allTransitiveDependencies24;
+  static final $allTransitiveDependencies26 =
+      SelectedWordCellsProvider.$allTransitiveDependencies25;
 
   @override
   String debugGetCreateSourceHash() => _$cellInSelectedWordHash();
@@ -290,6 +300,8 @@ final class CellInSelectedWordFamily extends $Family
           CellInSelectedWordProvider.$allTransitiveDependencies22,
           CellInSelectedWordProvider.$allTransitiveDependencies23,
           CellInSelectedWordProvider.$allTransitiveDependencies24,
+          CellInSelectedWordProvider.$allTransitiveDependencies25,
+          CellInSelectedWordProvider.$allTransitiveDependencies26,
         },
         isAutoDispose: false,
       );

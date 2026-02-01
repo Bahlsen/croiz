@@ -27,9 +27,19 @@ final class GameEndgameServiceProvider
         retry: null,
         name: r'gameEndgameServiceProvider',
         isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
+        dependencies: <ProviderOrFamily>[statisticsServiceProvider],
+        $allTransitiveDependencies: <ProviderOrFamily>[
+          GameEndgameServiceProvider.$allTransitiveDependencies0,
+          GameEndgameServiceProvider.$allTransitiveDependencies1,
+          GameEndgameServiceProvider.$allTransitiveDependencies2,
+        ],
       );
+
+  static final $allTransitiveDependencies0 = statisticsServiceProvider;
+  static final $allTransitiveDependencies1 =
+      StatisticsServiceProvider.$allTransitiveDependencies0;
+  static final $allTransitiveDependencies2 =
+      StatisticsServiceProvider.$allTransitiveDependencies1;
 
   @override
   String debugGetCreateSourceHash() => _$gameEndgameServiceHash();
@@ -55,4 +65,4 @@ final class GameEndgameServiceProvider
 }
 
 String _$gameEndgameServiceHash() =>
-    r'1c27a16a42e8704508a964333de84da36494e393';
+    r'c6c8b765ac119a547ec7d21545e72c1688e7f47b';
