@@ -119,7 +119,7 @@ class _PuzzlesListPageState extends ConsumerState<PuzzlesListPage> {
       body: Column(
         children: [
           Expanded(child: _buildBody(context, puzzlesAsync)),
-          const BannerAdWidget(),
+          const SafeArea(top: false, child: BannerAdWidget()),
         ],
       ),
       floatingActionButton:

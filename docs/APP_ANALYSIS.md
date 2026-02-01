@@ -98,7 +98,15 @@ croiz/
 - **Audio mute** toggle
 - **Help & About dialogs**
 
-### 6. Game Completion
+### 6. Onboarding Flow
+
+- **First-time user tutorial** with interactive walkthrough
+- **Multi-step introduction** to crossword mechanics
+- **Persistent state** — Tutorial shown only once
+- **Skip option** for experienced users
+- **Localized content** across all 8 languages
+
+### 7. Game Completion
 
 - **End game overlay** with confetti animation
 - **Celebration sounds** and visual effects
@@ -286,96 +294,17 @@ The app includes **~9,850 crossword puzzles** from major publications:
 
 ## 💡 Potential Improvements
 
-1. **Onboarding flow** — No guided tutorial for first-time users
-2. **Statistics/Leaderboards** — No puzzle completion stats or streaks
-3. **Social features** — No sharing or multiplayer modes
-4. **Subscription model** — Only ads; no premium tier for ad-free experience
-5. **Widget tests coverage** — Some complex widgets lack thorough testing
-6. **Web platform** — Integration tests not yet supported on web
+1. **Statistics/Leaderboards** — No puzzle completion stats or streaks
+2. **Social features** — No sharing or multiplayer modes
+3. **Subscription model** — Only ads; no premium tier for ad-free experience
+4. **Widget tests coverage** — Some complex widgets lack thorough testing
+5. **Web platform** — Integration tests not yet supported on web
 
 ---
 
-## � Implementation Plans
+## 📋 Implementation Plans
 
-### 🎓 Plan 1: Onboarding Flow
-
-**Goal**: Create a guided tutorial for first-time users to learn crossword mechanics.
-
-#### Phase 1: Detection & Storage (1 day)
-```
-lib/features/onboarding/
-├── providers/
-│   └── onboarding_provider.dart      # Track onboarding state
-├── services/
-│   └── onboarding_service.dart       # Persistence logic
-```
-
-**Tasks**:
-- [ ] Add `hasCompletedOnboarding` flag to SharedPreferences
-- [ ] Create `onboardingStateProvider` (Riverpod)
-- [ ] Check flag on app startup in `main.dart`
-
-#### Phase 2: Onboarding Screens (2-3 days)
-```
-lib/features/onboarding/
-├── screens/
-│   └── onboarding_screen.dart        # PageView with steps
-├── widgets/
-│   ├── onboarding_page.dart          # Individual page template
-│   ├── onboarding_indicator.dart     # Dot indicator
-│   └── onboarding_button.dart        # Next/Skip/Done buttons
-```
-
-**Onboarding Steps**:
-| Step | Title | Description | Visual |
-|------|-------|-------------|--------|
-| 1 | Welcome | "Welcome to Croiz!" | App logo animation |
-| 2 | How to Play | "Tap cells to select, type to fill" | Animated grid demo |
-| 3 | Direction Toggle | "Tap selected cell to switch direction" | Arrow animation |
-| 4 | Word Completion | "Complete words to see them glow!" | Green flash demo |
-| 5 | Get Started | "Choose your first puzzle" | CTA button |
-
-#### Phase 3: Interactive Tutorial (2 days)
-```
-lib/features/onboarding/
-├── widgets/
-│   ├── tutorial_overlay.dart         # Spotlight/coach marks
-│   └── tutorial_tooltip.dart         # Contextual hints
-```
-
-**Tasks**:
-- [ ] Optional in-game coach marks on first puzzle
-- [ ] Highlight: cell selection → keyboard → direction toggle → completion
-- [ ] "Got it" dismissal with animation
-
-#### Phase 4: Localization (1 day)
-- [ ] Add 8 ARB keys per language for onboarding text
-- [ ] Translate: EN, FR, ES, DE, IT, PT, UK, RU
-
-#### Routing Integration
-```dart
-// lib/routes/app_router.dart
-GoRouter(
-  initialLocation: '/puzzles',
-  redirect: (context, state) {
-    final hasOnboarded = ref.read(onboardingStateProvider);
-    if (!hasOnboarded && state.matchedLocation != '/onboarding') {
-      return '/onboarding';
-    }
-    return null;
-  },
-  routes: [
-    GoRoute(path: '/onboarding', builder: (_,_) => OnboardingScreen()),
-    ...
-  ],
-);
-```
-
-**Estimated Effort**: 5-7 days
-
----
-
-### 📊 Plan 2: Statistics & Leaderboards
+### 📊 Plan 1: Statistics & Leaderboards
 
 **Goal**: Track puzzle completion stats, streaks, and display achievements.
 
@@ -485,7 +414,7 @@ enum Achievement {
 
 ---
 
-### 💎 Plan 3: Subscription Model (Premium Tier)
+### 💎 Plan 2: Subscription Model (Premium Tier)
 
 **Goal**: Offer ad-free experience and premium features via subscription.
 
@@ -611,7 +540,7 @@ Widget build(BuildContext context) {
 
 ---
 
-### 🧪 Plan 4: Widget Tests Coverage
+### 🧪 Plan 3: Widget Tests Coverage
 
 **Goal**: Achieve comprehensive widget test coverage for complex UI components.
 
