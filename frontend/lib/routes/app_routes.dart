@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/game/screens/crossword_screen.dart';
+import 'package:croiz/features/onboarding/screens/onboarding_screen.dart';
 
 part 'app_routes.g.dart';
 
-@TypedGoRoute<HomeRoute>(path: '/puzzles', routes: [])
+@TypedGoRoute<HomeRoute>(path: '/puzzles')
 class HomeRoute extends GoRouteData with $HomeRoute {
   const HomeRoute();
 
@@ -42,4 +43,13 @@ class CrosswordRoute extends GoRouteData with $CrosswordRoute {
               ),
             ),
       );
+}
+
+@TypedGoRoute<OnboardingRoute>(path: '/onboarding')
+class OnboardingRoute extends GoRouteData with $OnboardingRoute {
+  const OnboardingRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const OnboardingScreen();
 }

@@ -139,7 +139,7 @@ class _CroizAppState extends ConsumerState<CroizApp> {
             theme: _lightTheme,
             darkTheme: _darkTheme,
             themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-            routerConfig: appRouter,
+            routerConfig: ref.watch(appRouterProvider),
             debugShowCheckedModeBanner: false,
             locale: locale,
             localizationsDelegates: const [

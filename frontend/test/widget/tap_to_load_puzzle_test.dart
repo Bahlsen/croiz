@@ -9,6 +9,16 @@ import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/persistence/storage_provider.dart'; // for puzzleStorageProvider
 import '../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/features/onboarding/providers/onboarding_provider.dart';
+import 'package:croiz/features/onboarding/services/onboarding_service.dart';
+
+class MockOnboardingService implements OnboardingService {
+  @override
+  Future<bool> hasCompletedOnboarding() async => true;
+
+  @override
+  Future<void> completeOnboarding() async {}
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +44,7 @@ void main() {
             AsyncValue.data(<PuzzleDescriptor>[desc]),
           ),
           puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+
           // Override loader to avoid JSON parsing and return a minimal board.
           puzzleAssetLoaderProvider.overrideWithValue(
             (String assetPath) async => GameBoard(
@@ -52,6 +63,8 @@ void main() {
               ),
             ),
           ),
+          // Override onboarding to be completed so we don't redirect
+          onboardingServiceProvider.overrideWithValue(MockOnboardingService()),
         ],
       );
       addTearDown(container.dispose);
@@ -62,14 +75,17 @@ void main() {
           container: container,
           child: Sizer(
             builder:
-                (context, orientation, deviceType) =>
-                    MaterialApp.router(routerConfig: appRouter),
+                (context, orientation, deviceType) => Consumer(
+                  builder: (context, ref, _) {
+                    final router = ref.watch(appRouterProvider);
+                    return MaterialApp.router(routerConfig: router);
+                  },
+                ),
           ),
         ),
       );
 
       // Navigate to puzzles list page via shared router instance.
-      appRouter.go('/puzzles');
       await tester.pumpAndSettle();
 
       // New UI shows puzzles directly in a flat list (no expansion tiles)

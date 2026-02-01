@@ -324,7 +324,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get helpFeature4 => '🌍 Languages: Play puzzles in multiple languages';
 
   @override
-  String get helpFeature5 => '✨ Generate: Create custom puzzles with AI';
+  String get helpFeature5 => '✨ Generate: Create custom puzzles';
 
   @override
   String get tips => 'Tips';
@@ -351,8 +351,47 @@ class AppLocalizationsEs extends AppLocalizations {
   String get zeroPuzzles => 'No puzzles yet';
 
   @override
-  String get zeroPuzzlesDesc => 'Generate your first crossword to start playing!';
+  String get zeroPuzzlesDesc => 'Select a puzzle to start playing!';
 
   @override
   String get generateFirst => 'Get Started';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to Croiz';
+
+  @override
+  String get onboardingWelcomeDesc => 'Play thousands of crosswords from top publishers.';
+
+  @override
+  String get onboardingBasicTitle => 'How to Play';
+
+  @override
+  String get onboardingBasicDesc => 'Tap any cell to select it, then type letters to fill the grid.';
+
+  @override
+  String get onboardingDirectionTitle => 'Switch Direction';
+
+  @override
+  String get onboardingDirectionDesc => 'Tap the selected cell again (or double-tap) to switch between Across and Down.';
+
+  @override
+  String get onboardingCompletionTitle => 'Word Completion';
+
+  @override
+  String get onboardingCompletionDesc => 'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!';
+
+  @override
+  String get onboardingFinishTitle => 'You\'re All Set!';
+
+  @override
+  String get onboardingFinishDesc => 'Choose from thousands of puzzles in multiple languages.';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingDone => 'Get Started';
 }

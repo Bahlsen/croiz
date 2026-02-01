@@ -716,7 +716,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpFeature5.
   ///
   /// In en, this message translates to:
-  /// **'✨ Generate: Create custom puzzles with AI'**
+  /// **'✨ Generate: Create custom puzzles'**
   String get helpFeature5;
 
   /// No description provided for @tips.
@@ -770,7 +770,7 @@ abstract class AppLocalizations {
   /// No description provided for @zeroPuzzlesDesc.
   ///
   /// In en, this message translates to:
-  /// **'Generate your first crossword to start playing!'**
+  /// **'Select a puzzle to start playing!'**
   String get zeroPuzzlesDesc;
 
   /// No description provided for @generateFirst.
@@ -778,6 +778,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Get Started'**
   String get generateFirst;
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Croiz'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Play thousands of crosswords from top publishers.'**
+  String get onboardingWelcomeDesc;
+
+  /// No description provided for @onboardingBasicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to Play'**
+  String get onboardingBasicTitle;
+
+  /// No description provided for @onboardingBasicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap any cell to select it, then type letters to fill the grid.'**
+  String get onboardingBasicDesc;
+
+  /// No description provided for @onboardingDirectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Direction'**
+  String get onboardingDirectionTitle;
+
+  /// No description provided for @onboardingDirectionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the selected cell again (or double-tap) to switch between Across and Down.'**
+  String get onboardingDirectionDesc;
+
+  /// No description provided for @onboardingCompletionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Word Completion'**
+  String get onboardingCompletionTitle;
+
+  /// No description provided for @onboardingCompletionDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!'**
+  String get onboardingCompletionDesc;
+
+  /// No description provided for @onboardingFinishTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re All Set!'**
+  String get onboardingFinishTitle;
+
+  /// No description provided for @onboardingFinishDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from thousands of puzzles in multiple languages.'**
+  String get onboardingFinishDesc;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingDone;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
