@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:croiz/routes/app_routes.dart';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/onboarding/providers/onboarding_provider.dart';
 
 part 'app_router.g.dart';
