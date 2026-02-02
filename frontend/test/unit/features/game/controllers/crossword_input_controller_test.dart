@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
-import 'package:croiz/services/providers.dart';
+
 import 'package:croiz/features/game/services/game_audio_service.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
-import '../../../../helpers/fake_puzzle_storage.dart';
+
+import '../../../../helpers/test_helpers.dart';
 
 // Mock pour le service audio (n'hérite pas pour éviter les appels au constructeur)
 class MockGameAudioService implements GameAudioService {
@@ -16,6 +16,12 @@ class MockGameAudioService implements GameAudioService {
   int successCallCount = 0;
   int victoryCallCount = 0;
   int revealCallCount = 0;
+  int achievementCallCount = 0;
+
+  @override
+  Future<void> playAchievement() async {
+    achievementCallCount++;
+  }
 
   @override
   Future<void> playType() async {
@@ -53,16 +59,16 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('CrosswordInputController - Audio Integration', () {
-    late ProviderContainer container;
     late MockGameAudioService mockAudioService;
 
     setUp(() {
       mockAudioService = MockGameAudioService();
-      container = ProviderContainer(
+    });
+
+    test('setLetterAndAdvance sets the letter in the board', () {
+      final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -87,34 +93,58 @@ void main() {
           ),
         ],
       );
-    });
+      addTearDown(testContainer.dispose);
 
-    tearDown(() {
-      container.dispose();
-    });
-
-    test('setLetterAndAdvance sets the letter in the board', () {
-      final controller = CrosswordInputController.fromContainer(container);
-      container
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      testContainer
           .read(selectedCellProvider.notifier)
           .select(const SelectedCell(0, 0));
 
       controller.setLetterAndAdvance('A');
 
-      final value = container.read(gameBoardProvider).grid[0][0];
+      final value = testContainer.read(gameBoardProvider).grid[0][0];
       expect(value, 'A');
     });
 
     test('clearCurrent clears the current cell', () {
-      final controller = CrosswordInputController.fromContainer(container);
-      container
+      final testContainer = ProviderContainer(
+        overrides: [
+          ...commonOverrides(audioService: mockAudioService),
+          puzzleLoaderProvider.overrideWithValue(
+            AsyncValue.data(
+              GameBoard(
+                id: 'test',
+                title: 'Test Board',
+                gridSize: 3,
+                createdAt: DateTime.now(),
+                grid: [
+                  [null, null, null],
+                  [null, null, null],
+                  [null, null, null],
+                ],
+                clues: {},
+                blackCells: [
+                  [false, false, false],
+                  [false, false, false],
+                  [false, false, false],
+                ],
+                difficulty: 1,
+              ),
+            ),
+          ),
+        ],
+      );
+      addTearDown(testContainer.dispose);
+
+      final controller = CrosswordInputController.fromContainer(testContainer);
+      testContainer
           .read(selectedCellProvider.notifier)
           .select(const SelectedCell(0, 0));
-      container.read(gameBoardProvider.notifier).setLetter(0, 0, 'A');
+      testContainer.read(gameBoardProvider.notifier).setLetter(0, 0, 'A');
 
       controller.clearCurrent();
 
-      final value = container.read(gameBoardProvider).grid[0][0];
+      final value = testContainer.read(gameBoardProvider).grid[0][0];
       expect(value, isNull);
     });
 
@@ -124,9 +154,7 @@ void main() {
         // Create a board with a simple 3-letter word "CAT"
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -192,9 +220,7 @@ void main() {
     test('typing the final word triggers victory sound', () async {
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -261,9 +287,7 @@ void main() {
         // to type is at that cell. Both words should be marked found after typing.
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -331,8 +355,7 @@ void main() {
     test('physical backspace/delete does not clear locked cells', () {
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -395,8 +418,7 @@ void main() {
       // New behavior: typing on filled cell replaces letter, NOT jumps to empty
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -463,8 +485,7 @@ void main() {
         // New behavior: typing on (0,0) should replace 'M', not jump to word3
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -549,8 +570,7 @@ void main() {
       // Setup a container with a locked cell
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -603,8 +623,7 @@ void main() {
       // should not auto-advance to next word unless it becomes complete.
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -681,8 +700,7 @@ void main() {
       // should not auto-advance to next word unless it becomes complete.
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -760,8 +778,7 @@ void main() {
     test('clearCurrent does not clear locked cells', () {
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -810,8 +827,7 @@ void main() {
       () {
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -873,8 +889,7 @@ void main() {
     test('backspace on empty cell moves to previous cell and clears it', () {
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -945,8 +960,7 @@ void main() {
       // We want: select first cell of entry2 (empty), backspace should go to last cell of entry1
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -1056,8 +1070,7 @@ void main() {
     test('auto-selects first cell of first across on game start', () {
       final container = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(MockGameAudioService()),
+          ...commonOverrides(),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(
@@ -1143,9 +1156,7 @@ void main() {
         // Bug: the letter 'T' goes to the next empty cell instead
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -1241,9 +1252,7 @@ void main() {
         // EXPECTED: letter 'T' should replace 'X' at position (0,2)
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -1342,9 +1351,7 @@ void main() {
         // Scenario: user has "CXT" but wants to correct middle letter to 'A'
         final testContainer = ProviderContainer(
           overrides: [
-            puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-            gameAudioServiceProvider.overrideWithValue(mockAudioService),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+            ...commonOverrides(audioService: mockAudioService),
             puzzleLoaderProvider.overrideWithValue(
               AsyncValue.data(
                 GameBoard(
@@ -1427,9 +1434,7 @@ void main() {
       // Word is fully filled with wrong letters, user wants to correct one
       final testContainer = ProviderContainer(
         overrides: [
-          puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
-          gameAudioServiceProvider.overrideWithValue(mockAudioService),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
+          ...commonOverrides(audioService: mockAudioService),
           puzzleLoaderProvider.overrideWithValue(
             AsyncValue.data(
               GameBoard(

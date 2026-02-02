@@ -61,7 +61,8 @@ void main() {
   group('OnboardingScreen', () {
     testWidgets('renders all pages and navigates', (tester) async {
       await tester.pumpWidget(buildTestApp());
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       // Check Step 1
       expect(find.text('Welcome to Croiz'), findsOneWidget);
@@ -69,22 +70,26 @@ void main() {
 
       // Tap Next (1 -> 2)
       await tester.tap(find.text('Next'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('How to Play'), findsOneWidget);
 
       // Tap Next (2 -> 3)
       await tester.tap(find.text('Next'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('Switch Direction'), findsOneWidget);
 
       // Tap Next (3 -> 4)
       await tester.tap(find.text('Next'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
       expect(find.text('Word Completion'), findsOneWidget);
 
       // Tap Next (4 -> 5)
       await tester.tap(find.text('Next'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
       expect(find.text("You're All Set!"), findsOneWidget);
       expect(
         find.text('Get Started'),
@@ -93,7 +98,8 @@ void main() {
 
       // Tap Done
       await tester.tap(find.text('Get Started'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       // Verify completion (mocks should record call ideally, but verifyInOrder needs generated mocks)
       // Since I used manual Mock class extension without Mockito generation features fully,
@@ -103,11 +109,13 @@ void main() {
 
     testWidgets('skip button completes onboarding', (tester) async {
       await tester.pumpWidget(buildTestApp());
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       expect(find.text('Skip'), findsOneWidget);
       await tester.tap(find.text('Skip'));
-      await tester.pump(const Duration(milliseconds: 500));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
 
       // Should trigger completion (we can't easily verify the side effect without better mocks or spy)
     });

@@ -16,7 +16,8 @@ import 'package:croiz/services/providers.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
-
+import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'helpers/fake_monetization_service.dart';
 import 'test_utils/fake_audio_service.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 
@@ -63,6 +64,9 @@ void main() {
             ]),
           ),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
+          monetizationServiceProvider.overrideWith(
+            (ref) => FakeMonetizationService(),
+          ),
         ],
         child: Sizer(
           builder:

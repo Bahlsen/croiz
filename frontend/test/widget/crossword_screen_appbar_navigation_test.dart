@@ -3,6 +3,8 @@ import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
 import '../helpers/fake_puzzle_storage.dart';
+import '../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
@@ -36,6 +38,9 @@ void main() {
               const AsyncValue.data(<PuzzleDescriptor>[]),
             ),
             puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+            monetizationServiceProvider.overrideWith(
+              (ref) => FakeMonetizationService(),
+            ),
           ],
           child: Sizer(
             builder:

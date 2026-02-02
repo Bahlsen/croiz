@@ -91,15 +91,18 @@ final class StatisticsServiceProvider
         dependencies: <ProviderOrFamily>[
           appDatabaseProvider,
           achievementServiceProvider,
+          achievementNotifier,
         ],
         $allTransitiveDependencies: <ProviderOrFamily>[
           StatisticsServiceProvider.$allTransitiveDependencies0,
           StatisticsServiceProvider.$allTransitiveDependencies1,
+          StatisticsServiceProvider.$allTransitiveDependencies2,
         ],
       );
 
   static final $allTransitiveDependencies0 = appDatabaseProvider;
   static final $allTransitiveDependencies1 = achievementServiceProvider;
+  static final $allTransitiveDependencies2 = achievementNotifier;
 
   @override
   String debugGetCreateSourceHash() => _$statisticsServiceHash();
@@ -124,7 +127,7 @@ final class StatisticsServiceProvider
   }
 }
 
-String _$statisticsServiceHash() => r'27a0549ec90c554daf631479b4b1f31da1fba6b0';
+String _$statisticsServiceHash() => r'80363e5a1f02cc8153f4ef4c8dbfdcef7389ff7d';
 
 /// Provider for all unlocked achievements.
 
@@ -203,11 +206,12 @@ final class UserStatsProvider
         name: r'userStatsProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[statisticsServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           UserStatsProvider.$allTransitiveDependencies0,
           UserStatsProvider.$allTransitiveDependencies1,
           UserStatsProvider.$allTransitiveDependencies2,
-        ],
+          UserStatsProvider.$allTransitiveDependencies3,
+        },
       );
 
   static final $allTransitiveDependencies0 = statisticsServiceProvider;
@@ -215,6 +219,8 @@ final class UserStatsProvider
       StatisticsServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       StatisticsServiceProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      StatisticsServiceProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$userStatsHash();
@@ -264,6 +270,8 @@ final class RecentCompletionsProvider
       StatisticsServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       StatisticsServiceProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      StatisticsServiceProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$recentCompletionsHash();
@@ -309,11 +317,12 @@ final class RecentCompletionsFamily extends $Family
         retry: null,
         name: r'recentCompletionsProvider',
         dependencies: <ProviderOrFamily>[statisticsServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           RecentCompletionsProvider.$allTransitiveDependencies0,
           RecentCompletionsProvider.$allTransitiveDependencies1,
           RecentCompletionsProvider.$allTransitiveDependencies2,
-        ],
+          RecentCompletionsProvider.$allTransitiveDependencies3,
+        },
         isAutoDispose: true,
       );
 
@@ -350,11 +359,12 @@ final class AllCompletionsProvider
         name: r'allCompletionsProvider',
         isAutoDispose: true,
         dependencies: <ProviderOrFamily>[statisticsServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           AllCompletionsProvider.$allTransitiveDependencies0,
           AllCompletionsProvider.$allTransitiveDependencies1,
           AllCompletionsProvider.$allTransitiveDependencies2,
-        ],
+          AllCompletionsProvider.$allTransitiveDependencies3,
+        },
       );
 
   static final $allTransitiveDependencies0 = statisticsServiceProvider;
@@ -362,6 +372,8 @@ final class AllCompletionsProvider
       StatisticsServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       StatisticsServiceProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      StatisticsServiceProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$allCompletionsHash();

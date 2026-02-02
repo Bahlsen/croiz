@@ -28,6 +28,10 @@ void main() {
       // Simulate a small phone screen (320x480)
       tester.view.physicalSize = const Size(320, 480);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -36,15 +40,16 @@ void main() {
       expect(find.byType(Scaffold), findsOneWidget);
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byType(ElevatedButton), findsOneWidget);
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
 
     testWidgets('renders correctly on medium screen', (tester) async {
       // Simulate a typical phone screen (400x800)
       tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -52,15 +57,16 @@ void main() {
       expect(find.byType(Scaffold), findsOneWidget);
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byType(ElevatedButton), findsOneWidget);
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
 
     testWidgets('renders correctly on large screen', (tester) async {
       // Simulate a tablet screen (800x1200)
       tester.view.physicalSize = const Size(800, 1200);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -68,14 +74,15 @@ void main() {
       expect(find.byType(Scaffold), findsOneWidget);
       expect(find.byType(AppBar), findsOneWidget);
       expect(find.byType(ElevatedButton), findsOneWidget);
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
 
     testWidgets('button has accessible touch target size', (tester) async {
       tester.view.physicalSize = const Size(400, 800);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -90,9 +97,6 @@ void main() {
       // Button should have minimum touch target of 48x48 (accessibility)
       expect(buttonSize.height, greaterThanOrEqualTo(36));
       expect(buttonSize.width, greaterThanOrEqualTo(48));
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
   });
 
@@ -116,6 +120,10 @@ void main() {
     testWidgets('text is readable on small screens', (tester) async {
       tester.view.physicalSize = const Size(320, 480);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -129,14 +137,15 @@ void main() {
           expect(fontSize, greaterThanOrEqualTo(8));
         }
       }
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
 
     testWidgets('text scales appropriately on large screens', (tester) async {
       tester.view.physicalSize = const Size(1200, 1920);
       tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       await tester.pumpWidget(createTestApp());
       await tester.pumpAndSettle();
@@ -152,9 +161,6 @@ void main() {
           expect(fontSize, lessThanOrEqualTo(200));
         }
       }
-
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
     });
   });
 }

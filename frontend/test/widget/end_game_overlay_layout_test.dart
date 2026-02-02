@@ -6,6 +6,10 @@ import 'package:croiz/features/game/widgets/content/crossword_content.dart';
 import 'package:croiz/features/game/controllers/crossword_input_controller.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:croiz/services/persistence/storage_provider.dart';
+import '../helpers/fake_puzzle_storage.dart';
 
 void main() {
   testWidgets('EndGameOverlay sits above content when puzzle solved', (
@@ -41,6 +45,10 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        monetizationServiceProvider.overrideWith(
+          (ref) => FakeMonetizationService(),
+        ),
+        puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
       ],
     );
     addTearDown(container.dispose);

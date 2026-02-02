@@ -61,6 +61,7 @@ final class SelectedWordCellsProvider
           SelectedWordCellsProvider.$allTransitiveDependencies23,
           SelectedWordCellsProvider.$allTransitiveDependencies24,
           SelectedWordCellsProvider.$allTransitiveDependencies25,
+          SelectedWordCellsProvider.$allTransitiveDependencies26,
         },
       );
 
@@ -96,7 +97,7 @@ final class SelectedWordCellsProvider
   static final $allTransitiveDependencies16 =
       GameBoardNotifierProvider.$allTransitiveDependencies13;
   static final $allTransitiveDependencies17 =
-      GameBoardNotifierProvider.$allTransitiveDependencies15;
+      GameBoardNotifierProvider.$allTransitiveDependencies14;
   static final $allTransitiveDependencies18 =
       GameBoardNotifierProvider.$allTransitiveDependencies16;
   static final $allTransitiveDependencies19 =
@@ -113,6 +114,8 @@ final class SelectedWordCellsProvider
       GameBoardNotifierProvider.$allTransitiveDependencies22;
   static final $allTransitiveDependencies25 =
       GameBoardNotifierProvider.$allTransitiveDependencies23;
+  static final $allTransitiveDependencies26 =
+      GameBoardNotifierProvider.$allTransitiveDependencies24;
 
   @override
   String debugGetCreateSourceHash() => _$selectedWordCellsHash();
@@ -219,6 +222,8 @@ final class CellInSelectedWordProvider
       SelectedWordCellsProvider.$allTransitiveDependencies24;
   static final $allTransitiveDependencies26 =
       SelectedWordCellsProvider.$allTransitiveDependencies25;
+  static final $allTransitiveDependencies27 =
+      SelectedWordCellsProvider.$allTransitiveDependencies26;
 
   @override
   String debugGetCreateSourceHash() => _$cellInSelectedWordHash();
@@ -302,6 +307,7 @@ final class CellInSelectedWordFamily extends $Family
           CellInSelectedWordProvider.$allTransitiveDependencies24,
           CellInSelectedWordProvider.$allTransitiveDependencies25,
           CellInSelectedWordProvider.$allTransitiveDependencies26,
+          CellInSelectedWordProvider.$allTransitiveDependencies27,
         },
         isAutoDispose: false,
       );

@@ -1,41 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/services.dart';
+
 import 'package:sizer/sizer.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/widgets/continue_playing_section.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/features/puzzles/widgets/puzzle_card.dart';
 import 'package:croiz/l10n/app_localizations.dart';
-import 'package:croiz/features/puzzles/widgets/puzzles_filter_row.dart';
+import 'package:croiz/features/puzzles/widgets/quick_difficulty_selector.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../helpers/fake_monetization_service.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:croiz/features/puzzles/puzzle_filter_provider.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-
-  // Mock Google Mobile Ads platform channel
-  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-      .setMockMethodCallHandler(
-        const MethodChannel('plugins.flutter.io/google_mobile_ads'),
-        (call) async {
-          if (call.method == 'init') {
-            return null;
-          }
-          if (call.method == 'loadAd') {
-            // Return successful load response structure if needed?
-            // For BannerAd, it likely expects nothing or a generic success.
-            // Based on source, loadAd returns Future<void>.
-            return null;
-          }
-          if (call.method == 'disposeAd') {
-            return null;
-          }
-          return null;
-        },
-      );
 
   final testPuzzles = [
     PuzzleDescriptor(
@@ -77,8 +57,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -95,7 +76,7 @@ void main() {
     expect(find.byType(ContinuePlayingSection), findsOneWidget);
   });
 
-  testWidgets('shows PuzzlesFilterRow below ContinuePlayingSection', (
+  testWidgets('shows QuickDifficultySelector below ContinuePlayingSection', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -104,8 +85,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -118,8 +100,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Filter chips should be visible (inside PuzzlesFilterRow)
-    expect(find.byType(PuzzlesFilterRow), findsOneWidget);
+    // QuickDifficultySelector should be visible
+    expect(find.byType(QuickDifficultySelector), findsOneWidget);
   });
 
   testWidgets('list shows all puzzles initially', (tester) async {
@@ -129,8 +111,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -156,8 +139,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -170,8 +154,10 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // App bar should show count (3 puzzles)
-    expect(find.text('3'), findsOneWidget);
+    // App bar should show title "Puzzles"
+    expect(find.text('Puzzles'), findsOneWidget);
+    // Count is not shown in app bar in new design
+    expect(find.text('3'), findsNothing);
   });
 
   testWidgets('shows loading indicator while loading', (tester) async {
@@ -187,8 +173,9 @@ void main() {
           ),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -219,8 +206,9 @@ void main() {
           ),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -259,8 +247,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => manyPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           home: Sizer(
@@ -286,8 +275,9 @@ void main() {
           puzzlesProvider.overrideWith((ref) async => testPuzzles),
           inProgressPuzzlesProvider.overrideWith((ref) async => []),
           monetizationServiceProvider.overrideWith(
-            (ref) => MockMonetizationService(),
+            (ref) => FakeMonetizationService(),
           ),
+          puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -323,8 +313,9 @@ void main() {
             puzzlesProvider.overrideWith((ref) async => testPuzzles),
             inProgressPuzzlesProvider.overrideWith((ref) async => []),
             monetizationServiceProvider.overrideWith(
-              (ref) => MockMonetizationService(),
+              (ref) => FakeMonetizationService(),
             ),
+            puzzleFilterProvider.overrideWith(FakePuzzleFilter.new),
           ],
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -342,6 +333,12 @@ void main() {
       // Initially, all 3 puzzles should be visible
       expect(find.text('Easy Puzzle'), findsOneWidget);
       expect(find.text('Medium Puzzle'), findsOneWidget);
+
+      // Open filters first
+      // QuickDifficultySelector has an expand toggle matching IconButton with expand_more/less
+      // Or we can tap the selector itself if it exposes a button.
+      await tester.tap(find.byIcon(Icons.tune));
+      await tester.pumpAndSettle();
 
       // Find and enter text in search bar
       final searchField = find.byType(TextField);
@@ -365,47 +362,10 @@ void main() {
   );
 }
 
-class MockMonetizationService implements MonetizationService {
+class FakePuzzleFilter extends PuzzleFilter {
   @override
-  String get bannerAdUnitId => 'test_banner_id';
-
-  @override
-  String get interstitialAdUnitId => 'test_interstitial_id';
-
-  @override
-  BannerAd createBannerAd({
-    required void Function(Ad) onAdLoaded,
-    required void Function(Ad, LoadAdError) onAdFailedToLoad,
-  }) {
-    final ad = FakeBannerAd(onAdLoaded);
-    return ad;
-  }
-
-  @override
-  void showInterstitialAd() {}
-}
-
-class FakeBannerAd extends BannerAd {
-  FakeBannerAd(this.onLoadedCallback)
-    : super(
-        adUnitId: 'test',
-        size: AdSize.banner,
-        request: const AdRequest(),
-        listener: const BannerAdListener(),
-      );
-
-  final void Function(Ad) onLoadedCallback;
-
-  @override
-  Future<void> load() async {
-    // Wait for super.load() to complete so internal state is updated by mocked platform channel
-    await super.load();
-    // Then notify the listener (which updates BannerAdWidget state)
-    onLoadedCallback(this);
-  }
-
-  @override
-  Future<void> dispose() async {
-    await super.dispose();
-  }
+  PuzzleFilterState build() => const PuzzleFilterState(
+    selectedDifficulties: {1, 2, 3, 4, 5},
+    selectedLanguages: {},
+  );
 }

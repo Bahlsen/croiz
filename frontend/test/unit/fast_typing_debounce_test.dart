@@ -28,6 +28,9 @@ class CountingAudioService implements GameAudioService {
   int victoryCount = 0;
 
   @override
+  Future<void> playAchievement() async {}
+
+  @override
   Future<void> playType() async {
     typeCount++;
   }

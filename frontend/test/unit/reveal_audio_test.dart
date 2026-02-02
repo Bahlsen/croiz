@@ -20,6 +20,9 @@ class MockAudio implements GameAudioService {
   Future<void> playReveal() async => reveal++;
 
   @override
+  Future<void> playAchievement() async {}
+
+  @override
   Future<void> playDelete() async {}
 
   @override

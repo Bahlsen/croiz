@@ -1,7 +1,7 @@
 # 🧩 Crossword Generation Engine - Unified Documentation
 
-**Version**: 3.14 (January 11, 2026)  
-**Status**: PRODUCTION READY (v3.14)
+**Version**: 3.16 (February 1, 2026)  
+**Status**: PRODUCTION READY (v3.16)
 
 > **Note (v3.14)**: Added deterministic template generation for robust testing.
 > 1. **Skeleton Retry Loop**: Up to 5 skeleton attempts with early validation before CSP solving.
@@ -11,10 +11,11 @@
 > 5. **AC-3 Optimization**: O(d) revise complexity (down from O(d²)).
 > 6. **Determinism**: Introduced `forceStyle` parameter for `GridFirstGenerator` to control template selection in tests.
 >
-> **Note (v3.15)**: Integrated User Statistics & Progress Tracking.
-> 1. **Persistent Metrics**: Added `hintsUsed` and `wordsRevealed` to game persistence.
-> 2. **Global Stats**: Implemented streak calculation and total playtime tracking via `StatisticsService`.
-> 3. **Accuracy Tracking**: Individual puzzle accuracy is now recorded on completion.
+> **Note (v3.16)**: UI Stability & Test suite Audit.
+> 1. **Mock Monetization**: Fully transitioned widget tests to `FakeMonetizationService` to avoid AdMob dependency failures.
+> 2. **Animation Control**: Standardized `pumpAndSettle` vs `pump` sequences for onboarding and overlays to prevent test timeouts.
+> 3. **Environment Isolation**: Improved `VirtualKeyboard` and `Responsive` test reliability via `Sizer` injection and `addTearDown` view resets.
+> 4. **List Performance**: Refactored `filteredPuzzlesProvider` for cleaner expression-based logic.
 
 
 ---

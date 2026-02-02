@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
+import '../helpers/fake_monetization_service.dart';
 
 void main() {
   testWidgets('Menu Home item navigates to Puzzles list', (tester) async {
@@ -31,6 +33,11 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
+        overrides: [
+          monetizationServiceProvider.overrideWith(
+            (ref) => FakeMonetizationService(),
+          ),
+        ],
         child: Sizer(
           builder:
               (context, orientation, deviceType) => MaterialApp.router(

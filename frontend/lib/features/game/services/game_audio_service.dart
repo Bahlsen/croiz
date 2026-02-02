@@ -31,6 +31,7 @@ class GameAudioService implements AudioService {
   AudioPlayer? _successPlayer;
   AudioPlayer? _victoryPlayer;
   AudioPlayer? _revealPlayer;
+  AudioPlayer? _achievementPlayer;
   bool _initialized = false;
   final Completer<void> _ready = Completer<void>();
 
@@ -65,6 +66,7 @@ class GameAudioService implements AudioService {
       _successPlayer = AudioPlayer();
       _victoryPlayer = AudioPlayer();
       _revealPlayer = AudioPlayer();
+      _achievementPlayer = AudioPlayer();
 
       // Set release mode to STOP - keeps resources loaded for quick replay
       await Future.wait([
@@ -73,6 +75,7 @@ class GameAudioService implements AudioService {
         _successPlayer!.setReleaseMode(ReleaseMode.stop),
         _victoryPlayer!.setReleaseMode(ReleaseMode.stop),
         _revealPlayer!.setReleaseMode(ReleaseMode.stop),
+        _achievementPlayer!.setReleaseMode(ReleaseMode.stop),
       ]);
 
       // Pre-load and play once silently to fully initialize
@@ -82,6 +85,9 @@ class GameAudioService implements AudioService {
         _successPlayer!.setSource(AssetSource('audio/success.wav')),
         _victoryPlayer!.setSource(AssetSource('audio/victory.wav')),
         _revealPlayer!.setSource(AssetSource('audio/reveal.wav')),
+        _achievementPlayer!.setSource(
+          AssetSource('audio/victory.wav'),
+        ), // Reuse victory for achievement
       ]);
 
       // Set volume to 0, play, then restore volume - ensures player is ready
@@ -208,6 +214,22 @@ class GameAudioService implements AudioService {
     unawaited(_replayFast(_revealPlayer!));
   }
 
+  @override
+  Future<void> playAchievement() async {
+    try {
+      WidgetsBinding.instance;
+      if (!_initialized && !_ready.isCompleted) {
+        unawaited(_init());
+      }
+    } on Object {
+      return;
+    }
+    if (!_initialized || _achievementPlayer == null) {
+      return;
+    }
+    unawaited(_replayFast(_achievementPlayer!));
+  }
+
   /// Fast replay: seek to start and resume without stopping.
   /// This is much faster than stop→seek→resume.
   Future<void> _replayFast(AudioPlayer player) async {
@@ -227,5 +249,6 @@ class GameAudioService implements AudioService {
     await _successPlayer?.dispose();
     await _victoryPlayer?.dispose();
     await _revealPlayer?.dispose();
+    await _achievementPlayer?.dispose();
   }
 }

@@ -28,11 +28,12 @@ final class GameEndgameServiceProvider
         name: r'gameEndgameServiceProvider',
         isAutoDispose: false,
         dependencies: <ProviderOrFamily>[statisticsServiceProvider],
-        $allTransitiveDependencies: <ProviderOrFamily>[
+        $allTransitiveDependencies: <ProviderOrFamily>{
           GameEndgameServiceProvider.$allTransitiveDependencies0,
           GameEndgameServiceProvider.$allTransitiveDependencies1,
           GameEndgameServiceProvider.$allTransitiveDependencies2,
-        ],
+          GameEndgameServiceProvider.$allTransitiveDependencies3,
+        },
       );
 
   static final $allTransitiveDependencies0 = statisticsServiceProvider;
@@ -40,6 +41,8 @@ final class GameEndgameServiceProvider
       StatisticsServiceProvider.$allTransitiveDependencies0;
   static final $allTransitiveDependencies2 =
       StatisticsServiceProvider.$allTransitiveDependencies1;
+  static final $allTransitiveDependencies3 =
+      StatisticsServiceProvider.$allTransitiveDependencies2;
 
   @override
   String debugGetCreateSourceHash() => _$gameEndgameServiceHash();

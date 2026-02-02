@@ -28,6 +28,9 @@ class _ImmediateAudioService implements AudioService {
 
   @override
   Future<void> playReveal() async {}
+
+  @override
+  Future<void> playAchievement() async {}
 }
 
 void main() {

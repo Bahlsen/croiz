@@ -2,6 +2,7 @@ import 'package:croiz/data/db/database_provider.dart';
 import 'package:croiz/features/statistics/models/achievement.dart';
 import 'package:croiz/features/statistics/models/puzzle_stat.dart';
 import 'package:croiz/features/statistics/models/user_stats.dart';
+import 'package:croiz/features/statistics/providers/achievement_notifier.dart';
 import 'package:croiz/features/statistics/services/achievement_service.dart';
 import 'package:croiz/features/statistics/services/statistics_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,11 +17,20 @@ AchievementService achievementService(Ref ref) {
 }
 
 /// Provider for the StatisticsService instance.
-@Riverpod(keepAlive: true, dependencies: [appDatabase, achievementService])
+@Riverpod(
+  keepAlive: true,
+  dependencies: [appDatabase, achievementService, AchievementNotifier],
+)
 StatisticsService statisticsService(Ref ref) {
   final db = ref.watch(appDatabaseProvider);
   final achievements = ref.watch(achievementServiceProvider);
-  return StatisticsService(db, achievementService: achievements);
+  final notifier = ref.watch(achievementNotifier.notifier);
+
+  return StatisticsService(
+    db,
+    achievementService: achievements,
+    onAchievementsUnlocked: notifier.notifyAchievements,
+  );
 }
 
 /// Provider for all unlocked achievements.

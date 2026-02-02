@@ -7,6 +7,8 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 class TestSecureStorage extends FlutterSecureStorage {
   final Map<String, String> _map = {};
@@ -82,6 +84,9 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
+        monetizationServiceProvider.overrideWith(
+          (ref) => FakeMonetizationService(),
+        ),
       ],
     );
     addTearDown(container.dispose);

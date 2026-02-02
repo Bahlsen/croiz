@@ -18,6 +18,9 @@ abstract class AudioService {
   /// Plays the reveal effect sound (wow factor).
   Future<void> playReveal();
 
+  /// Plays the achievement unlocked sound effect.
+  Future<void> playAchievement();
+
   /// Future that completes when the service is fully initialized.
   Future<void> get ready;
 

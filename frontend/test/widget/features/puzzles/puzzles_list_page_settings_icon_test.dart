@@ -6,6 +6,8 @@ import 'package:croiz/features/puzzles/puzzles_provider.dart';
 import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
 import '../../../helpers/fake_puzzle_storage.dart';
+import '../../../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 void main() {
   testWidgets('shows settings icon in app bar leading position', (
@@ -16,6 +18,9 @@ void main() {
         overrides: [
           puzzlesProvider.overrideWith((ref) async => []),
           puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+          monetizationServiceProvider.overrideWith(
+            (ref) => FakeMonetizationService(),
+          ),
         ],
         child: MaterialApp(
           home: Sizer(

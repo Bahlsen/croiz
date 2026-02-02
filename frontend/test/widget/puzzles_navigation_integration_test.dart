@@ -12,6 +12,8 @@ import '../helpers/fake_puzzle_storage.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 void main() {
   testWidgets('Navigate from list to crossword and load board', (tester) async {
@@ -60,6 +62,9 @@ void main() {
             (String path) async => fakeBoard,
           ),
           puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+          monetizationServiceProvider.overrideWith(
+            (ref) => FakeMonetizationService(),
+          ),
         ],
         child: Sizer(
           builder:

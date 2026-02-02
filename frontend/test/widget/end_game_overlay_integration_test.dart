@@ -7,6 +7,8 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/persistence/storage_provider.dart';
 import '../helpers/fake_puzzle_storage.dart';
+import '../helpers/fake_monetization_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 
 void main() {
   testWidgets('EndGameOverlay appears when controller completes all words', (
@@ -44,6 +46,9 @@ void main() {
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
         puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+        monetizationServiceProvider.overrideWith(
+          (ref) => FakeMonetizationService(),
+        ),
       ],
     );
     addTearDown(container.dispose);
@@ -128,6 +133,9 @@ void main() {
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
         puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+        monetizationServiceProvider.overrideWith(
+          (ref) => FakeMonetizationService(),
+        ),
         flashClearDelayProvider.overrideWithValue(Duration.zero),
         wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],
@@ -226,6 +234,9 @@ void main() {
       overrides: [
         puzzleLoaderProvider.overrideWithValue(AsyncValue.data(board)),
         puzzleStorageProvider.overrideWithValue(FakePuzzleStorage()),
+        monetizationServiceProvider.overrideWith(
+          (ref) => FakeMonetizationService(),
+        ),
         flashClearDelayProvider.overrideWithValue(Duration.zero),
         wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
       ],

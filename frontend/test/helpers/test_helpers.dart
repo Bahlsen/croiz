@@ -7,6 +7,9 @@ import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
 import 'fake_puzzle_storage.dart';
 import 'fake_audio_service.dart';
+import 'fake_statistics_service.dart';
+import 'package:croiz/features/statistics/providers/statistics_providers.dart';
+import 'package:croiz/features/statistics/providers/achievement_notifier.dart';
 
 /// A fake implementation of PreferencePersistenceService that uses in-memory storage.
 class FakePreferencePersistenceService implements PreferencePersistenceService {
@@ -47,6 +50,9 @@ List<dynamic> commonOverrides({
   wordCheckDebounceDelayProvider.overrideWithValue(
     wordCheckDebounceDelay ?? Duration.zero,
   ),
+  statisticsServiceProvider.overrideWith((ref) => FakeStatisticsService()),
+  achievementServiceProvider.overrideWith((ref) => FakeAchievementService([])),
+  achievementNotifier.overrideWith(AchievementNotifier.new),
 ];
 
 /// Creates a [ProviderContainer] for testing with common overrides.

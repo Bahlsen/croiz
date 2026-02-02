@@ -3,64 +3,13 @@ import 'package:croiz/features/statistics/models/puzzle_stat.dart';
 import 'package:croiz/features/statistics/models/user_stats.dart';
 import 'package:croiz/features/statistics/providers/statistics_providers.dart';
 import 'package:croiz/features/statistics/screens/statistics_screen.dart';
-import 'package:croiz/features/statistics/services/achievement_service.dart';
-import 'package:croiz/features/statistics/services/statistics_service.dart';
 import 'package:croiz/features/statistics/widgets/stats_summary_card.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sizer/sizer.dart';
-
-// ignore: must_be_immutable
-class FakeStatisticsService implements StatisticsService {
-  FakeStatisticsService(this.stats, this.allPuzzles);
-
-  final UserStats stats;
-  final List<PuzzleStat> allPuzzles;
-
-  @override
-  Future<UserStats> getOrInitUserStats() async => stats;
-
-  @override
-  Stream<UserStats> watchUserStats() => Stream.value(stats);
-
-  @override
-  Stream<List<PuzzleStat>> watchRecentCompletions({int limit = 10}) =>
-      Stream.value(allPuzzles.take(limit).toList());
-
-  @override
-  Future<List<PuzzleStat>> getAllCompletions() async => allPuzzles;
-
-  @override
-  AchievementService? get achievementService => null;
-
-  @override
-  Future<void> recordPuzzleCompletion({
-    required String puzzleId,
-    required int timeSeconds,
-    required int totalWords,
-    required int wordsFound,
-    required int hintsUsed,
-    required double accuracy,
-    required int wordsRevealed,
-  }) async {}
-}
-
-class FakeAchievementService implements AchievementService {
-  FakeAchievementService(this.unlocked);
-
-  final List<AchievementId> unlocked;
-
-  @override
-  Future<List<AchievementId>> getUnlockedAchievements() async => unlocked;
-
-  @override
-  Future<List<AchievementId>> checkAchievements(
-    UserStats stats,
-    PuzzleStat lastPuzzle,
-  ) async => [];
-}
+import '../../../helpers/fake_statistics_service.dart';
 
 void main() {
   testWidgets('StatisticsScreen renders correctly with data', (tester) async {
@@ -85,8 +34,8 @@ void main() {
     final mockUnlocked = [AchievementId.firstPuzzle];
 
     final fakeStatsService = FakeStatisticsService(
-      mockUserStats,
-      mockAllCompletions,
+      stats: mockUserStats,
+      allPuzzles: mockAllCompletions,
     );
     final fakeAchievementService = FakeAchievementService(mockUnlocked);
 

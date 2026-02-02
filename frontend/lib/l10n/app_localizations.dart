@@ -68,8 +68,7 @@ import 'app_localizations_uk.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -77,8 +76,7 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate =
-      _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -90,13 +88,12 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
-      <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -107,7 +104,7 @@ abstract class AppLocalizations {
     Locale('it'),
     Locale('pt'),
     Locale('ru'),
-    Locale('uk'),
+    Locale('uk')
   ];
 
   /// No description provided for @appTitle.
@@ -937,10 +934,129 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 Day} other{{count} Days}}'**
   String dayStreak(int count);
+
+  /// No description provided for @achievementUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievement Unlocked!'**
+  String get achievementUnlocked;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @achievement_firstPuzzle_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting Started'**
+  String get achievement_firstPuzzle_title;
+
+  /// No description provided for @achievement_firstPuzzle_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your first crossword puzzle.'**
+  String get achievement_firstPuzzle_desc;
+
+  /// No description provided for @achievement_tenPuzzles_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Solver'**
+  String get achievement_tenPuzzles_title;
+
+  /// No description provided for @achievement_tenPuzzles_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete 10 crossword puzzles.'**
+  String get achievement_tenPuzzles_desc;
+
+  /// No description provided for @achievement_hundredPuzzles_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Crossword Master'**
+  String get achievement_hundredPuzzles_title;
+
+  /// No description provided for @achievement_hundredPuzzles_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete 100 crossword puzzles.'**
+  String get achievement_hundredPuzzles_desc;
+
+  /// No description provided for @achievement_weekStreak_title.
+  ///
+  /// In en, this message translates to:
+  /// **'On Fire!'**
+  String get achievement_weekStreak_title;
+
+  /// No description provided for @achievement_weekStreak_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a 7-day completion streak.'**
+  String get achievement_weekStreak_desc;
+
+  /// No description provided for @achievement_monthStreak_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Unstoppable'**
+  String get achievement_monthStreak_title;
+
+  /// No description provided for @achievement_monthStreak_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep a 30-day completion streak.'**
+  String get achievement_monthStreak_desc;
+
+  /// No description provided for @achievement_speedDemon_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Speed Demon'**
+  String get achievement_speedDemon_title;
+
+  /// No description provided for @achievement_speedDemon_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a puzzle in under 3 minutes.'**
+  String get achievement_speedDemon_desc;
+
+  /// No description provided for @achievement_perfectPuzzle_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect Play'**
+  String get achievement_perfectPuzzle_title;
+
+  /// No description provided for @achievement_perfectPuzzle_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete a puzzle without hints and 100% accuracy.'**
+  String get achievement_perfectPuzzle_desc;
+
+  /// No description provided for @achievement_polyglot_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Polyglot'**
+  String get achievement_polyglot_title;
+
+  /// No description provided for @achievement_polyglot_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete puzzles in 3 different languages.'**
+  String get achievement_polyglot_desc;
+
+  /// No description provided for @achievement_generator_title.
+  ///
+  /// In en, this message translates to:
+  /// **'The Creator'**
+  String get achievement_generator_title;
+
+  /// No description provided for @achievement_generator_desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate and complete 5 custom puzzles.'**
+  String get achievement_generator_desc;
 }
 
-class _AppLocalizationsDelegate
-    extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -949,46 +1065,31 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) => <String>[
-    'de',
-    'en',
-    'es',
-    'fr',
-    'it',
-    'pt',
-    'ru',
-    'uk',
-  ].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['de', 'en', 'es', 'fr', 'it', 'pt', 'ru', 'uk'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
+
+
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'de':
-      return AppLocalizationsDe();
-    case 'en':
-      return AppLocalizationsEn();
-    case 'es':
-      return AppLocalizationsEs();
-    case 'fr':
-      return AppLocalizationsFr();
-    case 'it':
-      return AppLocalizationsIt();
-    case 'pt':
-      return AppLocalizationsPt();
-    case 'ru':
-      return AppLocalizationsRu();
-    case 'uk':
-      return AppLocalizationsUk();
+    case 'de': return AppLocalizationsDe();
+    case 'en': return AppLocalizationsEn();
+    case 'es': return AppLocalizationsEs();
+    case 'fr': return AppLocalizationsFr();
+    case 'it': return AppLocalizationsIt();
+    case 'pt': return AppLocalizationsPt();
+    case 'ru': return AppLocalizationsRu();
+    case 'uk': return AppLocalizationsUk();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
+    'that was used.'
   );
 }

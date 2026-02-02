@@ -9,6 +9,8 @@ import 'package:croiz/features/game/screens/crossword_screen.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/services/persistence/storage_provider.dart'; // for puzzleStorageProvider
 import '../helpers/fake_puzzle_storage.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
+import '../helpers/fake_monetization_service.dart';
 import 'package:croiz/features/onboarding/providers/onboarding_provider.dart';
 import 'package:croiz/features/onboarding/services/onboarding_service.dart';
 
@@ -65,6 +67,9 @@ void main() {
           ),
           // Override onboarding to be completed so we don't redirect
           onboardingServiceProvider.overrideWithValue(MockOnboardingService()),
+          monetizationServiceProvider.overrideWith(
+            (ref) => FakeMonetizationService(),
+          ),
         ],
       );
       addTearDown(container.dispose);

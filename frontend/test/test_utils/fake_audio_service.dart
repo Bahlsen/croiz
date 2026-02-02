@@ -9,10 +9,16 @@ class FakeAudioService implements AudioService {
   int successCount = 0;
   int victoryCount = 0;
   int revealCount = 0;
+  int achievementCount = 0;
 
   @override
   Future<void> playReveal() async {
     revealCount++;
+  }
+
+  @override
+  Future<void> playAchievement() async {
+    achievementCount++;
   }
 
   @override

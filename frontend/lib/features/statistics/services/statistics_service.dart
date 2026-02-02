@@ -1,4 +1,5 @@
 import 'package:croiz/data/db/app_database.dart';
+import 'package:croiz/features/statistics/models/achievement.dart';
 import 'package:croiz/features/statistics/models/puzzle_stat.dart';
 import 'package:croiz/features/statistics/models/user_stats.dart';
 import 'package:croiz/features/statistics/services/achievement_service.dart';
@@ -7,10 +8,15 @@ import 'package:logger/logger.dart';
 
 /// Service responsible for managing user and puzzle statistics.
 class StatisticsService {
-  StatisticsService(this._db, {this.achievementService});
+  StatisticsService(
+    this._db, {
+    this.achievementService,
+    this.onAchievementsUnlocked,
+  });
 
   final AppDatabase _db;
   final AchievementService? achievementService;
+  final void Function(List<AchievementId>)? onAchievementsUnlocked;
   final Logger _logger = Logger();
 
   /// Loads the global user statistics.
@@ -186,7 +192,7 @@ class StatisticsService {
         );
         if (newAchievements.isNotEmpty) {
           _logger.i('Unlocked achievements: $newAchievements');
-          // In future, we could return this list or emit it via a stream
+          onAchievementsUnlocked?.call(newAchievements);
         }
       }
 
