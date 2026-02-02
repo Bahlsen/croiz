@@ -84,7 +84,7 @@ class AchievementListener extends ConsumerWidget {
     // Wait for any fullscreen ad to be dismissed before showing achievements.
     // We poll for up to 500ms to catch ads that are about to show.
     final startTime = DateTime.now();
-    const maxWaitDuration = Duration(seconds: 10);
+    const maxWaitDuration = Duration(seconds: 60);
     const adStartGracePeriod = Duration(milliseconds: 500);
 
     while (monetizationService.isAdShowing.value ||
