@@ -192,8 +192,17 @@ class StatisticsService {
         );
         if (newAchievements.isNotEmpty) {
           _logger.i('Unlocked achievements: $newAchievements');
-          onAchievementsUnlocked?.call(newAchievements);
+          if (onAchievementsUnlocked != null) {
+            _logger.i('Calling onAchievementsUnlocked callback...');
+            onAchievementsUnlocked?.call(newAchievements);
+          } else {
+            _logger.w('onAchievementsUnlocked callback is NULL!');
+          }
+        } else {
+          _logger.d('No new achievements unlocked');
         }
+      } else {
+        _logger.w('achievementService is NULL!');
       }
 
       _logger.i('Puzzle completion recorded successfully.');

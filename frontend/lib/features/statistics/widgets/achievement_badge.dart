@@ -1,5 +1,5 @@
 import 'package:croiz/features/statistics/models/achievement.dart';
-
+import 'package:croiz/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -82,51 +82,50 @@ class AchievementBadge extends StatelessWidget {
   }
 
   String _getTitle(BuildContext context) {
-    // final l10n = AppLocalizations.of(context)!;
-    // Map id to l10n keys manually as codegen for dynamic keys is hard or use simple map
-    // For this iteration, I'll return hardcoded defaults if l10n key missing
+    final l10n = AppLocalizations.of(context)!;
     switch (id) {
       case AchievementId.firstPuzzle:
-        return 'First Steps';
+        return l10n.achievement_firstPuzzle_title;
       case AchievementId.tenPuzzles:
-        return 'Getting Serious';
+        return l10n.achievement_tenPuzzles_title;
       case AchievementId.hundredPuzzles:
-        return 'Crossword Master';
+        return l10n.achievement_hundredPuzzles_title;
       case AchievementId.weekStreak:
-        return 'Week Warrior';
+        return l10n.achievement_weekStreak_title;
       case AchievementId.monthStreak:
-        return 'Monthly Habit';
+        return l10n.achievement_monthStreak_title;
       case AchievementId.speedDemon:
-        return 'Speed Demon';
+        return l10n.achievement_speedDemon_title;
       case AchievementId.perfectPuzzle:
-        return 'Perfectionist';
+        return l10n.achievement_perfectPuzzle_title;
       case AchievementId.polyglot:
-        return 'Polyglot';
+        return l10n.achievement_polyglot_title;
       case AchievementId.generator:
-        return 'Creator';
+        return l10n.achievement_generator_title;
     }
   }
 
   String _getDescription(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     switch (id) {
       case AchievementId.firstPuzzle:
-        return 'Complete your first puzzle';
+        return l10n.achievement_firstPuzzle_desc;
       case AchievementId.tenPuzzles:
-        return 'Complete 10 puzzles';
+        return l10n.achievement_tenPuzzles_desc;
       case AchievementId.hundredPuzzles:
-        return 'Complete 100 puzzles';
+        return l10n.achievement_hundredPuzzles_desc;
       case AchievementId.weekStreak:
-        return 'Play for 7 days in a row';
+        return l10n.achievement_weekStreak_desc;
       case AchievementId.monthStreak:
-        return 'Play for 30 days in a row';
+        return l10n.achievement_monthStreak_desc;
       case AchievementId.speedDemon:
-        return 'Complete a puzzle in under 3 minutes';
+        return l10n.achievement_speedDemon_desc;
       case AchievementId.perfectPuzzle:
-        return 'Complete a puzzle with 100% accuracy and no hints';
+        return l10n.achievement_perfectPuzzle_desc;
       case AchievementId.polyglot:
-        return 'Complete puzzles in 3 different languages';
+        return l10n.achievement_polyglot_desc;
       case AchievementId.generator:
-        return 'Generate 5 custom puzzles';
+        return l10n.achievement_generator_desc;
     }
   }
 }

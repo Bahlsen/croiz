@@ -52,14 +52,22 @@ class AchievementService {
     // 5. Month Streak (30 days)
     check(AchievementId.monthStreak, condition: stats.currentStreak >= 30);
 
-    // 6. Speed Demon (< 3 mins = 180 seconds)
+    // 6. Speed Demon (< 3 mins = 180 seconds) AND no hints used
     check(
       AchievementId.speedDemon,
-      condition: lastPuzzle.timeToCompleteSeconds < 180,
+      condition:
+          lastPuzzle.timeToCompleteSeconds < 180 &&
+          lastPuzzle.hintsUsed == 0 &&
+          lastPuzzle.wordsRevealed == 0,
     );
 
     // 7. Perfect Puzzle
-    check(AchievementId.perfectPuzzle, condition: lastPuzzle.isPerfect);
+    // isPerfect checks hintsUsed == 0 and accuracy >= 1
+    // We also explicitly check wordsRevealed to be safe
+    check(
+      AchievementId.perfectPuzzle,
+      condition: lastPuzzle.isPerfect && lastPuzzle.wordsRevealed == 0,
+    );
 
     // 8. Generator (Skip for now or check count)
     // 9. Polyglot (Skip for now)

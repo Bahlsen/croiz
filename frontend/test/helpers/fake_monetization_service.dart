@@ -1,4 +1,5 @@
 import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -27,7 +28,11 @@ class FakeMonetizationService implements MonetizationService {
   @override
   void showInterstitialAd() {}
 
-  // These internal methods/fields are not needed for the interface since we implement it
-  // But strictly speaking 'implements' requires implementing all public members.
-  // Private members like _initGoogleMobileAds are not part of the public interface.
+  @override
+  final ValueNotifier<bool> isAdShowing = ValueNotifier<bool>(false);
+
+  @override
+  Future<void> waitForAdDismissed() async {
+    // Immediately return in tests since we never actually show ads
+  }
 }

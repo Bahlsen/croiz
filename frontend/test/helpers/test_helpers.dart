@@ -5,9 +5,11 @@ import 'package:croiz/services/persistence/preference_persistence_service.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/services/audio_service.dart';
 import 'package:croiz/services/persistence/puzzle_progress_service.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 import 'fake_puzzle_storage.dart';
 import 'fake_audio_service.dart';
 import 'fake_statistics_service.dart';
+import 'fake_monetization_service.dart';
 import 'package:croiz/features/statistics/providers/statistics_providers.dart';
 import 'package:croiz/features/statistics/providers/achievement_notifier.dart';
 
@@ -53,6 +55,7 @@ List<dynamic> commonOverrides({
   statisticsServiceProvider.overrideWith((ref) => FakeStatisticsService()),
   achievementServiceProvider.overrideWith((ref) => FakeAchievementService([])),
   achievementNotifier.overrideWith(AchievementNotifier.new),
+  monetizationServiceProvider.overrideWithValue(FakeMonetizationService()),
 ];
 
 /// Creates a [ProviderContainer] for testing with common overrides.

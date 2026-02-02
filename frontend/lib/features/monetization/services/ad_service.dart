@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -30,6 +31,24 @@ class MonetizationService {
   bool _isInterstitialAdReady = false;
   // Track if showInterstitialAd() was called while ad was loading
   bool _pendingShowRequest = false;
+
+  /// Notifies listeners when a fullscreen ad is showing.
+  /// true = ad is showing, false = no ad showing
+  final ValueNotifier<bool> isAdShowing = ValueNotifier<bool>(false);
+
+  /// Completer that resolves when the current ad is dismissed.
+  /// Returns null if no ad is showing.
+  Completer<void>? _adDismissedCompleter;
+
+  /// Returns a future that completes when the current fullscreen ad is dismissed.
+  /// If no ad is showing, returns immediately.
+  Future<void> waitForAdDismissed() async {
+    if (!isAdShowing.value) {
+      return;
+    }
+    // Wait for the ad to be dismissed
+    await _adDismissedCompleter?.future;
+  }
 
   Future<void> _initGoogleMobileAds() async {
     try {
@@ -76,14 +95,25 @@ class MonetizationService {
           _logger.i('Interstitial ad loaded.');
 
           ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (ad) {
+              _logger.i('Interstitial ad showing.');
+              isAdShowing.value = true;
+              _adDismissedCompleter = Completer<void>();
+            },
             onAdDismissedFullScreenContent: (ad) {
               _logger.i('Interstitial ad dismissed.');
+              isAdShowing.value = false;
+              _adDismissedCompleter?.complete();
+              _adDismissedCompleter = null;
               ad.dispose();
               _pendingShowRequest = false;
               _loadInterstitialAd(); // Load the next one
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               _logger.e('Interstitial ad failed to show: $error');
+              isAdShowing.value = false;
+              _adDismissedCompleter?.complete();
+              _adDismissedCompleter = null;
               ad.dispose();
               _pendingShowRequest = false;
               _loadInterstitialAd();
