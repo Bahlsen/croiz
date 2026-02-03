@@ -335,12 +335,12 @@ Full statistics system implemented including:
 ### 💎 Plan 2: Subscription Model (Backlog)
 
 **Goal**: Offer ad-free experience and premium features via subscription.
-*Status: 🏗️ In Progress - [Detailed Plan](SUBSCRIPTION_MODEL_PLAN.md)*
+*Status: ⏸️ Backlog - Core implementation done (remove ads), advanced features pending.*
 
 ### 🧪 Plan 3: Widget Tests Coverage (In Progress)
 
 **Goal**: Achieve comprehensive widget test coverage for complex UI components.
-*Status: Ongoing - Key components covered, working on edge cases.*
+*Status: 🏗️ In Progress - analyzing gaps and increasing coverage.*
 
 ---
 

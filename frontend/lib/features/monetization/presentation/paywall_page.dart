@@ -163,7 +163,9 @@ class PaywallPage extends ConsumerWidget {
                       ),
                       onPressed: () {
                         // Trigger purchase logic
-                        SubscriptionService().purchaseLifetimeAccess(context);
+                        ref
+                            .read(subscriptionServiceProvider)
+                            .purchaseLifetimeAccess(context);
                       },
                       child: Text(
                         'Purchase',
