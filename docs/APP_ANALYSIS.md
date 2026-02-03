@@ -11,6 +11,9 @@
 
 ---
 
+
+---
+
 ## 🏗️ Architecture
 
 ### High-Level Structure
@@ -25,7 +28,7 @@ croiz/
 │   │   ├── features/  # Feature modules (game, puzzles, generation, etc.)
 │   │   ├── l10n/      # Localization (8 languages)
 │   │   ├── routes/    # GoRouter navigation
-│   │   └── services/  # Global services (audio, persistence, auth)
+│   │   └── services/  # Global services (audio, persistence, ads)
 │   ├── assets/        # Puzzles, dictionaries, audio, icons
 │   └── test/          # Unit, widget, and integration tests
 ├── tools/             # Python utility scripts
@@ -42,6 +45,7 @@ croiz/
 | **Riverpod 3.0 (Notifier/AsyncNotifier)** | State management with code generation |
 | **Repository Pattern** | Data abstraction via interfaces |
 | **CSP (Constraint Satisfaction)** | Advanced puzzle generation algorithm |
+| **Local-First** | SQLite (Drift) for all data persistence, no backend dependency |
 
 ---
 
@@ -62,6 +66,8 @@ croiz/
 ### 2. Puzzle Selection & Filtering
 
 - **"Continue Playing" section** — Horizontal scroll of in-progress puzzles
+  - *Smart Detection*: Detects puzzles with even a single letter typed
+  - *Reset Feature*: Long-press to reset a puzzle and start over
 - **Quick Difficulty Selector** — Easy, Medium, Hard, Expert, Pro
 - **Advanced Filters**:
   - Origin (NYTimes, LA Times, Universal, etc.)
@@ -71,7 +77,7 @@ croiz/
 - **Search functionality** with persistent query
 - **Random Puzzle Grid** — Pick 4 random puzzles for quick play
 
-### 3. AI-Powered Puzzle Generation (v3.14)
+### 3. AI-Powered Puzzle Generation (v3.16)
 
 - **Grid-First Architecture** using GADDAG + CSP solver
 - **On-device generation** — No backend required
@@ -85,8 +91,9 @@ croiz/
 
 ### 4. Monetization
 
-- **Banner ads** via Google Mobile Ads
+- **Banner ads** via Google Mobile Ads (SafeArea aware)
 - **Interstitial ads** on game completion
+- **Smart Integration**: Ads pause during achievement popups
 - Graceful fallback if ads fail to load
 
 ### 5. Settings & Preferences
@@ -96,7 +103,7 @@ croiz/
 - **Keyboard layout** toggle (AZERTY/QWERTY)
 - **Keyboard size** adjustment
 - **Audio mute** toggle
-- **Help & About dialogs**
+- **Help & About dialogs** (Privacy Policy / Terms placeholders)
 
 ### 6. Onboarding Flow
 
@@ -110,16 +117,18 @@ croiz/
 
 - **End game overlay** with confetti animation
 - **Celebration sounds** and visual effects
-- Navigation to puzzle list or restart
+- **Navigation** to puzzle list or restart
+- **Statistics recording** on completion
 
 ### 8. Statistics & Progress Tracking
 
 - **Lifetime Statistics** — Track total puzzles completed, total words found, and total play time
 - **Streak Management** — Intelligent calculation of current and longest daily streaks
 - **Per-Puzzle Metrics** — Detailed records for each completion (time taken, hints used, accuracy, words revealed)
-- **Visual Progress** — Summary cards with gradients and animated puzzle completion history via `StatisticsScreen`
-- **Drift Integration** — Fully persistent statistics via `UserStatsTable` and `PuzzleStatsTable` with schema versioning
-
+- **Visual Progress** — Summary cards with gradients and animated puzzle completion history
+- **Interactive Graphs** — Activity heatmap and completion charts
+- **Achievements System** — Unlockable badges (e.g., "Speed Demon", "Perfect Puzzle") with overlay notifications
+- **Drift Integration** — Fully persistent statistics via `UserStatsTable` and `PuzzleStatsTable`
 
 ---
 
@@ -172,7 +181,7 @@ The app uses a sophisticated **CrosswordThemeColors** extension providing theme-
 - Left gradient strip indicating difficulty
 - Progress indicator (circular percentage) or completed checkmark
 - Metadata display (origin, year, language)
-- Long-press to delete generated puzzles
+- Long-press to delete generated puzzles or reset active ones
 - Opacity reduction for completed/pending puzzles
 
 #### Virtual Keyboard
@@ -236,6 +245,7 @@ The app supports **8 languages** with full UI translation:
 | **Animation** | `flutter_animate: ^4.5.2`, `confetti: ^0.8.0` | Effects |
 | **UI** | `google_fonts: ^6.1.0`, `flutter_svg: ^2.0.0` | Typography & icons |
 | **Responsive** | `sizer: ^3.1.3` | Responsive layouts |
+| **Charts** | `fl_chart: ^0.69.0` | Statistics graphs |
 | **Testing** | `mockito`, `mocktail`, `alchemist`, `patrol` | Test frameworks |
 
 ---
@@ -290,23 +300,23 @@ The app includes **~9,850 crossword puzzles** from major publications:
 
 ## 🔥 Strengths
 
-1. **Rich visual design** — Gradient difficulty indicators, glow effects, premium typography
-2. **Sophisticated generation engine** — Production-ready Grid-First CSP solver
-3. **Multi-language excellence** — 8 UI languages, 7+ puzzle generation languages
-4. **Complete offline support** — Local puzzles, local generation, local persistence
-5. **Accessibility** — Full semantic labels for screen readers
-6. **Robust architecture** — Clean separation, testable providers, feature isolation
-7. **Audio feedback** — Typing sounds, completion celebrations
-8. **Responsive design** — Sizer-based responsive utilities
+1.  **Rich visual design** — Gradient difficulty indicators, glow effects, premium typography
+2.  **Sophisticated generation engine** — Production-ready Grid-First CSP solver
+3.  **Multi-language excellence** — 8 UI languages, 7+ puzzle generation languages
+4.  **Complete offline support** — Local puzzles, local generation, local persistence
+5.  **Accessibility** — Full semantic labels for screen readers
+6.  **Robust architecture** — Clean separation, testable providers, feature isolation
+7.  **Gamification** — Comprehensive statistics, streaks, and achievements system
+8.  **Responsive design** — Sizer-based responsive utilities
 
 ---
 
 ## 💡 Potential Improvements
 
-1. **Social features** — No sharing or multiplayer modes
-2. **Subscription model** — Only ads; no premium tier for ad-free experience
-3. **Widget tests coverage** — Some complex widgets lack thorough testing
-4. **Web platform** — Integration tests not yet supported on web
+1.  **Social features** — Share results, simple leaderboards
+2.  **Subscription model** — Remove ads option
+3.  **Web platform** — Full web support with PWA capabilities
+4.  **Cloud Sync** — Optional Google Sign-In to sync stats across devices
 
 ---
 
@@ -314,393 +324,34 @@ The app includes **~9,850 crossword puzzles** from major publications:
 
 ### 📊 Plan 1: Statistics & Leaderboards ✅ **DONE**
 
-**Goal**: Track puzzle completion stats, streaks, and display achievements.
+Full statistics system implemented including:
+- Drift tables for UserStats and PuzzleStats
+- Statistics Service & Repository
+- Interactive UI with Charts & Heatmaps
+- Achievement System with Popup Notifications
+- Integration with Game Loop
 
-#### Phase 1: Data Model & Storage (2 days)
-```
-lib/features/statistics/
-├── models/
-│   ├── user_stats.dart               # Freezed model
-│   └── puzzle_stat.dart              # Per-puzzle metrics
-├── data/
-│   └── stats_database.dart           # Drift table definitions
-```
-
-**Database Schema**:
-```dart
-// Drift table
-class UserStats extends Table {
-  IntColumn get totalPuzzlesCompleted => integer().withDefault(const Constant(0))();
-  IntColumn get totalWordsFound => integer().withDefault(const Constant(0))();
-  IntColumn get totalPlayTimeSeconds => integer().withDefault(const Constant(0))();
-  IntColumn get currentStreak => integer().withDefault(const Constant(0))();
-  IntColumn get longestStreak => integer().withDefault(const Constant(0))();
-  DateTimeColumn get lastPlayedDate => dateTime().nullable()();
-}
-
-class PuzzleStats extends Table {
-  TextColumn get puzzleId => text()();
-  DateTimeColumn get completedAt => dateTime()();
-  IntColumn get timeToCompleteSeconds => integer()();
-  IntColumn get hintsUsed => integer().withDefault(const Constant(0))();
-  RealColumn get accuracy => real()(); // 0.0 - 1.0
-}
-```
-
-#### Phase 2: Statistics Service (1-2 days)
-```
-lib/features/statistics/
-├── services/
-│   └── statistics_service.dart       # CRUD operations
-├── providers/
-│   ├── user_stats_provider.dart      # Global stats
-│   └── puzzle_stats_provider.dart    # Per-puzzle stats
-```
-
-**Tracked Metrics**:
-| Metric | Type | Description |
-|--------|------|-------------|
-| `totalPuzzlesCompleted` | int | Lifetime count |
-| `totalWordsFound` | int | Lifetime words |
-| `totalPlayTime` | Duration | Cumulative time |
-| `currentStreak` | int | Consecutive days played |
-| `longestStreak` | int | Best streak ever |
-| `averageCompletionTime` | Duration | Avg per puzzle |
-| `fastestPuzzle` | PuzzleStat | Best time record |
-| `accuracyRate` | double | % correct on first try |
-
-#### Phase 3: Statistics UI (2-3 days)
-```
-lib/features/statistics/
-├── screens/
-│   └── statistics_screen.dart        # Main stats page
-├── widgets/
-│   ├── stats_summary_card.dart       # Overview card
-│   ├── streak_calendar.dart          # GitHub-style heatmap
-│   ├── completion_chart.dart         # fl_chart bar/line graph
-│   └── achievement_badge.dart        # Unlockable badges
-```
-
-**UI Mockup**:
-```
-┌─────────────────────────────────────┐
-│  📊 Your Statistics                 │
-├─────────────────────────────────────┤
-│  🏆 42 Puzzles Completed            │
-│  🔥 7 Day Streak (Best: 14)         │
-│  ⏱️ 23h 45m Total Play Time         │
-├─────────────────────────────────────┤
-│  [Streak Calendar Heatmap]          │
-│  Jan: ■■■□■■■ Feb: ■■■■□■■          │
-├─────────────────────────────────────┤
-│  🏅 Achievements                    │
-│  [First Puzzle] [Week Streak] [100] │
-└─────────────────────────────────────┘
-```
-
-#### Phase 4: Achievements System (2 days)
-```dart
-enum Achievement {
-  firstPuzzle,        // Complete 1 puzzle
-  tenPuzzles,         // Complete 10 puzzles
-  hundredPuzzles,     // Complete 100 puzzles
-  weekStreak,         // 7-day streak
-  monthStreak,        // 30-day streak
-  speedDemon,         // Complete puzzle < 5 min
-  perfectPuzzle,      // 100% accuracy, no hints
-  polyglot,           // Complete puzzles in 3+ languages
-  generator,          // Generate 5 puzzles
-}
-```
-
-#### Phase 5: Integration (In Progress)
-- [ ] Update `EndGameOverlay` to record stats on completion
-- [x] Add "Stats" button to settings menu
-- [x] Add route: `/statistics`
-
-**Estimated Effort**: 8-10 days
-
----
-
-### 💎 Plan 2: Subscription Model (Premium Tier)
+### 💎 Plan 2: Subscription Model (Backlog)
 
 **Goal**: Offer ad-free experience and premium features via subscription.
-
-#### Phase 1: Entitlement System (2 days)
-```
-lib/features/subscription/
-├── models/
-│   └── subscription_status.dart      # Freezed model
-├── providers/
-│   └── subscription_provider.dart    # Track premium status
-├── services/
-│   └── entitlement_service.dart      # Check/grant access
-```
-
-**Subscription Tiers**:
-| Tier | Price | Features |
-|------|-------|----------|
-| **Free** | $0 | Ads, basic puzzles, limited generation |
-| **Premium** | $4.99/mo | Ad-free, unlimited generation, stats |
-| **Premium+** | $9.99/mo | + Early access, exclusive puzzles |
-
-#### Phase 2: RevenueCat Integration (2-3 days)
-```yaml
-# pubspec.yaml
-dependencies:
-  purchases_flutter: ^8.0.0
-```
-
-```dart
-// lib/features/subscription/services/revenue_cat_service.dart
-class RevenueCatService {
-  Future<void> initialize() async {
-    await Purchases.configure(PurchasesConfiguration('<api_key>'));
-  }
-
-  Future<bool> isPremium() async {
-    final info = await Purchases.getCustomerInfo();
-    return info.entitlements.all['premium']?.isActive ?? false;
-  }
-
-  Future<void> purchasePackage(Package package) async {
-    await Purchases.purchasePackage(package);
-  }
-
-  Future<void> restorePurchases() async {
-    await Purchases.restorePurchases();
-  }
-}
-```
-
-#### Phase 3: Paywall UI (2 days)
-```
-lib/features/subscription/
-├── screens/
-│   └── paywall_screen.dart           # Subscription options
-├── widgets/
-│   ├── subscription_card.dart        # Tier display
-│   ├── feature_comparison.dart       # Free vs Premium table
-│   └── restore_button.dart           # Restore purchases
-```
-
-**Paywall Design**:
-```
-┌─────────────────────────────────────┐
-│  ✨ Upgrade to Premium              │
-├─────────────────────────────────────┤
-│  ✓ Remove all ads                   │
-│  ✓ Unlimited AI puzzle generation   │
-│  ✓ Detailed statistics & streaks    │
-│  ✓ Priority support                 │
-├─────────────────────────────────────┤
-│  ┌─────────┐  ┌─────────────────┐   │
-│  │ Monthly │  │ Yearly (Save 40%)│   │
-│  │ $4.99   │  │ $35.99          │   │
-│  └─────────┘  └─────────────────┘   │
-├─────────────────────────────────────┤
-│  [Subscribe Now]  [Restore]         │
-└─────────────────────────────────────┘
-```
-
-#### Phase 4: Feature Gating (1-2 days)
-```dart
-// lib/features/subscription/widgets/premium_gate.dart
-class PremiumGate extends ConsumerWidget {
-  final Widget child;
-  final Widget fallback;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isPremium = ref.watch(subscriptionProvider).isPremium;
-    return isPremium ? child : fallback;
-  }
-}
-```
-
-**Gated Features**:
-| Feature | Free | Premium |
-|---------|------|---------|
-| Banner Ads | ✓ | ✗ |
-| Interstitial Ads | ✓ | ✗ |
-| Puzzle Generation | 3/day | Unlimited |
-| Statistics | Basic | Full |
-| Themes | 2 | All |
-
-#### Phase 5: Ad Removal Logic (1 day)
-```dart
-// lib/features/monetization/widgets/banner_ad_widget.dart
-@override
-Widget build(BuildContext context) {
-  final isPremium = ref.watch(subscriptionProvider).isPremium;
-  if (isPremium) return const SizedBox.shrink();
-  // ... existing ad logic
-}
-```
-
-#### Phase 6: Store Setup (1-2 days)
-- [ ] Apple App Store: Create in-app purchase products
-- [ ] Google Play: Create subscription products
-- [ ] RevenueCat: Configure products, entitlements, offerings
-- [ ] Test: Sandbox purchases on both platforms
-
-**Estimated Effort**: 10-12 days
-
----
+*Status: Planned for v1.2*
 
 ### 🧪 Plan 3: Widget Tests Coverage (In Progress)
 
 **Goal**: Achieve comprehensive widget test coverage for complex UI components.
-
-#### Phase 1: Coverage Audit (1 day)
-```powershell
-# Generate coverage report
-flutter test --coverage
-dart run tools/compute_coverage.dart
-
-# Identify gaps
-genhtml coverage/lcov.info -o coverage/html
-```
-
-**Priority Widgets to Test**:
-| Widget | Complexity | Current Coverage | Target |
-|--------|------------|------------------|--------|
-| `CrosswordCell` | High | ~40% | 90% |
-| `CrosswordGrid` | High | ~30% | 85% |
-| `VirtualKeyboard` | Medium | ~50% | 90% |
-| `PuzzleCard` | Medium | ~60% | 90% |
-| `EndGameOverlay` | High | ~20% | 80% |
-| `ContinuePlayingSection` | High | ~35% | 85% |
-| `GenerationDialog` | Medium | ~25% | 80% |
-| `StatisticsScreen` | Medium | 100% | 90% | ✅ Done
-
-#### Phase 2: Test Infrastructure (1 day)
-```
-test/
-├── helpers/
-│   ├── test_app.dart                 # Wrapper with providers
-│   ├── mock_providers.dart           # Common mocks
-│   ├── golden_test_helper.dart       # Golden test utilities
-│   └── pump_helpers.dart             # pumpWidget extensions
-├── fixtures/
-│   ├── puzzle_fixtures.dart          # Sample puzzle data
-│   └── game_state_fixtures.dart      # Pre-built states
-```
-
-```dart
-// test/helpers/test_app.dart
-Widget buildTestApp({
-  required Widget child,
-  List<Override>? overrides,
-}) {
-  return ProviderScope(
-    overrides: [
-      puzzleStorageProvider.overrideWithValue(MockPuzzleStorage()),
-      gameAudioServiceProvider.overrideWithValue(MockAudioService()),
-      ...?overrides,
-    ],
-    child: MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: AppTheme.darkTheme(),
-      home: child,
-    ),
-  );
-}
-```
-
-#### Phase 3: CrosswordCell Tests (2 days)
-```dart
-// test/widget/features/game/widgets/grid/crossword_cell_test.dart
-group('CrosswordCell', () {
-  testWidgets('displays letter when provided', (tester) async { ... });
-  testWidgets('displays cell number in corner', (tester) async { ... });
-  testWidgets('shows selected state with border', (tester) async { ... });
-  testWidgets('shows highlighted state for word', (tester) async { ... });
-  testWidgets('flashes green on word completion', (tester) async { ... });
-  testWidgets('flashes red on cleared', (tester) async { ... });
-  testWidgets('tap selects cell', (tester) async { ... });
-  testWidgets('tap again toggles direction', (tester) async { ... });
-  testWidgets('disabled cells are not tappable', (tester) async { ... });
-  testWidgets('accessibility label is correct', (tester) async { ... });
-});
-```
-
-#### Phase 4: CrosswordGrid Tests (2 days)
-```dart
-// test/widget/features/game/widgets/grid/crossword_grid_test.dart
-group('CrosswordGrid', () {
-  testWidgets('renders correct number of cells', (tester) async { ... });
-  testWidgets('black cells are rendered correctly', (tester) async { ... });
-  testWidgets('grid is scrollable/zoomable', (tester) async { ... });
-  testWidgets('navigation between cells works', (tester) async { ... });
-  testWidgets('word highlighting spans correct cells', (tester) async { ... });
-});
-```
-
-#### Phase 5: VirtualKeyboard Tests (1 day)
-```dart
-// test/widget/features/game/widgets/keyboard/virtual_keyboard_test.dart
-group('VirtualKeyboard', () {
-  testWidgets('renders QWERTY layout', (tester) async { ... });
-  testWidgets('renders AZERTY layout', (tester) async { ... });
-  testWidgets('key tap calls onKey callback', (tester) async { ... });
-  testWidgets('backspace calls onBackspace', (tester) async { ... });
-  testWidgets('disabled keys are greyed out', (tester) async { ... });
-  testWidgets('respects size configuration', (tester) async { ... });
-});
-```
-
-#### Phase 6: Integration Widget Tests (2 days)
-```dart
-// test/widget/features/game/screens/crossword_screen_test.dart
-group('CrosswordScreen Integration', () {
-  testWidgets('loads puzzle and displays grid', (tester) async { ... });
-  testWidgets('typing letter updates cell', (tester) async { ... });
-  testWidgets('completing word triggers flash', (tester) async { ... });
-  testWidgets('completing puzzle shows overlay', (tester) async { ... });
-  testWidgets('reveal word fills correctly', (tester) async { ... });
-});
-```
-
-#### Phase 7: Golden Tests (1-2 days)
-```dart
-// test/golden/crossword_cell_golden_test.dart
-testGoldens('CrosswordCell states', (tester) async {
-  final builder = GoldenBuilder.grid(columns: 4, widthToHeightRatio: 1)
-    ..addScenario('Default', CrosswordCell(...))
-    ..addScenario('Selected', CrosswordCell(...))
-    ..addScenario('Highlighted', CrosswordCell(...))
-    ..addScenario('Flashing', CrosswordCell(...));
-
-  await tester.pumpWidgetBuilder(builder.build());
-  await screenMatchesGolden(tester, 'crossword_cell_states');
-});
-```
-
-#### Coverage Targets
-| Module | Current | Target | Status |
-|--------|---------|--------|--------|
-| `features/game/widgets/` | ~40% | 85% | 🔴 |
-| `features/puzzles/widgets/` | ~55% | 85% | 🟡 |
-| `features/generation/widgets/` | ~25% | 75% | 🔴 |
-| `features/settings/widgets/` | ~60% | 80% | 🟡 |
-| `features/statistics/screens/` | 100% | 90% | ✅ |
-| **Overall Widget Coverage** | ~48% | 80% | � |
-
-**Estimated Effort**: 10-12 days
+*Status: Ongoing - Key components covered, working on edge cases.*
 
 ---
 
-## �📁 Summary
+## 📁 Summary
 
 | Metric | Value |
 |--------|-------|
-| **Lines of Dart code** | ~50,000+ |
-| **Features** | 8 (game, puzzles, generation, statistics, splash, home, settings, monetization) |
-| **Providers** | 50+ Riverpod providers |
-| **Widgets** | 100+ custom widgets |
-| **Test files** | 142+ tests |
+| **Lines of Dart code** | ~55,000+ |
+| **Features** | 9 (game, puzzles, generation, statistics, achievements, splash, home, settings, monetization) |
+| **Providers** | 60+ Riverpod providers |
+| **Widgets** | 120+ custom widgets |
+| **Test files** | 150+ tests |
 | **Languages supported** | 8 UI + 7 puzzle generation |
 | **Puzzles bundled** | ~9,850 |
 | **Generation algorithm** | Grid-First v3.14 (GADDAG + CSP) |

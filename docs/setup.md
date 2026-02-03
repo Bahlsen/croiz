@@ -7,43 +7,24 @@ Complete setup instructions for the Croiz crossword game project development env
 ### System Requirements
 
 - **OS**: Windows 10+, macOS 11+, or Linux
-- **Disk Space**: 10+ GB for all tools
+- **Disk Space**: 5+ GB
 - **RAM**: 8+ GB recommended
 
 ### Required Tools
 
-#### Java Development
-- **Java 17** (for Android builds)
-  - Download: https://www.oracle.com/java/technologies/downloads/#java17
-  - Verify: `java -version`
-
 #### Flutter Development
-- **Flutter 3.38+**
+- **Flutter 3.x**
   - Download: https://flutter.dev/docs/get-started/install
-  - Installation: Follow official guide for your OS
   - Verify: `flutter --version`
-
-- **Dart 3.10+** (included with Flutter)
-  - Verify: `dart --version`
-
-#### Database
-
 
 #### Version Control
 - **Git 2.30+**
   - Download: https://git-scm.com/downloads
-  - Configure: 
-    ```bash
-    git config --global user.name "Your Name"
-    git config --global user.email "your.email@example.com"
-    ```
 
-#### IDEs (Choose one or both)
-- **VS Code**
-  - Extensions: Flutter, Dart, Java Extension Pack, REST Client
-  
-- **IntelliJ IDEA / Android Studio**
-  - Plugins: Flutter, Dart, Gradle
+#### IDEs
+- **VS Code** (Recommended)
+  - Extensions: Flutter, Dart, Awesome Flutter Snippets
+- **Android Studio** (For Android emulator management)
 
 ## Installation Steps
 
@@ -54,7 +35,9 @@ git clone https://github.com/yourusername/croiz.git
 cd croiz
 ```
 
-### 2. Frontend Setup
+### 2. Project Setup
+
+All project code is contained in the `frontend` directory.
 
 ```bash
 cd frontend
@@ -62,229 +45,96 @@ cd frontend
 # Get Flutter dependencies
 flutter pub get
 
-# Run code generation
-flutter pub run build_runner build
+# Run code generation (for Riverpod, Drift, Freezed)
+dart run build_runner build -d
 
 # Verify setup
 flutter doctor
+```
 
-# Run app on emulator
+## Running the Application
+
+### Real Device (Recommended)
+Connect your Android/iOS device via USB.
+
+```bash
 flutter run
 ```
 
-
-
-## Development Environment Configuration
-
-### VS Code Configuration
-
-**`.vscode/settings.json`** (Create in project root):
-
-```json
-{
-  "dart.flutterSdkPath": "/path/to/flutter",
-  "dart.lineLength": 100,
-  "editor.formatOnSave": true,
-  "[dart]": {
-    "editor.defaultFormatter": "Dart-Code.dart-code",
-    "editor.formatOnSave": true
-  },
-  "[java]": {
-    "editor.defaultFormatter": "redhat.java",
-    "editor.formatOnSave": true
-  },
-
-}
-```
-
-### Environment Variables
-
-**Create `.env` file** in project root (never commit):
-
-```env
-# Flutter
-FLUTTER_ROOT=/path/to/flutter
-```
-
-**Load environment variables:**
-
+### Emulators
 ```bash
-# Linux/Mac
-source .env
+# List available emulators
+flutter emulators
 
-# Windows PowerShell
-Get-Content .env | ForEach-Object {
-  if ($_ -notmatch '^#') {
-    $key, $value = $_.Split('=')
-    [Environment]::SetEnvironmentVariable($key, $value)
-  }
-}
-```
+# Launch an emulator
+flutter emulators --launch <emulator_id>
 
-## Running the Applications
-
-### Terminal 1: Frontend App
-
-```bash
-cd frontend
-
-# For Android emulator
+# Run the app
 flutter run
+```
 
-# For iOS simulator (macOS only)
-flutter run -d macos
+## Working with Code Generation
 
-# For web (development)
-flutter run -d chrome
+This project uses `build_runner` for:
+- Riverpod (`riverpod_generator`)
+- Freezed (`freezed`)
+- Drift (`drift_dev`)
+- JSON Serialization (`json_serializable`)
 
-# With hot reload enabled (automatic)
+**One-time generation:**
+```powershell
+dart run build_runner build -d
+```
+
+**Watch mode (recommended during dev):**
+```powershell
+dart run build_runner watch -d
 ```
 
 ## Testing
 
-### Frontend Tests
-
+### Run All Tests
 ```bash
-cd frontend
-
-# Run all tests
 flutter test
-
-# Run with coverage
-flutter test --coverage
-
-# Run specific test file
-flutter test test/unit/game_logic_test.dart
-
-# Watch mode (re-run on changes)
-flutter test --watch
-
-# Generate coverage report
-flutter test --coverage && open coverage/index.html
 ```
 
-
-
+### Run Specific Test Type
 ```bash
-# In terminal, run Flutter integration tests
-cd frontend
+# Unit tests
+flutter test test/unit
+
+# Widget tests
+flutter test test/widget
+```
+
+### Integration Tests
+```bash
 flutter test integration_test/
 ```
 
-## Debugging
+## Common Issues & Troubleshooting
 
-### Frontend Debugging
+### "Missing generated files"
+If you see errors about missing `.g.dart` or `.freezed.dart` files:
+1. Stop any running instances.
+2. Run `dart run build_runner build -d`.
+3. If issues persist, try `flutter clean` then `flutter pub get` before regenerating.
 
+### "CocoaPods not installed" (macOS)
+If running on iOS/macOS:
 ```bash
-# Enable verbose logging
-flutter run -v
-
-# Debug mode with breakpoints
-# In VS Code: Press F5 or click "Run and Debug"
-
-# Use Flutter DevTools
-flutter pub global activate devtools
-devtools
-
-# Access at: http://localhost:9101
+sudo gem install cocoapods
+cd ios
+pod install
+cd ..
 ```
 
-
-
-## Troubleshooting
-
-### Common Issues
-
-#### Flutter: "Flutter SDK not found"
+### Code Style
+We use standard Dart linting rules. Ensure your IDE is configured to format on save.
 ```bash
-# Set Flutter path
-export PATH="$PATH:/path/to/flutter/bin"
-flutter doctor
-```
-
-#### Gradle: "Gradle command not found"
-```bash
-cd backend
-chmod +x gradlew
-./gradlew --version
-```
-
-
-
-```bash
-# Flutter port (if applicable)
-lsof -i :port
-kill -9 <PID>
-```
-
-## Code Quality Tools
-
-### Format Code
-
-```bash
-# Flutter
-cd frontend
 flutter analyze
 ```
 
-## Useful Commands Reference
-
-### Git Commands
-
-```bash
-# Create feature branch
-git checkout -b feature/my-feature
-
-# Make changes and commit
-git add .
-git commit -m "feat(game): add word validation"
-
-# Push to remote
-git push origin feature/my-feature
-
-# Create pull request (via GitHub UI)
-
-# Merge after approval
-git checkout develop
-git merge feature/my-feature
-git push origin develop
-```
-
-### Flutter Commands
-
-```bash
-flutter pub get          # Install dependencies
-flutter pub outdated     # Check for updates
-flutter pub upgrade      # Upgrade dependencies
-flutter clean            # Clean build artifacts
-flutter doctor           # Check environment
-flutter config           # View/set configuration
-```
-
-
-
-## Next Steps
-
-1. **Read Architecture Docs**: `docs/architecture.md`
-2. **API Documentation**: `docs/api.md`
-3. **Contributing Guide**: `CONTRIBUTING.md`
-4. **Create GitHub Repository**: Set to private, add collaborators
-5. **Set Branch Protection**: Require PR reviews and CI/CD passing
-
-## Getting Help
-
-- **Flutter Docs**: https://flutter.dev/docs
-
-- **GitHub Docs**: https://docs.github.com/en/repositories
-
-## Support
-
-For issues or questions:
-1. Check documentation in `/docs`
-2. Search existing GitHub issues
-3. Create new issue with detailed description
-4. Contact team lead
-
 ---
 
-**Last Updated**: November 29, 2025
+**Last Updated**: February 2026
