@@ -86,26 +86,26 @@ The **Paywall** is the most critical UI component. It must look **premium** and 
 ## 🛠️ Implementation Steps
 
 ### Phase 1: Setup & Infrastructure
-1.  **RevenueCat Setup**:
-    -   Create Project "Croiz".
-    -   Configure Products (Entitlements: `pro_access`).
-    -   Get API Keys for Android/iOS.
+1.  **RevenueCat Setup** (Partial):
+    -   [x] Create Project "Croiz".
+    -   [ ] Configure Products (Entitlements: `pro_access`).
+    -   [ ] Get API Keys for Android/iOS.
 2.  **Dependency**:
-    -   Add `purchases_flutter` to `pubspec.yaml`.
-    -   Add `purchases_ui_flutter` (optional, if we want native paywalls, but custom UI is preferred for design consistency).
+    -   [x] Add `purchases_flutter` to `pubspec.yaml`.
+    -   [x] Add `purchases_ui_flutter`.
 
 ### Phase 2: Logic Implementation
 3.  **`SubscriptionService`**:
-    -   Implement `init()`, `purchase(package)`, `restore()`, `checkStatus()`.
-    -   Handle errors gracefuly.
+    -   [x] Implement `init()`, `purchase(package)`, `restore()`, `checkStatus()`.
+    -   [x] Handle errors gracefuly.
 4.  **`subscriptionProvider`**:
-    -   Create the Riverpod provider to broadcast the state.
-    -   Ensure it persists/caches status to avoid waiting for network on every boot (Current CustomerInfo usually caches well).
+    -   [x] Create the Riverpod provider to broadcast the state.
+    -   [x] Ensure it persists/caches status to avoid waiting for network on every boot (Current CustomerInfo usually caches well).
 
 ### Phase 3: UI Implementation
 5.  **Paywall Page**:
-    -   Design the screen using `features/monetization/presentation/paywall_page.dart`.
-    -   Use `flutter_animate` for entrance effects.
+    -   [x] Design the screen using `features/monetization/presentation/paywall_page.dart`.
+    -   [x] Use `flutter_animate` for entrance effects.
 6.  **Integration Points (Where & When)**:
     -   **Settings (Primary)**: A prominent "Remove Ads" tile in the Settings menu.
     -   **Home Screen (Visibility)**: A subtle "Crown" or "No Ads" icon in the `PuzzlesListPage` AppBar.

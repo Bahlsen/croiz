@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 import 'package:croiz/features/settings/widgets/help_dialog.dart';
 import 'package:croiz/features/settings/widgets/about_dialog.dart' as about;
+import 'package:croiz/features/monetization/presentation/paywall_page.dart';
+import 'package:croiz/features/monetization/providers/subscription_provider.dart';
 
 class CrosswordControlsMenu extends ConsumerWidget {
   const CrosswordControlsMenu({
@@ -126,6 +128,59 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 },
                               ),
                               const Divider(),
+
+                              // Subscription / Remove Ads
+                              Consumer(
+                                builder: (context, ref, _) {
+                                  final isPremiumAsync = ref.watch(
+                                    subscriptionProvider,
+                                  );
+                                  final isPremium =
+                                      isPremiumAsync.value ?? false;
+
+                                  if (isPremium) {
+                                    return const SizedBox.shrink(); // Hide if already premium
+                                  }
+
+                                  return Column(
+                                    children: [
+                                      ListTile(
+                                        leading: Icon(
+                                          Icons.star_border,
+                                          color: Colors.amber,
+                                          size: ResponsiveIconSize.md,
+                                        ),
+                                        title: Text(
+                                          AppLocalizations.of(
+                                                context,
+                                              )?.removeAds ??
+                                              'Remove Ads',
+                                          style: TextStyle(
+                                            fontSize:
+                                                ResponsiveFontSize.bodyLarge,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.amber[800],
+                                          ),
+                                        ),
+                                        trailing: const Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16,
+                                        ),
+                                        onTap: () {
+                                          onClose();
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (_) => const PaywallPage(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      const Divider(),
+                                    ],
+                                  );
+                                },
+                              ),
                               ListTile(
                                 leading: Icon(
                                   Icons.bar_chart_rounded,

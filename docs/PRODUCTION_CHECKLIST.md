@@ -8,6 +8,18 @@ A comprehensive guide for preparing Croiz for release on the Google Play Store a
   - [ ] Replace Test Ad Unit IDs with real AdMob Unit IDs in `lib/core/config/ad_config.dart`.
   - [ ] Verify `app-ads.txt` is hosted on your developer website.
   - [ ] Ensure "Data Safety" form in Play Console matches the AdMob data collection.
+12: 
+13: - [ ] **Subscription & Payments** (NEW)
+14:   - [ ] **RevenueCat**:
+15:     - [ ] Create Production Project in RevenueCat Dashboard.
+16:     - [ ] Replace Test API Keys with Live API Keys in `SubscriptionService.init()`.
+17:     - [ ] Verify `pro_access` Entitlement is linked to store products.
+18:   - [ ] **Store Configuration**:
+19:     - [ ] **Google Play**: Create Product `croiz_lifetime` (Managed Product). Activate it.
+20:     - [ ] **App Store**: Create Non-Consumable IAP `croiz_lifetime`. Approve it.
+21:   - [ ] **Testing**:
+22:     - [ ] Verify "Restore Purchases" works correctly on a fresh install.
+23:     - [ ] Verify "No Ads" logic actually hides banners/interstitials after purchase.
 
 - [ ] **Feature Flags**
   - [ ] Disable debug logs (ensure `kDebugMode` checks are in place).

@@ -127,7 +127,7 @@ final class StatisticsServiceProvider
   }
 }
 
-String _$statisticsServiceHash() => r'80363e5a1f02cc8153f4ef4c8dbfdcef7389ff7d';
+String _$statisticsServiceHash() => r'd7db6d5bd54676d070bd984200932d96cdf2ed37';
 
 /// Provider for all unlocked achievements.
 

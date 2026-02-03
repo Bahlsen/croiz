@@ -1054,6 +1054,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generate and complete 5 custom puzzles.'**
   String get achievement_generator_desc;
+
+  /// No description provided for @removeAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Ads'**
+  String get removeAds;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -8,18 +8,69 @@ part of 'achievement_notifier.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// A notifier that broadcasts newly unlocked achievements.
-/// Other parts of the app can listen to this stream to show popups.
+/// A stream-based notifier that broadcasts newly unlocked achievements.
+///
+/// This notifier uses a broadcast [StreamController] to allow multiple listeners
+/// (e.g., the `AchievementListener` widget) to react to achievement unlocks.
+///
+/// ## Usage:
+/// ```dart
+/// // Listen to achievements (typically done in AchievementListener)
+/// ref.listen(achievementNotifier, (previous, next) {
+///   if (next is AsyncData<List<AchievementId>>) {
+///     // Show popup for next.value
+///   }
+/// });
+///
+/// // Notify about new achievements (typically done in StatisticsService)
+/// ref.read(achievementNotifier.notifier).notifyAchievements([
+///   AchievementId.firstPuzzle,
+/// ]);
+/// ```
 
 @ProviderFor(AchievementNotifier)
 final achievementNotifier = AchievementNotifierProvider._();
 
-/// A notifier that broadcasts newly unlocked achievements.
-/// Other parts of the app can listen to this stream to show popups.
+/// A stream-based notifier that broadcasts newly unlocked achievements.
+///
+/// This notifier uses a broadcast [StreamController] to allow multiple listeners
+/// (e.g., the `AchievementListener` widget) to react to achievement unlocks.
+///
+/// ## Usage:
+/// ```dart
+/// // Listen to achievements (typically done in AchievementListener)
+/// ref.listen(achievementNotifier, (previous, next) {
+///   if (next is AsyncData<List<AchievementId>>) {
+///     // Show popup for next.value
+///   }
+/// });
+///
+/// // Notify about new achievements (typically done in StatisticsService)
+/// ref.read(achievementNotifier.notifier).notifyAchievements([
+///   AchievementId.firstPuzzle,
+/// ]);
+/// ```
 final class AchievementNotifierProvider
     extends $StreamNotifierProvider<AchievementNotifier, List<AchievementId>> {
-  /// A notifier that broadcasts newly unlocked achievements.
-  /// Other parts of the app can listen to this stream to show popups.
+  /// A stream-based notifier that broadcasts newly unlocked achievements.
+  ///
+  /// This notifier uses a broadcast [StreamController] to allow multiple listeners
+  /// (e.g., the `AchievementListener` widget) to react to achievement unlocks.
+  ///
+  /// ## Usage:
+  /// ```dart
+  /// // Listen to achievements (typically done in AchievementListener)
+  /// ref.listen(achievementNotifier, (previous, next) {
+  ///   if (next is AsyncData<List<AchievementId>>) {
+  ///     // Show popup for next.value
+  ///   }
+  /// });
+  ///
+  /// // Notify about new achievements (typically done in StatisticsService)
+  /// ref.read(achievementNotifier.notifier).notifyAchievements([
+  ///   AchievementId.firstPuzzle,
+  /// ]);
+  /// ```
   AchievementNotifierProvider._()
     : super(
         from: null,
@@ -40,10 +91,27 @@ final class AchievementNotifierProvider
 }
 
 String _$achievementNotifierHash() =>
-    r'7a2740f0da34952744763e8c50f6e1930cac4936';
+    r'54e8217fbcf281c9781ce8928218ee0abb581ccb';
 
-/// A notifier that broadcasts newly unlocked achievements.
-/// Other parts of the app can listen to this stream to show popups.
+/// A stream-based notifier that broadcasts newly unlocked achievements.
+///
+/// This notifier uses a broadcast [StreamController] to allow multiple listeners
+/// (e.g., the `AchievementListener` widget) to react to achievement unlocks.
+///
+/// ## Usage:
+/// ```dart
+/// // Listen to achievements (typically done in AchievementListener)
+/// ref.listen(achievementNotifier, (previous, next) {
+///   if (next is AsyncData<List<AchievementId>>) {
+///     // Show popup for next.value
+///   }
+/// });
+///
+/// // Notify about new achievements (typically done in StatisticsService)
+/// ref.read(achievementNotifier.notifier).notifyAchievements([
+///   AchievementId.firstPuzzle,
+/// ]);
+/// ```
 
 abstract class _$AchievementNotifier
     extends $StreamNotifier<List<AchievementId>> {

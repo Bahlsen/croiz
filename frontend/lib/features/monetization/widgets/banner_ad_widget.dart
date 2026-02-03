@@ -1,3 +1,4 @@
+import 'package:croiz/features/monetization/providers/subscription_provider.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,12 +20,22 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _checkAndLoadAd();
+  }
+
+  void _checkAndLoadAd() {
+    // If premium, don't load
+    final isPremium = ref.read(subscriptionProvider).value ?? false;
+    if (isPremium) {
+      return;
+    }
+
     _loadAd();
   }
 
   void _loadAd() {
     // Prevent multiple loads or reloading after failure immediately
-    if (_isAdLoaded || _adLoadFailed) {
+    if (_isAdLoaded || _adLoadFailed || _bannerAd != null) {
       return;
     }
 
@@ -50,6 +61,7 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
           _adLoadFailed = true;
         });
         ad.dispose();
+        _bannerAd = null;
       },
     )..load();
   }
@@ -62,6 +74,24 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final isPremiumAsync = ref.watch(subscriptionProvider);
+    final isPremium = isPremiumAsync.value ?? false;
+
+    // If User is Premium, hide ads logic
+    if (isPremium) {
+      if (_bannerAd != null) {
+        _bannerAd?.dispose();
+        _bannerAd = null;
+        _isAdLoaded = false;
+      }
+      return const SizedBox.shrink();
+    }
+
+    // Attempt load if not loaded and not failed
+    if (!_isAdLoaded && !_adLoadFailed && _bannerAd == null) {
+      _loadAd();
+    }
+
     if (_isAdLoaded && _bannerAd != null) {
       return SizedBox(
         width: _bannerAd!.size.width.toDouble(),

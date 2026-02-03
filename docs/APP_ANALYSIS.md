@@ -242,6 +242,7 @@ The app supports **8 languages** with full UI translation:
 | **Audio** | `audioplayers: ^6.5.1`, `flame_audio: ^2.6.0` | Sound effects |
 | **AI** | `firebase_ai: ^3.6.0` | Gemini for puzzle themes |
 | **Ads** | `google_mobile_ads: ^7.0.0` | Banner/Interstitial ads |
+| **Monetization** | `purchases_flutter` | RevenueCat IAP SDK |
 | **Animation** | `flutter_animate: ^4.5.2`, `confetti: ^0.8.0` | Effects |
 | **UI** | `google_fonts: ^6.1.0`, `flutter_svg: ^2.0.0` | Typography & icons |
 | **Responsive** | `sizer: ^3.1.3` | Responsive layouts |
@@ -334,7 +335,7 @@ Full statistics system implemented including:
 ### 💎 Plan 2: Subscription Model (Backlog)
 
 **Goal**: Offer ad-free experience and premium features via subscription.
-*Status: Planned - See [SUBSCRIPTION_MODEL_PLAN.md](SUBSCRIPTION_MODEL_PLAN.md)*
+*Status: 🏗️ In Progress - [Detailed Plan](SUBSCRIPTION_MODEL_PLAN.md)*
 
 ### 🧪 Plan 3: Widget Tests Coverage (In Progress)
 

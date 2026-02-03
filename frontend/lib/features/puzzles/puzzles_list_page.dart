@@ -22,6 +22,9 @@ import 'package:croiz/core/exceptions/user_friendly_exception.dart';
 import 'package:croiz/core/config/feature_flags.dart';
 import 'package:croiz/features/monetization/widgets/banner_ad_widget.dart';
 
+import 'package:croiz/features/monetization/presentation/paywall_page.dart';
+import 'package:croiz/features/monetization/providers/subscription_provider.dart';
+
 /// Puzzle selection page with Quick Play mode and expandable filters.
 class PuzzlesListPage extends ConsumerStatefulWidget {
   const PuzzlesListPage({super.key});
@@ -105,6 +108,25 @@ class _PuzzlesListPageState extends ConsumerState<PuzzlesListPage> {
           style: TextStyle(fontSize: ResponsiveFontSize.titleMedium),
         ),
         actions: [
+          // Premium / Remove Ads Icon
+          Consumer(
+            builder: (context, ref, _) {
+              final isPremiumAsync = ref.watch(subscriptionProvider);
+              final isPremium = isPremiumAsync.value ?? false;
+              if (isPremium) {
+                return const SizedBox.shrink();
+              }
+
+              return IconButton(
+                icon: const Icon(Icons.star_border, color: Colors.amber),
+                tooltip: 'Remove Ads',
+                onPressed:
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const PaywallPage()),
+                    ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.bar_chart_rounded),
             tooltip:

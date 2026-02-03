@@ -501,4 +501,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get achievement_generator_desc => 'Generate and complete 5 custom puzzles.';
+
+  @override
+  String get removeAds => 'Remove Ads';
 }
