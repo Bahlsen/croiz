@@ -65,9 +65,21 @@ class PuzzleConverter {
 
       var clueText = entry.clue ?? '';
       if (isMultiWord) {
-        // Append hint with italics style supported by _AutoSizeClueText
-        // Use simple localization based on puzzle language
-        final hint = language == 'fr' ? ' (plusieurs mots)' : ' (multi-word)';
+        // Calculate number of words from enumeration if available,
+        // otherwise default to 2+ words generic hint.
+        int wordCount = 0;
+        if (entry.enumeration != null && entry.enumeration!.contains(',')) {
+          wordCount = entry.enumeration!.split(',').length;
+        } else if (entry.answer != null && entry.answer!.contains(' ')) {
+          wordCount = entry.answer!.split(' ').length;
+        }
+
+        final hint =
+            wordCount > 0
+                ? (language == 'fr'
+                    ? ' ($wordCount mots)'
+                    : ' ($wordCount words)')
+                : (language == 'fr' ? ' (plusieurs mots)' : ' (multi-word)');
         clueText = '$clueText<i>$hint</i>';
       }
 
