@@ -49,11 +49,30 @@ class PuzzleConverter {
     // crosses black cells or goes out of bounds. To avoid inconsistent
     // entries (which prevent completion detection), sanitize each entry
     // by trimming its length at the first black cell or grid boundary.
+    final metadata = puzzle.metadata ?? {};
+    final title = metadata['title']?.toString() ?? 'Puzzle ${puzzle.id}';
+    final language = metadata['language']?.toString() ?? 'en';
+
+    // Build clues map from entries with optional multi-word hint
     final clues = <String, String>{};
     final entries = <PuzzleEntryData>[];
+
     for (final entry in puzzle.entries) {
+      // Determine if multi-word based on answer structure or enumeration
+      final isMultiWord =
+          (entry.answer != null && entry.answer!.contains(' ')) ||
+          (entry.enumeration != null && entry.enumeration!.contains(','));
+
+      var clueText = entry.clue ?? '';
+      if (isMultiWord) {
+        // Append hint with italics style supported by _AutoSizeClueText
+        // Use simple localization based on puzzle language
+        final hint = language == 'fr' ? ' (plusieurs mots)' : ' (multi-word)';
+        clueText = '$clueText<i>$hint</i>';
+      }
+
       final key = '${entry.number}-${entry.direction}';
-      clues[key] = entry.clue ?? '';
+      clues[key] = clueText;
 
       // Compute effective length by scanning until a black cell or edge.
       var effectiveLength = 0;
@@ -87,7 +106,7 @@ class PuzzleConverter {
           x: entry.x,
           y: entry.y,
           length: effectiveLength,
-          clue: entry.clue,
+          clue: clueText, // Store the modified clue in the entry data as well
           answer: croppedAnswer,
         ),
       );
@@ -173,10 +192,6 @@ class PuzzleConverter {
         debugPrint('Warning: Sparse puzzle detected: ${parts.join('; ')}');
       }
     }
-
-    final metadata = puzzle.metadata ?? {};
-    final title = metadata['title']?.toString() ?? 'Puzzle ${puzzle.id}';
-    final language = metadata['language']?.toString() ?? 'en';
 
     return GameBoard(
       id: puzzle.id,

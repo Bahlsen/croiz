@@ -40,9 +40,9 @@ void main() {
     return ProviderScope(
       overrides: [subscriptionServiceProvider.overrideWithValue(mockService)],
       child: Sizer(
-        builder: (context, orientation, deviceType) {
-          return MaterialApp.router(routerConfig: router);
-        },
+        builder:
+            (context, orientation, deviceType) =>
+                MaterialApp.router(routerConfig: router),
       ),
     );
   }

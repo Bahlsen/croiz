@@ -237,7 +237,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get revealAllConfirmationTitle => 'Confirmar Revelar Tudo';
 
   @override
-  String get revealAllConfirmationMessage => 'Tem certeza de que deseja revelar todo o puzzle?';
+  String get revealAllConfirmationMessage =>
+      'Tem certeza de que deseja revelar todo o puzzle?';
 
   @override
   String get yes => 'Sim';
@@ -252,7 +253,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get deletePuzzle => 'Excluir Puzzle Gerado';
 
   @override
-  String get deletePuzzleConfirmation => 'Tem certeza de que deseja excluir este puzzle? Esta ação não pode ser desfeita.';
+  String get deletePuzzleConfirmation =>
+      'Tem certeza de que deseja excluir este puzzle? Esta ação não pode ser desfeita.';
 
   @override
   String get deleteSuccessMessage => 'Puzzle excluído com sucesso';
@@ -261,7 +263,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
-  String get appDescription => 'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.';
+  String get appDescription =>
+      'A modern crossword puzzle game with AI-powered generation, multiple languages, and beautiful design.';
 
   @override
   String get credits => 'Credits';
@@ -285,10 +288,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get helpBasic1 => 'Tap a cell to select it and see the clue';
 
   @override
-  String get helpBasic2 => 'Type letters using the on-screen keyboard or your device keyboard';
+  String get helpBasic2 =>
+      'Type letters using the on-screen keyboard or your device keyboard';
 
   @override
-  String get helpBasic3 => 'Tap the selected cell again to switch between across/down';
+  String get helpBasic3 =>
+      'Tap the selected cell again to switch between across/down';
 
   @override
   String get helpBasic4 => 'Completed words turn green automatically';
@@ -312,7 +317,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get features => 'Features';
 
   @override
-  String get helpFeature1 => '🔍 Reveal: Show letters for a word or the entire puzzle';
+  String get helpFeature1 =>
+      '🔍 Reveal: Show letters for a word or the entire puzzle';
 
   @override
   String get helpFeature2 => '🔄 Reset: Clear all your answers and start over';
@@ -360,31 +366,36 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboardingWelcomeTitle => 'Welcome to Croiz';
 
   @override
-  String get onboardingWelcomeDesc => 'Play thousands of crosswords from top publishers.';
+  String get onboardingWelcomeDesc =>
+      'Play thousands of crosswords from top publishers.';
 
   @override
   String get onboardingBasicTitle => 'How to Play';
 
   @override
-  String get onboardingBasicDesc => 'Tap any cell to select it, then type letters to fill the grid.';
+  String get onboardingBasicDesc =>
+      'Tap any cell to select it, then type letters to fill the grid.';
 
   @override
   String get onboardingDirectionTitle => 'Switch Direction';
 
   @override
-  String get onboardingDirectionDesc => 'Tap the selected cell again (or double-tap) to switch between Across and Down.';
+  String get onboardingDirectionDesc =>
+      'Tap the selected cell again (or double-tap) to switch between Across and Down.';
 
   @override
   String get onboardingCompletionTitle => 'Word Completion';
 
   @override
-  String get onboardingCompletionDesc => 'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!';
+  String get onboardingCompletionDesc =>
+      'When a word is correct, it will glow green. Finish the whole puzzle for a celebration!';
 
   @override
   String get onboardingFinishTitle => 'You\'re All Set!';
 
   @override
-  String get onboardingFinishDesc => 'Choose from thousands of puzzles in multiple languages.';
+  String get onboardingFinishDesc =>
+      'Choose from thousands of puzzles in multiple languages.';
 
   @override
   String get onboardingSkip => 'Skip';
@@ -452,7 +463,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get achievement_firstPuzzle_title => 'Getting Started';
 
   @override
-  String get achievement_firstPuzzle_desc => 'Complete your first crossword puzzle.';
+  String get achievement_firstPuzzle_desc =>
+      'Complete your first crossword puzzle.';
 
   @override
   String get achievement_tenPuzzles_title => 'Daily Solver';
@@ -464,7 +476,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get achievement_hundredPuzzles_title => 'Crossword Master';
 
   @override
-  String get achievement_hundredPuzzles_desc => 'Complete 100 crossword puzzles.';
+  String get achievement_hundredPuzzles_desc =>
+      'Complete 100 crossword puzzles.';
 
   @override
   String get achievement_weekStreak_title => 'On Fire!';
@@ -482,26 +495,49 @@ class AppLocalizationsPt extends AppLocalizations {
   String get achievement_speedDemon_title => 'Speed Demon';
 
   @override
-  String get achievement_speedDemon_desc => 'Complete a puzzle in under 3 minutes.';
+  String get achievement_speedDemon_desc =>
+      'Complete a puzzle in under 3 minutes.';
 
   @override
   String get achievement_perfectPuzzle_title => 'Perfect Play';
 
   @override
-  String get achievement_perfectPuzzle_desc => 'Complete a puzzle without hints and 100% accuracy.';
+  String get achievement_perfectPuzzle_desc =>
+      'Complete a puzzle without hints and 100% accuracy.';
 
   @override
   String get achievement_polyglot_title => 'Polyglot';
 
   @override
-  String get achievement_polyglot_desc => 'Complete puzzles in 3 different languages.';
+  String get achievement_polyglot_desc =>
+      'Complete puzzles in 3 different languages.';
 
   @override
   String get achievement_generator_title => 'The Creator';
 
   @override
-  String get achievement_generator_desc => 'Generate and complete 5 custom puzzles.';
+  String get achievement_generator_desc =>
+      'Generate and complete 5 custom puzzles.';
 
   @override
   String get removeAds => 'Remove Ads';
+
+  @override
+  String get reportProblem => 'Report a problem';
+
+  @override
+  String get reportProblemSubject => 'Problem Report - Croiz';
+
+  @override
+  String get reportProblemBody => '[Describe your problem here]';
+
+  @override
+  String get watchAdTitle => 'Watch Ad?';
+
+  @override
+  String get watchAdMessage => 'Watch a short ad to get more reveals?';
+
+  @override
+  String get revealAllAdMessage =>
+      'To reveal the entire puzzle, you must watch a short ad. Continue?';
 }

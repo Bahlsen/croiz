@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -23,14 +25,24 @@ class MonetizationService {
   final String _androidBannerId = 'ca-app-pub-3940256099942544/6300978111';
   final String _iosBannerId = 'ca-app-pub-3940256099942544/2934735716';
 
+  final String _androidRewardedId = 'ca-app-pub-3940256099942544/5224354917';
+  final String _iosRewardedId = 'ca-app-pub-3940256099942544/1712485313';
+
   final String _androidInterstitialId =
       'ca-app-pub-3940256099942544/1033173712';
   final String _iosInterstitialId = 'ca-app-pub-3940256099942544/4411468910';
 
   InterstitialAd? _interstitialAd;
+  RewardedAd? _rewardedAd;
   bool _isInterstitialAdReady = false;
+  bool _isRewardedAdReady = false;
   // Track if showInterstitialAd() was called while ad was loading
   bool _pendingShowRequest = false;
+  bool _pendingShowRewardedRequest = false;
+
+  // Track puzzles loaded for interstitial trigger
+  static const String _puzzlesLoadedKey = 'puzzles_loaded_count';
+  int _puzzlesLoadedCount = 0;
 
   /// Notifies listeners when a fullscreen ad is showing.
   /// true = ad is showing, false = no ad showing
@@ -57,10 +69,26 @@ class MonetizationService {
       } // Ads not supported on web in this implementation
       await MobileAds.instance.initialize();
       _loadInterstitialAd();
+      _loadRewardedAd();
+
+      final prefs = await SharedPreferences.getInstance();
+      _puzzlesLoadedCount = prefs.getInt(_puzzlesLoadedKey) ?? 0;
     } on Object catch (e) {
       _logger.e('Error initializing Google Mobile Ads', error: e);
     }
   }
+
+  /// Increments the puzzle loaded count and persists it.
+  Future<void> incrementPuzzleLoadCount() async {
+    _puzzlesLoadedCount++;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_puzzlesLoadedKey, _puzzlesLoadedCount);
+  }
+
+  /// Returns true if an interstitial ad should be shown based on load count.
+  /// Logic: After loading 3 puzzles (1, 2, 3), the 4th (count=4) triggers ad.
+  bool get shouldShowInterstitial =>
+      _puzzlesLoadedCount > 0 && _puzzlesLoadedCount % 4 == 0;
 
   String get bannerAdUnitId {
     if (Platform.isAndroid) {
@@ -76,6 +104,15 @@ class MonetizationService {
       return _androidInterstitialId;
     } else if (Platform.isIOS) {
       return _iosInterstitialId;
+    }
+    throw UnsupportedError('Unsupported platform');
+  }
+
+  String get rewardedAdUnitId {
+    if (Platform.isAndroid) {
+      return _androidRewardedId;
+    } else if (Platform.isIOS) {
+      return _iosRewardedId;
     }
     throw UnsupportedError('Unsupported platform');
   }
@@ -137,15 +174,71 @@ class MonetizationService {
     );
   }
 
+  void _loadRewardedAd() {
+    if (kIsWeb) return;
+
+    RewardedAd.load(
+      adUnitId: rewardedAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          _rewardedAd = ad;
+          _isRewardedAdReady = true;
+          _logger.i('Rewarded ad loaded.');
+
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdShowedFullScreenContent: (ad) {
+              _logger.i('Rewarded ad showing.');
+              isAdShowing.value = true;
+              _adDismissedCompleter = Completer<void>();
+            },
+            onAdDismissedFullScreenContent: (ad) {
+              _logger.i('Rewarded ad dismissed.');
+              isAdShowing.value = false;
+              _adDismissedCompleter?.complete();
+              _adDismissedCompleter = null;
+              ad.dispose();
+              _pendingShowRewardedRequest = false;
+              _loadRewardedAd(); // Load the next one
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              _logger.e('Rewarded ad failed to show: $error');
+              isAdShowing.value = false;
+              _adDismissedCompleter?.complete();
+              _adDismissedCompleter = null;
+              ad.dispose();
+              _pendingShowRewardedRequest = false;
+              _loadRewardedAd();
+            },
+          );
+
+          if (_pendingShowRewardedRequest) {
+            _logger.i('Showing pending rewarded ad...');
+            // NOTE: We cannot easily await the result here as this is a void callback.
+            // So for now we just show it.
+            // Ideally the UI would retry or wait for readiness.
+            showRewardedAd();
+          }
+        },
+        onAdFailedToLoad: (error) {
+          _logger.w('Rewarded ad failed to load: $error');
+          _isRewardedAdReady = false;
+          _pendingShowRewardedRequest = false;
+        },
+      ),
+    );
+  }
+
   /// Shows the interstitial ad if it's ready.
   /// If the ad is still loading, marks it to be shown automatically when ready.
-  void showInterstitialAd() {
+  Future<void> showInterstitialAd() async {
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _logger.i('Showing interstitial ad...');
       _interstitialAd!.show();
       _isInterstitialAdReady = false;
       _interstitialAd = null;
       _pendingShowRequest = false;
+      await waitForAdDismissed();
     } else {
       _logger.w(
         'Interstitial ad not ready (ready: $_isInterstitialAdReady, ad: ${_interstitialAd != null}), will show when loaded...',
@@ -156,6 +249,37 @@ class MonetizationService {
       if (_interstitialAd == null && !kIsWeb) {
         _loadInterstitialAd();
       }
+    }
+  }
+
+  /// Shows the rewarded ad if it's ready.
+  /// Returns check if reward was granted.
+  Future<bool> showRewardedAd() async {
+    if (_isRewardedAdReady && _rewardedAd != null) {
+      _logger.i('Showing rewarded ad...');
+      var rewardEarned = false;
+      await _rewardedAd!.show(
+        onUserEarnedReward: (ad, reward) {
+          rewardEarned = true;
+          _logger.i('User earned reward: ${reward.amount} ${reward.type}');
+        },
+      );
+      _isRewardedAdReady = false;
+      _rewardedAd = null;
+      _pendingShowRewardedRequest = false;
+      await waitForAdDismissed();
+      return rewardEarned;
+    } else {
+      _logger.w(
+        'Rewarded ad not ready (ready: $_isRewardedAdReady, ad: ${_rewardedAd != null})',
+      );
+      // Mark pending request
+      _pendingShowRewardedRequest = true;
+      // Try to load one if it was null
+      if (_rewardedAd == null && !kIsWeb) {
+        _loadRewardedAd();
+      }
+      return false;
     }
   }
 

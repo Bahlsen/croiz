@@ -8,6 +8,7 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
+import 'package:croiz/features/monetization/services/ad_service.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 
@@ -213,14 +214,65 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     onTap: onTap,
   );
 
-  void _revealLetter() {
+  Future<bool> _checkAdQuota(int quota, VoidCallback onReplenish) async {
+    if (quota > 0) {
+      return true;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        final loc = AppLocalizations.of(context);
+        return AlertDialog(
+          title: Text(loc?.watchAdTitle ?? 'Watch Ad?'),
+          content: Text(
+            loc?.watchAdMessage ?? 'Watch a short ad to get more reveals?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(loc?.no ?? 'No'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(loc?.yes ?? 'Yes'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) {
+      return false;
+    }
+
+    // Show Ad
+    final adService = ref.read(monetizationServiceProvider);
+    final earned = await adService.showRewardedAd();
+    if (earned) {
+      onReplenish();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _revealLetter() async {
     setState(() => _revealOpen = false);
     final sel = ref.read(selectedCellProvider);
     if (sel == null) {
       return;
     }
 
-    // Reveal the letter
+    final board = ref.read(gameBoardProvider);
+    final canReveal = await _checkAdQuota(
+      board.lettersUntilAd,
+      () => ref.read(gameBoardProvider.notifier).replenishLetterQuota(),
+    );
+
+    if (!canReveal) {
+      return;
+    }
+
     ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
 
     // After revealing, find and navigate to the next empty cell
@@ -287,7 +339,7 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     }
   }
 
-  void _revealWord() {
+  Future<void> _revealWord() async {
     setState(() => _revealOpen = false);
     final sel = ref.read(selectedCellProvider);
     if (sel == null) {
@@ -300,7 +352,15 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       return;
     }
 
-    // Reveal the word
+    final canReveal = await _checkAdQuota(
+      board.wordsUntilAd,
+      () => ref.read(gameBoardProvider.notifier).replenishWordQuota(),
+    );
+
+    if (!canReveal) {
+      return;
+    }
+
     ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
 
     // After revealing, find and navigate to the next empty cell
@@ -325,11 +385,12 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       context: context,
       builder: (context) {
         final loc = AppLocalizations.of(context);
+        // Requirement: reveal complete puzzle -> watch ad.
         return AlertDialog(
-          title: Text(loc?.revealAllConfirmationTitle ?? 'Confirm Reveal All'),
+          title: Text(loc?.revealAllConfirmationTitle ?? 'Reveal All?'),
           content: Text(
-            loc?.revealAllConfirmationMessage ??
-                'Are you sure you want to reveal the entire puzzle?',
+            loc?.revealAllAdMessage ??
+                'To reveal the entire puzzle, you must watch a short ad. Continue?',
           ),
           actions: [
             TextButton(
@@ -346,7 +407,12 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     );
 
     if (confirmed == true) {
-      ref.read(gameBoardProvider.notifier).revealAll();
+      // Must watch ad
+      final adService = ref.read(monetizationServiceProvider);
+      final earned = await adService.showRewardedAd();
+      if (earned) {
+        ref.read(gameBoardProvider.notifier).revealAll();
+      }
     }
   }
 

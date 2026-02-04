@@ -10,6 +10,7 @@ import 'package:croiz/features/settings/widgets/help_dialog.dart';
 import 'package:croiz/features/settings/widgets/about_dialog.dart' as about;
 import 'package:croiz/features/monetization/presentation/paywall_page.dart';
 import 'package:croiz/features/monetization/providers/subscription_provider.dart';
+import 'package:croiz/features/support/services/feedback_service.dart';
 
 class CrosswordControlsMenu extends ConsumerWidget {
   const CrosswordControlsMenu({
@@ -414,6 +415,25 @@ class CrosswordControlsMenu extends ConsumerWidget {
                                 },
                               ),
                               const Divider(),
+                              ListTile(
+                                leading: Icon(
+                                  Icons.bug_report_outlined,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  size: ResponsiveIconSize.md,
+                                ),
+                                title: Text(
+                                  AppLocalizations.of(context)?.reportProblem ??
+                                      'Report a problem',
+                                  style: TextStyle(
+                                    fontSize: ResponsiveFontSize.bodyLarge,
+                                  ),
+                                ),
+                                onTap: () {
+                                  onClose();
+                                  FeedbackService.sendFeedback(context);
+                                },
+                              ),
                               ListTile(
                                 leading: Icon(
                                   Icons.help_outline,

@@ -83,6 +83,8 @@ class GameBoard extends GameEntity {
     this.language = 'en',
     this.hintsUsed = 0,
     this.wordsRevealed = 0,
+    this.lettersUntilAd = 10,
+    this.wordsUntilAd = 3,
   });
   final List<List<String?>> grid;
   final Map<String, String> clues;
@@ -97,6 +99,12 @@ class GameBoard extends GameEntity {
 
   /// Number of full words revealed by the user.
   final int wordsRevealed;
+
+  /// Number of free letter reveals remaining before an ad is required.
+  final int lettersUntilAd;
+
+  /// Number of free word reveals remaining before an ad is required.
+  final int wordsUntilAd;
 
   /// Optional: pre-computed entries (from Puzzle model) with number/position/clue.
   /// If present, UI can use these directly instead of recalculating numbering.
@@ -120,6 +128,8 @@ class GameBoard extends GameEntity {
     String? language,
     int? hintsUsed,
     int? wordsRevealed,
+    int? lettersUntilAd,
+    int? wordsUntilAd,
   }) => GameBoard(
     id: id ?? this.id,
     title: title,
@@ -134,6 +144,8 @@ class GameBoard extends GameEntity {
     language: language ?? this.language,
     hintsUsed: hintsUsed ?? this.hintsUsed,
     wordsRevealed: wordsRevealed ?? this.wordsRevealed,
+    lettersUntilAd: lettersUntilAd ?? this.lettersUntilAd,
+    wordsUntilAd: wordsUntilAd ?? this.wordsUntilAd,
   );
 
   /// Helper to create a new GameBoard with a single cell updated.

@@ -39,6 +39,8 @@ class GameProgressService {
     required void Function(int seconds)? setElapsedSeconds,
     void Function(int hints)? setHintsUsed,
     void Function(int words)? setWordsRevealed,
+    void Function(int letters)? setLettersUntilAd,
+    void Function(int words)? setWordsUntilAd,
   }) async {
     try {
       final savedData = await _storage.load(board.id);
@@ -106,6 +108,17 @@ class GameProgressService {
       final savedWordsRevealed = savedData['wordsRevealed'];
       if (savedWordsRevealed is int && setWordsRevealed != null) {
         setWordsRevealed(savedWordsRevealed);
+      }
+
+      // 6. Restore Ad Quotas (New v2)
+      final savedLettersUntilAd = savedData['lettersUntilAd'];
+      if (savedLettersUntilAd is int && setLettersUntilAd != null) {
+        setLettersUntilAd(savedLettersUntilAd);
+      }
+
+      final savedWordsUntilAd = savedData['wordsUntilAd'];
+      if (savedWordsUntilAd is int && setWordsUntilAd != null) {
+        setWordsUntilAd(savedWordsUntilAd);
       }
 
       return true;

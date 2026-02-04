@@ -8,6 +8,9 @@ import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/routes/app_routes.dart';
 import 'package:flutter/services.dart'; // For HapticFeedback
 
+import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:croiz/features/monetization/providers/subscription_provider.dart';
+
 import 'dart:async'; // For unawaited
 
 /// A premium, branded card representing a puzzle in the list.
@@ -61,6 +64,7 @@ class PuzzleCard extends ConsumerWidget {
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
+            // Updated to be async for Ad logic
             onTap:
                 (isPending || isCompleted) ? null : () => _onTap(context, ref),
             onLongPress:
@@ -123,9 +127,22 @@ class PuzzleCard extends ConsumerWidget {
     );
   }
 
-  void _onTap(BuildContext context, WidgetRef ref) {
-    ref.read(selectedPuzzleIdProvider.notifier).setSelected(descriptor.id);
-    CrosswordRoute(id: descriptor.id).go(context);
+  Future<void> _onTap(BuildContext context, WidgetRef ref) async {
+    // Check premium status
+    final isPremium = ref.read(subscriptionProvider).value ?? false;
+
+    if (!isPremium) {
+      final adService = ref.read(monetizationServiceProvider);
+      await adService.incrementPuzzleLoadCount();
+      if (adService.shouldShowInterstitial) {
+        await adService.showInterstitialAd();
+      }
+    }
+
+    if (context.mounted) {
+      ref.read(selectedPuzzleIdProvider.notifier).setSelected(descriptor.id);
+      CrosswordRoute(id: descriptor.id).go(context);
+    }
   }
 
   Future<void> _onLongPress(BuildContext context, WidgetRef ref) async {

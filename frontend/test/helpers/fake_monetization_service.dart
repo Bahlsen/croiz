@@ -13,20 +13,38 @@ class FakeMonetizationService implements MonetizationService {
   String get interstitialAdUnitId => 'test-interstitial-id';
 
   @override
+  String get rewardedAdUnitId => 'test-rewarded-id';
+
+  @override
   BannerAd createBannerAd({
     required void Function(Ad) onAdLoaded,
     required void Function(Ad, LoadAdError) onAdFailedToLoad,
   }) {
     final ad = MockBannerAd();
+    when(() => ad.size).thenReturn(AdSize.banner);
+
     // ignore: unnecessary_lambdas
-    when(() => ad.load()).thenAnswer((_) async {});
+    when(() => ad.load()).thenAnswer((_) async {
+      onAdLoaded(ad);
+    });
     // ignore: unnecessary_lambdas
     when(() => ad.dispose()).thenAnswer((_) async {});
     return ad;
   }
 
   @override
-  void showInterstitialAd() {}
+  Future<void> showInterstitialAd() async {}
+
+  @override
+  Future<bool> showRewardedAd() async {
+    return true; // Auto-reward in tests
+  }
+
+  @override
+  Future<void> incrementPuzzleLoadCount() async {}
+
+  @override
+  bool get shouldShowInterstitial => false;
 
   @override
   final ValueNotifier<bool> isAdShowing = ValueNotifier<bool>(false);

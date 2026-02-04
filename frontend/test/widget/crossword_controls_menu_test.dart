@@ -1,36 +1,14 @@
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
-import 'package:croiz/features/puzzles/puzzles_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
-import 'package:go_router/go_router.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
 import '../helpers/fake_monetization_service.dart';
 
 void main() {
-  testWidgets('Menu Home item navigates to Puzzles list', (tester) async {
-    final router = GoRouter(
-      initialLocation: '/',
-      routes: [
-        GoRoute(
-          path: '/',
-          builder:
-              (context, state) => Scaffold(
-                // `CrosswordControlsMenu` uses Positioned.fill and expects to be
-                // a child of a Stack. Mirror that here to avoid parent-data
-                // errors in tests.
-                body: Stack(children: [CrosswordControlsMenu(onClose: () {})]),
-              ),
-        ),
-        GoRoute(
-          path: '/puzzles',
-          builder: (context, state) => const PuzzlesListPage(),
-        ),
-      ],
-    );
-
+  testWidgets('Menu contains Report a Problem item', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -40,27 +18,31 @@ void main() {
         ],
         child: Sizer(
           builder:
-              (context, orientation, deviceType) => MaterialApp.router(
-                routerConfig: router,
+              (context, orientation, deviceType) => MaterialApp(
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
+                home: Scaffold(
+                  body: Stack(
+                    children: [CrosswordControlsMenu(onClose: () {})],
+                  ),
+                ),
               ),
         ),
       ),
     );
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Ensure the Home item exists and tap it.
-    expect(find.text('Home'), findsOneWidget);
-    await tester.tap(find.text('Home'));
-    // Pump a few frames to allow navigation to complete without waiting
-    // indefinitely for animations (BackdropFilter etc.).
-    await tester.pump();
-    for (var i = 0; i < 10 && find.text('Puzzles').evaluate().isEmpty; i++) {
-      await tester.pump(const Duration(milliseconds: 50));
-    }
+    final itemFinder = find.text('Report a problem');
 
-    // After tapping Home we expect the Puzzles page to be visible.
-    expect(find.text('Puzzles'), findsOneWidget);
+    // Scroll if needed
+    await tester.dragUntilVisible(
+      itemFinder,
+      find.byType(ListView),
+      const Offset(0, -500),
+    );
+    await tester.pumpAndSettle();
+
+    expect(itemFinder, findsOneWidget);
+    expect(find.byIcon(Icons.bug_report_outlined), findsOneWidget);
   });
 }

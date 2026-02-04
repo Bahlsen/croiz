@@ -48,6 +48,8 @@ class GamePersistenceService {
     required int hintsUsed,
     required int wordsRevealed,
     required bool isCompleted,
+    int lettersUntilAd = 10,
+    int wordsUntilAd = 3,
   }) {
     cancelTimer();
     _persistTimer = Timer(_persistDebounce, () {
@@ -60,6 +62,8 @@ class GamePersistenceService {
         hintsUsed: hintsUsed,
         wordsRevealed: wordsRevealed,
         isCompleted: isCompleted,
+        lettersUntilAd: lettersUntilAd,
+        wordsUntilAd: wordsUntilAd,
       );
     });
   }
@@ -74,6 +78,8 @@ class GamePersistenceService {
     required int hintsUsed,
     required int wordsRevealed,
     required bool isCompleted,
+    int lettersUntilAd = 10,
+    int wordsUntilAd = 3,
   }) => _persistProgress(
     puzzleId: puzzleId,
     grid: grid,
@@ -83,6 +89,8 @@ class GamePersistenceService {
     hintsUsed: hintsUsed,
     wordsRevealed: wordsRevealed,
     isCompleted: isCompleted,
+    lettersUntilAd: lettersUntilAd,
+    wordsUntilAd: wordsUntilAd,
   );
 
   /// Persist the previous puzzle's state when switching puzzles.
@@ -95,12 +103,14 @@ class GamePersistenceService {
     int hintsUsed = 0,
     int wordsRevealed = 0,
     bool isCompleted = false,
+    int lettersUntilAd = 10,
+    int wordsUntilAd = 3,
   }) {
     cancelTimer();
     () async {
       try {
         final payload = {
-          'schemaVersion': 1,
+          'schemaVersion': 2,
           'grid': grid,
           'savedAt': DateTime.now().toIso8601String(),
           'foundWords': foundWords,
@@ -108,6 +118,8 @@ class GamePersistenceService {
           'hintsUsed': hintsUsed,
           'wordsRevealed': wordsRevealed,
           'isCompleted': isCompleted,
+          'lettersUntilAd': lettersUntilAd,
+          'wordsUntilAd': wordsUntilAd,
         };
         await _storage.save(
           puzzleId,
@@ -133,10 +145,12 @@ class GamePersistenceService {
     required int hintsUsed,
     required int wordsRevealed,
     required bool isCompleted,
+    required int lettersUntilAd,
+    required int wordsUntilAd,
   }) async {
     try {
       final payload = {
-        'schemaVersion': 1,
+        'schemaVersion': 2,
         'grid': grid,
         'savedAt': DateTime.now().toIso8601String(),
         'foundWords': foundWords.toList(),
@@ -145,6 +159,8 @@ class GamePersistenceService {
         'hintsUsed': hintsUsed,
         'wordsRevealed': wordsRevealed,
         'isCompleted': isCompleted,
+        'lettersUntilAd': lettersUntilAd,
+        'wordsUntilAd': wordsUntilAd,
       };
 
       await _storage.save(

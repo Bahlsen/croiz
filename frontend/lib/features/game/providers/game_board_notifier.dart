@@ -266,6 +266,9 @@ class GameBoardNotifier extends _$GameBoardNotifier {
         setHintsUsed: (hints) => state = state.copyWith(hintsUsed: hints),
         setWordsRevealed:
             (words) => state = state.copyWith(wordsRevealed: words),
+        setLettersUntilAd:
+            (letters) => state = state.copyWith(lettersUntilAd: letters),
+        setWordsUntilAd: (words) => state = state.copyWith(wordsUntilAd: words),
       );
 
       if (!success && ref.mounted) {
@@ -406,10 +409,27 @@ class GameBoardNotifier extends _$GameBoardNotifier {
     }
   }
 
+  void replenishLetterQuota() {
+    state = state.copyWith(lettersUntilAd: 10);
+    _schedulePersist();
+  }
+
+  void replenishWordQuota() {
+    state = state.copyWith(wordsUntilAd: 3);
+    _schedulePersist();
+  }
+
   /// Reveal the solution letter at the given cell (if available).
   void revealLetterAt(int row, int col) {
     if (state.grid[row][col] != null) {
       return;
+    }
+
+    // Pass through if developer tools or unexpected state, but normally UI protects this.
+    // We decrement if > 0.
+    var newQuota = state.lettersUntilAd;
+    if (newQuota > 0) {
+      newQuota--;
     }
 
     final letter = _revealService.revealLetterAt(
@@ -424,7 +444,7 @@ class GameBoardNotifier extends _$GameBoardNotifier {
 
     state = state
         .updateCell(row, col, letter)
-        .copyWith(hintsUsed: state.hintsUsed + 1);
+        .copyWith(hintsUsed: state.hintsUsed + 1, lettersUntilAd: newQuota);
 
     // Play reveal sound
     if (!ref.read(gameAudioMutedProvider)) {
@@ -481,10 +501,16 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       return;
     }
 
+    var newQuota = state.wordsUntilAd;
+    if (newQuota > 0) {
+      newQuota--;
+    }
+
     state = state.copyWith(
       grid: result.newGrid,
       hintsUsed: state.hintsUsed + 1,
       wordsRevealed: state.wordsRevealed + 1,
+      wordsUntilAd: newQuota,
     );
     ref.read(foundWordsProvider.notifier).setFoundWords(result.newFoundWords);
     ref
@@ -575,6 +601,8 @@ class GameBoardNotifier extends _$GameBoardNotifier {
       hintsUsed: state.hintsUsed,
       wordsRevealed: state.wordsRevealed,
       isCompleted: isCompleted,
+      lettersUntilAd: state.lettersUntilAd,
+      wordsUntilAd: state.wordsUntilAd,
     );
   }
 

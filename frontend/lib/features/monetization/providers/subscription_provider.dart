@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../services/subscription_service.dart';
@@ -8,9 +7,7 @@ import '../services/subscription_service.dart';
 part 'subscription_provider.g.dart';
 
 @Riverpod(keepAlive: true)
-SubscriptionService subscriptionService(Ref ref) {
-  return SubscriptionService();
-}
+SubscriptionService subscriptionService(Ref ref) => SubscriptionService();
 
 @Riverpod(keepAlive: true)
 class SubscriptionNotifier extends _$SubscriptionNotifier {

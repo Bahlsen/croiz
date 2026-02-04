@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:croiz/features/monetization/providers/subscription_provider.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -39,31 +42,52 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
       return;
     }
 
-    final adService = ref.read(monetizationServiceProvider);
+    if (kIsWeb) {
+      return;
+    }
 
-    _bannerAd = adService.createBannerAd(
-      onAdLoaded: (ad) {
-        if (!mounted) {
+    try {
+      final adService = ref.read(monetizationServiceProvider);
+
+      // Ensure we are on a supported platform before trying to create ad
+      if (!Platform.isAndroid && !Platform.isIOS) {
+        debugPrint('BannerAdWidget: Platform not supported for ads');
+        _adLoadFailed = true;
+        return;
+      }
+
+      _bannerAd = adService.createBannerAd(
+        onAdLoaded: (ad) {
+          if (!mounted) {
+            ad.dispose();
+            return;
+          }
+          setState(() {
+            _isAdLoaded = true;
+            _adLoadFailed = false;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          if (!mounted) {
+            return;
+          }
+          debugPrint('BannerAdWidget: Failed to load ad: $error');
+          setState(() {
+            _isAdLoaded = false;
+            _adLoadFailed = true;
+          });
           ad.dispose();
-          return;
-        }
+          _bannerAd = null;
+        },
+      )..load();
+    } catch (e) {
+      debugPrint('BannerAdWidget: Error creating ad: $e');
+      if (mounted) {
         setState(() {
-          _isAdLoaded = true;
-          _adLoadFailed = false;
-        });
-      },
-      onAdFailedToLoad: (ad, error) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {
-          _isAdLoaded = false;
           _adLoadFailed = true;
         });
-        ad.dispose();
-        _bannerAd = null;
-      },
-    )..load();
+      }
+    }
   }
 
   @override
