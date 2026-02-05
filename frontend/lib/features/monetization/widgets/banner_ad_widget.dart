@@ -80,7 +80,7 @@ class _BannerAdWidgetState extends ConsumerState<BannerAdWidget> {
           _bannerAd = null;
         },
       )..load();
-    } catch (e) {
+    } on Object catch (e) {
       debugPrint('BannerAdWidget: Error creating ad: $e');
       if (mounted) {
         setState(() {

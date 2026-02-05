@@ -13,7 +13,6 @@ def main():
         'de': f'{base_url}/de/de_full.txt',
         'it': f'{base_url}/it/it_full.txt',
         'pt': f'{base_url}/pt_br/pt_br_full.txt',
-        'ru': f'{base_url}/ru/ru_full.txt',
         'uk': f'{base_url}/uk/uk_full.txt',
     }
 

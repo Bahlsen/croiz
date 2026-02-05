@@ -175,7 +175,9 @@ class MonetizationService {
   }
 
   void _loadRewardedAd() {
-    if (kIsWeb) return;
+    if (kIsWeb) {
+      return;
+    }
 
     RewardedAd.load(
       adUnitId: rewardedAdUnitId,
@@ -234,7 +236,7 @@ class MonetizationService {
   Future<void> showInterstitialAd() async {
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _logger.i('Showing interstitial ad...');
-      _interstitialAd!.show();
+      await _interstitialAd!.show();
       _isInterstitialAdReady = false;
       _interstitialAd = null;
       _pendingShowRequest = false;

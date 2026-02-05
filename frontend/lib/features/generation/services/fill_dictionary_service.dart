@@ -14,7 +14,7 @@ class FillDictionaryService {
   final Map<String, List<String>> _cache = {};
 
   /// Supported languages with fill dictionaries.
-  /// Maps language code to actual dictionary file code (for ru -> uk mapping).
+  /// Maps language code to actual dictionary file code.
   static const Map<String, String> _languageMapping = {
     'en': 'en',
     'fr': 'fr',
@@ -23,7 +23,6 @@ class FillDictionaryService {
     'it': 'it',
     'pt': 'pt',
     'uk': 'uk',
-    'ru': 'ru', // Russian uses its own dictionary now
   };
 
   /// Load fill dictionary for a specific language.

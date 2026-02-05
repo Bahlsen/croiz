@@ -36,9 +36,7 @@ class FakeMonetizationService implements MonetizationService {
   Future<void> showInterstitialAd() async {}
 
   @override
-  Future<bool> showRewardedAd() async {
-    return true; // Auto-reward in tests
-  }
+  Future<bool> showRewardedAd() async => true;
 
   @override
   Future<void> incrementPuzzleLoadCount() async {}
@@ -50,7 +48,5 @@ class FakeMonetizationService implements MonetizationService {
   final ValueNotifier<bool> isAdShowing = ValueNotifier<bool>(false);
 
   @override
-  Future<void> waitForAdDismissed() async {
-    // Immediately return in tests since we never actually show ads
-  }
+  Future<void> waitForAdDismissed() => Future.value();
 }

@@ -30,10 +30,6 @@ The application uses Flutter's standard `flutter_localizations` package with ARB
    ```
    *Note: Currently, generated files are versioned in `lib/l10n/`.*
 
-> [!IMPORTANT]
-> **Special Case: Russian (ru)**:
-> Although displayed as "Русский" in the UI, all internal translations and generation logic should correspond to **Ukrainian**.
-> If you add words or translations for Russian, they must be entered in Ukrainian.
 
 ## 2. App Configuration
 
@@ -94,7 +90,6 @@ If the language uses a specific alphabet (e.g., Greek, Russian, Bulgarian), you 
 | Italian | QWERTY | Accented letters via long-press |
 | Portuguese | QWERTY | Accented letters via long-press |
 | Ukrainian | ЙЦУКЕН | Full Cyrillic layout |
-| Russian | ЙЦУКЕН | Maps to Ukrainian layout |
 
 ## 4. Puzzle Generation Adaptation
 
@@ -111,7 +106,7 @@ The placement algorithm needs to know letter frequency/difficulty to optimize in
    'it': { 'A': 1, 'E': 1, ..., 'Z': 10 },
    ```
 
-2. **Language code mapping**: If necessary, map variants (e.g., `ru` -> `uk`) in the `_getWeights` method.
+2. **Language code mapping**: If necessary, map variants in the `_getWeights` method.
 
 ### B. Fill Dictionary
 
@@ -126,7 +121,7 @@ Create a fill dictionary with common words (3-8 letters) for the language. This 
 - `fill_de.txt` - German
 - `fill_it.txt` - Italian
 - `fill_pt.txt` - Portuguese
-- `fill_uk.txt` - Ukrainian (also used for Russian)
+- `fill_uk.txt` - Ukrainian
 
 **Dictionary format:**
 ```
@@ -164,7 +159,7 @@ The service must know how to ask the AI to generate valid words.
    'es': 'Use only uppercase Spanish letters. The Ñ character is allowed.',
    ```
 
-3. **Specific mapping**: For Russian, ensure `ru` maps to `uk` before selecting name and constraints.
+
 
 ## 5. Puzzle Data (Optional)
 
@@ -214,7 +209,6 @@ After adding a new language:
 | Italian | it | ✅ | ✅ | QWERTY | ✅ |
 | Portuguese | pt | ✅ | ✅ | QWERTY | ✅ |
 | Ukrainian | uk | ✅ | ✅ | Cyrillic | ✅ |
-| Russian | ru | ✅ | ✅ | Cyrillic | ✅ (uses uk) |
 
 ## Checklist for Adding a New Language
 

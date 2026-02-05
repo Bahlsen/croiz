@@ -38,7 +38,7 @@ class FeedbackService {
           );
         }
       }
-    } catch (e) {
+    } on Object catch (e) {
       debugPrint('Error launching feedback: $e');
       if (context.mounted) {
         ScaffoldMessenger.of(
@@ -68,7 +68,7 @@ class FeedbackService {
         deviceModel = '${iosInfo.name} (${iosInfo.systemName})';
         osVersion = iosInfo.systemVersion;
       }
-    } catch (e) {
+    } on Object catch (e) {
       debugPrint('Failed to get device info: $e');
     }
 

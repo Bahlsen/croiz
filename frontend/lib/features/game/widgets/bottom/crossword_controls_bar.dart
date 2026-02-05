@@ -9,6 +9,7 @@ import 'package:croiz/features/game/helpers/entry_lookup.dart';
 import 'package:croiz/features/game/controllers/entry_helpers.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
+import 'package:croiz/features/monetization/providers/subscription_provider.dart';
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_menu.dart';
 import 'package:croiz/core/responsive/responsive.dart';
 
@@ -41,8 +42,8 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
     final isAzerty = ref.watch(gameKeyboardLayoutProvider);
     final board = ref.watch(gameBoardProvider.select((b) => b));
     final language = board.language.toLowerCase();
-    // For Russian, we internally treat it as Ukrainian as requested
-    final isCyrillic = ['uk', 'ua', 'ru'].contains(language);
+    // Ukrainian uses Cyrillic layout
+    final isCyrillic = ['uk', 'ua'].contains(language);
 
     final isSpanish = language == 'es';
     final layout =
@@ -215,7 +216,9 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   );
 
   Future<bool> _checkAdQuota(int quota, VoidCallback onReplenish) async {
-    if (quota > 0) {
+    // Premium users bypass all quotas
+    final isPremium = ref.read(subscriptionProvider).value ?? false;
+    if (isPremium || quota > 0) {
       return true;
     }
 
@@ -380,6 +383,38 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
 
   Future<void> _revealAll() async {
     setState(() => _revealOpen = false);
+
+    // Premium users bypass ad requirement
+    final isPremium = ref.read(subscriptionProvider).value ?? false;
+    if (isPremium) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          final loc = AppLocalizations.of(context);
+          return AlertDialog(
+            title: Text(loc?.revealAllConfirmationTitle ?? 'Reveal All?'),
+            content: Text(
+              loc?.revealAllConfirmationMessage ??
+                  'Are you sure you want to reveal the entire puzzle?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(loc?.no ?? 'No'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text(loc?.yes ?? 'Yes'),
+              ),
+            ],
+          );
+        },
+      );
+      if (confirmed == true) {
+        ref.read(gameBoardProvider.notifier).revealAll();
+      }
+      return;
+    }
 
     final confirmed = await showDialog<bool>(
       context: context,

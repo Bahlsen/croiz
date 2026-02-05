@@ -11,7 +11,6 @@ class AppLanguages {
     'de',
     'it',
     'pt',
-    'ru',
   };
 
   /// Languages supported for puzzle generation (via Gemini).
@@ -24,7 +23,6 @@ class AppLanguages {
     'de',
     'it',
     'pt',
-    'ru',
   };
 
   static const Map<String, ({String name, String flag})> _metadata = {
@@ -35,7 +33,6 @@ class AppLanguages {
     'de': (name: 'Deutsch', flag: '🇩🇪'),
     'it': (name: 'Italiano', flag: '🇮🇹'),
     'pt': (name: 'Português', flag: '🇵🇹'),
-    'ru': (name: 'Русский', flag: '🇷🇺'),
   };
 
   /// Returns only the locales that have UI support.

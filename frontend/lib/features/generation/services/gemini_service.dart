@@ -103,7 +103,7 @@ class GeminiPuzzleService {
     int difficulty,
   ) {
     // Determine language-specific instructions
-    final effectiveLang = lang == 'ru' ? 'uk' : lang;
+    final effectiveLang = lang;
     final langNames = {
       'en': 'English',
       'fr': 'French',
@@ -280,7 +280,7 @@ $jsonFormat
 
   String _buildCluePrompt(List<String> words, String lang, int difficulty) {
     // Determine language-specific instructions
-    final effectiveLang = lang == 'ru' ? 'uk' : lang;
+    final effectiveLang = lang;
     final langNames = {
       'en': 'English',
       'fr': 'French',

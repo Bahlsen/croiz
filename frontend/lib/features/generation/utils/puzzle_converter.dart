@@ -67,7 +67,7 @@ class PuzzleConverter {
       if (isMultiWord) {
         // Calculate number of words from enumeration if available,
         // otherwise default to 2+ words generic hint.
-        int wordCount = 0;
+        var wordCount = 0;
         if (entry.enumeration != null && entry.enumeration!.contains(',')) {
           wordCount = entry.enumeration!.split(',').length;
         } else if (entry.answer != null && entry.answer!.contains(' ')) {

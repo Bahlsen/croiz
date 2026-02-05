@@ -114,15 +114,6 @@ void main() {
     expect(find.text('Ї'), findsOneWidget);
   });
 
-  testWidgets('shows Ukrainian keyboard when language is "ru"', (tester) async {
-    final ruBoard = emptyBoard.copyWith(language: 'ru');
-    await tester.pumpWidget(createSubject(ruBoard));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Й'), findsOneWidget);
-    expect(find.text('Ї'), findsOneWidget);
-  });
-
   testWidgets('shows QWERTY/AZERTY when language is "en"', (tester) async {
     final enBoard = emptyBoard.copyWith(language: 'en');
     await tester.pumpWidget(createSubject(enBoard));
