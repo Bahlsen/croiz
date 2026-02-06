@@ -49,11 +49,12 @@ class FakeMonetizationService implements MonetizationService {
   @override
   Future<bool> showRewardedAd() async {
     isAdShowing.value = true;
-    _adCompleter = Completer<void>();
+    final completer = Completer<void>();
+    _adCompleter = completer;
     if (autoDismiss) {
       simulateAdDismissal();
     }
-    await _adCompleter!.future;
+    await completer.future;
     return true;
   }
 
