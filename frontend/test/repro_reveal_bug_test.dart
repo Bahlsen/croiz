@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'package:croiz/features/game/widgets/bottom/crossword_controls_bar.dart';
 import 'package:croiz/features/game/providers/game_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
@@ -7,13 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
 import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/monetization/services/ad_service.dart';
-import '../helpers/fake_monetization_service.dart';
+import 'helpers/fake_monetization_service.dart';
 
 void main() {
-  testWidgets('CrosswordControlsBar Reveal All requires confirmation', (
+  testWidgets('Watching ad replenishes letter reveals and allows reveal', (
     tester,
   ) async {
-    // Setup a simple board
+    // 1. Setup board with 0 lettersUntilAd
     final board = GameBoard(
       id: 'test',
       title: 'T',
@@ -37,6 +38,7 @@ void main() {
         ['D', 'E', 'F'],
         ['G', 'H', 'I'],
       ],
+      lettersUntilAd: 0, // No reveals left
     );
 
     final container = ProviderContainer(
@@ -68,41 +70,48 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    // 1. Open the Reveal Menu
+    // Select a cell
+    container
+        .read(selectedCellProvider.notifier)
+        .select(const SelectedCell(0, 0));
+    await tester.pump();
+
+    // 2. Open Reveal Menu
     await tester.tap(find.byKey(const Key('reveal_button')));
     await tester.pumpAndSettle();
 
-    // 2. Verify "Reveal all" option is PRESENT (meaning menu opened)
-    expect(find.text('Reveal all'), findsOneWidget);
-
-    // 3. Tap "Reveal all"
-    await tester.tap(find.text('Reveal all'));
+    // 3. Tap "Reveal letter"
+    await tester.tap(find.text('Reveal letter'));
     await tester.pumpAndSettle();
 
-    // 4. Verify Confirmation Dialog
-    expect(find.text('Confirm Reveal All'), findsOneWidget);
-    expect(find.text('Yes'), findsOneWidget);
-    expect(find.text('No'), findsOneWidget);
+    // 4. Verify "Watch Ad?" dialog appears
+    expect(find.text('Watch Ad?'), findsOneWidget);
 
-    // 5. Cancel
-    await tester.tap(find.text('No'));
-    await tester.pumpAndSettle();
-    expect(find.text('Confirm Reveal All'), findsNothing);
-
-    // 6. Reveal again
-    // Reopen menu
-    await tester.tap(find.byKey(const Key('reveal_button')));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Reveal all'));
-    await tester.pumpAndSettle();
-
-    // 7. Confirm
+    // 5. Tap "Yes" (FakeMonetizationService will grant reward)
     await tester.tap(find.text('Yes'));
+    final adService =
+        container.read(monetizationServiceProvider) as FakeMonetizationService;
+    adService.autoDismiss = false; // We want to control it manually
+    await tester.pump(); // Start the async call
+
+    // Simulate ad dismissal
+    adService.simulateAdDismissal();
+
     await tester.pumpAndSettle();
 
-    // Check solved
-    final currentBoard = container.read(gameBoardProvider);
-    expect(currentBoard.grid[0][0], equals('A'));
+    // 6. Verify that the letter was revealed (meaning revealLetterAt was called)
+    final updatedBoard = container.read(gameBoardProvider);
+    expect(
+      updatedBoard.grid[0][0],
+      equals('A'),
+      reason: 'Letter should be revealed',
+    );
+
+    // 7. Verify that reveals were replenished (to 10) and one was used (result: 9)
+    expect(
+      updatedBoard.lettersUntilAd,
+      equals(9),
+      reason: 'Reveals should be 9 (10 - 1 used)',
+    );
   });
 }

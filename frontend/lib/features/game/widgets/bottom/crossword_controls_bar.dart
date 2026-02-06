@@ -36,6 +36,7 @@ class CrosswordControlsBar extends ConsumerStatefulWidget {
 class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   bool _dialogOpen = false;
   bool _revealOpen = false;
+  bool _isProcessingReveal = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,6 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
                     : VirtualKeyboard.qwertyLayout));
     final kbSize = ref.watch(gameKeyboardSizeProvider);
 
-    // Map keyboard size to responsive key height and font size.
     // Map keyboard size to responsive key height and font size.
     final keyHeight = switch (kbSize) {
       KeyboardSize.small => ResponsiveKeyboard.keyHeightSmall,
@@ -260,77 +260,130 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
   }
 
   Future<void> _revealLetter() async {
-    setState(() => _revealOpen = false);
-    final sel = ref.read(selectedCellProvider);
-    if (sel == null) {
+    if (_isProcessingReveal) {
       return;
     }
-
-    final board = ref.read(gameBoardProvider);
-    final canReveal = await _checkAdQuota(
-      board.lettersUntilAd,
-      () => ref.read(gameBoardProvider.notifier).replenishLetterQuota(),
-    );
-
-    if (!canReveal) {
-      return;
-    }
-
-    ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
-
-    // After revealing, find and navigate to the next empty cell
-    final updatedBoard = ref.read(gameBoardProvider);
-    final dir = ref.read(wordDirectionProvider);
-    final isAcross = dir == WordDirection.horizontal;
-
-    // Find containing entry
-    final containing = findContainingEntry(
-      row: sel.row,
-      col: sel.col,
-      wantAcross: isAcross,
-      entries: updatedBoard.entries,
-      index: ref.read(cellEntriesIndexProvider),
-    );
-
-    if (containing != null) {
-      // Search for next empty cell AFTER current position within same entry
-      SelectedCell? nextInEntry;
-      if (isAcross) {
-        // Search columns after current
-        for (
-          var cc = sel.col + 1;
-          cc < containing.x + containing.length;
-          cc++
-        ) {
-          final val = updatedBoard.grid[containing.y][cc];
-          if (val == null || val.isEmpty) {
-            nextInEntry = SelectedCell(containing.y, cc);
-            break;
-          }
-        }
-      } else {
-        // Search rows after current
-        for (
-          var rr = sel.row + 1;
-          rr < containing.y + containing.length;
-          rr++
-        ) {
-          final val = updatedBoard.grid[rr][containing.x];
-          if (val == null || val.isEmpty) {
-            nextInEntry = SelectedCell(rr, containing.x);
-            break;
-          }
-        }
-      }
-
-      if (nextInEntry != null) {
-        ref.read(selectedCellProvider.notifier).select(nextInEntry);
+    _isProcessingReveal = true;
+    try {
+      setState(() => _revealOpen = false);
+      final sel = ref.read(selectedCellProvider);
+      if (sel == null) {
         return;
       }
 
-      // If no empty after current position, find next empty from other entries
+      final board = ref.read(gameBoardProvider);
+      final canReveal = await _checkAdQuota(
+        board.lettersUntilAd,
+        () => ref.read(gameBoardProvider.notifier).replenishLetterQuota(),
+      );
+
+      if (!canReveal) {
+        return;
+      }
+
+      ref.read(gameBoardProvider.notifier).revealLetterAt(sel.row, sel.col);
+
+      // After revealing, find and navigate to the next empty cell
+      final updatedBoard = ref.read(gameBoardProvider);
+      final dir = ref.read(wordDirectionProvider);
+      final isAcross = dir == WordDirection.horizontal;
+
+      // Find containing entry
+      final containing = findContainingEntry(
+        row: sel.row,
+        col: sel.col,
+        wantAcross: isAcross,
+        entries: updatedBoard.entries,
+        index: ref.read(cellEntriesIndexProvider),
+      );
+
+      if (containing != null) {
+        // Search for next empty cell AFTER current position within same entry
+        SelectedCell? nextInEntry;
+        if (isAcross) {
+          // Search columns after current
+          for (
+            var cc = sel.col + 1;
+            cc < containing.x + containing.length;
+            cc++
+          ) {
+            final val = updatedBoard.grid[containing.y][cc];
+            if (val == null || val.isEmpty) {
+              nextInEntry = SelectedCell(containing.y, cc);
+              break;
+            }
+          }
+        } else {
+          // Search rows after current
+          for (
+            var rr = sel.row + 1;
+            rr < containing.y + containing.length;
+            rr++
+          ) {
+            final val = updatedBoard.grid[rr][containing.x];
+            if (val == null || val.isEmpty) {
+              nextInEntry = SelectedCell(rr, containing.x);
+              break;
+            }
+          }
+        }
+
+        if (nextInEntry != null) {
+          ref.read(selectedCellProvider.notifier).select(nextInEntry);
+          return;
+        }
+
+        // If no empty after current position, find next empty from other entries
+        final nextEmpty = findNextEmptyFromEntry(
+          containing: containing,
+          wantAcross: isAcross,
+          board: updatedBoard,
+          entries: updatedBoard.entries,
+          skipLocked: false,
+        );
+        if (nextEmpty != null) {
+          ref.read(selectedCellProvider.notifier).select(nextEmpty);
+        }
+      }
+    } finally {
+      _isProcessingReveal = false;
+    }
+  }
+
+  Future<void> _revealWord() async {
+    if (_isProcessingReveal) {
+      return;
+    }
+    _isProcessingReveal = true;
+    try {
+      setState(() => _revealOpen = false);
+      final sel = ref.read(selectedCellProvider);
+      if (sel == null) {
+        return;
+      }
+      final board = ref.read(gameBoardProvider);
+      final dir = ref.read(wordDirectionProvider);
+      final ctx = computeCurrentEntry(board, sel, dir);
+      if (ctx == null) {
+        return;
+      }
+
+      final canReveal = await _checkAdQuota(
+        board.wordsUntilAd,
+        () => ref.read(gameBoardProvider.notifier).replenishWordQuota(),
+      );
+
+      if (!canReveal) {
+        return;
+      }
+
+      ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
+
+      // After revealing, find and navigate to the next empty cell
+      final updatedBoard = ref.read(gameBoardProvider);
+      final isAcross = dir == WordDirection.horizontal;
       final nextEmpty = findNextEmptyFromEntry(
-        containing: containing,
+        containing: ctx.entry,
         wantAcross: isAcross,
         board: updatedBoard,
         entries: updatedBoard.entries,
@@ -339,63 +392,61 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
       if (nextEmpty != null) {
         ref.read(selectedCellProvider.notifier).select(nextEmpty);
       }
-    }
-  }
-
-  Future<void> _revealWord() async {
-    setState(() => _revealOpen = false);
-    final sel = ref.read(selectedCellProvider);
-    if (sel == null) {
-      return;
-    }
-    final board = ref.read(gameBoardProvider);
-    final dir = ref.read(wordDirectionProvider);
-    final ctx = computeCurrentEntry(board, sel, dir);
-    if (ctx == null) {
-      return;
-    }
-
-    final canReveal = await _checkAdQuota(
-      board.wordsUntilAd,
-      () => ref.read(gameBoardProvider.notifier).replenishWordQuota(),
-    );
-
-    if (!canReveal) {
-      return;
-    }
-
-    ref.read(gameBoardProvider.notifier).revealEntry(ctx.entry);
-
-    // After revealing, find and navigate to the next empty cell
-    final updatedBoard = ref.read(gameBoardProvider);
-    final isAcross = dir == WordDirection.horizontal;
-    final nextEmpty = findNextEmptyFromEntry(
-      containing: ctx.entry,
-      wantAcross: isAcross,
-      board: updatedBoard,
-      entries: updatedBoard.entries,
-      skipLocked: false,
-    );
-    if (nextEmpty != null) {
-      ref.read(selectedCellProvider.notifier).select(nextEmpty);
+    } finally {
+      _isProcessingReveal = false;
     }
   }
 
   Future<void> _revealAll() async {
-    setState(() => _revealOpen = false);
+    if (_isProcessingReveal) {
+      return;
+    }
+    _isProcessingReveal = true;
+    try {
+      setState(() => _revealOpen = false);
 
-    // Premium users bypass ad requirement
-    final isPremium = ref.read(subscriptionProvider).value ?? false;
-    if (isPremium) {
+      // Premium users bypass ad requirement
+      final isPremium = ref.read(subscriptionProvider).value ?? false;
+      if (isPremium) {
+        final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            final loc = AppLocalizations.of(context);
+            return AlertDialog(
+              title: Text(loc?.revealAllConfirmationTitle ?? 'Reveal All?'),
+              content: Text(
+                loc?.revealAllConfirmationMessage ??
+                    'Are you sure you want to reveal the entire puzzle?',
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(loc?.no ?? 'No'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(loc?.yes ?? 'Yes'),
+                ),
+              ],
+            );
+          },
+        );
+        if (confirmed == true) {
+          ref.read(gameBoardProvider.notifier).revealAll();
+        }
+        return;
+      }
+
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) {
           final loc = AppLocalizations.of(context);
+          // Requirement: reveal complete puzzle -> watch ad.
           return AlertDialog(
             title: Text(loc?.revealAllConfirmationTitle ?? 'Reveal All?'),
             content: Text(
-              loc?.revealAllConfirmationMessage ??
-                  'Are you sure you want to reveal the entire puzzle?',
+              loc?.revealAllAdMessage ??
+                  'To reveal the entire puzzle, you must watch a short ad. Continue?',
             ),
             actions: [
               TextButton(
@@ -410,44 +461,17 @@ class _CrosswordControlsBarState extends ConsumerState<CrosswordControlsBar> {
           );
         },
       );
+
       if (confirmed == true) {
-        ref.read(gameBoardProvider.notifier).revealAll();
+        // Must watch ad
+        final adService = ref.read(monetizationServiceProvider);
+        final earned = await adService.showRewardedAd();
+        if (earned) {
+          ref.read(gameBoardProvider.notifier).revealAll();
+        }
       }
-      return;
-    }
-
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        final loc = AppLocalizations.of(context);
-        // Requirement: reveal complete puzzle -> watch ad.
-        return AlertDialog(
-          title: Text(loc?.revealAllConfirmationTitle ?? 'Reveal All?'),
-          content: Text(
-            loc?.revealAllAdMessage ??
-                'To reveal the entire puzzle, you must watch a short ad. Continue?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(loc?.no ?? 'No'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(loc?.yes ?? 'Yes'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirmed == true) {
-      // Must watch ad
-      final adService = ref.read(monetizationServiceProvider);
-      final earned = await adService.showRewardedAd();
-      if (earned) {
-        ref.read(gameBoardProvider.notifier).revealAll();
-      }
+    } finally {
+      _isProcessingReveal = false;
     }
   }
 

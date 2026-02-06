@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/fake_puzzle_storage.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 // import removed: not needed in this unit test
 import 'package:croiz/domain/entities/game_entities.dart';
 import 'package:croiz/features/puzzles/puzzles_provider.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -62,7 +62,8 @@ void main() {
 
       final storage = FakePuzzleStorage();
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        storage: storage,
         overrides: [
           // Provide a loader that returns boardA or boardB based on selected id.
           puzzlesProvider.overrideWithValue(
@@ -77,9 +78,6 @@ void main() {
             }
             return boardB;
           }),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          puzzleStorageProvider.overrideWithValue(storage),
         ],
       );
       addTearDown(() async {

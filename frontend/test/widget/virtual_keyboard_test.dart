@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:sizer/sizer.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:croiz/l10n/app_localizations.dart';
 import 'package:croiz/features/game/widgets/keyboard/virtual_keyboard.dart';
 import 'package:croiz/services/providers.dart';
 import '../helpers/fake_audio_service.dart';
@@ -148,9 +145,6 @@ void main() {
     testWidgets('custom lowercase layout emits uppercase letters', (
       tester,
     ) async {
-      tester.view.resetPhysicalSize();
-      tester.view.resetDevicePixelRatio();
-
       final layout = [
         ['a', 'b'],
       ];
@@ -160,25 +154,15 @@ void main() {
           overrides: [
             gameAudioServiceProvider.overrideWithValue(FakeAudioService()),
           ],
-          child: Sizer(
-            builder:
-                (context, orientation, deviceType) => MaterialApp(
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  home: Scaffold(
-                    body: VirtualKeyboard(
-                      layout: layout,
-                      onKey: (k) => tapped = k,
-                      includeBackspace: false,
-                      enableFeedback: false,
-                    ),
-                  ),
-                ),
+          child: MaterialApp(
+            home: Scaffold(
+              body: VirtualKeyboard(
+                layout: layout,
+                onKey: (k) => tapped = k,
+                includeBackspace: false,
+                enableFeedback: false,
+              ),
+            ),
           ),
         ),
       );
@@ -186,7 +170,6 @@ void main() {
       expect(find.text('A'), findsOneWidget);
       await tester.tap(find.text('A'));
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 200));
       expect(tapped, 'A');
     });
   });

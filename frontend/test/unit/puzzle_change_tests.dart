@@ -1,12 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
-import 'package:croiz/services/providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import 'package:croiz/services/providers.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Puzzle change integration tests', () {
     test('selected cell is cleared when switching puzzles', () async {
       final board1 = GameBoard(
@@ -49,7 +51,7 @@ void main() {
 
       GameBoard? currentBoard = board1;
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async {
             final b = currentBoard;
@@ -58,8 +60,6 @@ void main() {
             }
             return b;
           }),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -136,14 +136,12 @@ void main() {
 
         final currentBoard = board;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async {
               final b = currentBoard;
               return b;
             }),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);
@@ -204,14 +202,12 @@ void main() {
 
       final currentBoard = board;
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async {
             final b = currentBoard;
             return b;
           }),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
@@ -266,21 +262,19 @@ void main() {
 
       final currentBoard = board;
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
         overrides: [
           puzzleLoaderProvider.overrideWith((ref) async {
             final b = currentBoard;
             return b;
           }),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
         ],
       );
       addTearDown(container.dispose);
 
       await container.read(puzzleLoaderProvider.future);
       await Future.microtask(() {});
-      // Ensure gameBoardProvider initialised
+      // Ensure gameBoardProvider initialisation so notifier can populate state
       container.read(gameBoardProvider);
 
       // Reveal the full entry
@@ -361,7 +355,7 @@ void main() {
 
         GameBoard? currentBoard = originalBoard;
 
-        final container = ProviderContainer(
+        final container = createTestContainer(
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async {
               final b = currentBoard;
@@ -370,8 +364,6 @@ void main() {
               }
               return b;
             }),
-            flashClearDelayProvider.overrideWithValue(Duration.zero),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
         );
         addTearDown(container.dispose);

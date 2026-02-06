@@ -1,14 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helpers/fake_puzzle_storage.dart';
-import 'package:croiz/services/persistence/storage_provider.dart';
 import 'package:croiz/features/game/providers/game_timer_provider.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
-import 'package:croiz/services/providers.dart';
 
 import '../helpers/fake_audio_service.dart';
+import '../helpers/test_helpers.dart';
 
 class FakeGameTimer extends GameTimer {
   FakeGameTimer(super.ref, super.gameId);
@@ -22,6 +20,8 @@ class FakeGameTimer extends GameTimer {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Puzzle change persistence & audio', () {
     test('GameTimer.setElapsed called from persisted payload', () async {
       final board = GameBoard(
@@ -48,14 +48,12 @@ void main() {
       final payload = {'elapsedSeconds': 42};
       await storage.save(board.id, payload);
 
-      final container = ProviderContainer(
+      final container = createTestContainer(
+        storage: storage,
         overrides: [
           // Replace GameTimer instances with a fake that records setElapsed
           gameTimerProvider.overrideWith(FakeGameTimer.new),
           puzzleLoaderProvider.overrideWith((ref) async => board),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-          puzzleStorageProvider.overrideWithValue(storage),
         ],
       );
       addTearDown(() async {
@@ -111,13 +109,9 @@ void main() {
 
       final fakeAudio = FakeAudioService();
 
-      final container = ProviderContainer(
-        overrides: [
-          gameAudioServiceProvider.overrideWithValue(fakeAudio),
-          puzzleLoaderProvider.overrideWith((ref) async => board),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        audioService: fakeAudio,
+        overrides: [puzzleLoaderProvider.overrideWith((ref) async => board)],
       );
       addTearDown(() async => container.dispose());
 

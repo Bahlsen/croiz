@@ -55,7 +55,7 @@ class MonetizationService {
   /// Returns a future that completes when the current fullscreen ad is dismissed.
   /// If no ad is showing, returns immediately.
   Future<void> waitForAdDismissed() async {
-    if (!isAdShowing.value) {
+    if (!isAdShowing.value && _adDismissedCompleter == null) {
       return;
     }
     // Wait for the ad to be dismissed
@@ -135,7 +135,6 @@ class MonetizationService {
             onAdShowedFullScreenContent: (ad) {
               _logger.i('Interstitial ad showing.');
               isAdShowing.value = true;
-              _adDismissedCompleter = Completer<void>();
             },
             onAdDismissedFullScreenContent: (ad) {
               _logger.i('Interstitial ad dismissed.');
@@ -192,7 +191,6 @@ class MonetizationService {
             onAdShowedFullScreenContent: (ad) {
               _logger.i('Rewarded ad showing.');
               isAdShowing.value = true;
-              _adDismissedCompleter = Completer<void>();
             },
             onAdDismissedFullScreenContent: (ad) {
               _logger.i('Rewarded ad dismissed.');
@@ -234,13 +232,19 @@ class MonetizationService {
   /// Shows the interstitial ad if it's ready.
   /// If the ad is still loading, marks it to be shown automatically when ready.
   Future<void> showInterstitialAd() async {
+    if (isAdShowing.value) {
+      _logger.w('An ad is already showing, ignoring request.');
+      return;
+    }
+
     if (_isInterstitialAdReady && _interstitialAd != null) {
       _logger.i('Showing interstitial ad...');
+      _adDismissedCompleter = Completer<void>();
       await _interstitialAd!.show();
       _isInterstitialAdReady = false;
       _interstitialAd = null;
       _pendingShowRequest = false;
-      await waitForAdDismissed();
+      await _adDismissedCompleter?.future;
     } else {
       _logger.w(
         'Interstitial ad not ready (ready: $_isInterstitialAdReady, ad: ${_interstitialAd != null}), will show when loaded...',
@@ -257,9 +261,15 @@ class MonetizationService {
   /// Shows the rewarded ad if it's ready.
   /// Returns check if reward was granted.
   Future<bool> showRewardedAd() async {
+    if (isAdShowing.value) {
+      _logger.w('An ad is already showing, ignoring request.');
+      return false;
+    }
+
     if (_isRewardedAdReady && _rewardedAd != null) {
       _logger.i('Showing rewarded ad...');
       var rewardEarned = false;
+      _adDismissedCompleter = Completer<void>();
       await _rewardedAd!.show(
         onUserEarnedReward: (ad, reward) {
           rewardEarned = true;
@@ -269,7 +279,7 @@ class MonetizationService {
       _isRewardedAdReady = false;
       _rewardedAd = null;
       _pendingShowRewardedRequest = false;
-      await waitForAdDismissed();
+      await _adDismissedCompleter?.future;
       return rewardEarned;
     } else {
       _logger.w(

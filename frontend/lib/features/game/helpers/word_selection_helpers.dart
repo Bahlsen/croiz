@@ -3,7 +3,8 @@ extension WordSelectionHelpers on List<List<bool>> {
   /// in the given direction, starting from (row, col).
   /// Returns (start, end) inclusive indices.
   List<int> wordBounds(int row, int col, {required bool horizontal}) {
-    final size = length;
+    final rowLen = this[row].length;
+    final gridHeight = length;
     var start = horizontal ? col : row;
     var end = horizontal ? col : row;
     // Expand left/up
@@ -12,7 +13,8 @@ extension WordSelectionHelpers on List<List<bool>> {
       start--;
     }
     // Expand right/down
-    while (end < size - 1 &&
+    final max = horizontal ? rowLen : gridHeight;
+    while (end < max - 1 &&
         !this[horizontal ? row : end + 1][horizontal ? end + 1 : col]) {
       end++;
     }

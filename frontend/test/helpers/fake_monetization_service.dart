@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:croiz/features/monetization/services/ad_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -6,6 +7,8 @@ import 'package:mocktail/mocktail.dart';
 class MockBannerAd extends Mock implements BannerAd {}
 
 class FakeMonetizationService implements MonetizationService {
+  bool autoDismiss = true;
+
   @override
   String get bannerAdUnitId => 'test-banner-id';
 
@@ -35,8 +38,24 @@ class FakeMonetizationService implements MonetizationService {
   @override
   Future<void> showInterstitialAd() async {}
 
+  Completer<void>? _adCompleter;
+
+  void simulateAdDismissal() {
+    _adCompleter?.complete();
+    _adCompleter = null;
+    isAdShowing.value = false;
+  }
+
   @override
-  Future<bool> showRewardedAd() async => true;
+  Future<bool> showRewardedAd() async {
+    isAdShowing.value = true;
+    _adCompleter = Completer<void>();
+    if (autoDismiss) {
+      simulateAdDismissal();
+    }
+    await _adCompleter!.future;
+    return true;
+  }
 
   @override
   Future<void> incrementPuzzleLoadCount() async {}

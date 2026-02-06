@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:croiz/features/game/providers/game_board_notifier.dart';
 import 'package:croiz/features/game/providers/puzzle_loader_provider.dart';
 import 'package:croiz/features/game/providers/game_state_providers.dart';
 import 'package:croiz/domain/entities/game_entities.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('Puzzle change — input & cleaners', () {
     test('setLetter only affects current puzzle instance', () async {
       final a = GameBoard(
@@ -48,12 +50,8 @@ void main() {
 
       GameBoard? current = a;
 
-      final container = ProviderContainer(
-        overrides: [
-          puzzleLoaderProvider.overrideWith((ref) async => current!),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        overrides: [puzzleLoaderProvider.overrideWith((ref) async => current!)],
       );
       addTearDown(container.dispose);
 
@@ -121,12 +119,8 @@ void main() {
       );
 
       final current = board;
-      final container = ProviderContainer(
-        overrides: [
-          puzzleLoaderProvider.overrideWith((ref) async => current),
-          flashClearDelayProvider.overrideWithValue(Duration.zero),
-          wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
-        ],
+      final container = createTestContainer(
+        overrides: [puzzleLoaderProvider.overrideWith((ref) async => current)],
       );
       addTearDown(container.dispose);
 
@@ -177,15 +171,11 @@ void main() {
         );
 
         final current = board;
-        final container = ProviderContainer(
+        final container = createTestContainer(
           overrides: [
             puzzleLoaderProvider.overrideWith((ref) async => current),
-            // keep flash set long enough to assert it
-            flashClearDelayProvider.overrideWithValue(
-              const Duration(seconds: 5),
-            ),
-            wordCheckDebounceDelayProvider.overrideWithValue(Duration.zero),
           ],
+          flashClearDelay: const Duration(seconds: 5),
         );
         addTearDown(container.dispose);
 
